@@ -1,0 +1,24 @@
+﻿﻿#APK 签名key文件目录
+storeFile = D:/mycodes/xiaoyou.jks
+
+#APK 签名key密码（第一重密码）
+storePassword = xiaoyou123
+
+#APK 签名key别名
+keyAlias = xy
+
+#APK 签名key别名密码（第二重密码）
+keyPassword = xiaoyou123
+
+#自定义混淆文件
+PrjProguard = proguard-rules.pro
+
+#版本号
+VersionCode = 101
+VersionName = 1.0.01
+
+#APK输出目录
+ApkPath = D:/Desktop/
+
+#App名称
+AppName = xiaoyou

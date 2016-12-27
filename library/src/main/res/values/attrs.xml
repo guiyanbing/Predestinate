@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- circular cover view -->
+    <declare-styleable name="CircularCoverView">
+        <attr name="left_top_radius" format="dimension" />
+        <attr name="left_bottom_radius" format="dimension" />
+        <attr name="right_top_radius" format="dimension" />
+        <attr name="right_bottom_radius" format="dimension" />
+        <attr name="cover_color" format="color" />
+    </declare-styleable>
+
+    <!-- download onProgress view -->
+    <declare-styleable name="DownloadProgress">
+        <attr name="progressColor" format="color" />
+        <attr name="max" format="integer" />
+        <attr name="progress" format="integer" />
+        <attr name="shapeType">
+            <enum name="circle" value="0" />
+            <enum name="horizontal" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <!-- Defines the custom XML attributes supported for a CircleImageView -->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="AspectRatio">
+        <attr name="lockWidth" format="boolean" />
+        <attr name="widthWeight" format="integer" />
+        <attr name="heightWeight" format="integer" />
+    </declare-styleable>
+</resources>

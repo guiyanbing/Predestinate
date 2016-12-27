@@ -1,0 +1,260 @@
+<resources>
+
+    <!-- Base application theme.material design style -->
+    <style name="AppTheme" parent="AppTheme.Base" />
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <!-- Actionbar color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--Status bar color-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--Window background color-->
+        <item name="android:windowBackground">@color/colorPrimaryLight</item>
+        <!--使toolbar支持actionMode -->
+        <item name="windowActionModeOverlay">true</item>
+        <!-- actionMode的背景颜色 -->
+        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:listDivider">@drawable/divider_bg</item>
+
+        <!-- 支持沉浸式状态栏的两个属性 -->
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:clipToPadding">true</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <!-- ******使用的小部件style样式，一级style只能进行添加，不要进行修改****** -->
+    <!-- ******二级与三级分别继承自父级，命名按照“一级_二级_三级”的规范进行，三级在继承二级的再次细分情况下可自由命名***** -->
+    <!-- =========================一级style，样式的parent父类=========================== -->
+    <!-- 按钮样式 -->
+    <style name="button" />
+    <!-- 分割线，分割区域样式 -->
+    <style name="divider" />
+    <!-- 文字样式 -->
+    <style name="text" />
+    <!-- icon图标样式 -->
+    <style name="icon" />
+    <!-- 图片样式，包括头像 -->
+    <style name="image" />
+    <!-- 角标样式 -->
+    <style name="badge" />
+    <!--输入框样式-->
+    <style name="editText" />
+    <!-- =======================细分的二级style，继承自一级style========================= -->
+
+    <!-- ***********button按钮************ -->
+    <!-- item中较小的button样式 -->
+    <style name="button_small" parent="button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_fill_green_bg</item>
+        <item name="android:paddingLeft">@dimen/px30_dp</item>
+        <item name="android:paddingRight">@dimen/px30_dp</item>
+        <item name="android:paddingTop">@dimen/px15_dp</item>
+        <item name="android:paddingBottom">@dimen/px15_dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/px36_sp</item>
+    </style>
+    <!-- item中较大的button样式 -->
+    <style name="button_middle" parent="button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/px87_dp</item>
+        <item name="android:background">@drawable/btn_fill_green_bg</item>
+        <item name="android:paddingLeft">@dimen/px45_dp</item>
+        <item name="android:paddingRight">@dimen/px45_dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/px36_sp</item>
+    </style>
+    <!-- 水平撑满的大按钮样式 -->
+    <style name="button_big" parent="button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/px120_dp</item>
+        <item name="android:background">@drawable/btn_fill_green_bg</item>
+        <item name="android:layout_marginLeft">@dimen/px40_dp</item>
+        <item name="android:layout_marginRight">@dimen/px40_dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- ***********text字体样式************ -->
+    <!-- 通用姓名字体大小 -->
+    <style name="text_title" parent="text">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/px60_sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxEms">6</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:text">PartyGo</item>
+    </style>
+
+    <style name="text_big" parent="text">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+    </style>
+
+    <style name="text_middle" parent="text">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/px39_sp</item>
+    </style>
+
+    <style name="text_small" parent="text">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/px36_sp</item>
+    </style>
+
+    <!-- ***********icon图标************ -->
+    <!--方形小图标通用大小 如vip 等-->
+    <style name="icon_small" parent="icon">
+        <item name="android:layout_width">@dimen/px50_dp</item>
+        <item name="android:layout_height">@dimen/px50_dp</item>
+    </style>
+
+    <style name="icon_middle" parent="icon">
+        <item name="android:layout_width">@dimen/px80_dp</item>
+        <item name="android:layout_height">@dimen/px80_dp</item>
+    </style>
+
+    <style name="icon_big" parent="icon">
+        <item name="android:layout_width">@dimen/px120_dp</item>
+        <item name="android:layout_height">@dimen/px120_dp</item>
+    </style>
+
+    <!-- ***********分割线与分割区域************ -->
+    <!--vip提示栏大小,80px-->
+    <style name="divider_area" parent="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/px80_dp</item>
+    </style>
+    <!-- 水平撑满的分割线 -->
+    <style name="divider_line" parent="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+    <!--间距 中-->
+    <style name="divider_spacing" parent="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/px60_dp</item>
+    </style>
+
+    <!-- ***********图片与头像************ -->
+    <!-- 普通列表头像大小 -->
+    <style name="avatar_big" parent="image">
+        <item name="android:layout_width">@dimen/px250_dp</item>
+        <item name="android:layout_height">@dimen/px250_dp</item>
+    </style>
+
+    <style name="avatar_middle" parent="image">
+        <item name="android:layout_width">@dimen/px180_dp</item>
+        <item name="android:layout_height">@dimen/px180_dp</item>
+    </style>
+
+    <style name="avatar_small" parent="image">
+        <item name="android:layout_width">@dimen/px150_dp</item>
+        <item name="android:layout_height">@dimen/px150_dp</item>
+    </style>
+
+    <!-- ***********badge角标************ -->
+    <style name="badge_common" parent="badge">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- =======================细分的三级style，继承自二级style========================= -->
+
+    <!-- *****************button按钮****************** -->
+    <!-- item中较小的button样式 -->
+    <style name="button_middle_list" parent="button_middle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/px85_dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">@dimen/px38_dp</item>
+        <item name="android:paddingRight">@dimen/px38_dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/px39_sp</item>
+    </style>
+
+    <style name="button_middle_nodata" parent="button_middle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/px45_dp</item>
+        <item name="android:paddingRight">@dimen/px45_dp</item>
+        <item name="android:paddingTop">@dimen/px21_dp</item>
+        <item name="android:paddingBottom">@dimen/px21_dp</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+    </style>
+
+    <!-- *****************分割线与分割区域****************** -->
+    <!-- 带字体内容的分割区域的样式 -->
+    <style name="divider_area_item" parent="divider_area">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/px68_dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/px35_dp</item>
+        <item name="android:paddingRight">@dimen/px40_dp</item>
+        <item name="android:paddingTop">@dimen/px10_dp</item>
+        <item name="android:paddingBottom">@dimen/px10_dp</item>
+        <item name="android:textSize">@dimen/px36_sp</item>
+    </style>
+    <!-- 水平分割线样式 -->
+    <style name="divider_line_horizontal" parent="divider_line" />
+    <!-- 竖直撑满的分割线 -->
+    <style name="divider_line_vertical" parent="divider_line">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <!-- *****************icon图标****************** -->
+    <!-- 个人中心图标icon -->
+    <style name="icon_middle_center" parent="icon_middle">
+        <item name="android:layout_width">@dimen/px64_dp</item>
+        <item name="android:layout_height">@dimen/px64_dp</item>
+    </style>
+
+    <style name="icon_huge_tip" parent="icon">
+        <item name="android:layout_width">@dimen/px200_dp</item>
+        <item name="android:layout_height">@dimen/px200_dp</item>
+    </style>
+
+    <!-- *****************图片与头像****************** -->
+
+    <!-- *****************badge角标****************** -->
+    <!-- 45px小数字角标 -->
+    <style name="badge_num" parent="badge_common">
+        <item name="android:layout_width">@dimen/px42_dp</item>
+        <item name="android:layout_height">@dimen/px42_dp</item>
+        <item name="android:textSize">@dimen/px28_sp</item>
+    </style>
+
+    <style name="badge_num_big" parent="badge_common">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/px52_dp</item>
+        <item name="android:minWidth">@dimen/px52_dp</item>
+        <item name="android:textSize">@dimen/px28_sp</item>
+        <item name="android:paddingLeft">@dimen/px12_dp</item>
+        <item name="android:paddingRight">@dimen/px12_dp</item>
+    </style>
+
+    <!-- 用户在线图标 -->
+    <style name="badge_common_online" parent="badge_common">
+        <item name="android:layout_width">@dimen/px32_dp</item>
+        <item name="android:layout_height">@dimen/px32_dp</item>
+    </style>
+
+
+</resources>

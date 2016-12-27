@@ -1,0 +1,97 @@
+import java.util.regex.Pattern
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+//==================读取配置文件====================
+
+ext {
+    cApplicationId = "com.xiaochen.android.fate_it"
+    cCompileSdkVersion = 24
+    cBuildToolsVersion = "25.0.1"
+    cMinSdkVersion = 15
+    cTargetSdkVersion = 19
+
+    cConfigTxt = 'configs.txt'
+
+    //从配置文件加载的变量
+    cStoreFile = ''
+    cStorePassword = ''
+    cKeyAlias = ''
+    cKeyPassword = ''
+    cPrjProguard = ""
+
+    cVersionCode = ''
+    cVersionName = ''
+
+    cApkPath = ""
+    cAppName = getPrjNameFromManifest()
+
+    //加载参数配置
+    initConfigs()
+}
+
+//加载参数配置
+def initConfigs() {
+    def Properties props = new Properties()
+    def InputS = new FileInputStream(cConfigTxt)
+    def b = new byte[3];
+    InputS.read(b);
+    if (b[0].intValue() == -17 && b[1].intValue() == -69 && b[2].intValue() == -65) {
+        props.load(new InputStreamReader(InputS, 'UTF-8'))
+    } else {
+        props.load(new InputStreamReader(InputS, 'GBK'))
+    }
+
+    cStoreFile = props['storeFile']
+    cStorePassword = props['storePassword']
+    cKeyAlias = props['keyAlias']
+    cKeyPassword = props['keyPassword']
+    cPrjProguard = props['PrjProguard']
+
+    cVersionCode = props['VersionCode']
+    cVersionName = props['VersionName']
+
+
+    cApkPath = props['ApkPath']
+
+    if (props['AppName'] == null || ''.equals(props['AppName']))
+        cAppName = getPrjNameFromManifest()
+    else
+        cAppName = props['AppName']
+}
+
+//从包名获取项目名
+def getPrjNameFromManifest() {
+    def manifestFile = file('app/src/main/AndroidManifest.xml')
+    def pattern = Pattern.compile("package=\"(\\S+)\\.(\\S+)\\.(\\S+)\\.(\\S+)\"");
+    def matcher = pattern.matcher(manifestFile.getText('UTF-8'))
+    matcher.find()
+    return matcher.group(4)
+}

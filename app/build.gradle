@@ -1,0 +1,174 @@
+import java.util.regex.Pattern
+
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file(cStoreFile)
+            storePassword cStorePassword
+            keyAlias cKeyAlias
+            keyPassword cKeyPassword
+        }
+
+        release {
+            storeFile file(cStoreFile)
+            storePassword cStorePassword
+            keyAlias cKeyAlias
+            keyPassword cKeyPassword
+        }
+    }
+    compileSdkVersion cCompileSdkVersion
+    buildToolsVersion cBuildToolsVersion
+    defaultConfig {
+        minSdkVersion cMinSdkVersion
+        applicationId cApplicationId
+        signingConfig signingConfigs.release;
+        ndk { abiFilters "armeabi", "armeabi-v7a", "x86", "mips" }//让64位的操作系统可以兼容32位的库文件
+
+        //tusdk
+        multiDexEnabled true
+
+        // tray contentProvider鉴权
+        // add this to set a unique tray authority based on your applicationId
+        resValue "string", "tray__authority", "${applicationId}.tray"
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    //忽略警告信息
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    sourceSets {//重要，勿动
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml' //指向AndroidManifest
+            java.srcDirs = ['src/main/java']                //指向java文件夹
+            resources.srcDirs = ['src/main/res']            //指向res文件夹
+            aidl.srcDirs = ['src/main/java']                //指向java文件夹
+            renderscript.srcDirs = ['src/main/java']        //[指向java文件夹]该类型的指向未搜索到确切含义的目的，待议
+            res.srcDirs = ['src/main/res']                  //指向res文件夹
+            assets.srcDirs = ['src/main/assets']            //指向assets文件夹
+            jniLibs.srcDirs = ['libs', 'jniLibs']           //指向jni库文件位置，很重要
+        }
+        androidTest.setRoot('tests')
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+    buildTypes {
+        debug {
+            //
+        }
+
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true//是否优化资源文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), cPrjProguard
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.buildType.name.equals('release')) {
+
+            project.getTasksByName("assemble${variant.name.capitalize()}", false).each { task ->
+                task.doLast {
+                    def outdir = "${project.buildDir}\\outputs\\"
+
+                    //备份mapping.txt
+                    def taskname = task.name.substring('assemble'.length(), task.name.length() - 'Release'.length())
+                    def mapdir = "${outdir}mapping\\${taskname}\\release\\"
+                    def mapsrc = "mapping.txt"
+                    def mapdst = "mapping_${cVersionCode}_${cVersionName}.txt"
+
+                    def m = new File(mapdir, mapsrc)
+                    if (m.exists()) {
+                        def d = new File(cApkPath, mapdst)
+                        if (!d.exists()) {
+                            m.renameTo(d)
+                        }
+                    }
+
+                    //清理输出目录
+                    def dir = new File(outdir)
+                    if (dir.exists()) {
+                        dir.deleteDir()
+                    }
+                }
+            }
+
+            //修改输出文件名
+            variant.outputs.each { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    def fileName = outputFile.name
+
+                    if (cApkPath != null && !cApkPath.equals("")) {
+                        fileName = "${cAppName}.apk"
+                    }
+
+                    if (cApkPath == null || cApkPath.equals("")) {
+                        cApkPath = outputFile.parent
+                    }
+
+                    output.outputFile = new File(cApkPath, fileName)
+                }
+            }
+        }
+    }
+
+    compileOptions {
+        targetCompatibility 1.7
+        sourceCompatibility 1.7
+    }
+}
+
+//修改VersionCode
+task('increaseVersionCode') << {
+    def manifestFile = file('src/main/AndroidManifest.xml')
+    def pattern = Pattern.compile("android:versionCode=\"(\\d+)\"")
+    def matcher = pattern.matcher(manifestFile.getText('UTF-8'))
+    matcher.find()
+    def manifestContent = matcher.replaceAll("android:versionCode=\"${cVersionCode}\"")
+    manifestFile.write(manifestContent, 'UTF-8')
+}
+
+//修改VersionName
+task('incrementVersionName') << {
+    def manifestFile = file('src/main/AndroidManifest.xml')
+    def pattern = Pattern.compile("android:versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)\"")
+    def matcher = pattern.matcher(manifestFile.getText('UTF-8'))
+    matcher.find()
+    def manifestContent = matcher.replaceAll("android:versionName=\"${cVersionName}\"")
+    manifestFile.write(manifestContent, 'UTF-8')
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('generate') &&
+            task.name.endsWith('ReleaseBuildConfig')
+    ) {
+        task.dependsOn 'increaseVersionCode'
+        task.dependsOn 'incrementVersionName'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    testCompile 'junit:junit:4.12'
+
+    compile project(':library')
+
+    //沉浸式状态栏
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    //轮播图库:[https://github.com/saiwu-bigkoo/Android-ConvenientBanner]
+    compile 'com.bigkoo:convenientbanner:2.0.5'
+}
