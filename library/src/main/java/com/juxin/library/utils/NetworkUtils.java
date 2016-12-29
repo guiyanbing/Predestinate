@@ -3,7 +3,10 @@ package com.juxin.library.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
+
+import com.juxin.library.log.PLogger;
 
 /**
  * 网络状态工具类
@@ -14,6 +17,20 @@ import android.telephony.TelephonyManager;
 public final class NetworkUtils {
 
     private NetworkUtils() {
+    }
+
+    /**
+     * @return 获取网络mac地址
+     */
+    public static String getMacAddress(Context context) {
+        try {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            String mac = wifiManager.getConnectionInfo().getMacAddress();
+            if (mac.matches("([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}")) return mac;
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+        return "00:00:00:00:00:00";
     }
 
     public static String getNetworkTypeName(Context context) {
@@ -76,9 +93,8 @@ public final class NetworkUtils {
      * @return 是否连接
      */
     public static boolean isConnected(Context context) {
-        if (context == null) {
-            return true;
-        }
+        if (context == null) return true;
+
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
@@ -108,5 +124,4 @@ public final class NetworkUtils {
     public enum NetworkType {
         WIFI, MOBILE, OTHER, NONE
     }
-
 }

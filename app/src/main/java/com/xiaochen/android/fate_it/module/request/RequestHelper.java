@@ -1,13 +1,13 @@
 package com.xiaochen.android.fate_it.module.request;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
+import com.xiaochen.android.fate_it.module.application.APP;
 import com.xiaochen.android.fate_it.module.application.Constant;
+import com.xiaochen.android.fate_it.module.application.ModuleMgr;
 import com.xiaochen.android.fate_it.utils.Url_Enc;
 
 import java.io.File;
@@ -48,8 +48,8 @@ public class RequestHelper {
     /**
      * 初始化网络请求
      */
-    public void init(Context context) {
-        Requester.initBuilder(context);
+    public void init() {
+        Requester.initBuilder(APP.context, ModuleMgr.getAppMgr().isDebug());
         requestAPI = Requester.getRequestAPI(Constant.HOST_URL, RequestAPI.class);
     }
 
@@ -58,8 +58,8 @@ public class RequestHelper {
      *
      * @param cookie cookie
      */
-    public void initCookie(Context context, String cookie) {
-        Requester.initCookie(context, cookie);
+    public void initCookie(String cookie) {
+        Requester.initCookie(APP.context, ModuleMgr.getAppMgr().isDebug(), cookie);
         requestAPI = Requester.getRequestAPI(Constant.HOST_URL, RequestAPI.class);
     }
 

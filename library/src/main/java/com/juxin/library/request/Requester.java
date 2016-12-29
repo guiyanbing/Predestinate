@@ -3,7 +3,6 @@ package com.juxin.library.request;
 import android.content.Context;
 
 import com.juxin.library.utils.NetworkUtils;
-import com.zrp.library.BuildConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,9 +33,9 @@ public class Requester {
     /**
      * 初始化OkHttpClient.Builder()
      */
-    public static void initBuilder(final Context context) {
+    public static void initBuilder(final Context context, boolean isDebug) {
         builder = new OkHttpClient.Builder();
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
             builder.addInterceptor(loggingInterceptor);
@@ -99,8 +98,8 @@ public class Requester {
     /**
      * 初始化cookie
      */
-    public static void initCookie(Context context, final String cookie) {
-        if (builder == null) initBuilder(context);
+    public static void initCookie(Context context, boolean isDebug, final String cookie) {
+        if (builder == null) initBuilder(context, isDebug);
         //添加请求cookie
         builder.addInterceptor(new Interceptor() {
             @Override

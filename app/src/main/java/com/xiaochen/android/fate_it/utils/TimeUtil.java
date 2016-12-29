@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.text.format.Time;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.xiaochen.android.fate_it.module.application.ModuleMgr;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -383,7 +385,6 @@ public class TimeUtil extends TimeBaseUtil {
         return "";
     }
 
-
     /**
      * 将指定时间与当前时间对比：<br>
      * 获取小时间隔
@@ -400,7 +401,6 @@ public class TimeUtil extends TimeBaseUtil {
         return ret;
     }
 
-
     public static String millisecondToFormatStringThree(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ssZZZZZ");
         String strTime = "";
@@ -412,10 +412,9 @@ public class TimeUtil extends TimeBaseUtil {
                 stringBuffer.insert(stringBuffer.length() - 2, ":");
                 return stringBuffer.toString();
             }
-        } catch (Exception var5) {
-            MMLog.printThrowable(var5);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
         }
-
         return strTime;
     }
 
@@ -441,9 +440,7 @@ public class TimeUtil extends TimeBaseUtil {
     }
 
     /**
-     * 获取当前年月日  20160126
-     *
-     * @return
+     * @return 获取当前年月日
      */
     public static String getCurrentData() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -454,7 +451,6 @@ public class TimeUtil extends TimeBaseUtil {
         Date curDate = new Date(time);// 获取当前日期
         return formatter.format(curDate);
     }
-
 
     public static long dateDiff(String timeInterval, Date date1, Date date2) {
         try {

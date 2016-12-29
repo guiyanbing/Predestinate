@@ -12,7 +12,7 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperTransformation;
-import com.zrp.library.R;
+import com.juxin.library.R;
 
 /**
  * 全局图片请求类：Glide

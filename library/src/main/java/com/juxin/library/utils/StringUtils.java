@@ -23,6 +23,26 @@ public final class StringUtils {
 
     public static final String EMPTY = "";      // 默认空值字符串
 
+    private static char sHexDigits[] = {'0', '1', '2', '3', '4', '5', '6',
+            '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+    public static String hexString(byte[] source) {
+        if (source == null || source.length <= 0) {
+            return "";
+        }
+
+        final int size = source.length;
+        final char str[] = new char[size * 2];
+        int index = 0;
+        byte b;
+        for (int i = 0; i < size; i++) {
+            b = source[i];
+            str[index++] = sHexDigits[b >>> 4 & 0xf];
+            str[index++] = sHexDigits[b & 0xf];
+        }
+        return new String(str);
+    }
+
     /**
      * 截取并保留标志位之前的字符串, 不包含标志位
      *
@@ -201,7 +221,7 @@ public final class StringUtils {
      *
      * @param string 字符串
      * @param expr   分隔符
-     * @return
+     * @return 切割完的数组
      */
     public static String[] stringToArray(String string, String expr) {
         return string.split(expr);
@@ -209,26 +229,10 @@ public final class StringUtils {
 
     /**
      * 去除字符串中的空格
-     *
-     * @param str
-     * @return
      */
     public static String noSpace(String str) {
         str = str.trim();
         str = str.replace(" ", "");
-        return str;
-    }
-
-    /**
-     * 重要,支付专用,别的地方请不要用,出问题自负
-     *
-     * @return
-     */
-    public static String getOutTradeNo() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
-        String key = format.format(new Date());
-        int i = new Random().nextInt(89999) + 10000;
-        String str = key + i;
         return str;
     }
 }

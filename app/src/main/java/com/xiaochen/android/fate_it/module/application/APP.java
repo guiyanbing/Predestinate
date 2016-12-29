@@ -23,8 +23,8 @@ public class APP extends Application {
     }
 
     private void initPlugins(Context context) {
-        ModuleInitial initial = new ModuleInitial(context);
-        initial.initial();
+        ModuleMgr initial = new ModuleMgr(context);
+        initial.initModule();
     }
 
     public static Context getActivity() {
