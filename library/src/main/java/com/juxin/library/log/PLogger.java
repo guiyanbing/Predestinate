@@ -3,7 +3,6 @@ package com.juxin.library.log;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.elvishew.xlog.LogConfiguration;
 import com.elvishew.xlog.LogLevel;
 import com.elvishew.xlog.XLog;
 
@@ -16,7 +15,7 @@ public class PLogger {
     private static final int STACK = 4;
 
     public static void init(boolean isDebug) {
-        XLog.init(isDebug ? LogLevel.ALL : LogLevel.NONE, new LogConfiguration.Builder().build());
+        XLog.init(isDebug ? LogLevel.ALL : LogLevel.NONE);
     }
 
     public static void v(String msg) {
@@ -69,11 +68,11 @@ public class PLogger {
         sb.append(getSimpleName(Thread.currentThread().getStackTrace()[stack].getClassName()));
         sb.append("_");
         sb.append(Thread.currentThread().getStackTrace()[stack].getMethodName());
-        sb.append("_LN[");
+        sb.append("_LineNumber[");
         sb.append(Thread.currentThread().getStackTrace()[stack].getLineNumber());
-        sb.append("]_M[");
+        sb.append("]_MainThreadName[");
         sb.append(Looper.getMainLooper().getThread().getName());
-        sb.append("]_S[");
+        sb.append("]_CurrentThreadName[");
         sb.append(Thread.currentThread().getName());
         sb.append("]\n%s");
 

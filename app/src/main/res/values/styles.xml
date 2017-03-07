@@ -1,33 +1,26 @@
 <resources>
 
-    <!-- Base application theme.material design style -->
-    <style name="AppTheme" parent="AppTheme.Base" />
-
-    <style name="AppTheme.Base" parent="Theme.AppCompat">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <!-- Actionbar color -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <!--Status bar color-->
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <!--Window background color-->
-        <item name="android:windowBackground">@color/colorPrimaryLight</item>
-        <!--使toolbar支持actionMode -->
-        <item name="windowActionModeOverlay">true</item>
-        <!-- actionMode的背景颜色 -->
-        <item name="actionModeBackground">@color/colorPrimary</item>
-        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
-        <item name="android:listDivider">@drawable/divider_bg</item>
-
-        <!-- 支持沉浸式状态栏的两个属性 -->
-        <item name="android:fitsSystemWindows">true</item>
-        <item name="android:clipToPadding">true</item>
+    <!-- ********************* App样式 ************************-->
+    <style name="AppTheme" parent="@style/Default">
+        <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-        <item name="color">@android:color/white</item>
+    <style name="Default" parent="@android:style/Theme.Light">
+        <item name="android:textColorPrimaryInverse">@android:color/black</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleSize">46.0dip</item>
+        <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
+        <item name="android:listViewStyle">@style/customListView</item>
+        <item name="android:listDivider">@drawable/divider_bg</item>
+    </style>
+
+    <style name="customListView" parent="@android:style/Widget.ListView">
+        <item name="android:scrollingCache">false</item>
+        <item name="android:cacheColorHint">@null</item>
+    </style>
+
+    <style name="CustomWindowTitleBackground">
+        <item name="android:background">@android:color/black</item>
     </style>
 
     <!-- ******使用的小部件style样式，一级style只能进行添加，不要进行修改****** -->

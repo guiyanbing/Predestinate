@@ -1,6 +1,7 @@
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     signingConfigs {
@@ -42,22 +43,6 @@ android {
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
-    }
-
-    sourceSets {//重要，勿动
-        main {
-            manifest.srcFile 'src/main/AndroidManifest.xml' //指向AndroidManifest
-            java.srcDirs = ['src/main/java']                //指向java文件夹
-            resources.srcDirs = ['src/main/res']            //指向res文件夹
-            aidl.srcDirs = ['src/main/java']                //指向java文件夹
-            renderscript.srcDirs = ['src/main/java']        //[指向java文件夹]该类型的指向未搜索到确切含义的目的，待议
-            res.srcDirs = ['src/main/res']                  //指向res文件夹
-            assets.srcDirs = ['src/main/assets']            //指向assets文件夹
-            jniLibs.srcDirs = ['libs', 'jniLibs']           //指向jni库文件位置，很重要
-        }
-        androidTest.setRoot('tests')
-        debug.setRoot('build-types/debug')
-        release.setRoot('build-types/release')
     }
 
     buildTypes {
@@ -157,6 +142,13 @@ tasks.whenTaskAdded { task ->
     }
 }
 
+greendao {
+    // GreenDao数据库配置
+    schemaVersion 1
+    daoPackage 'com.juxin.predestinate.bean.db'
+    targetGenDir 'src/main/java'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -166,9 +158,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile project(':library')
-
-    //沉浸式状态栏
-    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    //轮播图库:[https://github.com/saiwu-bigkoo/Android-ConvenientBanner]
-    compile 'com.bigkoo:convenientbanner:2.0.5'
+    //GreenDao数据库
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'org.greenrobot:greendao-generator:3.2.0'
 }

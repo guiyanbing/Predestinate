@@ -22,7 +22,23 @@ public class MsgMgr {
     }
 
     /**
-     * 抛出事件
+     * 在应用模块初始化的时候初始化ui-thread监听
+     */
+    public void initUiThread() {
+        RxBus.getInstance().toObservable(Runnable.class)
+                .onBackpressureBuffer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Runnable>() {
+                    @Override
+                    public void call(Runnable runnable) {
+                        runnable.run();
+                    }
+                });
+    }
+
+    /**
+     * 抛出事件到主线程
      *
      * @param key   事件的key
      * @param value 事件的value
@@ -58,6 +74,16 @@ public class MsgMgr {
     }
 
     /**
+     * 抛出事件到ui线程
+     *
+     * @param runnable 事件
+     */
+    public void runOnUiThread(Runnable runnable) {
+        if (runnable == null) return;
+        RxBus.getInstance().post(runnable);
+    }
+
+    /**
      * 解绑（RxBus取消订阅），在调用对象进行销毁的时候进行解绑，防止内存溢出
      */
     public void detach() {
@@ -65,9 +91,5 @@ public class MsgMgr {
             PLogger.d("------>detach");
             rxSubscriptions.unsubscribe();
         }
-    }
-
-    public interface PObserver {
-        void onMessage(String key, Object value);
     }
 }

@@ -96,24 +96,6 @@ public class Requester {
     }
 
     /**
-     * 初始化cookie
-     */
-    public static void initCookie(Context context, boolean isDebug, final String cookie) {
-        if (builder == null) initBuilder(context, isDebug);
-        //添加请求cookie
-        builder.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();
-                Request authorised = request.newBuilder()
-                        .header("Cookie", cookie)
-                        .build();
-                return chain.proceed(authorised);
-            }
-        });
-    }
-
-    /**
      * 构造retrofit请求api
      *
      * @param host    host地址

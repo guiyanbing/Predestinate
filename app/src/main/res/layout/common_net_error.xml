@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/error_img"
             style="@style/icon_huge_tip"
-            android:src="@drawable/ico_error" />
+            android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/error_txt"
