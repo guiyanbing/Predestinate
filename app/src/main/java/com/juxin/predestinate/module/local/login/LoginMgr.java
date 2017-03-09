@@ -7,4 +7,5 @@ package com.juxin.predestinate.module.local.login;
 public class LoginMgr {
 
     public static String cookie = null;
+    public static boolean hasLogin = false;//是否已经登录
 }

@@ -19,12 +19,7 @@ public class App extends Application {
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
 
-        initPlugins();
-    }
-
-    private void initPlugins() {
-        ModuleMgr initial = new ModuleMgr(context);
-        initial.initModule();
+        ModuleMgr.initModule(context);
     }
 
     public static Context getActivity() {

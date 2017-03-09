@@ -2,14 +2,12 @@ package com.juxin.predestinate.module.logic.request;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.util.JniUtil;
 import com.juxin.predestinate.module.util.Url_Enc;
 
 import java.io.File;
@@ -80,12 +78,11 @@ public class RequestHelper {
      * @param post_param  post数据
      * @param file_params 文件数据
      * @param isEncrypt   是否加密
-     * @param isNewInter  是否为新类型的请求：false-原php的请求
      * @return Call
      */
     public Call<ResponseBody> reqHttpCallUrl(Map<String, String> headerMap, String url,
                                              Map<String, Object> get_param, Map<String, Object> post_param,
-                                             Map<String, File> file_params, boolean isEncrypt, boolean isNewInter) {
+                                             Map<String, File> file_params, boolean isEncrypt) {
         if (isEncrypt) {//是否加密 加密
             url = Url_Enc.appendOldUrl(url, get_param, post_param);
         }
@@ -107,13 +104,7 @@ public class RequestHelper {
             return requestAPI.executePostCallUploadCall(headerMap, url, builder.build());
         } else if (post_param != null) {//post请求
             PLogger.d("---request--->带参数的post请求：" + url);
-            if (isNewInter) {
-                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                        isEncrypt ? JniUtil.GetEncryptString(new Gson().toJson(post_param)) : new Gson().toJson(post_param));
-                return requestAPI.executePostCall(headerMap, url, body);
-            } else {
-                return requestAPI.executePostCall(headerMap, url, post_param);
-            }
+            return requestAPI.executePostCall(headerMap, url, post_param);
         } else if (get_param != null) {//带请求参数的get请求
             PLogger.d("---request--->带参数的get请求：" + url);
             return requestAPI.executeGetCall(headerMap, url, get_param);
