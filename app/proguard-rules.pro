@@ -73,6 +73,8 @@
     public static final int *;
 }
 
+-dontwarn freemarker.**
+
 # ==============应用内交互界面混淆处理start============
 # JS交互
 -keep class com.juxin.predestinate.module.logic.invoke.WebAppInterface {*;}
@@ -120,7 +122,7 @@
 }
 
 # ==============GreenDao start================
--keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+-keepclassmembers class * extends org.greenrobot.**greendao.**AbstractDao {
 public static java.lang.String TABLENAME;
 }
 -keep class **$Properties

@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion rootProject.versions.compileSDK
+    buildToolsVersion rootProject.versions.buildTools
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion rootProject.versions.minSDK
+        targetSdkVersion rootProject.versions.targetSDK
         versionCode 1
         versionName "1.0"
     }
@@ -27,19 +27,21 @@ dependencies {
 
     //recyclerView工具库:[https://github.com/CymChad/BaseRecyclerViewAdapterHelper]
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.6.5'
-
-    //rxJava:[https://github.com/ReactiveX/RxJava],rxAndroid:[https://github.com/ReactiveX/RxAndroid]
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-    //retrofit:[https://github.com/square/retrofit]
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    //okhttp:[https://github.com/square/okhttp]
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     //Glide:[https://github.com/bumptech/glide]
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    //retrofit:[https://github.com/square/retrofit]
+    compile "com.squareup.retrofit2:retrofit:$rootProject.versions.libRetrofit"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.versions.libRetrofit"
+    compile "com.squareup.retrofit2:adapter-rxjava2:2.2.0"
+
+    //okhttp:[https://github.com/square/okhttp]
+    compile "com.squareup.okhttp3:okhttp:$rootProject.versions.libOkhttp"
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.versions.libOkhttp"
+
+    //rxJava:[https://github.com/ReactiveX/RxJava],rxAndroid:[https://github.com/ReactiveX/RxAndroid]
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.versions.libRxJava"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"
 
     //可多进程调用并进行效率优化的SP库[https://github.com/grandcentrix/tray]
     compile 'net.grandcentrix.tray:tray:0.11.1'

@@ -7,14 +7,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * 文件下载FileCallback
@@ -22,7 +22,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class FileCallback implements Callback<ResponseBody> {
 
-    private CompositeSubscription rxSubscriptions = new CompositeSubscription();//订阅下载进度
+    private CompositeDisposable rxDisposable = new CompositeDisposable();//订阅下载进度
 
     private String url;                 // 文件下载地址
     private String filePath;            // 目标文件存储的文件夹路径
@@ -82,19 +82,18 @@ public class FileCallback implements Callback<ResponseBody> {
      */
     private void subscribeLoadProgress() {
         downloadProcess = 0;
-        rxSubscriptions.add(RxBus.getInstance()
-                .toObservable(FileLoadingBean.class)
+        rxDisposable.add(RxBus.getInstance().toFlowable(FileLoadingBean.class)
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<FileLoadingBean>() {
+                .subscribe(new Consumer<FileLoadingBean>() {
                     @Override
-                    public void call(FileLoadingBean fileLoadEvent) {
-                        int process = (int) ((100 * fileLoadEvent.getProgress()) / fileLoadEvent.getTotal());
+                    public void accept(FileLoadingBean fileLoadingBean) throws Exception {
+                        int process = (int) ((100 * fileLoadingBean.getProgress()) / fileLoadingBean.getTotal());
                         if (process > downloadProcess) {
                             downloadProcess = process;
                             if (listener != null)
-                                listener.onProcess(url, process, fileLoadEvent.getTotal());// 下载中
+                                listener.onProcess(url, process, fileLoadingBean.getTotal());// 下载中
                         }
                     }
                 }));
@@ -104,8 +103,8 @@ public class FileCallback implements Callback<ResponseBody> {
      * 取消订阅，防止内存泄漏
      */
     private void unSubscribe() {
-        if (!rxSubscriptions.isUnsubscribed()) {
-            rxSubscriptions.unsubscribe();
+        if (!rxDisposable.isDisposed()) {
+            rxDisposable.dispose();
         }
     }
 }

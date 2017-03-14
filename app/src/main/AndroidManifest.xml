@@ -37,6 +37,10 @@
             android:name=".ui.test.TestActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
+        <service
+            android:name=".module.logic.socket.CoreService"
+            android:process=":coreservice" />
     </application>
 
 </manifest>

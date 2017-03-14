@@ -1,0 +1,374 @@
+package com.juxin.predestinate.module.logic.socket;
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
+
+import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.Msg;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.predestinate.module.logic.application.App;
+
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 即时通许代理，负责将接收到的服务器消息通知给上层。
+ */
+public class IMProxy {
+
+    private static final String TAG = "IMProxy";
+
+    private static IMProxy ourInstance = new IMProxy();
+
+    public static IMProxy getInstance() {
+        return ourInstance;
+    }
+
+    private IMProxy() {
+    }
+
+    // 对外的常用接口。
+
+    /**
+     * 登录用的信息。通过Http请求获得Socket需要的host和私钥。
+     *
+     * @param uid   登录用户的uid。
+     * @param token 登录用的cookie。
+     */
+    public void login(long uid, String token) {
+        try {
+            if (iCoreService != null) iCoreService.login(uid, token);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 退出登录，即断开即时通讯的连接。同时清除登录用的token。
+     *
+     * @see #login(long, String) login(long, String)
+     */
+    public void logout() {
+        try {
+            if (iCoreService != null) iCoreService.logout();
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 设置GPS坐标，经纬度坐标。
+     *
+     * @param longitude 经度坐标。
+     * @param latitude  维度坐标。
+     */
+    public void setLocationGPS(double longitude, double latitude) {
+        try {
+            if (iCoreService != null) iCoreService.setLocationGPS(longitude, latitude);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 设置系统类型。
+     *
+     * @param systemInfo 操作系统:0 其它；1 苹果；2 小米
+     */
+    public void setSystemInfo(int systemInfo) {
+        try {
+            if (iCoreService != null) iCoreService.setSystemInfo(systemInfo);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    private Map<String, Set<IMListener>> typeMapListener = new HashMap<String, Set<IMListener>>();
+    private Set<IMListener> noTypeMapListener = new LinkedHashSet<IMListener>();
+
+    private Intent sIntent = null;
+
+    /**
+     * 代理和服务器建立连接。
+     */
+    public void connect() {
+        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) return;
+
+        Context context = App.context;
+        sIntent = new Intent();
+        sIntent.setClass(context, CoreService.class);
+
+        try {
+            context.startService(sIntent);//启动CoreService服务
+            if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
+                if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
+                    status = ConnectStatus.BINDING;
+                } else {
+                    status = ConnectStatus.REBINDING;
+                }
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 代理和服务器断开连接。（默认不主动断开连接，特殊情况调用）
+     */
+    public void disconnect() {
+        if (status != ConnectStatus.CONNECTED) {
+            return;
+        }
+
+        if (sIntent != null) {//解绑并停止服务
+            App.context.unbindService(connection);
+            App.context.stopService(sIntent);
+        }
+    }
+
+    private ChatServiceConnection connection = new ChatServiceConnection();
+
+    private class ChatServiceConnection implements ServiceConnection {
+
+        @Override
+        public void onServiceDisconnected(final ComponentName name) {
+            status = ConnectStatus.DISCONNECTED;
+            iCoreService = null;
+        }
+
+        @Override
+        public void onServiceConnected(final ComponentName name, final IBinder service) {
+            if (status == ConnectStatus.BINDING || status == ConnectStatus.REBINDING) {
+                iCoreService = ICoreService.Stub.asInterface(service);
+                setCSCallback();
+
+                //发送CoreService启动消息
+                Msg msg = new Msg();
+                msg.setData(true);
+                MsgMgr.getInstance().sendMsg(MsgType.MT_App_CoreService, msg);
+            }
+            status = ConnectStatus.CONNECTED;
+        }
+    }
+
+    /**
+     * 注册一个监听者，将监听者和具体消息类型绑定。
+     *
+     * @param imType     消息类型。
+     * @param imListener 监听者实例。
+     */
+    public void attach(final String imType, final IMListener imListener) {
+        Set<IMListener> observers = typeMapListener.get(imType);
+
+        if (observers == null) {
+            observers = new LinkedHashSet<IMListener>();
+            typeMapListener.put(imType, observers);
+        }
+
+        observers.add(imListener);
+    }
+
+    /**
+     * 取消注册的监听者，解除将监听者和具体消息类型的绑定。
+     *
+     * @param imType     消息类型。
+     * @param imListener 监听者实例。
+     */
+    public void detach(final String imType, final IMListener imListener) {
+        Set<IMListener> observers = typeMapListener.get(imType);
+
+        if (observers != null) {
+            observers.remove(imListener);
+        }
+    }
+
+    /**
+     * 注册一个监听者，将监听者和所有消息类型绑定。<br>
+     * 使用此接口时，通过{@link #attach(String, IMProxy.IMListener)}
+     * 绑定的监听者将会被解除绑定关系。
+     *
+     * @param imListener 监听者实例。
+     */
+    public void attach(final IMListener imListener) {
+        noTypeMapListener.add(imListener);
+    }
+
+    /**
+     * 取消注册的监听者，解除监听者的所有绑定。
+     *
+     * @param imListener 监听者实例。
+     */
+    public void detach(final IMListener imListener) {
+        for (Map.Entry<String, Set<IMListener>> entry : typeMapListener.entrySet()) {
+            entry.getValue().remove(imListener);
+        }
+
+        noTypeMapListener.remove(imListener);
+    }
+
+    /**
+     * 监听事件的回调接口。
+     */
+    public interface IMListener {
+        /**
+         * 处理{@link CoreService}
+         * 回调过来的消息。
+         *
+         * @param msgId    消息Id。
+         * @param group    是否群聊消息。
+         * @param groupId  群聊Id，私聊为null或空。
+         * @param sender   消息发送者的uid。
+         * @param contents 消息内容，一个json格式的String。
+         */
+        void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents);
+    }
+
+    /**
+     * 网络连接状态。
+     */
+    private enum ConnectStatus {
+        NO_CONNECT,         //未连接
+        BINDING,            //连接中
+        CONNECTED,          //一连接
+        DISCONNECTED,       //断开连接
+        REBINDING           //重连
+    }
+
+    private static ConnectStatus status = ConnectStatus.NO_CONNECT;//默认连接状态为未连接
+
+    /**
+     * 调用{@link CoreService}的接口实例。
+     */
+    private ICoreService iCoreService = null;
+
+    /**
+     * 将{@link CoreService}
+     * 对{@link IMProxy}的回调在这里设置。
+     */
+    private void setCSCallback() {
+        try {
+            if (iCoreService != null) iCoreService.setCallback(iCSCallback);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 将{@link CoreService}
+     * 对{@link IMProxy}的回调清除。
+     */
+    private void removeCSCallback() {
+        try {
+            if (iCoreService != null) iCoreService.setCallback(null);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    // =======================ICSCallback.aidl start=========================
+    /**
+     * {@link CoreService}回调IMProxy的接口实例。
+     */
+    private ICSCallback iCSCallback = new CSCallback();
+
+    private class CSCallback extends ICSCallback.Stub {
+        @Override
+        public void onMessage(long msgId, boolean group, String groupId, long sender, String contents) throws RemoteException {
+            IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
+        }
+
+        @Override
+        public void onFeedback(long msgId, int msgType, String host) throws RemoteException {
+        }
+
+        @Override
+        public void onStatusChange(int type, int subType, String msg) throws RemoteException {
+            IMProxy.this.onStatusChange(type, subType, msg);
+        }
+
+        @Override
+        public void accountInvalid(int reason) throws RemoteException {
+            IMProxy.this.accountInvalid(reason);
+        }
+
+        @Override
+        public void heartbeatStatus(boolean isBeating) throws RemoteException {
+            IMProxy.this.setSocketValidStatus(isBeating);
+        }
+    }
+
+    /**
+     * 处理{@link CoreService}
+     * 回调过来的消息。<br>
+     * 添加特殊处理记录下最新的消息Id，如果小于此Id的消息，认为是重复消息，直接丢弃。
+     *
+     * @param msgId    消息Id。
+     * @param group    是否群聊消息。
+     * @param groupId  群聊Id。
+     * @param sender   消息发送者的uid。
+     * @param contents 消息内容，一个json格式的String。
+     */
+    public void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents) {
+        PLogger.d("msgId: " + msgId + "; group: " + group + "; groupId: " + groupId + "; sender: " + sender + "; contents: " + contents);
+
+        //不区分消息类型
+        for (Map.Entry<String, Set<IMListener>> stringSetEntry : typeMapListener.entrySet()) {
+            for (IMListener imListener : stringSetEntry.getValue()) {
+                imListener.onMessage(msgId, group, groupId, sender, contents);
+            }
+        }
+
+        for (IMListener imListener : noTypeMapListener) {
+            imListener.onMessage(msgId, group, groupId, sender, contents);
+        }
+    }
+
+    /**
+     * 处理{@link CoreService}
+     * 回调过来的消息。
+     *
+     * @param type 消息类型。0 登录成功；1 登录失败；2 连接成功；3 断开连接；4 获取Key成功；5 获取Key失败。
+     * @param msg  提示消息。
+     */
+    private void onStatusChange(final int type, final int subType, final String msg) {
+        PLogger.d(msg);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        bundle.putString("msg", msg);
+
+        Msg imMsg = new Msg();
+        imMsg.setData(bundle);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_App_IMStatus, imMsg);
+    }
+
+    /**
+     * 帐号无效
+     *
+     * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
+     */
+    private void accountInvalid(int reason) {
+    }
+
+    private boolean isSocketValid = false;//socket是否在线
+
+    /**
+     * @return 判断socket是否在线。true表示socket存活并且保持在线状态；false表示socket掉线或者socket对象被杀死
+     */
+    public boolean isSocketValid() {
+        return isSocketValid;
+    }
+
+    private void setSocketValidStatus(boolean isSocketValid) {
+        this.isSocketValid = isSocketValid;
+    }
+    // =======================ICSCallback.aidl end=========================
+}

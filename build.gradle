@@ -33,12 +33,15 @@ tasks.withType(JavaCompile) {
 //==================读取配置文件====================
 
 ext {
-    cApplicationId = "com.juxin.predestinate"
-    cCompileSdkVersion = 24
-    cBuildToolsVersion = "25.0.1"
-    cMinSdkVersion = 15
-    cTargetSdkVersion = 19
+    versions = [compileSDK : 24,
+                buildTools : "25.0.1",
+                minSDK     : 15,
+                targetSDK  : 19,
+                libRxJava  : "2.0.1",
+                libRetrofit: "2.1.0",
+                libOkhttp  : "3.4.1"]
 
+    cApplicationId = "com.juxin.predestinate"
     cConfigTxt = 'configs.txt'
 
     //从配置文件加载的变量

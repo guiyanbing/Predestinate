@@ -18,7 +18,7 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.library.view.DownloadProgressView;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.invoke.WebAppInterface;
 
 /**
@@ -122,7 +122,7 @@ public class WebPanel extends BasePanel {
      */
     private void synCookies() {
         CookieSyncManager.createInstance(getContext());
-        CookieManager.getInstance().setCookie(url, Constant.cookieString);
+        CookieManager.getInstance().setCookie(url, LoginMgr.cookie);
         CookieSyncManager.getInstance().sync();
     }
 

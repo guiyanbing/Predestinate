@@ -2,10 +2,10 @@ package com.juxin.library.observe;
 
 import com.juxin.library.log.PLogger;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 消息处理中枢
@@ -15,7 +15,7 @@ public class MsgMgr {
 
     private static MsgMgr instance = new MsgMgr();
 
-    private CompositeSubscription rxSubscriptions = new CompositeSubscription();//订阅中心
+    private CompositeDisposable rxDisposable = new CompositeDisposable();//订阅中心
 
     public static MsgMgr getInstance() {
         return instance;
@@ -25,16 +25,31 @@ public class MsgMgr {
      * 在应用模块初始化的时候初始化ui-thread监听
      */
     public void initUiThread() {
-        RxBus.getInstance().toObservable(Runnable.class)
+        RxBus.getInstance().toFlowable(Runnable.class)
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Runnable>() {
+                .subscribe(new Consumer<Runnable>() {
                     @Override
-                    public void call(Runnable runnable) {
+                    public void accept(Runnable runnable) throws Exception {
                         runnable.run();
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        PLogger.printThrowable(throwable);
+                    }
                 });
+    }
+
+    /**
+     * 抛出事件到ui线程，与initUiThread配套使用，只有其在初始化之后该方法才起效
+     *
+     * @param runnable 事件
+     */
+    public void runOnUiThread(Runnable runnable) {
+        if (runnable == null) return;
+        RxBus.getInstance().post(runnable);
     }
 
     /**
@@ -60,36 +75,43 @@ public class MsgMgr {
             return;
         }
         PLogger.d("------>attach");
-        rxSubscriptions.add(RxBus.getInstance()
-                .toObservable(Msg.class)
-                .onBackpressureBuffer()
-                .subscribeOn(Schedulers.io())
+        rxDisposable.add(RxBus.getInstance().toFlowable(Msg.class)
+                .onBackpressureBuffer().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Msg>() {
+                .subscribe(new Consumer<Msg>() {
                     @Override
-                    public void call(Msg msg) {
+                    public void accept(Msg msg) throws Exception {
                         observer.onMessage(msg.getKey(), msg.getData());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        PLogger.printThrowable(throwable);
                     }
                 }));
     }
 
     /**
-     * 抛出事件到ui线程
+     * 子线程执行
      *
-     * @param runnable 事件
+     * @param aClass            监听的消息类型
+     * @param consumer          执行成功回调
+     * @param throwableConsumer 执行失败回调
      */
-    public void runOnUiThread(Runnable runnable) {
-        if (runnable == null) return;
-        RxBus.getInstance().post(runnable);
+    public static <T> void doOnChildThread(Class<T> aClass, Consumer<T> consumer, Consumer<Throwable> throwableConsumer) {
+        RxBus.getInstance().toFlowable(aClass).
+                onBackpressureBuffer().subscribeOn(Schedulers.io()).
+                subscribeOn(Schedulers.newThread()).
+                subscribe(consumer, throwableConsumer);
     }
 
     /**
      * 解绑（RxBus取消订阅），在调用对象进行销毁的时候进行解绑，防止内存溢出
      */
     public void detach() {
-        if (!rxSubscriptions.isUnsubscribed()) {
+        if (!rxDisposable.isDisposed()) {
             PLogger.d("------>detach");
-            rxSubscriptions.unsubscribe();
+            rxDisposable.dispose();
         }
     }
 }

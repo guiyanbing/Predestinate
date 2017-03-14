@@ -19,10 +19,11 @@ android {
             keyPassword cKeyPassword
         }
     }
-    compileSdkVersion cCompileSdkVersion
-    buildToolsVersion cBuildToolsVersion
+    compileSdkVersion rootProject.versions.compileSDK
+    buildToolsVersion rootProject.versions.buildTools
     defaultConfig {
-        minSdkVersion cMinSdkVersion
+        minSdkVersion rootProject.versions.minSDK
+        targetSdkVersion rootProject.versions.targetSDK
         applicationId cApplicationId
         signingConfig signingConfigs.release;
         ndk { abiFilters "armeabi", "armeabi-v7a", "x86", "mips" }//让64位的操作系统可以兼容32位的库文件

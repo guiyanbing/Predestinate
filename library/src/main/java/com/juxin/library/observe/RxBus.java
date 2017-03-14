@@ -1,56 +1,51 @@
 package com.juxin.library.observe;
 
-
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import io.reactivex.Flowable;
+import io.reactivex.processors.FlowableProcessor;
+import io.reactivex.processors.PublishProcessor;
+import io.reactivex.subscribers.SerializedSubscriber;
 
 /**
  * rxJava事件订阅者
  */
 public class RxBus {
 
-    private static volatile RxBus mInstance;
-    private final Subject<Object, Object> bus;
+    private static FlowableProcessor<Object> mBus;
+    private static volatile RxBus mInstance = null;
 
     private RxBus() {
-        bus = new SerializedSubject<Object, Object>(PublishSubject.create());
+        mBus = PublishProcessor.create().toSerialized();//调用toSerialized()方法，保证线程安全
     }
 
-    /**
-     * 单例RxBus
-     */
-    public static RxBus getInstance() {
-        RxBus rxBus = mInstance;
+    public static synchronized RxBus getInstance() {
         if (mInstance == null) {
             synchronized (RxBus.class) {
-                rxBus = mInstance;
                 if (mInstance == null) {
-                    rxBus = new RxBus();
-                    mInstance = rxBus;
+                    mInstance = new RxBus();
                 }
             }
         }
-        return rxBus;
+        return mInstance;
     }
 
     /**
-     * 发送一个新事件
+     * 发送消息
      */
     public void post(Object o) {
-        bus.onNext(o);
+        new SerializedSubscriber<>(mBus).onNext(o);
     }
 
     /**
-     * 返回特定类型的被观察者
-     *
-     * @param eventType
-     * @param <T>
-     * @return
+     * 确定接收消息的类型
      */
-    public <T> Observable<T> toObservable(Class<T> eventType) {
-        return bus.ofType(eventType);
+    public <T> Flowable<T> toFlowable(Class<T> eventType) {
+        return mBus.ofType(eventType);
     }
 
+    /**
+     * 判断是否有订阅者
+     */
+    public boolean hasSubscribers() {
+        return mBus.hasSubscribers();
+    }
 }

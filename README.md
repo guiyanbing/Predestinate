@@ -18,7 +18,12 @@
 - `drawable`及`xml`命名及存放见[RULES.md](./RULES.md)中说明。
 
 ## 注意事项
-1. 软件中所有的日志打印全部通过`PLogger`统一处理，Toast通过`PToast`同统一处理，Sharedpreferences操作通过`PSP`统一处理；
+1. 软件中所有的统一使用模块：
+    - 日志打印：`PLogger`；
+    - Toast提示：`PToast`；
+    - Sharedpreferences：`PSP`；
+    - 请求缓存：`PCache`；
+    - 消息派发：`MsgMgr`
 2. 软件中数据库使用[GreenDao](https://github.com/greenrobot/greenDAO)，进行数据库操作时各自学习使用。`./bean/db/`目录下的文件为GreenDao自动生成，请勿上传。
 
 ## 测试接口
