@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">缘份吧</string>
+
+
+    <!-- 主页Fragment -->
+    <string name="main_btn_mail">消息</string>
+    <string name="main_btn_xiaoyou">小友</string>
+    <string name="main_btn_plaza">广场</string>
+    <string name="main_btn_user">我的</string>
+
+    <string name="base_title_back">返回</string>
+
 </resources>

@@ -39,4 +39,5 @@ public class DBManager {
         mDaoSession = mDaoMaster.newSession();
         return mDaoSession;
     }
+
 }

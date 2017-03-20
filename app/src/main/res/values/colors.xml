@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- ============软件最常用的颜色 =========== -->
+    <color name="color_zhuyao">#333333</color>
+    <color name="color_ciyao">#aaaaaa</color>
+
     <!-- ============基础色值=========== -->
     <color name="color_009688">#009688</color>
     <color name="color_00796B">#00796B</color>

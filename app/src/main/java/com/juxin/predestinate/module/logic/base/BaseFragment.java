@@ -6,15 +6,199 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.juxin.predestinate.R;
 
 /**
  * Created by ZRP on 2016/12/2.
  */
 public class BaseFragment extends Fragment {
 
+    public BaseFragment() {
+        super();
+    }
+
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private View contentView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.inflater = inflater;
+        this.container = container;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    /**
+     * 设置内容组件
+     *
+     * @param resourcesId
+     */
+    public View setContentView(int resourcesId) {
+        contentView = inflater.inflate(resourcesId, container, false);
+        return contentView;
+    }
+
+    /**
+     * 获取内容组件
+     *
+     * @return
+     */
+    public View getContentView() {
+        return this.contentView;
+    }
+
+    /**
+     * 查找组件
+     *
+     * @param id
+     * @return
+     */
+    public View findViewById(int id) {
+        return contentView.findViewById(id);
+    }
+
+    /**
+     * 设置标题
+     *
+     * @param txt
+     */
+    public void setTitle(String txt) {
+        TextView textView = (TextView) contentView.findViewById(R.id.title);
+        textView.setText(txt);
+    }
+
+    /**
+     * 设置标题 带角标的标题
+     *
+     * @param txt    标题内容
+     * @param number 角标显示数量
+     */
+    public void setTitleWithBadge(String txt, String number) {
+        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView badge = (TextView) this.findViewById(R.id.base_title_badge_view);
+        textView.setVisibility(View.VISIBLE);
+        badge.setVisibility(View.VISIBLE);
+        textView.setText(txt);
+        badge.setText(number);
+    }
+
+    /**
+     * 添加标题栏左边布局的填充view
+     *
+     * @param container 填充的view
+     */
+    public void setTitleLeftContainer(View container) {
+        LinearLayout title_left_container = (LinearLayout) contentView.findViewById(R.id.base_title_left_container);
+        title_left_container.setVisibility(View.VISIBLE);
+        title_left_container.removeAllViews();
+        title_left_container.addView(container);
+    }
+
+    /**
+     * 设置标题右侧文字
+     *
+     * @param txt      标题右侧显示文字
+     * @param listener 文字点击事件回调
+     */
+    public void setTitleRight(String txt, View.OnClickListener listener) {
+        setTitleRight(txt, -1, listener);
+    }
+
+    /**
+     * 设置标题右侧文字
+     *
+     * @param txt      标题右侧显示文字
+     * @param color    文字颜色资源id
+     * @param listener 文字点击事件回调
+     */
+    public void setTitleRight(String txt, int color, View.OnClickListener listener) {
+        this.findViewById(R.id.base_title_right_img_container).setVisibility(View.GONE);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_right_txt);
+        textView.setVisibility(View.VISIBLE);
+        if (color != -1) textView.setTextColor(getResources().getColor(color));
+        textView.setText(txt);
+        textView.setOnClickListener(listener);
+        titleRightText = textView;
+    }
+
+    /**
+     * 设置标题右侧图片
+     */
+    public void setTitleRightImg(int resId, View.OnClickListener listener) {
+        this.findViewById(R.id.base_title_right_txt).setVisibility(View.GONE);
+        View view = this.findViewById(R.id.base_title_right_img_container);
+        view.setVisibility(View.VISIBLE);
+        view.setOnClickListener(listener);
+        ImageView imageView = (ImageView) view.findViewById(R.id.base_title_right_img);
+        imageView.setImageResource(resId);
+    }
+
+    private TextView titleLeftText, titleRightText;
+
+    /**
+     * @return 获取左侧textview，需先set，再get，确保其不为空
+     */
+    public TextView getTitleLeftText() {
+        return titleLeftText;
+    }
+
+    /**
+     * @return 获取右侧textview，需先set，再get，确保其不为空
+     */
+    public TextView getTitleRightText() {
+        return titleRightText;
+    }
+
+    /**
+     * 设置标题左侧文字
+     *
+     * @param txt
+     */
+    public void setTitleLeft(String txt, View.OnClickListener listener) {
+        TextView textView = (TextView) contentView.findViewById(R.id.base_title_left_txt);
+        textView.setVisibility(View.VISIBLE);
+        textView.setText(txt);
+        textView.setOnClickListener(listener);
+        titleLeftText = textView;
+    }
+
+    /**
+     * 设置标题左侧文字
+     *
+     * @param txt
+     */
+    public void setTitleLeft(String txt, int color, View.OnClickListener listener) {
+        TextView textView = (TextView) contentView.findViewById(R.id.base_title_left_txt);
+        textView.setVisibility(View.VISIBLE);
+        textView.setTextColor(color);
+        textView.setText(txt);
+        textView.setOnClickListener(listener);
+        titleLeftText = textView;
+    }
+
+    /**
+     * 设置标题左侧图片
+     */
+    public void setTitleLeftImg(int resId, View.OnClickListener listener) {
+        ImageView imageView = (ImageView) contentView.findViewById(R.id.base_title_left_img);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setImageResource(resId);
+        imageView.setOnClickListener(listener);
+    }
+
 }

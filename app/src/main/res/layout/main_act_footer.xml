@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_footer_height"
+    android:background="@color/white"
+    tools:showIn="@layout/main_act">
+
+    <RelativeLayout
+        android:id="@+id/mail_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/mail_ico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_btn_mail"
+                android:textColor="@color/color_FF5722"
+                android:textSize="@dimen/px34_sp" />
+        </LinearLayout>
+
+        <com.juxin.library.unread.BadgeView
+            android:id="@+id/mail_number"
+            style="@style/badge_num_big"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:layout_toRightOf="@+id/mail_ico"
+            android:text="1" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/xiaoyou_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/xiaoyou_ico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_btn_xiaoyou"
+                android:textColor="@color/color_FF5722"
+                android:textSize="@dimen/px34_sp" />
+        </LinearLayout>
+
+        <com.juxin.library.unread.BadgeView
+            android:id="@+id/xiaoyou_number"
+            style="@style/badge_num_big"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:layout_toRightOf="@+id/xiaoyou_ico"
+            android:text="1" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/plaza_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/plaza_ico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_btn_plaza"
+                android:textColor="@color/color_FF5722"
+                android:textSize="@dimen/px34_sp" />
+        </LinearLayout>
+
+        <com.juxin.library.unread.BadgeView
+            android:id="@+id/plaza_number"
+            style="@style/badge_num_big"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:layout_toRightOf="@+id/plaza_ico"
+            android:text="1" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/user_ico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_btn_user"
+                android:textColor="@color/color_FF5722"
+                android:textSize="@dimen/px34_sp" />
+        </LinearLayout>
+
+        <com.juxin.library.unread.BadgeView
+            android:id="@+id/user_number"
+            style="@style/badge_num_big"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:layout_toRightOf="@+id/user_ico"
+            android:text="1" />
+    </RelativeLayout>
+</LinearLayout>
