@@ -1,20 +1,15 @@
 package com.juxin.library.controls.xRecyclerView.indicator;
 
-
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.view.animation.LinearInterpolator;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Jack on 2015/10/19.
  */
-public class BallZigZagDeflectIndicator extends com.jcodecraeer.xrecyclerview.progressindicator.indicator.BallZigZagIndicator {
-
-
-
+public class BallZigZagDeflectIndicator extends BallZigZagIndicator {
 
     @Override
     public List<Animator> createAnimation() {
@@ -61,5 +56,4 @@ public class BallZigZagDeflectIndicator extends com.jcodecraeer.xrecyclerview.pr
         }
         return animators;
     }
-
 }
