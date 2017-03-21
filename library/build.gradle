@@ -53,4 +53,7 @@ dependencies {
     compile('com.github.florent37:viewanimator:1.0.4') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
+
+    //xrecyclerView
+    compile 'com.android.support:design:23.4.0'
 }
