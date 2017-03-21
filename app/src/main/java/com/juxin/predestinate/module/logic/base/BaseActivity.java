@@ -6,6 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.juxin.predestinate.R;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等
@@ -16,6 +21,12 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        getWindow().setBackgroundDrawableResource(R.color.transparent);  // 去除Theme设置的默认背景，减少绘图层级
     }
 
     /**
@@ -46,5 +57,253 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+    /**
+     * 设置返回组件
+     *
+     * @param view
+     */
+    public void setBackView(View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
+    }
+
+    /**
+     * 设置返回按钮
+     *
+     * @param resourcesId 返回按钮id
+     */
+    public void setBackView(int resourcesId) {
+        View view = this.findViewById(resourcesId);
+        view.setVisibility(View.VISIBLE);
+        setBackView(view);
+    }
+
+    /**
+     * 设置返回按钮，同时设置标题
+     *
+     * @param resourcesId 返回按钮id
+     * @param title       标题文字
+     */
+    public void setBackView(int resourcesId, String title) {
+        View view = this.findViewById(resourcesId);
+        view.setVisibility(View.VISIBLE);
+        setBackView(view);
+
+        setTitle(title);
+    }
+
+    /**
+     * 设置返回按钮，同时设置标题
+     *
+     * @param resourcesId 返回按钮id
+     * @param showLeftTip 是否显示返回按钮文字
+     * @param title       标题文字
+     * @param titleColor  标题颜色
+     */
+    public void setBackView(int resourcesId, boolean showLeftTip, String title, int titleColor) {
+        View view = this.findViewById(resourcesId);
+        view.setVisibility(View.VISIBLE);
+        view.findViewById(R.id.back_view_tip).setVisibility(showLeftTip ? View.VISIBLE : View.INVISIBLE);
+        setBackView(view);
+
+        setTitle(title, titleColor);
+    }
+
+    /**
+     * 设置返回按钮
+     *
+     * @param resourcesId 资源ID
+     * @param title       标题
+     * @param listener    资源点击事件
+     */
+    public void setBackView(int resourcesId, String title, View.OnClickListener listener) {
+        View view = this.findViewById(resourcesId);
+        view.setVisibility(View.VISIBLE);
+        view.setOnClickListener(listener);
+
+        setTitle(title);
+    }
+
+    /**
+     * 设置标题
+     *
+     * @param txt
+     */
+    public void setTitle(String txt) {
+        TextView textView = (TextView) this.findViewById(R.id.title);
+        textView.setVisibility(View.VISIBLE);
+        textView.setText(txt);
+    }
+
+    /**
+     * 设置标题
+     *
+     * @param txt
+     */
+    public void setTitle(String txt, int color) {
+        TextView textView = (TextView) this.findViewById(R.id.title);
+        textView.setVisibility(View.VISIBLE);
+        textView.setText(txt);
+        textView.setTextColor(color);
+    }
+
+    /**
+     * 设置标题背景颜色
+     *
+     * @param color 标题颜色,下面的线默认是不显示的
+     */
+    public void setTitleBackground(int color) {
+        setTitleBackground(color, false);
+    }
+
+    /**
+     * 设置标题背景颜色
+     *
+     * @param color      背景颜色
+     * @param isShowLine 下面的线是否显示
+     */
+    public void setTitleBackground(int color, boolean isShowLine) {
+        View titleBg = this.findViewById(R.id.common_tab);
+        titleBg.setBackgroundResource(color);
+        this.findViewById(R.id.cut_line).setVisibility(isShowLine ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * 设置标题 带角标的标题
+     *
+     * @param txt    标题内容
+     * @param number 角标显示数量
+     */
+    public void setTitleWithBadge(String txt, String number) {
+        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView badge = (TextView) this.findViewById(R.id.title_badge_view);
+        textView.setVisibility(View.VISIBLE);
+        badge.setVisibility(View.VISIBLE);
+        textView.setText(txt);
+        badge.setText(number);
+    }
+
+
+    /**
+     * 添加title中标题中间的填充view
+     *
+     * @param container 填充的view
+     */
+    public void setTitleCenterContainer(View container) {
+        LinearLayout title_center_container = (LinearLayout) this.findViewById(R.id.title_center_container);
+        title_center_container.removeAllViews();
+        title_center_container.addView(container);
+    }
+
+    /**
+     * 设置标题右侧文字
+     *
+     * @param txt      标题右侧显示文字
+     * @param listener 文字点击事件回调
+     */
+    public void setTitleRight(String txt, View.OnClickListener listener) {
+        setTitleRight(txt, -1, listener);
+    }
+
+    /**
+     * 设置标题右侧文字
+     *
+     * @param txt      标题右侧显示文字
+     * @param color    文字颜色资源id
+     * @param listener 文字点击事件回调
+     */
+    public void setTitleRight(String txt, int color, View.OnClickListener listener) {
+        this.findViewById(R.id.title_right_img_container).setVisibility(View.GONE);
+        TextView textView = (TextView) this.findViewById(R.id.title_right_txt);
+        textView.setVisibility(View.VISIBLE);
+        if (color != -1) textView.setTextColor(getResources().getColor(color));
+        textView.setText(txt);
+        textView.setOnClickListener(listener);
+        titleRightText = textView;
+    }
+
+    private TextView titleLeftText, titleRightText;
+    private ImageView titleRightImg;
+    /**
+     * @return 获取标题栏view对象
+     */
+    public View getTitleView() {
+        return findViewById(R.id.back_but);
+    }
+
+    /**
+     * 设置标题右侧图片
+     */
+    public void setTitleRightImg(int resId, View.OnClickListener listener) {
+        this.findViewById(R.id.title_right_txt).setVisibility(View.GONE);
+        View view = this.findViewById(R.id.title_right_img_container);
+        view.setVisibility(View.VISIBLE);
+        view.setOnClickListener(listener);
+        ImageView imageView = (ImageView) view.findViewById(R.id.title_right_img);
+        imageView.setImageResource(resId);
+        titleRightImg = imageView;
+    }
+
+    /**
+     * 设置标题左侧文字
+     *
+     * @param txt      标题左侧显示文字
+     * @param listener 文字点击事件回调
+     */
+    public void setTitleLeft(String txt, View.OnClickListener listener) {
+        TextView textView = (TextView) this.findViewById(R.id.title_left_txt);
+        textView.setVisibility(View.VISIBLE);
+        textView.setText(txt);
+        textView.setOnClickListener(listener);
+        titleLeftText = textView;
+    }
+
+    /**
+     * 设置标题左侧文字
+     *
+     * @param txt      标题左侧显示文字
+     * @param color    文字颜色资源id
+     * @param listener 文字点击事件回调
+     */
+    public void setTitleLeft(String txt, int color, View.OnClickListener listener) {
+        TextView textView = (TextView) this.findViewById(R.id.title_left_txt);
+        textView.setVisibility(View.VISIBLE);
+        textView.setTextColor(getResources().getColor(color));
+        textView.setText(txt);
+        textView.setOnClickListener(listener);
+        titleLeftText = textView;
+    }
+
+    /**
+     * 设置标题左侧图片
+     */
+    public void setTitleLeftImg(int resId, View.OnClickListener listener) {
+        ImageView imageView = (ImageView) this.findViewById(R.id.title_left_img);
+        imageView.setImageResource(resId);
+        View ll_left_view = this.findViewById(R.id.ll_left_view);
+        ll_left_view.setVisibility(View.VISIBLE);
+        ll_left_view.setOnClickListener(listener);
+    }
+
+    /**
+     * 设置右侧带图片带文字的功能按钮
+     *
+     * @param titleRighttext 按钮文字
+     * @param resId          图片id
+     * @param listener       点击监听
+     */
+    public void setRightImgTextBtn(String titleRighttext, int resId, View.OnClickListener listener) {
+        LinearLayout layout = (LinearLayout) this.findViewById(R.id.title_right_img_text_btn);
+        layout.setVisibility(View.VISIBLE);
+        TextView textView = (TextView) this.findViewById(R.id.title_right_img_text);
+        ImageView imageView = (ImageView) this.findViewById(R.id.title_right_img_view);
+        textView.setText(titleRighttext);
+        imageView.setImageResource(resId);
+        layout.setOnClickListener(listener);
     }
 }

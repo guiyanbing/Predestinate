@@ -10,4 +10,23 @@
 
     <string name="base_title_back">返回</string>
 
+
+    <!--设置-->
+    <string name="switch_acceptmsg">接受新消息通知</string>
+    <string name="switch_stealth">一键隐身</string>
+    <string name="switch_shaker">震动提醒</string>
+    <string name="switch_voice">声音提醒</string>
+    <string name="switch_acceptmsg_tip">打开该按钮，即表示你愿意接受系统推荐给你的消息</string>
+    <string name="switch_stealth_tip">打开该按钮，即表示不再出现在推荐列表中</string>
+    <string name="button_feedback">意见反馈</string>
+    <string name="button_clean_cache">清除缓存</string>
+    <string name="button_clean_cache_tip">缓存状态良好</string>
+    <string name="button_exit">退出登录</string>
+    <string name="ext_feedback_hit">填写对小友的意见和建议</string>
+    <string name="ext_feedback_contact">联系方式</string>
+    <string name="ext_feedback_contact_hit">（手机/微信/邮箱）</string>
+    <string name="toast_feedback_submit">提交成功，感谢您的支持</string>
+    <string name="button_version">版本</string>
+    <string name="button_help">帮助</string>
+
 </resources>

@@ -105,6 +105,8 @@
     <dimen name="px100_dp">33.3dp</dimen>
     <dimen name="px118_dp">39.3dp</dimen>
     <dimen name="px120_dp">40.0dp</dimen>
+    <dimen name="px140_dp">47dp</dimen>
+    <dimen name="px145_dp">48.3dp</dimen>
     <dimen name="px150_dp">50.0dp</dimen>
     <dimen name="px180_dp">60.0dp</dimen>
     <dimen name="px200_dp">67dp</dimen>
@@ -151,5 +153,12 @@
     <!-- ==============引用高度============= -->
     <dimen name="title_footer_height">@dimen/px150_dp</dimen>
 
+    <!-- 单个item条目的高度 -->
+    <dimen name="center_item_height">@dimen/px140_dp</dimen>
+    <dimen name="center_item_icon_kg">@dimen/px72_dp</dimen>
+    <dimen name="center_item_txt">@dimen/px45_sp</dimen>
+    <dimen name="center_item_go_kg">@dimen/px52_dp</dimen>
+    <!-- 底部空白区域 -->
+    <dimen name="divider_page_footing">@dimen/px180_dp</dimen>
 
 </resources>
