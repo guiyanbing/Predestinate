@@ -4,6 +4,7 @@
     <!-- ============软件最常用的颜色 =========== -->
     <color name="color_zhuyao">#333333</color>
     <color name="color_ciyao">#aaaaaa</color>
+    <color name="bg_color">#eaeaea</color>
 
     <!-- ============基础色值=========== -->
     <color name="color_009688">#009688</color>
@@ -17,6 +18,7 @@
     <color name="color_DDDDDD">#DDDDDD</color>
     <color name="color_E5E5E5">#E5E5E5</color>
     <color name="color_FF5722">#FF5722</color>
+    <color name="color_aaaaaa">#aaaaaa</color>
 
     <color name="color_30333333">#4D333333</color>
 
@@ -41,6 +43,7 @@
     <color name="divider">@color/color_BDBDBD</color>
     <color name="icons">@color/white</color>
     <color name="disable">@color/color_DDDDDD</color>
+
 
 </resources>
 

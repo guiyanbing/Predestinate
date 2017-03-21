@@ -103,6 +103,7 @@
     <dimen name="px98_dp">32.7dp</dimen>
     <dimen name="px99_dp">33.0dp</dimen>
     <dimen name="px100_dp">33.3dp</dimen>
+    <dimen name="px118_dp">39.3dp</dimen>
     <dimen name="px120_dp">40.0dp</dimen>
     <dimen name="px150_dp">50.0dp</dimen>
     <dimen name="px180_dp">60.0dp</dimen>
