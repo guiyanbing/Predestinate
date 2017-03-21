@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px25_dp"
+        android:background="@color/bg_color"/>
+    <LinearLayout
+        android:id="@+id/ll_new_msg"
+        style="@style/center_set_item">
+
+        <TextView
+            style="@style/center_item_text"
+            android:layout_marginLeft="@dimen/px5_dp"
+            android:text="@string/switch_acceptmsg" />
+
+        <SeekBar
+            android:id="@+id/sb_new_msg"
+            style="@style/SeekBar" />
+    </LinearLayout>
+
+    <include layout="@layout/center_information_line" />
+
+    <LinearLayout style="@style/center_set_item">
+
+        <TextView
+            style="@style/setting_tip"
+            android:layout_marginLeft="@dimen/px5_dp"
+            android:text="@string/switch_acceptmsg_tip" />
+    </LinearLayout>
+
+    <include layout="@layout/center_information_line" />
+
+    <LinearLayout
+        android:id="@+id/ll_stealth"
+        style="@style/center_set_item">
+
+        <TextView
+            style="@style/center_item_text"
+            android:layout_marginLeft="@dimen/px5_dp"
+            android:text="@string/switch_stealth" />
+
+        <SeekBar
+            android:id="@+id/sb_stealth"
+            style="@style/SeekBar" />
+    </LinearLayout>
+
+    <include layout="@layout/center_information_line" />
+
+    <LinearLayout style="@style/center_set_item">
+
+        <TextView
+            style="@style/setting_tip"
+            android:layout_marginLeft="@dimen/px5_dp"
+            android:text="@string/switch_stealth_tip" />
+    </LinearLayout>
+
+    <include layout="@layout/center_information_line" />
+
+    <LinearLayout
+        android:id="@+id/ll_shaker"
+        style="@style/center_set_item">
+
+        <TextView
+            style="@style/center_item_text"
+            android:layout_marginLeft="@dimen/px5_dp"
+            android:text="@string/switch_shaker" />
+
+        <SeekBar
+            android:id="@+id/sb_shaker"
+            style="@style/SeekBar" />
+    </LinearLayout>
+
+    <include layout="@layout/center_information_line" />
+
+    <LinearLayout
+        android:id="@+id/ll_voice"
+        style="@style/center_set_item">
+
+        <TextView
+            style="@style/center_item_text"
+            android:layout_marginLeft="@dimen/px5_dp"
+            android:text="@string/switch_voice" />
+
+        <SeekBar
+            android:id="@+id/sb_voice"
+            style="@style/SeekBar" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -250,4 +250,46 @@
     </style>
 
 
+    <!-- ============== 个人中心 ==================-->
+    <!-- 个人中心点击item的样式 -->
+    <style name="center_set_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/list_item_selector</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">@dimen/px35_dp</item>
+    </style>
+    <!-- 个人中心中部textView的样式 -->
+    <style name="center_item_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/px35_dp</item>
+        <item name="android:textColor">@color/text_zhuyao_black</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+    </style>
+    <!-- 设置 -->
+    <style name="setting_tip" parent="center_item_text">
+        <item name="android:textColor">@color/text_ciyao_gray</item>
+        <item name="android:textSize">@dimen/px40_sp</item>
+    </style>
+    <!--设置页面开关按钮样式-->
+    <style name="SeekBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:indeterminate">false</item>
+        <item name="android:max">100</item>
+        <item name="android:maxHeight">@dimen/px66_dp</item>
+        <item name="android:minHeight">@dimen/px66_dp</item>
+        <item name="android:maxWidth">@dimen/px145_dp</item>
+        <item name="android:minWidth">@dimen/px145_dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:progressDrawable">@drawable/y1_bg_seekbar</item>
+        <item name="android:thumb">@drawable/y1_slide_btn_thumb</item>
+        <item name="android:thumbOffset">0dp</item>
+    </style>
 </resources>

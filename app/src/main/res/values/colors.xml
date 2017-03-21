@@ -41,6 +41,21 @@
     <color name="divider">@color/color_BDBDBD</color>
     <color name="icons">@color/white</color>
     <color name="disable">@color/color_DDDDDD</color>
+    <!-- 通用色值，搜索进行使用 -->
+    <color name="color_e5e5e5">#e5e5e5</color>
+    <!-- 背景颜色 -->
+    <color name="bg_color">#eaeaea</color>
+    <!-- 主要文字颜色 -->
+    <color name="text_zhuyao_black">#333333</color>
+    <!-- 次要文字颜色 -->
+    <color name="text_ciyao_gray">#aaaaaa</color>
+    <color name="color_title">@color/text_ciyao_gray</color>
+    <color name="txt_color1">#9a9a9a</color>
+    <color name="txt_color_green">#35c066</color>
+    <!-- 小字体 白色 -->
+    <color name="txt_middle">#bbb</color>
 
+    <!-- 分割线颜色 -->
+    <color name="fengexian_gray">#e5e5e5</color>
 </resources>
 
