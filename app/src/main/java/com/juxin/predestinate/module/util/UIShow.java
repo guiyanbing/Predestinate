@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.util;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
@@ -42,6 +43,26 @@ public class UIShow {
         Intent intent = new Intent(context, WebActivity.class);
         intent.putExtra("url", url);
         show(context, intent);
+    }
+
+    /**
+     * 跳转到系统设置面面
+     *
+     * @param context
+     */
+    public static void showNetworkSettings(Context context) {
+        Intent intent = null;
+        //判断手机系统的版本  即API大于10 就是3.0或以上版本
+        if (android.os.Build.VERSION.SDK_INT > 10) {
+            intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            intent = new Intent();
+            ComponentName component = new ComponentName("com.android.settings", "com.android.settings.WirelessSettings");
+            intent.setComponent(component);
+            intent.setAction("android.intent.action.VIEW");
+        }
+        context.startActivity(intent);
     }
 
 }
