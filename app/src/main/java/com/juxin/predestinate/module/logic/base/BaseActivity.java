@@ -17,6 +17,7 @@ import com.juxin.predestinate.R;
  * Created by ZRP on 2016/9/18.
  */
 public class BaseActivity extends FragmentActivity {
+    private boolean canNotify = true; //是否能弹出悬浮提示
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +59,23 @@ public class BaseActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    /**
+     * 设置当前页面是否支持悬浮窗消息通知，默认为可以弹出
+     *
+     * @param canNotify 能否支持悬浮窗消息通知
+     */
+    public void setCanNotify(boolean canNotify) {
+        this.canNotify = canNotify;
+    }
+
+    /**
+     * @return 获取当前activity实例能否弹出悬浮窗消息状态
+     */
+    public boolean isCanNotify() {
+        return canNotify;
+    }
+
     /**
      * 设置返回组件
      *

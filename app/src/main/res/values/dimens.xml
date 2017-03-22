@@ -148,6 +148,7 @@
     <dimen name="px240_dp">80dp</dimen>
     <dimen name="px245_dp">81.7dp</dimen>
     <dimen name="px246_dp">82.0dp</dimen>
+    <dimen name="px250_dp">83dp</dimen>
     <dimen name="px255_dp">85.0dp</dimen>
     <dimen name="px265_dp">88.3dp</dimen>
     <dimen name="px270_dp">90.0dp</dimen>
