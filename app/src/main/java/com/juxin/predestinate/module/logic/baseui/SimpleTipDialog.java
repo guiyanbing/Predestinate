@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.baseui;
+package com.juxin.predestinate.module.logic.baseui;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.baseui.picker.common.popup.ConfirmPopup;
+import com.juxin.predestinate.module.logic.baseui.picker.common.popup.ConfirmPopup;
 import com.juxin.predestinate.module.util.UIUtil;
 
 

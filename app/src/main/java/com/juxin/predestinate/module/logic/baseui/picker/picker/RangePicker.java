@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.baseui.picker.picker;
+package com.juxin.predestinate.module.logic.baseui.picker.picker;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -6,7 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.juxin.predestinate.module.baseui.picker.widget.WheelView;
+import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;

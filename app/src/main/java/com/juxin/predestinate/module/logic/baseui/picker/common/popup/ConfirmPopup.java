@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.baseui.picker.common.popup;
+package com.juxin.predestinate.module.logic.baseui.picker.common.popup;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;

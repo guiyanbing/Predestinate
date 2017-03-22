@@ -1,12 +1,12 @@
-package com.juxin.predestinate.module.baseui.picker.picker;
+package com.juxin.predestinate.module.logic.baseui.picker.picker;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
-import com.juxin.predestinate.module.baseui.picker.common.popup.ConfirmPopup;
-import com.juxin.predestinate.module.baseui.picker.widget.WheelView;
+import com.juxin.predestinate.module.logic.baseui.picker.common.popup.ConfirmPopup;
+import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
 
 
 /**

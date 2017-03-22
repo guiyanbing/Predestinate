@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.baseui.picker.widget;
+package com.juxin.predestinate.module.logic.baseui.picker.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

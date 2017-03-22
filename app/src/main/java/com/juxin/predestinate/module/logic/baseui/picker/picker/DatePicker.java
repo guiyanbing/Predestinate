@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.baseui.picker.picker;
+package com.juxin.predestinate.module.logic.baseui.picker.picker;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.mumu.bean.utils.TypeConvUtil;
-import com.juxin.predestinate.module.baseui.picker.widget.WheelView;
+import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
 
