@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -11,24 +12,59 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.baseui.RightSlidLinearLayout;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等
  * Created by ZRP on 2016/9/18.
  */
 public class BaseActivity extends FragmentActivity {
-
+    private boolean canNotify = true; //是否能弹出悬浮提示
+    private boolean canBack = true;   //是否能右滑退出
+    private RightSlidLinearLayout linearLayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
 
+        if (canBack) {
+            initSlideBack();
+        }
+    }
+    /**
+     * 顶层触摸控制
+     */
+    private void initSlideBack() {
+        linearLayout = (RightSlidLinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_slideback_container, null);
+        linearLayout.attachToActivity(this);
+    }
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         getWindow().setBackgroundDrawableResource(R.color.transparent);  // 去除Theme设置的默认背景，减少绘图层级
     }
+    /**
+     * 设置当前页面是否支持滑动退出，需要写在继承该类的子类onCreate中super.onCreate();的前面
+     *
+     * @param canBack 能否支持右滑退出
+     */
+    public void isCanBack(boolean canBack) {
+        this.canBack = canBack;
+    }
 
+    /**
+     * 设置当前页面是否支持悬浮窗消息通知，默认为可以弹出
+     *
+     * @param canNotify 能否支持悬浮窗消息通知
+     */
+    public void setCanNotify(boolean canNotify) {
+        this.canNotify = canNotify;
+    }
+    /**
+     * @return 获取当前activity实例能否弹出悬浮窗消息状态
+     */
+    public boolean isCanNotify() {
+        return canNotify;
+    }
     /**
      * 返回
      */

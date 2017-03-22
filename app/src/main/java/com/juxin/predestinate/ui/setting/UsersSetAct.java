@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.setting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,9 +9,7 @@ import android.widget.TextView;
 
 
 import com.juxin.library.log.PToast;
-import com.juxin.library.utils.DirUtils;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.base.BaseActivity;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +26,7 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.y1_users_set);
+        setContentView(R.layout.r1_users_set);
         setBackView(R.id.back_view, "设置");
         initView();
     }

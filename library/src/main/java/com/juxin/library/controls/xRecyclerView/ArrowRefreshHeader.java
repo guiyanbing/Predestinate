@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.juxin.library.R;
+
 import java.util.Date;
 
 public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeader {

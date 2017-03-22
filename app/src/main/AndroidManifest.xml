@@ -37,6 +37,18 @@
             android:name=".ui.test.TestActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.NavUserAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.RegInfoAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.LoginAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".module.logic.socket.CoreService"

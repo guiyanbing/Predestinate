@@ -57,5 +57,18 @@
 
     <!-- 分割线颜色 -->
     <color name="fengexian_gray">#e5e5e5</color>
+    <color name="btn_enable">#dddddd</color>
+    <color name="mokuai_bg_press">#f5f5f5</color>
+    <color name="fengexian_lahei">#dcdcdc</color>
+
+    <color name="blue">#4586f2</color>
+    <!--待替换-->
+    <color name="btn_login_normal">#00B7D1</color>
+    <color name="btn_login_press">#00D5D8</color>
+    <color name="color_e8e8e8">#e8e8e8</color>
+    <color name="color_ffe1e0">#ffe1e0</color>
+    <color name="color_dddddd">#dddddd</color>
+
+    <color name="usersnickname">#353535</color>
 </resources>
 
