@@ -1,5 +1,6 @@
 package com.juxin.predestinate.bean.center.area;
 
+
 import com.juxin.predestinate.module.logic.base.BaseData;
 
 import org.json.JSONObject;

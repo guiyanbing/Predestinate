@@ -20,7 +20,7 @@ public class SetNoticePanel extends BaseViewPanel implements View.OnTouchListene
 
     public SetNoticePanel(Context context) {
         super(context);
-        setContentView(R.layout.y1_set_notice_panel);
+        setContentView(R.layout.r1_set_notice_panel);
         initView();
         InitPreference();
     }

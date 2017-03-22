@@ -9,6 +9,8 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.local.center.CenterMgr;
+import com.juxin.predestinate.module.local.common.CommonMgr;
+import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
@@ -115,5 +117,28 @@ public final class ModuleMgr {
             addModule(centerMgr);
         }
         return centerMgr;
+    }
+    /**
+     * 登录管理
+     */
+    private static LoginMgr loginMgr = null;
+
+    public static LoginMgr getLoginMgr() {
+        if (loginMgr == null) {
+            loginMgr = new LoginMgr();
+        }
+        return loginMgr;
+    }
+
+    /**
+     * 通用
+     */
+    private static CommonMgr commonMgr = null;
+
+    public static CommonMgr getCommonMgr() {
+        if (commonMgr == null) {
+            commonMgr = new CommonMgr();
+        }
+        return commonMgr;
     }
 }

@@ -118,6 +118,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <include layout="@layout/y2_fillbottom_bg" />
+    <include layout="@layout/fillbottom_bg" />
 
 </LinearLayout>

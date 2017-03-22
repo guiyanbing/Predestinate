@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <!--<include layout="@layout/common_back" />-->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarThumbVertical="@color/transparent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- 头像部分-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px604_dp"
+                android:background="@drawable/ic_launcher"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/px240_dp"
+                    android:layout_height="@dimen/px240_dp"
+                    android:layout_marginTop="@dimen/px80_dp">
+
+                    <ImageView
+                        android:id="@+id/img_header"
+                        android:layout_width="@dimen/px250_dp"
+                        android:layout_height="@dimen/px250_dp"
+                        android:clickable="true"
+                        android:src="@drawable/r1_user_ico" />
+
+                    <ImageView
+                        android:layout_width="@dimen/px80_dp"
+                        android:layout_height="@dimen/px80_dp"
+                        android:layout_alignBottom="@+id/img_header"
+                        android:layout_alignRight="@+id/img_header"
+                        android:gravity="center"
+                        android:src="@drawable/r1_reg_camera" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/txt_header_describe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/px30_dp"
+                    android:gravity="center"
+                    android:text="@string/upload_head_man"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px40_sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edtTxt_reg_info_nickname"
+                style="@style/editText_input"
+                android:layout_marginLeft="@dimen/px50_dp"
+                android:layout_marginRight="@dimen/px50_dp"
+                android:layout_marginTop="@dimen/px80_dp"
+                android:hint="@string/ext_nickname_hit"
+                android:inputType="text" />
+
+            <View style="@style/divider_line_gap70px" />
+
+            <!--<RelativeLayout-->
+            <!--android:id="@+id/layout_reg_info_birth"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/px120_dp"-->
+            <!--android:layout_marginLeft="@dimen/px50_dp"-->
+            <!--android:layout_marginRight="@dimen/px50_dp">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/txt_reg_info_birth"-->
+            <!--style="@style/text_regTip_left"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:hint="生日"-->
+            <!--android:maxLines="1" />-->
+
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="@dimen/px15_dp"-->
+            <!--android:src="@drawable/ic_user_go" />-->
+            <!--</RelativeLayout>-->
+
+            <!--<View style="@style/divider_line_gap70px" />-->
+
+            <!--<RelativeLayout-->
+            <!--android:id="@+id/layout_reg_info_addr"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/px120_dp"-->
+            <!--android:layout_marginLeft="@dimen/px50_dp"-->
+            <!--android:layout_marginRight="@dimen/px50_dp">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/txt_reg_info_addr"-->
+            <!--style="@style/text_regTip_left"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:hint="地区"-->
+            <!--android:maxLines="1" />-->
+
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="@dimen/px15_dp"-->
+            <!--android:src="@drawable/ic_user_go" />-->
+            <!--</RelativeLayout>-->
+
+            <!--<View style="@style/divider_line_gap70px" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px80_dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/rl_boy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/px180_dp"
+                        android:layout_height="@dimen/px180_dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/px120_dp">
+
+                        <include layout="@layout/r1_choose_man" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_girl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/px180_dp"
+                        android:layout_height="@dimen/px180_dp"
+                        android:layout_marginLeft="@dimen/px120_dp">
+
+                        <include layout="@layout/r1_choose_woman" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/px30_dp"
+                android:text="@string/txt_gender_tip"
+                android:textColor="@color/txt_middle"
+                android:textSize="@dimen/px36_sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/btn_reg_submit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px114_dp"
+                android:layout_marginLeft="@dimen/px80_dp"
+                android:layout_marginRight="@dimen/px80_dp"
+                android:layout_marginTop="@dimen/px55_dp"
+                android:background="@color/color_e8e8e8">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/button_reg"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px45_sp" />
+
+            </RelativeLayout>
+
+            <!--<TextView-->
+            <!--android:id="@+id/txt_switch_acount"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dip"-->
+            <!--android:layout_marginTop="@dimen/px20_dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="切换账号"-->
+            <!--android:textColor="@color/blue"-->
+            <!--android:textSize="@dimen/px36_sp" />-->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px386_dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
