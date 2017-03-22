@@ -48,7 +48,7 @@ public class SimpleTipDialog extends ConfirmPopup {
         TextView textView = new TextView(activity);
         textView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         textView.setGravity(gravity);
-        int padding = UIUtil.dp2px(20);
+        int padding = UIUtil.dip2px(activity,20);
         textView.setPadding(padding, padding, padding, padding);
         textView.setText(contentString);
         textView.setTextSize(14);

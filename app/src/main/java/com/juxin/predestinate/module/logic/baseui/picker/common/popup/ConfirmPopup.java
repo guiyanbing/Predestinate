@@ -201,7 +201,7 @@ public abstract class ConfirmPopup<V extends View> extends BottomPopup<View> {
     protected View makeHeaderView() {
         //创建标题
         TextView titleView = new TextView(activity);
-        titleView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, UIUtil.dp2px(40)));
+        titleView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, UIUtil.dip2px(activity,40)));
         titleView.setGravity(location);
         if (!TextUtils.isEmpty(titleText)) {
             titleView.setText(titleText);
@@ -229,7 +229,7 @@ public abstract class ConfirmPopup<V extends View> extends BottomPopup<View> {
     protected View makeFooterView() {
         LinearLayout footerButtonLayout = new LinearLayout(activity);
         footerButtonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        footerButtonLayout.setLayoutParams(new RelativeLayout.LayoutParams(MATCH_PARENT, UIUtil.dp2px(45)));
+        footerButtonLayout.setLayoutParams(new RelativeLayout.LayoutParams(MATCH_PARENT, UIUtil.dip2px(activity,45)));
         footerButtonLayout.setGravity(Gravity.CENTER_VERTICAL);
 
         //创建取消按钮

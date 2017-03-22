@@ -96,8 +96,8 @@ public class OptionPicker extends WheelPicker {
         }
         LinearLayout layout = new LinearLayout(activity);
         layout.setOrientation(LinearLayout.HORIZONTAL);
-        int vertical_padding = UIUtil.dp2px(15);
-        int horizontal_padding = UIUtil.dp2px(40);
+        int vertical_padding = UIUtil.dip2px(activity,15);
+        int horizontal_padding = UIUtil.dip2px(activity,40);
         layout.setPadding(horizontal_padding, vertical_padding, horizontal_padding, vertical_padding);
         layout.setGravity(Gravity.CENTER);
         WheelView optionView = new WheelView(activity);

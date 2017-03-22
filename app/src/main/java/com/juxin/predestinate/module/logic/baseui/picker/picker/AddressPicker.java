@@ -6,9 +6,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.center.area.Province;
+import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.util.UIUtil;
 
@@ -90,7 +90,7 @@ public class AddressPicker extends LinkagePicker {
         }
         //创建根布局
         LinearLayout layout = new LinearLayout(activity);
-        int padding = UIUtil.dp2px(15);
+        int padding = UIUtil.dip2px(activity,15);
         layout.setPadding(padding, padding, padding, padding);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setGravity(Gravity.CENTER);

@@ -165,7 +165,7 @@ public class WheelView extends ScrollView {
         tv.setText(item);
         tv.setTextSize(textSize);
         tv.setGravity(Gravity.CENTER);
-        int padding = UIUtil.dp2px(9);
+        int padding = UIUtil.dip2px(context,9);
         tv.setPadding(padding, padding, padding, padding);
         if (0 == itemHeight) {
             itemHeight = getViewMeasuredHeight(tv);

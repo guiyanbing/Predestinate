@@ -184,13 +184,13 @@ public class DatePicker extends WheelPicker {
     protected View makeCenterView() {
         LinearLayout layout = new LinearLayout(activity);
         layout.setOrientation(LinearLayout.HORIZONTAL);
-        int padding = UIUtil.dp2px(15);
+        int padding = UIUtil.dip2px(activity,15);
         layout.setPadding(0, padding, 0, padding);
         layout.setGravity(Gravity.CENTER);
 
         //创建年滑动选区
         WheelView yearView = new WheelView(activity.getBaseContext());
-        yearView.setLayoutParams(new LinearLayout.LayoutParams(UIUtil.dp2px(80), WRAP_CONTENT));
+        yearView.setLayoutParams(new LinearLayout.LayoutParams(UIUtil.dip2px(activity,80), WRAP_CONTENT));
         yearView.setTextSize(textSize);
         yearView.setTextColor(textColorNormal, textColorFocus);
         yearView.setLineVisible(lineVisible);
@@ -208,7 +208,7 @@ public class DatePicker extends WheelPicker {
 
         //创建月滑动选区
         WheelView monthView = new WheelView(activity.getBaseContext());
-        monthView.setLayoutParams(new LinearLayout.LayoutParams(UIUtil.dp2px(80), WRAP_CONTENT));
+        monthView.setLayoutParams(new LinearLayout.LayoutParams(UIUtil.dip2px(activity,80), WRAP_CONTENT));
         monthView.setTextSize(textSize);
         monthView.setTextColor(textColorNormal, textColorFocus);
         monthView.setLineVisible(lineVisible);
@@ -226,7 +226,7 @@ public class DatePicker extends WheelPicker {
 
         //创建日滑动选区
         final WheelView dayView = new WheelView(activity.getBaseContext());
-        dayView.setLayoutParams(new LinearLayout.LayoutParams(UIUtil.dp2px(80), WRAP_CONTENT));
+        dayView.setLayoutParams(new LinearLayout.LayoutParams(UIUtil.dip2px(activity,80), WRAP_CONTENT));
         dayView.setTextSize(textSize);
         dayView.setTextColor(textColorNormal, textColorFocus);
         dayView.setLineVisible(lineVisible);
