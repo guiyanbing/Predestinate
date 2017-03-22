@@ -5,11 +5,11 @@ import android.text.TextUtils;
 import android.view.Gravity;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.baseui.SimpleTipDialog;
-import com.juxin.predestinate.module.baseui.picker.picker.AddressPicker;
-import com.juxin.predestinate.module.baseui.picker.picker.DatePicker;
-import com.juxin.predestinate.module.baseui.picker.picker.OptionPicker;
-import com.juxin.predestinate.module.baseui.picker.picker.RangePicker;
+import com.juxin.predestinate.module.logic.baseui.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.baseui.picker.picker.AddressPicker;
+import com.juxin.predestinate.module.logic.baseui.picker.picker.DatePicker;
+import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
+import com.juxin.predestinate.module.logic.baseui.picker.picker.RangePicker;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
 
 import java.util.List;
