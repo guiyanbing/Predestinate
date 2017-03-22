@@ -44,6 +44,125 @@ public class HttpMgrImpl implements HttpMgr {
 
     }
 
+    private HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
+        return reqPostNoCacheHttp(urlParam, null, null, post_param, requestCallback);
+    }
+
+    /**
+     * 加密，不缓存
+     * @param urlParam
+     * @param headerMap
+     * @param get_param
+     * @param post_param
+     * @param requestCallback
+     * @return
+     */
+    private HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, String> headerMap,Map<String, Object> get_param,
+                                   Map<String, Object> post_param, RequestComplete requestCallback) {
+        return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
+    }
+
+
+    private HTCallBack reqPostAndCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
+        return reqPostAndCacheHttp(urlParam, null, null, post_param, requestCallback);
+    }
+
+
+    /**
+     * 加密，缓存
+     * @param urlParam
+     * @param headerMap
+     * @param get_param
+     * @param post_param
+     * @param requestCallback
+     * @return
+     */
+    private HTCallBack reqPostAndCacheHttp(UrlParam urlParam, Map<String, String> headerMap,Map<String, Object> get_param,
+                                          Map<String, Object> post_param, RequestComplete requestCallback) {
+        return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_Params, true, requestCallback);
+    }
+
+
+    private HTCallBack reqGetNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
+        return reqGetNoCacheHttp(urlParam, null, get_param, requestCallback);
+    }
+
+    /**
+     * 加密，不缓存
+     * @param urlParam
+     * @param headerMap
+     * @param get_param
+     * @param requestCallback
+     * @return
+     */
+    private HTCallBack reqGetNoCacheHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param, RequestComplete requestCallback) {
+        return reqGetHttp(urlParam, headerMap, get_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
+    }
+
+    private HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
+        return reqGetAndCacheHttp(urlParam, null, get_param, requestCallback);
+    }
+
+    /**
+     * 加密，缓存
+     * @param urlParam
+     * @param headerMap
+     * @param get_param
+     * @param requestCallback
+     * @return
+     */
+    private HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param, RequestComplete requestCallback) {
+        return reqGetHttp(urlParam, headerMap, get_param, RequestParam.CacheType.CT_Cache_Params, true, requestCallback);
+    }
+
+    /**
+     * get
+     * @param urlParam
+     * @param headerMap
+     * @param get_param
+     * @param cacheType
+     * @param isEncrypt
+     * @param requestCallback
+     * @return
+     */
+    private HTCallBack reqGetHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
+                               RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+        return reqHttp(urlParam, headerMap, null, get_param, null, cacheType, isEncrypt, requestCallback);
+    }
+
+    /**
+     * post
+     * @param urlParam
+     * @param headerMap
+     * @param get_param
+     * @param post_param
+     * @param cacheType
+     * @param isEncrypt
+     * @param requestCallback
+     * @return
+     */
+    private HTCallBack reqPostHttp(UrlParam urlParam, Map<String, String> headerMap,Map<String, Object> get_param,
+                                   Map<String, Object> post_param, RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+        return reqHttp(urlParam, headerMap, null, get_param, post_param, cacheType, isEncrypt, requestCallback);
+    }
+
+    private HTCallBack reqHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, File> file_param,
+                                   Map<String, Object> get_param, Map<String, Object> post_param,
+                                   RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+        RequestParam requestParam = new RequestParam();
+        requestParam.setUrlParam(urlParam);
+        requestParam.setHead_param(headerMap);
+        requestParam.setFile_param(file_param);
+        requestParam.setGet_param(get_param);
+        requestParam.setPost_param(post_param);
+        requestParam.setCacheType(cacheType);
+        requestParam.setCacheType(cacheType);
+        requestParam.setNeedEncrypt(isEncrypt);
+        requestParam.setRequestCallback(requestCallback);
+        return request(requestParam);
+    }
+
+
     @Override
     public HTCallBack request(RequestParam requestParam) {
         //TODO 添加完整请求及基础解析
