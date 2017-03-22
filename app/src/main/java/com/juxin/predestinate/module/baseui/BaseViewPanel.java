@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.baseui;
+package com.juxin.predestinate.module.baseui;
 
 import android.annotation.TargetApi;
 import android.content.Context;

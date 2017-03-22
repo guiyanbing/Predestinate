@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.baseui.BaseViewPanel;
 
 
 /**
