@@ -19,6 +19,12 @@
     <color name="color_E5E5E5">#E5E5E5</color>
     <color name="color_FF5722">#FF5722</color>
     <color name="color_aaaaaa">#aaaaaa</color>
+    <color name="color_e5e5e5">#e5e5e5</color>
+    <color name="color_353535">#353535</color>
+    <color name="color_d9d9d9">#d9d9d9</color>
+    <color name="color_ededed">#ededed</color>
+    <color name="color_feeebd">#FEEEBD</color>
+    <color name="color_fba62d">#e5fba62d</color>
 
     <color name="color_30333333">#4D333333</color>
 
@@ -32,6 +38,7 @@
     <color name="white_per90">#E6FFFFFF</color>
     <color name="black">#000000</color>
     <color name="black_per30">#4D000000</color>
+    <color name="read_near">#ffff4a76</color>
 
     <!-- ============引用色值=========== -->
     <color name="colorPrimary">@color/color_009688</color>
@@ -43,23 +50,26 @@
     <color name="divider">@color/color_BDBDBD</color>
     <color name="icons">@color/white</color>
     <color name="disable">@color/color_DDDDDD</color>
-    <!-- 通用色值，搜索进行使用 -->
-    <color name="color_e5e5e5">#e5e5e5</color>
-    <!-- 主要文字颜色 -->
+
+    <!-- 字体 -->
     <color name="text_zhuyao_black">#333333</color>
-    <!-- 次要文字颜色 -->
     <color name="text_ciyao_gray">#aaaaaa</color>
-    <color name="color_title">@color/text_ciyao_gray</color>
     <color name="txt_color1">#9a9a9a</color>
     <color name="txt_color_green">#35c066</color>
-    <!-- 小字体 白色 -->
     <color name="txt_middle">#bbb</color>
 
     <!-- 分割线颜色 -->
+    <color name="color_title">@color/text_ciyao_gray</color>
     <color name="fengexian_gray">#e5e5e5</color>
     <color name="btn_enable">#dddddd</color>
     <color name="mokuai_bg_press">#f5f5f5</color>
     <color name="fengexian_lahei">#dcdcdc</color>
+    <!-- 相机相册 -->
+    <color name="album_takePic_bg">@color/color_353535</color>
+    <color name="album_takePic_txt">@color/color_DDDDDD</color>
+    <color name="album_takePic_verify">@color/color_ededed</color>
+    <color name="album_exhPic_div">@color/color_d9d9d9</color>
+    <color name="album_exhPic_desc">@color/color_aaaaaa</color>
 
     <color name="blue">#4586f2</color>
     <!--待替换-->

@@ -1,5 +1,5 @@
 ﻿#APK 签名key文件目录
-storeFile = ../../../key/xiaoyou.jks
+storeFile = E:\\apks\\xiaoyou.jks
 
 #APK 签名key密码（第一重密码）
 storePassword = xiaoyou123
@@ -18,7 +18,7 @@ VersionCode = 10000000
 VersionName = 1.0.0
 
 #APK输出目录
-ApkPath = D:/mycodes/K_GEN_APK/Predestinate/
+ApkPath = E:\\Fate_It\\apk\\Predestinate
 
 #App名称
-AppName = xiaoyou
+AppName = Predestinate
