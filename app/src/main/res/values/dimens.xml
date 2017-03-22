@@ -148,6 +148,7 @@
     <dimen name="px240_dp">80dp</dimen>
     <dimen name="px245_dp">81.7dp</dimen>
     <dimen name="px246_dp">82.0dp</dimen>
+    <dimen name="px250_dp">83.3dp</dimen>
     <dimen name="px255_dp">85.0dp</dimen>
     <dimen name="px265_dp">88.3dp</dimen>
     <dimen name="px270_dp">90.0dp</dimen>
@@ -205,5 +206,11 @@
     <dimen name="center_item_go_kg">@dimen/px52_dp</dimen>
     <!-- 底部空白区域 -->
     <dimen name="divider_page_footing">@dimen/px180_dp</dimen>
+
+    <!-- 离标题栏的高度 -->
+    <dimen name="marginTop">@dimen/px35_dp</dimen>
+    <!-- 底部提示高度 -->
+    <dimen name="tip_footer_height">@dimen/px116_dp</dimen>
+
 
 </resources>

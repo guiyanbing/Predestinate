@@ -95,4 +95,16 @@ public class MsgType {
      */
     public static final String MT_Network_Status_Change = "MT_Network_Status_Change";
 
+    /**
+     * App内悬浮窗通知
+     */
+    public static final String MT_APP_Suspension_Notice = "MT_APP_Suspension_Notice";
+
+    /**
+     * 悬浮窗内部互调通知
+     * 非TipsBarMgr相关不监听
+     */
+    public static final String MT_Inner_Suspension_Notice = "MT_Inner_Suspension_Notice";
+
+
 }
