@@ -292,4 +292,11 @@
         <item name="android:thumb">@drawable/y1_slide_btn_thumb</item>
         <item name="android:thumbOffset">0dp</item>
     </style>
+
+    <!-- ============== 动画 ==================-->
+    <style name="AnimScaleInScaleOutOverShoot" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/scale_in_shot</item>
+        <item name="android:windowExitAnimation">@anim/scale_out</item>
+        <item name="android:interpolator">@anim/left_in</item>
+    </style>
 </resources>

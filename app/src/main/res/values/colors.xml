@@ -18,6 +18,13 @@
     <color name="color_DDDDDD">#DDDDDD</color>
     <color name="color_E5E5E5">#E5E5E5</color>
     <color name="color_FF5722">#FF5722</color>
+    <color name="color_FC615C">#FC615C</color>
+    <!-- ============小友模块添加=========== -->
+    <color name="color_F0F0F0">#F0F0F0</color>
+    <color name="color_B0B0B0">#B0B0B0</color>
+    <color name="color_FF9900">#FF9900</color>
+    <color name="color_8E8E8E">#8E8E8E</color>
+    <color name="color_F5F5F5">#F5F5F5</color>
     <color name="color_aaaaaa">#aaaaaa</color>
     <color name="color_e5e5e5">#e5e5e5</color>
     <color name="color_353535">#353535</color>
@@ -47,6 +54,7 @@
     <color name="divider">@color/color_BDBDBD</color>
     <color name="icons">@color/white</color>
     <color name="disable">@color/color_DDDDDD</color>
+    <color name="theme_color_red">@color/color_FC615C</color>
 
     <!-- 字体 -->
     <color name="text_zhuyao_black">#333333</color>
@@ -58,6 +66,8 @@
     <!-- 分割线颜色 -->
     <color name="color_title">@color/text_ciyao_gray</color>
     <color name="fengexian_gray">#e5e5e5</color>
+    <color name="btn_enable">#dddddd</color>
+    <color name="mokuai_bg_press">#f5f5f5</color>
 
     <!-- 相机相册 -->
     <color name="album_takePic_bg">@color/color_353535</color>

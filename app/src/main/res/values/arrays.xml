@@ -1,0 +1,16 @@
+<resources>
+    <string-array name="auth_arr">
+    <item>手机认证</item>
+    <item>银行信息</item>
+    <item>身份认证</item>
+    <item>视频认证</item>
+   </string-array>
+    <string-array name="friend_list_Label">
+        <item>标签分组</item>
+        <item>亲密好友等级</item>
+    </string-array>
+    <string-array name="friend_list_describe">
+        <item>为您的亲密好友添加分组</item>
+        <item>为您的亲密好友添加分组</item>
+    </string-array>
+</resources>

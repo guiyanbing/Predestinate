@@ -1,16 +1,19 @@
 package com.juxin.library.utils;
 
+import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -718,5 +721,26 @@ public class FileUtil {
                 }
             }
         }
+    }
+    /**
+     * 从assets里边读取字符串
+     *
+     * @param context
+     * @param fileName
+     * @return
+     */
+    public static String getFromAssets(Context context, String fileName) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader(context.getResources().getAssets().open(fileName));
+            BufferedReader bufReader = new BufferedReader(inputReader);
+            String line = "";
+            String Result = "";
+            while ((line = bufReader.readLine()) != null)
+                Result += line;
+            return Result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
