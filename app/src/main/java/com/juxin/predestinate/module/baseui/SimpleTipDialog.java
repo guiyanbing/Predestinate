@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.baseui;
+package com.juxin.predestinate.module.baseui;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.picker.common.popup.ConfirmPopup;
+import com.juxin.predestinate.module.baseui.picker.common.popup.ConfirmPopup;
 import com.juxin.predestinate.module.util.UIUtil;
 
 
@@ -48,7 +48,7 @@ public class SimpleTipDialog extends ConfirmPopup {
         TextView textView = new TextView(activity);
         textView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         textView.setGravity(gravity);
-        int padding = UIUtil.dip2px(activity,20);
+        int padding = UIUtil.dip2px(activity, 20);
         textView.setPadding(padding, padding, padding, padding);
         textView.setText(contentString);
         textView.setTextSize(14);

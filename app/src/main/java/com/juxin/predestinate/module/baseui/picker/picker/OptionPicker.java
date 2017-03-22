@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.baseui.picker.picker;
+package com.juxin.predestinate.module.baseui.picker.picker;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
+import com.juxin.predestinate.module.baseui.picker.widget.WheelView;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;
@@ -96,8 +96,8 @@ public class OptionPicker extends WheelPicker {
         }
         LinearLayout layout = new LinearLayout(activity);
         layout.setOrientation(LinearLayout.HORIZONTAL);
-        int vertical_padding = UIUtil.dip2px(activity,15);
-        int horizontal_padding = UIUtil.dip2px(activity,40);
+        int vertical_padding = UIUtil.dip2px(activity, 15);
+        int horizontal_padding = UIUtil.dip2px(activity, 40);
         layout.setPadding(horizontal_padding, vertical_padding, horizontal_padding, vertical_padding);
         layout.setGravity(Gravity.CENTER);
         WheelView optionView = new WheelView(activity);
