@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.model.tips;
+package com.juxin.predestinate.module.logic.tips;
 
 /**
  * 那个位置要显示标题

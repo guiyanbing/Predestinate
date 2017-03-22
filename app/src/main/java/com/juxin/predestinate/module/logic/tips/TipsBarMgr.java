@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.model.tips;
+package com.juxin.predestinate.module.logic.tips;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;

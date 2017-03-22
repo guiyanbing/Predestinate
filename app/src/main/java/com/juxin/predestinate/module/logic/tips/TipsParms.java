@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.model.tips;
+package com.juxin.predestinate.module.logic.tips;
 
 /**
  * 提示条用到的参数

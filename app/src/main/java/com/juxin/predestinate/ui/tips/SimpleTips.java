@@ -11,8 +11,8 @@ import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.model.tips.TipsBarMgr;
-import com.juxin.predestinate.module.logic.model.tips.TipsBarType;
+import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
+import com.juxin.predestinate.module.logic.tips.TipsBarType;
 import com.juxin.predestinate.module.util.TimerUtil;
 
 import org.json.JSONObject;
