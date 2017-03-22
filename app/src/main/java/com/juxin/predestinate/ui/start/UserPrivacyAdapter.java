@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
-import com.juxin.predestinate.module.baseui.ExBaseAdapter;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 
 import java.util.List;
 

@@ -8,6 +8,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.BuildConfig;
+import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
@@ -113,5 +114,17 @@ public final class ModuleMgr {
             loginMgr = new LoginMgr();
         }
         return loginMgr;
+    }
+
+    /**
+     * 通用
+     */
+    private static CommonMgr commonMgr = null;
+
+    public static CommonMgr getCommonMgr() {
+        if (commonMgr == null) {
+            commonMgr = new CommonMgr();
+        }
+        return commonMgr;
     }
 }

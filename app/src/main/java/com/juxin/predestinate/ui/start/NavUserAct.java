@@ -17,7 +17,6 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  * Created by XY on 2017/3/21.
  */
 public class NavUserAct extends BaseActivity {
-    private static final String TAG = "NavUserAct";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         isCanBack(false);
@@ -48,7 +47,7 @@ public class NavUserAct extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-       ModuleMgr.getLoginMgr().clearCookie();
+        ModuleMgr.getLoginMgr().clearCookie();
         super.onBackPressed();
     }
 }

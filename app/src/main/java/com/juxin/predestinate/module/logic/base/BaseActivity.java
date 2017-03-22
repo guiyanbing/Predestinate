@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.baseui.RightSlidLinearLayout;
+import com.juxin.predestinate.module.logic.baseui.RightSlidLinearLayout;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等

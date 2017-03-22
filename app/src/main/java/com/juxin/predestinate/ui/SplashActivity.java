@@ -2,14 +2,19 @@ package com.juxin.predestinate.ui;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.base.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.start.NavUserAct;
 
 /**
  * 闪屏页面
@@ -19,6 +24,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        isCanBack(false);
+        setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
@@ -37,8 +44,7 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                UIShow.show(SplashActivity.this, MainActivity.class);
-                finish();
+                skipLogic();
             }
 
             @Override
@@ -50,5 +56,44 @@ public class SplashActivity extends BaseActivity {
             }
         });
         animator.start();
+    }
+
+    //================ Intent跳转 ===================================
+    private void skipLogic() {
+        Intent intent = null;
+        if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
+// TODO           ModuleMgr.getCenterMgr().loadMyInfo(null);
+            if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey()) && !checkUserIsUploadAvatar()) {
+//TODO                UIShow.showNoHeadActToMain(this);
+//                finish();
+            } else {
+                intent = new Intent(SplashActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            }
+        } else {
+            intent = new Intent(SplashActivity.this, NavUserAct.class);
+        }
+
+        if (null == intent) return;
+        startActivity(intent);
+        this.finish();
+    }
+
+    /**
+     * @return 是否到达第二天key
+     */
+    private String getUploadHeadKey() {
+        return "judgeUploadHead" + App.uid;
+    }
+    /**
+     * 判断了是否上传了用户头像
+     */
+    private boolean checkUserIsUploadAvatar() {
+        //TODO 待替换
+//        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+//        String avatar = userDetail.getAvatar();
+//        // 判断用户头像是否正常
+//        return !(TextUtils.isEmpty(avatar) || userDetail.getAvatar_status() == 2);
+        return true;
     }
 }

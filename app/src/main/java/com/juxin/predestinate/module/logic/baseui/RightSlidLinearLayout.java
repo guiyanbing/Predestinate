@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.baseui;
+package com.juxin.predestinate.module.logic.baseui;
 
 import android.content.Context;
 import android.content.res.TypedArray;

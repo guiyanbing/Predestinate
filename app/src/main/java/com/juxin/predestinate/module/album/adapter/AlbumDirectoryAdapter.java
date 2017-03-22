@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.album.bean.AlbumDirectories;
 import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
-import com.juxin.predestinate.module.baseui.ExBaseAdapter;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.io.File;

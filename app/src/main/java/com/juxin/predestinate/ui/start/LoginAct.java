@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.start;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.base.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.SplashActivity;
+import com.juxin.predestinate.ui.main.MainActivity;
 
 import java.util.List;
 
@@ -94,9 +97,12 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_user_login_submit:
-                if (!checkUserDataIsEmpty()) {
+                Intent intent = new Intent(LoginAct.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+//                if (!checkUserDataIsEmpty()) {
 //                    loginMgr.onLogin(this, currentUserID, currentUserPwd, null, true);
-                }
+//                }
                 break;
 
             case R.id.img_user_login_arrow:

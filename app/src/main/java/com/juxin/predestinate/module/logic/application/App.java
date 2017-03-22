@@ -12,7 +12,10 @@ public class App extends Application {
 
     public static Context context;
     public static Activity activity;
-
+    /**
+     * 登录用户的uid（供运行时程序内调用）
+     */
+    public static long uid = 0;//全局uid，避免重复从本地获取
     @Override
     public void onCreate() {
         super.onCreate();

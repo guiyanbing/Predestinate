@@ -16,7 +16,7 @@ import com.juxin.predestinate.module.album.bean.SingleImageModel;
 import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
 import com.juxin.predestinate.module.album.help.AlbumHelper;
 import com.juxin.predestinate.module.album.ImgSelectUtil;
-import com.juxin.predestinate.module.baseui.ExBaseAdapter;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.List;

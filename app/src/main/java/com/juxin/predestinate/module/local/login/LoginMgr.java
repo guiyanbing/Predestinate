@@ -31,6 +31,20 @@ public class LoginMgr{
     public static String cookie = null;
     public static boolean hasLogin = false;//是否已经登录
 
+
+    /**
+     * @return 判断Cookie是否存在
+     */
+    public boolean checkAuthIsExist() {
+        return !TextUtils.isEmpty(getCookie());
+    }
+    /**
+     * @return 获取cookie
+     */
+    public String getCookie() {
+        return PSP.getInstance().getString(AUTH, "");
+    }
+
     //************************************ 登录用户信息列表存储 *****************************\\
     private ArrayList<UP> userList;  // 维护登录过的用户数据列表，防止多次进行SP读写操作
     /**
@@ -170,4 +184,5 @@ public class LoginMgr{
     public void setResetStatus(boolean resetStatus) {
         this.IF_PW_RESET = resetStatus;
     }
+
 }
