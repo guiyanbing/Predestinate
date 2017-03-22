@@ -37,7 +37,47 @@
             android:name=".ui.test.TestActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.NavUserAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.RegInfoAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.LoginAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
+        <!-- ============= 相机相册模块start ============= -->
+        <activity
+            android:name=".module.album.activity.TransferActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".module.album.activity.PickOrTakeImageActivity"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".module.album.activity.PickBigImagesActivity"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".module.album.activity.ResetOrFinishAct"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".module.album.crop.CropImageAct"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- ============= service =============== -->
         <service
             android:name=".module.logic.socket.CoreService"
             android:process=":coreservice" />

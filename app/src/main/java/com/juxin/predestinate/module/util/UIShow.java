@@ -3,9 +3,13 @@ package com.juxin.predestinate.module.util;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 
 import com.juxin.predestinate.module.logic.base.WebActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.start.LoginAct;
+import com.juxin.predestinate.ui.start.NavUserAct;
+import com.juxin.predestinate.ui.start.RegInfoAct;
 
 /**
  * 应用内页面跳转工具
@@ -65,4 +69,26 @@ public class UIShow {
         context.startActivity(intent);
     }
 
+    /**
+     * 打开导航页
+     */
+    public static void showNavUserAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, NavUserAct.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开登录页
+     */
+    public static void showLoginAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, LoginAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开注册页
+     */
+    public static void showRegInfoAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, RegInfoAct.class);
+        activity.startActivity(intent);
+    }
 }

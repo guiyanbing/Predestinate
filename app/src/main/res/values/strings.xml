@@ -7,7 +7,6 @@
     <string name="main_btn_xiaoyou">小友</string>
     <string name="main_btn_plaza">广场</string>
     <string name="main_btn_user">我的</string>
-
     <string name="base_title_back">返回</string>
 
 
@@ -28,10 +27,27 @@
     <string name="toast_feedback_submit">提交成功，感谢您的支持</string>
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
-
-    <!--提示条通知-->
+    <!-- 注册/个人中心 -->
+    <string name="str_not_filled">未填写</string>
+    <string name="upload_head_man">上传真实头像\n非真头像不会得到推荐</string>
+    <string name="upload_head_female">上传真实优质头像\n更容易获得奖励</string>
+    <string name="txt_head_ts">请上传真实、清晰美观的个人近照，\n上传宠物照、照片不清晰、裸露的照片不予通过</string>
     <string name="portrait_tips_man">上传真实头像 非真实头像不会得到推荐</string>
     <string name="portrait_tips_women">上传真实美观头像 获得奖励提高80%</string>
-    <!--end 提示条通知-->
+    <string name="ext_nickname_hit">填写昵称</string>
+    <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
+    <string name="button_reg">一键注册</string>
+
+
+    <!--  相册  -->
+    <string name="album_all" translatable="false">全部图片</string>
+    <string name="album_take_pic">拍摄照片</string>
+    <string name="preview_without_num">预览</string>
+    <string name="preview_with_num">预览(%1$d)</string>
+    <string name="choose_pic_finish">完成</string>
+    <string name="choose_pic_finish_with_num">完成(%1$d/%2$d)</string>
+    <string name="choose_pic_num_out_of_index">你最多只能选择%1$d张照片</string>
+    <string name="choose_pic">选择</string>
+    <string name="choose_no_pick">你还没有选择任何图片</string>
 
 </resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.juxin.library.view.CustomFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_choose_woman"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/no_choose_woman"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:src="@drawable/r1_woman01" />
+
+    <RelativeLayout
+        android:id="@+id/has_choose_woman"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_gender_girl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:src="@drawable/r1_woman02" />
+
+        <ImageView
+            android:id="@+id/iv_girl_check"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/iv_gender_girl"
+            android:layout_alignRight="@+id/iv_gender_girl"
+            android:gravity="center"
+            android:src="@drawable/r1_true_ico" />
+    </RelativeLayout>
+</com.juxin.library.view.CustomFrameLayout>

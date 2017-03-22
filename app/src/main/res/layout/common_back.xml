@@ -23,7 +23,7 @@
 
             <ImageView
                 style="@style/icon_small"
-                android:src="@drawable/y1_back_btn" />
+                android:src="@drawable/r1_back_btn" />
 
             <TextView
                 android:id="@+id/back_view_tip"
@@ -67,7 +67,7 @@
             android:textColor="@color/text_zhuyao_black"
             android:textSize="@dimen/px52_sp" />
 
-        <com.p.library.unread.BadgeView
+        <com.juxin.library.unread.BadgeView
             android:id="@+id/title_badge_view"
             style="@style/badge_num_big"
             android:layout_marginLeft="-3dip"
