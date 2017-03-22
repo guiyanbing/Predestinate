@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.config;
+package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.logic.application.App;

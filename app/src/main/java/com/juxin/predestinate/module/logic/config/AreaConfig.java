@@ -12,12 +12,11 @@ import java.util.ArrayList;
 
 /**
  * 地区管理类
- * Created by ZRP on 2016/5/18.
  */
 public class AreaConfig extends BaseData {
 
-    private ArrayList<Province> provinces = new ArrayList<Province>();
-    private ArrayList<Province> temp = new ArrayList<Province>();
+    private ArrayList<Province> provinces = new ArrayList<>();
+    private ArrayList<Province> temp = new ArrayList<>();
 
     private volatile static AreaConfig instance = null;
 
@@ -56,7 +55,7 @@ public class AreaConfig extends BaseData {
         for (Province pro : temp) {
             ArrayList<City> cityList = pro.getCities();
             if (cityList == null || cityList.isEmpty()) {
-                cityList = new ArrayList<City>();
+                cityList = new ArrayList<>();
                 cityList.add(new City("不限", 0, pro.getProvince(), pro.getProvinceID()));
             } else if (cityList.size() > 1 && "不限".equals(cityList.get(0).getCity())) {
                 cityList.remove(0);
@@ -80,7 +79,7 @@ public class AreaConfig extends BaseData {
         for (Province pro : temp) {
             ArrayList<City> cityList = pro.getCities();
             if (cityList == null || cityList.isEmpty()) {
-                cityList = new ArrayList<City>();
+                cityList = new ArrayList<>();
                 cityList.add(0, new City("不限", 0, pro.getProvince(), pro.getProvinceID()));
             } else if (!"不限".equals(cityList.get(0).getCity())) {
                 cityList.add(0, new City("不限", 0, pro.getProvince(), pro.getProvinceID()));

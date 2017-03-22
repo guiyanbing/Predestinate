@@ -2,7 +2,7 @@ package com.juxin.predestinate.bean.center.user;
 
 import android.os.Parcel;
 
-import com.juxin.predestinate.module.config.InfoConfig;
+import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.util.ChineseFilter;
 
 import org.json.JSONObject;
