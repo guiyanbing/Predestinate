@@ -39,11 +39,6 @@
     <string name="button_reg">一键注册</string>
 
 
-    <!--提示条通知-->
-    <string name="portrait_tips_man">上传真实头像 非真实头像不会得到推荐</string>
-    <string name="portrait_tips_women">上传真实美观头像 获得奖励提高80%</string>
-    <!--end 提示条通知-->
-
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>
     <string name="album_take_pic">拍摄照片</string>
