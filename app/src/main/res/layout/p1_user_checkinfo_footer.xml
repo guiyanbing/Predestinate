@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/view_album"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="个人相册"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <LinearLayout
+            android:id="@+id/album_item"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:scrollbars="none" />
+
+        <TextView
+            android:id="@+id/photo_nums"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px35_dp"
+            android:text="0"
+            android:textColor="@color/text_ciyao_gray" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/jiayuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_margintop" />
+
+        <LinearLayout
+            android:id="@+id/view_jiayuan"
+            style="@style/center_set_item">
+
+            <TextView
+                android:layout_width="@dimen/px200_dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:text="动态"
+                android:textColor="@color/color_999999"
+                android:textSize="@dimen/px40_sp" />
+
+            <com.p.library.view.roadlights.LMarqueeView
+                android:id="@+id/lmv_home_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px35_dp"
+                android:clickable="false"
+                android:focusable="false" />
+
+            <ImageView style="@style/right_go" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/layout_margintop" />
+
+    <LinearLayout
+        android:id="@+id/view_fans"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="粉丝"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <RelativeLayout
+            style="@style/center_item_layout"
+            android:gravity="center_vertical">
+
+            <com.xiaoyou.friends.ui.info.detail.CircleStackView
+                android:id="@+id/cv_fans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/fans_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="暂时还没有粉丝"
+                android:textColor="@color/text_ciyao_gray"
+                android:textSize="@dimen/px42_sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_fans_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:textColor="@color/text_ciyao_gray" />
+
+        <ImageView style="@style/right_go" />
+
+    </LinearLayout>
+
+    <TextView style="@style/divider_line" />
+
+    <LinearLayout
+        android:id="@+id/view_level"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:text="账号等级"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <com.xiaoyou.friends.ui.commonlist.UserLevelViewEx
+            android:id="@+id/uv_level"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical" />
+
+        <ImageView
+            style="@style/right_go"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_margintop" />
+
+    <LinearLayout
+        android:id="@+id/view_jianjie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/px35_dp">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="资料介绍"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <LinearLayout
+            style="@style/center_item_text"
+            android:gravity="center_vertical">
+
+            <include layout="@layout/p1_user_flow_label" />
+        </LinearLayout>
+
+        <ImageView
+            style="@style/right_go"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_margintop" />
+
+    <LinearLayout
+        android:id="@+id/view_sign"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:text="关系"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <TextView
+            android:id="@+id/tv_relationship"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="@dimen/px3_dp"
+            android:text="自己"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/px45_sp" />
+    </LinearLayout>
+
+    <TextView style="@style/divider_line" />
+
+    <LinearLayout
+        android:id="@+id/view_register"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="注册时间"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <TextView
+            android:id="@+id/tv_register"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
+            android:text="2016-01-01"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/px45_sp" />
+    </LinearLayout>
+
+    <TextView style="@style/divider_line" />
+
+    <LinearLayout
+        android:id="@+id/view_id"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="用户ID号"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
+            android:text="22167000"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/px45_sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px386_dp"
+        android:background="@color/bg_color" />
+</LinearLayout>

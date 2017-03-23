@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:overScrollMode="always"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <com.juxin.library.view.CustomFrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_footer_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tm_bg"
+        android:visibility="gone">
+
+        <!--底部发消息 打招呼 关注-->
+        <LinearLayout
+            android:id="@+id/userinfo_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/userinfo_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/px21_dp">
+
+                    <ImageView
+                        android:layout_width="@dimen/px56_dp"
+                        android:layout_height="@dimen/px56_dp" />
+
+                    <TextView
+                        android:id="@+id/is_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px24_dp"
+                        android:text="发消息"
+                        android:textSize="@dimen/px39_sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/px1_dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/px30_dp"
+                    android:layout_marginTop="@dimen/px30_dp"
+                    android:background="@color/text_ciyao_gray" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/userinfo_sayhello"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="@dimen/px21_dp">
+
+                <ImageView
+                    android:layout_width="@dimen/px56_dp"
+                    android:layout_height="@dimen/px56_dp" />
+
+                <TextView
+                    android:id="@+id/is_say_hi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/px24_dp"
+                    android:text="打招呼"
+                    android:textSize="@dimen/px39_sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_friend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <View
+                    android:layout_width="@dimen/px1_dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/px30_dp"
+                    android:layout_marginTop="@dimen/px30_dp"
+                    android:background="@color/text_ciyao_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/px21_dp">
+
+                    <ImageView
+                        android:layout_width="@dimen/px56_dp"
+                        android:layout_height="@dimen/px56_dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px24_dp"
+                        android:text="加好友"
+                        android:textSize="@dimen/px39_sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--编辑个人资料-->
+        <LinearLayout
+            android:id="@+id/edit_user_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/px24_dp">
+
+            <ImageView
+                android:layout_width="@dimen/px56_dp"
+                android:layout_height="@dimen/px56_dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px24_dp"
+                android:text="编辑个人资料"
+                android:textSize="@dimen/px39_sp" />
+        </LinearLayout>
+    </com.juxin.library.view.CustomFrameLayout>
+
+    <include layout="@layout/common_back" />
+</RelativeLayout>

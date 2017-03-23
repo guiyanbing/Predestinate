@@ -224,6 +224,13 @@
         <item name="android:layout_height">@dimen/px200_dp</item>
     </style>
 
+    <!-- 右侧进入箭头 -->
+    <style name="right_go" parent="icon_small">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/px35_dp</item>
+        <item name="android:src">@drawable/y1_right_go</item>
+    </style>
+
     <!-- *****************图片与头像****************** -->
 
     <!-- *****************badge角标****************** -->
@@ -259,6 +266,13 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:padding">@dimen/px35_dp</item>
+    </style>
+    <!-- 个人中心中部的样式 -->
+    <style name="center_item_layout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/px35_dp</item>
     </style>
     <!-- 个人中心中部textView的样式 -->
     <style name="center_item_text">
