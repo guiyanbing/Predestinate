@@ -40,6 +40,9 @@
     <style name="badge" />
     <!--输入框样式-->
     <style name="editText" />
+    <!-- item样式 -->
+    <style name="item" />
+
     <!-- =======================细分的二级style，继承自一级style========================= -->
 
     <!-- ***********button按钮************ -->
@@ -166,6 +169,11 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <!-- *********** item条目 ************ -->
+    <style name="item_common" parent="item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <!-- =======================细分的三级style，继承自二级style========================= -->
 
     <!-- *****************button按钮****************** -->
@@ -350,5 +358,16 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <!-- =========================== item条目样式 ============================== -->
+    <!--公共用户list item条目-->
+    <style name="common_list_item" parent="item_common">
+        <item name="android:background">@drawable/list_item_selector</item>
+        <item name="android:paddingBottom">@dimen/px24_dp</item>
+        <item name="android:paddingLeft">@dimen/px36_dp</item>
+        <item name="android:paddingRight">@dimen/px36_dp</item>
+        <item name="android:paddingTop">@dimen/px24_dp</item>
+    </style>
+
 
 </resources>
