@@ -14,6 +14,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- 百度定位所需权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <application
         android:name=".module.logic.application.App"
         android:allowBackup="false"
@@ -84,6 +89,17 @@
         <service
             android:name=".module.logic.socket.CoreService"
             android:process=":coreservice" />
+
+        <!-- ============== 第三方 ====================== -->
+        <!-- 百度定位 注意后续对 AK 的替换 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="czltCjkpCiT1sawjuxGzAeTMRWMZATPP" />
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
     </application>
 
 </manifest>
