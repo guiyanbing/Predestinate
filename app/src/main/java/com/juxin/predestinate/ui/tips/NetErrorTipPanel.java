@@ -12,7 +12,7 @@ import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.base.BaseViewPanel;
+import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 
 import static com.juxin.library.observe.MsgType.MT_Network_Status_Change;

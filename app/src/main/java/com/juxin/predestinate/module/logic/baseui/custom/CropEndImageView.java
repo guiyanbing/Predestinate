@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.baseui;
+package com.juxin.predestinate.module.logic.baseui.custom;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

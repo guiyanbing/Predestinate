@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.base.BaseFragment;
+import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 
 /**
  * 消息

@@ -8,6 +8,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.BuildConfig;
+import com.juxin.predestinate.module.local.center.CenterMgr;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
@@ -103,6 +104,19 @@ public final class ModuleMgr {
             addModule(httpMgr);
         }
         return httpMgr;
+    }
+
+    /**
+     * 个人中心管理
+     */
+    private static CenterMgr centerMgr = null;
+
+    public static CenterMgr getCenterMgr() {
+        if (centerMgr == null) {
+            centerMgr = new CenterMgr();
+            addModule(centerMgr);
+        }
+        return centerMgr;
     }
     /**
      * 登录管理

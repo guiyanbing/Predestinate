@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--流式布局-->
+    <declare-styleable name="FlowLayout">
+        <attr name="horizontal_spacing" format="dimension" />
+        <attr name="vertical_spacing" format="dimension" />
+    </declare-styleable>
+
     <!-- 裁切布局自定义属性 -->
     <declare-styleable name="ClipViewLayout">
         <attr name="clipType" format="enum">

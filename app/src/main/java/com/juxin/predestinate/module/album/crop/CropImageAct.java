@@ -11,7 +11,7 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.DirUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.album.help.AlbumHelper;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;

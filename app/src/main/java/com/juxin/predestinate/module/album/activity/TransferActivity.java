@@ -8,7 +8,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.album.help.AlbumHelper;
 import com.juxin.predestinate.module.album.help.ImgConstant;
 import com.juxin.predestinate.module.album.ImgSelectUtil;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 import java.util.List;
 

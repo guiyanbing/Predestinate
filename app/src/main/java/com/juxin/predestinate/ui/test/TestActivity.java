@@ -11,7 +11,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.User;
 import com.juxin.predestinate.bean.db.UserDao;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.db.DBManager;
 
 import java.util.List;

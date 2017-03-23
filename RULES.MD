@@ -6,7 +6,7 @@
 - java class文件命名遵守大驼峰命名规范。
 - java方法名遵循小驼峰命名规范，首字母小写。
 - 资源文件名和id等以下划线`_`分割。
-- 当前资源文件版本为：<strong>`r1`</strong>。
+- 当前资源文件版本为：<strong>`p1`</strong>。
 
 #### class命名规则
 - activity、fragment等页面命名：模块+Activity/Fragment。如：`RankDetailActivity、GameRankFragment`

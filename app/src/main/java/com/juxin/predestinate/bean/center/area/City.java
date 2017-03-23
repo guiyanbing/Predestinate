@@ -1,7 +1,7 @@
 package com.juxin.predestinate.bean.center.area;
 
 
-import com.juxin.predestinate.module.logic.base.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 

@@ -1,16 +1,9 @@
-package com.juxin.predestinate.module.logic.base;
+package com.juxin.predestinate.module.logic.baseui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.JsResult;
 import android.webkit.URLUtil;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.juxin.library.utils.NetworkUtils;
@@ -20,6 +13,13 @@ import com.juxin.library.view.DownloadProgressView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.invoke.WebAppInterface;
+import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 /**
  * 通用的网络请求处理panel
