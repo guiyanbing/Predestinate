@@ -14,6 +14,10 @@ import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 
 /**
+ * 页面四种状态： {@link #showLoading()}加载中，{@link #showNetError()}网络错误、
+ * {@link #showNoData()}无数据、{@link #showXrecyclerView()}可刷新RecycleView、
+ * {@link #showRecyclerView()}普通RecycleView
+ *
  * Created by Kind on 2017/3/21.
  */
 
@@ -50,17 +54,14 @@ public class CustomRecyclerView extends LinearLayout {
     }
 
     /**
-     * XRecyclerView
-     * @return
+     * @return  获得下拉加载的RecyclerView
      */
     public XRecyclerView getXRecyclerView() {
         return (XRecyclerView) customFrameLayout.findViewById(R.id.common_xrecyclerView);
     }
 
     /**
-     * 获得下拉加载的RecyclerView
-     *
-     * @return
+     * @return  获得普通RecyclerView
      */
     public RecyclerView getRecyclerView() {
         return (RecyclerView) customFrameLayout.findViewById(R.id.common_recyclerView);
