@@ -1,7 +1,8 @@
 package com.juxin.predestinate.bean.start;
 
 
-import com.juxin.predestinate.module.logic.base.BaseData;
+
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 

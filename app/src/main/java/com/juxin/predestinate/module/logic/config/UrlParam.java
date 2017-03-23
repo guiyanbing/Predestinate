@@ -1,9 +1,9 @@
 package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.UserLogin;
+import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.bean.start.UserReg;
-import com.juxin.predestinate.module.logic.base.BaseData;
 
 import java.util.Map;
 
