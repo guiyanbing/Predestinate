@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.base;
+package com.juxin.predestinate.bean.net;
 
 import android.text.TextUtils;
 

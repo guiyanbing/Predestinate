@@ -1,15 +1,12 @@
 package com.juxin.predestinate.ui.setting;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 
 /**

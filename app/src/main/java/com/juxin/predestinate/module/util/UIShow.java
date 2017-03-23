@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
-import com.juxin.predestinate.module.logic.base.WebActivity;
+import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;

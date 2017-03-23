@@ -5,7 +5,7 @@ import android.content.Context;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
-import com.juxin.predestinate.module.logic.base.BaseViewPanel;
+import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
 import com.juxin.predestinate.module.logic.tips.TipsBarType;
 

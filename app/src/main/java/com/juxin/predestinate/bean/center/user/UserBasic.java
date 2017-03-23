@@ -3,9 +3,9 @@ package com.juxin.predestinate.bean.center.user;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.juxin.predestinate.module.config.AreaConfig;
+import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
-import com.juxin.predestinate.module.logic.base.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 

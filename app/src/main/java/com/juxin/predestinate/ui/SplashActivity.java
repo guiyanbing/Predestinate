@@ -5,14 +5,12 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
-import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.start.NavUserAct;
 

@@ -29,7 +29,7 @@ import com.juxin.predestinate.module.album.help.AlbumAnime;
 import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
 import com.juxin.predestinate.module.album.help.AlbumHelper;
 import com.juxin.predestinate.module.album.help.ImgConstant;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.io.File;

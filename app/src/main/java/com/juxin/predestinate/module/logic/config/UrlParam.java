@@ -1,6 +1,6 @@
 package com.juxin.predestinate.module.logic.config;
 
-import com.juxin.predestinate.module.logic.base.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import java.util.Map;
 

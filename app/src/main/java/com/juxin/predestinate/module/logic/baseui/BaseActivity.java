@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.base;
+package com.juxin.predestinate.module.logic.baseui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.RightSlidLinearLayout;
+import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等

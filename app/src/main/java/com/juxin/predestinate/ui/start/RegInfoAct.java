@@ -15,11 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.juxin.library.utils.FileUtil;
-import com.juxin.library.utils.StringUtils;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;

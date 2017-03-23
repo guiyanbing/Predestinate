@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.juxin.library.custom.NoDoubleClickListener;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.album.activity.PickOrTakeImageActivity;
 import com.juxin.predestinate.module.album.bean.SingleImageModel;
@@ -18,6 +17,7 @@ import com.juxin.predestinate.module.album.help.AlbumHelper;
 import com.juxin.predestinate.module.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.util.List;
 

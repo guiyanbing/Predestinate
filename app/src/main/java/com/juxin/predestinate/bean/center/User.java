@@ -3,7 +3,7 @@ package com.juxin.predestinate.bean.center;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.juxin.predestinate.module.logic.base.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

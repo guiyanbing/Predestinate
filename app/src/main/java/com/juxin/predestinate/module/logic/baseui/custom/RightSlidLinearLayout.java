@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.baseui;
+package com.juxin.predestinate.module.logic.baseui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 
 
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

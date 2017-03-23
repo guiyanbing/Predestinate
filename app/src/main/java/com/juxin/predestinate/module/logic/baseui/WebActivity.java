@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.base;
+package com.juxin.predestinate.module.logic.baseui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

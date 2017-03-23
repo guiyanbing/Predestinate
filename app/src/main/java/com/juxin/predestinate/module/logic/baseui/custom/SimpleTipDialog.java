@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.logic.baseui;
+package com.juxin.predestinate.module.logic.baseui.custom;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;

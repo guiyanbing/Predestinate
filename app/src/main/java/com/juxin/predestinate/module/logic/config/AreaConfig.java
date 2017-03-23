@@ -6,7 +6,7 @@ import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.center.area.Province;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.base.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import java.util.ArrayList;
 
