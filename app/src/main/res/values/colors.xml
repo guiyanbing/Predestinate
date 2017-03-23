@@ -85,6 +85,8 @@
     <color name="color_e8e8e8">#e8e8e8</color>
     <color name="color_ffe1e0">#ffe1e0</color>
     <color name="color_dddddd">#dddddd</color>
+    <color name="btn_getcode_stroke">#00D3D2</color>
+    <color name="btn_getcode_solid">#F3FFFF</color>
 
     <color name="usersnickname">#353535</color>
 </resources>

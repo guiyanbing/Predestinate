@@ -28,6 +28,7 @@ public class RequestParam {
     private Map<String, Object> post_param;                 //post请求参数
     private Map<String, File> file_param;                   //文件上传参数
     private RequestComplete requestCallback;                //请求回调
+    private RequestComplete logicCallBack;                //logic回调
     private CacheType cacheType = CacheType.CT_Cache_No;    //缓存类型：默认不缓存
     private boolean needEncrypt = false;                    //是否加密：默认不加密
 
@@ -77,6 +78,14 @@ public class RequestParam {
 
     public void setFile_param(Map<String, File> file_param) {
         this.file_param = file_param;
+    }
+
+    public RequestComplete getLogicCallBack() {
+        return logicCallBack;
+    }
+
+    public void setLogicCallBack(RequestComplete logicCallBack) {
+        this.logicCallBack = logicCallBack;
     }
 
     public RequestComplete getRequestCallback() {

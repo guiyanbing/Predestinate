@@ -19,8 +19,14 @@ import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.album.ImgSelectUtil;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.base.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -31,7 +37,7 @@ import java.util.HashMap;
  * <p/>
  * Created by Su on 2016/8/22.
  */
-public class RegInfoAct extends BaseActivity {
+public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCompleteListener {
 
     private EditText txt_reg_info_nickname;     // 昵称
     private RelativeLayout btn_reg_info_submit; // 提交
@@ -40,7 +46,7 @@ public class RegInfoAct extends BaseActivity {
     private CustomFrameLayout fl_choose_man, fl_choose_woman;
 
     // 保存临时数据
-    private String _nickname,district, _photoUrl;
+    private String _nickname, district, _photoUrl;
     private int _gender = 1;
     private HashMap<String, Object> commitMap;
     private boolean canSubmit = false;
@@ -49,7 +55,7 @@ public class RegInfoAct extends BaseActivity {
     private Bitmap headPicBitmap;               // 头像btm
     private String pickFile;                    // 头像地址
 
-
+    private UrlParam urlParam = UrlParam.reqRegister;  // 默认为常规注册
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         isCanBack(false);
@@ -110,16 +116,12 @@ public class RegInfoAct extends BaseActivity {
     // 填充提交数据
     private void fillCommitMap() {
         // 头像
-//        commitMap.put("avatar", _photoUrl);
-
+        commitMap.put("avatar", _photoUrl);
         // 昵称
         commitMap.put("nickname", _nickname);
-
         // 性别
         commitMap.put("gender", _gender);
 
-        // 年龄
-        commitMap.put("age", 18);
     }
 
     // 设置提交btn
@@ -148,7 +150,7 @@ public class RegInfoAct extends BaseActivity {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.img_header:  // 上传头像
-//                    ImgSelectUtil.getInstance().pickPhoto(RegInfoAct.this, RegInfoAct.this);
+                    ImgSelectUtil.getInstance().pickPhoto(RegInfoAct.this, RegInfoAct.this);
                     break;
 
                 case R.id.rl_boy:
@@ -169,19 +171,19 @@ public class RegInfoAct extends BaseActivity {
 //                    }
 
                     if (canSubmit) {
-//                        LoadingDialog.show(RegInfoAct.this, "保存资料中...", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                cancel(); // 取消请求
-//                            }
-//                        });
-//                        fillCommitMap();
-//                        htCallBack = ModuleMgr.getLoginMgr().onRegister(RegInfoAct.this, urlParam, commitMap, new HttpMgr.IReqComplete() {
-//                            @Override
-//                            public void onReqComplete(HttpResult result) {
-//                                LoadingDialog.closeLoadingDialog(300);
-//                            }
-//                        });
+                        LoadingDialog.show(RegInfoAct.this, "保存资料中...", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cancel(); // 取消请求
+                            }
+                        });
+                        fillCommitMap();
+                        htCallBack = ModuleMgr.getLoginMgr().onRegister(RegInfoAct.this, urlParam, commitMap, new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(HttpResponse response) {
+                                LoadingDialog.closeLoadingDialog(300);
+                            }
+                        });
                     }
                     break;
 
@@ -241,8 +243,8 @@ public class RegInfoAct extends BaseActivity {
     /**
      * 选择头像完成
      */
-//    @Override
-//    public void onComplete(final String... path) {
+    @Override
+    public void onComplete(final String... path) {
 //        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
 //            return;
 //        }
@@ -272,7 +274,8 @@ public class RegInfoAct extends BaseActivity {
 //            MMToast.showShort("图片地址无效");
 //        }
 //        }
-//    }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -282,4 +285,5 @@ public class RegInfoAct extends BaseActivity {
             headPicBitmap = null;
         }
     }
+
 }

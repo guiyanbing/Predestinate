@@ -49,5 +49,7 @@
     <string name="choose_pic_num_out_of_index">你最多只能选择%1$d张照片</string>
     <string name="choose_pic">选择</string>
     <string name="choose_no_pick">你还没有选择任何图片</string>
-
+    <!-- EditText输入规范 -->
+    <string name="phone_digits">1234567890</string>
+    <string name="user_modify_pwd_input_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
 </resources>

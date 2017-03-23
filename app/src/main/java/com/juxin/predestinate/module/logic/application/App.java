@@ -16,6 +16,16 @@ public class App extends Application {
      * 登录用户的uid（供运行时程序内调用）
      */
     public static long uid = 0;//全局uid，避免重复从本地获取
+
+    /**
+     * 发送需要登录信息的Http请求使用。
+     */
+    public static String cookie = "";
+    /**
+     * 用户是否已经登录。该值暂时无效
+     */
+    public static boolean isLogin = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
