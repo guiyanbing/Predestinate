@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.Selection;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
@@ -143,6 +144,14 @@ public class UIUtil {
         return App.context.getResources().getDisplayMetrics().density;
     }
 
+    /**
+     * 获取屏幕转换的倍数，主要是XML中的dp单位对px的转换
+     */
+    public static float toDpMultiple(Activity activity) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        return metrics.density;
+    }
 
     /**
      * 将px值转换为sp值，保证文字大小不变。
