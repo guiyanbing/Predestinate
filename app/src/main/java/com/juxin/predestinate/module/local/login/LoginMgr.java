@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
+import com.juxin.library.observe.ModuleBase;
 import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
@@ -33,7 +35,18 @@ import java.util.Random;
  * 登录逻辑处理
  * Created by ZRP on 2016/9/19.
  */
-public class LoginMgr {
+public class LoginMgr implements ModuleBase{
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void release() {
+
+    }
+
     private final static String UID = "sUid";                 // 保存当前登录用户账号信息 uid, pw
     private final static String USER_KEY = "user_key";        // 保存当前登录过的账号信息
     private final static String AUTH = "auth";                // 保存当前登录用户cookie
@@ -196,7 +209,7 @@ public class LoginMgr {
             return "v=" + ModuleMgr.getAppMgr().getVerCode();
         }
     }
-    // ************************************内部调用************************** \\
+
 
     /**
      * 保存登录信息
@@ -235,7 +248,7 @@ public class LoginMgr {
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, msg);
         return App.isLogin;
     }
-
+    // ************************************内部调用************************** \\
     /**
      * 登录后存储账号密码到list配置
      */
@@ -279,5 +292,4 @@ public class LoginMgr {
     public void setResetStatus(boolean resetStatus) {
         this.IF_PW_RESET = resetStatus;
     }
-
 }

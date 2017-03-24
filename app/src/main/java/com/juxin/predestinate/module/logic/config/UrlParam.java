@@ -19,6 +19,8 @@ public enum UrlParam {
     //获取详细个人资料
     reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),
 
+    CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
+
     // 最后一个，占位
     LastUrlParam("");
 

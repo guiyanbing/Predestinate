@@ -106,5 +106,9 @@ public class MsgType {
      */
     public static final String MT_Inner_Suspension_Notice = "MT_Inner_Suspension_Notice";
 
+    /**
+     * socket开始连接
+     */
+    public static final String MT_Socket_Start_Connect = "MT_Socket_Start_Connect";
 
 }

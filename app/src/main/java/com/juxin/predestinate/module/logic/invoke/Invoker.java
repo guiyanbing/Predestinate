@@ -1,10 +1,23 @@
 package com.juxin.predestinate.module.logic.invoke;
 
+import android.app.Activity;
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
+import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.ChineseFilter;
+import com.juxin.predestinate.module.util.JsonUtil;
+import com.juxin.predestinate.module.util.MediaNotifyUtils;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -15,6 +28,17 @@ import java.util.Map;
  * Created by ZRP on 2017/1/3.
  */
 public class Invoker {
+
+    // js cmd key
+    public static final String JSCMD_visit_home = "visit_home";         // 返回自己的摇钱树
+    public static final String JSCMD_visit_other = "visit_other";       // 进入他人摇钱树
+    public static final String JSCMD_shake = "shake";                   // 摇动手机
+    public static final String JSCMD_share_success = "share_success";   // QQ/微信客户端分享成功后通知js
+    public static final String JSCMD_update_data = "update_data";       // 通知游戏刷新数据（充值，分享等可能要更新个人信息的操作后调用）
+    public static final String JSCMD_game_guide = "game_guide";         // 游戏引导：event:“rob_other”引导的事件（rob_other为引导抢夺红包）
+    public static final String JSCMD_cancel_dialog = "cancel_dialog";   // 取消cmd型对话框（取消分享，取消充值才发送）
+
+    public static String JSCMD_cache_uid = "";//缓存的访问uid
 
     private WebAppInterface appInterface = new WebAppInterface(App.context, null);
     private Object webView;
@@ -107,9 +131,318 @@ public class Invoker {
         }
     }
 
+    /**
+     * 设置webView，AAMainAct专用，在离开AAMainAct时设置webView为摇钱树webView
+     *
+     * @param webView
+     */
+    public void setWebView(Object webView) {
+        this.webView = webView;
+    }
+
     //--------------------CMD处理end--------------------
 
     public class Invoke {
 
+        // 打开游戏页面
+        // type:1   打开方式（1为侧滑页面，2为全屏页面，全屏时显示loading条）
+        public void open_game_web(String data) {
+            MMLog.autoDebug("---open_game_web--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            Activity act = appInterface.getAct();
+            //TODO
+//            if (dataObject.optInt("type") == 2) {
+//                UIHelper.showRedboxAct(act == null ? (Activity) App.getActivity() : act, dataObject.optString("url"));
+//            } else {
+//                UIHelper.showWebView_Act(act == null ? (Activity) App.getActivity() : act, dataObject.optString("title"), dataObject.optString("url"));
+//            }
+        }
+
+        // 关闭loading页面
+        public void hide_loading(String data) {
+            MMLog.autoDebug("---hide_loading--->" + data);
+            try {
+                Activity act = appInterface.getAct();
+                //TODO 单独处理新H5页面的loading关闭策略
+//                if (act != null && act instanceof Redbox_Act) {
+//                    ((Redbox_Act) act).hideLoadingView();
+//                } else if (act != null && act instanceof AAMainAct) {
+//                    //关闭摇钱树loading。切水果tab无需主动关闭
+//                    ((AAMainAct) act).closeCashCowLoading();
+//                }
+                //缓存最后一条访问别人摇钱树的uid
+                if (!TextUtils.isEmpty(JSCMD_cache_uid)) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("target_id", JSCMD_cache_uid);
+                    doInJS(JSCMD_visit_other, params);
+                    JSCMD_cache_uid = "";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 播放音效，url为音频相对地址
+        // 具体查看音乐地址文档-> http://test.game.xiaoyouapp.cn:30081/static/assets/cutfruit/config/sounds.json
+        // 游戏名：fruit_ninja切水果      cashcow  红包来了
+        public void play_sound(String data) {
+            MMLog.autoDebug("---play_sound--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            //TODO
+//            if ("cashcow".equalsIgnoreCase(dataObject.optString("game"))) {
+//                PlayerPool.getInstance().playSound(AppCfg.ASet.getCashcow_asset_url() + dataObject.optString("url"));
+//            } else {
+//                if (dataObject.optInt("is_long") == 1) {//是否是长音频：0-不是，1-是
+//                    PlayerPool.getInstance().playBg(AppCfg.ASet.getBase_url() + dataObject.optString("url"));
+//                } else {
+//                    PlayerPool.getInstance().playSound(AppCfg.ASet.getBase_url() + dataObject.optString("url"));
+//                }
+//            }
+        }
+
+        // 结束当前游戏页面
+        public void do_finish(String data) {
+            MMLog.autoDebug("---do_finish--->" + data);
+            // [注意]：当前游戏页面必须是继承自BaseActivity.class
+            Activity act = appInterface.getAct();
+            if (act != null) act.finish();
+        }
+
+        // 获取当前用户的uid和auth
+        public void get_app_data(String data) {
+            MMLog.autoDebug("---get_app_data--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            //TODO
+//            UserDetail userDetail = AppModel.getInstance().getUserDetail();
+            Map<String, Object> responseObject = new HashMap<>();
+//            responseObject.put("uid", AppCtx.getUid());
+//            responseObject.put("auth", URLEncoder.encode(AppCtx.getCookie()));
+//            responseObject.put("user_type", "8956".equals(AppCtx.APP_ID) ? 2 : 1);//只根据主渠道进行区分
+//            responseObject.put("gender", userDetail.getGender());
+//            responseObject.put("is_vip", userDetail.isMonthMail());
+//            responseObject.put("version", 2);//1为之前的缘分吧版本（礼物版），2为红包来了之后的缘分吧版本
+
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+        }
+
+        // 根据uid获取用户信息
+        public void get_user_info(String data) {
+            MMLog.autoDebug("---get_user_info--->" + data);
+            final JSONObject dataObject = JsonUtil.getJsonObject(data);
+            //TODO
+//            RequestHolder.getInstance().requestLiteUserInfo(dataObject.optString("uid"), new RequestHolder.OnRequestListener() {
+//                @Override
+//                public void onResult(String requestUrl, boolean isSuccess, String data) {
+//                    if (isSuccess) {
+//                        JSONObject content = JsonUtil.getJsonObject(data);
+//                        Map<String, Object> responseObject = new HashMap<>();
+//                        responseObject.put("uid", content.optString("uid"));
+//                        responseObject.put("avatar", content.optString("avatar"));
+//                        responseObject.put("avatar_status", content.optInt("avatar_status"));
+//                        responseObject.put("nickname", content.optString("nickname"));
+//                        responseObject.put("gender", content.optInt("gender"));
+//                        responseObject.put("is_vip", content.optInt("ismonth") == 1);
+//
+//                        String responseString = JsonUtil.mapToJSONString(responseObject);
+//                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), responseString);
+//                    } else {
+//                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
+//                    }
+//                }
+//            });
+        }
+
+        // 弹出模态对话框
+        public void show_dialog(String data) {
+            MMLog.autoDebug("---show_dialog--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            Activity act = appInterface.getAct();
+            Activity context = (act == null ? (Activity) App.getActivity() : act);
+            //展示游戏弹框
+            switch (dataObject.optInt("code")) {
+                case 101://弹出灵气不足弹框
+                    break;
+                case 104://弹出分享恢复灵气弹框
+                    break;
+                case 105://弹出添加好友分享弹框
+                    break;
+                case 106://分享获得哈士奇
+                    break;
+                case 201://弹出购买VIP弹框
+                    break;
+                case 202://获得斗牛犬，开通VIP弹框样式
+                    break;
+                case 301://弹出开通vip服务弹框：提示是高级场需要开通vip，下面只去掉赠送体力提示
+                    break;
+                case 401://弹出购买y币弹框
+                    break;
+            }
+        }
+
+        // 跳转到跟指定uid用户私聊界面
+        public void jump_to_chat(String data) {
+            MMLog.autoDebug("---jump_to_chat--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            Activity act = appInterface.getAct();
+            //TODO
+//            UIHelper.showMail_Chat_Act(act == null ? (Activity) App.getActivity() : act,
+//                    String.valueOf(AppModel.getInstance().getUserDetail().getUid()),
+//                    dataObject.optString("target_uid"));
+        }
+
+        // 侧滑出app页面
+        public void jump_to_app(String data) {
+            MMLog.autoDebug("---jump_to_app--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            //跳转到应用内页面
+            Activity act = appInterface.getAct();
+            Activity context = (act == null ? (Activity) App.getActivity() : act);
+            //TODO
+            switch (dataObject.optInt("code")) {
+                case 11://跳转到灵气说明页面
+                    break;
+                case 21://跳转到亲密度说明页面
+                    break;
+                case 31://跳转到购买体力页面
+                    break;
+                case 41://跳转到掠夺记录页面
+                    break;
+            }
+        }
+
+        // 改变页面标题
+        public void change_title(String data) {
+            MMLog.autoDebug("---change_title--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            final String title = dataObject.optString("title");
+
+            final Activity act = appInterface.getAct();
+            //TODO
+        }
+
+        // 屏幕震动
+        public void play_shock(String data) {
+            MMLog.autoDebug("---play_shock--->" + data);
+            MediaNotifyUtils.vibrator();
+        }
+
+        // 加密网络请求
+        public void safe_request(String data) {
+            MMLog.autoDebug("---safe_request--->" + data);
+            cmdRequest(JsonUtil.getJsonObject(data), true);
+        }
+
+        // 普通网络请求
+        public void normal_request(String data) {
+            MMLog.autoDebug("---normal_request--->" + data);
+            cmdRequest(JsonUtil.getJsonObject(data), false);
+        }
+
+        // 切换到主tab页
+        public void enter_tab(String data) {
+            MMLog.autoDebug("---enter_tab--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            // tab页面索引， 类型为1（红包），2（消息），3（擂台），4（我的）5（发现）
+            int index = 1;
+            switch (dataObject.optInt("index")) {
+                case 1:
+                    index = Constant.MAIN_TAB_3;
+                    break;
+                case 2:
+                    index = Constant.MAIN_TAB_2;
+                    break;
+                case 3:
+                    index = Constant.MAIN_TAB_4;
+                    break;
+                case 4:
+                    index = Constant.MAIN_TAB_5;
+                    break;
+                case 5:
+                    index = Constant.MAIN_TAB_1;
+                    break;
+            }
+            Activity act = appInterface.getAct();
+            //TODO 首页tab切换
+        }
+
+        // 获取设备信息
+        public void getdevicemodel(String data) {
+            MMLog.autoDebug("---getdevicemodel--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("devicemodel", android.os.Build.MODEL);//解密后的服务端返回（安卓注意大小写）
+
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+        }
+
+        // 进入别人的个人中心页面
+        public void jump_to_userinfo(String data) {
+            MMLog.autoDebug("---jump_to_userinfo--->" + data);
+            final JSONObject dataObject = JsonUtil.getJsonObject(data);
+            final Activity act = appInterface.getAct();
+            //TODO
+//            RequestHolder.getInstance().requestLiteUserInfo(dataObject.optString("target_uid"), new RequestHolder.OnRequestListener() {
+//                @Override
+//                public void onResult(String requestUrl, boolean isSuccess, String data) {
+//                    if (isSuccess) {
+//                        JSONObject jsonObject = JsonUtil.getJsonObject(data);
+//                        UIHelper.showUserInfo(act == null ? (Activity) App.getActivity() : act,
+//                                dataObject.optString("target_uid"), jsonObject.optString("nickname"),
+//                                jsonObject.optInt("gender"));
+//                    }
+//                }
+//            });
+        }
+
+        // 吐槽别人
+        public void mock_other(String data) {
+            MMLog.autoDebug("---mock_other--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            Activity act = appInterface.getAct();
+            //跳转到私聊页面并按照指定的id发送一条吐槽消息
+//            UIHelper.showMail_Chat_Act(act == null ? App.getActivity() : act,
+//                    String.valueOf(AppModel.getInstance().getUserDetail().getUid()),
+//                    dataObject.optString("target_uid"), 1, dataObject.optString("msg_id"));
+        }
+
+        // 吐司提示
+        public void show_toast(String data) {
+            MMLog.autoDebug("---show_toast--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            MMToast.showShort(dataObject.optString("content"));
+        }
+
+        // 开启支付页面
+        public void start_pay(String data) {
+            MMLog.autoDebug("---start_pay--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            Activity act = appInterface.getAct();
+            //TODO
+//            UIHelper.showCMDPaymentAct(act == null ? (Activity) App.getActivity() : act, dataObject.optInt("pay_id"),
+//                    dataObject.optString("desc"), dataObject.optString("money"));//money价格(元)
+        }
+    }
+
+    /**
+     * 游戏交互-请求转发
+     *
+     * @param dataObject JS传递的JSONObject
+     * @param isEnc      是否为加密请求
+     */
+    private void cmdRequest(final JSONObject dataObject, boolean isEnc) {
+        JSONObject bodyObject = JsonUtil.getJsonObject(dataObject.optString("body"));
+        ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"), isEnc, dataObject.optString("url"),
+                ChineseFilter.JSONObjectToMap(bodyObject), new RequestComplete() {
+                    @Override
+                    public void onRequestComplete(HttpResponse response) {
+                        PLogger.d("---cmdRequest--->" + response.getResponseString());
+                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), response.getResponseString());
+                    }
+                });
     }
 }
