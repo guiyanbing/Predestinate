@@ -3,10 +3,8 @@ package com.juxin.predestinate.bean.db;
 /**
  * Created by Kind on 2017/3/23.
  */
-
 public class FProfile {
     public static final String FPROFILE_TABLE = "fprofile";
-
 
     private static final String _ID = "_id";
     private static final String COLUMN_USERID = "userID";// 用户ID
