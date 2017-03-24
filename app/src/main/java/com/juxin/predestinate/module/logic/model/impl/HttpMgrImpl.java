@@ -178,7 +178,6 @@ public class HttpMgrImpl implements HttpMgr {
         final Map<String, Object> post_param = requestParam.getPost_param();
         final Map<String, File> file_param = requestParam.getFile_param();
         final RequestComplete requestCallback = requestParam.getRequestCallback();
-        final RequestComplete logicCallback = requestParam.getLogicCallBack();
         final RequestParam.CacheType cacheType = requestParam.getCacheType();
         final boolean isEncrypt = requestParam.isNeedEncrypt();
 
@@ -215,7 +214,6 @@ public class HttpMgrImpl implements HttpMgr {
                 result.parseJson(cacheStr);
 
                 //缓存回调
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
 
             }
@@ -249,7 +247,6 @@ public class HttpMgrImpl implements HttpMgr {
                     PLogger.printThrowable(e);
 //                    result.setError();//设置失败
 //                    result.setCache(false);
-                    if (logicCallback != null) logicCallback.onRequestComplete(result);
                     if (requestCallback != null) requestCallback.onRequestComplete(result);
                     return;
                 }
@@ -264,7 +261,6 @@ public class HttpMgrImpl implements HttpMgr {
                     PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
 
                 //如果有请求完成的回调实例的话，则进行回调
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 
@@ -274,7 +270,6 @@ public class HttpMgrImpl implements HttpMgr {
                 PLogger.printThrowable(t);
 //                result.setError();//设置失败
 //                result.setCache(false);
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 
