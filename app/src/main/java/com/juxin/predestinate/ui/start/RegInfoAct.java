@@ -16,12 +16,14 @@ import android.widget.TextView;
 
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
+import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.module.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -34,6 +36,9 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -135,7 +140,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     // 填充提交数据
     private void fillCommitMap() {
         // 头像
-        if (_photoUrl!=null){
+        if (_photoUrl != null) {
             commitMap.put("avatar", _photoUrl);
         }
         // 昵称
@@ -209,6 +214,18 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                         htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, commitMap, new RequestComplete() {
                             @Override
                             public void onRequestComplete(HttpResponse response) {
+                                if (response.isOk()) {
+                                    UserReg userReg = (UserReg) response.getBaseData();
+                                    //TODO 保存信息到个人资料
+//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(accountObject.optLong("uid"));
+//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(postParams.get("nickname") + "");
+//                        ModuleMgr.getCenterMgr().getMyInfo().setScity(accountObject.optInt("city"));
+//                        ModuleMgr.getCenterMgr().getMyInfo().setSprovince(accountObject.optInt("province"));
+                                    ModuleMgr.getLoginMgr().putAllLoginInfo(userReg.getUid(), userReg.getPassword() + "", userReg.getCookie(), false);
+                                    UIShow.showMainClearTask(RegInfoAct.this);
+                                } else {
+                                    PToast.showShort("注册失败");
+                                }
                                 LoadingDialog.closeLoadingDialog(300);
                             }
                         });

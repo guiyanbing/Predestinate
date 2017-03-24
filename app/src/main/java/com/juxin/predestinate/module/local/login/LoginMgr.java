@@ -7,40 +7,46 @@ import android.text.TextUtils;
 import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.ModuleBase;
 import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
-import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.logic.request.RequestParam;
-import com.juxin.predestinate.module.util.JniUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.Url_Enc;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
  * 登录逻辑处理
  * Created by ZRP on 2016/9/19.
  */
-public class LoginMgr {
+public class LoginMgr implements ModuleBase{
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void release() {
+
+    }
+
     private final static String UID = "sUid";                 // 保存当前登录用户账号信息 uid, pw
     private final static String USER_KEY = "user_key";        // 保存当前登录过的账号信息
     private final static String AUTH = "auth";                // 保存当前登录用户cookie
@@ -167,8 +173,7 @@ public class LoginMgr {
         postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
         postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
         postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-//        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-        postParams.put("imsi", "000000");
+        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
         postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
         postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
@@ -186,48 +191,12 @@ public class LoginMgr {
      */
     public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback, final boolean hasJump) {
         HashMap<String, Object> userAccount = new HashMap<>();
-        userAccount.put("username", uid);
-        userAccount.put("password", MD5.encode(pwd));
-        //userAccount.put("platform", Constant.PLATFROM); // web:1, android:2, ios:3
-
-        LoadingDialog.show((FragmentActivity) context, "正在登录，请稍候...");
-
-        RequestParam requestParam = new RequestParam();
-        requestParam.setCacheType(RequestParam.CacheType.CT_Cache_No);
-        requestParam.setUrlParam(UrlParam.reqLogin);
-        requestParam.setPost_param(userAccount);
-        requestParam.setRequestCallback(requestCallback);
-//        requestParam.setLogicCallBack(new RequestComplete() {
-//            @Override
-//            public void onRequestComplete(HttpResponse response) {
-//                LoadingDialog.closeLoadingDialog(500);
-                //TODO 待替换
-//                String jsonResult = response.getData().toString();
-//                try {
-//                    JSONObject jsonObject = new JSONObject(jsonResult);
-//                    String respCode = jsonObject.optString("respCode");
-//                    if ("success".equals(respCode)) {
-//                        // Cookie 在headers中返回
-//                        putAllLoginInfo(uid, pwd, true);
-//
-//                        // 临时资料设置
-//                        JSONObject json = jsonObject.optJSONObject("user_info");
-//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
-
-                        if (hasJump) {
-//                            UIShow.showMainAct(context);
-                        }
-//                    } else {
-//                        PToast.showShort("登录失败，请稍候重试");
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-        ModuleMgr.getHttpMgr().request(requestParam);
+        userAccount.put("name", uid);
+        userAccount.put("pwd", MD5.encode(pwd));
+        LoadingDialog.show((FragmentActivity) context,context.getResources().getString(R.string.tip_loading_login));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLogin,userAccount, requestCallback);
     }
+
     /**
      * @return 获取cookie + vercode
      */
@@ -240,15 +209,20 @@ public class LoginMgr {
             return "v=" + ModuleMgr.getAppMgr().getVerCode();
         }
     }
-    // ************************************内部调用************************** \\
+
 
     /**
      * 保存登录信息
+     * @param uid
+     * @param password
+     * @param cookie
+     * @param isUserLogin
      */
-    private void putAllLoginInfo(long uid, String password, boolean isUserLogin) {
+    public void putAllLoginInfo(long uid, String password, String cookie, boolean isUserLogin) {
         setUid(uid + "");
         putUserinfo(uid, password); //保存登录账户到list配置
         setLoginInfo(uid, isUserLogin);  //设置登录状态
+        setCookie(cookie);
     }
 
     /**
@@ -274,7 +248,7 @@ public class LoginMgr {
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, msg);
         return App.isLogin;
     }
-
+    // ************************************内部调用************************** \\
     /**
      * 登录后存储账号密码到list配置
      */
@@ -318,5 +292,4 @@ public class LoginMgr {
     public void setResetStatus(boolean resetStatus) {
         this.IF_PW_RESET = resetStatus;
     }
-
 }

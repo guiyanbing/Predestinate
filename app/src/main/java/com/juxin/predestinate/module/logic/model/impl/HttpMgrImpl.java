@@ -34,12 +34,10 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public void init() {
-
     }
 
     @Override
     public void release() {
-
     }
     @Override
     public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
@@ -51,8 +49,25 @@ public class HttpMgrImpl implements HttpMgr {
         return reqPostNoCacheHttp(urlParam, null, get_param, post_param, requestCallback);
     }
 
+    @Override
+    public HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback){
+        return reqGetAndCacheHttp(urlParam, null, get_param, requestCallback);
+    }
+
+    @Override
+    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
+        if (FileUtil.isExist(filePath)) {
+            if (downloadListener != null) downloadListener.onSuccess(url, filePath);
+        } else {
+            return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
+        }
+        return new HTCallBack();
+    }
+
+
+    // ================ 以下为基础接口，不要重载 =====================
     /**
-     * 加密，不缓存
+     * Post: 加密，不缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -65,14 +80,8 @@ public class HttpMgrImpl implements HttpMgr {
         return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
     }
 
-
-    private HTCallBack reqPostAndCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
-        return reqPostAndCacheHttp(urlParam, null, null, post_param, requestCallback);
-    }
-
-
     /**
-     * 加密，缓存
+     * Post: 加密，缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -85,13 +94,8 @@ public class HttpMgrImpl implements HttpMgr {
         return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_Params, true, requestCallback);
     }
 
-
-    private HTCallBack reqGetNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
-        return reqGetNoCacheHttp(urlParam, null, get_param, requestCallback);
-    }
-
     /**
-     * 加密，不缓存
+     * Get: 加密，不缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -102,12 +106,8 @@ public class HttpMgrImpl implements HttpMgr {
         return reqGetHttp(urlParam, headerMap, get_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
     }
 
-    private HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
-        return reqGetAndCacheHttp(urlParam, null, get_param, requestCallback);
-    }
-
     /**
-     * 加密，缓存
+     * Get: 加密，缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -165,7 +165,6 @@ public class HttpMgrImpl implements HttpMgr {
         return request(requestParam);
     }
 
-
     @Override
     public HTCallBack request(RequestParam requestParam) {
         //TODO 添加完整请求及基础解析
@@ -175,7 +174,6 @@ public class HttpMgrImpl implements HttpMgr {
         final Map<String, Object> post_param = requestParam.getPost_param();
         final Map<String, File> file_param = requestParam.getFile_param();
         final RequestComplete requestCallback = requestParam.getRequestCallback();
-        final RequestComplete logicCallback = requestParam.getLogicCallBack();
         final RequestParam.CacheType cacheType = requestParam.getCacheType();
         final boolean isEncrypt = requestParam.isNeedEncrypt();
 
@@ -212,7 +210,6 @@ public class HttpMgrImpl implements HttpMgr {
                 result.parseJson(cacheStr);
 
                 //缓存回调
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
 
             }
@@ -246,7 +243,6 @@ public class HttpMgrImpl implements HttpMgr {
                     PLogger.printThrowable(e);
 //                    result.setError();//设置失败
 //                    result.setCache(false);
-                    if (logicCallback != null) logicCallback.onRequestComplete(result);
                     if (requestCallback != null) requestCallback.onRequestComplete(result);
                     return;
                 }
@@ -261,7 +257,6 @@ public class HttpMgrImpl implements HttpMgr {
                     PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
 
                 //如果有请求完成的回调实例的话，则进行回调
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 
@@ -271,21 +266,10 @@ public class HttpMgrImpl implements HttpMgr {
                 PLogger.printThrowable(t);
 //                result.setError();//设置失败
 //                result.setCache(false);
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 
         });
         return new HTCallBack(httpResultCall);
-    }
-
-    @Override
-    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
-        if (FileUtil.isExist(filePath)) {
-            if (downloadListener != null) downloadListener.onSuccess(url, filePath);
-        } else {
-            return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
-        }
-        return new HTCallBack();
     }
 }

@@ -11,7 +11,6 @@ import org.json.JSONObject;
  * Created by XY on 17/3/23
  */
 public class UserLogin extends BaseData {
-    private boolean login;
     private String cookie;
 //TODO 待接入userdetail
 //    private UserDetail userDetail = new UserDetail();
@@ -19,7 +18,6 @@ public class UserLogin extends BaseData {
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
-        this.setLogin(jsonObject.optBoolean("login"));
         this.setCookie(jsonObject.optString("cookie"));
 
         //用户资料
@@ -30,13 +28,6 @@ public class UserLogin extends BaseData {
 
     }
 
-    public boolean isLogin() {
-        return login;
-    }
-
-    public void setLogin(boolean login) {
-        this.login = login;
-    }
 
     public String getCookie() {
         return cookie;
