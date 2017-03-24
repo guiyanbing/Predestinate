@@ -7,6 +7,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
@@ -216,7 +217,7 @@ public class HttpMgrImpl implements HttpMgr {
         }
 
         Map<String, String> requestHeaderMap = new HashMap<>();
-        requestHeaderMap.put("Cookie", LoginMgr.cookie);
+        requestHeaderMap.put("Cookie", ModuleMgr.getLoginMgr().getCookieVerCode());
         if (headerMap != null) requestHeaderMap.putAll(headerMap);
 
         //然后正式发出请求，请求完成之后再次抛出请  求结果

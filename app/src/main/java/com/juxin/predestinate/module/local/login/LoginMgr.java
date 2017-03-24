@@ -11,6 +11,7 @@ import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
 import com.juxin.predestinate.bean.start.UP;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -159,23 +160,18 @@ public class LoginMgr {
 
     /**
      * 账号注册
-     * <p>
-     * 三方注册时简化绑定步骤，防止因网络原因造成的不确定问题
-     * <p>
-     *
-     * @param urlParam UrlParam.reqRegister : 常规注册  UrlParam.reqThridRegister : 三方账号注册
      */
     public HTCallBack onRegister(final Activity context, UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
-//        postParams.put("flag", 0);  // 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
-        postParams.put("user_client_type", 2); // 2为android 3为iphone
-        postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());
-        postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());
+        postParams.put("client_type", 1); // 1为android 2为iphone
+        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
+        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
         postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+//        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("imsi", "000000");
         postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
-        postParams.put("flag", 1);
-//        postParams.put("ms", 7); //1、支持语音 2、新机器人 3、新新机器人 4、支持视频 5、支持Y币 6、支持钻石、礼物 7、红包版本 8、红包来了单独APP
+        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
+        postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
+
         long randNum = new Random().nextLong();
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("vcode", randNum);
@@ -193,27 +189,27 @@ public class LoginMgr {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 // 暂时此处进行xxtea解密，看后续能否统一处理
-                String jsonResult = JniUtil.GetDecryptString(response.getData().toString());//TODO 待替换
-                if (TextUtils.isEmpty(jsonResult)) PToast.showShort("注册失败");
+//                String jsonResult = JniUtil.GetDecryptString(response.getData().toString());//TODO 待替换
+//                if (TextUtils.isEmpty(jsonResult)) PToast.showShort("注册失败");
 
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonResult);
-                    String respCode = jsonObject.optString("respCode");
-                    if ("success".equals(respCode)) {
-                        JSONObject accountObject = jsonObject.optJSONObject("user_account");
+//                try {
+//                    JSONObject jsonObject = new JSONObject(jsonResult);
+//                    String respCode = jsonObject.optString("respCode");
+//                    if ("success".equals(respCode)) {
+//                        JSONObject accountObject = jsonObject.optJSONObject("user_account");
 //                        ModuleMgr.getCenterMgr().getMyInfo().setUid(accountObject.optLong("uid"));
 //                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(postParams.get("nickname") + "");
 //                        ModuleMgr.getCenterMgr().getMyInfo().setScity(accountObject.optInt("city"));
 //                        ModuleMgr.getCenterMgr().getMyInfo().setSprovince(accountObject.optInt("province"));
 
-                        putAllLoginInfo(accountObject.optLong("uid"), accountObject.optString("password"), false);
-                        UIShow.showMainClearTask(context);
-                    } else {
-                        PToast.showShort("注册失败，请稍候重试");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//                        putAllLoginInfo(accountObject.optLong("uid"), accountObject.optString("password"), false);
+//                        UIShow.showMainClearTask(context);
+//                    } else {
+//                        PToast.showShort("注册失败，请稍候重试");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
         return ModuleMgr.getHttpMgr().request(requestParam);
@@ -237,36 +233,48 @@ public class LoginMgr {
         requestParam.setUrlParam(UrlParam.reqLogin);
         requestParam.setPost_param(userAccount);
         requestParam.setRequestCallback(requestCallback);
-        requestParam.setLogicCallBack(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                LoadingDialog.closeLoadingDialog(500);
+//        requestParam.setLogicCallBack(new RequestComplete() {
+//            @Override
+//            public void onRequestComplete(HttpResponse response) {
+//                LoadingDialog.closeLoadingDialog(500);
                 //TODO 待替换
-                String jsonResult = response.getData().toString();
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonResult);
-                    String respCode = jsonObject.optString("respCode");
-                    if ("success".equals(respCode)) {
-                        // Cookie 在headers中返回
-                        putAllLoginInfo(uid, pwd, true);
-
-                        // 临时资料设置
-                        JSONObject json = jsonObject.optJSONObject("user_info");
+//                String jsonResult = response.getData().toString();
+//                try {
+//                    JSONObject jsonObject = new JSONObject(jsonResult);
+//                    String respCode = jsonObject.optString("respCode");
+//                    if ("success".equals(respCode)) {
+//                        // Cookie 在headers中返回
+//                        putAllLoginInfo(uid, pwd, true);
+//
+//                        // 临时资料设置
+//                        JSONObject json = jsonObject.optJSONObject("user_info");
 //                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
 //                        ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
 
                         if (hasJump) {
 //                            UIShow.showMainAct(context);
                         }
-                    } else {
-                        PToast.showShort("登录失败，请稍候重试");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//                    } else {
+//                        PToast.showShort("登录失败，请稍候重试");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
         ModuleMgr.getHttpMgr().request(requestParam);
+    }
+    /**
+     * @return 获取cookie + vercode
+     */
+    public String getCookieVerCode() {
+        String cookie = getCookie();
+        if (!TextUtils.isEmpty(cookie)) {
+            return cookie + ";" + "v=" + ModuleMgr.getAppMgr().getVerCode();
+        } else {
+            clearCookie();
+            return "v=" + ModuleMgr.getAppMgr().getVerCode();
+        }
     }
     // ************************************内部调用************************** \\
 
