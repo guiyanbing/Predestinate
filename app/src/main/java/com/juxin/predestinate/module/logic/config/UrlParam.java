@@ -12,8 +12,8 @@ import java.util.Map;
  */
 public enum UrlParam {
 
-    reqRegister("s/reg/Reg", UserReg.class),//注册接口
-    reqLogin("s/reg/CLogIn", UserLogin.class),//普通登录接口
+    reqRegister("i/reg/Reg", UserReg.class),//注册接口
+    reqLogin("i/reg/CLogIn", UserLogin.class),//普通登录接口
     // 最后一个，占位
     LastUrlParam("");
 

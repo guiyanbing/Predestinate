@@ -11,6 +11,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
@@ -31,6 +32,7 @@ interface RequestAPI {
 
     // =============post请求============
 
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST
     Call<ResponseBody> executePostCall(@HeaderMap Map<String, String> headerMap, @Url String url, @Body RequestBody str);
 

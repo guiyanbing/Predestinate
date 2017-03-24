@@ -206,7 +206,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                             }
                         });
                         fillCommitMap();
-                        htCallBack = ModuleMgr.getLoginMgr().onRegister(RegInfoAct.this, urlParam, commitMap, new RequestComplete() {
+                        htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, commitMap, new RequestComplete() {
                             @Override
                             public void onRequestComplete(HttpResponse response) {
                                 LoadingDialog.closeLoadingDialog(300);

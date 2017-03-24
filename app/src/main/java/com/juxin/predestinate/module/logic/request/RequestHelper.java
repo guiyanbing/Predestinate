@@ -2,13 +2,18 @@ package com.juxin.predestinate.module.logic.request;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
+import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.mumu.bean.utils.JSONUtil;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.Url_Enc;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -84,7 +89,11 @@ public class RequestHelper {
                                              Map<String, Object> get_param, Map<String, Object> post_param,
                                              Map<String, File> file_params, boolean isEncrypt) {
         if (isEncrypt) {//是否加密 加密
-            url = Url_Enc.appendOldUrl(url, get_param, post_param);
+            if (file_params == null && post_param != null) {//post加密。文件上传使用的为post，故同时判断两者
+                url = Url_Enc.appendJsonUrl(url, get_param, new Gson().toJson(post_param));
+            } else {//其余请求为get请求
+                url = Url_Enc.appendUrl(url, get_param, null);
+            }
         }
         if (headerMap == null) headerMap = new HashMap<>();
 
@@ -104,7 +113,8 @@ public class RequestHelper {
             return requestAPI.executePostCallUploadCall(headerMap, url, builder.build());
         } else if (post_param != null) {//post请求
             PLogger.d("---request--->带参数的post请求：" + url);
-            return requestAPI.executePostCall(headerMap, url, post_param);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(post_param));
+            return requestAPI.executePostCall(headerMap, url, body);
         } else if (get_param != null) {//带请求参数的get请求
             PLogger.d("---request--->带参数的get请求：" + url);
             return requestAPI.executeGetCall(headerMap, url, get_param);

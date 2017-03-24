@@ -161,7 +161,7 @@ public class LoginMgr {
     /**
      * 账号注册
      */
-    public HTCallBack onRegister(final Activity context, UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
+    public HTCallBack onRegister(UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
 
         postParams.put("client_type", 1); // 1为android 2为iphone
         postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
@@ -173,66 +173,10 @@ public class LoginMgr {
         postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
 
-        long randNum = new Random().nextLong();
         HashMap<String, Object> getParams = new HashMap<>();
-        getParams.put("vcode", randNum);
+        getParams.put("vcode", new Random().nextLong());
 
         return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, getParams, postParams, requestCallback);
-
-
-
-
-//        postParams.put("client_type", 1); // 1为android 2为iphone
-//        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
-//        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
-//        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-////        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-//        postParams.put("imsi", "000000");
-//        postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-//        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
-//        postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
-//
-//        long randNum = new Random().nextLong();
-//        HashMap<String, Object> getParams = new HashMap<>();
-//        getParams.put("vcode", randNum);
-//
-//        Map<String, String> headerMap = new HashMap<>();
-//        headerMap.put("User-Agent", "");
-//        RequestParam requestParam = new RequestParam();
-//        requestParam.setCacheType(RequestParam.CacheType.CT_Cache_No);
-//        requestParam.setUrlParam(urlParam);
-//        requestParam.setHead_param(headerMap);
-//        requestParam.setPost_param(postParams);
-//        requestParam.setGet_param(getParams);
-//        requestParam.setRequestCallback(requestCallback);
-//        requestParam.setLogicCallBack(new RequestComplete() {
-//            @Override
-//            public void onRequestComplete(HttpResponse response) {
-                // 暂时此处进行xxtea解密，看后续能否统一处理
-//                String jsonResult = JniUtil.GetDecryptString(response.getData().toString());//TODO 待替换
-//                if (TextUtils.isEmpty(jsonResult)) PToast.showShort("注册失败");
-
-//                try {
-//                    JSONObject jsonObject = new JSONObject(jsonResult);
-//                    String respCode = jsonObject.optString("respCode");
-//                    if ("success".equals(respCode)) {
-//                        JSONObject accountObject = jsonObject.optJSONObject("user_account");
-//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(accountObject.optLong("uid"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(postParams.get("nickname") + "");
-//                        ModuleMgr.getCenterMgr().getMyInfo().setScity(accountObject.optInt("city"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setSprovince(accountObject.optInt("province"));
-
-//                        putAllLoginInfo(accountObject.optLong("uid"), accountObject.optString("password"), false);
-//                        UIShow.showMainClearTask(context);
-//                    } else {
-//                        PToast.showShort("注册失败，请稍候重试");
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-         //   }
-       // });
-//        return ModuleMgr.getHttpMgr().request(requestParam);
     }
 
     /**
