@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
+import com.juxin.predestinate.module.util.PkgHelper;
 
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class AppMgrImpl implements AppMgr {
     private String imsi = "";           // 移动用户识别码
     private String simo = "";           // SIM卡供应商
     private String mac = "";            // 网络mac地址
-
+    private String mainChannelID;// 应用id 主渠道号
+    private String subChannelID;//子渠道号
     @Override
     public void init() {
         try {
@@ -52,6 +54,9 @@ public class AppMgrImpl implements AppMgr {
             simo = mTm.getSimOperator();
 
             mac = NetworkUtils.getMacAddress(App.context);
+
+            subChannelID = PkgHelper.getSubChannel(App.context, "999"); //appInfo.metaData.getInt("sID");
+            mainChannelID = PkgHelper.getMainChannel(App.context, "2"); //appInfo.metaData.getInt("sUID");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -91,12 +96,12 @@ public class AppMgrImpl implements AppMgr {
 
     @Override
     public String getMainChannelID() {
-        return null;
+        return mainChannelID;
     }
 
     @Override
     public String getSubChannelID() {
-        return null;
+        return subChannelID;
     }
 
     // ================手机硬件信息================

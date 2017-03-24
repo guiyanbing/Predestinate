@@ -37,7 +37,12 @@
     <string name="ext_nickname_hit">填写昵称</string>
     <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
     <string name="button_reg">一键注册</string>
-
+    <string name="toast_phone_isnull">手机号码不能为空</string>
+    <string name="toast_phone_iserror">您输入的手机号码不正确</string>
+    <string name="toast_code_isnull">验证码不能为空</string>
+    <string name="toast_uid_isnull">请输入您的用户名</string>
+    <string name="toast_pwd_isnull">请输入您的密码</string>
+    <string name="toast_login_iserror">登录失败，请稍候重试</string>
 
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>
@@ -57,4 +62,12 @@
     <!-- EditText输入规范 -->
     <string name="phone_digits">1234567890</string>
     <string name="user_modify_pwd_input_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
+
+    <!--提示-->
+    <string name="tip_loading_submit">正在提交数据，请稍等...</string>
+    <string name="tip_loading_login">正在登录，请稍等......</string>
+
+
+    <!--activity标题-->
+    <string name="title_loginact">登录</string>
 </resources>

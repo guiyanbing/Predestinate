@@ -16,10 +16,15 @@ import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.UserLogin;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.main.MainActivity;
 
@@ -27,7 +32,6 @@ import java.util.List;
 
 /**
  * 用户登录页面
- * <p>
  * Created by Su on 2016/12/12.
  */
 public class LoginAct extends BaseActivity implements OnItemClickListener, OnClickListener, UserPrivacyAdapter.OnDelItemListener {
@@ -35,8 +39,7 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
     private LoginMgr loginMgr;
 
     // UI Object
-    private EditText et_userID;
-    private EditText et_userPwd;
+    private EditText et_uid, et_pwd;
     private ImageView iv_arrow;
     private ListView lv_userData;
     private UserPrivacyAdapter privacyAdapter;
@@ -51,20 +54,24 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         setContentView(R.layout.r1_login_act);
-        setBackView(R.id.back_view, "登录");
-
+        setBackView(R.id.back_view, getResources().getString(R.string.title_loginact));
         initView();
         initData();
-        initEvent();
     }
 
     private void initView() {
         loginMgr = ModuleMgr.getLoginMgr();
-        this.lv_userData = (ListView) findViewById(R.id.list_user_login_account);
-        this.et_userID = (EditText) findViewById(R.id.edtTxt_user_login_username);
-        this.et_userPwd = (EditText) findViewById(R.id.edtTxt_user_login_password);
-        this.iv_arrow = (ImageView) findViewById(R.id.img_user_login_arrow);
-
+        lv_userData = (ListView) findViewById(R.id.list_user_login_account);
+        et_uid = (EditText) findViewById(R.id.et_uid);
+        et_pwd = (EditText) findViewById(R.id.et_pwd);
+        iv_arrow = (ImageView) findViewById(R.id.img_user_login_arrow);
+        findViewById(R.id.bt_submit).setOnClickListener(this);
+        findViewById(R.id.bt_reg).setOnClickListener(this);
+        findViewById(R.id.layout_parent).setOnClickListener(this);
+        findViewById(R.id.txt_user_reset_pw).setOnClickListener(this);
+        this.iv_arrow.setOnClickListener(this);
+        this.lv_userData.setOnItemClickListener(this);
+        this.et_uid.setOnClickListener(this);
         // 列表
         privacyAdapter = new UserPrivacyAdapter(this, loginMgr.getUserList());
         privacyAdapter.setDelListener(this);
@@ -82,26 +89,32 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         }
     }
 
-    private void initEvent() {
-        findViewById(R.id.btn_user_login_submit).setOnClickListener(this);
-        findViewById(R.id.txt_user_login_toReg).setOnClickListener(this);
-        findViewById(R.id.layout_parent).setOnClickListener(this);
-        findViewById(R.id.txt_user_reset_pw).setOnClickListener(this);
-        this.iv_arrow.setOnClickListener(this);
-        this.lv_userData.setOnItemClickListener(this);
-        this.et_userID.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_user_login_submit:
+            case R.id.bt_submit://提交
                 Intent intent = new Intent(LoginAct.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-//                if (!checkUserDataIsEmpty()) {
-//                    loginMgr.onLogin(this, currentUserID, currentUserPwd, null, true);
-//                }
+                if (checkLoginInfo()) {
+                    loginMgr.onLogin(this, currentUserID, currentUserPwd, new RequestComplete() {
+                        @Override
+                        public void onRequestComplete(HttpResponse response) {
+                            LoadingDialog.closeLoadingDialog(500);
+                            if (response.isOk()) {
+                                UserLogin userLogin = (UserLogin) response.getBaseData();
+                                userLogin.getCookie();
+                                loginMgr.putAllLoginInfo(currentUserID, currentUserPwd, userLogin.getCookie(), true);
+//                        // 临时资料设置
+//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
+//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
+                                UIShow.showMainClearTask(LoginAct.this);
+                            } else {
+                                PToast.showShort(getResources().getString(R.string.toast_login_iserror));
+                            }
+                        }
+                    }, true);
+                }
                 break;
 
             case R.id.img_user_login_arrow:
@@ -113,11 +126,11 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
                 break;
 
             case R.id.layout_parent:
-            case R.id.edtTxt_user_login_username:
+            case R.id.et_uid:
                 endAnimate();
                 break;
 
-            case R.id.txt_user_login_toReg:
+            case R.id.bt_reg:
                 UIShow.showRegInfoAct(this);
                 finish();
                 break;
@@ -129,19 +142,19 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
     }
 
     // 检查输入信息是否为空
-    private boolean checkUserDataIsEmpty() {
-        String uid = et_userID.getText().toString();
+    private boolean checkLoginInfo() {
+        String uid = et_uid.getText().toString();
         if (TextUtils.isEmpty(uid)) {
-            PToast.showShort("请输入您的用户名");
-            return true;
+            PToast.showShort(getResources().getString(R.string.toast_uid_isnull));
+            return false;
         }
-        currentUserPwd = et_userPwd.getText().toString();
+        currentUserPwd = et_pwd.getText().toString();
         if (TextUtils.isEmpty(currentUserPwd)) {
-            PToast.showShort("请输入您的密码");
-            return true;
+            PToast.showShort(getResources().getString(R.string.toast_pwd_isnull));
+            return false;
         }
-//        currentUserID = BaseUtil.getLong(uid, 0);
-        return false;
+        currentUserID = BaseUtil.getLong(uid, 0);
+        return true;
     }
 
     @Override
@@ -202,9 +215,9 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
     }
 
     private void showCurrentUserData() {
-        et_userID.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserID + "");
-        et_userID.setSelection(loginMgr.getUserList().size() > 0 ? String.valueOf(currentUserID).length() : 0);
-        et_userPwd.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserPwd);
+        et_uid.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserID + "");
+        et_uid.setSelection(loginMgr.getUserList().size() > 0 ? String.valueOf(currentUserID).length() : 0);
+        et_pwd.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserPwd);
     }
 
     // =========================== 账户列表显隐动画 =========================================

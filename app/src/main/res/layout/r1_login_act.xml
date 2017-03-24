@@ -27,7 +27,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/edtTxt_user_login_username"
+                    android:id="@+id/et_uid"
                     style="@style/editText_input"
                     android:layout_width="0dip"
                     android:layout_weight="1"
@@ -48,7 +48,7 @@
             <View style="@style/divider_line_gap70px" />
 
             <EditText
-                android:id="@+id/edtTxt_user_login_password"
+                android:id="@+id/et_pwd"
                 style="@style/editText_input"
                 android:layout_marginLeft="@dimen/px70_dp"
                 android:layout_marginRight="@dimen/px70_dp"
@@ -58,7 +58,7 @@
             <View style="@style/divider_line_gap70px" />
 
             <Button
-                android:id="@+id/btn_user_login_submit"
+                android:id="@+id/bt_submit"
                 style="@style/button_big"
                 android:layout_marginLeft="@dimen/px70_dp"
                 android:layout_marginRight="@dimen/px70_dp"
@@ -82,7 +82,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txt_user_login_toReg"
+                    android:id="@+id/bt_reg"
                     android:layout_width="match_parent"
                     android:layout_height="40dip"
                     android:layout_gravity="bottom"

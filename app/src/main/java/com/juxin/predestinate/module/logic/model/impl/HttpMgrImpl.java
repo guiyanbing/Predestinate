@@ -1,12 +1,12 @@
 package com.juxin.predestinate.module.logic.model.impl;
 
 import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
@@ -15,14 +15,12 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
 import com.juxin.predestinate.module.logic.request.RequestParam;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,9 +41,14 @@ public class HttpMgrImpl implements HttpMgr {
     public void release() {
 
     }
-
-    private HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
+    @Override
+    public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostNoCacheHttp(urlParam, null, null, post_param, requestCallback);
+    }
+
+    @Override
+    public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, Map<String, Object> post_param, RequestComplete requestCallback) {
+        return reqPostNoCacheHttp(urlParam, null, get_param, post_param, requestCallback);
     }
 
     /**
@@ -172,7 +175,6 @@ public class HttpMgrImpl implements HttpMgr {
         final Map<String, Object> post_param = requestParam.getPost_param();
         final Map<String, File> file_param = requestParam.getFile_param();
         final RequestComplete requestCallback = requestParam.getRequestCallback();
-        final RequestComplete logicCallback = requestParam.getLogicCallBack();
         final RequestParam.CacheType cacheType = requestParam.getCacheType();
         final boolean isEncrypt = requestParam.isNeedEncrypt();
 
@@ -209,14 +211,13 @@ public class HttpMgrImpl implements HttpMgr {
                 result.parseJson(cacheStr);
 
                 //缓存回调
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
 
             }
         }
 
         Map<String, String> requestHeaderMap = new HashMap<>();
-        requestHeaderMap.put("Cookie", LoginMgr.cookie);
+        requestHeaderMap.put("Cookie", ModuleMgr.getLoginMgr().getCookieVerCode());
         if (headerMap != null) requestHeaderMap.putAll(headerMap);
 
         //然后正式发出请求，请求完成之后再次抛出请  求结果
@@ -243,7 +244,6 @@ public class HttpMgrImpl implements HttpMgr {
                     PLogger.printThrowable(e);
 //                    result.setError();//设置失败
 //                    result.setCache(false);
-                    if (logicCallback != null) logicCallback.onRequestComplete(result);
                     if (requestCallback != null) requestCallback.onRequestComplete(result);
                     return;
                 }
@@ -258,7 +258,6 @@ public class HttpMgrImpl implements HttpMgr {
                     PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
 
                 //如果有请求完成的回调实例的话，则进行回调
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 
@@ -268,7 +267,6 @@ public class HttpMgrImpl implements HttpMgr {
                 PLogger.printThrowable(t);
 //                result.setError();//设置失败
 //                result.setCache(false);
-                if (logicCallback != null) logicCallback.onRequestComplete(result);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 

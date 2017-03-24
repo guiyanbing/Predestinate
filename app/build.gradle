@@ -173,4 +173,8 @@ dependencies {
     //GreenDao数据库
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'org.greenrobot:greendao-generator:3.2.0'
+
+    compile ('com.squareup.sqlbrite:sqlbrite:1.1.1'){
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
 }

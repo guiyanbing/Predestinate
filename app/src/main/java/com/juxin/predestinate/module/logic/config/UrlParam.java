@@ -12,8 +12,8 @@ import java.util.Map;
  */
 public enum UrlParam {
 
-    reqRegister("s/reg/Reg", UserReg.class),//注册接口
-    reqLogin("s/reg/CLogIn", UserLogin.class),//普通登录接口
+    reqRegister("i/reg/Reg", UserReg.class),//注册接口
+    reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
     // 最后一个，占位

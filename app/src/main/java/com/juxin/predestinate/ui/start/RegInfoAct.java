@@ -15,20 +15,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.library.view.CustomFrameLayout;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.area.City;
+import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.module.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -46,7 +56,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     private CustomFrameLayout fl_choose_man, fl_choose_woman;
 
     // 保存临时数据
-    private String _nickname, district, _photoUrl;
+    private String _nickname, _province, _city, _district, _photoUrl;
     private int _gender = 1;
     private HashMap<String, Object> commitMap;
     private boolean canSubmit = false;
@@ -54,8 +64,9 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     private boolean isCompleteHead;             // 是否已设置头像
     private Bitmap headPicBitmap;               // 头像btm
     private String pickFile;                    // 头像地址
-
+    private LocationMgr.PointD pointD;          // GPS定位
     private UrlParam urlParam = UrlParam.reqRegister;  // 默认为常规注册
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         isCanBack(false);
@@ -90,6 +101,19 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
 
     private void initData() {
         commitMap = new HashMap<>();
+        pointD = LocationMgr.getInstance().getPointD();
+        if (pointD != null) {
+            _province = TextUtils.isEmpty(pointD.province) ? "" : pointD.province;
+            _city = TextUtils.isEmpty(pointD.city) ? "" : pointD.city;
+            _district = TextUtils.isEmpty(pointD.district) ? "" : pointD.district;
+            if (_province.equals(_city)) {          // 直辖市
+                _province = _city;
+                _city = _district;
+            }
+            City city = AreaConfig.getInstance().getCityInfo(_province, _city);
+            _province = city.getProvinceName();
+            _city = city.getCityName();
+        }
     }
 
     private void initEvent() {
@@ -116,12 +140,21 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     // 填充提交数据
     private void fillCommitMap() {
         // 头像
-        commitMap.put("avatar", _photoUrl);
+        if (_photoUrl != null) {
+            commitMap.put("avatar", _photoUrl);
+        }
         // 昵称
         commitMap.put("nickname", _nickname);
         // 性别
         commitMap.put("gender", _gender);
-
+//        commitMap.put("x", pointD.longitude); //经度
+//        commitMap.put("y", pointD.latitude);//纬度
+        // 地址
+        if (_province != null && _city != null) {
+            City city = AreaConfig.getInstance().getCity(_province, _city);
+            commitMap.put("province", city.getProvinceID());
+            commitMap.put("city", city.getCityID());
+        }
     }
 
     // 设置提交btn
@@ -178,9 +211,21 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                             }
                         });
                         fillCommitMap();
-                        htCallBack = ModuleMgr.getLoginMgr().onRegister(RegInfoAct.this, urlParam, commitMap, new RequestComplete() {
+                        htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, commitMap, new RequestComplete() {
                             @Override
                             public void onRequestComplete(HttpResponse response) {
+                                if (response.isOk()) {
+                                    UserReg userReg = (UserReg) response.getBaseData();
+                                    //TODO 保存信息到个人资料
+//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(accountObject.optLong("uid"));
+//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(postParams.get("nickname") + "");
+//                        ModuleMgr.getCenterMgr().getMyInfo().setScity(accountObject.optInt("city"));
+//                        ModuleMgr.getCenterMgr().getMyInfo().setSprovince(accountObject.optInt("province"));
+                                    ModuleMgr.getLoginMgr().putAllLoginInfo(userReg.getUid(), userReg.getPassword() + "", userReg.getCookie(), false);
+                                    UIShow.showMainClearTask(RegInfoAct.this);
+                                } else {
+                                    PToast.showShort("注册失败");
+                                }
                                 LoadingDialog.closeLoadingDialog(300);
                             }
                         });

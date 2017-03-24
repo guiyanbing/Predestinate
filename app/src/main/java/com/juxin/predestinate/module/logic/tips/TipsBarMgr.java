@@ -6,14 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.library.request.DownloadListener;
-import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
-import com.juxin.predestinate.module.logic.request.HTCallBack;
-import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.ui.tips.TipsBarBasePanel;
 
 import org.json.JSONObject;
@@ -33,7 +30,7 @@ import static com.juxin.library.observe.MsgType.MT_Inner_Suspension_Notice;
  * Created by Kind on 2016/11/16.
  */
 
-public class TipsBarMgr implements HttpMgr, PObserver {
+public class TipsBarMgr implements ModuleBase, PObserver {
     //提示条事件标记key
     public static final String TipsMgrTag = "TipsMgrTag";
     //提示条事件标记 -- 显示提示条
@@ -415,17 +412,6 @@ public class TipsBarMgr implements HttpMgr, PObserver {
                 e.printStackTrace();
             }
         }
-        return null;
-    }
-
-
-    @Override
-    public HTCallBack request(RequestParam requestParam) {
-        return null;
-    }
-
-    @Override
-    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
         return null;
     }
 }

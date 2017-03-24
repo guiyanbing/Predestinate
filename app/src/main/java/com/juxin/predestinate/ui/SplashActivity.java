@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -26,7 +27,7 @@ public class SplashActivity extends BaseActivity {
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        LocationMgr.getInstance().start();//启动定位
         jumpAnimation();
     }
 
