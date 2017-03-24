@@ -9,6 +9,11 @@ public class Constant {
     public static final String NO_HOST = "no_host";
     public static final String HOST_URL = "http://123.59.187.13:10001/";
 
+    // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
+    public static final int MS = 9;                 //消息版本号
+    public static final int PLATFORM_TYPE = 2;      //平台号
+    public static final int SUB_VERSION = 3;        //客户端版本号
+
     // --------------socket常量----------------
     public static final int MSG_ID_Login = 1;               //长连接登录消息id
     public static final int MSG_ID_KICK_Offline = 65533;    //异地登陆踢下线消息id
@@ -42,4 +47,10 @@ public class Constant {
     // 视频
     public static final int INT_CHAT_VIDEO = 301;   // 聊天小视频
 
+    // 首页tab标记，从左到右依次为1-4
+    public static final int MAIN_TAB_1 = 0x01;
+    public static final int MAIN_TAB_2 = 0x02;
+    public static final int MAIN_TAB_3 = 0x03;
+    public static final int MAIN_TAB_4 = 0x04;
+    public static final int MAIN_TAB_5 = 0X05;
 }

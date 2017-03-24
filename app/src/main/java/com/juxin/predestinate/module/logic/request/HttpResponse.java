@@ -9,11 +9,28 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
  */
 public class HttpResponse<T extends BaseData> extends BaseData {
 
-    private UrlParam urlParam;
+    private UrlParam urlParam;      //请求实例
+    private String responseString;  //原字符串
     private T data;                 //实际返回数据
 
     public HttpResponse(UrlParam urlParam) {
         this.urlParam = urlParam;
+    }
+
+    public UrlParam getUrlParam() {
+        return urlParam;
+    }
+
+    public void setUrlParam(UrlParam urlParam) {
+        this.urlParam = urlParam;
+    }
+
+    public String getResponseString() {
+        return responseString;
+    }
+
+    public void setResponseString(String responseString) {
+        this.responseString = responseString;
     }
 
     public T getData() {
@@ -26,6 +43,7 @@ public class HttpResponse<T extends BaseData> extends BaseData {
 
     @Override
     public void parseJson(String jsonStr) {
+        this.setResponseString(jsonStr);
         //TODO 基础解析
     }
 }
