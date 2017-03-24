@@ -44,9 +44,14 @@ public class HttpMgrImpl implements HttpMgr {
     public void release() {
 
     }
-
-    private HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
+    @Override
+    public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostNoCacheHttp(urlParam, null, null, post_param, requestCallback);
+    }
+
+    @Override
+    public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, Map<String, Object> post_param, RequestComplete requestCallback) {
+        return reqPostNoCacheHttp(urlParam, null, get_param, post_param, requestCallback);
     }
 
     /**
