@@ -93,9 +93,6 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_submit://提交
-                Intent intent = new Intent(LoginAct.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
                 if (checkLoginInfo()) {
                     loginMgr.onLogin(this, currentUserID, currentUserPwd, new RequestComplete() {
                         @Override
