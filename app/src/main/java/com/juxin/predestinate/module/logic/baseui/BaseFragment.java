@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.juxin.predestinate.R;
 
 /**
@@ -78,7 +79,7 @@ public class BaseFragment extends Fragment {
      * @param txt
      */
     public void setTitle(String txt) {
-        TextView textView = (TextView) contentView.findViewById(R.id.title);
+        TextView textView = (TextView) contentView.findViewById(R.id.base_title_title);
         textView.setText(txt);
     }
 
@@ -89,7 +90,7 @@ public class BaseFragment extends Fragment {
      * @param number 角标显示数量
      */
     public void setTitleWithBadge(String txt, String number) {
-        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_title);
         TextView badge = (TextView) this.findViewById(R.id.base_title_badge_view);
         textView.setVisibility(View.VISIBLE);
         badge.setVisibility(View.VISIBLE);

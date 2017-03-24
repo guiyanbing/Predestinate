@@ -67,7 +67,7 @@
             android:textColor="@color/color_zhuyao"
             android:textSize="@dimen/px52_sp" />
 
-        <com.p.library.unread.BadgeView
+        <com.juxin.library.unread.BadgeView
             android:id="@+id/base_title_badge_view"
             style="@style/badge_num_big"
             android:layout_marginLeft="-3dip"
