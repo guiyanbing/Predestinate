@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -83,13 +84,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        if(fragment == mailFragment){
+        if (fragment == mailFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
-        }else if(fragment == xiaoyouFragment){
+        } else if (fragment == xiaoyouFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.xiaoyou_layout);
-        }else if(fragment == plazaFragment){
+        } else if (fragment == plazaFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.plaza_layout);
-        }else if(fragment == userFragment){
+        } else if (fragment == userFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.user_layout);
         }
     }

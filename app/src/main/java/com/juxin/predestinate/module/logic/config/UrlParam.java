@@ -15,11 +15,13 @@ public enum UrlParam {
     reqRegister("i/reg/Reg", UserReg.class),//注册接口
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
 
-    //============================== 用户资料相关接口 =============================
-    //获取详细个人资料
-    reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),
-
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
+
+    //============================== 用户资料相关接口 =============================
+
+    reqSetInfo("i/uinfo/SecSetInfo", true),  // 用户设置更新
+    reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),  //获取详细个人资料
+    reqOtherInfo("s/uinfo/ODetail", UserDetail.class, true),
 
     // 最后一个，占位
     LastUrlParam("");
