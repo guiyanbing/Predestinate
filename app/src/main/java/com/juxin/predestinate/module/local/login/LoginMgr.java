@@ -209,7 +209,7 @@ public class LoginMgr implements ModuleBase{
             return "v=" + ModuleMgr.getAppMgr().getVerCode();
         }
     }
-    // ************************************内部调用************************** \\
+
 
     /**
      * 保存登录信息
@@ -248,7 +248,7 @@ public class LoginMgr implements ModuleBase{
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, msg);
         return App.isLogin;
     }
-
+    // ************************************内部调用************************** \\
     /**
      * 登录后存储账号密码到list配置
      */
