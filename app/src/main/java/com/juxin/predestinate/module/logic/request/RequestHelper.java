@@ -1,24 +1,17 @@
 package com.juxin.predestinate.module.logic.request;
 
 import android.content.Context;
-
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.JSONUtil;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.Url_Enc;
-
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
