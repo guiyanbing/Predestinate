@@ -1,8 +1,8 @@
 package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.UserLogin;
+import com.juxin.predestinate.bean.center.user.UserDetail;
 import com.juxin.predestinate.bean.net.BaseData;
-import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.bean.start.UserReg;
 
 import java.util.Map;
@@ -14,6 +14,11 @@ public enum UrlParam {
 
     reqRegister("i/reg/Reg", UserReg.class),//注册接口
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
+
+    //============================== 用户资料相关接口 =============================
+    //获取详细个人资料
+    reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),
+
     // 最后一个，占位
     LastUrlParam("");
 

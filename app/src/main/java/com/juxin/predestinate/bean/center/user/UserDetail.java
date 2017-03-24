@@ -29,6 +29,9 @@ public class UserDetail extends UserInfo {
         super.writeToParcel(dest, flags);
     }
 
+    public UserDetail() {
+    }
+
     protected UserDetail(Parcel in) {
         super(in);
     }
