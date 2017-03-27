@@ -1,7 +1,7 @@
 package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.UserLogin;
-import com.juxin.predestinate.bean.center.user.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.start.UserReg;
 

@@ -10,7 +10,7 @@ import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 

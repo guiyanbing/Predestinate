@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.FlowLayout;
