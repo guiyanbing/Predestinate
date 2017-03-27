@@ -70,7 +70,7 @@ android {
 
     applicationVariants.all { variant ->
         if (variant.buildType.name.equals('release')) {
-
+            def apkPath = rootProject.cApkPath;
             project.getTasksByName("assemble${variant.name.capitalize()}", false).each { task ->
                 task.doLast {
                     def outdir = "${project.buildDir}\\outputs\\"
@@ -83,7 +83,7 @@ android {
 
                     def m = new File(mapdir, mapsrc)
                     if (m.exists()) {
-                        def d = new File(cApkPath, mapdst)
+                        def d = new File(apkPath, mapdst)
                         if (!d.exists()) {
                             m.renameTo(d)
                         }
@@ -102,16 +102,14 @@ android {
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith('.apk')) {
                     def fileName = outputFile.name
-
-                    if (cApkPath != null && !cApkPath.equals("")) {
+                    if (apkPath != null && !apkPath.equals("")) {
                         fileName = "${cAppName}.apk"
                     }
 
-                    if (cApkPath == null || cApkPath.equals("")) {
-                        cApkPath = outputFile.parent
+                    if (apkPath == null || apkPath.equals("")) {
+                        apkPath = outputFile.parent
                     }
-
-                    output.outputFile = new File(cApkPath, fileName)
+                    output.outputFile = new File(apkPath, fileName)
                 }
             }
         }
@@ -122,8 +120,6 @@ android {
         sourceCompatibility 1.7
     }
 }
-
-
 
 //修改VersionCode
 task('increaseVersionCode') << {
