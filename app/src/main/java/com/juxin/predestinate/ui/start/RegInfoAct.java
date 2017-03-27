@@ -65,7 +65,6 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         isCanBack(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r1_user_reg_info_act);
-
         initTitle();
         initView();
         initData();
@@ -88,7 +87,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         fl_choose_man.show(R.id.has_choose_man);
         fl_choose_woman.show(R.id.no_choose_woman);
 
-//        ModuleMgr.getCenterMgr().inputFilterSpace(txt_reg_info_nickname);
+        ModuleMgr.getCenterMgr().inputFilterSpace(txt_reg_info_nickname);
         txt_reg_info_nickname.addTextChangedListener(textWatcher);
     }
 
@@ -140,8 +139,6 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         commitMap.put("nickname", _nickname);
         // 性别
         commitMap.put("gender", _gender);
-//        commitMap.put("x", pointD.longitude); //经度
-//        commitMap.put("y", pointD.latitude);//纬度
         // 地址
         if (_province != null && _city != null) {
             City city = AreaConfig.getInstance().getCity(_province, _city);
@@ -175,9 +172,9 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.img_header:  // 上传头像
-                    ImgSelectUtil.getInstance().pickPhoto(RegInfoAct.this, RegInfoAct.this);
-                    break;
+//                case R.id.img_header:  // 上传头像
+//                    ImgSelectUtil.getInstance().pickPhoto(RegInfoAct.this, RegInfoAct.this);
+//                    break;
 
                 case R.id.rl_boy:
                     _gender = 1; // 性别男

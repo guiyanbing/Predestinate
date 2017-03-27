@@ -1,14 +1,12 @@
 <resources>
     <string name="app_name">缘份吧</string>
 
-
     <!-- 主页Fragment -->
     <string name="main_btn_mail">消息</string>
     <string name="main_btn_xiaoyou">小友</string>
     <string name="main_btn_plaza">广场</string>
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
-
 
     <!--设置-->
     <string name="switch_acceptmsg">接受新消息通知</string>
@@ -42,7 +40,25 @@
     <string name="toast_code_isnull">验证码不能为空</string>
     <string name="toast_uid_isnull">请输入您的用户名</string>
     <string name="toast_pwd_isnull">请输入您的密码</string>
+    <string name="toast_setpwd_isnull">请输入您要设置的密码</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
+    <string name="txt_phone">手机号</string>
+    <string name="txt_verifycode">验证码</string>
+    <string name="txt_setpwd">设置密码</string>
+    <string name="ext_setpwd_hit">设置登录密码</string>
+    <string name="bt_send_code_normal">点击获取</string>
+    <string name="bt_send_code_press">重新发送（%1$d）秒</string>
+
+    <!-- 用户资料 -->
+    <string name="check_info_sendmsg">发消息</string>
+    <string name="check_info_sayhi">打招呼</string>
+    <string name="check_info_gift">送礼物</string>
+    <string name="check_info_secret_photo">私密相册</string>
+    <string name="check_info_secret_video">私密视频</string>
+    <string name="check_info_dynamic">动态</string>
+    <string name="check_info_ex_gift">礼物</string>
+    <string name="check_info_game">游戏</string>
+    <string name="check_info_impress_sign">印象标签</string>
 
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>
@@ -67,7 +83,7 @@
     <string name="tip_loading_submit">正在提交数据，请稍等...</string>
     <string name="tip_loading_login">正在登录，请稍等......</string>
 
-
     <!--activity标题-->
     <string name="title_loginact">登录</string>
+    <string name="title_findpwdact">找回密码</string>
 </resources>

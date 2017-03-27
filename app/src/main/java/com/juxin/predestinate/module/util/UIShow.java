@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.RegInfoAct;
@@ -89,6 +90,13 @@ public class UIShow {
      */
     public static void showRegInfoAct(FragmentActivity activity) {
         Intent intent = new Intent(activity, RegInfoAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开找回密码页
+     */
+    public static void showFindPwdAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, FindPwdAct.class);
         activity.startActivity(intent);
     }
 }
