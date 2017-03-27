@@ -18,23 +18,22 @@ import java.util.Map;
 public interface HttpMgr extends ModuleBase {
 
     /**
-     * post请求
-     * @param urlParam
-     * @param post_param
-     * @param requestCallback
-     * @return
+     * Post: 加密，不缓存
      */
     HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback);
 
-
+    /**
+     * Post: 加密，不缓存
+     */
     HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, Map<String, Object> post_param, RequestComplete requestCallback);
 
+    /**
+     * Get: 加密，缓存
+     */
+    HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback);
 
     /**
      * 发起普通请求
-     *
-     * @param requestParam 请求参数
-     * @return HTCallBack
      */
     HTCallBack request(RequestParam requestParam);
 

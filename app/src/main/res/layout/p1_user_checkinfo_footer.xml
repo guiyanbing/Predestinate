@@ -4,8 +4,98 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- 动态 -->
     <LinearLayout
-        android:id="@+id/view_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_margintop" />
+
+        <LinearLayout style="@style/center_set_item">
+
+            <TextView
+                android:layout_width="@dimen/px200_dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:text="@string/check_info_dynamic"
+                android:textColor="@color/color_999999"
+                android:textSize="@dimen/px40_sp" />
+
+            <LinearLayout
+                android:id="@+id/dynamic_item"
+                style="@style/center_item_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:scrollbars="none" />
+
+            <ImageView style="@style/right_go" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView style="@style/divider_line" />
+
+    <!-- 礼物 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/center_set_item">
+
+            <TextView
+                android:layout_width="@dimen/px200_dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:text="@string/check_info_ex_gift"
+                android:textColor="@color/color_999999"
+                android:textSize="@dimen/px40_sp" />
+
+            <LinearLayout
+                android:id="@+id/gift_item"
+                style="@style/center_item_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:scrollbars="none" />
+
+            <ImageView style="@style/right_go" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/layout_margintop" />
+
+    <!-- 游戏 -->
+    <LinearLayout style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="@string/check_info_game"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <LinearLayout
+            android:id="@+id/game_item"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:scrollbars="none" />
+
+        <ImageView style="@style/right_go" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_margintop" />
+
+    <!-- 私密相册 -->
+    <LinearLayout
+        android:id="@+id/view_secret_photo"
         style="@style/center_set_item">
 
         <TextView
@@ -14,7 +104,7 @@
             android:ellipsize="end"
             android:maxLength="30"
             android:maxLines="1"
-            android:text="个人相册"
+            android:text="@string/check_info_secret_photo"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
@@ -25,53 +115,14 @@
             android:orientation="horizontal"
             android:scrollbars="none" />
 
-        <TextView
-            android:id="@+id/photo_nums"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/px35_dp"
-            android:text="0"
-            android:textColor="@color/text_ciyao_gray" />
+        <ImageView style="@style/right_go" />
     </LinearLayout>
 
+    <TextView style="@style/divider_line" />
+
+    <!-- 私密视频 -->
     <LinearLayout
-        android:id="@+id/jiayuan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include layout="@layout/layout_margintop" />
-
-        <LinearLayout
-            android:id="@+id/view_jiayuan"
-            style="@style/center_set_item">
-
-            <TextView
-                android:layout_width="@dimen/px200_dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLength="30"
-                android:maxLines="1"
-                android:text="动态"
-                android:textColor="@color/color_999999"
-                android:textSize="@dimen/px40_sp" />
-
-            <com.p.library.view.roadlights.LMarqueeView
-                android:id="@+id/lmv_home_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/px35_dp"
-                android:clickable="false"
-                android:focusable="false" />
-
-            <ImageView style="@style/right_go" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <include layout="@layout/layout_margintop" />
-
-    <LinearLayout
-        android:id="@+id/view_fans"
+        android:id="@+id/view_secret_video"
         style="@style/center_set_item">
 
         <TextView
@@ -80,71 +131,25 @@
             android:ellipsize="end"
             android:maxLength="30"
             android:maxLines="1"
-            android:text="粉丝"
+            android:text="@string/check_info_secret_video"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/video_item"
             style="@style/center_item_layout"
-            android:gravity="center_vertical">
-
-            <com.xiaoyou.friends.ui.info.detail.CircleStackView
-                android:id="@+id/cv_fans"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical" />
-
-            <TextView
-                android:id="@+id/fans_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="暂时还没有粉丝"
-                android:textColor="@color/text_ciyao_gray"
-                android:textSize="@dimen/px42_sp" />
-
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tv_fans_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="9999"
-            android:textColor="@color/text_ciyao_gray" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:scrollbars="none" />
 
         <ImageView style="@style/right_go" />
-
-    </LinearLayout>
-
-    <TextView style="@style/divider_line" />
-
-    <LinearLayout
-        android:id="@+id/view_level"
-        style="@style/center_set_item">
-
-        <TextView
-            android:layout_width="@dimen/px200_dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLength="30"
-            android:text="账号等级"
-            android:textColor="@color/color_999999"
-            android:textSize="@dimen/px40_sp" />
-
-        <com.xiaoyou.friends.ui.commonlist.UserLevelViewEx
-            android:id="@+id/uv_level"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical" />
-
-        <ImageView
-            style="@style/right_go"
-            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
     <include layout="@layout/layout_margintop" />
 
+    <!-- 印象标签 -->
     <LinearLayout
-        android:id="@+id/view_jianjie"
+        android:id="@+id/view_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -157,7 +162,7 @@
             android:ellipsize="end"
             android:maxLength="30"
             android:maxLines="1"
-            android:text="资料介绍"
+            android:text="@string/check_info_impress_sign"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
@@ -173,83 +178,10 @@
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 
-    <include layout="@layout/layout_margintop" />
-
-    <LinearLayout
-        android:id="@+id/view_sign"
-        style="@style/center_set_item">
-
-        <TextView
-            android:layout_width="@dimen/px200_dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLength="30"
-            android:text="关系"
-            android:textColor="@color/color_999999"
-            android:textSize="@dimen/px40_sp" />
-
-        <TextView
-            android:id="@+id/tv_relationship"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="@dimen/px3_dp"
-            android:text="自己"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/px45_sp" />
-    </LinearLayout>
-
-    <TextView style="@style/divider_line" />
-
-    <LinearLayout
-        android:id="@+id/view_register"
-        style="@style/center_set_item">
-
-        <TextView
-            android:layout_width="@dimen/px200_dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLength="30"
-            android:maxLines="1"
-            android:text="注册时间"
-            android:textColor="@color/color_999999"
-            android:textSize="@dimen/px40_sp" />
-
-        <TextView
-            android:id="@+id/tv_register"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
-            android:text="2016-01-01"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/px45_sp" />
-    </LinearLayout>
-
-    <TextView style="@style/divider_line" />
-
-    <LinearLayout
-        android:id="@+id/view_id"
-        style="@style/center_set_item">
-
-        <TextView
-            android:layout_width="@dimen/px200_dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLength="30"
-            android:maxLines="1"
-            android:text="用户ID号"
-            android:textColor="@color/color_999999"
-            android:textSize="@dimen/px40_sp" />
-
-        <TextView
-            android:id="@+id/tv_id"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
-            android:text="22167000"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/px45_sp" />
-    </LinearLayout>
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px386_dp"
+        android:layout_height="@dimen/divider_page_footing"
         android:background="@color/bg_color" />
+
+    <include layout="@layout/fillbottom_bg" />
 </LinearLayout>

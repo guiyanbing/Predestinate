@@ -6,6 +6,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -34,12 +35,10 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public void init() {
-
     }
 
     @Override
     public void release() {
-
     }
     @Override
     public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
@@ -51,8 +50,25 @@ public class HttpMgrImpl implements HttpMgr {
         return reqPostNoCacheHttp(urlParam, null, get_param, post_param, requestCallback);
     }
 
+    @Override
+    public HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback){
+        return reqGetAndCacheHttp(urlParam, null, get_param, requestCallback);
+    }
+
+    @Override
+    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
+        if (FileUtil.isExist(filePath)) {
+            if (downloadListener != null) downloadListener.onSuccess(url, filePath);
+        } else {
+            return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
+        }
+        return new HTCallBack();
+    }
+
+
+    // ================ 以下为基础接口，不要重载 =====================
     /**
-     * 加密，不缓存
+     * Post: 加密，不缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -65,14 +81,8 @@ public class HttpMgrImpl implements HttpMgr {
         return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
     }
 
-
-    private HTCallBack reqPostAndCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
-        return reqPostAndCacheHttp(urlParam, null, null, post_param, requestCallback);
-    }
-
-
     /**
-     * 加密，缓存
+     * Post: 加密，缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -85,13 +95,8 @@ public class HttpMgrImpl implements HttpMgr {
         return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_Params, true, requestCallback);
     }
 
-
-    private HTCallBack reqGetNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
-        return reqGetNoCacheHttp(urlParam, null, get_param, requestCallback);
-    }
-
     /**
-     * 加密，不缓存
+     * Get: 加密，不缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -102,12 +107,8 @@ public class HttpMgrImpl implements HttpMgr {
         return reqGetHttp(urlParam, headerMap, get_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
     }
 
-    private HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
-        return reqGetAndCacheHttp(urlParam, null, get_param, requestCallback);
-    }
-
     /**
-     * 加密，缓存
+     * Get: 加密，缓存
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -165,7 +166,6 @@ public class HttpMgrImpl implements HttpMgr {
         return request(requestParam);
     }
 
-
     @Override
     public HTCallBack request(RequestParam requestParam) {
         //TODO 添加完整请求及基础解析
@@ -190,7 +190,7 @@ public class HttpMgrImpl implements HttpMgr {
         if (TextUtils.isEmpty(url)) return new HTCallBack();
 
         // 判断登录,如果用户没有登录，并且该请求又需要登录的话，则不发出请求，且清除该url的缓存数据
-        if (!LoginMgr.hasLogin) {
+        if (!App.isLogin) {
             if (urlParam.isNeedLogin()) {
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
                     PCache.getInstance().deleteCache(cacheUrl);// 清除该url的缓存
@@ -272,15 +272,5 @@ public class HttpMgrImpl implements HttpMgr {
 
         });
         return new HTCallBack(httpResultCall);
-    }
-
-    @Override
-    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
-        if (FileUtil.isExist(filePath)) {
-            if (downloadListener != null) downloadListener.onSuccess(url, filePath);
-        } else {
-            return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
-        }
-        return new HTCallBack();
     }
 }

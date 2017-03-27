@@ -1,7 +1,16 @@
 package com.juxin.predestinate.module.util;
 
+import android.content.Context;
+import android.text.ClipboardManager;
 import android.text.TextUtils;
 
+import com.juxin.mumu.bean.utils.MMToast;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -62,8 +71,6 @@ public class ChineseFilter {
         Matcher m = p.matcher(mobiles);
         return m.matches();
     }
-
-
 
     /**
      * 检查Email的格式
@@ -139,4 +146,35 @@ public class ChineseFilter {
         return s;
     }
 
+    /**
+     * 将JSONObject转换成Map<String, Object>
+     *
+     * @param jsonObject JSONObject对象
+     * @return Map对象
+     */
+    public static Map<String, Object> JSONObjectToMap(JSONObject jsonObject) {
+        Map<String, Object> result = new HashMap<>();
+        if (jsonObject == null) return result;
+
+        Iterator<String> iterator = jsonObject.keys();
+        String key = null;
+        Object value = null;
+        while (iterator.hasNext()) {
+            key = iterator.next();
+            value = jsonObject.opt(key);
+            result.put(key, value);
+        }
+        return result;
+    }
+
+    /**
+     * 复制字符串到剪贴板，并提示：已复制到剪贴板
+     *
+     * @param copy_string 需要赋值的文字
+     */
+    public static void copyString(Context context, String copy_string) {
+        ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setText(copy_string);
+        MMToast.showShort("已复制到剪贴板");
+    }
 }

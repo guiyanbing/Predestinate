@@ -126,6 +126,7 @@ public final class ModuleMgr {
     public static LoginMgr getLoginMgr() {
         if (loginMgr == null) {
             loginMgr = new LoginMgr();
+            addModule(loginMgr);
         }
         return loginMgr;
     }
@@ -138,6 +139,7 @@ public final class ModuleMgr {
     public static CommonMgr getCommonMgr() {
         if (commonMgr == null) {
             commonMgr = new CommonMgr();
+            addModule(commonMgr);
         }
         return commonMgr;
     }

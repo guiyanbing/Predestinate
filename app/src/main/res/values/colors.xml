@@ -3,8 +3,18 @@
 
     <!-- ============软件最常用的颜色 =========== -->
     <color name="color_zhuyao">#333333</color>
-    <color name="color_ciyao">#aaaaaa</color>
-    <color name="bg_color">#eaeaea</color>
+    <color name="color_ciyao">#F0F0F0</color>
+    <color name="bg_color">#F0F0F0</color>
+    <color name="color_C7C7C7">#C7C7C7</color>
+    <color name="color_B0B0B0">#B0B0B0</color>
+    <color name="color_656565">#656565</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="color_48CFD3">#48CFD3</color>
+    <color name="color_FF9900">#FF9900</color>
+    <color name="color_F85556">#F85556</color>
+    <color name="color_B6A88B">#B6A88B</color>
+    <color name="color_FAF2DD">#FAF2DD</color>
 
     <!-- ============基础色值=========== -->
     <color name="color_009688">#009688</color>
@@ -20,8 +30,6 @@
     <color name="color_FF5722">#FF5722</color>
     <color name="color_FC615C">#FC615C</color>
     <color name="color_F0F0F0">#F0F0F0</color>
-    <color name="color_B0B0B0">#B0B0B0</color>
-    <color name="color_FF9900">#FF9900</color>
     <color name="color_8E8E8E">#8E8E8E</color>
     <color name="color_F5F5F5">#F5F5F5</color>
     <color name="color_aaaaaa">#aaaaaa</color>
@@ -33,12 +41,10 @@
     <color name="color_fba62d">#e5fba62d</color>
     <color name="color_999999">#999999</color>
     <color name="color_666666">#666666</color>
-
     <color name="color_30333333">#4D333333</color>
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
-    <color name="white">#FFFFFF</color>
     <color name="white_per20">#33FFFFFF</color>
     <color name="white_per30">#4DFFFFFF</color>
     <color name="white_per40">#66FFFFFF</color>

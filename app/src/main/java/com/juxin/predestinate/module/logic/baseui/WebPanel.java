@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.baseui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.TextView;
@@ -10,10 +11,13 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.library.view.DownloadProgressView;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.invoke.WebAppInterface;
 import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -111,8 +115,29 @@ public class WebPanel extends BasePanel {
                 view.loadUrl(url);
                 return true;
             }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                MMLog.autoDebug("-----onPageFinished---->" + url);
+            }
+
+            @Override
+            public void onPageStarted(WebView webView, String s, Bitmap bitmap) {
+                super.onPageStarted(webView, s, bitmap);
+            }
+
+            @Override
+            public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                super.onReceivedSslError(webView, sslErrorHandler, sslError);
+                sslErrorHandler.proceed();
+            }
         });
-        webView.addJavascriptInterface(new WebAppInterface(getContext(), webView), "aiai");
+        webView.addJavascriptInterface(new WebAppInterface(getContext(), webView), "Android");
         webView.loadUrl(url);
     }
 

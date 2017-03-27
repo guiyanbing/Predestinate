@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
 
@@ -18,12 +19,14 @@ import com.juxin.predestinate.module.util.UIUtil;
 
 public class AlbumHorizontalPanel extends BaseViewPanel implements AdapterView.OnItemClickListener {
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
+    private UserDetail userDetail;
 
     private RecyclerView recyclerView;
 
-    public AlbumHorizontalPanel(Context context) {
+    public AlbumHorizontalPanel(Context context, UserDetail userDetail) {
         super(context);
         setContentView(R.layout.p1_album_horizontal_panel);
+        this.userDetail = userDetail;
 
         initview();
     }
@@ -43,14 +46,12 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements AdapterView.O
      * 设置照片显示参数
      */
     private void setParameter() {
-
     }
 
     /**
      * 刷新页面
      */
     public void refresh() {
-
     }
 
     @Override

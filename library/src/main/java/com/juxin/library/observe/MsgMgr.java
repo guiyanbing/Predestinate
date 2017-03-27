@@ -98,7 +98,7 @@ public class MsgMgr {
      * @param consumer          执行成功回调
      * @param throwableConsumer 执行失败回调
      */
-    public static <T> void doOnChildThread(Class<T> aClass, Consumer<T> consumer, Consumer<Throwable> throwableConsumer) {
+    public <T> void doOnChildThread(Class<T> aClass, Consumer<T> consumer, Consumer<Throwable> throwableConsumer) {
         RxBus.getInstance().toFlowable(aClass).
                 onBackpressureBuffer().subscribeOn(Schedulers.io()).
                 subscribeOn(Schedulers.newThread()).
