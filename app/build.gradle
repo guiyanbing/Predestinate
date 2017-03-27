@@ -3,64 +3,6 @@ import java.util.regex.Pattern
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
-
-//==================读取配置文件====================
-ext {
-    cConfigTxt = 'configs.txt'
-
-    //从配置文件加载的变量
-    cStoreFile = ''
-    cStorePassword = ''
-    cKeyAlias = ''
-    cKeyPassword = ''
-    cPrjProguard = ""
-
-    cVersionCode = ''
-    cVersionName = ''
-
-    cApkPath = ""
-    cAppName = getPrjNameFromManifest()
-
-    //加载参数配置
-    initConfigs()
-}
-
-//加载参数配置
-def initConfigs() {
-    def Properties props = new Properties()
-    def InputS = new FileInputStream(cConfigTxt)
-    def b = new byte[3];
-    InputS.read(b);
-    if (b[0] == -17 && b[1] == -69 && b[2] == -65) {
-        props.load(new InputStreamReader(InputS, 'UTF-8'))
-    } else {
-        props.load(new InputStreamReader(InputS, 'GBK'))
-    }
-
-    cStoreFile = props['storeFile']
-    cStorePassword = props['storePassword']
-    cKeyAlias = props['keyAlias']
-    cKeyPassword = props['keyPassword']
-    cPrjProguard = props['PrjProguard']
-
-    cVersionCode = props['VersionCode']
-    cVersionName = props['VersionName']
-
-
-    cApkPath = props['ApkPath']
-    cAppName = props['AppName']
-}
-
-//从包名获取项目名
-def getPrjNameFromManifest() {
-    def manifestFile = file('src/main/AndroidManifest.xml')
-    def pattern = Pattern.compile("package=\"(\\S+)\\.(\\S+)\\.(\\S+)\"");
-    def matcher = pattern.matcher(manifestFile.getText('UTF-8'))
-    matcher.find()
-    return matcher.group(3)
-}
-
-tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 android {
     signingConfigs {
         debug {
