@@ -62,8 +62,8 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.lmv_home_info:
-                    break;
+//                case R.id.lmv_home_info:
+//                    break;
             }
         }
     };

@@ -35,7 +35,13 @@ import java.util.Random;
  * 登录逻辑处理
  * Created by ZRP on 2016/9/19.
  */
-public class LoginMgr implements ModuleBase{
+public class LoginMgr implements ModuleBase {
+    private final static String LOGINMGR_UID = "loginmgr_sUid";                 // 保存当前登录用户账号信息 uid, pw
+    private final static String USER_KEY = "user_key";        // 保存当前登录过的账号信息
+    private final static String LOGINMGR_AUTH = "loginmgr_auth";                // 保存当前登录用户cookie
+    public boolean IF_PW_RESET = false;                       // 密码已是否重置
+    public static String cookie = null;
+    public static boolean hasLogin = false;//是否已经登录
 
     @Override
     public void init() {
@@ -46,13 +52,6 @@ public class LoginMgr implements ModuleBase{
     public void release() {
 
     }
-
-    private final static String UID = "sUid";                 // 保存当前登录用户账号信息 uid, pw
-    private final static String USER_KEY = "user_key";        // 保存当前登录过的账号信息
-    private final static String AUTH = "auth";                // 保存当前登录用户cookie
-    public boolean IF_PW_RESET = false;                       // 密码已是否重置
-    public static String cookie = null;
-
 
     /**
      * @return 判断Cookie是否存在
@@ -65,7 +64,7 @@ public class LoginMgr implements ModuleBase{
      * @return 获取cookie
      */
     public String getCookie() {
-        return PSP.getInstance().getString(AUTH, "");
+        return PSP.getInstance().getString(LOGINMGR_AUTH, "");
     }
 
     //************************************ 登录用户信息列表存储 *****************************\\
@@ -82,7 +81,7 @@ public class LoginMgr implements ModuleBase{
      * 保存cookie
      */
     public void setCookie(String cookie) {
-        PSP.getInstance().put(AUTH, cookie);
+        PSP.getInstance().put(LOGINMGR_AUTH, cookie);
     }
 
     /**
@@ -282,7 +281,7 @@ public class LoginMgr implements ModuleBase{
      * @param uid
      */
     public void setUid(String uid) {
-        PSP.getInstance().put(UID, uid);
+        PSP.getInstance().put(LOGINMGR_UID, uid);
     }
 
     /**
@@ -291,4 +290,5 @@ public class LoginMgr implements ModuleBase{
     public void setResetStatus(boolean resetStatus) {
         this.IF_PW_RESET = resetStatus;
     }
+
 }

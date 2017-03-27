@@ -133,7 +133,7 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
                 break;
 
             case R.id.txt_user_reset_pw:  // 跳转重置密码
-//                UIShow.showResetPwAct(this);
+                UIShow.showFindPwdAct(this);
                 break;
         }
     }

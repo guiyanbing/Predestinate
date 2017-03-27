@@ -6,6 +6,7 @@ import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

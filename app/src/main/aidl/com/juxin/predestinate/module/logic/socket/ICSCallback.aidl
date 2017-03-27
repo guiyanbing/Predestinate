@@ -12,10 +12,9 @@ interface ICSCallback {
     void onFeedback(long msgId, int msgType, String host);
 
     // 即时通讯状态
-    // type: 0 登录成功；1 登录失败；2 连接成功；3 断开连接；4 获取Key成功；5 获取Key失败。
-    // subType: 子类型
+    // type: 0 登录成功；1 登录失败；2 连接成功；3 断开连接；
     // msg: 提示消息
-    void onStatusChange(int type, int subType, String msg);
+    void onStatusChange(int type, String msg);
 
     //帐号无效
     void accountInvalid(int reason);
