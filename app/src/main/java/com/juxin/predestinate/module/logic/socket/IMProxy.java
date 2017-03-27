@@ -4,12 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.module.logic.application.App;
@@ -151,9 +149,7 @@ public class IMProxy {
                 setCSCallback();
 
                 //发送CoreService启动消息
-                Msg msg = new Msg();
-                msg.setData(true);
-                MsgMgr.getInstance().sendMsg(MsgType.MT_App_CoreService, msg);
+                MsgMgr.getInstance().sendMsg(MsgType.MT_App_CoreService, true);
             }
             status = ConnectStatus.CONNECTED;
         }
@@ -290,8 +286,8 @@ public class IMProxy {
         }
 
         @Override
-        public void onStatusChange(int type, int subType, String msg) throws RemoteException {
-            IMProxy.this.onStatusChange(type, subType, msg);
+        public void onStatusChange(int type, String msg) throws RemoteException {
+            IMProxy.this.onStatusChange(type, msg);
         }
 
         @Override
@@ -335,19 +331,17 @@ public class IMProxy {
      * 处理{@link CoreService}
      * 回调过来的消息。
      *
-     * @param type 消息类型。0 登录成功；1 登录失败；2 连接成功；3 断开连接；4 获取Key成功；5 获取Key失败。
+     * @param type 消息类型。0 登录成功；1 登录失败；2 连接成功；3 断开连接；
      * @param msg  提示消息。
      */
-    private void onStatusChange(final int type, final int subType, final String msg) {
-        PLogger.d(msg);
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        bundle.putString("msg", msg);
-
-        Msg imMsg = new Msg();
-        imMsg.setData(bundle);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_App_IMStatus, imMsg);
+    private void onStatusChange(final int type, final String msg) {
+        PLogger.d("type：" + type + "，msg：" + msg);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_App_IMStatus, new HashMap<String, Object>() {
+            {
+                put("type", type);
+                put("msg", msg);
+            }
+        });
     }
 
     /**

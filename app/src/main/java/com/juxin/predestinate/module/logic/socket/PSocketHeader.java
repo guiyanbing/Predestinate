@@ -28,9 +28,10 @@ public class PSocketHeader {
             return;
         }
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(buffer, 0, ServiceConstant.CHAT_TCP_DATA_Header_Size);
-        byte[] b = new byte[4];
+        ByteArrayInputStream bais = new ByteArrayInputStream(buffer, 0, TCPConstant.TCP_DATA_Header_Size);
+        byte[] b = new byte[4];//读取数组单个最长
 
+        //根据socket头定义，读取4-4-2的数据
         bais.read(b, 0, 4);
         this.length = ByteUtil.toUnsignedInt(b);
         bais.read(b, 0, 4);
@@ -54,7 +55,7 @@ public class PSocketHeader {
     }
 
     public int getHeaderSize() {
-        return ServiceConstant.CHAT_TCP_DATA_Header_Size;
+        return TCPConstant.TCP_DATA_Header_Size;
     }
 
     public int getSize() {
@@ -69,7 +70,7 @@ public class PSocketHeader {
         return (int) length;
     }
 
-    private void toggle() {
+    public void toggle() {
         isHeader = !isHeader;
     }
 
