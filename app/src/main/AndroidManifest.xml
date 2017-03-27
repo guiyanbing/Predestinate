@@ -57,6 +57,10 @@
         <activity
             android:name=".ui.user.check.UserCheckInfoAct"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.FindPwdAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <!-- ============= 相机相册模块start ============= -->
         <activity

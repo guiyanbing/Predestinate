@@ -91,5 +91,7 @@
     <color name="btn_getcode_solid">#F3FFFF</color>
 
     <color name="usersnickname">#353535</color>
+    <color name="bg_reghead_start">#00B7CB</color>
+    <color name="bg_reghead_end">#00D3D2</color>
 </resources>
 

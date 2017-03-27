@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
+    <com.juxin.predestinate.module.logic.baseui.custom.CropEndImageView
         android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/p1_splash" />
 
 </LinearLayout>

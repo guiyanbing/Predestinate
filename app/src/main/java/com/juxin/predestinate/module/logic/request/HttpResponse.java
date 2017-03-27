@@ -68,6 +68,14 @@ public class HttpResponse<T extends BaseData> extends BaseData {
         this.baseData = baseData;
     }
 
+    public UrlParam getUrlParam() {
+        return urlParam;
+    }
+
+    public void setUrlParam(UrlParam urlParam) {
+        this.urlParam = urlParam;
+    }
+
     public JSONObject getJson() {
         if (json == null) {
             return new JSONObject();
