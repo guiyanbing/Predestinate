@@ -20,45 +20,55 @@
             android:orientation="vertical">
 
             <!-- 头像部分-->
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/px604_dp"
-                android:background="@drawable/ic_launcher"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_height="@dimen/px604_dp">
 
-                <RelativeLayout
-                    android:layout_width="@dimen/px240_dp"
-                    android:layout_height="@dimen/px240_dp"
-                    android:layout_marginTop="@dimen/px80_dp">
+                <com.juxin.predestinate.ui.start.RegHeadBg
+                    android:id="@+id/rg_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <ImageView
-                        android:id="@+id/img_header"
-                        android:layout_width="@dimen/px250_dp"
-                        android:layout_height="@dimen/px250_dp"
-                        android:clickable="true"
-                        android:src="@drawable/r1_user_ico" />
-
-                    <ImageView
-                        android:layout_width="@dimen/px80_dp"
-                        android:layout_height="@dimen/px80_dp"
-                        android:layout_alignBottom="@+id/img_header"
-                        android:layout_alignRight="@+id/img_header"
-                        android:gravity="center"
-                        android:src="@drawable/r1_reg_camera" />
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/txt_header_describe"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px30_dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/upload_head_man"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/px40_sp" />
-            </LinearLayout>
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/px240_dp"
+                        android:layout_height="@dimen/px240_dp"
+                        android:layout_marginTop="@dimen/px80_dp">
+
+                        <ImageView
+                            android:id="@+id/img_header"
+                            android:layout_width="@dimen/px250_dp"
+                            android:layout_height="@dimen/px250_dp"
+                            android:background="@color/white"
+                            android:clickable="true"
+                            android:src="@drawable/p1_head_default" />
+
+                        <ImageView
+                            android:layout_width="@dimen/px80_dp"
+                            android:layout_height="@dimen/px80_dp"
+                            android:layout_alignBottom="@+id/img_header"
+                            android:layout_alignRight="@+id/img_header"
+                            android:gravity="center"
+                            android:src="@drawable/r1_reg_camera" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/txt_header_describe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/px30_dp"
+                        android:gravity="center"
+                        android:text="@string/upload_head_man"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px40_sp" />
+                </LinearLayout>
+            </RelativeLayout>
 
             <EditText
                 android:id="@+id/edtTxt_reg_info_nickname"

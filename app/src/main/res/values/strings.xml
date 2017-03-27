@@ -40,7 +40,14 @@
     <string name="toast_code_isnull">验证码不能为空</string>
     <string name="toast_uid_isnull">请输入您的用户名</string>
     <string name="toast_pwd_isnull">请输入您的密码</string>
+    <string name="toast_setpwd_isnull">请输入您要设置的密码</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
+    <string name="txt_phone">手机号</string>
+    <string name="txt_verifycode">验证码</string>
+    <string name="txt_setpwd">设置密码</string>
+    <string name="ext_setpwd_hit">设置登录密码</string>
+    <string name="bt_send_code_normal">点击获取</string>
+    <string name="bt_send_code_press">重新发送（%1$d）秒</string>
 
     <!-- 用户资料 -->
     <string name="check_info_sendmsg">发消息</string>
@@ -78,4 +85,5 @@
 
     <!--activity标题-->
     <string name="title_loginact">登录</string>
+    <string name="title_findpwdact">找回密码</string>
 </resources>

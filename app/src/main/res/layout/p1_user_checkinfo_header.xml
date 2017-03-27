@@ -20,7 +20,7 @@
                 android:id="@+id/img_header"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/r1_man02"
+                android:background="@drawable/ic_launcher"
                 android:clickable="true" />
 
             <ImageView

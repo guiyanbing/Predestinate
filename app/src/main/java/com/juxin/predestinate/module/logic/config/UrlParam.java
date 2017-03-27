@@ -5,6 +5,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.start.UserReg;
+import com.juxin.predestinate.bean.start.UP;
 
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public enum UrlParam {
 
     reqRegister("i/reg/Reg", UserReg.class),//注册接口
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
+    reqReqVerifyCode("i/reg/ReqVerifyCode"),//获取手机验证码
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
