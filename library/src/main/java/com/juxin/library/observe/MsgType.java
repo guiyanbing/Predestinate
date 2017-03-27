@@ -106,9 +106,32 @@ public class MsgType {
      */
     public static final String MT_Inner_Suspension_Notice = "MT_Inner_Suspension_Notice";
 
+    // -----------------------------socket相关 start---------------------------------
+
+    /**
+     * socket开始解析DNS
+     */
+    public static final String MT_Socket_DNS_Parse = "MT_Socket_DNS_Parse";
+
     /**
      * socket开始连接
      */
     public static final String MT_Socket_Start_Connect = "MT_Socket_Start_Connect";
 
+    /**
+     * socket重连失败统计
+     */
+    public static final String MT_Socket_Fail_Statistics = "MT_Socket_Fail_Statistics";
+
+    /**
+     * socket消息写入
+     */
+    public static final String MT_Socket_Write_Content = "MT_Socket_Write_Content";
+
+    /**
+     * socket消息读取
+     */
+    public static final String MT_Socket_Read_Content = "MT_Socket_Read_Content";
+
+    // -----------------------------socket相关 end---------------------------------
 }

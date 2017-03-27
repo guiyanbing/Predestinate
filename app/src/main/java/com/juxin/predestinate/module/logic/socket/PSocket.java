@@ -9,13 +9,14 @@ import com.juxin.library.observe.RxBus;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Vector;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -31,42 +32,24 @@ public class PSocket {
     private static OutputStream outputStream;
 
     private PSocket() {
-        // 监听登录
         RxBus.getInstance().toFlowable(Msg.class)
-                .onBackpressureBuffer().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .onBackpressureBuffer().subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.io())
                 .subscribe(new Consumer<Msg>() {
                     @Override
                     public void accept(Msg msg) throws Exception {
-                        if (MsgType.MT_Socket_Start_Connect.equals(msg.getKey())) connect();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        PLogger.printThrowable(throwable);
-                    }
-                });
-        // 监听写入
-        RxBus.getInstance().toFlowable(InputStream.class)
-                .onBackpressureBuffer().subscribeOn(Schedulers.newThread())
-                .subscribe(new Consumer<InputStream>() {
-                    @Override
-                    public void accept(InputStream inputStream) throws Exception {
-                        sendContent(inputStream);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        PLogger.printThrowable(throwable);
-                    }
-                });
-        // 监听读取
-        RxBus.getInstance().toFlowable(OutputStream.class)
-                .onBackpressureBuffer().subscribeOn(Schedulers.newThread())
-                .subscribe(new Consumer<OutputStream>() {
-                    @Override
-                    public void accept(OutputStream outputStream) throws Exception {
-                        readContent(outputStream);
+                        PLogger.d("---PSocket--->connect：" + msg.toString());
+                        switch (msg.getKey()) {
+                            case MsgType.MT_Socket_Start_Connect:// 监听登录
+                                connect();
+                                break;
+                            case MsgType.MT_Socket_Read_Content:// 监听数据接收
+                                readContent();
+                                break;
+                            case MsgType.MT_Socket_Write_Content:// 监听数据发送
+                                writeContent();
+                                break;
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -110,7 +93,7 @@ public class PSocket {
     /**
      * 断开socket长连接
      */
-    public void disConnect() {
+    public void disconnect() {
         try {
             if (socket != null) {
                 if (!socket.isInputShutdown()) socket.shutdownInput();
@@ -131,6 +114,16 @@ public class PSocket {
     }
 
     /**
+     * 发送socket数据
+     *
+     * @param buffer 数据buffer
+     */
+    public void send(byte[] buffer) {
+        datas.add(buffer);
+        RxBus.getInstance().post(new Msg(MsgType.MT_Socket_Write_Content, null));
+    }
+
+    /**
      * socket连接服务端
      */
     private void connect() {
@@ -141,19 +134,22 @@ public class PSocket {
             socket.connect(socketAddress, SOCKET_TIMEOUT);
 
             if (isValidSocket()) {
-                if (socketCallback != null) socketCallback.onConnected(this);
+//                if (socketCallback != null) socketCallback.onConnected(this);
 
                 outputStream = new DataOutputStream(socket.getOutputStream());
                 inputStream = new DataInputStream(socket.getInputStream());
 
-                RxBus.getInstance().post(outputStream);
-                RxBus.getInstance().post(inputStream);
+                isWrite = true;
+                isRead = true;
+
+                RxBus.getInstance().post(new Msg(MsgType.MT_Socket_Read_Content, null));
+                RxBus.getInstance().post(new Msg(MsgType.MT_Socket_Write_Content, null));
             } else {
-                if (socketCallback != null) socketCallback.onDisconnect(this, 1);
+//                if (socketCallback != null) socketCallback.onDisconnect(this, 1);
             }
         } catch (Exception e) {
             PLogger.printThrowable(e);
-            if (socketCallback != null) socketCallback.onDisconnect(this, 1);
+//            if (socketCallback != null) socketCallback.onDisconnect(this, 1);
         }
     }
 
@@ -170,21 +166,88 @@ public class PSocket {
                 && !socket.isOutputShutdown();
     }
 
-    /**
-     * 读取服务器socket数据
-     *
-     * @param outputStream 输出流
-     */
-    private void readContent(OutputStream outputStream) {
+    private static final Vector<byte[]> datas = new Vector<byte[]>();
+    private boolean isWrite = false;
+    private boolean isRead = false;
+    private int bufferSize = 2 * 1024 * 1024;
 
+    /**
+     * 数据发送，一直处于等待状态
+     */
+    private void writeContent() {
+        PLogger.d("---PSocket--->writeContent：" + outputStream);
+        while (isWrite) {
+            if (datas.isEmpty()) continue;
+
+            while (datas.size() > 0) {
+                byte[] buffer = datas.remove(0);
+                if (isWrite && outputStream != null && isValidSocket()) {
+                    try {
+                        outputStream.write(buffer);
+                        outputStream.flush();
+                        continue;//写入完成继续进入等待状态
+                    } catch (IOException e) {
+                        PLogger.printThrowable(e);
+                    }
+                }
+
+                if (isWrite) {//写入失败就断开socket
+                    isRead = false;
+                    isWrite = false;
+//                    if (socketCallback != null) socketCallback.onDisconnect(this, 2);
+                }
+                return;
+            }
+        }
     }
 
     /**
-     * 发送客户端socket数据
-     *
-     * @param inputStream 写入流
+     * 数据接收
      */
-    private void sendContent(InputStream inputStream) {
+    private void readContent() {
+        PLogger.d("---PSocket--->readContent：" + inputStream);
 
+        byte[] buffer = new byte[bufferSize];
+        int len = 0;
+
+        PSocketHeader header = new PSocketHeader();
+        int readStart = 0;
+        int readSize = header.getHeaderSize();
+
+        try {
+            while ((inputStream != null && (len = inputStream.read(buffer, readStart, readSize)) != -1)) {
+                if (header.isHeader()) {
+                    header.setBuffer(buffer);
+
+                    if (header.getLength() != 0) {
+                        header.toggle();
+                        readSize = header.getSize();
+                        continue;
+                    }
+                } else {
+                    // 防止一次没有读完
+                    if (len == readSize) {
+                        header.toggle();
+                        readStart = 0;
+                        readSize = header.getSize();
+                    } else {
+                        readStart += len;
+                        readSize = header.getSize() - readStart;
+                        continue;
+                    }
+                }
+//                if (socketCallback != null)
+//                    socketCallback.onReceive(this, header, buffer, header.getLength());
+            }
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+
+        if (isRead) {
+            isRead = false;
+            isWrite = false;
+//            if (socketCallback != null) socketCallback.onDisconnect(this, 3);
+        }
+        isWrite = false;
     }
 }

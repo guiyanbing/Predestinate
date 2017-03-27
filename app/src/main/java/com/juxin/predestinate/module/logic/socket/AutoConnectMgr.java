@@ -1,8 +1,6 @@
 package com.juxin.predestinate.module.logic.socket;
 
 import android.os.DeadObjectException;
-import android.os.Handler;
-import android.os.Message;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +9,9 @@ import com.google.gson.Gson;
 import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.observe.Msg;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.RxBus;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -27,6 +28,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * 负责即时通讯的重连机制。同时提供对外的操作接口。
  *
@@ -35,7 +40,7 @@ import java.util.Random;
  * @qq 505214658
  * @date 2015-04-16
  */
-public class AutoConnectMgr implements SimpleSocket.SocketCallback {
+public class AutoConnectMgr implements SocketCallback {
 
     private static final String TAG = "AutoConnectMgr";
 
@@ -46,6 +51,33 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
     }
 
     private AutoConnectMgr() {
+        RxBus.getInstance().toFlowable(Msg.class)
+                .onBackpressureBuffer().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Msg>() {
+                    @Override
+                    public void accept(Msg msg) throws Exception {
+                        switch (msg.getKey()) {
+                            case MsgType.MT_Socket_DNS_Parse:
+                                DNSParse();
+                                break;
+                            case MsgType.MT_Socket_Fail_Statistics://发送失败统计
+                                if (failCount == 0) {
+                                    firstFailTime = System.currentTimeMillis();//第一次记时
+                                }
+                                failCount++;
+                                if (System.currentTimeMillis() - firstFailTime > 10 * 60 * 1000) {
+                                    socketConnectFailReport();//如果距第一次记时超过了10min，就发送统计消息
+                                }
+                                break;
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        PLogger.printThrowable(throwable);
+                    }
+                });
     }
 
     /**
@@ -85,7 +117,7 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
         this.token = token;
 
         if (heartBeating) return;//如果是保持心跳连接状态，就不再次登录
-        socketHandler.sendEmptyMessage(SH_MSG_DNSParse);//开始连接服务器
+        RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));//开始DNS解析
         PLogger.d("login: ------>发送连接服务器的消息");
     }
 
@@ -104,7 +136,6 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
         heartbeatSend = 0;
         heartbeatResend = 0;
 
-        socketHandler.removeMessages(SH_MSG_DNSParse);
         if (simpleSocket != null) {
             SimpleSocket temp = simpleSocket;
             simpleSocket = null;
@@ -115,7 +146,7 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
 
     // =================以下是关于内部自动连接维护的功能=================
     /**
-     * 重连递增时间，每次2秒。
+     * 重连递增时间，每次2秒
      */
     private int incrementTime = 0;
 
@@ -123,13 +154,13 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
      * @return 请求发送的延时时长
      */
     private int getIncrementTime() {
-        incrementTime = TimerUtil.increaseTime(ServiceConstant.SOCKET_AUTO_CONNECT_Increment_Time, 60 * 1000, false);
+        incrementTime = TimerUtil.increaseTime(TCPConstant.SOCKET_AUTO_CONNECT_Increment_Time, 60 * 1000, false);
         PLogger.d("socket reconnect delayed time：" + incrementTime);
         return incrementTime;
     }
 
-    private String hostIP = null;   //socket域名解析之后的IP地址
-    private String port = null;     //socket端口
+    private String hostIP = "sc.app.yuanfenba.net";   //socket域名解析之后的IP地址
+    private String port = "8823";     //socket端口
 
     /**
      * 进行域名解析
@@ -149,15 +180,15 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
                         hostIP = inetAddress.getHostAddress();
                         port = split[1];
                         PLogger.d("---DNSParse--->DNS解析成功：host->" + hostIP + "，port->" + port);
-                        socketHandler.sendEmptyMessage(SH_MSG_Connect);
+                        connect();
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
-                        socketHandler.sendEmptyMessage(SH_MSG_DNSParse);
+                        RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
                     }
                 }
             }).start();
         } else {
-            socketHandler.sendEmptyMessage(SH_MSG_Connect);
+            connect();
         }
     }
 
@@ -198,8 +229,8 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
                 heartbeatSend = 0;
                 heartbeatResend = 0;
 
-                onStatusChange(ServiceConstant.CHATSERVIE_STATUS_Disconnect, ServiceConstant.CHATSERVIE_STATUS_SUBTYPE_Default, "IM 心跳回送失败，socket重新进行连接");
-                socketHandler.sendEmptyMessage(SH_MSG_DNSParse);
+                onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "IM 心跳回送失败，socket重新进行连接");
+                RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
             } else {
                 simpleSocket.send(getRevertHeartbeat().getBytes());
             }
@@ -242,31 +273,6 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
         return getHeartbeat(Constant.MSG_ID_Heartbeat_Reply);
     }
 
-    /**
-     * 处理连接中的各种同步调用。
-     */
-    private static final int SH_MSG_DNSParse = 0;//开始进行域名解析
-    private static final int SH_MSG_Connect = 1;// 开始连接Socket
-    private static final int SH_MSG_Hearbeat = 2;// 循环发送心跳
-
-    private Handler socketHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SH_MSG_DNSParse:
-                    DNSParse();
-                    break;
-
-                case SH_MSG_Connect:
-                    connect();
-                    break;
-
-                case SH_MSG_Hearbeat:
-                    // heartbeat();//该版本心跳逻辑不由此负责，而是通过ChatService中ExTimerUtil.startRepeatTimer实现
-                    break;
-            }
-        }
-    };
-
     @Override
     public void onConnected(SimpleSocket id) {
         if (id != simpleSocket) return;
@@ -274,7 +280,7 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
         //与聊天服务器连接成功之后，同时发送一条心跳消息与登录验证消息
         simpleSocket.send(getHeartbeat(Constant.MSG_ID_Heartbeat).getBytes());
         simpleSocket.send(getLoginData().getBytes());
-        onStatusChange(ServiceConstant.CHATSERVIE_STATUS_Connect, ServiceConstant.CHATSERVIE_STATUS_SUBTYPE_Default, "IM 连接服务器成功");
+        onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "IM 连接服务器成功");
     }
 
     /**
@@ -290,20 +296,22 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
         loginMap.put("fid", uid);
         loginMap.put("mt", curTime);
         loginMap.put("md", md);
+        loginMap.put("ms", Constant.MS);
+        loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
         NetData data = new NetData(uid, Constant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
         return data;
     }
 
     @Override
-    public void onReceive(SimpleSocket id, SimpleSocket.SimpleSocketHeader header, byte[] buffer, int length) {
+    public void onReceive(SimpleSocket id, PSocketHeader header, byte[] buffer, int length) {
         if (id != simpleSocket) return;
         if (header == null || buffer == null || length < 0) return;
 
         String content = "";
 
         if (length > 0) content = JniUtil.GetDecryptString(new String(buffer, 0, length));
-        PLogger.d("\n---socket消息头：" + header.toString() + "\n---socket消息体：" + content);
+        PLogger.d("---socket消息头：" + header.toString() + "\n---socket消息体：" + content);
 
         if (header.type == Constant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
             //TODO 根据mct字段的错误描述进行dialog提示，如果无此字段，直接跳转到登录页面。服务器暂无此实现
@@ -328,9 +336,9 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
                         heartBeating = true;
                         loopHeartbeatStatus();
                         incrementTime = 0;
-                        onStatusChange(ServiceConstant.CHATSERVIE_STATUS_Login_Suc, ServiceConstant.CHATSERVIE_STATUS_SUBTYPE_Default, "IM 登录成功：" + content);
+                        onStatusChange(TCPConstant.SOCKET_STATUS_Login_Success, "IM 登录成功：" + content);
                     } else {//登录失败，默认为与服务器断开连接，重新连接
-                        onStatusChange(ServiceConstant.CHATSERVIE_STATUS_Login_Fail, ServiceConstant.CHATSERVIE_STATUS_SUBTYPE_Default, "IM 登录失败：" + content);
+                        onStatusChange(TCPConstant.SOCKET_STATUS_Login_Fail, "IM 登录失败：" + content);
                         switch (s) {
                             case -1:// 登录错误(密码错误之类)，跳转到登录页面
                                 PLogger.d("socket登录错误---->" + contentObject.optString("c"));
@@ -338,7 +346,8 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
                                 break;
                             case -2://时间戳不对，需要读取返回的mt字段来重新登录
                                 PLogger.d("socket登录错误---->时间戳不对");
-                                socketHandler.sendEmptyMessageDelayed(SH_MSG_DNSParse, getIncrementTime());
+                                RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
+//                                socketHandler.sendEmptyMessageDelayed(SH_MSG_DNSParse, getIncrementTime());
                                 break;
                         }
                     }
@@ -351,7 +360,7 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
                 if (contentObject.has("fid")) sender = contentObject.optLong("fid");
 
                 //消息接收反馈
-                simpleSocket.send(getLoopbackData(header.type, header.msdId).getBytes());
+                simpleSocket.send(getLoopbackData(header.type, msgId).getBytes());
 
                 //抛出消息
                 onMessage(msgId, false, "", sender, content);
@@ -400,19 +409,6 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
     /* -------------socket重连失败统计start----------- */
     private int failCount = 0;//重连失败次数统计
     private long firstFailTime = 0;//首次重连失败的时间
-    private Handler connectReportHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                if (failCount == 0) firstFailTime = System.currentTimeMillis();//第一次记时
-                failCount++;
-                if (System.currentTimeMillis() - firstFailTime > 10 * 60 * 1000) {
-                    socketConnectFailReport();//如果距第一次记时超过了10min，就发送统计消息
-                }
-            }
-        }
-    };
 
     /**
      * socket重连失败统计
@@ -424,22 +420,22 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
             failCount = 0;//消息回馈之后，不管成功失败，直接重置
         }
     }
-    /* -------------socket重连失败统计end------------- */
 
+    /* -------------socket重连失败统计end------------- */
     @Override
-    public void onDisconnect(SimpleSocket id, SimpleSocket.SocketCloseType type) {
+    public void onDisconnect(SimpleSocket id, int type) {
         if (id != simpleSocket) return;
 
         //打印日志
         String disconnectType = "";
         switch (type) {
-            case SCT_Connect:
+            case 1:
                 disconnectType = "连接服务器失败";
                 break;
-            case SCT_SendTimeOut:
+            case 2:
                 disconnectType = "发送数据超时";
                 break;
-            case SCT_ServerClose:
+            case 3:
                 disconnectType = "服务器主动关闭";
                 break;
         }
@@ -451,10 +447,11 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
         heartbeatSend = 0;
         heartbeatResend = 0;
 
-        onStatusChange(ServiceConstant.CHATSERVIE_STATUS_Disconnect, ServiceConstant.CHATSERVIE_STATUS_SUBTYPE_Default, "IM 断开服务器连接");
+        onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "IM 断开服务器连接");
         if (NetworkUtils.isConnected(App.context)) {//网络可用情况下才立即发送重连
-            socketHandler.sendEmptyMessageDelayed(SH_MSG_DNSParse, getIncrementTime());
-            connectReportHandler.sendEmptyMessage(0);//重连失败统计
+            RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
+//            socketHandler.sendEmptyMessageDelayed(SH_MSG_DNSParse, getIncrementTime());
+            RxBus.getInstance().post(new Msg(MsgType.MT_Socket_Fail_Statistics, null));
         }
     }
 
@@ -506,12 +503,12 @@ public class AutoConnectMgr implements SimpleSocket.SocketCallback {
      * @param type 类型。
      * @param msg  消息内容。
      */
-    private void onStatusChange(final int type, final int subType, final String msg) {
+    private void onStatusChange(final int type, final String msg) {
         PLogger.d(msg);
 
         try {
             if (iCSCallback != null) {
-                iCSCallback.onStatusChange(type, subType, msg);
+                iCSCallback.onStatusChange(type, msg);
             }
         } catch (DeadObjectException de) {//如果服务挂了，就重启聊天service
 //            CoreService.startChatService(App.context);

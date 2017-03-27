@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.ExTimerUtil;
 
@@ -16,12 +15,12 @@ import com.juxin.predestinate.module.util.ExTimerUtil;
  */
 public class CoreService extends Service {
 
-    private SocketServiceBinder binder = null;
+    private CoreServiceBinder binder = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        binder = new SocketServiceBinder();
+        binder = new CoreServiceBinder();
 
         Intent intent = new Intent(this, CoreService.class);
         intent.putExtra("timer", "60");
@@ -37,7 +36,6 @@ public class CoreService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            PLogger.d(intent.getStringExtra("timer"));
             if ("60".equals(intent.getStringExtra("timer"))) {//心跳
                 AutoConnectMgr.getInstance().heartbeat();
             }
@@ -45,7 +43,7 @@ public class CoreService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private class SocketServiceBinder extends ICoreService.Stub {
+    private class CoreServiceBinder extends ICoreService.Stub {
 
         @Override
         public void setCallback(ICSCallback iCSCallback) throws RemoteException {
