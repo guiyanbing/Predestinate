@@ -8,21 +8,24 @@ import com.juxin.predestinate.bean.net.BaseData;
 import org.json.JSONObject;
 
 /**
- * 私密视频列表
+ * 私密相册/视频
  * Created by Su on 2017/3/27.
  */
 
-public class SecretVideo extends BaseData implements Parcelable{
+public class SecretMedia extends BaseData implements Parcelable {
     private String coverUrl; // 封面url
     private long id;         // 相片id
     private long time;       // 发布时间
     private int viewTimes;   // 看过次数
+    private int totalNum;    // 每组数量  相册
+
     @Override
     public void parseJson(String jsonStr) {
         JSONObject jsonObject = getJsonObject(jsonStr);
         this.setId(jsonObject.optLong("id"));
         this.setCoverUrl(jsonObject.optString("cover"));
         this.setTime(jsonObject.optLong("tm"));
+        this.setTotalNum(jsonObject.optInt("total"));
         this.setViewTimes(jsonObject.optInt("view"));
     }
 
@@ -50,6 +53,14 @@ public class SecretVideo extends BaseData implements Parcelable{
         this.time = time;
     }
 
+    public int getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(int totalNum) {
+        this.totalNum = totalNum;
+    }
+
     public int getViewTimes() {
         return viewTimes;
     }
@@ -57,7 +68,6 @@ public class SecretVideo extends BaseData implements Parcelable{
     public void setViewTimes(int viewTimes) {
         this.viewTimes = viewTimes;
     }
-
 
     @Override
     public int describeContents() {
@@ -69,28 +79,30 @@ public class SecretVideo extends BaseData implements Parcelable{
         dest.writeString(this.coverUrl);
         dest.writeLong(this.id);
         dest.writeLong(this.time);
+        dest.writeInt(this.totalNum);
         dest.writeInt(this.viewTimes);
     }
 
-    public SecretVideo() {
+    public SecretMedia() {
     }
 
-    protected SecretVideo(Parcel in) {
+    protected SecretMedia(Parcel in) {
         this.coverUrl = in.readString();
         this.id = in.readLong();
         this.time = in.readLong();
+        this.totalNum = in.readInt();
         this.viewTimes = in.readInt();
     }
 
-    public static final Creator<SecretVideo> CREATOR = new Creator<SecretVideo>() {
+    public static final Creator<SecretMedia> CREATOR = new Creator<SecretMedia>() {
         @Override
-        public SecretVideo createFromParcel(Parcel source) {
-            return new SecretVideo(source);
+        public SecretMedia createFromParcel(Parcel source) {
+            return new SecretMedia(source);
         }
 
         @Override
-        public SecretVideo[] newArray(int size) {
-            return new SecretVideo[size];
+        public SecretMedia[] newArray(int size) {
+            return new SecretMedia[size];
         }
     };
 }

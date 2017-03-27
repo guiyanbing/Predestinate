@@ -24,6 +24,8 @@ public enum UrlParam {
     reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),  //获取详细个人资料
     reqOtherInfo("s/uinfo/ODetail", UserDetail.class, true),
 
+    //批量获取用户简略信息
+    reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
     //获取昵称和头像的最近变更 list
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 

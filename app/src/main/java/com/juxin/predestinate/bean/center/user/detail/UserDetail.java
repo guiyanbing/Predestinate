@@ -3,8 +3,7 @@ package com.juxin.predestinate.bean.center.user.detail;
 import android.os.Parcel;
 
 import com.juxin.predestinate.bean.center.user.others.Game;
-import com.juxin.predestinate.bean.center.user.others.SecretPhoto;
-import com.juxin.predestinate.bean.center.user.others.SecretVideo;
+import com.juxin.predestinate.bean.center.user.others.SecretMedia;
 import com.juxin.predestinate.bean.center.user.others.UserLabel;
 import com.juxin.predestinate.bean.center.user.others.UserPrize;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -19,8 +18,8 @@ import java.util.List;
  */
 public class UserDetail extends UserInfo {
     private List<Game> gamesInfo = new ArrayList<>();
-    private List<SecretPhoto> secretPhotos = new ArrayList<>();
-    private List<SecretVideo> secretVideos = new ArrayList<>();
+    private List<SecretMedia> secretPhotos = new ArrayList<>();
+    private List<SecretMedia> secretVideos = new ArrayList<>();
     private UserPrize userPrize = new UserPrize();
     private UserLabel userLabel = new UserLabel();
 
@@ -36,12 +35,12 @@ public class UserDetail extends UserInfo {
 
         // 私密相册列表
         if (!jsonObject.isNull("photo")) {
-            this.secretPhotos = (List<SecretPhoto>) getBaseDataList(jsonObject.optJSONArray("photo"), SecretPhoto.class);
+            this.secretPhotos = (List<SecretMedia>) getBaseDataList(jsonObject.optJSONArray("photo"), SecretMedia.class);
         }
 
         // 私密视频列表
         if (!jsonObject.isNull("video")) {
-            this.secretVideos = (List<SecretVideo>) getBaseDataList(jsonObject.optJSONArray("video"), SecretVideo.class);
+            this.secretVideos = (List<SecretMedia>) getBaseDataList(jsonObject.optJSONArray("video"), SecretMedia.class);
         }
 
         // 礼物信息
@@ -64,11 +63,11 @@ public class UserDetail extends UserInfo {
         return gamesInfo;
     }
 
-    public List<SecretPhoto> getSecretPhotos() {
+    public List<SecretMedia> getSecretPhotos() {
         return secretPhotos;
     }
 
-    public List<SecretVideo> getSecretVideos() {
+    public List<SecretMedia> getSecretVideos() {
         return secretVideos;
     }
 
