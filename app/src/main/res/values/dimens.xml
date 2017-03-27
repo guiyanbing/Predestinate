@@ -169,7 +169,18 @@
     <dimen name="px760_dp">253.3dp</dimen>
     <dimen name="px870_dp">290dp</dimen>
 
+    <!-- =================图片圆角 角度==================== -->
+    <dimen name="fillet_big">@dimen/px12_dp</dimen>
+    <dimen name="fillet_in">@dimen/px8_dp</dimen>
+    <dimen name="fillet_small">@dimen/px4_dp</dimen>
+
     <!-- =================新版通用字体尺寸hdpi，sp==================== -->
+    <dimen name="big_font_60">@dimen/px60_sp</dimen>
+    <dimen name="big_font_52">@dimen/px52_sp</dimen>
+    <dimen name="big_font_45">@dimen/px45_sp</dimen>
+    <dimen name="big_font_40">@dimen/px40_sp</dimen>
+    <dimen name="big_font_36">@dimen/px36_sp</dimen>
+
     <dimen name="px22_sp">7.3sp</dimen>
     <dimen name="px26_sp">8.7sp</dimen>
     <dimen name="px28_sp">9.3sp</dimen>
