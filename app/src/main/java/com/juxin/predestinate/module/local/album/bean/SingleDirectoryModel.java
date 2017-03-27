@@ -1,6 +1,4 @@
-package com.juxin.predestinate.module.album.bean;
-
-import com.juxin.predestinate.module.album.bean.SingleImageModel;
+package com.juxin.predestinate.module.local.album.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;

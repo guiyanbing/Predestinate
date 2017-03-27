@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.help;
+package com.juxin.predestinate.module.local.album.help;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;

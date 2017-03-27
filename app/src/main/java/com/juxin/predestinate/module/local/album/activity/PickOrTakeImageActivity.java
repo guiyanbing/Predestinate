@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.activity;
+package com.juxin.predestinate.module.local.album.activity;
 
 import android.animation.ValueAnimator;
 import android.content.ContentResolver;
@@ -21,14 +21,14 @@ import android.widget.Toast;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.adapter.AlbumDirectoryAdapter;
-import com.juxin.predestinate.module.album.adapter.AlbumExhibitionAdapter;
-import com.juxin.predestinate.module.album.bean.AlbumDirectories;
-import com.juxin.predestinate.module.album.bean.SingleImageModel;
-import com.juxin.predestinate.module.album.help.AlbumAnime;
-import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
-import com.juxin.predestinate.module.album.help.AlbumHelper;
-import com.juxin.predestinate.module.album.help.ImgConstant;
+import com.juxin.predestinate.module.local.album.adapter.AlbumDirectoryAdapter;
+import com.juxin.predestinate.module.local.album.adapter.AlbumExhibitionAdapter;
+import com.juxin.predestinate.module.local.album.bean.AlbumDirectories;
+import com.juxin.predestinate.module.local.album.bean.SingleImageModel;
+import com.juxin.predestinate.module.local.album.help.AlbumAnime;
+import com.juxin.predestinate.module.local.album.help.AlbumBitmapCacheHelper;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.album.help.ImgConstant;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIUtil;
 

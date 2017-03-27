@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.bean;
+package com.juxin.predestinate.module.local.album.bean;
 
 import java.io.Serializable;
 

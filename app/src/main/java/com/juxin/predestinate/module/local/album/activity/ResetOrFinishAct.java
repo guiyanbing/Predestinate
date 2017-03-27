@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.activity;
+package com.juxin.predestinate.module.local.album.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.PhotoUtils;
 import com.juxin.predestinate.module.util.UIUtil;

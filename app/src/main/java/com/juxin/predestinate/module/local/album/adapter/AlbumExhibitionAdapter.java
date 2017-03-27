@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.adapter;
+package com.juxin.predestinate.module.local.album.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,11 +10,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.activity.PickOrTakeImageActivity;
-import com.juxin.predestinate.module.album.bean.SingleImageModel;
-import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
-import com.juxin.predestinate.module.album.help.AlbumHelper;
-import com.juxin.predestinate.module.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.album.activity.PickOrTakeImageActivity;
+import com.juxin.predestinate.module.local.album.bean.SingleImageModel;
+import com.juxin.predestinate.module.local.album.help.AlbumBitmapCacheHelper;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;

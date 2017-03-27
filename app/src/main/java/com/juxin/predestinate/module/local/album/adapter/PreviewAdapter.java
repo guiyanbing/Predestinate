@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.adapter;
+package com.juxin.predestinate.module.local.album.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.activity.PickBigImagesActivity;
-import com.juxin.predestinate.module.album.activity.ZoomImageView;
-import com.juxin.predestinate.module.album.bean.SingleImageModel;
-import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
+import com.juxin.predestinate.module.local.album.activity.PickBigImagesActivity;
+import com.juxin.predestinate.module.local.album.activity.ZoomImageView;
+import com.juxin.predestinate.module.local.album.bean.SingleImageModel;
+import com.juxin.predestinate.module.local.album.help.AlbumBitmapCacheHelper;
 
 import java.util.List;
 

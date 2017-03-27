@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.crop;
+package com.juxin.predestinate.module.local.album.crop;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,7 +10,7 @@ import android.view.View;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.DirUtils;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 import java.io.IOException;

@@ -1,6 +1,4 @@
-package com.juxin.predestinate.module.album.bean;
-
-import com.juxin.predestinate.module.album.bean.SingleDirectoryModel;
+package com.juxin.predestinate.module.local.album.bean;
 
 /**
  * 相册目录

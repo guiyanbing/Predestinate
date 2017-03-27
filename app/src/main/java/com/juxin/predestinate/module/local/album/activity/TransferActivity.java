@@ -1,13 +1,13 @@
-package com.juxin.predestinate.module.album.activity;
+package com.juxin.predestinate.module.local.album.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.help.AlbumHelper;
-import com.juxin.predestinate.module.album.help.ImgConstant;
-import com.juxin.predestinate.module.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.album.help.ImgConstant;
+import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 import java.util.List;
