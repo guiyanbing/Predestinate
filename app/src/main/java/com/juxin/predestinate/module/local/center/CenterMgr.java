@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.predestinate.bean.center.user.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -64,5 +64,12 @@ public class CenterMgr implements ModuleBase {
                 put("uid", uid);
             }
         }, complete);
+    }
+
+    /**
+     * 保存个人信息Json串到SP
+     */
+    public void setMyInfo(String resultStr) {
+        PSP.getInstance().put(INFO_SAVE_KEY, resultStr);
     }
 }

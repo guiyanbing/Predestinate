@@ -3,7 +3,7 @@ package com.juxin.predestinate.ui.user.check;
 import android.content.Context;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 /**

@@ -1,7 +1,8 @@
 package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.UserLogin;
-import com.juxin.predestinate.bean.center.user.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.start.UserReg;
 
@@ -22,6 +23,9 @@ public enum UrlParam {
     reqSetInfo("i/uinfo/SecSetInfo", true),  // 用户设置更新
     reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),  //获取详细个人资料
     reqOtherInfo("s/uinfo/ODetail", UserDetail.class, true),
+
+    //获取昵称和头像的最近变更 list
+    reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 
     // 最后一个，占位
     LastUrlParam("");
