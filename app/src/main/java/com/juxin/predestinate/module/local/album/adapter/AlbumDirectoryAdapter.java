@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.adapter;
+package com.juxin.predestinate.module.local.album.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.album.bean.AlbumDirectories;
-import com.juxin.predestinate.module.album.help.AlbumBitmapCacheHelper;
+import com.juxin.predestinate.module.local.album.bean.AlbumDirectories;
+import com.juxin.predestinate.module.local.album.help.AlbumBitmapCacheHelper;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIUtil;
 

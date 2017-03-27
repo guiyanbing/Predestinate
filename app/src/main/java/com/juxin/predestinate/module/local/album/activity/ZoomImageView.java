@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.activity;
+package com.juxin.predestinate.module.local.album.activity;
 
 import android.app.Activity;
 import android.content.Context;

@@ -15,16 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
-import com.juxin.library.utils.FileUtil;
-import com.juxin.library.utils.StringUtils;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.start.UserReg;
-import com.juxin.predestinate.module.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -36,9 +32,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 

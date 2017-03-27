@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <com.juxin.predestinate.module.album.crop.ClipViewLayout
+    <com.juxin.predestinate.module.local.album.crop.ClipViewLayout
         android:id="@+id/clipViewLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

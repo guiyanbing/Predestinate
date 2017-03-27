@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.help;
+package com.juxin.predestinate.module.local.album.help;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -13,13 +13,13 @@ import android.text.TextUtils;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
-import com.juxin.predestinate.module.album.activity.PickBigImagesActivity;
-import com.juxin.predestinate.module.album.activity.ResetOrFinishAct;
-import com.juxin.predestinate.module.album.activity.TransferActivity;
-import com.juxin.predestinate.module.album.bean.AlbumDirectories;
-import com.juxin.predestinate.module.album.bean.SingleDirectoryModel;
-import com.juxin.predestinate.module.album.bean.SingleImageModel;
-import com.juxin.predestinate.module.album.crop.CropImageAct;
+import com.juxin.predestinate.module.local.album.activity.PickBigImagesActivity;
+import com.juxin.predestinate.module.local.album.activity.ResetOrFinishAct;
+import com.juxin.predestinate.module.local.album.activity.TransferActivity;
+import com.juxin.predestinate.module.local.album.bean.AlbumDirectories;
+import com.juxin.predestinate.module.local.album.bean.SingleDirectoryModel;
+import com.juxin.predestinate.module.local.album.bean.SingleImageModel;
+import com.juxin.predestinate.module.local.album.crop.CropImageAct;
 import com.juxin.predestinate.module.logic.application.App;
 
 import java.io.File;

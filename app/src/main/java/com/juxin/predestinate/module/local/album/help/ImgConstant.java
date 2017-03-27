@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.help;
+package com.juxin.predestinate.module.local.album.help;
 
 /**
  * 图片相册常量管理类

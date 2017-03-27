@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album.crop;
+package com.juxin.predestinate.module.local.album.crop;
 
 import android.content.Context;
 import android.graphics.Canvas;

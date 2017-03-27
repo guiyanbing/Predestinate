@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.album;
+package com.juxin.predestinate.module.local.album;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.provider.MediaStore;
 
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.DirUtils;
-import com.juxin.predestinate.module.album.activity.TransferActivity;
-import com.juxin.predestinate.module.album.help.AlbumHelper;
-import com.juxin.predestinate.module.album.help.ImgConstant;
+import com.juxin.predestinate.module.local.album.activity.TransferActivity;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.album.help.ImgConstant;
 import com.juxin.predestinate.module.logic.application.App;
 
 import java.util.List;
