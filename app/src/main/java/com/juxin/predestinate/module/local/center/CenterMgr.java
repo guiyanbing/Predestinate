@@ -83,6 +83,7 @@ public class CenterMgr implements ModuleBase {
                 }
             }
         });
+    }
     /**
      * 获取我的个人资料
      */
