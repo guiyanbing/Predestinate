@@ -6,6 +6,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -189,7 +190,7 @@ public class HttpMgrImpl implements HttpMgr {
         if (TextUtils.isEmpty(url)) return new HTCallBack();
 
         // 判断登录,如果用户没有登录，并且该请求又需要登录的话，则不发出请求，且清除该url的缓存数据
-        if (!LoginMgr.hasLogin) {
+        if (!App.isLogin) {
             if (urlParam.isNeedLogin()) {
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
                     PCache.getInstance().deleteCache(cacheUrl);// 清除该url的缓存
