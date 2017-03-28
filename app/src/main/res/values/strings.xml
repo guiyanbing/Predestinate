@@ -35,6 +35,8 @@
     <string name="ext_nickname_hit">填写昵称</string>
     <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
     <string name="button_reg">一键注册</string>
+    <string name="toast_nickname_isnull">请填写昵称</string>
+    <string name="toast_avatar_isnull">请上传头像</string>
     <string name="toast_phone_isnull">手机号码不能为空</string>
     <string name="toast_phone_iserror">您输入的手机号码不正确</string>
     <string name="toast_code_isnull">验证码不能为空</string>

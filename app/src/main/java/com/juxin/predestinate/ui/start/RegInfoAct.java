@@ -172,9 +172,9 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-//                case R.id.img_header:  // 上传头像
-//                    ImgSelectUtil.getInstance().pickPhoto(RegInfoAct.this, RegInfoAct.this);
-//                    break;
+                case R.id.img_header:  // 上传头像
+                    ImgSelectUtil.getInstance().pickPhoto(RegInfoAct.this, RegInfoAct.this);
+                    break;
 
                 case R.id.rl_boy:
                     _gender = 1; // 性别男
@@ -257,12 +257,14 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         _nickname = txt_reg_info_nickname.getText().toString();
 
         if (_gender == 2 && !isCompleteHead) {   // 上传头像
+            PToast.showShort(getResources().getString(R.string.toast_avatar_isnull));
             return false;
         }
-        if (_nickname.length() < 2) {            // 昵称限制
-            return false;
-        }
+//        if (_nickname.length() < 2) {            // 昵称限制
+//            return false;
+//        }
         if (TextUtils.isEmpty(_nickname)) {      // 未输入昵称
+            PToast.showShort(getResources().getString(R.string.toast_nickname_isnull));
             return false;
         }
         return true;
