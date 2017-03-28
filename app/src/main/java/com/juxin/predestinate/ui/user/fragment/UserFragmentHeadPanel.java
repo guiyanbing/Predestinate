@@ -78,7 +78,7 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
                 ImgSelectUtil.getInstance().pickPhoto(getContext(), this);
                 break;
 
-            case R.id.ll_edit://跳转到个人资料页面
+            case R.id.ll_edit://跳转到个人信息页面
                 break;
         }
     }

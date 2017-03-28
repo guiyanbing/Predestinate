@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.user.fragment;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
@@ -19,13 +20,12 @@ import java.util.List;
  */
 public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
 
-    private final RecyclerView list_user_authority;
+    private RecyclerView recyclerView;
     private UserAuthAdapter userAuthAdapter;
 
-    public UserFragmentFootPanel(Context context, RecyclerView list_user_authority) {
+    public UserFragmentFootPanel(Context context) {
         super(context);
         setContentView(R.layout.p1_user_fragment_footer);
-        this.list_user_authority = list_user_authority;
 
         initData();
         addFooter();
@@ -35,6 +35,8 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
     private void initData() {
         List<UserAuth> userAuthList = new ArrayList<>();
         Resources resources = getContext().getResources();
+        recyclerView = (RecyclerView) findViewById(R.id.user_fragment_footer);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         String[] names = resources.getStringArray(R.array.user_authority_name);
         int[] levels = resources.getIntArray(R.array.user_authority_level);
         int[] icons = new int[]{R.drawable.p1_user_zhuye_ico, R.drawable.p1_user_dongtai_ico, R.drawable.p1_user_renzheng_ico, R.drawable.p1_user_vip_ico, R.drawable.p1_user_zuanshi_ico,
@@ -46,7 +48,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         }
         userAuthAdapter = new UserAuthAdapter();
         userAuthAdapter.setList(userAuthList);
-        list_user_authority.setAdapter(userAuthAdapter);
+        recyclerView.setAdapter(userAuthAdapter);
         userAuthAdapter.setOnItemClickListener(this);
     }
 
@@ -58,7 +60,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         margin_layout.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 getContext().getResources().getDimensionPixelSize(R.dimen.title_footer_height)));
         margin_layout.setBackgroundResource(R.color.bg_color);
-        list_user_authority.addView(margin_layout, -1);
+//        recyclerView.addView(margin_layout, -1);
     }
 
     /**
