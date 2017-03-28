@@ -40,7 +40,7 @@ public class PickBigImagesActivity extends BaseActivity implements ViewPager.OnP
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_album_exbig_act);
-        setBackView(R.id.back_view);
+        setBackView();
 
         initView();
         initData();
@@ -49,7 +49,7 @@ public class PickBigImagesActivity extends BaseActivity implements ViewPager.OnP
     private void initView() {
         viewPager = (ViewPager) findViewById(R.id.vp_content);
         iv_choose_state = (ImageView) findViewById(R.id.iv_choose_state);
-        title_right_txt = (TextView) findViewById(R.id.title_right_txt);
+        title_right_txt = (TextView) findViewById(R.id.base_title_right_txt);
         iv_choose_state.setOnClickListener(this);
         title_right_txt.setOnClickListener(this);
     }
@@ -110,7 +110,7 @@ public class PickBigImagesActivity extends BaseActivity implements ViewPager.OnP
                 refreshTxt();
                 break;
 
-            case R.id.title_right_txt:
+            case R.id.base_title_right_txt:
                 isFinish = true;
                 finish();
                 break;

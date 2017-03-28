@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">缘份吧</string>
+    <string name="app_name">小友</string>
 
     <!-- 主页Fragment -->
     <string name="main_btn_mail">消息</string>

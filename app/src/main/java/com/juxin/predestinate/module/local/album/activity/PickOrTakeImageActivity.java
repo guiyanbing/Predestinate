@@ -85,7 +85,7 @@ public class PickOrTakeImageActivity extends BaseActivity implements View.OnClic
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_album_select_act);
-        setBackView(R.id.back_view, "选择图片");
+        setBackView("选择图片");
 
         initView();
         initData();
@@ -93,7 +93,7 @@ public class PickOrTakeImageActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
-        title_right_txt = (TextView) this.findViewById(R.id.title_right_txt);
+        title_right_txt = (TextView) this.findViewById(R.id.base_title_right_txt);
         title_right_txt.setVisibility(View.VISIBLE);
         title_right_txt.setOnClickListener(this);
 
@@ -222,7 +222,7 @@ public class PickOrTakeImageActivity extends BaseActivity implements View.OnClic
                 break;
 
             // 完成
-            case R.id.title_right_txt:
+            case R.id.base_title_right_txt:
                 returnDataAndClose();
                 break;
         }

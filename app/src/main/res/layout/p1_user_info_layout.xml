@@ -49,7 +49,7 @@
                     <ImageView
                         android:layout_width="@dimen/px56_dp"
                         android:layout_height="@dimen/px56_dp"
-                        android:src="@drawable/p1_user_check_sendmsg"/>
+                        android:src="@drawable/p1_user_check_sendmsg" />
 
                     <TextView
                         android:id="@+id/is_follow"
@@ -82,7 +82,7 @@
                 <ImageView
                     android:layout_width="@dimen/px56_dp"
                     android:layout_height="@dimen/px56_dp"
-                    android:src="@drawable/p1_user_check_sayhi"/>
+                    android:src="@drawable/p1_user_check_sayhi" />
 
                 <TextView
                     android:id="@+id/is_say_hi"
@@ -120,7 +120,7 @@
                     <ImageView
                         android:layout_width="@dimen/px56_dp"
                         android:layout_height="@dimen/px56_dp"
-                        android:src="@drawable/p1_user_check_gift"/>
+                        android:src="@drawable/p1_user_check_gift" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -157,5 +157,5 @@
         </LinearLayout>
     </com.juxin.library.view.CustomFrameLayout>
 
-    <include layout="@layout/common_back" />
+    <include layout="@layout/base_title" />
 </RelativeLayout>
