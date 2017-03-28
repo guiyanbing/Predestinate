@@ -42,7 +42,7 @@
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dip"
                     android:paddingRight="15dip"
-                    android:src="@drawable/r1_filter_down_arrow" />
+                    android:src="@drawable/p1_filter_down_arrow" />
             </LinearLayout>
 
             <View style="@style/divider_line_gap70px" />
