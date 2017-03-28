@@ -4,14 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <include layout="@layout/layout_margintop" />
+
     <!-- 提示条 -->
     <LinearLayout
         android:id="@+id/tips_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
-
-    <View style="@style/divider_line" />
+        android:orientation="vertical"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/ll_edit"
@@ -93,5 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" />
+
+    <include layout="@layout/layout_margintop" />
 
 </LinearLayout>

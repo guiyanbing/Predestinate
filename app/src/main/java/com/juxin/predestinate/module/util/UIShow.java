@@ -11,6 +11,9 @@ import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.RegInfoAct;
+import com.juxin.predestinate.ui.user.information.EditContentAct;
+import com.juxin.predestinate.ui.user.information.UserEditSignAct;
+import com.juxin.predestinate.ui.user.information.UserInfoAct;
 
 /**
  * 应用内页面跳转工具
@@ -98,5 +101,30 @@ public class UIShow {
     public static void showFindPwdAct(FragmentActivity activity) {
         Intent intent = new Intent(activity, FindPwdAct.class);
         activity.startActivity(intent);
+    }
+
+    /**
+     * 打开个人信息页
+     */
+    public static void showUserInfoAct(Context context) {
+        context.startActivity(new Intent(context, UserInfoAct.class));
+    }
+
+    /**
+     * 打开编辑昵称页
+     */
+    public static void showEditContentAct(FragmentActivity context, String defaultValue) {
+        Intent intent = new Intent(context, EditContentAct.class);
+        intent.putExtra("defaultValue", defaultValue);
+        context.startActivityForResult(intent, UserInfoAct.EDIT_REQUEST_CODE);
+    }
+
+    /**
+     * 打开编辑昵称页
+     */
+    public static void showUserEditSignAct(FragmentActivity context, String sign) {
+        Intent intent = new Intent(context, UserEditSignAct.class);
+        intent.putExtra("sign", sign);
+        context.startActivityForResult(intent, UserInfoAct.EDIT_REQUEST_CODE);
     }
 }

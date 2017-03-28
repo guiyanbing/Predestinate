@@ -14,6 +14,7 @@ import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 个人中心条目头部
@@ -79,6 +80,7 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
                 break;
 
             case R.id.ll_edit://跳转到个人信息页面
+                UIShow.showUserInfoAct(getContext());
                 break;
         }
     }
