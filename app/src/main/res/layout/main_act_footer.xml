@@ -23,13 +23,13 @@
 
             <ImageView
                 style="@style/icon_middle"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/tab_msg_btn" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_btn_mail"
-                android:textColor="@color/color_FF5722"
+                android:textColor="@color/main_bottom_text_color"
                 android:textSize="@dimen/px34_sp" />
         </LinearLayout>
 
@@ -58,13 +58,13 @@
 
             <ImageView
                 style="@style/icon_middle"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/tab_xiaoyou_btn" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_btn_xiaoyou"
-                android:textColor="@color/color_FF5722"
+                android:textColor="@color/main_bottom_text_color"
                 android:textSize="@dimen/px34_sp" />
         </LinearLayout>
 
@@ -93,13 +93,13 @@
 
             <ImageView
                 style="@style/icon_middle"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/tab_square_btn" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_btn_plaza"
-                android:textColor="@color/color_FF5722"
+                android:textColor="@color/main_bottom_text_color"
                 android:textSize="@dimen/px34_sp" />
         </LinearLayout>
 
@@ -128,13 +128,13 @@
 
             <ImageView
                 style="@style/icon_middle"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/tab_my_btn" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_btn_user"
-                android:textColor="@color/color_FF5722"
+                android:textColor="@color/main_bottom_text_color"
                 android:textSize="@dimen/px34_sp" />
         </LinearLayout>
 

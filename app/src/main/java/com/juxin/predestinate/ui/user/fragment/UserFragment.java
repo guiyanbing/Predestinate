@@ -3,8 +3,6 @@ package com.juxin.predestinate.ui.user.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,18 +37,12 @@ public class UserFragment extends BaseFragment {
 
     private void initView() {
         checkIntervalTimeUtil = new CheckIntervalTimeUtil();
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_user_authority);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayout container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserFragmentHeadPanel(getActivity());
-//        recyclerView.addView(headPanel.getContentView(), 0);
-        footPanel = new UserFragmentFootPanel(getContext());
-//        recyclerView.addView(footPanel.getContentView(), 1);
+        footPanel = new UserFragmentFootPanel(getActivity());
 
-        LinearLayout ll_header = (LinearLayout) findViewById(R.id.header_container);
-        LinearLayout ll_footer = (LinearLayout) findViewById(R.id.footer_container);
-
-        ll_header.addView(headPanel.getContentView());
-        ll_footer.addView(footPanel.getContentView());
+        container.addView(headPanel.getContentView());
+        container.addView(footPanel.getContentView());
     }
 
     @Override

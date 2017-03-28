@@ -5,8 +5,6 @@ import android.content.res.Resources;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
@@ -28,7 +26,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         setContentView(R.layout.p1_user_fragment_footer);
 
         initData();
-        addFooter();
     }
 
     // 初始化条目数据
@@ -37,6 +34,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         Resources resources = getContext().getResources();
         recyclerView = (RecyclerView) findViewById(R.id.user_fragment_footer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setNestedScrollingEnabled(false); // 嵌套ScrollView滑动惯性消失
         String[] names = resources.getStringArray(R.array.user_authority_name);
         int[] levels = resources.getIntArray(R.array.user_authority_level);
         int[] icons = new int[]{R.drawable.p1_user_zhuye_ico, R.drawable.p1_user_dongtai_ico, R.drawable.p1_user_renzheng_ico, R.drawable.p1_user_vip_ico, R.drawable.p1_user_zuanshi_ico,
@@ -50,17 +48,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         userAuthAdapter.setList(userAuthList);
         recyclerView.setAdapter(userAuthAdapter);
         userAuthAdapter.setOnItemClickListener(this);
-    }
-
-    /**
-     * 底部添加一个margin的高度
-     */
-    private void addFooter() {
-        LinearLayout margin_layout = new LinearLayout(getContext());
-        margin_layout.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-                getContext().getResources().getDimensionPixelSize(R.dimen.title_footer_height)));
-        margin_layout.setBackgroundResource(R.color.bg_color);
-//        recyclerView.addView(margin_layout, -1);
     }
 
     /**
