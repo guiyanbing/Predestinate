@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dip"
-            android:background="@drawable/r1_ic_edit_del"
+            android:background="@drawable/p1_ic_edit_del"
             />
     </RelativeLayout>
 

@@ -23,7 +23,7 @@
 
             <ImageView
                 style="@style/icon_small"
-                android:src="@drawable/r1_back_btn" />
+                android:src="@drawable/p1_back_btn" />
 
             <TextView
                 android:id="@+id/back_view_tip"
