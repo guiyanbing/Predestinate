@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_rank"
+            style="@style/center_pieces_item"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle_center"
+                android:src="@drawable/p1_user_fragment_rank" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10_dp"
+                android:text="@string/user_center_fragment_rank"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/px36_sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/fengexian_gray" />
+
+        <LinearLayout
+            android:id="@+id/ll_wallet"
+            style="@style/center_pieces_item"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle_center"
+                android:src="@drawable/p1_user_fragment_wallet" />
+
+            <TextView
+                android:id="@+id/tv_wallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10_dp"
+                android:text="@string/user_center_fragment_wallet"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/px36_sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View style="@style/divider_line" />
+</LinearLayout>

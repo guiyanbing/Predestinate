@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/item_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px150_dp"
+        android:background="@drawable/list_item_selector">
+
+        <ImageView
+            android:id="@+id/item_icon"
+            style="@style/icon_middle_center"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px35_dp" />
+
+        <TextView
+            android:id="@+id/item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px30_dp"
+            android:layout_toRightOf="@+id/item_icon"
+            android:text="最近来访"
+            android:textColor="@color/text_zhuyao_black"
+            android:textSize="@dimen/px42_sp" />
+
+        <ImageView
+            android:id="@+id/right_go"
+            style="@style/right_go"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/px35_dp" />
+
+        <com.juxin.library.unread.BadgeView
+            android:id="@+id/item_badge"
+            style="@style/badge_num_big"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/right_go"
+            android:text="9"
+            android:visibility="gone" />
+
+        <com.juxin.predestinate.ui.utils.MarqueeTextView
+            android:id="@+id/item_hint"
+            android:layout_width="@dimen/px420_dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/right_go"
+            android:ellipsize="marquee"
+            android:gravity="right"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="1"
+            android:text="立即开通"
+            android:textColor="@color/text_ciyao_gray"
+            android:textSize="@dimen/px36_sp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px">
+
+        <View
+            android:layout_width="@dimen/px45_dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <View style="@style/divider_line" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/divider_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View style="@style/divider_line" />
+
+        <include layout="@layout/layout_margintop" />
+
+        <View style="@style/divider_line" />
+    </LinearLayout>
+
+</LinearLayout>

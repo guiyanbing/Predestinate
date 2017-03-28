@@ -1,10 +1,10 @@
 <resources>
     <string-array name="auth_arr">
-    <item>手机认证</item>
-    <item>银行信息</item>
-    <item>身份认证</item>
-    <item>视频认证</item>
-   </string-array>
+        <item>手机认证</item>
+        <item>银行信息</item>
+        <item>身份认证</item>
+        <item>视频认证</item>
+    </string-array>
     <string-array name="friend_list_Label">
         <item>标签分组</item>
         <item>亲密好友等级</item>
@@ -13,4 +13,30 @@
         <item>为您的亲密好友添加分组</item>
         <item>为您的亲密好友添加分组</item>
     </string-array>
+
+    <!-- ================个人中心条目配置start================== -->
+    <!-- 个人中心条目配置 -->
+    <string-array name="user_authority_name">
+        <item>主页</item>
+        <item>动态</item>
+        <item>认证</item>
+        <item>VIP充值</item>
+        <item>钻石</item>
+        <item>礼物</item>
+        <item>游戏</item>
+        <item>关于</item>
+        <item>设置</item>
+    </string-array>
+    <integer-array name="user_authority_level">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>2</item>
+    </integer-array>
+    <!-- ================个人中心条目配置end================== -->
 </resources>
