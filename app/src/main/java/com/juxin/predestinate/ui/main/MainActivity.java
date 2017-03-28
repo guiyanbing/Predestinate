@@ -11,7 +11,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.plaza.PlazaFragment;
-import com.juxin.predestinate.ui.user.UserFragment;
+import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {

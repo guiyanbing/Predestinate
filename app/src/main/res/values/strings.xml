@@ -52,6 +52,9 @@
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
 
     <!-- 用户资料 -->
+    <string name="user_center_fragment">我的</string>
+    <string name="user_center_fragment_rank">排行榜</string>
+    <string name="user_center_fragment_wallet">钱包</string>
     <string name="check_info_sendmsg">发消息</string>
     <string name="check_info_sayhi">打招呼</string>
     <string name="check_info_gift">送礼物</string>

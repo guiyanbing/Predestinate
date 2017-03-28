@@ -292,6 +292,15 @@
         <item name="android:textColor">@color/text_zhuyao_black</item>
         <item name="android:textSize">@dimen/px45_sp</item>
     </style>
+    <!-- 个人中心钻石碎片条目样式 -->
+    <style name="center_pieces_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/list_item_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
     <!-- 设置 -->
     <style name="setting_tip" parent="center_item_text">
         <item name="android:textColor">@color/text_ciyao_gray</item>
