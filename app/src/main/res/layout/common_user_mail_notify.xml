@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/user_mail_notify_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/user_mail_notify_ly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tm_bg"
+        android:padding="@dimen/px15_dp">
+
+        <ImageView
+            android:id="@+id/user_mail_notify_icon"
+            android:layout_width="@dimen/px150_dp"
+            android:layout_height="@dimen/px150_dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/user_mail_notify_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/px15_dp"
+            android:layout_toRightOf="@+id/user_mail_notify_icon"
+            android:singleLine="true"
+            android:text="王艳艳"
+            android:textColor="@color/theme_color_red"
+            android:textSize="@dimen/px45_sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/user_mail_notify_icon"
+            android:layout_marginLeft="@dimen/px15_dp"
+            android:layout_toRightOf="@+id/user_mail_notify_icon"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/user_mail_notify_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="你好，请问你在吗？"
+                android:textColor="@color/white"
+                android:textSize="@dimen/px39_sp" />
+
+            <TextView
+                android:id="@+id/chat"
+                style="@style/button_middle"
+                android:paddingBottom="@dimen/px9_dp"
+                android:paddingTop="@dimen/px9_dp"
+                android:text="联系她"
+                android:visibility="gone" />
+            <!-- 判断男女进行字体显示：他、她 -->
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/px36_dp"
+            android:paddingRight="@dimen/px12_dp"
+            android:visibility="gone">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/p1_ic_edit_del" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

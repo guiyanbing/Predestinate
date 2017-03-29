@@ -26,6 +26,8 @@ public class Constant {
     public static final Boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
     public static final String SETTING_MESSAGE = "setting_message";             //是否进行消息提示，存储key及默认值
     public static final Boolean SETTING_MESSAGE_DEFAULT = true;
+    public static final String SETTING_STEALTH = "setting_stealth";             //是否隐身，存储key及默认值
+    public static final Boolean SETTING_STEALTH_DEFAULT = true;
     public static final String SETTING_VIBRATION = "setting_vibration";         //是否进行新消息震动提示，存储key及默认值
     public static final Boolean SETTING_VIBRATION_DEFAULT = true;
     public static final String SETTING_VOICE = "setting_voice";                 //是否进行新消息声音提示，存储key及默认值

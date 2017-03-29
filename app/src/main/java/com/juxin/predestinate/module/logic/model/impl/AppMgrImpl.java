@@ -36,8 +36,10 @@ public class AppMgrImpl implements AppMgr {
     private String imsi = "";           // 移动用户识别码
     private String simo = "";           // SIM卡供应商
     private String mac = "";            // 网络mac地址
-    private String mainChannelID;// 应用id 主渠道号
-    private String subChannelID;//子渠道号
+
+    private String mainChannelID;       // 应用id 主渠道号
+    private String subChannelID;        //子渠道号
+
     @Override
     public void init() {
         try {
