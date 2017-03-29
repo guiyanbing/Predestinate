@@ -46,7 +46,7 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.p1_users_set);
-        setBackView(R.id.back_view, "设置");
+        setBackView("设置");
         initView();
     }
 

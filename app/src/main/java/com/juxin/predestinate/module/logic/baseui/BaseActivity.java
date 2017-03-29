@@ -13,15 +13,18 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
+import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等
  * Created by ZRP on 2016/9/18.
  */
 public class BaseActivity extends FragmentActivity {
+
     private boolean canNotify = true; //是否能弹出悬浮提示
     private boolean canBack = true;   //是否能右滑退出
     private RightSlidLinearLayout linearLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +41,13 @@ public class BaseActivity extends FragmentActivity {
         linearLayout = (RightSlidLinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_slideback_container, null);
         linearLayout.attachToActivity(this);
     }
+
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         getWindow().setBackgroundDrawableResource(R.color.transparent);  // 去除Theme设置的默认背景，减少绘图层级
     }
+
     /**
      * 设置当前页面是否支持滑动退出，需要写在继承该类的子类onCreate中super.onCreate();的前面
      *
@@ -60,12 +65,14 @@ public class BaseActivity extends FragmentActivity {
     public void setCanNotify(boolean canNotify) {
         this.canNotify = canNotify;
     }
+
     /**
      * @return 获取当前activity实例能否弹出悬浮窗消息状态
      */
     public boolean isCanNotify() {
         return canNotify;
     }
+
     /**
      * 返回
      */
@@ -92,9 +99,22 @@ public class BaseActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        FloatingMgr.getInstance().onResume(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FloatingMgr.getInstance().onPause(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
     /**
      * 设置返回组件
      *
@@ -121,16 +141,19 @@ public class BaseActivity extends FragmentActivity {
     }
 
     /**
+     * 设置返回组件
+     */
+    public void setBackView() {
+        setBackView(R.id.base_title_back);
+    }
+
+    /**
      * 设置返回按钮，同时设置标题
      *
-     * @param resourcesId 返回按钮id
-     * @param title       标题文字
+     * @param title 标题文字
      */
-    public void setBackView(int resourcesId, String title) {
-        View view = this.findViewById(resourcesId);
-        view.setVisibility(View.VISIBLE);
-        setBackView(view);
-
+    public void setBackView(String title) {
+        setBackView();
         setTitle(title);
     }
 
@@ -145,7 +168,7 @@ public class BaseActivity extends FragmentActivity {
     public void setBackView(int resourcesId, boolean showLeftTip, String title, int titleColor) {
         View view = this.findViewById(resourcesId);
         view.setVisibility(View.VISIBLE);
-        view.findViewById(R.id.back_view_tip).setVisibility(showLeftTip ? View.VISIBLE : View.INVISIBLE);
+        view.findViewById(R.id.base_title_view_tip).setVisibility(showLeftTip ? View.VISIBLE : View.INVISIBLE);
         setBackView(view);
 
         setTitle(title, titleColor);
@@ -172,7 +195,7 @@ public class BaseActivity extends FragmentActivity {
      * @param txt
      */
     public void setTitle(String txt) {
-        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_title);
         textView.setVisibility(View.VISIBLE);
         textView.setText(txt);
     }
@@ -183,7 +206,7 @@ public class BaseActivity extends FragmentActivity {
      * @param txt
      */
     public void setTitle(String txt, int color) {
-        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_title);
         textView.setVisibility(View.VISIBLE);
         textView.setText(txt);
         textView.setTextColor(color);
@@ -205,7 +228,7 @@ public class BaseActivity extends FragmentActivity {
      * @param isShowLine 下面的线是否显示
      */
     public void setTitleBackground(int color, boolean isShowLine) {
-        View titleBg = this.findViewById(R.id.common_tab);
+        View titleBg = this.findViewById(R.id.base_title_tab);
         titleBg.setBackgroundResource(color);
         this.findViewById(R.id.cut_line).setVisibility(isShowLine ? View.VISIBLE : View.GONE);
     }
@@ -218,13 +241,12 @@ public class BaseActivity extends FragmentActivity {
      */
     public void setTitleWithBadge(String txt, String number) {
         TextView textView = (TextView) this.findViewById(R.id.title);
-        TextView badge = (TextView) this.findViewById(R.id.title_badge_view);
+        TextView badge = (TextView) this.findViewById(R.id.base_title_badge_view);
         textView.setVisibility(View.VISIBLE);
         badge.setVisibility(View.VISIBLE);
         textView.setText(txt);
         badge.setText(number);
     }
-
 
     /**
      * 添加title中标题中间的填充view
@@ -232,7 +254,7 @@ public class BaseActivity extends FragmentActivity {
      * @param container 填充的view
      */
     public void setTitleCenterContainer(View container) {
-        LinearLayout title_center_container = (LinearLayout) this.findViewById(R.id.title_center_container);
+        LinearLayout title_center_container = (LinearLayout) this.findViewById(R.id.base_title_center_container);
         title_center_container.removeAllViews();
         title_center_container.addView(container);
     }
@@ -255,8 +277,8 @@ public class BaseActivity extends FragmentActivity {
      * @param listener 文字点击事件回调
      */
     public void setTitleRight(String txt, int color, View.OnClickListener listener) {
-        this.findViewById(R.id.title_right_img_container).setVisibility(View.GONE);
-        TextView textView = (TextView) this.findViewById(R.id.title_right_txt);
+        this.findViewById(R.id.base_title_right_img_container).setVisibility(View.GONE);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_right_txt);
         textView.setVisibility(View.VISIBLE);
         if (color != -1) textView.setTextColor(getResources().getColor(color));
         textView.setText(txt);
@@ -266,22 +288,23 @@ public class BaseActivity extends FragmentActivity {
 
     private TextView titleLeftText, titleRightText;
     private ImageView titleRightImg;
+
     /**
      * @return 获取标题栏view对象
      */
     public View getTitleView() {
-        return findViewById(R.id.back_but);
+        return findViewById(R.id.base_title);
     }
 
     /**
      * 设置标题右侧图片
      */
     public void setTitleRightImg(int resId, View.OnClickListener listener) {
-        this.findViewById(R.id.title_right_txt).setVisibility(View.GONE);
-        View view = this.findViewById(R.id.title_right_img_container);
+        this.findViewById(R.id.base_title_right_txt).setVisibility(View.GONE);
+        View view = this.findViewById(R.id.base_title_right_img_container);
         view.setVisibility(View.VISIBLE);
         view.setOnClickListener(listener);
-        ImageView imageView = (ImageView) view.findViewById(R.id.title_right_img);
+        ImageView imageView = (ImageView) view.findViewById(R.id.base_title_right_img);
         imageView.setImageResource(resId);
         titleRightImg = imageView;
     }
@@ -293,7 +316,7 @@ public class BaseActivity extends FragmentActivity {
      * @param listener 文字点击事件回调
      */
     public void setTitleLeft(String txt, View.OnClickListener listener) {
-        TextView textView = (TextView) this.findViewById(R.id.title_left_txt);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_left_txt);
         textView.setVisibility(View.VISIBLE);
         textView.setText(txt);
         textView.setOnClickListener(listener);
@@ -308,7 +331,7 @@ public class BaseActivity extends FragmentActivity {
      * @param listener 文字点击事件回调
      */
     public void setTitleLeft(String txt, int color, View.OnClickListener listener) {
-        TextView textView = (TextView) this.findViewById(R.id.title_left_txt);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_left_txt);
         textView.setVisibility(View.VISIBLE);
         textView.setTextColor(getResources().getColor(color));
         textView.setText(txt);
@@ -320,9 +343,9 @@ public class BaseActivity extends FragmentActivity {
      * 设置标题左侧图片
      */
     public void setTitleLeftImg(int resId, View.OnClickListener listener) {
-        ImageView imageView = (ImageView) this.findViewById(R.id.title_left_img);
+        ImageView imageView = (ImageView) this.findViewById(R.id.base_title_left_img);
         imageView.setImageResource(resId);
-        View ll_left_view = this.findViewById(R.id.ll_left_view);
+        View ll_left_view = this.findViewById(R.id.base_title_left_view);
         ll_left_view.setVisibility(View.VISIBLE);
         ll_left_view.setOnClickListener(listener);
     }
@@ -335,10 +358,10 @@ public class BaseActivity extends FragmentActivity {
      * @param listener       点击监听
      */
     public void setRightImgTextBtn(String titleRighttext, int resId, View.OnClickListener listener) {
-        LinearLayout layout = (LinearLayout) this.findViewById(R.id.title_right_img_text_btn);
+        LinearLayout layout = (LinearLayout) this.findViewById(R.id.base_title_right_img_text_btn);
         layout.setVisibility(View.VISIBLE);
-        TextView textView = (TextView) this.findViewById(R.id.title_right_img_text);
-        ImageView imageView = (ImageView) this.findViewById(R.id.title_right_img_view);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_right_img_text);
+        ImageView imageView = (ImageView) this.findViewById(R.id.base_title_right_img_view);
         textView.setText(titleRighttext);
         imageView.setImageResource(resId);
         layout.setOnClickListener(listener);

@@ -1,4 +1,4 @@
-// ISocketService.aidl
+// ICoreService.aidl
 package com.juxin.predestinate.module.logic.socket;
 
 // Declare any non-default types here with import statements
@@ -27,7 +27,7 @@ interface ICoreService {
     void setLocationGPS(double longitude, double latitude);
 
     /**
-    * 设置系统类型。操作系统:0 其它；1 苹果；2 小米
+    * 设置系统类型。操作系统
     */
     void setSystemInfo(int systemInfo);
 }

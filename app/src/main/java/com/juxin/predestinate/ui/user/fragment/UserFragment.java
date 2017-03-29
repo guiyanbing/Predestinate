@@ -3,10 +3,10 @@ package com.juxin.predestinate.ui.user.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
@@ -37,11 +37,12 @@ public class UserFragment extends BaseFragment {
 
     private void initView() {
         checkIntervalTimeUtil = new CheckIntervalTimeUtil();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_user_authority);
+        LinearLayout container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserFragmentHeadPanel(getActivity());
-        recyclerView.addView(headPanel.getContentView(), 0);
-        footPanel = new UserFragmentFootPanel(getContext(), recyclerView);
-        recyclerView.addView(footPanel.getContentView(), 1);
+        footPanel = new UserFragmentFootPanel(getActivity());
+
+        container.addView(headPanel.getContentView());
+        container.addView(footPanel.getContentView());
     }
 
     @Override

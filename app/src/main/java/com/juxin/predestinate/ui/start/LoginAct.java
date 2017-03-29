@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.start;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.main.MainActivity;
 
 import java.util.List;
 
@@ -54,7 +52,7 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         setContentView(R.layout.r1_login_act);
-        setBackView(R.id.back_view, getResources().getString(R.string.title_loginact));
+        setBackView(getResources().getString(R.string.title_loginact));
         initView();
         initData();
     }

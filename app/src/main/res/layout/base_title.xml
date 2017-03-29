@@ -23,7 +23,7 @@
 
             <ImageView
                 style="@style/icon_small"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/p1_back_btn" />
 
             <TextView
                 android:id="@+id/base_title_view_tip"
@@ -32,7 +32,8 @@
                 android:layout_marginLeft="@dimen/px12_dp"
                 android:text="@string/base_title_back"
                 android:textColor="@color/color_zhuyao"
-                android:textSize="@dimen/px42_sp" />
+                android:textSize="@dimen/px42_sp"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +64,7 @@
             android:layout_centerInParent="true"
             android:ellipsize="end"
             android:maxEms="7"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textColor="@color/color_zhuyao"
             android:textSize="@dimen/px52_sp" />
 
@@ -92,8 +93,8 @@
             android:paddingLeft="@dimen/px35_dp"
             android:paddingRight="@dimen/px35_dp"
             android:text="@null"
-            android:textColor="@color/color_zhuyao"
-            android:textSize="@dimen/px39_sp" />
+            android:textColor="@color/text_theme_blue"
+            android:textSize="@dimen/px48_sp" />
 
         <LinearLayout
             android:id="@+id/base_title_right_img_container"

@@ -36,7 +36,7 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.r1_findpwd_act);
-        setBackView(R.id.back_view,getResources().getString(R.string.title_findpwdact));
+        setBackView(getResources().getString(R.string.title_findpwdact));
         initView();
     }
 
