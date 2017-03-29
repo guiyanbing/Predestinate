@@ -15,8 +15,25 @@
 
         <EditText
             android:id="@+id/edit_content_text"
-            style="@style/editText_input"
-            android:hint="@string/user_info_put_name" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:background="@null"
+            android:hint="@string/user_info_put_name"
+            android:maxLines="1"
+            android:textColor="@color/text_zhuyao_black"
+            android:textColorHint="@color/text_ciyao_gray"
+            android:textSize="@dimen/px45_sp" />
+
+        <TextView
+            android:id="@+id/tv_name_num"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="s"
+            android:textColor="@color/color_999999" />
+
     </LinearLayout>
 
     <View
@@ -24,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/px35_dp"
         android:background="@color/bg_color"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/view_confidentiality"
@@ -57,5 +74,4 @@
     </LinearLayout>
 
     <include layout="@layout/fillbottom_bg" />
-
 </LinearLayout>
