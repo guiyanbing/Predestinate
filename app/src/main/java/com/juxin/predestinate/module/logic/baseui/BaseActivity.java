@@ -182,7 +182,7 @@ public class BaseActivity extends FragmentActivity {
      * @param txt
      */
     public void setTitle(String txt) {
-        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_title);
         textView.setVisibility(View.VISIBLE);
         textView.setText(txt);
     }
@@ -193,7 +193,7 @@ public class BaseActivity extends FragmentActivity {
      * @param txt
      */
     public void setTitle(String txt, int color) {
-        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView textView = (TextView) this.findViewById(R.id.base_title_title);
         textView.setVisibility(View.VISIBLE);
         textView.setText(txt);
         textView.setTextColor(color);

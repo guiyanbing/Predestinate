@@ -68,6 +68,7 @@
     <color name="theme_color_red">@color/color_FC615C</color>
 
     <!-- 字体 -->
+    <color name="text_theme_blue">@color/color_47cfd3</color>
     <color name="text_zhuyao_black">#333333</color>
     <color name="text_ciyao_gray">#aaaaaa</color>
     <color name="txt_color1">#9a9a9a</color>

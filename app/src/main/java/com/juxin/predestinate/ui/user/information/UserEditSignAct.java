@@ -24,7 +24,7 @@ import java.util.Set;
  * 编辑签名页面
  */
 public class UserEditSignAct extends BaseActivity implements TextWatcher {
-    private static final int MAX_INPUT_NUM = 150;     // 最大输入字数限制
+    private static final int MAX_INPUT_NUM = 120;     // 最大输入字数限制
 
     private EditText editTxt_sign_content;
     private TextView txt_sign_content_num;
@@ -44,8 +44,8 @@ public class UserEditSignAct extends BaseActivity implements TextWatcher {
     }
 
     private void initTitle() {
-//        setTitle(getResources().getString(R.string.user_info_edit_sign));
         setBackView();
+        setTitle(getResources().getString(R.string.user_info_edit_sign));
         setTitleRight(getResources().getString(R.string.user_info_save), new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +109,7 @@ public class UserEditSignAct extends BaseActivity implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        int balanceNum = MAX_INPUT_NUM - s.toString().length();
+        int balanceNum = s.toString().length();
         if (balanceNum < 0) {
             balanceNum = 0;
             signContent = s.toString().substring(0, MAX_INPUT_NUM);

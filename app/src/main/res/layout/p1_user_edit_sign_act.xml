@@ -8,35 +8,31 @@
 
     <include layout="@layout/layout_margintop" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/bg_color"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/editTxt_sign_content"
             android:layout_width="match_parent"
-            android:layout_height="170dip"
+            android:layout_height="@dimen/px500_dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:background="@color/white"
             android:ems="10"
             android:gravity="top"
             android:hint="@string/user_info_put_sign"
-            android:lineSpacingExtra="3dip"
-            android:paddingLeft="10dip"
-            android:paddingTop="5dip"
-            android:textColor="#999999"
-            android:textColorHint="#999999"
-            android:textSize="14sp" />
+            android:lineSpacingExtra="@dimen/px9_dp"
+            android:paddingLeft="@dimen/px30_dp"
+            android:paddingTop="@dimen/px15_dp"
+            android:textColor="@color/color_999999"
+            android:textColorHint="@color/color_999999"
+            android:textSize="@dimen/px43_sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/editTxt_sign_content"
             android:background="@color/white"
             android:gravity="clip_vertical|right">
 
@@ -44,8 +40,9 @@
                 android:id="@+id/txt_sign_content_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px15_dp"
                 android:layout_marginRight="@dimen/px15_dp"
-                android:layout_marginBottom="@dimen/px15_dp"/>
+                android:textColor="@color/color_999999" />
 
             <ImageView
                 android:id="@+id/img_sign_content_del"
@@ -54,5 +51,7 @@
                 android:clickable="true"
                 android:visibility="gone" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
+
+    <include layout="@layout/fillbottom_bg" />
 </LinearLayout>
