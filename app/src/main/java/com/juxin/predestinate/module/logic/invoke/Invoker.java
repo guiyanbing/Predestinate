@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -74,7 +73,7 @@ public class Invoker {
                 "，AppMgr.isForground()：" + ModuleMgr.getAppMgr().isForeground());
 
         this.appInterface = (appInterface == null ? new WebAppInterface(App.context, null) : appInterface);
-        webView = appInterface.getWebView();
+        webView = appInterface == null ? null : appInterface.getWebView();
 
         MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
@@ -144,10 +143,15 @@ public class Invoker {
 
     public class Invoke {
 
+        // 私聊指令
+        public void cmd_open_chat(String data) {
+            PLogger.d("cmd_open_chat: ------>" + data);
+        }
+
         // 打开游戏页面
         // type:1   打开方式（1为侧滑页面，2为全屏页面，全屏时显示loading条）
         public void open_game_web(String data) {
-            MMLog.autoDebug("---open_game_web--->" + data);
+            PLogger.d("---open_game_web--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             Activity act = appInterface.getAct();
             //TODO
@@ -160,7 +164,7 @@ public class Invoker {
 
         // 关闭loading页面
         public void hide_loading(String data) {
-            MMLog.autoDebug("---hide_loading--->" + data);
+            PLogger.d("---hide_loading--->" + data);
             try {
                 Activity act = appInterface.getAct();
                 //TODO 单独处理新H5页面的loading关闭策略
@@ -186,7 +190,7 @@ public class Invoker {
         // 具体查看音乐地址文档-> http://test.game.xiaoyouapp.cn:30081/static/assets/cutfruit/config/sounds.json
         // 游戏名：fruit_ninja切水果      cashcow  红包来了
         public void play_sound(String data) {
-            MMLog.autoDebug("---play_sound--->" + data);
+            PLogger.d("---play_sound--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             //TODO
 //            if ("cashcow".equalsIgnoreCase(dataObject.optString("game"))) {
@@ -202,7 +206,7 @@ public class Invoker {
 
         // 结束当前游戏页面
         public void do_finish(String data) {
-            MMLog.autoDebug("---do_finish--->" + data);
+            PLogger.d("---do_finish--->" + data);
             // [注意]：当前游戏页面必须是继承自BaseActivity.class
             Activity act = appInterface.getAct();
             if (act != null) act.finish();
@@ -210,7 +214,7 @@ public class Invoker {
 
         // 获取当前用户的uid和auth
         public void get_app_data(String data) {
-            MMLog.autoDebug("---get_app_data--->" + data);
+            PLogger.d("---get_app_data--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             //TODO
@@ -228,7 +232,7 @@ public class Invoker {
 
         // 根据uid获取用户信息
         public void get_user_info(String data) {
-            MMLog.autoDebug("---get_user_info--->" + data);
+            PLogger.d("---get_user_info--->" + data);
             final JSONObject dataObject = JsonUtil.getJsonObject(data);
             //TODO
 //            RequestHolder.getInstance().requestLiteUserInfo(dataObject.optString("uid"), new RequestHolder.OnRequestListener() {
@@ -255,7 +259,7 @@ public class Invoker {
 
         // 弹出模态对话框
         public void show_dialog(String data) {
-            MMLog.autoDebug("---show_dialog--->" + data);
+            PLogger.d("---show_dialog--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             Activity act = appInterface.getAct();
@@ -283,7 +287,7 @@ public class Invoker {
 
         // 跳转到跟指定uid用户私聊界面
         public void jump_to_chat(String data) {
-            MMLog.autoDebug("---jump_to_chat--->" + data);
+            PLogger.d("---jump_to_chat--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             Activity act = appInterface.getAct();
@@ -295,7 +299,7 @@ public class Invoker {
 
         // 侧滑出app页面
         public void jump_to_app(String data) {
-            MMLog.autoDebug("---jump_to_app--->" + data);
+            PLogger.d("---jump_to_app--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             //跳转到应用内页面
@@ -316,7 +320,7 @@ public class Invoker {
 
         // 改变页面标题
         public void change_title(String data) {
-            MMLog.autoDebug("---change_title--->" + data);
+            PLogger.d("---change_title--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             final String title = dataObject.optString("title");
 
@@ -326,25 +330,25 @@ public class Invoker {
 
         // 屏幕震动
         public void play_shock(String data) {
-            MMLog.autoDebug("---play_shock--->" + data);
+            PLogger.d("---play_shock--->" + data);
             MediaNotifyUtils.vibrator();
         }
 
         // 加密网络请求
         public void safe_request(String data) {
-            MMLog.autoDebug("---safe_request--->" + data);
+            PLogger.d("---safe_request--->" + data);
             cmdRequest(JsonUtil.getJsonObject(data), true);
         }
 
         // 普通网络请求
         public void normal_request(String data) {
-            MMLog.autoDebug("---normal_request--->" + data);
+            PLogger.d("---normal_request--->" + data);
             cmdRequest(JsonUtil.getJsonObject(data), false);
         }
 
         // 切换到主tab页
         public void enter_tab(String data) {
-            MMLog.autoDebug("---enter_tab--->" + data);
+            PLogger.d("---enter_tab--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             // tab页面索引， 类型为1（红包），2（消息），3（擂台），4（我的）5（发现）
             int index = 1;
@@ -371,7 +375,7 @@ public class Invoker {
 
         // 获取设备信息
         public void getdevicemodel(String data) {
-            MMLog.autoDebug("---getdevicemodel--->" + data);
+            PLogger.d("---getdevicemodel--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             Map<String, Object> responseObject = new HashMap<>();
@@ -382,7 +386,7 @@ public class Invoker {
 
         // 进入别人的个人中心页面
         public void jump_to_userinfo(String data) {
-            MMLog.autoDebug("---jump_to_userinfo--->" + data);
+            PLogger.d("---jump_to_userinfo--->" + data);
             final JSONObject dataObject = JsonUtil.getJsonObject(data);
             final Activity act = appInterface.getAct();
             //TODO
@@ -401,7 +405,7 @@ public class Invoker {
 
         // 吐槽别人
         public void mock_other(String data) {
-            MMLog.autoDebug("---mock_other--->" + data);
+            PLogger.d("---mock_other--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             Activity act = appInterface.getAct();
             //跳转到私聊页面并按照指定的id发送一条吐槽消息
@@ -412,14 +416,14 @@ public class Invoker {
 
         // 吐司提示
         public void show_toast(String data) {
-            MMLog.autoDebug("---show_toast--->" + data);
+            PLogger.d("---show_toast--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             MMToast.showShort(dataObject.optString("content"));
         }
 
         // 开启支付页面
         public void start_pay(String data) {
-            MMLog.autoDebug("---start_pay--->" + data);
+            PLogger.d("---start_pay--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             Activity act = appInterface.getAct();
             //TODO

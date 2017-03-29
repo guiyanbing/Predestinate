@@ -19,14 +19,14 @@ public class WebActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_web_activity);
         String url = getIntent().getStringExtra("url");
-//        setBackView();
+        setBackView();
 
         LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
         webPanel = new WebPanel(this, url);
         webPanel.setTitleListener(new WebPanel.TitleListener() {
             @Override
             public void onTitle(String title) {
-//                setTittle(title);
+                setTitle(title);
             }
         });
         web_container.addView(webPanel.getContentView());

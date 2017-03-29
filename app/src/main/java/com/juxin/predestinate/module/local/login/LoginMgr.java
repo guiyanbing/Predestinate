@@ -1,8 +1,11 @@
 package com.juxin.predestinate.module.local.login;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
 import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
@@ -245,6 +248,24 @@ public class LoginMgr implements ModuleBase {
         msg.setData(App.isLogin);
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, msg);
         return App.isLogin;
+    }
+
+    /**
+     * 清除当前用户存储到cookies表中的所有数据
+     */
+    public void removeCookie(Context context) {
+        CookieSyncManager.createInstance(context);
+        CookieManager.getInstance().removeAllCookie();
+        CookieSyncManager.getInstance().sync();
+    }
+    /**
+     * 退出登录，并清空用户登录信息
+     */
+    public void logout() {
+        setUid("");//清空uid
+        setLoginInfo(0, true);
+//        App.appState = App.AppState.AS_Service; //TODO
+        clearCookie();
     }
     // ************************************内部调用************************** \\
     /**

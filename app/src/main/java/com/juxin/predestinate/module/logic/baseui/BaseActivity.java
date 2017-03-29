@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
+import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等
@@ -95,6 +96,18 @@ public class BaseActivity extends FragmentActivity {
     public void onBackPressed() {
         super.onBackPressed();
         back();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FloatingMgr.getInstance().onResume(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FloatingMgr.getInstance().onPause(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
     }
 
     @Override

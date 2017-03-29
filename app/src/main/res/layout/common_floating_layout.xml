@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px200_dp"
+    android:background="@drawable/tm_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px200_dp"
+        android:gravity="center"
+        android:paddingBottom="@dimen/px15_dp"
+        android:paddingTop="@dimen/px15_dp">
+
+        <ImageView
+            android:id="@+id/user_img"
+            android:layout_width="@dimen/px150_dp"
+            android:layout_height="@dimen/px150_dp"
+            android:layout_marginLeft="@dimen/px15_dp"
+            android:layout_marginRight="@dimen/px15_dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher" />
+
+        <LinearLayout
+            android:id="@+id/main_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="王艳艳"
+                android:textColor="@color/theme_color_red"
+                android:textSize="@dimen/px45_sp" />
+
+            <TextView
+                android:id="@+id/user_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px30_sp"
+                android:singleLine="true"
+                android:text="你好，请问你在吗？"
+                android:textColor="@color/white"
+                android:textSize="@dimen/px39_sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/reply_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/btn_ignore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:padding="7dp"
+                android:text="忽略"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/btn_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:padding="7dp"
+                android:text="回复"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

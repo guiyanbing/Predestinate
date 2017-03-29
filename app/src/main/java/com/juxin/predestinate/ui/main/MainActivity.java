@@ -5,8 +5,8 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
@@ -32,6 +32,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         initViews();
         initFragment();
+        ModuleMgr.getChatMgr();
     }
 
     private void initFragment() {
