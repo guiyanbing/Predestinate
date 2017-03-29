@@ -4,6 +4,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- 标签 -->
+    <LinearLayout
+        android:id="@+id/item_sign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/px35_dp">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="@string/check_info_impress_sign"
+            android:textColor="@color/text_zhuyao_black"
+            android:textSize="@dimen/px40_sp" />
+
+        <LinearLayout
+            style="@style/center_item_text"
+            android:gravity="center_vertical">
+
+            <include layout="@layout/p1_user_flow_label" />
+        </LinearLayout>
+
+        <ImageView
+            style="@style/right_go"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
     <!-- 动态 -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +44,9 @@
 
         <include layout="@layout/layout_margintop" />
 
-        <LinearLayout style="@style/center_set_item">
+        <LinearLayout
+            android:id="@+id/item_dynamic"
+            style="@style/center_set_item">
 
             <TextView
                 android:layout_width="@dimen/px200_dp"
@@ -21,7 +55,7 @@
                 android:maxLength="30"
                 android:maxLines="1"
                 android:text="@string/check_info_dynamic"
-                android:textColor="@color/color_999999"
+                android:textColor="@color/text_zhuyao_black"
                 android:textSize="@dimen/px40_sp" />
 
             <LinearLayout
@@ -31,45 +65,22 @@
                 android:orientation="horizontal"
                 android:scrollbars="none" />
 
+            <ImageView
+                android:id="@+id/img_dynamic"
+                android:layout_width="@dimen/px100_dp"
+                android:layout_height="@dimen/px100_dp"
+                android:background="@drawable/ic_launcher" />
+
             <ImageView style="@style/right_go" />
         </LinearLayout>
     </LinearLayout>
 
     <TextView style="@style/divider_line" />
 
-    <!-- 礼物 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout style="@style/center_set_item">
-
-            <TextView
-                android:layout_width="@dimen/px200_dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLength="30"
-                android:maxLines="1"
-                android:text="@string/check_info_ex_gift"
-                android:textColor="@color/color_999999"
-                android:textSize="@dimen/px40_sp" />
-
-            <LinearLayout
-                android:id="@+id/gift_item"
-                style="@style/center_item_layout"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:scrollbars="none" />
-
-            <ImageView style="@style/right_go" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <include layout="@layout/layout_margintop" />
-
     <!-- 游戏 -->
-    <LinearLayout style="@style/center_set_item">
+    <LinearLayout
+        android:id="@+id/item_game"
+        style="@style/center_set_item">
 
         <TextView
             android:layout_width="@dimen/px200_dp"
@@ -78,7 +89,7 @@
             android:maxLength="30"
             android:maxLines="1"
             android:text="@string/check_info_game"
-            android:textColor="@color/color_999999"
+            android:textColor="@color/text_zhuyao_black"
             android:textSize="@dimen/px40_sp" />
 
         <LinearLayout
@@ -88,6 +99,20 @@
             android:orientation="horizontal"
             android:scrollbars="none" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/px35_dp"
+            android:gravity="center_vertical"
+            android:text="小友浴缸"
+            android:textColor="@color/text_ciyao_gray" />
+
+        <ImageView
+            android:id="@+id/img_game"
+            android:layout_width="@dimen/px100_dp"
+            android:layout_height="@dimen/px100_dp"
+            android:background="@drawable/ic_launcher" />
+
         <ImageView style="@style/right_go" />
     </LinearLayout>
 
@@ -95,7 +120,7 @@
 
     <!-- 私密相册 -->
     <LinearLayout
-        android:id="@+id/view_secret_photo"
+        android:id="@+id/item_secret_photo"
         style="@style/center_set_item">
 
         <TextView
@@ -105,7 +130,7 @@
             android:maxLength="30"
             android:maxLines="1"
             android:text="@string/check_info_secret_photo"
-            android:textColor="@color/color_999999"
+            android:textColor="@color/text_zhuyao_black"
             android:textSize="@dimen/px40_sp" />
 
         <LinearLayout
@@ -122,7 +147,7 @@
 
     <!-- 私密视频 -->
     <LinearLayout
-        android:id="@+id/view_secret_video"
+        android:id="@+id/item_secret_video"
         style="@style/center_set_item">
 
         <TextView
@@ -132,7 +157,7 @@
             android:maxLength="30"
             android:maxLines="1"
             android:text="@string/check_info_secret_video"
-            android:textColor="@color/color_999999"
+            android:textColor="@color/text_zhuyao_black"
             android:textSize="@dimen/px40_sp" />
 
         <LinearLayout
@@ -145,15 +170,42 @@
         <ImageView style="@style/right_go" />
     </LinearLayout>
 
+    <TextView style="@style/divider_line" />
+
+    <!-- 礼物 -->
+    <LinearLayout
+        android:id="@+id/item_gift"
+        style="@style/center_set_item">
+
+        <TextView
+            android:layout_width="@dimen/px200_dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:text="@string/check_info_ex_gift"
+            android:textColor="@color/text_zhuyao_black"
+            android:textSize="@dimen/px40_sp" />
+
+        <LinearLayout
+            android:id="@+id/gift_item"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:scrollbars="none" />
+
+        <ImageView style="@style/right_go" />
+    </LinearLayout>
+
     <include layout="@layout/layout_margintop" />
 
-    <!-- 印象标签 -->
+    <!-- 内心独白 -->
     <LinearLayout
-        android:id="@+id/view_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:padding="@dimen/px35_dp">
 
         <TextView
@@ -162,25 +214,24 @@
             android:ellipsize="end"
             android:maxLength="30"
             android:maxLines="1"
-            android:text="@string/check_info_impress_sign"
-            android:textColor="@color/color_999999"
+            android:text="@string/check_info_sign"
+            android:textColor="@color/color_B0B0B0"
             android:textSize="@dimen/px40_sp" />
 
-        <LinearLayout
-            style="@style/center_item_text"
-            android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tv_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px35_dp"
+            android:text="@string/check_info_default_sign"
+            android:textColor="@color/color_C7C7C7"
+            android:textSize="@dimen/px40_sp" />
 
-            <include layout="@layout/p1_user_flow_label" />
-        </LinearLayout>
-
-        <ImageView
-            style="@style/right_go"
-            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_page_footing"
+        android:layout_height="@dimen/px300_dp"
         android:background="@color/bg_color" />
 
     <include layout="@layout/fillbottom_bg" />

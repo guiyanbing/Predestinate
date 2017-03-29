@@ -19,7 +19,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
 
     private ImageView img_header, img_vip, img_gender;
     private TextView user_alias, user_id, user_gender,
-            user_age, user_height, user_addr, user_sign,
+            user_age, user_height, user_addr,
             user_status, user_distance;
 
     public UserCheckInfoHeadPanel(Context context, int channel, UserDetail userProfile) {
@@ -42,7 +42,6 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
         user_age = (TextView) findViewById(R.id.user_age);
         user_height = (TextView) findViewById(R.id.user_height);
         user_addr = (TextView) findViewById(R.id.user_addr);
-        user_sign = (TextView) findViewById(R.id.user_sign);
         user_status = (TextView) findViewById(R.id.user_status);
         user_distance = (TextView) findViewById(R.id.user_distance);
     }
@@ -51,7 +50,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
         ImageLoader.loadRoundCorners(getContext(), userProfile.getAvatar(), 15, img_header);
         if (!userProfile.isVip()) img_vip.setVisibility(View.GONE);
 
-        user_alias.setText(userProfile.getNickname());
+        user_alias.setText(userProfile.getNickname() + "昵称");
         user_id.setText("ID:" + userProfile.getUid());
     }
 }

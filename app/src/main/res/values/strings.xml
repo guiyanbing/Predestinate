@@ -62,8 +62,10 @@
     <string name="check_info_secret_video">私密视频</string>
     <string name="check_info_dynamic">动态</string>
     <string name="check_info_ex_gift">礼物</string>
+    <string name="check_info_sign">内心独白</string>
+    <string name="check_info_default_sign">TA还没有什么想说的</string>
     <string name="check_info_game">游戏</string>
-    <string name="check_info_impress_sign">印象标签</string>
+    <string name="check_info_impress_sign">标签</string>
     <string name="user_self_info_act">个人信息</string>
     <string name="user_self_info_avatar">头像</string>
     <string name="user_self_info_nickname">昵称</string>

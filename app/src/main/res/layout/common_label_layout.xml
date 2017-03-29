@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/label_common_bg"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/px20_dp"
+        android:paddingRight="@dimen/px20_dp">
+        <!-- 文字左侧图片 -->
+        <ImageView
+            android:id="@+id/label_img"
+            android:layout_width="@dimen/px32_dp"
+            android:layout_height="@dimen/px36_dp"
+            android:layout_marginRight="@dimen/px15_dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/label_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18岁"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/px36_sp" />
+    </LinearLayout>
+</LinearLayout>
