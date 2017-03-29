@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View style="@style/divider_line" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px25_dp"
+                android:background="@color/bg_color" />
+
+            <include layout="@layout/center_information_line" />
+
+            <LinearLayout
+                android:id="@+id/ll_stealth"
+                style="@style/center_set_item">
+
+                <TextView
+                    style="@style/center_item_text"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/switch_stealth" />
+
+                <SeekBar
+                    android:id="@+id/sb_stealth"
+                    style="@style/SeekBar" />
+            </LinearLayout>
+
+            <include layout="@layout/center_information_line" />
+
+            <LinearLayout style="@style/center_set_item">
+
+                <TextView
+                    style="@style/setting_tip"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/switch_stealth_tip" />
+            </LinearLayout>
+
+            <View style="@style/divider_line" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px35_dp"
+                android:background="@color/bg_color" />
+
+            <View style="@style/divider_line" />
+
+            <RelativeLayout
+                android:id="@+id/rl_voice"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:id="@+id/tv_title_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="语音接听"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px15_dp"
+                    android:layout_toRightOf="@+id/tv_title_mark"
+                    android:text="最低10钻石"
+                    android:textColor="@color/text_ciyao_gray"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/et_voice_price"
+                    android:layout_width="@dimen/px300_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tv_mark"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:inputType="number"
+                    android:text="10"
+                    android:maxLength="7"
+                    android:textColor="@color/bg_reghead_end"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_mark"
+                    android:text="钻石/分"
+                    android:textColor="@color/bg_reghead_end"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/iv_mark"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/y1_right_go" />
+
+            </RelativeLayout>
+
+            <include layout="@layout/center_information_line" />
+
+            <RelativeLayout
+                android:id="@+id/rl_video"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:id="@+id/tv_title_mark1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="视频接听"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px15_dp"
+                    android:layout_toRightOf="@+id/tv_title_mark1"
+                    android:text="最低20钻石"
+                    android:textColor="@color/text_ciyao_gray"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/et_video_price"
+                    android:layout_width="@dimen/px300_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tv_mark1"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:inputType="number"
+                    android:text="20"
+                    android:maxLength="7"
+                    android:textColor="@color/bg_reghead_end"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_mark1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_mark1"
+                    android:text="钻石/分"
+                    android:textColor="@color/bg_reghead_end"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/iv_mark1"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/y1_right_go" />
+
+            </RelativeLayout>
+
+            <View style="@style/divider_line" />
+
+            <View
+                android:id="@+id/mark"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px35_dp"
+                android:background="@color/bg_color" />
+
+
+            <View style="@style/divider_line" />
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/button_feedback"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/y1_right_go" />
+            </RelativeLayout>
+
+            <include layout="@layout/center_information_line" />
+
+            <RelativeLayout
+                android:id="@+id/rl_clean"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/button_clean_cache"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
+
+                <TextView
+                    android:id="@+id/desc_clean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/button_clean_cache_tip"
+                    android:textColor="@color/txt_middle"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/mark1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px35_dp"
+                android:background="@color/bg_color" />
+
+            <View style="@style/divider_line" />
+
+            <RelativeLayout
+                android:id="@+id/rl_exit"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/button_exit"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
+            </RelativeLayout>
+
+
+            <View style="@style/divider_line" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_page_footing"
+                android:background="@color/bg_color" />
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/fillbottom_bg" />
+
+</LinearLayout>
