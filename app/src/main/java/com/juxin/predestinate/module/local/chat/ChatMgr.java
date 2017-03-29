@@ -7,6 +7,8 @@ import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.App;
+
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -27,7 +29,14 @@ public class ChatMgr implements ModuleBase {
 
     @Override
     public void init() {
-
+        App.getmAppComponent().inject(this);
+        BaseMessage baseMessage = new BaseMessage();
+        baseMessage.setWhisperID("1");
+        baseMessage.setSendID(1);
+        baseMessage.setcMsgID(1);
+        baseMessage.setContent("xxxx");
+        baseMessage.setStatus(1);
+        onReceiving(baseMessage);
     }
 
     @Override

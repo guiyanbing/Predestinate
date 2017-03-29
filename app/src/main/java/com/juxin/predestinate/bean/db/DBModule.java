@@ -16,10 +16,16 @@ import dagger.Provides;
 @Module
 public final class DBModule {
 
+    private long uid = 0;
+
+    public DBModule(long uid) {
+        this.uid = uid;
+    }
+
     @Provides
     @Singleton
     SQLiteOpenHelper provideOpenHelper(Application application) {
-        return new DBHelper(application, "1.db");
+        return new DBHelper(application, String.valueOf(uid));
     }
 
     @Provides

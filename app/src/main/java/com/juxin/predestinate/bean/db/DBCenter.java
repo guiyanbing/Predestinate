@@ -11,8 +11,6 @@ import rx.Observable;
 
 public class DBCenter {
 
-    private final int ERROR = -1;
-
     private BriteDatabase mDatabase;
     private DBCenterFmessage centerFmessage;
 

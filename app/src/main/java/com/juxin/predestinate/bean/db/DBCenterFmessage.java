@@ -11,7 +11,6 @@ import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
@@ -52,8 +51,8 @@ public class DBCenterFmessage {
      * @param baseMessage
      * @return
      */
-    public long insertMsg(BaseMessage baseMessage){
-        if(baseMessage == null){
+    public long insertMsg(BaseMessage baseMessage) {
+        if (baseMessage == null) {
             return ERROR;
         }
 
@@ -79,7 +78,7 @@ public class DBCenterFmessage {
             values.put(Fmessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
 
             return mDatabase.insert(Fmessage.FMESSAGE_TABLE, values);
-        } catch (UnsupportedEncodingException e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
         return ERROR;
@@ -127,7 +126,7 @@ public class DBCenterFmessage {
             if (baseMessage.getContentJson() != null)
                 values.put(Fmessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
             return mDatabase.update(Fmessage.FMESSAGE_TABLE, values, sql, str);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ERROR;

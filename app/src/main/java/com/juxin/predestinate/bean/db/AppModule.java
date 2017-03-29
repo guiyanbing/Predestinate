@@ -1,11 +1,8 @@
 package com.juxin.predestinate.bean.db;
 
 import android.app.Application;
-
 import com.juxin.library.observe.RxBus;
-
 import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -30,6 +27,5 @@ public class AppModule {
     @Singleton
     RxBus provideRxBus() {
         return RxBus.getInstance();
-        //    return new RxBus();
     }
 }

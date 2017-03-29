@@ -9,6 +9,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.local.center.CenterMgr;
+import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
@@ -158,8 +159,10 @@ public final class ModuleMgr {
         return notifyMgr;
     }
 
+    /**
+     * 聊天消息管理
+     */
     private static ChatMgr chatMgr = null;
-
     public static ChatMgr getChatMgr() {
         if (chatMgr == null) {
             chatMgr = new ChatMgr();
