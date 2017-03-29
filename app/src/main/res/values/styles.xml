@@ -73,7 +73,7 @@
     <style name="button_big" parent="button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/px120_dp</item>
-        <item name="android:background">@drawable/btn_fill_green_bg</item>
+        <item name="android:background">@drawable/p1_button_bg_long</item>
         <item name="android:layout_marginLeft">@dimen/px40_dp</item>
         <item name="android:layout_marginRight">@dimen/px40_dp</item>
         <item name="android:textColor">@color/white</item>
@@ -228,8 +228,8 @@
     </style>
 
     <style name="icon_huge_tip" parent="icon">
-        <item name="android:layout_width">@dimen/px200_dp</item>
-        <item name="android:layout_height">@dimen/px200_dp</item>
+        <item name="android:layout_width">@dimen/px240_dp</item>
+        <item name="android:layout_height">@dimen/px240_dp</item>
     </style>
 
     <!-- 右侧进入箭头 -->
@@ -337,9 +337,11 @@
         <item name="android:background">@null</item>
         <item name="android:paddingLeft">@dimen/px45_dp</item>
     </style>
+
     <style name="divider_line_gapLeft40px" parent="divider_line">
         <item name="android:layout_marginLeft">@dimen/px40_dp</item>
     </style>
+
     <style name="divider_line_gap40px" parent="divider_line">
         <item name="android:layout_marginLeft">@dimen/px40_dp</item>
         <item name="android:layout_marginRight">@dimen/px40_dp</item>
