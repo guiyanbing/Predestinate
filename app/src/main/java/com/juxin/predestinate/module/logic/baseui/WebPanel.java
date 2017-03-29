@@ -151,19 +151,6 @@ public class WebPanel extends BasePanel {
         CookieSyncManager.getInstance().sync();
     }
 
-    /**
-     * 回调网页中的脚本接口。
-     *
-     * @param method 调用网页方法的方法名
-     * @param notify 传给网页的通知内容。
-     */
-    public void onNotifyListener(String method, String notify) {
-        if (webView != null) {
-            String url = "javascript:" + method + "('" + notify + "')";
-            webView.loadUrl(url);
-        }
-    }
-
     private TitleListener titleListener;
 
     /**

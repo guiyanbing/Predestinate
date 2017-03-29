@@ -3,9 +3,14 @@ package com.juxin.predestinate.module.util;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
+import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
+import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
@@ -81,6 +86,7 @@ public class UIShow {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
+
     /**
      * 打开登录页
      */
@@ -88,6 +94,7 @@ public class UIShow {
         Intent intent = new Intent(activity, LoginAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开注册页
      */
@@ -95,6 +102,7 @@ public class UIShow {
         Intent intent = new Intent(activity, RegInfoAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开找回密码页
      */
@@ -126,5 +134,33 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivityForResult(intent, UserInfoAct.EDIT_REQUEST_CODE);
+    }
+
+    /**
+     * 打开锁屏弹窗弹出的activity
+     */
+    public static void showLockScreenActivity() {
+        Intent intent = new Intent(App.context, LockScreenActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        App.context.startActivity(intent);
+    }
+
+    /**
+     * 跳转到解锁后顶部消息提示
+     *
+     * @param type       消息类型
+     * @param simpleData 简单的用户个人资料
+     * @param content    聊天内容
+     */
+    public static void showUserMailNotifyAct(int type, UserInfoLightweight simpleData, String content) {
+        int flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+        if (Build.VERSION.SDK_INT >= 11) flags = flags | Intent.FLAG_ACTIVITY_CLEAR_TASK;
+
+        Intent intent = new Intent(App.context, UserMailNotifyAct.class);
+        intent.addFlags(flags);
+        intent.putExtra("type", type);
+        intent.putExtra("simple_data", simpleData);
+        intent.putExtra("content", content);
+        App.context.startActivity(intent);
     }
 }

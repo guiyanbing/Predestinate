@@ -15,6 +15,7 @@ import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
+import com.juxin.predestinate.module.logic.notify.NotifyMgr;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
 
 import java.util.ArrayList;
@@ -118,6 +119,7 @@ public final class ModuleMgr {
         }
         return centerMgr;
     }
+
     /**
      * 登录管理
      */
@@ -142,5 +144,18 @@ public final class ModuleMgr {
             addModule(commonMgr);
         }
         return commonMgr;
+    }
+
+    /**
+     * 通知信息管理
+     */
+    private static NotifyMgr notifyMgr = null;
+
+    public static NotifyMgr getNotifyMgr() {
+        if (notifyMgr == null) {
+            notifyMgr = new NotifyMgr();
+            addModule(notifyMgr);
+        }
+        return notifyMgr;
     }
 }
