@@ -18,6 +18,29 @@ public class BaseMessage implements IBaseMessage {
     private int fStatus;
     private long time;
     private String content;
+    private String contentJson;
+
+
+    public BaseMessage() {
+        super();
+    }
+
+    //fmessage
+    public BaseMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID,
+                       String type, int status, int fStatus, long time, String contentJson) {
+        this.channelID = channelID;
+        this.whisperID = whisperID;
+        this.sendID = sendID;
+        this.msgID = msgID;
+        this.cMsgID = cMsgID;
+        this.type = type;
+        this.status = status;
+        this.fStatus = fStatus;
+        this.time = time;
+        this.contentJson = contentJson;
+    }
+
+
 
 
     @Override
@@ -108,5 +131,13 @@ public class BaseMessage implements IBaseMessage {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getContentJson() {
+        return contentJson;
+    }
+
+    public void setContentJson(String contentJson) {
+        this.contentJson = contentJson;
     }
 }

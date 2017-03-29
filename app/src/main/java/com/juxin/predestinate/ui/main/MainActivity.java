@@ -6,13 +6,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.Fmessage;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.plaza.PlazaFragment;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
+
+import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -24,6 +29,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private BaseFragment current;  // 当前的fragment
     private View[] views;
+    @Inject
+    DBCenter dbCenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         initViews();
         initFragment();
+
     }
 
     private void initFragment() {
