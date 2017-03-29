@@ -93,25 +93,26 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_submit://提交
-                if (checkLoginInfo()) {
-                    loginMgr.onLogin(this, currentUserID, currentUserPwd, new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            LoadingDialog.closeLoadingDialog(500);
-                            if (response.isOk()) {
-                                UserLogin userLogin = (UserLogin) response.getBaseData();
-                                userLogin.getCookie();
-                                loginMgr.putAllLoginInfo(currentUserID, currentUserPwd, userLogin.getCookie(), true);
-//                        // 临时资料设置
-//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
-                                UIShow.showMainClearTask(LoginAct.this);
-                            } else {
-                                PToast.showShort(getResources().getString(R.string.toast_login_iserror));
-                            }
-                        }
-                    }, true);
-                }
+                UIShow.showUserSetAct(LoginAct.this);
+//                if (checkLoginInfo()) {
+//                    loginMgr.onLogin(this, currentUserID, currentUserPwd, new RequestComplete() {
+//                        @Override
+//                        public void onRequestComplete(HttpResponse response) {
+//                            LoadingDialog.closeLoadingDialog(500);
+//                            if (response.isOk()) {
+//                                UserLogin userLogin = (UserLogin) response.getBaseData();
+//                                userLogin.getCookie();
+//                                loginMgr.putAllLoginInfo(currentUserID, currentUserPwd, userLogin.getCookie(), true);
+////                        // 临时资料设置
+////                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
+////                        ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
+//                                UIShow.showMainClearTask(LoginAct.this);
+//                            } else {
+//                                PToast.showShort(getResources().getString(R.string.toast_login_iserror));
+//                            }
+//                        }
+//                    }, true);
+//                }
                 break;
 
             case R.id.img_user_login_arrow:

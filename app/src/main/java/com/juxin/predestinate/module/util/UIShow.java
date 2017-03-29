@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.util;
+ package com.juxin.predestinate.module.util;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
@@ -97,6 +98,13 @@ public class UIShow {
      */
     public static void showFindPwdAct(FragmentActivity activity) {
         Intent intent = new Intent(activity, FindPwdAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开设置页
+     */
+    public static void showUserSetAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, UsersSetAct.class);
         activity.startActivity(intent);
     }
 }
