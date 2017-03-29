@@ -124,16 +124,16 @@ public class UIShow {
     public static void showEditContentAct(FragmentActivity context, String defaultValue) {
         Intent intent = new Intent(context, EditContentAct.class);
         intent.putExtra("defaultValue", defaultValue);
-        context.startActivityForResult(intent, UserInfoAct.EDIT_REQUEST_CODE);
+        context.startActivity(intent);
     }
 
     /**
-     * 打开编辑昵称页
+     * 打开编辑个性签名页
      */
     public static void showUserEditSignAct(FragmentActivity context, String sign) {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
-        context.startActivityForResult(intent, UserInfoAct.EDIT_REQUEST_CODE);
+        context.startActivity(intent);
     }
 
     /**
