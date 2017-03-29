@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.user.information;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -21,9 +20,6 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  */
 
 public class UserInfoAct extends BaseActivity {
-    public static final int EDIT_REQUEST_CODE = 0x10; // 编辑请求码
-    public static final int UPDATE_NICK_NAME = 0x11;  // 修改昵称返回码
-    public static final int UPDATE_USER_SIGN = 0x12;  // 修改签名返回码
 
     private ImageView img_header;
     private TextView tv_name, tv_age, tv_home, tv_sign;
@@ -32,7 +28,7 @@ public class UserInfoAct extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_user_selfinfo_act);
-//        setTitle(getResources().getString(R.string.user_self_info_act));
+        setTitle(getString(R.string.user_self_info_act));
         setBackView();
 
         initView();
@@ -59,21 +55,6 @@ public class UserInfoAct extends BaseActivity {
         tv_name.setText(userDetail.getNickname());
         tv_age.setText(userDetail.getAge() + "岁");
         tv_home.setText(userDetail.getProvince());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_REQUEST_CODE) {
-            switch (resultCode) {
-                case UPDATE_NICK_NAME:
-                    // TODO 存储临时变量
-                    break;
-
-                case UPDATE_USER_SIGN:
-                    break;
-            }
-        }
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
