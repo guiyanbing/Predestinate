@@ -17,10 +17,14 @@ public class UserInfo extends UserBasic {
     private int status;
 
     // 自己
+    private String activities;  // 最新动态照片或视频
     private boolean isVip;      // 是否是VIP
     private long vipEnd;        // VIP到期时间
     private String mobile;      // 手机
     private int money;          // 资产
+    private int bankAuthStatus; // 银行卡认证 0未提交， 1 待审核中，2-失败， 3 通过
+    private int mobileAuthStatus;// 手机认证  0未提交， 3-通过
+    private int videoAuthStatus; // 视频认证   0未提交， 1 待审核中，2-失败， 3 通过
     private int channel_sid;
     private int channel_uid;
     private int real_status;
@@ -31,10 +35,16 @@ public class UserInfo extends UserBasic {
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
+
+        this.setActivities(jsonObject.optString("activities"));
+
         if (!jsonObject.isNull("detail")) {
             String json = jsonObject.optString("detail");
             super.parseJson(json);
             JSONObject detailObject = this.getJsonObject(json);
+
+            // B
+            this.setBankAuthStatus(detailObject.optInt("bank_auth_status"));
 
             // C
             this.setChannel_sid(detailObject.optInt("channel_sid"));
@@ -52,6 +62,7 @@ public class UserInfo extends UserBasic {
 
             // M
             this.setMobile(detailObject.optString("mobile"));
+            this.setMobileAuthStatus(detailObject.optInt("mobile_auth_status"));
             this.setMoney(detailObject.optInt("money"));
 
             // R
@@ -62,7 +73,42 @@ public class UserInfo extends UserBasic {
             this.setSignName(detailObject.optString("signname"));
             this.setSignName_status(detailObject.optInt("signname_status"));
             this.setStatus(detailObject.optInt("status"));
+
+            // V
+            this.setVideoAuthStatus(detailObject.optInt("video_auth_status"));
         }
+    }
+
+    public int getVideoAuthStatus() {
+        return videoAuthStatus;
+    }
+
+    public void setVideoAuthStatus(int videoAuthStatus) {
+        this.videoAuthStatus = videoAuthStatus;
+    }
+
+    public int getMobileAuthStatus() {
+        return mobileAuthStatus;
+    }
+
+    public void setMobileAuthStatus(int mobileAuthStatus) {
+        this.mobileAuthStatus = mobileAuthStatus;
+    }
+
+    public int getBankAuthStatus() {
+        return bankAuthStatus;
+    }
+
+    public void setBankAuthStatus(int bankAuthStatus) {
+        this.bankAuthStatus = bankAuthStatus;
+    }
+
+    public String getActivities() {
+        return activities;
+    }
+
+    public void setActivities(String activities) {
+        this.activities = activities;
     }
 
     public long getRegTime() {
@@ -170,6 +216,9 @@ public class UserInfo extends UserBasic {
     }
 
 
+    public UserInfo() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -183,17 +232,18 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.signName_status);
         dest.writeInt(this.gem);
         dest.writeInt(this.status);
+        dest.writeString(this.activities);
         dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
         dest.writeLong(this.vipEnd);
         dest.writeString(this.mobile);
         dest.writeInt(this.money);
+        dest.writeInt(this.bankAuthStatus);
+        dest.writeInt(this.mobileAuthStatus);
+        dest.writeInt(this.videoAuthStatus);
         dest.writeInt(this.channel_sid);
         dest.writeInt(this.channel_uid);
         dest.writeInt(this.real_status);
         dest.writeInt(this.kf_id);
-    }
-
-    public UserInfo() {
     }
 
     protected UserInfo(Parcel in) {
@@ -203,10 +253,14 @@ public class UserInfo extends UserBasic {
         this.signName_status = in.readInt();
         this.gem = in.readInt();
         this.status = in.readInt();
+        this.activities = in.readString();
         this.isVip = in.readByte() != 0;
         this.vipEnd = in.readLong();
         this.mobile = in.readString();
         this.money = in.readInt();
+        this.bankAuthStatus = in.readInt();
+        this.mobileAuthStatus = in.readInt();
+        this.videoAuthStatus = in.readInt();
         this.channel_sid = in.readInt();
         this.channel_uid = in.readInt();
         this.real_status = in.readInt();

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -59,6 +60,7 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
      */
     public void refreshView() {
         myInfo = ModuleMgr.getCenterMgr().getMyInfo();
+        ImageLoader.loadRoundCorners(getContext(), myInfo.getAvatar(), 10, user_head);
         vip_status.setVisibility(myInfo.isVip() ? View.VISIBLE : View.GONE);
         user_id.setText("ID:" + myInfo.getUid());
         user_nick.setText(myInfo.getNickname());

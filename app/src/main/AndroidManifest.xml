@@ -70,24 +70,28 @@
             android:name=".ui.setting.UsersSetAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name=".ui.user.information.UserInfoAct"
+            android:name=".ui.recommend.RecommendAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.information.EditContentAct"
+            android:name=".ui.user.check.edit.UserInfoAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.information.UserEditSignAct"
+            android:name=".ui.user.check.edit.EditContentAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.information.UserSecretAct"
+            android:name=".ui.user.check.edit.UserEditSignAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.user.check.edit.UserSecretAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 

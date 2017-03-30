@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View style="@style/divider_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/px30_dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/px60_dp"
+                android:layout_height="@dimen/px60_dp"
+                android:src="@drawable/p1_msg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px10_dp"
+                android:text="私信TA"
+                android:textColor="@color/txt_item_sign" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/px3_dp"
+            android:layout_height="@dimen/px40_dp"
+            android:background="@color/divider" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/px60_dp"
+                android:layout_height="@dimen/px60_dp"
+                android:src="@drawable/p1_greet_normal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px10_dp"
+                android:text="打个招呼"
+                android:textColor="@color/txt_item_sign" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

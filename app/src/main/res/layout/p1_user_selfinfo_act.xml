@@ -42,8 +42,7 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/px205_dp"
                     android:layout_height="@dimen/px205_dp"
-                    android:layout_toLeftOf="@id/right_arrow"
-                    android:background="@drawable/p1_main_xiaoyou02" />
+                    android:layout_toLeftOf="@id/right_arrow" />
             </RelativeLayout>
 
             <include layout="@layout/center_information_line" />

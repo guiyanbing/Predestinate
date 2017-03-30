@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/text_theme_blue"
+    android:background="@drawable/p1_theme_bg"
     app:heightWeight="3"
     app:widthWeight="4">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <LinearLayout
             android:id="@+id/center_info"
@@ -21,58 +20,43 @@
             android:orientation="vertical">
 
             <!-- 头像 -->
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/img_header"
                 android:layout_width="@dimen/px240_dp"
                 android:layout_height="@dimen/px240_dp"
-                android:layout_marginTop="@dimen/px100_dp">
+                android:layout_marginTop="@dimen/px100_dp" />
 
-                <ImageView
-                    android:id="@+id/img_header"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/ic_launcher"
-                    android:clickable="true" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10_dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/user_alias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="用户昵称"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px52_sp" />
 
                 <ImageView
                     android:id="@+id/img_vip"
-                    android:layout_width="@dimen/px80_dp"
-                    android:layout_height="@dimen/px80_dp"
-                    android:layout_alignBottom="@+id/img_header"
-                    android:layout_alignRight="@+id/img_header"
-                    android:gravity="center" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/user_alias"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/px10_dp"
-                android:gravity="center"
-                android:text="111111"
-                android:textColor="@color/white"
-                android:textSize="@dimen/px52_sp" />
-
-            <TextView
-                android:id="@+id/user_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/px20_dp"
-                android:gravity="center"
-                android:text="ID:22"
-                android:textColor="@color/white" />
+                    android:layout_width="@dimen/px42_dp"
+                    android:layout_height="@dimen/px42_dp"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:src="@drawable/p1_vip_ico" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/px20_dp"
                 android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/user_gender_img"
-                    android:layout_width="@dimen/px32_dp"
-                    android:layout_height="@dimen/px36_dp"
-                    android:layout_marginRight="@dimen/px15_dp"
-                    android:background="@drawable/networkset_img" />
 
                 <TextView
                     android:id="@+id/user_gender"
@@ -91,18 +75,19 @@
                     android:textSize="@dimen/px36_sp" />
 
                 <TextView
-                    android:id="@+id/user_height"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="168cm，"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/px36_sp" />
-
-                <TextView
                     android:id="@+id/user_addr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="北京海淀区"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px36_sp" />
+
+                <TextView
+                    android:id="@+id/user_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:text="ID:"
                     android:textColor="@color/white"
                     android:textSize="@dimen/px36_sp" />
             </LinearLayout>

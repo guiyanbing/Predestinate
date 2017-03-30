@@ -11,9 +11,8 @@ import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.logic.application.App;
@@ -22,6 +21,7 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.Url_Enc;
 
@@ -230,7 +230,6 @@ public class LoginMgr implements ModuleBase {
      * 设置登录信息，并发送登录信息。
      */
     public boolean setLoginInfo(long uid, boolean isUserLogin) {
-        Msg msg = new Msg();
         App.cookie = getCookie();
 
         if (isUserLogin) {
@@ -245,8 +244,7 @@ public class LoginMgr implements ModuleBase {
             App.uid = uid;
             App.isLogin = true;
         }
-        msg.setData(App.isLogin);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, msg);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login,App.isLogin);
         return App.isLogin;
     }
 
@@ -303,6 +301,26 @@ public class LoginMgr implements ModuleBase {
      */
     public void setUid(String uid) {
         PSP.getInstance().put(LOGINMGR_UID, uid);
+    }
+
+    public long getUid() {
+        String uid = PSP.getInstance().getString(LOGINMGR_UID, "");
+        if (!TextUtils.isEmpty(uid)) {
+            return BaseUtil.getLong(uid, 0);
+        }
+        return 0L;
+    }
+
+    /**
+     * 初始化登陆信息
+     */
+    public void initCookie() {
+        long uid = getUid();
+        if (uid == 0) {
+            clearCookie();
+            return;
+        }
+        setLoginInfo(uid, true);
     }
 
     /**

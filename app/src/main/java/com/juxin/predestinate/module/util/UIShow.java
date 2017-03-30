@@ -12,15 +12,17 @@ import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.RegInfoAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
-import com.juxin.predestinate.ui.user.information.EditContentAct;
-import com.juxin.predestinate.ui.user.information.UserEditSignAct;
-import com.juxin.predestinate.ui.user.information.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
+import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
+import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
 
 /**
  * 应用内页面跳转工具
@@ -116,6 +118,13 @@ public class UIShow {
         Intent intent = new Intent(activity, UsersSetAct.class);
         activity.startActivity(intent);
     }
+    /**
+     * 打开推荐的人页面
+     */
+    public static void showRecommendAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, RecommendAct.class);
+        activity.startActivity(intent);
+    }
 
     /**
      * 打开个人信息页
@@ -134,9 +143,8 @@ public class UIShow {
     /**
      * 打开编辑昵称页
      */
-    public static void showEditContentAct(FragmentActivity context, String defaultValue) {
+    public static void showEditContentAct(FragmentActivity context) {
         Intent intent = new Intent(context, EditContentAct.class);
-        intent.putExtra("defaultValue", defaultValue);
         context.startActivity(intent);
     }
 
@@ -147,6 +155,13 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivity(intent);
+    }
+
+    /**
+     * 打开私密相册/视频
+     */
+    public static void showUserSecretAct(Context context) {
+        context.startActivity(new Intent(context, UserSecretAct.class));
     }
 
     /**
