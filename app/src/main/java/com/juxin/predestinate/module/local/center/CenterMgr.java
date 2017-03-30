@@ -17,6 +17,9 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
@@ -124,6 +127,14 @@ public class CenterMgr implements ModuleBase, PObserver {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     userDetail = (UserDetail) response.getBaseData();
+
+                    // 持久化必须放在这里，不能放在UserDetail解析里
+                    try {
+                        JSONObject json = new JSONObject(response.getResponseString());
+                        setMyInfo(json.optString("res"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -143,9 +154,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 保存个人信息Json串到SP
      */
-    public void setMyInfo(String resultStr) {
+    private void setMyInfo(String resultStr) {
         PSP.getInstance().put(INFO_SAVE_KEY, resultStr);
     }
-
-
 }

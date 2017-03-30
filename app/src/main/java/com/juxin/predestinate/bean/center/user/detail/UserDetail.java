@@ -6,8 +6,9 @@ import com.juxin.predestinate.bean.center.user.others.Game;
 import com.juxin.predestinate.bean.center.user.others.SecretMedia;
 import com.juxin.predestinate.bean.center.user.others.UserLabel;
 import com.juxin.predestinate.bean.center.user.others.UserPrize;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -21,6 +22,13 @@ public class UserDetail extends UserInfo {
     private List<SecretMedia> secretPhotos = new ArrayList<>();
     private List<SecretMedia> secretVideos = new ArrayList<>();
     private UserPrize userPrize = new UserPrize();
+
+    // 自己
+    private List<String> impressions = new ArrayList<>();
+    private List<String> photoCovers = new ArrayList<>();
+    private List<String> videoCovers = new ArrayList<>();
+
+    // 他人
     private UserLabel userLabel = new UserLabel();
 
     @Override
@@ -55,8 +63,33 @@ public class UserDetail extends UserInfo {
             this.userLabel.parseJson(remarks);
         }
 
-        // 存储个人信息到本地
-        ModuleMgr.getCenterMgr().setMyInfo(s);
+        // ========================= 自己独有 ==============================
+        // 最新三个印象说明
+        if (!jsonObject.isNull("impressions")) {
+            this.impressions = getStringList(jsonObject.optJSONArray("impressions"));
+        }
+
+        // 最新四组相册封面
+        if (!jsonObject.isNull("photos")) {
+            this.photoCovers = getStringList(jsonObject.optJSONArray("photos"));
+        }
+
+        // 最新四组视频封面
+        if (!jsonObject.isNull("videos")) {
+            this.photoCovers = getStringList(jsonObject.optJSONArray("videos"));
+        }
+    }
+
+    public List<String> getImpressions() {
+        return impressions;
+    }
+
+    public List<String> getPhotoCovers() {
+        return photoCovers;
+    }
+
+    public List<String> getVideoCovers() {
+        return videoCovers;
     }
 
     public List<Game> getGamesInfo() {
@@ -77,6 +110,19 @@ public class UserDetail extends UserInfo {
 
     public UserLabel getUserLabel() {
         return userLabel;
+    }
+
+    // 字符串数组解析
+    private List<String> getStringList(JSONArray jsonArray) {
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                list.add(jsonArray.getString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 
     @Override
