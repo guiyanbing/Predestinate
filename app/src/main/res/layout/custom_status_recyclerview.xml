@@ -8,6 +8,8 @@
 
     <include layout="@layout/common_xrecyclerview" />
 
+    <include layout="@layout/common_pagerecylerview" />
+
     <include layout="@layout/common_nodata" />
 
     <include layout="@layout/common_net_error" />
