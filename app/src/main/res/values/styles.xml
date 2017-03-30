@@ -337,9 +337,11 @@
         <item name="android:background">@null</item>
         <item name="android:paddingLeft">@dimen/px45_dp</item>
     </style>
+
     <style name="divider_line_gapLeft40px" parent="divider_line">
         <item name="android:layout_marginLeft">@dimen/px40_dp</item>
     </style>
+
     <style name="divider_line_gap40px" parent="divider_line">
         <item name="android:layout_marginLeft">@dimen/px40_dp</item>
         <item name="android:layout_marginRight">@dimen/px40_dp</item>
@@ -386,4 +388,18 @@
         <item name="android:layout_marginLeft">@dimen/px45_dp</item>
     </style>
 
+    <style name="txt_item_nickname" parent="text_big">
+        <item name="android:textColor">@color/text_zhuyao_black</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxEms">6</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:text">小云</item>
+    </style>
+
+    <style name="txt_item_introduction" parent="text_middle">
+        <item name="android:textColor">@color/text_ciyao_gray</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:text">小云</item>
+    </style>
 </resources>

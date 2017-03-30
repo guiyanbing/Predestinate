@@ -12,6 +12,7 @@ import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
@@ -114,6 +115,13 @@ public class UIShow {
      */
     public static void showUserSetAct(FragmentActivity activity) {
         Intent intent = new Intent(activity, UsersSetAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开推荐的人页面
+     */
+    public static void showRecommendAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, RecommendAct.class);
         activity.startActivity(intent);
     }
 

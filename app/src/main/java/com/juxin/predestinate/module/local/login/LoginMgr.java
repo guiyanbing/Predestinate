@@ -11,9 +11,8 @@ import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.logic.application.App;
@@ -230,7 +229,6 @@ public class LoginMgr implements ModuleBase {
      * 设置登录信息，并发送登录信息。
      */
     public boolean setLoginInfo(long uid, boolean isUserLogin) {
-        Msg msg = new Msg();
         App.cookie = getCookie();
 
         if (isUserLogin) {
@@ -245,8 +243,7 @@ public class LoginMgr implements ModuleBase {
             App.uid = uid;
             App.isLogin = true;
         }
-        msg.setData(App.isLogin);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, msg);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login,App.isLogin);
         return App.isLogin;
     }
 
