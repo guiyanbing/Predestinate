@@ -143,9 +143,8 @@ public class UIShow {
     /**
      * 打开编辑昵称页
      */
-    public static void showEditContentAct(FragmentActivity context, String defaultValue) {
+    public static void showEditContentAct(FragmentActivity context) {
         Intent intent = new Intent(context, EditContentAct.class);
-        intent.putExtra("defaultValue", defaultValue);
         context.startActivity(intent);
     }
 

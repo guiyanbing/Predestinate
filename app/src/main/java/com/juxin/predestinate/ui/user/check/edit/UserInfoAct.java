@@ -54,7 +54,7 @@ public class UserInfoAct extends BaseActivity {
         ImageLoader.loadRoundCorners(this, userDetail.getAvatar(), 10, img_header);
         tv_name.setText(userDetail.getNickname());
         tv_age.setText(userDetail.getAge() + "岁");
-        tv_home.setText(userDetail.getProvince());
+        tv_home.setText(userDetail.getAddress());
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
@@ -65,7 +65,7 @@ public class UserInfoAct extends BaseActivity {
                     break;
 
                 case R.id.name_view: // 打开修改昵称页
-                    UIShow.showEditContentAct(UserInfoAct.this, "default");
+                    UIShow.showEditContentAct(UserInfoAct.this);
                     break;
 
                 case R.id.age_view:  // 修改年龄
@@ -74,7 +74,7 @@ public class UserInfoAct extends BaseActivity {
                     break;
 
                 case R.id.sign_view:// 个性签名
-                    UIShow.showUserEditSignAct(UserInfoAct.this, "default-----sign");
+                    UIShow.showUserEditSignAct(UserInfoAct.this, "");
                     break;
             }
         }

@@ -49,7 +49,7 @@ public class EditContentAct extends BaseActivity implements View.OnClickListener
     }
 
     private void fillData() {
-        defaultValue = getIntent().getStringExtra("defaultValue");
+        defaultValue = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
 
         if (!TextUtils.isEmpty(defaultValue)) {
             editText.setText(defaultValue);
@@ -84,6 +84,12 @@ public class EditContentAct extends BaseActivity implements View.OnClickListener
             PToast.showShort("昵称至少2个字符");
             return false;
         }
+
+        if (contact.equals(defaultValue)) {
+            PToast.showShort("请编辑后在保存");
+            return false;
+        }
+
         return true;
     }
 
@@ -92,9 +98,7 @@ public class EditContentAct extends BaseActivity implements View.OnClickListener
      */
     private void saveAndFinish() {
         String contact = editText.getText().toString().trim();
-        if (!contact.equals(defaultValue)) {
-            // TODO 请求修改个人资料接口
-        }
+        // TODO 请求修改个人资料接口
         finish();
     }
 

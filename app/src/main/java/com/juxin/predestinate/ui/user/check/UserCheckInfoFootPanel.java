@@ -14,7 +14,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.edit.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ import java.util.List;
 public class UserCheckInfoFootPanel extends BaseViewPanel {
     private final int channel;
     private UserDetail userDetail;
-    private final List<String> labels = new ArrayList<>(); // 资料介绍标签
+    private List<String> labels; // 资料介绍标签
 
     private FlowLayout mFlowLayout;
     private LinearLayout albumLayout, videoLayout;
@@ -63,12 +62,9 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
      */
     private void initLabels() {
         mFlowLayout.removeAllViews();
-        labels.clear();
+        if (labels != null) labels.clear();
 
-        labels.add("长头发");
-        labels.add("大长腿");
-        labels.add("丰满");
-
+        labels = userDetail.getImpressions();
         for (int i = 0; i < labels.size(); i++) {
             View view = createView(R.layout.common_label_layout);
             TextView label_text = (TextView) view.findViewById(R.id.label_text);
