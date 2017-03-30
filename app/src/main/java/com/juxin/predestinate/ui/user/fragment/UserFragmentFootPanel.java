@@ -72,6 +72,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
     public void onItemClick(View convertView, int position) {
         switch (position) {
             case CenterItemID.i_Center_Homepage_id: // 主页
+                UIShow.showUserCheckInfoAct(getContext());
                 break;
 
             case CenterItemID.i_Center_Dynamic_id: // 动态

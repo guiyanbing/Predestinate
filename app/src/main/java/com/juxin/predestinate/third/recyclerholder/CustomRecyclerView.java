@@ -9,15 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.third.pagerecyeler.PageRecyclerView;
 
 /**
  * 页面四种状态： {@link #showLoading()}加载中，{@link #showNetError()}网络错误、
  * {@link #showNoData()}无数据、{@link #showXrecyclerView()}可刷新RecycleView、
  * {@link #showRecyclerView()}普通RecycleView
- *
+ * <p>
  * Created by Kind on 2017/3/21.
  */
 
@@ -49,23 +51,33 @@ public class CustomRecyclerView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.custom_status_recyclerview, this);
         customFrameLayout = (CustomFrameLayout) view.findViewById(R.id.customFrameLayout);
-        customFrameLayout.setList(new int[]{R.id.common_recyclerView, R.id.common_xrecyclerView,
+        customFrameLayout.setList(new int[]{R.id.common_recyclerView, R.id.common_xrecyclerView, R.id.common_pagerecylerview,
                 R.id.common_nodata, R.id.common_loading, R.id.common_net_error});
     }
 
     /**
-     * @return  获得下拉加载的RecyclerView
+     * @return 获得下拉加载的RecyclerView
      */
     public XRecyclerView getXRecyclerView() {
         return (XRecyclerView) customFrameLayout.findViewById(R.id.common_xrecyclerView);
     }
 
     /**
-     * @return  获得普通RecyclerView
+     * @return 获得普通RecyclerView
      */
     public RecyclerView getRecyclerView() {
         return (RecyclerView) customFrameLayout.findViewById(R.id.common_recyclerView);
     }
+
+    /**
+     * 获得翻页的recycleView (配合PageIndicatorView使用)
+     *
+     * @return
+     */
+    public PageRecyclerView getPageRecyclerView() {
+        return (PageRecyclerView) customFrameLayout.findViewById(R.id.common_pagerecylerview);
+    }
+
 
     /**
      * 显示loading

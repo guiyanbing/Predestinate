@@ -11,6 +11,7 @@ import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 
@@ -46,11 +47,24 @@ public class UserCheckInfoAct extends BaseActivity implements View.OnClickListen
     }
 
     private void initData() {
+        userProfile = ModuleMgr.getCenterMgr().getMyInfo();
 
     }
 
     private void initView() {
+        initTitle();
+        container = (LinearLayout) findViewById(R.id.container);
 
+    }
+
+    private void initTitle() {
+        setTitleBackground(R.color.transparent);
+        setTitleLeftImg(R.drawable.p1_back_white_btn, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
     }
 
     private void initPanel() {

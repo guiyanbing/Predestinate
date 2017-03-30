@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.notify.NotifyMgr;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
+import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,7 @@ public final class ModuleMgr {
         return httpMgr;
     }
 
+
     /**
      * 个人中心管理
      */
@@ -120,6 +122,7 @@ public final class ModuleMgr {
         }
         return centerMgr;
     }
+
     /**
      * 登录管理
      */
@@ -132,6 +135,26 @@ public final class ModuleMgr {
         }
         return loginMgr;
     }
+
+
+    /**
+     * 通知栏管理类
+     */
+    private static TipsBarMgr tipsBarMgr = null;
+
+    /**
+     * 获取通知栏管理器 唯一实例
+     *
+     * @return
+     */
+    public static TipsBarMgr getTipsBarMgr() {
+        if (tipsBarMgr == null) {
+            tipsBarMgr = new TipsBarMgr();
+            addModule(tipsBarMgr);
+        }
+        return tipsBarMgr;
+    }
+
 
     /**
      * 通用

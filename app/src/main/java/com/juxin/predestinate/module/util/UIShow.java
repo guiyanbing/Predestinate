@@ -17,6 +17,7 @@ import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.RegInfoAct;
+import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.information.EditContentAct;
 import com.juxin.predestinate.ui.user.information.UserEditSignAct;
 import com.juxin.predestinate.ui.user.information.UserInfoAct;
@@ -121,6 +122,13 @@ public class UIShow {
      */
     public static void showUserInfoAct(Context context) {
         context.startActivity(new Intent(context, UserInfoAct.class));
+    }
+
+    /**
+     * 打开主页
+     */
+    public static void showUserCheckInfoAct(Context context) {
+        context.startActivity(new Intent(context, UserCheckInfoAct.class));
     }
 
     /**
