@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.fragment;
+ package com.juxin.predestinate.ui.user.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
