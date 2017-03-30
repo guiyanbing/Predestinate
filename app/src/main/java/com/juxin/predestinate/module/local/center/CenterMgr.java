@@ -7,35 +7,51 @@ import android.widget.EditText;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.StringUtils;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import java.util.HashMap;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.module.logic.config.UrlParam;
 
 import java.util.HashMap;
 
 /**
  * 个人中心管理类
  */
-public class CenterMgr implements ModuleBase {
+public class CenterMgr implements ModuleBase, PObserver {
     private static final String INFO_SAVE_KEY = "myInfo"; // 本地化个人资料key
     private UserDetail userDetail = null;
 
     @Override
     public void init() {
+        MsgMgr.getInstance().attach(this);
     }
 
     @Override
     public void release() {
     }
 
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_App_Login:
+                if ((Boolean) value) {
+                    reqMyInfo();
+                } else {
+                    userDetail = null;
+                    setMyInfo(null);
+                }
+                break;
+        }
+    }
 
     /**
      * 请求手机验证码
+     *
      * @param mobile
      * @param complete
      */
@@ -84,6 +100,7 @@ public class CenterMgr implements ModuleBase {
             }
         });
     }
+
     /**
      * 获取我的个人资料
      */
@@ -129,4 +146,6 @@ public class CenterMgr implements ModuleBase {
     public void setMyInfo(String resultStr) {
         PSP.getInstance().put(INFO_SAVE_KEY, resultStr);
     }
+
+
 }

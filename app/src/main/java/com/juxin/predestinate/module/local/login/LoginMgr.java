@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.Url_Enc;
 
@@ -300,6 +301,26 @@ public class LoginMgr implements ModuleBase {
      */
     public void setUid(String uid) {
         PSP.getInstance().put(LOGINMGR_UID, uid);
+    }
+
+    public long getUid() {
+        String uid = PSP.getInstance().getString(LOGINMGR_UID, "");
+        if (!TextUtils.isEmpty(uid)) {
+            return BaseUtil.getLong(uid, 0);
+        }
+        return 0L;
+    }
+
+    /**
+     * 初始化登陆信息
+     */
+    public void initCookie() {
+        long uid = getUid();
+        if (uid == 0) {
+            clearCookie();
+            return;
+        }
+        setLoginInfo(uid, true);
     }
 
     /**

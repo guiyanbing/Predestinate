@@ -12,7 +12,7 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 /**
- * 私密相册/视频adapter
+ * 主页水平私密相册/视频展示adapter
  * Created by Su on 2017/3/27.
  */
 

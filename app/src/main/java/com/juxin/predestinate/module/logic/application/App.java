@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.logic.application;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBModule;
@@ -43,7 +44,7 @@ public class App extends Application {
 
         ModuleMgr.initModule(context);
         initAppComponent();
-
+        ModuleMgr.getLoginMgr().initCookie();
     }
 
     public static Context getActivity() {
@@ -53,7 +54,7 @@ public class App extends Application {
     /**
      * DB初始化
      */
-    private void initAppComponent(){
+    private void initAppComponent() {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .dBModule(new DBModule(App.uid))
@@ -63,4 +64,5 @@ public class App extends Application {
     public static AppComponent getmAppComponent() {
         return mAppComponent;
     }
+
 }

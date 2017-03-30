@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.information;
+package com.juxin.predestinate.ui.user.check.edit;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

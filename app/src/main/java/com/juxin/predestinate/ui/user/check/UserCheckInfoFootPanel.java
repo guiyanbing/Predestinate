@@ -10,6 +10,8 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.FlowLayout;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.check.edit.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.util.ArrayList;
@@ -89,6 +91,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
                     break;
 
                 case R.id.item_secret_photo://私密相册
+                    UIShow.showUserSecretAct(getContext());
                     break;
 
                 case R.id.item_secret_video://私密视频
