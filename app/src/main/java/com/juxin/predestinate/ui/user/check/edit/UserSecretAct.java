@@ -22,7 +22,7 @@ import java.util.List;
  * Created by Su on 2017/3/29.
  */
 
-public class UserSecretAct extends BaseActivity {
+public class UserSecretAct extends BaseActivity implements View.OnClickListener {
     private static final int SECRET_SHOW_COLUMN = 3; // 列数
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
     private UserDetail userDetail;
@@ -43,13 +43,7 @@ public class UserSecretAct extends BaseActivity {
         toDpMutliple = UIUtil.toDpMultiple(this);
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         setBackView();
-        setTitleRight("编辑", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                secretAdapter.setDele(true);
-                secretAdapter.notifyDataSetChanged();
-            }
-        });
+        setTitleRight("编辑", this);
     }
 
     private void initView() {
@@ -71,6 +65,26 @@ public class UserSecretAct extends BaseActivity {
         data.add("8");
         secretAdapter.setList(data);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.base_title_right_txt:
+                secretAdapter.setDele(true);
+
+                List<String> data = new ArrayList<>();
+                data.add("1");
+                data.add("2");
+                data.add("3");
+                data.add("4");
+                data.add("5");
+                data.add("6");
+                data.add("7");
+                data.add("8");
+                secretAdapter.setList(data);
+                break;
+        }
     }
 
     /**
