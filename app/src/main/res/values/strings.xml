@@ -82,6 +82,9 @@
     <string name="user_info_put_sign">请输入个性签名</string>
     <string name="user_info_show_all">已经显示全部</string>
 
+    <string name="goods_diamond_title">钻石充值</string>
+    <string name="goods_diamond_remain">余额</string>
+
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>
     <string name="album_take_pic">拍摄照片</string>
