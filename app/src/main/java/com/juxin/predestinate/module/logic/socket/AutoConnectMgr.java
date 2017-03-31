@@ -3,81 +3,39 @@ package com.juxin.predestinate.module.logic.socket;
 import android.os.DeadObjectException;
 import android.os.RemoteException;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.library.observe.Msg;
-import com.juxin.library.observe.MsgType;
-import com.juxin.library.observe.RxBus;
-import com.juxin.library.utils.NetworkUtils;
-import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.module.logic.config.ServerTime;
-import com.juxin.predestinate.module.util.JniUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
- * 负责即时通讯的重连机制。同时提供对外的操作接口。
+ * 负责即时通讯的重连机制，同时提供对外的操作接口
  *
- * @author JohnsonLi
- * @version 1.0
- * @qq 505214658
- * @date 2015-04-16
+ * @author ZRP
  */
 public class AutoConnectMgr implements SocketCallback {
 
-    private static final String TAG = "AutoConnectMgr";
-
-    private static AutoConnectMgr ourInstance = new AutoConnectMgr();
-
-    public static AutoConnectMgr getInstance() {
-        return ourInstance;
+    private static class SingletonHolder {
+        static AutoConnectMgr instance = new AutoConnectMgr();
     }
 
-    private AutoConnectMgr() {
-        RxBus.getInstance().toFlowable(Msg.class)
-                .onBackpressureBuffer().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Msg>() {
-                    @Override
-                    public void accept(Msg msg) throws Exception {
-                        switch (msg.getKey()) {
-                            case MsgType.MT_Socket_DNS_Parse:
-                                DNSParse();
-                                break;
-                            case MsgType.MT_Socket_Fail_Statistics://发送失败统计
-                                if (failCount == 0) {
-                                    firstFailTime = System.currentTimeMillis();//第一次记时
-                                }
-                                failCount++;
-                                if (System.currentTimeMillis() - firstFailTime > 10 * 60 * 1000) {
-                                    socketConnectFailReport();//如果距第一次记时超过了10min，就发送统计消息
-                                }
-                                break;
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        PLogger.printThrowable(throwable);
-                    }
-                });
+    public static AutoConnectMgr getInstance() {
+        return SingletonHolder.instance;
     }
 
     /**
@@ -108,8 +66,8 @@ public class AutoConnectMgr implements SocketCallback {
      * @param token 登录用的cookie。
      */
     public void login(long uid, String token) {
-        PLogger.d("---socket login--->uid：" + uid + "，token：" + token);
         if (TextUtils.isEmpty(token)) {
+            PLogger.d("---socket login--->token is empty,login return.");
             logout();
             return;
         }
@@ -117,8 +75,8 @@ public class AutoConnectMgr implements SocketCallback {
         this.token = token;
 
         if (heartBeating) return;//如果是保持心跳连接状态，就不再次登录
-        RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));//开始DNS解析
         PLogger.d("login: ------>发送连接服务器的消息");
+        connect();
     }
 
     /**
@@ -159,50 +117,27 @@ public class AutoConnectMgr implements SocketCallback {
         return incrementTime;
     }
 
-    private String hostIP = "sc.app.yuanfenba.net";   //socket域名解析之后的IP地址
-    private String port = "8823";     //socket端口
-
-    /**
-     * 进行域名解析
-     */
-    private void DNSParse() {
-        if (TextUtils.isEmpty(hostIP) || TextUtils.isEmpty(port)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        String online_server = "";//TODO
-                        PLogger.d("---DNSParse--->logic_server：" + online_server);
-                        if (TextUtils.isEmpty(online_server)) return;
-
-                        String[] split = online_server.split(":");
-                        InetAddress inetAddress = InetAddress.getByName(split[0]);
-                        hostIP = inetAddress.getHostAddress();
-                        port = split[1];
-                        PLogger.d("---DNSParse--->DNS解析成功：host->" + hostIP + "，port->" + port);
-                        connect();
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                        RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
-                    }
-                }
-            }).start();
-        } else {
-            connect();
-        }
-    }
-
     /**
      * 以获取到的地址和秘钥登录及时通讯服务器
      */
     private void connect() {
-        if (TextUtils.isEmpty(hostIP) || TextUtils.isEmpty(port) || heartBeating) return;
-
         simpleSocket = new SimpleSocket();
-        simpleSocket.setRemoteAddress(hostIP, Integer.parseInt(port));
+        simpleSocket.setRemoteAddress(TCPConstant.HOST, TCPConstant.PORT);
         simpleSocket.setCallback(this);
         simpleSocket.connect();
-        PLogger.d("connect: ------>socket开始连接，hostIP：" + hostIP);
+        PLogger.d("connect: ------>socket开始连接，hostIP：" + TCPConstant.HOST + ":" + TCPConstant.PORT);
+    }
+
+    /**
+     * 重连，每次重连进行延时，防止刷服务器
+     */
+    private void reConnect() {
+        Observable.timer(getIncrementTime(), TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                connect();
+            }
+        });
     }
 
     private boolean heartBeating = false;   //是否需要发送心跳：长连接断线状态为false
@@ -229,8 +164,8 @@ public class AutoConnectMgr implements SocketCallback {
                 heartbeatSend = 0;
                 heartbeatResend = 0;
 
-                onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "IM 心跳回送失败，socket重新进行连接");
-                RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
+                onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "心跳回送失败，socket重新进行连接");
+                connect();
             } else {
                 simpleSocket.send(getRevertHeartbeat().getBytes());
             }
@@ -270,17 +205,14 @@ public class AutoConnectMgr implements SocketCallback {
             heartbeatResend = 0;
         }
         heartbeatSend++;//叠加心跳发送次数
-        return getHeartbeat(Constant.MSG_ID_Heartbeat_Reply);
+        return getHeartbeat(TCPConstant.MSG_ID_Heartbeat_Reply);
     }
 
     @Override
     public void onConnected(SimpleSocket id) {
         if (id != simpleSocket) return;
-
-        //与聊天服务器连接成功之后，同时发送一条心跳消息与登录验证消息
-        simpleSocket.send(getHeartbeat(Constant.MSG_ID_Heartbeat).getBytes());
         simpleSocket.send(getLoginData().getBytes());
-        onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "IM 连接服务器成功");
+        onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
     }
 
     /**
@@ -291,14 +223,13 @@ public class AutoConnectMgr implements SocketCallback {
     private NetData getLoginData() {
         long curTime = ServerTime.getServerTime().getTimeInMillis() / 1000;
         // 注意：md字段md5加密字符串为string的拼接
-        String md = MD5.encode(String.valueOf(uid) + String.valueOf(curTime) + MD5.encode(token)).toUpperCase();
+        String md = MD5.encode(String.valueOf(uid) + String.valueOf(curTime) + token).toUpperCase();
         Map<String, Object> loginMap = new HashMap<>();
         loginMap.put("fid", uid);
         loginMap.put("mt", curTime);
         loginMap.put("md", md);
-        loginMap.put("ms", Constant.MS);
-        loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
-        NetData data = new NetData(uid, Constant.MSG_ID_Login, gson.toJson(loginMap));
+        loginMap.put("xt", 0);//0为安卓,3为IOS,其他则不包含此字段
+        NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
         return data;
     }
@@ -309,17 +240,15 @@ public class AutoConnectMgr implements SocketCallback {
         if (header == null || buffer == null || length < 0) return;
 
         String content = "";
-
-        if (length > 0) content = JniUtil.GetDecryptString(new String(buffer, 0, length));
+        if (length > 0) content = new String(buffer, 0, length);
         PLogger.d("---socket消息头：" + header.toString() + "\n---socket消息体：" + content);
 
-        if (header.type == Constant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
-            //TODO 根据mct字段的错误描述进行dialog提示，如果无此字段，直接跳转到登录页面。服务器暂无此实现
+        if (header.type == TCPConstant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
             accountInvalid(1);
             return;
         }
 
-        if (header.type == Constant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
+        if (header.type == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
             heartbeatResend++;
         }
 
@@ -336,18 +265,30 @@ public class AutoConnectMgr implements SocketCallback {
                         heartBeating = true;
                         loopHeartbeatStatus();
                         incrementTime = 0;
-                        onStatusChange(TCPConstant.SOCKET_STATUS_Login_Success, "IM 登录成功：" + content);
+                        onStatusChange(TCPConstant.SOCKET_STATUS_Login_Success, "socket用户登录成功：" + content);
                     } else {//登录失败，默认为与服务器断开连接，重新连接
-                        onStatusChange(TCPConstant.SOCKET_STATUS_Login_Fail, "IM 登录失败：" + content);
+                        onStatusChange(TCPConstant.SOCKET_STATUS_Login_Fail, "socket用户登录失败：" + content);
                         switch (s) {
-                            case -1:// 登录错误(密码错误之类)，跳转到登录页面
-                                PLogger.d("socket登录错误---->" + contentObject.optString("c"));
+                            case -1://json解析错误
+                                PLogger.d("socket登录---->json解析错误");
+                                break;
+                            case -2://时间戳不对,需要读取返回的mt 字段来重新登录
+                                PLogger.d("socket登录---->时间戳不对");
+                                reConnect();
+                                break;
+                            case -3://密码验证失败
+                                PLogger.d("socket登录---->密码验证失败");
+                                PToast.showLong("密码验证失败，请重新登录");
                                 accountInvalid(2);
                                 break;
-                            case -2://时间戳不对，需要读取返回的mt字段来重新登录
-                                PLogger.d("socket登录错误---->时间戳不对");
-                                RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
-//                                socketHandler.sendEmptyMessageDelayed(SH_MSG_DNSParse, getIncrementTime());
+                            case -4://用户已封号
+                                PLogger.d("socket登录---->用户已封号");
+                                PToast.showLong("您因特殊原因已被系统封号，如有疑问，请联系客服");
+                                accountInvalid(2);
+                                break;
+                            case -5://用户不存在
+                                PLogger.d("socket登录---->用户不存在");
+                                accountInvalid(2);
                                 break;
                         }
                     }
@@ -406,22 +347,6 @@ public class AutoConnectMgr implements SocketCallback {
         }
     }
 
-    /* -------------socket重连失败统计start----------- */
-    private int failCount = 0;//重连失败次数统计
-    private long firstFailTime = 0;//首次重连失败的时间
-
-    /**
-     * socket重连失败统计
-     */
-    private void socketConnectFailReport() {
-        if (failCount >= 3) {//重连失败三次以上，发送统计消息
-            PLogger.d("------>socket三次重连失败，发送失败统计");
-            onFeedback(-1, -1);
-            failCount = 0;//消息回馈之后，不管成功失败，直接重置
-        }
-    }
-
-    /* -------------socket重连失败统计end------------- */
     @Override
     public void onDisconnect(SimpleSocket id, int type) {
         if (id != simpleSocket) return;
@@ -447,12 +372,8 @@ public class AutoConnectMgr implements SocketCallback {
         heartbeatSend = 0;
         heartbeatResend = 0;
 
-        onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "IM 断开服务器连接");
-        if (NetworkUtils.isConnected(App.context)) {//网络可用情况下才立即发送重连
-            RxBus.getInstance().post(new Msg(MsgType.MT_Socket_DNS_Parse, null));
-//            socketHandler.sendEmptyMessageDelayed(SH_MSG_DNSParse, getIncrementTime());
-            RxBus.getInstance().post(new Msg(MsgType.MT_Socket_Fail_Statistics, null));
-        }
+        onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "socket断开服务器连接");
+        reConnect();
     }
 
     /**
@@ -465,31 +386,12 @@ public class AutoConnectMgr implements SocketCallback {
      * @param contents 消息内容，一个json格式的String。
      */
     private void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents) {
-        Log.d(TAG, "onMessage:---->msgId:" + msgId + ",sender:" + sender + ",content:" + contents);
+        PLogger.d("onMessage:---->msgId:" + msgId + ",sender:" + sender + ",content:" + contents);
         try {
             if (iCSCallback != null) {
                 iCSCallback.onMessage(msgId, group, groupId, sender, contents);
             }
         } catch (DeadObjectException de) {//如果服务挂了，就缓存当前消息，并重启ChatService
-//            CoreService.startChatService(App.context);
-            PLogger.d("---AutoConnectMgr--->DeadObjectException");
-        } catch (RemoteException e) {
-            PLogger.d("---AutoConnectMgr--->RemoteException");
-        }
-    }
-
-    /**
-     * 将即时通讯中的消息反馈动作抛出
-     *
-     * @param msgId   消息Id。
-     * @param msgType 消息类型
-     */
-    private void onFeedback(long msgId, int msgType) {
-        try {
-            if (iCSCallback != null) {
-                iCSCallback.onFeedback(msgId, msgType, hostIP);
-            }
-        } catch (DeadObjectException de) {//如果服务挂了，就重启ChatService
 //            CoreService.startChatService(App.context);
             PLogger.d("---AutoConnectMgr--->DeadObjectException");
         } catch (RemoteException e) {
