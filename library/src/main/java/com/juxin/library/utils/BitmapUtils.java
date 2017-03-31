@@ -41,6 +41,52 @@ public final class BitmapUtils {
     private BitmapUtils() {
     }
 
+
+    /**
+     * 得到压缩后的Bitmap，主要用于Activity中设置大图背景
+     */
+    public static Bitmap getDecodeBitmap(Context context, int resID, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(context.getResources(), resID, options);
+
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+        options.inJustDecodeBounds = false;
+
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID, options);
+        return bitmap;
+    }
+
+    /**
+     * 计算InSampleSize
+     * 宽的压缩比和高的压缩比的较小值  取接近的2的次幂的值
+     * 比如宽的压缩比是3 高的压缩比是5 取较小值3  而InSampleSize必须是2的次幂，取接近的2的次幂4
+     */
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int heightRatio = Math.round((float) height
+                    / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            int ratio = heightRatio < widthRatio ? heightRatio : widthRatio;
+            // inSampleSize只能是2的次幂  将ratio就近取2的次幂的值
+            if (ratio < 3)
+                inSampleSize = ratio;
+            else if (ratio < 6.5)
+                inSampleSize = 4;
+            else if (ratio < 8)
+                inSampleSize = 8;
+            else
+                inSampleSize = ratio;
+        }
+        return inSampleSize;
+    }
+
     /**
      * 旋转图片
      *

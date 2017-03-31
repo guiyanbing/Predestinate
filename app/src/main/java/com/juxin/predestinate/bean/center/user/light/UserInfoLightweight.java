@@ -3,6 +3,7 @@ package com.juxin.predestinate.bean.center.user.light;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 
 import org.json.JSONObject;
 
@@ -38,6 +39,11 @@ public class UserInfoLightweight extends UserBasic {
 //        "status": "ok",
 //            "tm": 1481856586
 //    }
+
+    public void parseUserInfoLightweight(UserDetail userInfo) {
+        if (userInfo == null)
+            return;
+    }
 
     /**
      * 新版本，新接口解析

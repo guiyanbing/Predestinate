@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -234,26 +233,34 @@ public class UIUtil {
     }
 
     /**
-     * 得到压缩后的Bitmap，主要用于Activity中设置大图背景
-     */
-    public static Bitmap getDecodeBitmap(int resID, int width, int height) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(App.activity.getResources(), resID, options);
-
-        options.inSampleSize = PhotoUtils.calculateInSampleSize(options, width, height);
-        options.inJustDecodeBounds = false;
-
-        Bitmap bitmap = BitmapFactory.decodeResource(App.activity.getResources(), resID, options);
-        return bitmap;
-    }
-
-    /**
      * edittext光标定位到文字后
      */
     public static void endCursor(EditText editText) {
         editText.requestFocus();
         Editable etext = editText.getText();
         Selection.setSelection(etext, etext.length());
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)。
+     *
+     * @param dpValue
+     * @return
+     */
+    public static int dp2px(float dpValue) {
+        final float density = getDensity();
+        return Math.round(dpValue * density);
+
+    }
+
+    /**
+     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp。
+     *
+     * @param pxValue
+     * @return
+     */
+    public static int px2dp(float pxValue) {
+        final float density = getDensity();
+        return Math.round(pxValue / density);
     }
 }

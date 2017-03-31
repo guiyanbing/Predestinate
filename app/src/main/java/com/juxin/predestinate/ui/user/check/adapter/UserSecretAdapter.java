@@ -4,10 +4,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.others.SecretMedia;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
@@ -27,14 +25,22 @@ public class UserSecretAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-        SecretMedia data = (SecretMedia) getItem(position);
+//        SecretMedia data = (SecretMedia) getItem(position);
+        final String data = (String) getItem(position);
 
         ImageView img_media = viewHolder.findViewById(R.id.img_secret);
         TextView tv_publishTime = viewHolder.findViewById(R.id.publish_time);
         ImageView btn_delete = viewHolder.findViewById(R.id.btn_delete);
 
         btn_delete.setVisibility(isDele ? View.VISIBLE : View.GONE);
-        ImageLoader.loadCenterCrop(App.context, data.getCoverUrl(), img_media);
+//        ImageLoader.loadCenterCrop(App.context, data.getCoverUrl(), img_media);
+
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PToast.showShort(data);
+            }
+        });
     }
 
     @Override

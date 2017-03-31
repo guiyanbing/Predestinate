@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/smile_item"
+        android:layout_width="@dimen/px180_dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/smile_package_ico"
+            android:layout_width="@dimen/px110_dp"
+            android:layout_height="@dimen/px110_dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/default_head" />
+
+        <TextView
+            android:id="@+id/smile_package_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px10_dp"
+            android:text="打招呼"
+            android:textSize="@dimen/px30_sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/color_dddddd" />
+</RelativeLayout>

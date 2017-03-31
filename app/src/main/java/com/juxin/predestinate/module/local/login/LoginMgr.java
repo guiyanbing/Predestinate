@@ -44,7 +44,6 @@ public class LoginMgr implements ModuleBase {
     private final static String LOGINMGR_AUTH = "loginmgr_auth";                // 保存当前登录用户cookie
     public boolean IF_PW_RESET = false;                       // 密码已是否重置
     public static String cookie = null;
-    public static boolean hasLogin = false;//是否已经登录
 
     @Override
     public void init() {

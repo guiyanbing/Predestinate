@@ -402,6 +402,104 @@
         <item name="android:singleLine">true</item>
         <item name="android:text">小云</item>
     </style>
+
+    <!-- ============== 聊天 ==================-->
+    <style name="chat_item_time">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/px32_dp</item>
+        <item name="android:background">@drawable/bg_circular_gray_d4d4d4</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/px36_sp</item>
+        <item name="android:paddingLeft">@dimen/px25_dp</item>
+        <item name="android:paddingRight">@dimen/px25_dp</item>
+        <item name="android:paddingTop">@dimen/px9_dp</item>
+        <item name="android:paddingBottom">@dimen/px6_dp</item>
+    </style>
+
+    <style name="chat_item_name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_zhuyao_black</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+        <item name="android:layout_marginBottom">@dimen/px6_dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="chat_item_content_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="chat_item_content">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="chat_item_content_left" parent="chat_item_content">
+        <item name="android:background">@drawable/y1_talk_box_24x24</item>
+    </style>
+
+    <style name="chat_item_content_right" parent="chat_item_content">
+        <item name="android:background">@drawable/y1_talk_box_24x24_me</item>
+    </style>
+
+    <style name="chat_item_status">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/text_ciyao_gray</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">@dimen/px30_sp</item>
+    </style>
+
+    <style name="chat_item_status_img">
+        <item name="android:layout_width">@dimen/px25_dp</item>
+        <item name="android:layout_height">@dimen/px25_dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/bg_round_red</item>
+    </style>
+
+    <style name="chat_input_btn">
+        <item name="android:layout_width">@dimen/px84_dp</item>
+        <item name="android:layout_height">@dimen/px84_dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    <style name="chat_input_text_edit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/title_footer_height</item>
+        <item name="android:maxHeight">@dimen/px240_dp</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:background">@null</item>
+        <item name="android:textColorHint">@color/tip_light_gray</item>
+        <item name="android:textColor">@color/text_zhuyao_black</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+        <item name="android:padding">@dimen/px25_dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="chat_item_head">
+        <item name="android:layout_width">@dimen/px120_dp</item>
+        <item name="android:layout_height">@dimen/px120_dp</item>
+        <item name="android:src">@drawable/ic_launcher</item>
+    </style>
+
+    <style name="chat_item_custom_simple_text" parent="chat_item_time">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- 轮播指示点 -->
+    <style name="pointsview_point">
+        <item name="android:layout_width">@dimen/px20_dp</item>
+        <item name="android:layout_height">@dimen/px20_dp</item>
+        <item name="android:layout_margin">@dimen/px10_dp</item>
+        <item name="android:background">@drawable/bg_slide_point</item>
+    </style>
+
     <!--Activity弹出框样式-->
     <style name="No_Background">
         <item name="android:windowFrame">@null</item>
