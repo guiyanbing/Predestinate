@@ -72,6 +72,8 @@
     <string name="user_self_info_age">年龄</string>
     <string name="user_self_info_addr">地区</string>
     <string name="user_self_info_sign">个性签名</string>
+    <string name="user_self_secret_edit">编辑</string>
+    <string name="user_self_secret_cancel">取消</string>
     <string name="user_info_save">保存</string>
     <string name="user_info_edit_name">昵称修改</string>
     <string name="user_info_edit_sign">个性签名</string>

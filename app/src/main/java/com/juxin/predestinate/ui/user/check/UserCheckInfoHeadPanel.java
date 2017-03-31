@@ -38,7 +38,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
 
     private void initView() {
         LinearLayout layout = (LinearLayout) findViewById(R.id.check_header);
-        Bitmap bitmap = UIUtil.getDecodeBitmap(R.drawable.p1_theme_bg, 320, 480);
+        Bitmap bitmap = UIUtil.getDecodeBitmap(R.drawable.p1_theme_bg, 320, 240);
         UIUtil.setBackground(layout, new BitmapDrawable(null, bitmap));
 
         img_header = (ImageView) findViewById(R.id.img_header);
@@ -50,8 +50,6 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
         user_addr = (TextView) findViewById(R.id.user_addr);
         user_status = (TextView) findViewById(R.id.user_status);
         user_distance = (TextView) findViewById(R.id.user_distance);
-
-
     }
 
     private void initData() {

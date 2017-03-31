@@ -29,6 +29,7 @@ public class UserSecretAct extends BaseActivity implements View.OnClickListener 
 
     private RecyclerView recyclerView;
     private UserSecretAdapter secretAdapter;
+    private static boolean isFirst = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class UserSecretAct extends BaseActivity implements View.OnClickListener 
         toDpMutliple = UIUtil.toDpMultiple(this);
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         setBackView();
-        setTitleRight("编辑", this);
+        setTitleRight(getString(R.string.user_self_secret_edit), this);
     }
 
     private void initView() {
@@ -71,18 +72,16 @@ public class UserSecretAct extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.base_title_right_txt:
-                secretAdapter.setDele(true);
-
-                List<String> data = new ArrayList<>();
-                data.add("1");
-                data.add("2");
-                data.add("3");
-                data.add("4");
-                data.add("5");
-                data.add("6");
-                data.add("7");
-                data.add("8");
-                secretAdapter.setList(data);
+                if (isFirst) {
+                    isFirst = false;
+                    setTitleRight(getString(R.string.user_self_secret_cancel), this);
+                    secretAdapter.setDele(true);
+                }else {
+                    isFirst = true;
+                    setTitleRight(getString(R.string.user_self_secret_edit), this);
+                    secretAdapter.setDele(false);
+                }
+                secretAdapter.notifyDataSetChanged();
                 break;
         }
     }
