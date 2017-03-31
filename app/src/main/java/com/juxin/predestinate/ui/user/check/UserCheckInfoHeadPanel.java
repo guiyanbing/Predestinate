@@ -1,14 +1,18 @@
 package com.juxin.predestinate.ui.user.check;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.UIUtil;
 
 /**
  * 查看用户资料头部panel
@@ -33,6 +37,10 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
     }
 
     private void initView() {
+        LinearLayout layout = (LinearLayout) findViewById(R.id.check_header);
+        Bitmap bitmap = UIUtil.getDecodeBitmap(R.drawable.p1_theme_bg, 320, 240);
+        UIUtil.setBackground(layout, new BitmapDrawable(null, bitmap));
+
         img_header = (ImageView) findViewById(R.id.img_header);
         img_vip = (ImageView) findViewById(R.id.img_vip);
         user_alias = (TextView) findViewById(R.id.user_alias);

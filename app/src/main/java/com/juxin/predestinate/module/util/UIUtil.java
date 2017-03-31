@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -230,6 +231,21 @@ public class UIUtil {
         } else {
             v.setBackgroundDrawable(background);
         }
+    }
+
+    /**
+     * 得到压缩后的Bitmap，主要用于Activity中设置大图背景
+     */
+    public static Bitmap getDecodeBitmap(int resID, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(App.activity.getResources(), resID, options);
+
+        options.inSampleSize = PhotoUtils.calculateInSampleSize(options, width, height);
+        options.inJustDecodeBounds = false;
+
+        Bitmap bitmap = BitmapFactory.decodeResource(App.activity.getResources(), resID, options);
+        return bitmap;
     }
 
     /**

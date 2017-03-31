@@ -22,13 +22,14 @@ import java.util.List;
  * Created by Su on 2017/3/29.
  */
 
-public class UserSecretAct extends BaseActivity {
+public class UserSecretAct extends BaseActivity implements View.OnClickListener {
     private static final int SECRET_SHOW_COLUMN = 3; // 列数
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
     private UserDetail userDetail;
 
     private RecyclerView recyclerView;
     private UserSecretAdapter secretAdapter;
+    private static boolean isFirst = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,13 +44,7 @@ public class UserSecretAct extends BaseActivity {
         toDpMutliple = UIUtil.toDpMultiple(this);
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         setBackView();
-        setTitleRight("编辑", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                secretAdapter.setDele(true);
-                secretAdapter.notifyDataSetChanged();
-            }
-        });
+        setTitleRight(getString(R.string.user_self_secret_edit), this);
     }
 
     private void initView() {
@@ -71,6 +66,24 @@ public class UserSecretAct extends BaseActivity {
         data.add("8");
         secretAdapter.setList(data);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.base_title_right_txt:
+                if (isFirst) {
+                    isFirst = false;
+                    setTitleRight(getString(R.string.user_self_secret_cancel), this);
+                    secretAdapter.setDele(true);
+                }else {
+                    isFirst = true;
+                    setTitleRight(getString(R.string.user_self_secret_edit), this);
+                    secretAdapter.setDele(false);
+                }
+                secretAdapter.notifyDataSetChanged();
+                break;
+        }
     }
 
     /**
