@@ -191,7 +191,7 @@ public class DBCenterFmessage {
                         CursorUtil.getLong(cursor, Fmessage.COLUMN_SENDID),
                         CursorUtil.getLong(cursor, Fmessage.COLUMN_MSGID),
                         CursorUtil.getLong(cursor, Fmessage.COLUMN_CMSGID),
-                        CursorUtil.getString(cursor, Fmessage.COLUMN_TYPE),
+                        CursorUtil.getInt(cursor, Fmessage.COLUMN_TYPE),
                         CursorUtil.getInt(cursor, Fmessage.COLUMN_STATUS),
                         CursorUtil.getInt(cursor, Fmessage.COLUMN_FSTATUS),
                         CursorUtil.getLong(cursor, Fmessage.COLUMN_TIME),

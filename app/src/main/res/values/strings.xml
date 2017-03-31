@@ -82,6 +82,9 @@
     <string name="user_info_put_sign">请输入个性签名</string>
     <string name="user_info_show_all">已经显示全部</string>
 
+    <string name="goods_diamond_title">钻石充值</string>
+    <string name="goods_diamond_remain">余额</string>
+
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>
     <string name="album_take_pic">拍摄照片</string>
@@ -111,4 +114,19 @@
     <!--activity标题-->
     <string name="title_loginact">登录</string>
     <string name="title_findpwdact">找回密码</string>
+
+
+    <!-- xList 后期可能删掉，不要用-->
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载...</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="xlistview_header_hint_normal_a">下拉刷新</string>
+    <string name="xlistview_header_hint_loading_a">正在刷新数据...</string>
+    <string name="xlistview_header_hint_loading_male">正在锁定妹子...</string>
+    <string name="xlistview_header_hint_loading_female">正在锁定帅哥...</string>
+    <string name="chat_move_up_to_cancel">手指上滑 取消发送</string>
+    <string name="chat_release_to_cancel">松开手指 取消发送</string>
 </resources>

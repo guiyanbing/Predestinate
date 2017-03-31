@@ -95,6 +95,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.user.paygoods.GoodsDiamondAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
         <!-- ============= 相机相册模块start ============= -->
         <activity
             android:name=".module.local.album.activity.TransferActivity"

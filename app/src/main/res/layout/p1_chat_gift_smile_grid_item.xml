@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/px270_dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/list_item_selector"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/chat_gift"
+            android:layout_width="@dimen/px270_dp"
+            android:layout_height="@dimen/px270_dp"
+            android:scaleType="centerInside" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px15_dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/mask_view"
+                android:layout_width="@dimen/px35_dp"
+                android:layout_height="@dimen/px35_dp"
+                android:layout_marginRight="@dimen/px15_dp"
+                android:src="@drawable/v3_user_ico7" />
+
+            <TextView
+                android:id="@+id/chat_gift_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="礼物"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/px30_sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/chat_gift_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px10_dp"
+            android:text="100钻"
+            android:textColor="@color/color_aaaaaa"
+            android:textSize="@dimen/px30_sp" />
+
+        <TextView
+            android:id="@+id/chat_gift_info"
+            android:layout_width="@dimen/px156_dp"
+            android:layout_height="@dimen/px45_dp"
+            android:layout_marginTop="@dimen/px10_dp"
+            android:background="@drawable/expression_gift_describe"
+            android:gravity="center"
+            android:text="有好感"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px30_sp" />
+    </LinearLayout>
+
+</LinearLayout>
