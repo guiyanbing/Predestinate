@@ -36,7 +36,7 @@ public class NetData implements Parcelable {
             this.length = 0;
             this.content = content;
         } else {
-            this.content = JniUtil.GetEncryptString(content);
+//            this.content = JniUtil.GetEncryptString(content);
             try {
                 this.length = this.content.getBytes("UTF-8").length;
             } catch (UnsupportedEncodingException e) {

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/p1_pay_bg"
+    android:padding="@dimen/px15_dp">
+
+    <ImageView
+        android:id="@+id/iv_choose_state"
+        android:layout_width="@dimen/px50_dp"
+        android:layout_height="@dimen/px50_dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/p1_choose_btn" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/px35_dp">
+
+        <TextView
+            android:id="@+id/tv_goods"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goods_pay_alipay"
+            android:textColor="@color/text_zhuyao_black"
+            android:textSize="@dimen/px43_sp" />
+
+        <!--活动-->
+        <TextView
+            android:id="@+id/tv_offers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goods_pay_alipay"
+            android:textColor="@color/p1_pay_text_color"
+            android:textSize="@dimen/px43_sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_money"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:paddingRight="@dimen/px35_dp"
+        android:text="200￥"
+        android:textColor="@color/p1_pay_text_color"
+        android:textSize="@dimen/px43_sp" />
+
+</RelativeLayout>

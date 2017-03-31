@@ -109,19 +109,9 @@ public class MsgType {
     // -----------------------------socket相关 start---------------------------------
 
     /**
-     * socket开始解析DNS
-     */
-    public static final String MT_Socket_DNS_Parse = "MT_Socket_DNS_Parse";
-
-    /**
      * socket开始连接
      */
     public static final String MT_Socket_Start_Connect = "MT_Socket_Start_Connect";
-
-    /**
-     * socket重连失败统计
-     */
-    public static final String MT_Socket_Fail_Statistics = "MT_Socket_Fail_Statistics";
 
     /**
      * socket消息写入

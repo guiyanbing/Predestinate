@@ -6,7 +6,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.ExTimerUtil;
 
 /**
@@ -24,7 +23,7 @@ public class CoreService extends Service {
 
         Intent intent = new Intent(this, CoreService.class);
         intent.putExtra("timer", "60");
-        ExTimerUtil.startRepeatTimer(this, intent, Constant.Heartbeat_Time);//每隔60s发送一次心跳消息
+        ExTimerUtil.startRepeatTimer(this, intent, TCPConstant.Heartbeat_Time);//每隔60s发送一次心跳消息
     }
 
     @Nullable

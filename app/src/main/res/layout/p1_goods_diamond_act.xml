@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -35,6 +36,18 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="@dimen/px40_dp"
+        android:text="@string/goods_diamond_type"
+        android:background="@color/white"
+        android:textColor="@color/text_ciyao_gray" />
+
+    <LinearLayout
+        android:id="@+id/pay_type_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
+    <include layout="@layout/p1_goods_of_payment" />
 
 </LinearLayout>
