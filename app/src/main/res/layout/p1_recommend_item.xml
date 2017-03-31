@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -9,11 +11,16 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/px30_dp">
 
-        <ImageView
+        <com.juxin.library.view.CircularCoverView
             android:id="@+id/iv_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
+            android:layout_width="@dimen/px130_dp"
+            android:layout_height="@dimen/px130_dp"
+            android:background="@drawable/ic_launcher"
+            app:cover_color="@color/white"
+            app:left_bottom_radius="@dimen/px15_dp"
+            app:left_top_radius="@dimen/px15_dp"
+            app:right_bottom_radius="@dimen/px15_dp"
+            app:right_top_radius="@dimen/px15_dp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -31,6 +38,7 @@
                     style="@style/txt_item_nickname" />
 
                 <ImageView
+                    android:id="@+id/iv_identity"
                     android:layout_width="@dimen/px50_dp"
                     android:layout_height="@dimen/px50_dp"
                     android:layout_alignTop="@+id/tv_online_time"
@@ -61,6 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_introduction"
+                android:maxEms="3"
+                android:maxLines="1"
                 android:text="这家伙很懒，什么也没写"
                 android:textColor="@color/txt_item_sign" />
         </RelativeLayout>

@@ -2,6 +2,9 @@ package com.juxin.predestinate.ui.recommend;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.predestinate.R;
@@ -19,7 +22,7 @@ import java.util.List;
 public class RecommendAct extends BaseActivity {
 
     CustomRecyclerView customRecyclerView;
-    XRecyclerView xRecyclerView;
+    XRecyclerView recyclerView;
     RecommendAdapter recommendAdapter;
 
     @Override
@@ -31,14 +34,20 @@ public class RecommendAct extends BaseActivity {
     }
 
     private void initView() {
-//        customRecyclerView = (CustomRecyclerView) findViewById(R.id.cv_common);
-//        xRecyclerView = customRecyclerView.getXRecyclerView();
-//        List<String> list = new ArrayList<>();
-//        list.add("小明");
-//        list.add("晓云");
-//        list.add("佐助");
-//        recommendAdapter = new RecommendAdapter(this,list);
-//        xRecyclerView.setAdapter(recommendAdapter);
-//        customRecyclerView.showXrecyclerView();
+        customRecyclerView = (CustomRecyclerView) findViewById(R.id.cv_common);
+        recyclerView = customRecyclerView.getXRecyclerView();
+        List<String> list = new ArrayList<>();
+        list.add("小明");
+        list.add("晓云");
+        list.add("佐助");
+        recommendAdapter = new RecommendAdapter(this, list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(recommendAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_recommend_item_space));
+        customRecyclerView.showXrecyclerView();
     }
 }
