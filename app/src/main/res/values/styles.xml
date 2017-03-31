@@ -402,4 +402,32 @@
         <item name="android:singleLine">true</item>
         <item name="android:text">小云</item>
     </style>
+    <!--Activity弹出框样式-->
+    <style name="No_Background">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="button_rank_gift_dialog" parent="button_middle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/px120_dp</item>
+        <item name="android:paddingTop">@dimen/px30_dp</item>
+        <item name="android:paddingRight">@dimen/px120_dp</item>
+        <item name="android:paddingBottom">@dimen/px30_dp</item>
+        <item name="android:background">@drawable/p1_red_packet_bg</item>
+        <item name="android:textColor">@color/text_zhuyao_black</item>
+        <item name="android:textSize">@dimen/px39_sp</item>
+    </style>
 </resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/px150_dp"
+        android:layout_marginRight="@dimen/px150_dp"
+        android:background="@drawable/p1_redpacket_bg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px386_dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/px30_dp"
+                android:src="@drawable/y2_tc_title" />
+
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="@dimen/px60_dp"
+                android:layout_height="@dimen/px60_dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/px30_dp"
+                android:src="@drawable/y2_close_hd" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/rank_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="恭喜你昨日在财富榜排名第4名"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px39_sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:text="获得以下礼品"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px39_sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/px40_dp"
+            android:layout_marginTop="@dimen/px40_dp">
+
+            <ImageView
+                android:layout_width="@dimen/px300_dp"
+                android:layout_height="@dimen/px300_dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/y2_gz_img" />
+
+            <com.xiaoyou.friends.module.baseui.CircleImageView
+                android:id="@+id/gift_icon"
+                android:layout_width="@dimen/px200_dp"
+                android:layout_height="@dimen/px200_dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_launcher" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/confirm"
+            android:layout_marginBottom="@dimen/px90_dp"
+            style="@style/button_rank_gift_dialog"
+            android:text="查看领取" />
+    </LinearLayout>
+</LinearLayout>

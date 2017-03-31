@@ -105,5 +105,16 @@
 
     <!--activity标题-->
     <string name="title_loginact">登录</string>
-    <string name="title_findpwdact">找回密码</string>
+    <string name="title_findpwdact">找回密码</string>label
+    <!--activity标题-->
+    <string name="label">标签互动</string>
+    <string name="intimacy">最近亲密度</string>
+    <string name="intimacy_level">标签名字</string>
+    <string name="intimate_num">标签成员（0）</string>
+    <string name="athentication">我的认证</string>
+    <string name="contact">选择联系人</string>
+    <string name="tab_group">标签分组</string>
+    <string name="interaction">最近互动</string>
+    <string name="search_tip">会员昵称/会员ID</string>
+    <string name="good_friend">亲密好友</string>
 </resources>

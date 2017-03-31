@@ -26,6 +26,7 @@ public class ClearEditText extends EditText implements OnFocusChangeListener, Te
      * 控件是否有焦点
      */
     private boolean hasFoucs;
+    InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
     public ClearEditText(Context context) {
         this(context, null);
@@ -66,7 +67,7 @@ public class ClearEditText extends EditText implements OnFocusChangeListener, Te
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
             if (getCompoundDrawables()[2] != null) {
 
                 boolean touchable = event.getX() > (getWidth() - getTotalPaddingRight()) && (event.getX() < ((getWidth() - getPaddingRight())));
@@ -178,6 +179,17 @@ public class ClearEditText extends EditText implements OnFocusChangeListener, Te
                 imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
             }
             listener.onSearchClick(v);
+        }
+        return false;
+    }
+
+    private boolean hideKeyboard(){
+        if(inputMethodManager.isActive(this)){
+            //因为是在fragment下，所以用了getView()获取view，也可以用findViewById（）来获取父控件
+//            this.requestFocus();//强制获取焦点，不然getActivity().getCurrentFocus().getWindowToken()会报错
+//            inputMethodManager.hideSoftInputFromWindow(()getContext().getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//            inputMethodManager.restartInput(this);
+            return true;
         }
         return false;
     }
