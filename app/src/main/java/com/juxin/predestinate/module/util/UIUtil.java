@@ -240,4 +240,27 @@ public class UIUtil {
         Editable etext = editText.getText();
         Selection.setSelection(etext, etext.length());
     }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)。
+     *
+     * @param dpValue
+     * @return
+     */
+    public static int dp2px(float dpValue) {
+        final float density = getDensity();
+        return Math.round(dpValue * density);
+
+    }
+
+    /**
+     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp。
+     *
+     * @param pxValue
+     * @return
+     */
+    public static int px2dp(float pxValue) {
+        final float density = getDensity();
+        return Math.round(pxValue / density);
+    }
 }
