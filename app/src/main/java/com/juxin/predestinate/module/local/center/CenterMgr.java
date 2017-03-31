@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
@@ -16,6 +17,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,8 @@ import java.util.HashMap;
  * 个人中心管理类
  */
 public class CenterMgr implements ModuleBase, PObserver {
-    private static final String INFO_SAVE_KEY = "myInfo"; // 本地化个人资料key
+
+    private static final String INFO_SAVE_KEY = "INFO_SAVE_KEY"; // 本地化个人资料key
     private UserDetail userDetail = null;
 
     @Override
@@ -42,11 +45,23 @@ public class CenterMgr implements ModuleBase, PObserver {
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_App_Login:
+                IMProxy.getInstance().connect();//登录成功之后连接socket
+
+                // 请求个人资料
                 if ((Boolean) value) {
                     reqMyInfo();
                 } else {
                     userDetail = null;
                     setMyInfo(null);
+                }
+                break;
+            case MsgType.MT_App_CoreService:// socket已连接，登录
+                long uid = ModuleMgr.getLoginMgr().getUid();
+                String auth = ModuleMgr.getLoginMgr().getAuth();
+                if (uid == 0 || TextUtils.isEmpty(auth)) {
+                    PLogger.d("---CenterMgr--->MT_App_CoreService：auth is empty.");
+                } else {
+                    IMProxy.getInstance().login(uid, auth);
                 }
                 break;
         }

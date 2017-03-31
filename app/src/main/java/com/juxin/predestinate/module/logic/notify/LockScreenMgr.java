@@ -10,7 +10,6 @@ import android.view.View;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -49,7 +48,7 @@ public class LockScreenMgr {
             App.context.registerReceiver(receiver, filter);
             reg = true;
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -60,7 +59,7 @@ public class LockScreenMgr {
             App.context.unregisterReceiver(receiver);
             reg = false;
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -88,6 +87,7 @@ public class LockScreenMgr {
 
     /**
      * 获取
+     *
      * @param onLockScreenCallback
      * @return
      */
@@ -128,11 +128,11 @@ public class LockScreenMgr {
     public boolean popupActivity(boolean wakeLock) {
         if (ModuleMgr.getAppMgr().isForeground() || getLockView(null) == null || !isTip() || !isLockScreen()) {
             // 前台/显示面板为空/(应用为退出状态且消息提示状态为退出不提示)/不是锁屏状态：不进行锁屏弹窗
-            MMLog.autoDebug("=== 锁屏弹窗popupActivity returned ===");
+            PLogger.d("=== 锁屏弹窗popupActivity returned ===");
             return false;
         }
 
-        MMLog.autoDebug("=== 锁屏弹窗popupActivity===");
+        PLogger.d("=== 锁屏弹窗popupActivity===");
         UIShow.showLockScreenActivity();
 
         if (wakeLock) wakeLock();//点亮屏幕

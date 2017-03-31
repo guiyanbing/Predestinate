@@ -14,13 +14,6 @@ public class Constant {
     public static final int PLATFORM_TYPE = 2;      //平台号
     public static final int SUB_VERSION = 3;        //客户端版本号
 
-    // --------------socket常量----------------
-    public static final int MSG_ID_Login = 1;               //长连接登录消息id
-    public static final int MSG_ID_KICK_Offline = 65533;    //异地登陆踢下线消息id
-    public static final int MSG_ID_Heartbeat_Reply = 65532; //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
-    public static final int MSG_ID_Heartbeat = 65535;       //普通心跳消息id
-    public static final long Heartbeat_Time = 60 * 1000;    //心跳时间间隔，60s
-
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
     public static final String SETTING_QUIT_MESSAGE = "setting_quit_message";   //是否进行锁屏弹窗，存储key及默认值
     public static final Boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
@@ -55,4 +48,8 @@ public class Constant {
     public static final int MAIN_TAB_3 = 0x03;
     public static final int MAIN_TAB_4 = 0x04;
     public static final int MAIN_TAB_5 = 0X05;
+
+
+    public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
+    public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
 }

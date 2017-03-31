@@ -112,8 +112,26 @@
     <!--提示-->
     <string name="tip_loading_submit">正在提交数据，请稍等...</string>
     <string name="tip_loading_login">正在登录，请稍等......</string>
+    <string name="tip_net_error">很遗憾，现在无网络</string>
+    <string name="tip_data_empty">没有数据，客官等会再来吧！</string>
+    <string name="tip_click_refresh">点击刷新</string>
 
     <!--activity标题-->
     <string name="title_loginact">登录</string>
     <string name="title_findpwdact">找回密码</string>
+
+
+    <!-- xList 后期可能删掉，不要用-->
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载...</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="xlistview_header_hint_normal_a">下拉刷新</string>
+    <string name="xlistview_header_hint_loading_a">正在刷新数据...</string>
+    <string name="xlistview_header_hint_loading_male">正在锁定妹子...</string>
+    <string name="xlistview_header_hint_loading_female">正在锁定帅哥...</string>
+    <string name="chat_move_up_to_cancel">手指上滑 取消发送</string>
+    <string name="chat_release_to_cancel">松开手指 取消发送</string>
 </resources>

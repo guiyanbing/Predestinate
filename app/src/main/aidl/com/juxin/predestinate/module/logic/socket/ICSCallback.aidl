@@ -8,9 +8,6 @@ interface ICSCallback {
     // 处理消息
     void onMessage(long msgId, boolean group, String groupId, long sender, String contents);
 
-    // 消息反馈：消息id，消息类型，hostIP；如果msgId=-1，msgType=-1，表示为重连失败统计，否则为已读消息反馈
-    void onFeedback(long msgId, int msgType, String host);
-
     // 即时通讯状态
     // type: 0 登录成功；1 登录失败；2 连接成功；3 断开连接；
     // msg: 提示消息

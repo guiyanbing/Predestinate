@@ -16,4 +16,17 @@
         <attr name="mHorizontalPadding" format="dimension" />
         <attr name="clipBorderWidth" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="EmojiTextView">
+        <attr name="emojiSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="HorizontalListView">
+        <attr name="android_divider" format="boolean" />
+        <attr name="dividerWidth" format="dimension" />
+        <attr name="android_listSelector" format="reference" />
+        <attr name="android_drawSelectorOnTop" format="boolean" />
+        <attr name="android_choiceMode" format="integer" />
+    </declare-styleable>
+
 </resources>

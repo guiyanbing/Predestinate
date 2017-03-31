@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.juxin.predestinate.module.logic.notify;
 
 import android.content.BroadcastReceiver;

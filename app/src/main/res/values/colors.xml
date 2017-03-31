@@ -22,6 +22,7 @@
     <color name="color_B2DFDB">#B2DFDB</color>
     <color name="color_00BCD4">#00BCD4</color>
     <color name="color_212121">#212121</color>
+    <color name="color_5A5A5A">#5A5A5A</color>
     <color name="color_757575">#757575</color>
     <color name="color_9D9D9D">#9D9D9D</color>
     <color name="color_BDBDBD">#BDBDBD</color>
@@ -44,7 +45,6 @@
     <color name="color_30333333">#4D333333</color>
     <color name="color_47cfd3">#47CFD3</color>
     <color name="color_f0f1f4">#f0f1f4</color>
-    <color name="color_f95553">#F95553</color>
 
 
     <!-- ============预设色值=========== -->
@@ -105,7 +105,17 @@
     <color name="bg_reghead_start">#00B7CB</color>
     <color name="bg_reghead_end">#00D3D2</color>
 
-
     <color name="txt_item_sign">#666460</color>
+
+
+    <color name="color_ff3939">#ff3939</color>
+    <color name="tip_light_gray">#bbbbbb</color>
+    <color name="color_658fe1">#658fe1</color>
+    <color name="blue2">#278dea</color>
+    <color name="color_d0d0d0">#d0d0d0</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_56aff3">#56aff3</color>
+    <color name="gray_9d9d9d">#9d9d9d</color>
+
 </resources>
 
