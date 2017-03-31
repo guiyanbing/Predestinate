@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check;
+package com.juxin.predestinate.ui.user.check.edit;
 
 import android.app.Activity;
 import android.content.Context;

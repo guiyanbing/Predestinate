@@ -61,7 +61,7 @@ public class SplashActivity extends BaseActivity {
     private void skipLogic() {
         Intent intent = null;
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
-// TODO           ModuleMgr.getCenterMgr().loadMyInfo(null);
+            ModuleMgr.getCenterMgr().reqMyInfo();
             if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey()) && !checkUserIsUploadAvatar()) {
 //TODO                UIShow.showNoHeadActToMain(this);
 //                finish();
@@ -84,6 +84,7 @@ public class SplashActivity extends BaseActivity {
     private String getUploadHeadKey() {
         return "judgeUploadHead" + App.uid;
     }
+
     /**
      * 判断了是否上传了用户头像
      */

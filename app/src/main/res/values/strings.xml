@@ -72,12 +72,18 @@
     <string name="user_self_info_age">年龄</string>
     <string name="user_self_info_addr">地区</string>
     <string name="user_self_info_sign">个性签名</string>
+    <string name="user_self_secret_edit">编辑</string>
+    <string name="user_self_secret_cancel">取消</string>
     <string name="user_info_save">保存</string>
     <string name="user_info_edit_name">昵称修改</string>
     <string name="user_info_edit_sign">个性签名</string>
     <string name="user_info_edit_limit">%1$d/%2$d</string>
     <string name="user_info_put_name">请输入昵称</string>
     <string name="user_info_put_sign">请输入个性签名</string>
+    <string name="user_info_show_all">已经显示全部</string>
+
+    <string name="goods_diamond_title">钻石充值</string>
+    <string name="goods_diamond_remain">余额</string>
 
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>

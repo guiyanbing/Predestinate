@@ -2,6 +2,7 @@ package com.juxin.predestinate.bean.center.user.detail;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
@@ -118,6 +119,12 @@ public class UserBasic extends BaseData implements Parcelable {
 
     public String getProvince() {
         return province;
+    }
+
+    public String getAddress() {
+        String _province = (TextUtils.isEmpty(province) || "不限".equals(province)) ? "" : province;
+        String _city = (TextUtils.isEmpty(city) || "不限".equals(city)) ? "" : " " + city;
+        return _province + _city;
     }
 
     public void setProvince(String province) {

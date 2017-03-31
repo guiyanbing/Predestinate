@@ -19,9 +19,11 @@ import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.RegInfoAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
-import com.juxin.predestinate.ui.user.information.EditContentAct;
-import com.juxin.predestinate.ui.user.information.UserEditSignAct;
-import com.juxin.predestinate.ui.user.information.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
+import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
+import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
+import com.juxin.predestinate.ui.user.paygoods.GoodsDiamondAct;
 
 /**
  * 应用内页面跳转工具
@@ -142,9 +144,8 @@ public class UIShow {
     /**
      * 打开编辑昵称页
      */
-    public static void showEditContentAct(FragmentActivity context, String defaultValue) {
+    public static void showEditContentAct(FragmentActivity context) {
         Intent intent = new Intent(context, EditContentAct.class);
-        intent.putExtra("defaultValue", defaultValue);
         context.startActivity(intent);
     }
 
@@ -155,6 +156,20 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivity(intent);
+    }
+
+    /**
+     * 打开钻石商品页
+     */
+    public static void showGoodsDiamondAct(Context context) {
+        context.startActivity(new Intent(context, GoodsDiamondAct.class));
+    }
+
+    /**
+     * 打开私密相册/视频
+     */
+    public static void showUserSecretAct(Context context) {
+        context.startActivity(new Intent(context, UserSecretAct.class));
     }
 
     /**

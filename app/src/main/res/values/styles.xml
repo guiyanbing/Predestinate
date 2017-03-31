@@ -138,7 +138,7 @@
     <style name="divider_line" parent="divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
-        <item name="android:background">@color/divider</item>
+        <item name="android:background">@color/fengexian_gray</item>
     </style>
     <!--间距 中-->
     <style name="divider_spacing" parent="divider">
