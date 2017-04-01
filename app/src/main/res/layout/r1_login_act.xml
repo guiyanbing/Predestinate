@@ -53,7 +53,7 @@
                 android:layout_marginLeft="@dimen/px70_dp"
                 android:layout_marginRight="@dimen/px70_dp"
                 android:hint="密码"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <View style="@style/divider_line_gap70px" />
 
