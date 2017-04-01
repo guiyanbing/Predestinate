@@ -6,11 +6,17 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.app.FragmentActivity;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.start.LoginAct;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -341,7 +347,40 @@ public class IMProxy {
      * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
      */
     private void accountInvalid(int reason) {
-        //TODO 踢下线弹窗
+        if (reason == 1) {// 踢下线弹窗
+            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
+        } else if (reason == 2) {// 帐号无效
+            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
+        }
+    }
+
+    /**
+     * 显示帐号无效弹框
+     *
+     * @param context FragmentActivity上下文
+     * @param tip     弹框提示文字
+     */
+    private void showInvalidDialog(final FragmentActivity context, final String tip) {
+        ModuleMgr.getLoginMgr().logout();
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PickerDialogUtil.showTipDialogCancelBack(context, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
+                        }
+
+                        @Override
+                        public void onSubmit() {
+                            UIShow.showActivityClearTask(context, LoginAct.class);
+                        }
+                    }, tip, "提示", "", "确定", false, false);
+                } catch (Exception e) {
+                    UIShow.showActivityClearTask(context, LoginAct.class);
+                }
+            }
+        });
     }
 
     private boolean isSocketValid = false;//socket是否在线

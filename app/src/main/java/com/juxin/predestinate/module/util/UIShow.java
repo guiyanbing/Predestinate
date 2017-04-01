@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 
+import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
@@ -25,6 +27,7 @@ import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
@@ -50,13 +53,21 @@ public class UIShow {
         show(context, clz, -1);
     }
 
-    /**\
+    /**
+     * 显示activity并清空栈里其他activity
+     *
+     * @param activity 要启动的activity
+     */
+    public static void showActivityClearTask(Context context, Class activity) {
+        show(context, activity, Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
      * 跳转到主页并清除栈里的其他页面
      */
     public static void showMainClearTask(Context context) {
-        show(context, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        showActivityClearTask(context, MainActivity.class);
     }
-
 
     /**
      * 跳转到网页
@@ -97,6 +108,7 @@ public class UIShow {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
+
     /**
      * 打开登录页
      */
@@ -104,6 +116,7 @@ public class UIShow {
         Intent intent = new Intent(activity, LoginAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开注册页
      */
@@ -111,6 +124,7 @@ public class UIShow {
         Intent intent = new Intent(activity, RegInfoAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开找回密码页
      */
@@ -118,7 +132,9 @@ public class UIShow {
         Intent intent = new Intent(activity, FindPwdAct.class);
         activity.startActivity(intent);
     }
+
     //============================== 小友模块相关跳转 =============================
+
     /**
      * 打开标签分组页面
      */
@@ -126,6 +142,7 @@ public class UIShow {
         Intent intent = new Intent(activity, TabGroupActivity.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开亲密好友页面
      */
@@ -133,6 +150,7 @@ public class UIShow {
         Intent intent = new Intent(activity, CloseFriendsActivity.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开添加联系人页面
      */
@@ -140,20 +158,23 @@ public class UIShow {
         Intent intent = new Intent(activity, SelectContactActivity.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开添加标签页面
      */
-    public static void showNewTabAct(FragmentActivity activity,long tab) {
+    public static void showNewTabAct(FragmentActivity activity, long tab) {
         Intent intent = new Intent(activity, NewTabActivity.class);
-        intent.putExtra("tab",tab);
+        intent.putExtra("tab", tab);
         activity.startActivity(intent);
     }
+
     /**
      * 打开设置页
      */
     public static void showUserSetAct(Activity context, int resultCode) {
         context.startActivityForResult(new Intent(context, UsersSetAct.class), resultCode);
     }
+
     /**
      * 打开推荐的人页面
      */
@@ -207,6 +228,8 @@ public class UIShow {
         context.startActivity(new Intent(context, UserSecretAct.class));
     }
 
+    // -----------------------消息提示跳转 start--------------------------
+
     /**
      * 打开锁屏弹窗弹出的activity
      */
@@ -233,5 +256,25 @@ public class UIShow {
         intent.putExtra("simple_data", simpleData);
         intent.putExtra("content", content);
         App.context.startActivity(intent);
+    }
+
+    // -----------------------消息提示跳转 end----------------------------
+
+    /**
+     * 调起软件强制升级弹窗
+     *
+     * @param activity  FragmentActivity上下文
+     * @param appUpdate 软件升级信息
+     * @param runnable  非强制更新时点击取消按钮执行的操作
+     */
+    public static void showUpdateDialog(FragmentActivity activity, AppUpdate appUpdate, Runnable runnable) {
+        if (appUpdate == null) return;
+        if (appUpdate.getVer() > ModuleMgr.getAppMgr().getVerCode()) {
+            UpdateDialog updateDialog = new UpdateDialog();
+            updateDialog.setData(appUpdate, runnable);
+            updateDialog.showDialog(activity);
+        } else {
+            if (runnable != null) runnable.run();
+        }
     }
 }
