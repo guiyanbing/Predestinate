@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.util;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -49,12 +50,13 @@ public class UIShow {
         show(context, clz, -1);
     }
 
-    /**
+    /**\
      * 跳转到主页并清除栈里的其他页面
      */
     public static void showMainClearTask(Context context) {
         show(context, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
+
 
     /**
      * 跳转到网页
@@ -149,9 +151,8 @@ public class UIShow {
     /**
      * 打开设置页
      */
-    public static void showUserSetAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, UsersSetAct.class);
-        activity.startActivity(intent);
+    public static void showUserSetAct(Activity context, int resultCode) {
+        context.startActivityForResult(new Intent(context, UsersSetAct.class), resultCode);
     }
     /**
      * 打开推荐的人页面

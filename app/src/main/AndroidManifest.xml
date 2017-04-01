@@ -40,7 +40,7 @@
             android:name=".ui.main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".module.logic.baseui.WebActivity"
             android:screenOrientation="portrait" />
@@ -50,30 +50,25 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.start.NavUserAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.start.RegInfoAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.start.LoginAct"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.user.check.UserCheckInfoAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.start.FindPwdAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.UsersSetAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.recommend.RecommendAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
@@ -95,19 +90,19 @@
         <activity
             android:name=".ui.xiaoyou.TabGroupActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.xiaoyou.CloseFriendsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.xiaoyou.SelectContactActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.xiaoyou.NewTabActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".ui.user.check.edit.UserSecretAct"
