@@ -26,11 +26,11 @@ import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
-import com.juxin.predestinate.ui.user.update.UpdateDialog;
 
 /**
  * 应用内页面跳转工具
@@ -131,7 +131,9 @@ public class UIShow {
         Intent intent = new Intent(activity, FindPwdAct.class);
         activity.startActivity(intent);
     }
+
     //============================== 小友模块相关跳转 =============================
+
     /**
      * 打开标签分组页面
      */
@@ -139,6 +141,7 @@ public class UIShow {
         Intent intent = new Intent(activity, TabGroupActivity.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开亲密好友页面
      */
@@ -146,6 +149,7 @@ public class UIShow {
         Intent intent = new Intent(activity, CloseFriendsActivity.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开添加联系人页面
      */
@@ -153,12 +157,13 @@ public class UIShow {
         Intent intent = new Intent(activity, SelectContactActivity.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开添加标签页面
      */
-    public static void showNewTabAct(FragmentActivity activity,long tab) {
+    public static void showNewTabAct(FragmentActivity activity, long tab) {
         Intent intent = new Intent(activity, NewTabActivity.class);
-        intent.putExtra("tab",tab);
+        intent.putExtra("tab", tab);
         activity.startActivity(intent);
     }
 
