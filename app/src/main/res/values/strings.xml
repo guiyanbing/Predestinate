@@ -134,4 +134,18 @@
     <string name="xlistview_header_hint_loading_female">正在锁定帅哥...</string>
     <string name="chat_move_up_to_cancel">手指上滑 取消发送</string>
     <string name="chat_release_to_cancel">松开手指 取消发送</string>
+    <!--小友模块标题-->
+    <string name="label">标签互动</string>
+    <string name="intimacy">最近亲密度</string>
+    <string name="income">最近收益</string>
+    <string name="intimacy_level">标签名字</string>
+    <string name="intimate_num">标签成员（0）</string>
+    <string name="athentication">我的认证</string>
+    <string name="contact">选择联系人</string>
+    <string name="tab_group">标签分组</string>
+    <string name="interaction">最近互动</string>
+    <string name="search_tip">会员昵称/会员ID</string>
+    <string name="good_friend">亲密好友</string>
+    <string name="hongbao_tips">已存入零钱，可直接提现</string>
+    <string name="hongbao_go">查看领取详情</string>
 </resources>

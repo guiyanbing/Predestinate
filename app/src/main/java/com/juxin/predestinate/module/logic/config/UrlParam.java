@@ -5,7 +5,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.start.UserReg;
-import com.juxin.predestinate.bean.start.UP;
+import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.Map;
 
@@ -31,6 +31,10 @@ public enum UrlParam {
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
     //获取昵称和头像的最近变更 list
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
+
+    //============================== 小友模块相关接口 =============================
+    //好友标签分组成员
+    reqTagGroupMember("/s/friend/TagGroupMember", SimpleFriendsList.class),
 
     // 最后一个，占位
     LastUrlParam("");
