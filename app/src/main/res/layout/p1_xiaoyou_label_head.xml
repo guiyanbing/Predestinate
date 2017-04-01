@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/color_F0F0F0"
+       android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px95_dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/px50_dp"
+        android:text="@string/intimacy_level"
+        android:textColor="@color/color_8E8E8E"
+        android:textSize="@dimen/px42_sp"/>
+
+    <EditText
+        android:id="@+id/friend_label_head_txv_name"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/color_F5F5F5"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/px50_dp"
+        android:hint="@string/intimacy_level"
+        android:textColor="@color/color_zhuyao"
+        android:textSize="@dimen/px48_sp"/>
+
+    <TextView
+        android:id="@+id/friend_label_head_txv_num"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px95_dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/px50_dp"
+        android:text="@string/intimate_num"
+        android:textColor="@color/color_8E8E8E"
+        android:textSize="@dimen/px42_sp"/>
+
+</merge>

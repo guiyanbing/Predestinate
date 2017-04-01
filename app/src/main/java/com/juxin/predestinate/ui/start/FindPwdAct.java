@@ -19,6 +19,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.CommonUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 找回密码
@@ -68,14 +69,13 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
         switch (v.getId()) {
             case R.id.bt_send_code:
                 if (checkPhone()) {
-                    ModuleMgr.getCenterMgr().reqReqVerifyCode(phone, this);
+                    ModuleMgr.getCenterMgr().reqVerifyCode(phone, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                 }
                 break;
             case R.id.bt_submit:
-                if (checkSubmitInfo()) {
-                    //TODO 提交
-//                    ModuleMgr.getCenterMgr().bindChellPhone(phoneNum, Constant.BIND_PHONE, keys, this);
+                if (checkPhone()&&checkSubmitInfo()) {
+                    ModuleMgr.getCenterMgr().resetPassword(phone, pwd, code, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                 }
                 break;
@@ -84,17 +84,16 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
     }
 
     private boolean checkSubmitInfo() {
-        checkPhone();
-        code = et_code.getText().toString();
-        if (TextUtils.isEmpty(code)) {
-            PToast.showShort(getResources().getString(R.string.toast_code_isnull));
-            return false;
-        }
-        pwd = et_pwd.getText().toString();
-        if (TextUtils.isEmpty(pwd)) {
-            PToast.showShort(getResources().getString(R.string.toast_setpwd_isnull));
-            return false;
-        }
+            code = et_code.getText().toString();
+            if (TextUtils.isEmpty(code)) {
+                PToast.showShort(getResources().getString(R.string.toast_code_isnull));
+                return false;
+            }
+            pwd = et_pwd.getText().toString();
+            if (TextUtils.isEmpty(pwd)) {
+                PToast.showShort(getResources().getString(R.string.toast_setpwd_isnull));
+                return false;
+            }
         return true;
     }
 
@@ -147,9 +146,14 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
 
             } else {
                 bt_send_code.setEnabled(true);
-//                phoneBind.parseJson(result.getResultStr());
-//                PToast.showShort(CommonUtil.getErrorMsg(phoneBind.getDetail()));
-                PToast.showShort("验证码发送失败 ");
+                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+            }
+        }else if(response.getUrlParam()== UrlParam.resetPassword){
+            if (response.isOk()){
+                PToast.showShort("找回密码成功");
+                back();
+            }else{
+                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
             }
 
         }

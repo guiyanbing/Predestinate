@@ -5,7 +5,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.start.UserReg;
-import com.juxin.predestinate.bean.start.UP;
+import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.Map;
 
@@ -16,7 +16,8 @@ public enum UrlParam {
 
     reqRegister("i/reg/Reg", UserReg.class),//注册接口
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
-    reqReqVerifyCode("i/reg/ReqVerifyCode"),//获取手机验证码
+    reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
+    resetPassword("i/reg/ResetPassword"),//找回密码
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
@@ -30,6 +31,10 @@ public enum UrlParam {
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
     //获取昵称和头像的最近变更 list
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
+
+    //============================== 小友模块相关接口 =============================
+    //好友标签分组成员
+    reqTagGroupMember("/s/friend/TagGroupMember", SimpleFriendsList.class),
 
     // 最后一个，占位
     LastUrlParam("");

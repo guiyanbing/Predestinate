@@ -147,7 +147,7 @@ public class LoginMgr implements ModuleBase {
                 jsonArray.put(tmpJson);
             }
             jsonObject.put("user", jsonArray);
-//            ModuleMgr.getCfgMgr().setString(USER_KEY, jsonObject.toString());
+            PSP.getInstance().put(LOGIN_USER_KEY, jsonObject.toString());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

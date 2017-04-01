@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:descendantFocusability="blocksDescendants"
+              android:focusable="true"
+              android:orientation="vertical">
+
+<View
+    android:id="@+id/invite_catalog_divider_1"
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:background="@color/mokuai_bg_press"/>
+
+<LinearLayout
+    android:id="@+id/invite_catalog_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px90_dp"
+    android:background="@color/mokuai_bg_press"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/px15_dp"
+    android:paddingLeft="@dimen/px60_dp"
+    android:paddingTop="5.3dp">
+
+    <TextView
+        android:id="@+id/invite_catalog"
+        android:layout_width="26.7dp"
+        android:layout_height="26.7dp"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="@color/color_aaaaaa"
+        android:textSize="14sp" />
+</LinearLayout>
+
+<View
+    android:id="@+id/invite_catalog_divider_2"
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:background="@color/mokuai_bg_press"/>
+
+<RelativeLayout
+    android:id="@+id/invite_msg_info_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/px20_dp"
+    android:paddingTop="@dimen/px20_dp">
+
+    <!--<ImageView-->
+        <!--android:id="@+id/xiaoyou_select_img_sel"-->
+        <!--android:layout_width="@dimen/px60_dp"-->
+        <!--android:layout_height="@dimen/px60_dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginLeft="@dimen/px46_dp"-->
+        <!--android:background="@drawable/p1_xiaoyou_xuanze1"/>-->
+    <CheckBox
+        android:id="@+id/xiaoyou_select_chb_sel"
+        android:layout_width="@dimen/px60_dp"
+        android:layout_height="@dimen/px60_dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/px46_dp"
+        android:background="@drawable/p1_invite_msg_check_bg"
+        android:button="@null"
+        android:checked="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <ImageView
+        android:id="@+id/xiaoyou_select_img_head"
+        android:layout_width="@dimen/px135_dp"
+        android:layout_height="@dimen/px135_dp"
+        android:layout_marginLeft="@dimen/px45_dp"
+        android:layout_toRightOf="@+id/xiaoyou_select_chb_sel"
+        android:background="@drawable/default_pic"/>
+    <TextView
+        android:id="@+id/xiaoyou_select_txv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/px44_dp"
+        android:layout_toRightOf="@+id/xiaoyou_select_img_head"
+        android:text="测试"/>
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginLeft="@dimen/px60_dp"-->
+        <!--android:layout_toRightOf="@id/invite_msg_check"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/invite_msg_name"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="棒棒糖"-->
+            <!--android:textColor="@color/text_zhuyao_black"-->
+            <!--android:textSize="15.3dp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/invite_msg_phone"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/px15_dp"-->
+            <!--android:text="手机号：15030201654"-->
+            <!--android:textColor="@color/color_aaaaaa"-->
+            <!--android:textSize="14.3dp" />-->
+    <!--</LinearLayout>-->
+</RelativeLayout>
+<LinearLayout
+    android:id="@+id/invite_msg_divider_line"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/px200_dp"
+    android:background="@color/white">
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/fengexian_gray"
+        android:layout_height="1dp" />
+</LinearLayout>
+
+</LinearLayout>
+

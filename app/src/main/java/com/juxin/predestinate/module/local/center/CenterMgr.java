@@ -73,10 +73,26 @@ public class CenterMgr implements ModuleBase, PObserver {
      * @param mobile
      * @param complete
      */
-    public void reqReqVerifyCode(String mobile, RequestComplete complete) {
+    public void reqVerifyCode(String mobile, RequestComplete complete) {
         HashMap<String, Object> postparam = new HashMap<>();
         postparam.put("mobile", mobile);
+        postparam.put("tag", 301);//tag 301小友密码重置
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode, postparam, complete);
+    }
+
+    /**
+     * 找回密码
+     * @param mobile 手机号
+     * @param password 新密码
+     * @param code 验证码
+     * @param complete
+     */
+    public void resetPassword(String mobile, String password, String code, RequestComplete complete) {
+        HashMap<String, Object> postparam = new HashMap<>();
+        postparam.put("phone", mobile);
+        postparam.put("password", password);
+        postparam.put("code", code);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.resetPassword, postparam, complete);
     }
 
     /**
