@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.module.util.NotificationsUtils;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.Url_Enc;
 
@@ -254,7 +255,7 @@ public class LoginMgr implements ModuleBase {
     /**
      * 清除当前用户存储到cookies表中的所有数据
      */
-    public void removeCookie(Context context) {
+    private void removeCookie(Context context) {
         CookieSyncManager.createInstance(context);
         CookieManager.getInstance().removeAllCookie();
         CookieSyncManager.getInstance().sync();
@@ -264,6 +265,8 @@ public class LoginMgr implements ModuleBase {
      * 退出登录，并清空用户登录信息
      */
     public void logout() {
+        removeCookie(App.context);
+        NotificationsUtils.cancelAll();//如果还有通知栏提示，在退出帐号的时候全部清掉
         setUid("");//清空uid
         setLoginInfo(0, true);
 //        App.appState = App.AppState.AS_Service; //TODO

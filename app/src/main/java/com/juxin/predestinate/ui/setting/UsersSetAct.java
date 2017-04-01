@@ -121,8 +121,6 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onSubmit() {
-                        ModuleMgr.getLoginMgr().removeCookie(UsersSetAct.this);
-//                        NotificationsUtils.cancelAll();//如果还有通知栏提示，在退出帐号的时候全部清掉
                         ModuleMgr.getLoginMgr().logout();
                         setResult(200);
                         finish();
