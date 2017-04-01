@@ -92,4 +92,9 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
             mCustomSearchView.showNoData();
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCustomSearchView.onDestroy();
+    }
 }

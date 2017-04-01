@@ -17,12 +17,10 @@
         <!--android:divider="@android:color/transparent"-->
         <!--android:descendantFocusability="afterDescendants"-->
         <!--android:dividerHeight="@dimen/px1_dp"/>-->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/xiaoyou_frag_lv_list"
+    <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
+        android:id="@+id/xiaoyou_frag_crlv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="afterDescendants">
-
-    </android.support.v7.widget.RecyclerView>
+        android:descendantFocusability="afterDescendants"/>
 
 </LinearLayout>

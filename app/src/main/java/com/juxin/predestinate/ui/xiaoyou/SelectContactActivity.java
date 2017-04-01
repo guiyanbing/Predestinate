@@ -57,4 +57,9 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
             mCustomSearchView.showNoData();
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCustomSearchView.onDestroy();
+    }
 }

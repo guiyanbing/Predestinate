@@ -39,6 +39,14 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
                 vh.friend_item_txv_title.setVisibility(View.GONE);
             }
             vh.showLately();
+            //friend_item_txv_intimacy 根据性别设置提示文字
+            if (info.getGender() == 1){
+                vh.friend_item_txv_intimacy.setText(R.string.intimacy);
+                vh.friend_item_txv_num.setText(info.getIntimacy()+"");
+            }else {
+                vh.friend_item_txv_intimacy.setText(R.string.income);
+                vh.friend_item_txv_num.setText(info.getIntimacy()+"元");
+            }
             //处理list条目
             //            vh.friend_item_img_head;
             //            vh.friend_item_txv_name;
@@ -54,18 +62,6 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
     class MyViewHolder {
         ImageView friend_item_img_head, friend_item_img_vip, friend_item_img_dynamic, friend_item_img_photo, friend_item_img_right;
         TextView friend_item_txv_name, friend_item_txv_intimacy, friend_item_txv_describe, friend_item_txv_num,friend_item_txv_title;
-
-
-        //        CircleImageView special_item_icon, info_item_icon;
-        //        ImageView info_item_vip_state;
-        //        TextView special_item_title, special_item_content;
-        //        BadgeView special_item_unread;
-        //
-        //        TextView info_item_nickname, info_item_height, info_item_city, info_item_time;
-        //        GenderAgeView info_item_age;
-        //
-        //        View friend_special_item, friend_item_driver, friend_info_item, info_item_isOnline;
-
 
         public MyViewHolder(BaseRecyclerViewHolder convertView) {
             initView(convertView);

@@ -56,4 +56,9 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         UIShow.showSelectContactAct(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
