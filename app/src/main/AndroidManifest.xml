@@ -95,19 +95,19 @@
         <activity
             android:name=".ui.xiaoyou.TabGroupActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".ui.xiaoyou.CloseFriendsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".ui.xiaoyou.SelectContactActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".ui.xiaoyou.NewTabActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
 
         <activity
             android:name=".ui.user.check.edit.UserSecretAct"

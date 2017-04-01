@@ -2,12 +2,16 @@ package com.juxin.predestinate.ui.xiaoyou;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
+import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
+import com.juxin.predestinate.ui.xiaoyou.adapter.CloseFriendsDdetailAdapter;
+import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 
 import java.util.ArrayList;
 
@@ -17,7 +21,11 @@ import java.util.ArrayList;
  */
 public class NewTabActivity extends BaseActivity implements View.OnClickListener {
 
-    private ArrayList<SimpleFriendsList.SimpleFriendInfo> arrSimpleFriends;
+    //控件
+    private RecyclerView rvList;
+    //其他
+    private ArrayList<FriendsList.FriendInfo> arrFriendinfos;
+    private CloseFriendsDdetailAdapter mCloseFriendsDdetailAdapter;
     private long tab ;
 
     @Override
@@ -29,6 +37,10 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initView() {
+        rvList = (RecyclerView) findViewById(R.id.xiaoyou_newtab_rv_list);
+        rvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rvList.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.tab_group));
         setTitleRight("添加成员", this);

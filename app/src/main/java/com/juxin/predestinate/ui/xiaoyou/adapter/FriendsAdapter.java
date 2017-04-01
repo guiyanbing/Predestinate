@@ -1,37 +1,29 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
-import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
-
-import java.util.List;
 
 
 /**
  * xiaoyouFragment的适配器
  * Created by zm on 2017/3/25.
  */
-public class FriendsAdapter extends ExBaseAdapter<FriendsList.FriendInfo> {
-    public FriendsAdapter(Context context, List<FriendsList.FriendInfo> datas) {
-        super(context, datas);
+public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendInfo> {
+
+    @Override
+    public int[] getItemLayouts() {
+        return new int[]{R.layout.p1_xiaoyou_fragment_item};
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder vh;
-        if (convertView == null) {
-            convertView = inflate(R.layout.p1_xiaoyou_fragment_item);
-            vh = new ViewHolder(convertView);
-            convertView.setTag(vh);
-        } else {
-            vh = (ViewHolder) convertView.getTag();
-        }
+    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
+        MyViewHolder vh = new MyViewHolder(viewHolder);
         final FriendsList.FriendInfo info = getItem(position);
         if (info.getType() == 1) {
             vh.showImgRight();
@@ -39,7 +31,7 @@ public class FriendsAdapter extends ExBaseAdapter<FriendsList.FriendInfo> {
             vh.friend_item_txv_name.setText(info.getNickname() + "");
             vh.friend_item_txv_describe.setText(info.getDescribe() + "");
             vh.friend_item_txv_title.setVisibility(View.GONE);
-//            Log.e("TTTTTTT",info.getNickname()+"||");
+            //            Log.e("TTTTTTT",info.getNickname()+"||");
         } else if(info.getType() == 0){
             if ((position > 0 && getItem(position-1).getType() == 1) || position == 0){
                 vh.friend_item_txv_title.setVisibility(View.VISIBLE);
@@ -52,47 +44,14 @@ public class FriendsAdapter extends ExBaseAdapter<FriendsList.FriendInfo> {
             //            vh.friend_item_txv_name;
             //            vh.frien
         }
-
-
-        //        if (position < 3) {
-        //            vh.showSpecialItem();
-        //            vh.special_item_icon.setImageResource(info.getSpecial_icon());
-        //            vh.special_item_title.setText(info.getSpecial_name());
-        //            vh.special_item_content.setText(info.getSpecial_content());
-        //            if (info.getUnread_type() == 0) {//通讯录好友
-        //                ModuleMgr.getUnreadMgr().registerBadge(vh.special_item_unread, false, UnreadHelper.CONTACTS_FRIENDS);
-        //            } else if (info.getUnread_type() == 1) {//好友申请
-        //                ModuleMgr.getUnreadMgr().registerBadge(vh.special_item_unread, false, UnreadHelper.CONTACTS_APPLICANT);
-        //            }
-        //
-        //            convertView.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    switch (position) {
-        //                        case 0: //通讯录好友
-        //                            UIShow.showFriendsPhone((FragmentActivity) getContext());
-        //                            break;
-        //                        case 1: //好友申请
-        //                            UIShow.showFriensdAddMe((FragmentActivity) getContext());
-        //                            break;
-        //                        case 2: //添加好友
-        //                            UIShow.showFriendsMeAdd((FragmentActivity) getContext());
-        //                            break;
-        //                    }
-        //                }
-        //            });
-        //
-        //        } else if (position == 3) {
-        //            vh.showFirstFriend();
-        //            setFriendInfo(vh, info, convertView);
-        //        } else {
-        //            vh.showFriendItem();
-        //            setFriendInfo(vh, info, convertView);
-        //        }
-        return convertView;
     }
 
-    class ViewHolder {
+    @Override
+    public int getRecycleViewItemType(int position) {
+        return 0;
+    }
+
+    class MyViewHolder {
         ImageView friend_item_img_head, friend_item_img_vip, friend_item_img_dynamic, friend_item_img_photo, friend_item_img_right;
         TextView friend_item_txv_name, friend_item_txv_intimacy, friend_item_txv_describe, friend_item_txv_num,friend_item_txv_title;
 
@@ -108,22 +67,22 @@ public class FriendsAdapter extends ExBaseAdapter<FriendsList.FriendInfo> {
         //        View friend_special_item, friend_item_driver, friend_info_item, info_item_isOnline;
 
 
-        public ViewHolder(View convertView) {
+        public MyViewHolder(BaseRecyclerViewHolder convertView) {
             initView(convertView);
         }
 
-        private void initView(View convertView) {
-            friend_item_img_head = (ImageView) convertView.findViewById(R.id.friend_item_img_head);
-            friend_item_img_vip = (ImageView) convertView.findViewById(R.id.friend_item_img_vip);
-            friend_item_img_dynamic = (ImageView) convertView.findViewById(R.id.friend_item_img_dynamic);
-            friend_item_img_photo = (ImageView) convertView.findViewById(R.id.friend_item_img_photo);
-            friend_item_img_right = (ImageView) convertView.findViewById(R.id.friend_item_img_right);
+        private void initView(BaseRecyclerViewHolder convertView) {
+            friend_item_img_head =  convertView.findViewById(R.id.friend_item_img_head);
+            friend_item_img_vip =  convertView.findViewById(R.id.friend_item_img_vip);
+            friend_item_img_dynamic =  convertView.findViewById(R.id.friend_item_img_dynamic);
+            friend_item_img_photo =  convertView.findViewById(R.id.friend_item_img_photo);
+            friend_item_img_right =  convertView.findViewById(R.id.friend_item_img_right);
 
-            friend_item_txv_name = (TextView) convertView.findViewById(R.id.friend_item_txv_name);
-            friend_item_txv_intimacy = (TextView) convertView.findViewById(R.id.friend_item_txv_intimacy);
-            friend_item_txv_describe = (TextView) convertView.findViewById(R.id.friend_item_txv_describe);
-            friend_item_txv_num = (TextView) convertView.findViewById(R.id.friend_item_txv_num);
-            friend_item_txv_title = (TextView) convertView.findViewById(R.id.friend_item_txv_title);
+            friend_item_txv_name =  convertView.findViewById(R.id.friend_item_txv_name);
+            friend_item_txv_intimacy =  convertView.findViewById(R.id.friend_item_txv_intimacy);
+            friend_item_txv_describe =  convertView.findViewById(R.id.friend_item_txv_describe);
+            friend_item_txv_num =  convertView.findViewById(R.id.friend_item_txv_num);
+            friend_item_txv_title =  convertView.findViewById(R.id.friend_item_txv_title);
         }
 
         public void showImgRight() {

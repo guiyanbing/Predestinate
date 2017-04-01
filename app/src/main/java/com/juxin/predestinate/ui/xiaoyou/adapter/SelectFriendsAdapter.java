@@ -1,8 +1,6 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
-import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,7 +8,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.List;
@@ -20,36 +19,51 @@ import java.util.List;
  * 选择联系人页面适配
  * Created by zm on 2016/9/7.
  */
-public class SelectFriendsAdapter extends ExBaseAdapter<SimpleFriendsList.SimpleFriendInfo> {
+public class SelectFriendsAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList.SimpleFriendInfo> {
 
     private OnContactSelect contactSelect;
-    public SelectFriendsAdapter(Context context, List<SimpleFriendsList.SimpleFriendInfo> datas,OnContactSelect contactSelect) {
-        super(context, datas);
-        this.contactSelect = contactSelect;
+
+    private void setChecked(int position) {
+        if (getItem(position) != null) {
+            getItem(position).setIsCheck(!getItem(position).isCheck());
+            notifyDataSetChanged();
+            if (contactSelect != null) {
+                contactSelect.onSelectChange(getList());
+            }
+        }
+    }
+
+    /**
+     * 根据ListView的当前位置获取分类的首字母的Char ascii值
+     */
+    public int getSectionForPosition(int position) {
+        return getItem(position).getSortKey().charAt(0);
+    }
+
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     */
+    public int getPositionForSection(int section) {
+        int count = getListSize();
+        for (int i = 0; i < count; i++) {
+            String sortStr = getList().get(i).getSortKey();
+            char firstChar = sortStr.toUpperCase().charAt(0);
+            if (firstChar == section) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public int[] getItemLayouts() {
+        return new int[]{R.layout.p1_xiaoyou_select_contact_item};
+    }
 
-        ViewHolder vh;
-        if (convertView == null) {
-            convertView = inflate(R.layout.p1_xiaoyou_select_contact_item);
-            vh = new ViewHolder();
-
-            vh.chbSel = (CheckBox) convertView.findViewById(R.id.xiaoyou_select_chb_sel);
-            vh.invite_catalog_divider_1 = convertView.findViewById(R.id.invite_catalog_divider_1);
-            vh.invite_catalog_layout = (LinearLayout) convertView.findViewById(R.id.invite_catalog_layout);
-            vh.invite_catalog = (TextView) convertView.findViewById(R.id.invite_catalog);
-            vh.invite_catalog_divider_2 = convertView.findViewById(R.id.invite_catalog_divider_2);
-            vh.invite_msg_info_layout = (RelativeLayout) convertView.findViewById(R.id.invite_msg_info_layout);
-            vh.imgHead = (ImageView) convertView.findViewById(R.id.xiaoyou_select_img_head);
-            vh.txvName = (TextView) convertView.findViewById(R.id.xiaoyou_select_txv_name);
-            vh.invite_msg_divider_line = convertView.findViewById(R.id.invite_msg_divider_line);
-
-            convertView.setTag(vh);
-        } else {
-            vh = (ViewHolder) convertView.getTag();
-        }
+    @Override
+    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
+        MyViewHolder vh = new MyViewHolder(viewHolder);
         SimpleFriendsList.SimpleFriendInfo info = getItem(position);
         if (info.isCheck()){
             vh.chbSel.setChecked(true);
@@ -84,7 +98,7 @@ public class SelectFriendsAdapter extends ExBaseAdapter<SimpleFriendsList.Simple
 
         vh.txvName.setText(info.getNickname()+"");
         //设置头像
-//        vh.imgHead
+        //        vh.imgHead
 
         vh.invite_msg_info_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,49 +113,35 @@ public class SelectFriendsAdapter extends ExBaseAdapter<SimpleFriendsList.Simple
                 setChecked(position);
             }
         });
-        return convertView;
     }
 
-
-    private void setChecked(int position) {
-        if (getItem(position) != null) {
-            getItem(position).setIsCheck(!getItem(position).isCheck());
-            notifyDataSetChanged();
-            if (contactSelect != null) {
-                contactSelect.onSelectChange(getList());
-            }
-        }
+    @Override
+    public int getRecycleViewItemType(int position) {
+        return 0;
     }
 
-    /**
-     * 根据ListView的当前位置获取分类的首字母的Char ascii值
-     */
-    public int getSectionForPosition(int position) {
-        return getItem(position).getSortKey().charAt(0);
-    }
-
-    /**
-     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
-     */
-    public int getPositionForSection(int section) {
-        for (int i = 0; i < getCount(); i++) {
-            String sortStr = getList().get(i).getSortKey();
-            char firstChar = sortStr.toUpperCase().charAt(0);
-            if (firstChar == section) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    class ViewHolder {
+    class MyViewHolder {
         CheckBox chbSel;
         LinearLayout invite_catalog_layout;
         ImageView imgHead;
         TextView invite_catalog, txvName;
         View invite_msg_divider_line, invite_catalog_divider_1, invite_catalog_divider_2;
         RelativeLayout invite_msg_info_layout;
+        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+            initView(convertView);
+        }
+
+        private void initView(BaseRecyclerViewHolder convertView) {
+            chbSel = convertView.findViewById(R.id.xiaoyou_select_chb_sel);
+            invite_catalog_divider_1 = convertView.findViewById(R.id.invite_catalog_divider_1);
+            invite_catalog_layout = convertView.findViewById(R.id.invite_catalog_layout);
+            invite_catalog = convertView.findViewById(R.id.invite_catalog);
+            invite_catalog_divider_2 = convertView.findViewById(R.id.invite_catalog_divider_2);
+            invite_msg_info_layout = convertView.findViewById(R.id.invite_msg_info_layout);
+            imgHead = convertView.findViewById(R.id.xiaoyou_select_img_head);
+            txvName = convertView.findViewById(R.id.xiaoyou_select_txv_name);
+            invite_msg_divider_line = convertView.findViewById(R.id.invite_msg_divider_line);
+        }
     }
 
     /**

@@ -5,74 +5,133 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/px150_dp"
-        android:layout_marginRight="@dimen/px150_dp"
-        android:background="@drawable/p1_redpacket_bg"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <RelativeLayout
+        android:layout_marginRight="@dimen/px150_dp">
+        <com.juxin.predestinate.module.logic.baseui.custom.CropEndImageView
+            android:id="@+id/hongbao_img_bg"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/px386_dp">
-
-            <ImageView
+            android:layout_height="wrap_content"
+            android:src="@drawable/p1_hongbao_bg"
+            android:scaleType="centerInside"/>
+        <LinearLayout
+            android:id="@+id/hongbao_ll_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/hongbao_img_bg"
+            android:layout_alignBottom="@+id/hongbao_img_bg"
+            android:layout_alignLeft="@+id/hongbao_img_bg"
+            android:layout_alignRight="@+id/hongbao_img_bg"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="410"/>
+            <TextView
+                android:id="@+id/hongbao_txv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/px130_sp"
+                android:textColor="@color/color_FFE27F"
+                android:text="7.86元"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="50"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/px32_sp"
+                android:textColor="@color/color_F1897F"
+                android:text="@string/hongbao_tips"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="371"/>
+            <LinearLayout
+                android:id="@+id/hongbao_ll_go"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/px30_dp"
-                android:src="@drawable/y2_tc_title" />
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/px42_sp"
+                    android:textColor="@color/color_FFE27F"
+                    android:text="@string/hongbao_go"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/px10_dp"
+                    android:paddingBottom="@dimen/px10_dp"
+                    android:layout_marginLeft="@dimen/px20_dp"
+                    android:src="@drawable/p1_go_btn2"/>
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/close"
-                android:layout_width="@dimen/px60_dp"
-                android:layout_height="@dimen/px60_dp"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/px30_dp"
-                android:src="@drawable/y2_close_hd" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/rank_detail"
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="236"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/hongbao_ll_open"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="恭喜你昨日在财富榜排名第4名"
-            android:textColor="@color/white"
-            android:textSize="@dimen/px39_sp" />
+            android:layout_alignTop="@+id/hongbao_img_bg"
+            android:layout_alignBottom="@+id/hongbao_img_bg"
+            android:layout_alignLeft="@+id/hongbao_img_bg"
+            android:layout_alignRight="@+id/hongbao_img_bg"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="433"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/px9_dp"
-            android:text="获得以下礼品"
-            android:textColor="@color/white"
-            android:textSize="@dimen/px39_sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/px52_sp"
+                android:textColor="@color/color_FFE27F"
+                android:text="恭喜你，获得聊天奖励红包"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="170"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="328"
+                    android:layout_height="1dp"/>
+                <com.juxin.predestinate.module.logic.baseui.custom.CropEndImageView
+                    android:id="@+id/hongbao_img_open"
+                    android:layout_width="0dp"
+                    android:layout_weight="312"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/p1_hongbao_open_btn"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="328"
+                    android:layout_height="1dp"/>
+            </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/px40_dp"
-            android:layout_marginTop="@dimen/px40_dp">
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="328"/>
+        </LinearLayout>
 
-            <ImageView
-                android:layout_width="@dimen/px300_dp"
-                android:layout_height="@dimen/px300_dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/y2_gz_img" />
+    </RelativeLayout>
 
-            <com.xiaoyou.friends.module.baseui.CircleImageView
-                android:id="@+id/gift_icon"
-                android:layout_width="@dimen/px200_dp"
-                android:layout_height="@dimen/px200_dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_launcher" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/confirm"
-            android:layout_marginBottom="@dimen/px90_dp"
-            style="@style/button_rank_gift_dialog"
-            android:text="查看领取" />
-    </LinearLayout>
 </LinearLayout>

@@ -10,10 +10,14 @@
         android:id="@+id/xiaoyou_close_friends_csv_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <ListView
+    <!--<ListView-->
+        <!-- -->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:dividerHeight="@dimen/px1_dp"-->
+        <!--android:divider="@color/bg_color"/>-->
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/xiaoyou_close_friends_lv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerHeight="@dimen/px1_dp"
-        android:divider="@color/bg_color"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>

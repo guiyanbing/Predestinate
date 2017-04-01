@@ -42,8 +42,8 @@ public class AthenticationActivity extends BaseActivity implements View.OnClickL
         for (int i = 0;i < auth.length;i++){
             arrNames.add(auth[i]);
         }
-        mAthenticationAdapter = new AthenticationAdapter(this,arrNames);
-        lv_list.setAdapter(mAthenticationAdapter);
+        mAthenticationAdapter = new AthenticationAdapter();
+//        lv_list.setAdapter(mAthenticationAdapter);
     }
 
     //list的item的单击事件

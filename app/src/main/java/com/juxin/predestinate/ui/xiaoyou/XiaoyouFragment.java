@@ -2,17 +2,19 @@ package com.juxin.predestinate.ui.xiaoyou;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.FriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
@@ -31,7 +33,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
     private ArrayList<FriendsList.FriendInfo> arrHead;//头部列表
     private ArrayList<FriendsList.FriendInfo> arrFriends;//互动列表
     //控件
-    private ListView lvList;
+    private RecyclerView lvList;
     private CustomSearchView mCustomSearchView;//自定义的搜索控件
     private FriendsAdapter mFriendsAdapter;
     @Nullable
@@ -45,7 +47,10 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
 
     private void initView(){
         setTitle("小友");
-        lvList = (ListView) findViewById(R.id.xiaoyou_frag_lv_list);
+        lvList = (RecyclerView) findViewById(R.id.xiaoyou_frag_lv_list);
+        lvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        lvList.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mCustomSearchView = (CustomSearchView) findViewById(R.id.xiaoyou_frag_csv_search);
         //        mCustomSearchView = new CustomSearchView(getContext());
 //        lvList.addHeaderView(mCustomSearchView);
@@ -53,22 +58,24 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
         initDataHead();
         arrDatas = new ArrayList<>();
         arrDatas.addAll(arrHead);
-        mFriendsAdapter = new FriendsAdapter(getContext(),arrDatas);
+        mFriendsAdapter = new FriendsAdapter();
         mFriendsAdapter.setList(arrDatas);
         lvList.setAdapter(mFriendsAdapter);
         initListener();
     }
 
     private void initListener(){
-        lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mFriendsAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int handledPosition = position - lvList.getHeaderViewsCount();
-                FriendsList.FriendInfo info = mFriendsAdapter.getItem(handledPosition);
+            public void onItemClick(View convertView, int position) {
+                //                int handledPosition = position - lvList.getHeaderViewsCount();
+                FriendsList.FriendInfo info = mFriendsAdapter.getItem(position);
                 if (info != null && info.getType() == 1){
-                    if (handledPosition == 0){
+                    if (position == 0){
                         UIShow.showTabGroupAct(getActivity());
-                    }else if (handledPosition == 1){
+//                        RedPacketDialog dialog = new RedPacketDialog();
+//                        dialog.showDialog(getActivity());
+                    }else if (position == 1){
                         UIShow.showCloseFriendsAct(getActivity());
                     }
                 }else if (info != null && info.getType() == 0){

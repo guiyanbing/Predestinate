@@ -1,52 +1,45 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
-
-import java.util.List;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 
 /**
  * Created by zm on 2016/9/7.
  */
-public class AthenticationAdapter extends ExBaseAdapter<String> {
-    public AthenticationAdapter(Context context, List<String> datas) {
-        super(context, datas);
+public class AthenticationAdapter extends BaseRecyclerViewAdapter<String> {
+    @Override
+    public int[] getItemLayouts() {
+        return new int[]{R.layout.p1_user_athentication_item};
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder vh;
-        if (convertView == null) {
-            convertView = inflate(R.layout.p1_user_athentication_item);
-            vh = new ViewHolder(convertView);
-            convertView.setTag(vh);
-        } else {
-            vh = (ViewHolder) convertView.getTag();
-        }
+    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
+        MyViewHolder vh = new MyViewHolder(viewHolder);
         String str = getItem(position);
         vh.tevName.setText(str+"");
         //设置认证状态
-//        vh.tevState
-
-        return convertView;
+        //        vh.tevState
     }
 
-    class ViewHolder {
+    @Override
+    public int getRecycleViewItemType(int position) {
+        return 0;
+    }
+
+    class MyViewHolder{
         TextView tevName,tevState;
 
-        public ViewHolder(View convertView) {
+        public MyViewHolder(BaseRecyclerViewHolder convertView) {
             initView(convertView);
         }
 
-        private void initView(View convertView) {
-            tevName = (TextView) convertView.findViewById(R.id.user_txv_name);
-            tevState = (TextView) convertView.findViewById(R.id.user_tev_state);
+        private void initView(BaseRecyclerViewHolder convertView) {
+            tevName = convertView.findViewById(R.id.user_txv_name);
+            tevState = convertView.findViewById(R.id.user_tev_state);
         }
     }
 }

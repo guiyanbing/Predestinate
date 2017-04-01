@@ -1,15 +1,21 @@
 package com.juxin.predestinate.ui.xiaoyou;
 
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.util.UIUtil;
 
 
 /**
@@ -18,7 +24,11 @@ import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
  */
 public class RedPacketDialog extends BaseDialogFragment implements View.OnClickListener {
 
-    private String detailString, iconUrl;
+    private LinearLayout llDetail;//红包详情
+    private LinearLayout llOpen;//红包打开布局
+
+    private double money;
+    private TextView txvMoney;
 
     public RedPacketDialog() {
         settWindowAnimations(R.style.AnimScaleInScaleOutOverShoot);
@@ -38,40 +48,49 @@ public class RedPacketDialog extends BaseDialogFragment implements View.OnClickL
     }
 
     private void initView(View contentView) {
-        TextView rank_detail = (TextView) contentView.findViewById(R.id.rank_detail);
-        ImageView gift_icon = (ImageView) contentView.findViewById(R.id.gift_icon);
+        llOpen = (LinearLayout) contentView.findViewById(R.id.hongbao_ll_open);
+        llDetail = (LinearLayout) contentView.findViewById(R.id.hongbao_ll_detail);
 
-        contentView.findViewById(R.id.close).setOnClickListener(this);
-        contentView.findViewById(R.id.confirm).setOnClickListener(this);
+        contentView.findViewById(R.id.hongbao_img_open).setOnClickListener(this);
+        contentView.findViewById(R.id.hongbao_ll_go).setOnClickListener(this);
 
-        rank_detail.setText(detailString);
-        
-        
-        //// TODO: 2017/3/30 设置图片请求
-//        ModuleMgr.httpMgr.reqImage(gift_icon, iconUrl, R.drawable.default_pic);
+        txvMoney = (TextView) contentView.findViewById(R.id.hongbao_txv_money);
     }
 
     /**
      * 设置显示数据
      *
-     * @param detailString 排行信息
-     * @param iconUrl      奖品图片地址
+     * @param money 得到的钱
      */
-    public void setData(String detailString, String iconUrl) {
-        this.detailString = detailString;
-        this.iconUrl = iconUrl;
+    public void setData(double money) {
+        this.money = money;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.confirm:
-                //TODO 跳转到奖品页面
+            case R.id.hongbao_img_open:
+                //TODO 打开红包操作
 //                UIShow.showGiftShopAct((FragmentActivity) getContext());
-                dismissAllowingStateLoss();
+                llOpen.setVisibility(View.GONE);
+                llDetail.setVisibility(View.VISIBLE);
+                String str = txvMoney.getText().toString();
+                if (!TextUtils.isEmpty(str)){
+//                    SpannableString WordtoSpan = new SpannableString("大字小字");
+//                    WordtoSpan.setSpan(new AbsoluteSizeSpan(UIUtil.px2sp(130),true), 0, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    WordtoSpan.setSpan(new AbsoluteSizeSpan(UIUtil.px2sp(50),true), str.length()-1, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    txvMoney.setText(WordtoSpan.toString(),TextView.BufferType.SPANNABLE);
+                    Spannable sp = new SpannableString(str);
+                    sp.setSpan(new AbsoluteSizeSpan(UIUtil.px2sp(130),true),0, str.length()-1,Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    sp.setSpan(new AbsoluteSizeSpan(UIUtil.px2sp(50),true),str.length()-1, str.length(),Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    txvMoney.setText(sp);
+                }
+
                 break;
-            case R.id.close:
+            case R.id.hongbao_ll_go:
+                //// TODO: 2017/3/31  跳转到小友钱包明细页
                 dismissAllowingStateLoss();
+                PToast.showShort("跳转到小友钱包明细页");
                 break;
         }
     }

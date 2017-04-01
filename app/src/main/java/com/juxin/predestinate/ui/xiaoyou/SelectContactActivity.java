@@ -2,9 +2,9 @@ package com.juxin.predestinate.ui.xiaoyou;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ListView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class SelectContactActivity extends BaseActivity implements View.OnClickListener,CustomSearchView.OnTextChangedListener {
 
     private ArrayList<SimpleFriendsList.SimpleFriendInfo> arrSimpleFriends;
-    private ListView lvFriends;
+    private RecyclerView lvFriends;
     private CustomSearchView mCustomSearchView;
 
     @Override
@@ -36,7 +36,7 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.contact));
         setTitleRight("确定", this);
-        lvFriends = (ListView) findViewById(R.id.xiaoyou_sele_lv_list);
+        lvFriends = (RecyclerView) findViewById(R.id.xiaoyou_sele_lv_list);
     }
 
     private void changeTitleRight() {
