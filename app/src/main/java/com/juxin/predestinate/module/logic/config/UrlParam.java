@@ -16,7 +16,8 @@ public enum UrlParam {
 
     reqRegister("i/reg/Reg", UserReg.class),//注册接口
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
-    reqReqVerifyCode("i/reg/ReqVerifyCode"),//获取手机验证码
+    reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
+    resetPassword("i/reg/ResetPassword"),//找回密码
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 

@@ -47,7 +47,7 @@
     <string name="txt_phone">手机号</string>
     <string name="txt_verifycode">验证码</string>
     <string name="txt_setpwd">设置密码</string>
-    <string name="ext_setpwd_hit">设置登录密码</string>
+    <string name="ext_setpwd_hit">设置登录密码4~16位</string>
     <string name="bt_send_code_normal">点击获取</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
 

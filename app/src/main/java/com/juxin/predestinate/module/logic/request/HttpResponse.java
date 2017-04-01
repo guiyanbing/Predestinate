@@ -19,6 +19,7 @@ public class HttpResponse extends BaseData {
     private String responseString = "";         //原始返回串
     private String status = null;               //返回状态，ok表示成功返回数据。
     private BaseData baseData = null;           //返回的数据对象
+    private String msg = null;      //返回的提示消息
 
     public HttpResponse(UrlParam urlParam) {
         this.urlParam = urlParam;
@@ -81,12 +82,21 @@ public class HttpResponse extends BaseData {
         this.baseData = baseData;
     }
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     @Override
     public void parseJson(String jsonStr) {
         responseString = jsonStr;
         JSONObject json = getJsonObject(jsonStr);
 
         status = json.optString("status");
+        msg = json.optString("msg");
         //------请求返回的数据体处理------
         baseData = null;
 

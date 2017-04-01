@@ -22,8 +22,8 @@
     <!--</item>-->
     <item>
         <shape android:shape="rectangle">
-            <corners android:bottomLeftRadius="@dimen/px870_dp" android:bottomRightRadius="@dimen/px870_dp" android:topLeftRadius="@dimen/px870_dp" android:topRightRadius="@dimen/px870_dp" />
-            <stroke android:color="@color/btn_getcode_stroke" android:width="@dimen/px5_dp" />
+            <corners android:bottomLeftRadius="@dimen/px15_dp" android:bottomRightRadius="@dimen/px15_dp" android:topLeftRadius="@dimen/px15_dp" android:topRightRadius="@dimen/px15_dp" />
+            <stroke android:color="@color/btn_getcode_stroke" android:width="@dimen/px3_dp" />
             <solid android:color="@color/btn_getcode_solid" />
         </shape>
     </item>
