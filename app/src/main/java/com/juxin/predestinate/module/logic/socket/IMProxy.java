@@ -18,28 +18,23 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 即时通许代理，负责将接收到的服务器消息通知给上层。
+ * 即时通许代理，负责将接收到的服务器消息通知给上层
  */
 public class IMProxy {
 
-    private static final String TAG = "IMProxy";
-
-    private static IMProxy ourInstance = new IMProxy();
+    private static class SingletonHolder {
+        static IMProxy instance = new IMProxy();
+    }
 
     public static IMProxy getInstance() {
-        return ourInstance;
+        return SingletonHolder.instance;
     }
-
-    private IMProxy() {
-    }
-
-    // 对外的常用接口。
 
     /**
-     * 登录用的信息。通过Http请求获得Socket需要的host和私钥。
+     * 登录用的信息通过Http请求获得Socket需要的host和私钥
      *
-     * @param uid   登录用户的uid。
-     * @param token 登录用的cookie。
+     * @param uid   登录用户的uid
+     * @param token MD5(pw)
      */
     public void login(long uid, String token) {
         try {
@@ -50,7 +45,7 @@ public class IMProxy {
     }
 
     /**
-     * 退出登录，即断开即时通讯的连接。同时清除登录用的token。
+     * 退出登录，即断开即时通讯的连接，同时清除登录用的token
      *
      * @see #login(long, String) login(long, String)
      */
@@ -63,10 +58,10 @@ public class IMProxy {
     }
 
     /**
-     * 设置GPS坐标，经纬度坐标。
+     * 设置GPS坐标，经纬度坐标
      *
-     * @param longitude 经度坐标。
-     * @param latitude  维度坐标。
+     * @param longitude 经度坐标
+     * @param latitude  维度坐标
      */
     public void setLocationGPS(double longitude, double latitude) {
         try {
@@ -77,7 +72,7 @@ public class IMProxy {
     }
 
     /**
-     * 设置系统类型。
+     * 设置系统类型
      *
      * @param systemInfo 操作系统:0 其它；1 苹果；2 小米
      */
@@ -89,13 +84,13 @@ public class IMProxy {
         }
     }
 
-    private Map<String, Set<IMListener>> typeMapListener = new HashMap<String, Set<IMListener>>();
-    private Set<IMListener> noTypeMapListener = new LinkedHashSet<IMListener>();
+    private Map<String, Set<IMListener>> typeMapListener = new HashMap<>();
+    private Set<IMListener> noTypeMapListener = new LinkedHashSet<>();
 
     private Intent sIntent = null;
 
     /**
-     * 代理和服务器建立连接。
+     * 代理和服务器建立连接
      */
     public void connect() {
         if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) return;
@@ -119,7 +114,7 @@ public class IMProxy {
     }
 
     /**
-     * 代理和服务器断开连接。（默认不主动断开连接，特殊情况调用）
+     * 代理和服务器断开连接（默认不主动断开连接，特殊情况调用）
      */
     public void disconnect() {
         if (status != ConnectStatus.CONNECTED) {
@@ -156,16 +151,16 @@ public class IMProxy {
     }
 
     /**
-     * 注册一个监听者，将监听者和具体消息类型绑定。
+     * 注册一个监听者，将监听者和具体消息类型绑定
      *
-     * @param imType     消息类型。
-     * @param imListener 监听者实例。
+     * @param imType     消息类型
+     * @param imListener 监听者实例
      */
     public void attach(final String imType, final IMListener imListener) {
         Set<IMListener> observers = typeMapListener.get(imType);
 
         if (observers == null) {
-            observers = new LinkedHashSet<IMListener>();
+            observers = new LinkedHashSet<>();
             typeMapListener.put(imType, observers);
         }
 
@@ -173,10 +168,10 @@ public class IMProxy {
     }
 
     /**
-     * 取消注册的监听者，解除将监听者和具体消息类型的绑定。
+     * 取消注册的监听者，解除将监听者和具体消息类型的绑定
      *
-     * @param imType     消息类型。
-     * @param imListener 监听者实例。
+     * @param imType     消息类型
+     * @param imListener 监听者实例
      */
     public void detach(final String imType, final IMListener imListener) {
         Set<IMListener> observers = typeMapListener.get(imType);
@@ -187,20 +182,20 @@ public class IMProxy {
     }
 
     /**
-     * 注册一个监听者，将监听者和所有消息类型绑定。<br>
+     * 注册一个监听者，将监听者和所有消息类型绑定<br>
      * 使用此接口时，通过{@link #attach(String, IMProxy.IMListener)}
-     * 绑定的监听者将会被解除绑定关系。
+     * 绑定的监听者将会被解除绑定关系
      *
-     * @param imListener 监听者实例。
+     * @param imListener 监听者实例
      */
     public void attach(final IMListener imListener) {
         noTypeMapListener.add(imListener);
     }
 
     /**
-     * 取消注册的监听者，解除监听者的所有绑定。
+     * 取消注册的监听者，解除监听者的所有绑定
      *
-     * @param imListener 监听者实例。
+     * @param imListener 监听者实例
      */
     public void detach(final IMListener imListener) {
         for (Map.Entry<String, Set<IMListener>> entry : typeMapListener.entrySet()) {
@@ -211,24 +206,24 @@ public class IMProxy {
     }
 
     /**
-     * 监听事件的回调接口。
+     * 监听事件的回调接口
      */
     public interface IMListener {
         /**
          * 处理{@link CoreService}
-         * 回调过来的消息。
+         * 回调过来的消息
          *
-         * @param msgId    消息Id。
-         * @param group    是否群聊消息。
-         * @param groupId  群聊Id，私聊为null或空。
-         * @param sender   消息发送者的uid。
-         * @param contents 消息内容，一个json格式的String。
+         * @param msgId    消息Id
+         * @param group    是否群聊消息
+         * @param groupId  群聊Id，私聊为null或空
+         * @param sender   消息发送者的uid
+         * @param contents 消息内容，一个json格式的String
          */
         void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents);
     }
 
     /**
-     * 网络连接状态。
+     * 网络连接状态
      */
     private enum ConnectStatus {
         NO_CONNECT,         //未连接
@@ -241,13 +236,13 @@ public class IMProxy {
     private static ConnectStatus status = ConnectStatus.NO_CONNECT;//默认连接状态为未连接
 
     /**
-     * 调用{@link CoreService}的接口实例。
+     * 调用{@link CoreService}的接口实例
      */
     private ICoreService iCoreService = null;
 
     /**
      * 将{@link CoreService}
-     * 对{@link IMProxy}的回调在这里设置。
+     * 对{@link IMProxy}的回调在这里设置
      */
     private void setCSCallback() {
         try {
@@ -259,7 +254,7 @@ public class IMProxy {
 
     /**
      * 将{@link CoreService}
-     * 对{@link IMProxy}的回调清除。
+     * 对{@link IMProxy}的回调清除
      */
     private void removeCSCallback() {
         try {
@@ -271,7 +266,7 @@ public class IMProxy {
 
     // =======================ICSCallback.aidl start=========================
     /**
-     * {@link CoreService}回调IMProxy的接口实例。
+     * {@link CoreService}回调IMProxy的接口实例
      */
     private ICSCallback iCSCallback = new CSCallback();
 
@@ -279,10 +274,6 @@ public class IMProxy {
         @Override
         public void onMessage(long msgId, boolean group, String groupId, long sender, String contents) throws RemoteException {
             IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
-        }
-
-        @Override
-        public void onFeedback(long msgId, int msgType, String host) throws RemoteException {
         }
 
         @Override
@@ -303,14 +294,14 @@ public class IMProxy {
 
     /**
      * 处理{@link CoreService}
-     * 回调过来的消息。<br>
-     * 添加特殊处理记录下最新的消息Id，如果小于此Id的消息，认为是重复消息，直接丢弃。
+     * 回调过来的消息<br>
+     * 添加特殊处理记录下最新的消息Id，如果小于此Id的消息，认为是重复消息，直接丢弃
      *
-     * @param msgId    消息Id。
-     * @param group    是否群聊消息。
-     * @param groupId  群聊Id。
-     * @param sender   消息发送者的uid。
-     * @param contents 消息内容，一个json格式的String。
+     * @param msgId    消息Id
+     * @param group    是否群聊消息
+     * @param groupId  群聊Id
+     * @param sender   消息发送者的uid
+     * @param contents 消息内容，一个json格式的String
      */
     public void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents) {
         PLogger.d("msgId: " + msgId + "; group: " + group + "; groupId: " + groupId + "; sender: " + sender + "; contents: " + contents);
@@ -329,10 +320,10 @@ public class IMProxy {
 
     /**
      * 处理{@link CoreService}
-     * 回调过来的消息。
+     * 回调过来的消息
      *
-     * @param type 消息类型。0 登录成功；1 登录失败；2 连接成功；3 断开连接；
-     * @param msg  提示消息。
+     * @param type 消息类型：0-登录成功；1-登录失败；2-连接成功；3-断开连接
+     * @param msg  提示消息
      */
     private void onStatusChange(final int type, final String msg) {
         PLogger.d("type：" + type + "，msg：" + msg);
@@ -350,12 +341,13 @@ public class IMProxy {
      * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
      */
     private void accountInvalid(int reason) {
+        //TODO 踢下线弹窗
     }
 
     private boolean isSocketValid = false;//socket是否在线
 
     /**
-     * @return 判断socket是否在线。true表示socket存活并且保持在线状态；false表示socket掉线或者socket对象被杀死
+     * @return 判断socket是否在线true表示socket存活并且保持在线状态；false表示socket掉线或者socket对象被杀死
      */
     public boolean isSocketValid() {
         return isSocketValid;
@@ -364,5 +356,4 @@ public class IMProxy {
     private void setSocketValidStatus(boolean isSocketValid) {
         this.isSocketValid = isSocketValid;
     }
-    // =======================ICSCallback.aidl end=========================
 }

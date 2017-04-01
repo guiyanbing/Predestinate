@@ -9,7 +9,6 @@ import android.webkit.CookieSyncManager;
 
 import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
-import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -39,10 +38,14 @@ import java.util.Random;
  * Created by ZRP on 2016/9/19.
  */
 public class LoginMgr implements ModuleBase {
-    private final static String LOGINMGR_UID = "loginmgr_sUid";                 // 保存当前登录用户账号信息 uid, pw
-    private final static String USER_KEY = "user_key";        // 保存当前登录过的账号信息
-    private final static String LOGINMGR_AUTH = "loginmgr_auth";                // 保存当前登录用户cookie
-    public boolean IF_PW_RESET = false;                       // 密码已是否重置
+
+    private final static String LOGINMGR_UID = "LOGINMGR_UID";          // 保存当前登录用户账号信息 uid, pw
+    private final static String LOGINMGR_COOKIE = "LOGINMGR_COOKIE";    // 保存当前登录用户cookie
+    private final static String LOGINMGR_AUTH = "LOGINMGR_AUTH";        // 保存当前登录用户的密码md5
+    private final static String LOGIN_USER_KEY = "LOGIN_USER_KEY";      // 保存当前登录过的账号信息
+
+    public boolean IF_PW_RESET = false;                                 // 密码已是否重置
+    public static boolean hasLogin = false;                             //是否已经登录
     public static String cookie = null;
 
     @Override
@@ -66,10 +69,11 @@ public class LoginMgr implements ModuleBase {
      * @return 获取cookie
      */
     public String getCookie() {
-        return PSP.getInstance().getString(LOGINMGR_AUTH, "");
+        return PSP.getInstance().getString(LOGINMGR_COOKIE, "");
     }
 
-    //************************************ 登录用户信息列表存储 *****************************\\
+    // ************************************ 登录用户信息列表存储 *****************************
+
     private ArrayList<UP> userList;  // 维护登录过的用户数据列表，防止多次进行SP读写操作
 
     /**
@@ -83,7 +87,7 @@ public class LoginMgr implements ModuleBase {
      * 保存cookie
      */
     public void setCookie(String cookie) {
-        PSP.getInstance().put(LOGINMGR_AUTH, cookie);
+        PSP.getInstance().put(LOGINMGR_COOKIE, cookie);
     }
 
     /**
@@ -92,7 +96,7 @@ public class LoginMgr implements ModuleBase {
     private List<UP> getUserJson() {
         List<UP> upList = new ArrayList<>();
         try {
-            String key = PSP.getInstance().getString(USER_KEY, null);
+            String key = PSP.getInstance().getString(LOGIN_USER_KEY, null);
             if (!TextUtils.isEmpty(key)) {
                 JSONObject jsonObject = new JSONObject(key);
                 JSONArray jsonArray = jsonObject.optJSONArray("user");
@@ -168,7 +172,6 @@ public class LoginMgr implements ModuleBase {
      * 账号注册
      */
     public HTCallBack onRegister(UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
-
         postParams.put("client_type", 1); // 1为android 2为iphone
         postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
         postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
@@ -193,8 +196,8 @@ public class LoginMgr implements ModuleBase {
         HashMap<String, Object> userAccount = new HashMap<>();
         userAccount.put("name", uid);
         userAccount.put("pwd", MD5.encode(pwd));
-        LoadingDialog.show((FragmentActivity) context,context.getResources().getString(R.string.tip_loading_login));
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLogin,userAccount, requestCallback);
+        LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLogin, userAccount, requestCallback);
     }
 
     /**
@@ -210,9 +213,9 @@ public class LoginMgr implements ModuleBase {
         }
     }
 
-
     /**
      * 保存登录信息
+     *
      * @param uid
      * @param password
      * @param cookie
@@ -220,7 +223,8 @@ public class LoginMgr implements ModuleBase {
      */
     public void putAllLoginInfo(long uid, String password, String cookie, boolean isUserLogin) {
         setUid(uid + "");
-        putUserinfo(uid, password); //保存登录账户到list配置
+        PSP.getInstance().put(LOGINMGR_AUTH, MD5.encode(password));
+        putUserInfo(uid, password); //保存登录账户到list配置
         setLoginInfo(uid, isUserLogin);  //设置登录状态
         setCookie(cookie);
     }
@@ -243,7 +247,7 @@ public class LoginMgr implements ModuleBase {
             App.uid = uid;
             App.isLogin = true;
         }
-        MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login,App.isLogin);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, App.isLogin);
         return App.isLogin;
     }
 
@@ -255,6 +259,7 @@ public class LoginMgr implements ModuleBase {
         CookieManager.getInstance().removeAllCookie();
         CookieSyncManager.getInstance().sync();
     }
+
     /**
      * 退出登录，并清空用户登录信息
      */
@@ -264,11 +269,13 @@ public class LoginMgr implements ModuleBase {
 //        App.appState = App.AppState.AS_Service; //TODO
         clearCookie();
     }
-    // ************************************内部调用************************** \\
+
+    // **************************内部调用**************************
+
     /**
      * 登录后存储账号密码到list配置
      */
-    private void putUserinfo(long uid, String pwd) {
+    private void putUserInfo(long uid, String pwd) {
         List<UP> list = getUserJson();
         if (list == null) {
             list = new ArrayList<>();
@@ -308,6 +315,13 @@ public class LoginMgr implements ModuleBase {
             return BaseUtil.getLong(uid, 0);
         }
         return 0L;
+    }
+
+    /**
+     * @return 获取保存的密码md5值
+     */
+    public String getAuth() {
+        return PSP.getInstance().getString(LOGINMGR_AUTH, "");
     }
 
     /**

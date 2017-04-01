@@ -22,6 +22,7 @@
     <color name="color_B2DFDB">#B2DFDB</color>
     <color name="color_00BCD4">#00BCD4</color>
     <color name="color_212121">#212121</color>
+    <color name="color_5A5A5A">#5A5A5A</color>
     <color name="color_757575">#757575</color>
     <color name="color_9D9D9D">#9D9D9D</color>
     <color name="color_BDBDBD">#BDBDBD</color>
@@ -44,6 +45,8 @@
     <color name="color_30333333">#4D333333</color>
     <color name="color_47cfd3">#47CFD3</color>
     <color name="color_f0f1f4">#f0f1f4</color>
+    <color name="color_f95553">#f95553</color>
+
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>

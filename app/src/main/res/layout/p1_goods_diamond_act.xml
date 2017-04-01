@@ -6,35 +6,72 @@
 
     <include layout="@layout/base_title" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:fadingEdge="none"
+        android:overScrollMode="always"
+        android:scrollbars="none">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/px60_dp"
-            android:text="@string/goods_diamond_remain"
-            android:textColor="@color/text_zhuyao_black"
-            android:textSize="@dimen/px56_sp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/remain_diamond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/px60_dp"
-            android:layout_marginTop="@dimen/px30_dp"
-            android:text="0"
-            android:textColor="@color/color_f95553"
-            android:textSize="@dimen/px86_sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="vertical">
 
-    <include layout="@layout/layout_margintop" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/px60_dp"
+                    android:text="@string/goods_diamond_remain"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/px56_sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/remain_diamond"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/px60_dp"
+                    android:layout_marginTop="@dimen/px30_dp"
+                    android:text="0"
+                    android:textColor="@color/color_f95553"
+                    android:textSize="@dimen/px86_sp" />
+            </LinearLayout>
 
+            <include layout="@layout/layout_margintop" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/px40_dp"
+                android:text="@string/goods_diamond_type"
+                android:textColor="@color/text_ciyao_gray" />
+
+            <LinearLayout
+                android:id="@+id/pay_type_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <include layout="@layout/p1_goods_of_payment" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
