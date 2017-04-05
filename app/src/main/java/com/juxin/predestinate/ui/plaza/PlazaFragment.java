@@ -35,7 +35,7 @@ public class PlazaFragment extends BaseFragment {
 
     private void setTopView() {
         setTitle(getString(R.string.plaza_title));
-        setTitleRightImg(R.drawable.r1_reg_camera, new View.OnClickListener() {
+        setTitleRightImg(R.drawable.p1_reg_camera, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PToast.showShort("打开发布");
