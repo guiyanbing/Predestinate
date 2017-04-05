@@ -9,6 +9,7 @@ import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 
 
 /**
+ * 亲密好友首页
  * Created by zm on 2016/9/7.
  */
 public class CloseFriendsAdapter extends BaseRecyclerViewAdapter<LabelsList.LabelInfo> {

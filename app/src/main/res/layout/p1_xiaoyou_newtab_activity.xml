@@ -9,8 +9,8 @@
     <com.juxin.predestinate.ui.xiaoyou.view.LabelDetailsHeadView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/xiaoyou_newtab_rv_list"
+    <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
+        android:id="@+id/xiaoyou_newtab_crlv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

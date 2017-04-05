@@ -3,14 +3,15 @@ package com.juxin.predestinate.ui.xiaoyou;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.CloseFriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
@@ -25,7 +26,9 @@ import java.util.ArrayList;
 public class CloseFriendsActivity extends BaseActivity implements View.OnClickListener,CustomSearchView.OnTextChangedListener {
 
     //控件
-    private RecyclerView lvList;
+    //控件
+    private CustomRecyclerView crlvList;
+    private XRecyclerView lvList;
     private CustomSearchView mCustomSearchView;//自定义的搜索控件
 
     private ArrayList<LabelsList.LabelInfo> arrLabelinfos;
@@ -41,7 +44,8 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
     private void initView() {
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.good_friend));
-        lvList = (RecyclerView) findViewById(R.id.xiaoyou_close_friends_lv_list);
+        crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_close_friends_lv_list);
+        lvList = crlvList.getXRecyclerView();
         lvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         lvList.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));

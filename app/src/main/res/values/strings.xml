@@ -148,4 +148,5 @@
     <string name="good_friend">亲密好友</string>
     <string name="hongbao_tips">已存入零钱，可直接提现</string>
     <string name="hongbao_go">查看领取详情</string>
+    <string name="all_friends">全部好友</string>
 </resources>

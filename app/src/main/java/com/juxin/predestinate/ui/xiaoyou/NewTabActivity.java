@@ -3,30 +3,38 @@ package com.juxin.predestinate.ui.xiaoyou;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.juxin.library.controls.xRecyclerView.XRecyclerView;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
-import com.juxin.predestinate.ui.xiaoyou.adapter.CloseFriendsDdetailAdapter;
-import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
+import com.juxin.predestinate.ui.xiaoyou.adapter.TabDdetailAdapter;
+import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 添加标签页面
  * Created by zm on 2017/3/24
  */
-public class NewTabActivity extends BaseActivity implements View.OnClickListener {
+public class NewTabActivity extends BaseActivity implements View.OnClickListener,XRecyclerView.LoadingListener,RequestComplete {
 
     //控件
-    private RecyclerView rvList;
+    private CustomRecyclerView crlvList;
+    private XRecyclerView rvList;
     //其他
-    private ArrayList<FriendsList.FriendInfo> arrFriendinfos;
-    private CloseFriendsDdetailAdapter mCloseFriendsDdetailAdapter;
+    private ArrayList<SimpleFriendsList.SimpleFriendInfo> arrFriendinfos;
+    private TabDdetailAdapter mTabDdetailAdapter;
     private long tab ;
+    private int page = 0;//当前页
+    private int pageLimits = 20;//一页的条数
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,13 +45,17 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initView() {
-        rvList = (RecyclerView) findViewById(R.id.xiaoyou_newtab_rv_list);
+        crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_newtab_crlv_list);
+        rvList = crlvList.getXRecyclerView();
+        rvList.setLoadingListener(this);
         rvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvList.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.tab_group));
         setTitleRight("添加成员", this);
+        mTabDdetailAdapter = new TabDdetailAdapter();
+        rvList.setAdapter(mTabDdetailAdapter);
         if (tab == -1){
 
         }else {
@@ -60,5 +72,37 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefresh() {
+        page = 0;
+    }
+
+    @Override
+    public void onLoadMore() {
+        page++;
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        if (response.isOk()){//请求返回成功
+            SimpleFriendsList lists = (SimpleFriendsList) response.getBaseData();
+            List<SimpleFriendsList.SimpleFriendInfo> friendInfos = lists.getArr_frends();
+            if (page == 0){
+                arrFriendinfos.clear();
+            }
+            arrFriendinfos.addAll(friendInfos);
+            if (friendInfos != null && !friendInfos.isEmpty()) {
+                rvList.setLoadingMoreEnabled(friendInfos.size() >= pageLimits ? true:false);
+                mTabDdetailAdapter.setList(arrFriendinfos);
+                crlvList.showXrecyclerView();
+            }else{
+                crlvList.showNoData();
+            }
+        }else {//请求失败
+            crlvList.showNetError();
+            MMToast.showShort("请求失败，请检查您的网络");
+        }
     }
 }
