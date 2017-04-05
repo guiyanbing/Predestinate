@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
@@ -37,7 +38,7 @@ public class IMProxy {
     }
 
     /**
-     * 登录用的信息通过Http请求获得Socket需要的host和私钥
+     * 登录socket
      *
      * @param uid   登录用户的uid
      * @param token MD5(pw)
@@ -47,6 +48,19 @@ public class IMProxy {
             if (iCoreService != null) iCoreService.login(uid, token);
         } catch (Exception e) {
             PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 使用存储的账户密码进行登录
+     */
+    public void login() {
+        long uid = ModuleMgr.getLoginMgr().getUid();
+        String auth = ModuleMgr.getLoginMgr().getAuth();
+        if (uid == 0 || TextUtils.isEmpty(auth)) {
+            PLogger.d("---IMProxy--->login：auth is empty.");
+        } else {
+            login(uid, auth);
         }
     }
 
@@ -99,23 +113,24 @@ public class IMProxy {
      * 代理和服务器建立连接
      */
     public void connect() {
-        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) return;
-
-        Context context = App.context;
-        sIntent = new Intent();
-        sIntent.setClass(context, CoreService.class);
-
-        try {
-            context.startService(sIntent);//启动CoreService服务
-            if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
-                if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
-                    status = ConnectStatus.BINDING;
-                } else {
-                    status = ConnectStatus.REBINDING;
+        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) {
+            login();
+        } else {
+            Context context = App.context;
+            sIntent = new Intent();
+            sIntent.setClass(context, CoreService.class);
+            try {
+                context.startService(sIntent);//启动CoreService服务
+                if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
+                    if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
+                        status = ConnectStatus.BINDING;
+                    } else {
+                        status = ConnectStatus.REBINDING;
+                    }
                 }
+            } catch (SecurityException e) {
+                e.printStackTrace();
             }
-        } catch (SecurityException e) {
-            e.printStackTrace();
         }
     }
 
@@ -234,7 +249,7 @@ public class IMProxy {
     private enum ConnectStatus {
         NO_CONNECT,         //未连接
         BINDING,            //连接中
-        CONNECTED,          //一连接
+        CONNECTED,          //已连接
         DISCONNECTED,       //断开连接
         REBINDING           //重连
     }

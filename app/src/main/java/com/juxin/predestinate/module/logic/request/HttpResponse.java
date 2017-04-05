@@ -6,7 +6,6 @@ import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -19,7 +18,8 @@ public class HttpResponse extends BaseData {
     private String responseString = "";         //原始返回串
     private String status = null;               //返回状态，ok表示成功返回数据。
     private BaseData baseData = null;           //返回的数据对象
-    private String msg = null;      //返回的提示消息
+    private String msg = null;                  //返回的提示消息
+    private boolean cache = false;              //当前数据是否来自于缓存
 
     public HttpResponse(UrlParam urlParam) {
         this.urlParam = urlParam;
@@ -88,6 +88,14 @@ public class HttpResponse extends BaseData {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public boolean isCache() {
+        return cache;
+    }
+
+    public void setCache(boolean cache) {
+        this.cache = cache;
     }
 
     @Override
