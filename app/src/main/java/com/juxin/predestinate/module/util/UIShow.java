@@ -72,12 +72,23 @@ public class UIShow {
     /**
      * 跳转到网页
      *
+     * @param type 1-侧滑页面，2-全屏页面，全屏时显示loading条
+     * @param url  网页地址
+     */
+    public static void showWebActivity(Context context, int type, String url) {
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("type", type);
+        show(context, intent);
+    }
+
+    /**
+     * 跳转到网页
+     *
      * @param url 网页地址
      */
     public static void showWebActivity(Context context, String url) {
-        Intent intent = new Intent(context, WebActivity.class);
-        intent.putExtra("url", url);
-        show(context, intent);
+        showWebActivity(context, 1, url);
     }
 
     /**
