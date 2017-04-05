@@ -46,10 +46,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px120_dp"
             android:layout_marginRight="@dimen/px120_dp"
-            android:background="@drawable/r1_btn_login_bg"
+            android:background="@drawable/r1_btn_nav_bg"
             android:gravity="center"
             android:padding="@dimen/px35_dp"
-            android:text="注册"
+            android:text="@string/bt_reg"
             android:textColor="@color/white"
             android:textSize="@dimen/px45_sp" />
 
@@ -60,10 +60,10 @@
             android:layout_marginLeft="@dimen/px120_dp"
             android:layout_marginRight="@dimen/px120_dp"
             android:layout_marginTop="@dimen/px35_dp"
-            android:background="@drawable/r1_btn_login_bg"
+            android:background="@drawable/r1_btn_nav_bg"
             android:gravity="center"
             android:padding="@dimen/px35_dp"
-            android:text="登录"
+            android:text="@string/bt_login"
             android:textColor="@color/white"
             android:textSize="@dimen/px45_sp" />
     </LinearLayout>

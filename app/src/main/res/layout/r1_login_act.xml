@@ -7,6 +7,8 @@
 
     <include layout="@layout/base_title" />
 
+    <View style="@style/divider_spacing_top" />
+
     <RelativeLayout
         android:id="@+id/layout_parent"
         android:layout_width="match_parent"
@@ -32,8 +34,9 @@
                     android:layout_width="0dip"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="账号"
-                    android:inputType="number" />
+                    android:hint="@string/ext_account_number_hit"
+                    android:inputType="number"
+                    android:maxLength="50" />
 
                 <ImageView
                     android:id="@+id/img_user_login_arrow"
@@ -52,8 +55,9 @@
                 style="@style/editText_input"
                 android:layout_marginLeft="@dimen/px70_dp"
                 android:layout_marginRight="@dimen/px70_dp"
-                android:hint="密码"
-                android:inputType="textPassword" />
+                android:hint="@string/ext_password_hit"
+                android:inputType="textPassword"
+                android:maxLength="16" />
 
             <View style="@style/divider_line_gap70px" />
 
@@ -63,16 +67,17 @@
                 android:layout_marginLeft="@dimen/px70_dp"
                 android:layout_marginRight="@dimen/px70_dp"
                 android:layout_marginTop="@dimen/px60_dp"
-                android:text="登录" />
+                android:text="@string/bt_login" />
 
             <TextView
                 android:id="@+id/txt_user_reset_pw"
                 android:layout_width="match_parent"
                 android:layout_height="40dip"
+                android:layout_marginRight="@dimen/px70_dp"
                 android:layout_marginTop="10dip"
-                android:gravity="center"
-                android:text="忘记密码？"
-                android:textColor="@color/blue"
+                android:gravity="right"
+                android:text="@string/txt_forget_password"
+                android:textColor="@color/text_ciyao_gray"
                 android:textSize="@dimen/px36_sp" />
 
             <LinearLayout
@@ -88,7 +93,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="20dip"
                     android:gravity="center"
-                    android:text="免费注册"
+                    android:text="@string/txt_free_reg"
                     android:textColor="@color/text_zhuyao_black"
                     android:textSize="@dimen/px39_sp" />
             </LinearLayout>

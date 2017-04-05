@@ -102,7 +102,10 @@
     <color name="blue">#4586f2</color>
     <!--待替换-->
     <color name="btn_login_normal">#00B7D1</color>
-    <color name="btn_login_press">#00D5D8</color>
+    <color name="btn_nav_normal">#18FFFFFF</color>
+    <color name="btn_login_normal_start">#47CFD3</color>
+    <color name="btn_login_normal_end">#1DB5E0</color>
+    <color name="btn_login_press">#008BB7</color>
     <color name="color_e8e8e8">#e8e8e8</color>
     <color name="color_ffe1e0">#ffe1e0</color>
     <color name="color_dddddd">#dddddd</color>

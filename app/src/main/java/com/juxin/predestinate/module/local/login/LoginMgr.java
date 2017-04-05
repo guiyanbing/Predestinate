@@ -12,6 +12,7 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.logic.application.App;
@@ -181,7 +182,6 @@ public class LoginMgr implements ModuleBase {
         postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
         postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
-
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("vcode", new Random().nextLong());
 
@@ -226,12 +226,15 @@ public class LoginMgr implements ModuleBase {
         setUid(uid + "");
         PSP.getInstance().put(LOGINMGR_AUTH, MD5.encode(password));
         putUserInfo(uid, password); //保存登录账户到list配置
+        setCookie(cookie);//在setLoginInfo方法之前执行
         setLoginInfo(uid, isUserLogin);  //设置登录状态
-        setCookie(cookie);
     }
 
     /**
      * 设置登录信息，并发送登录信息。
+     * @param uid
+     * @param isUserLogin　进行登录请求或处于登录状态
+     * @return
      */
     public boolean setLoginInfo(long uid, boolean isUserLogin) {
         App.cookie = getCookie();
@@ -248,6 +251,7 @@ public class LoginMgr implements ModuleBase {
             App.uid = uid;
             App.isLogin = true;
         }
+        MMLog.d("yao","isLogin="+App.isLogin+"==isUserLogin=="+isUserLogin);
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, App.isLogin);
         return App.isLogin;
     }
@@ -268,9 +272,9 @@ public class LoginMgr implements ModuleBase {
         removeCookie(App.context);
         NotificationsUtils.cancelAll();//如果还有通知栏提示，在退出帐号的时候全部清掉
         setUid("");//清空uid
+        clearCookie();//在setLoginInfo方法之前执行
         setLoginInfo(0, true);
 //        App.appState = App.AppState.AS_Service; //TODO
-        clearCookie();
     }
 
     // **************************内部调用**************************
