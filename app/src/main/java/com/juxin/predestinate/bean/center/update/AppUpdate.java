@@ -9,28 +9,28 @@ import org.json.JSONObject;
  */
 public class AppUpdate extends BaseData {
 
-    private int ver;            //软件版本号
     private String title;       //标题，显示软件的版本
-    private int force;          //是否为强制升级
     private String summary;     //升级描述信息
     private String url;         //升级包下载地址
+    private int version;        //软件版本号
+    private int force;          //是否为强制升级：1-强制升级，2-可选
 
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
-        this.setVer(jsonObject.optInt("ver"));
         this.setTitle(jsonObject.optString("title"));
-        this.setForce(jsonObject.optInt("force"));
         this.setSummary(jsonObject.optString("summary"));
         this.setUrl(jsonObject.optString("url"));
+        this.setVersion(jsonObject.optInt("version"));
+        this.setForce(jsonObject.optInt("force"));
     }
 
-    public int getVer() {
-        return ver;
+    public int getVersion() {
+        return version;
     }
 
-    public void setVer(int ver) {
-        this.ver = ver;
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public String getTitle() {
@@ -68,11 +68,11 @@ public class AppUpdate extends BaseData {
     @Override
     public String toString() {
         return "AppUpdate{" +
-                "ver=" + ver +
-                ", title='" + title + '\'' +
-                ", force=" + force +
+                "title='" + title + '\'' +
                 ", summary='" + summary + '\'' +
                 ", url='" + url + '\'' +
+                ", version=" + version +
+                ", force=" + force +
                 '}';
     }
 }

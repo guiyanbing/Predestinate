@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
@@ -14,6 +13,8 @@ import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.start.NavUserAct;
@@ -30,8 +31,22 @@ public class SplashActivity extends BaseActivity {
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        LocationMgr.getInstance().start();//启动定位
+        initData();
         jumpAnimation();
+    }
+
+    private void initData() {
+        LocationMgr.getInstance().start();//启动定位
+        //请求软件升级接口
+        ModuleMgr.getCommonMgr().checkUpdate(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                isRequestResponse = true;
+                if (response.isOk()) {
+                    UIShow.showUpdateDialog(SplashActivity.this, (AppUpdate) response.getBaseData(), runnable);
+                }
+            }
+        });
     }
 
     private boolean isAnimationEnd = false, isRequestResponse = false;
@@ -61,26 +76,6 @@ public class SplashActivity extends BaseActivity {
             }
         });
         animator.start();
-        isRequestResponse = true;
-        //TODO 发起软件升级请求
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                isRequestResponse = true;
-//                AppUpdate appUpdate = new AppUpdate();
-//                appUpdate.parseJson("{\n" +
-//                        "  \"status\": \"ok\",\n" +
-//                        "  \"ver\": \"10100090\",\n" +
-//                        "  \"title\": \"v1.4.040\",\n" +
-//                        "  \"force\": \"0\",\n" +
-//                        "  \"summary\": \"版本：2.4.148\\n1、心动\\n2、抢话费\\n3、即时通讯\\n4、IOS\",\n" +
-//                        "  \"url\": \"http://down.yuanfenba.net/yuanfen/new/Fate_It_2_888_10100090_2.4.148.apk\",\n" +
-//                        "  \"msg\": \"有新版本了!\",\n" +
-//                        "  \"newpackname\":\"\"\n" +
-//                        "}");
-//                UIShow.showUpdateDialog(SplashActivity.this, appUpdate, runnable);
-//            }
-//        }, 5000);
     }
 
     /**

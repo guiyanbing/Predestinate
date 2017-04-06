@@ -95,7 +95,7 @@ public class UpdateDialog extends BaseDialogFragment implements DownloadListener
                 downloadingDialog.showDialog(activity);
 
                 String fileName = DirUtils.getDir(DirUtils.DirType.DT_SD_EXT_Cache_APK) +
-                        "xiaou_" + appUpdate.getVer() + ".apk";
+                        "xiaou_" + appUpdate.getVersion() + ".apk";
                 ModuleMgr.getHttpMgr().download(appUpdate.getUrl(), fileName, this);
                 break;
         }
