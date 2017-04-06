@@ -12,6 +12,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.ui.main.MainActivity;
@@ -33,6 +34,8 @@ import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
+
+import java.util.Map;
 
 /**
  * 应用内页面跳转工具
@@ -71,14 +74,41 @@ public class UIShow {
     }
 
     /**
+     * 跳转到首页的指定tab，并传值，通过MainActivity的OnNewIntent接收
+     *
+     * @param tabType 指定的跳转tab
+     * @param dataMap 跳转时通过intent传递的map值
+     */
+    public static void showMainWithTabData(Context context, int tabType, Map<String, String> dataMap) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(FinalKey.HOME_TAB_TYPE, tabType);
+        if (dataMap != null)
+            for (Map.Entry<String, String> entry : dataMap.entrySet()) {
+                intent.putExtra(entry.getKey(), entry.getValue());
+            }
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳转到网页
+     *
+     * @param type 1-侧滑页面，2-全屏页面，全屏时显示loading条
+     * @param url  网页地址
+     */
+    public static void showWebActivity(Context context, int type, String url) {
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("type", type);
+        show(context, intent);
+    }
+
+    /**
      * 跳转到网页
      *
      * @param url 网页地址
      */
     public static void showWebActivity(Context context, String url) {
-        Intent intent = new Intent(context, WebActivity.class);
-        intent.putExtra("url", url);
-        show(context, intent);
+        showWebActivity(context, 1, url);
     }
 
     /**

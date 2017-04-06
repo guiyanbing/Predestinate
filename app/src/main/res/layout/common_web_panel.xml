@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.juxin.library.view.DownloadProgressView
-        android:id="@+id/progressView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px9_dp"
-        app:max="100"
-        app:progress="0"
-        app:progressColor="@color/color_FF5722"
-        app:shapeType="horizontal" />
 
     <com.juxin.library.view.CustomFrameLayout
         android:id="@+id/customFrameLayout"
@@ -24,6 +14,8 @@
             android:layout_height="match_parent" />
 
         <include layout="@layout/common_net_error" />
+
+        <include layout="@layout/common_loading" />
     </com.juxin.library.view.CustomFrameLayout>
 
 </RelativeLayout>

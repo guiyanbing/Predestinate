@@ -12,6 +12,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.plaza.PlazaFragment;
@@ -31,6 +32,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        isCanBack(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_act);
 
@@ -133,6 +135,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (requestCode == 100 && resultCode == 200) {
             UIShow.showNavUserAct(this);
             finish();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, -1), intent);
+    }
+
+    /**
+     * 切换首页tab
+     *
+     * @param tab_type tab类型
+     * @param intent   跳转intent，默认传null
+     */
+    public void changeTab(int tab_type, Intent intent) {
+        MMLog.autoDebug("---changeTab--->tab_type：" + tab_type);
+        if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到消息tab
+            switchContent(mailFragment);
+        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到小友tab
+            switchContent(xiaoyouFragment);
+        } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到广场tab
+            switchContent(plazaFragment);
+        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到我的tab
+            switchContent(userFragment);
         }
     }
 }
