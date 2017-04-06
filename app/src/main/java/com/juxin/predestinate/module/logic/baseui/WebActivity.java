@@ -50,4 +50,11 @@ public class WebActivity extends BaseActivity {
             super.onBackPressed();
         }
     }
+
+    /**
+     * 关闭loading，显示webView
+     */
+    public void hideLoading() {
+        if (webPanel != null) webPanel.hideLoading();
+    }
 }

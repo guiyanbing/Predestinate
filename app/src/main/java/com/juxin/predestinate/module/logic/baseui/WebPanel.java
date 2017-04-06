@@ -116,6 +116,13 @@ public class WebPanel extends BasePanel {
     }
 
     /**
+     * 隐藏loading并展示WebView
+     */
+    public void hideLoading(){
+        customFrameLayout.showOfIndex(0);
+    }
+
+    /**
      * CookieManager会将这个Cookie存入该应用程序/data/data/databases/目录下的webviewCookiesChromium.db数据库的cookies表中
      * 需要在当前用户退出登录的时候进行清除
      */
