@@ -52,12 +52,10 @@
 
             <EditText
                 android:id="@+id/et_pwd"
-                style="@style/editText_input"
+                style="@style/editText_input_pwd"
                 android:layout_marginLeft="@dimen/px70_dp"
                 android:layout_marginRight="@dimen/px70_dp"
-                android:hint="@string/ext_password_hit"
-                android:inputType="textPassword"
-                android:maxLength="16" />
+                android:hint="@string/ext_password_hit" />
 
             <View style="@style/divider_line_gap70px" />
 

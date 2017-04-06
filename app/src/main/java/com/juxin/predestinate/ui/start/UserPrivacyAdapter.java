@@ -28,7 +28,7 @@ public class UserPrivacyAdapter extends ExBaseAdapter<UP> {
         ViewHolder mHolder;
         if (convertView == null) {
             mHolder = new ViewHolder();
-            convertView = inflate(R.layout.r1_user_login_usernameselect_items);
+            convertView = inflate(R.layout.p1_user_login_usernameselect_items);
             mHolder.username = (TextView) convertView.findViewById(R.id.userlogin_username_item_text);
             mHolder.userdelete = (ImageView) convertView.findViewById(R.id.userLogin_username_item_delete);
 

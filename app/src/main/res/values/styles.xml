@@ -345,6 +345,18 @@
         <item name="android:paddingLeft">@dimen/px45_dp</item>
     </style>
 
+    <!--密码框-->
+    <style name="editText_input_pwd" parent="editText_input">
+        <item name="android:maxLength">16</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+    <!--手机号输入框-->
+    <style name="editText_input_phone" parent="editText_input">
+        <item name="android:maxLength">16</item>
+        <item name="android:inputType">phone</item>
+        <item name="android:digits">@string/phone_digits</item>
+    </style>
+
     <style name="divider_line_gapLeft40px" parent="divider_line">
         <item name="android:layout_marginLeft">@dimen/px40_dp</item>
     </style>
@@ -398,7 +410,6 @@
     <style name="findpwd_tip_txt">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:maxLength">16</item>
         <item name="android:textSize">@dimen/px46_sp</item>
         <item name="android:textColor">@color/text_zhuyao_black</item>
         <item name="android:layout_marginLeft">@dimen/px45_dp</item>

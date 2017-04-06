@@ -96,7 +96,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/px120_dp">
 
-                        <include layout="@layout/r1_choose_man" />
+                        <include layout="@layout/p1_choose_man" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -111,7 +111,7 @@
                         android:layout_height="@dimen/px180_dp"
                         android:layout_marginLeft="@dimen/px120_dp">
 
-                        <include layout="@layout/r1_choose_woman" />
+                        <include layout="@layout/p1_choose_woman" />
                     </LinearLayout>
                 </RelativeLayout>
 

@@ -19,7 +19,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.CommonUtil;
-import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 找回密码
@@ -36,7 +35,7 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.r1_findpwd_act);
+        setContentView(R.layout.p1_findpwd_act);
         setBackView(getResources().getString(R.string.title_findpwdact));
         initView();
     }

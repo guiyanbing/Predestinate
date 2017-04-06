@@ -70,7 +70,9 @@
         <activity
             android:name=".ui.recommend.RecommendAct"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.recommend.RecommendFilterAct"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.check.edit.UserInfoAct"
             android:launchMode="singleTask"

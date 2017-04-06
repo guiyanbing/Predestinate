@@ -110,7 +110,8 @@
     <color name="color_ffe1e0">#ffe1e0</color>
     <color name="color_dddddd">#dddddd</color>
     <color name="btn_getcode_stroke">#00D3D2</color>
-    <color name="btn_getcode_solid">#F3FFFF</color>
+    <color name="btn_getcode_solid_normal">#F3FFFF</color>
+    <color name="btn_getcode_solid_press">#CBE3E3</color>
 
     <color name="usersnickname">#353535</color>
     <color name="bg_reghead_start">#00B7CB</color>
@@ -127,5 +128,6 @@
     <color name="color_56aff3">#56aff3</color>
     <color name="gray_9d9d9d">#9d9d9d</color>
 
+    <color name="title_right_commit">#00D3D2</color>
 </resources>
 

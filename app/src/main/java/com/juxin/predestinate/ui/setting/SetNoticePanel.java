@@ -8,16 +8,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.config.Constant;
 
@@ -36,7 +31,7 @@ public class SetNoticePanel extends BaseViewPanel implements View.OnTouchListene
     private boolean voiceChange, videoChange;
     public SetNoticePanel(Context context) {
         super(context);
-        setContentView(R.layout.r1_set_notice_panel);
+        setContentView(R.layout.p1_set_notice_panel);
         initView();
         InitPreference();
     }
