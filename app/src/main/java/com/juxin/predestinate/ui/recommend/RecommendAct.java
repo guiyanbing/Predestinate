@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
@@ -29,7 +31,13 @@ public class RecommendAct extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_recommend_act);
-        setBackView("推荐的人");
+        setTitle(getResources().getString(R.string.title_recommend));
+        setTitleRight("筛选", R.color.title_right_commit, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIShow.showRecommendFilterAct(RecommendAct.this );
+            }
+        });
         initView();
     }
 

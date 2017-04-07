@@ -51,7 +51,7 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         isCanBack(false);
         super.onCreate(savedInstanceState);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        setContentView(R.layout.r1_login_act);
+        setContentView(R.layout.p1_login_act);
         setBackView(getResources().getString(R.string.title_loginact));
         initView();
         initData();

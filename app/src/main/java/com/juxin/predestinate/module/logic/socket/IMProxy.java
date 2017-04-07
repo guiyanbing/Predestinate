@@ -6,11 +6,18 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.start.LoginAct;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -31,7 +38,7 @@ public class IMProxy {
     }
 
     /**
-     * 登录用的信息通过Http请求获得Socket需要的host和私钥
+     * 登录socket
      *
      * @param uid   登录用户的uid
      * @param token MD5(pw)
@@ -41,6 +48,19 @@ public class IMProxy {
             if (iCoreService != null) iCoreService.login(uid, token);
         } catch (Exception e) {
             PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 使用存储的账户密码进行登录
+     */
+    public void login() {
+        long uid = ModuleMgr.getLoginMgr().getUid();
+        String auth = ModuleMgr.getLoginMgr().getAuth();
+        if (uid == 0 || TextUtils.isEmpty(auth)) {
+            PLogger.d("---IMProxy--->login：auth is empty.");
+        } else {
+            login(uid, auth);
         }
     }
 
@@ -93,23 +113,24 @@ public class IMProxy {
      * 代理和服务器建立连接
      */
     public void connect() {
-        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) return;
-
-        Context context = App.context;
-        sIntent = new Intent();
-        sIntent.setClass(context, CoreService.class);
-
-        try {
-            context.startService(sIntent);//启动CoreService服务
-            if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
-                if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
-                    status = ConnectStatus.BINDING;
-                } else {
-                    status = ConnectStatus.REBINDING;
+        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) {
+            login();
+        } else {
+            Context context = App.context;
+            sIntent = new Intent();
+            sIntent.setClass(context, CoreService.class);
+            try {
+                context.startService(sIntent);//启动CoreService服务
+                if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
+                    if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
+                        status = ConnectStatus.BINDING;
+                    } else {
+                        status = ConnectStatus.REBINDING;
+                    }
                 }
+            } catch (SecurityException e) {
+                e.printStackTrace();
             }
-        } catch (SecurityException e) {
-            e.printStackTrace();
         }
     }
 
@@ -228,7 +249,7 @@ public class IMProxy {
     private enum ConnectStatus {
         NO_CONNECT,         //未连接
         BINDING,            //连接中
-        CONNECTED,          //一连接
+        CONNECTED,          //已连接
         DISCONNECTED,       //断开连接
         REBINDING           //重连
     }
@@ -341,7 +362,40 @@ public class IMProxy {
      * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
      */
     private void accountInvalid(int reason) {
-        //TODO 踢下线弹窗
+        if (reason == 1) {// 踢下线弹窗
+            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
+        } else if (reason == 2) {// 帐号无效
+            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
+        }
+    }
+
+    /**
+     * 显示帐号无效弹框
+     *
+     * @param context FragmentActivity上下文
+     * @param tip     弹框提示文字
+     */
+    private void showInvalidDialog(final FragmentActivity context, final String tip) {
+        ModuleMgr.getLoginMgr().logout();
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PickerDialogUtil.showTipDialogCancelBack(context, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
+                        }
+
+                        @Override
+                        public void onSubmit() {
+                            UIShow.showActivityClearTask(context, LoginAct.class);
+                        }
+                    }, tip, "提示", "", "确定", false, false);
+                } catch (Exception e) {
+                    UIShow.showActivityClearTask(context, LoginAct.class);
+                }
+            }
+        });
     }
 
     private boolean isSocketValid = false;//socket是否在线

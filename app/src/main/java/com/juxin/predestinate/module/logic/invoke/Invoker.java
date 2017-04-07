@@ -7,18 +7,24 @@ import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.predestinate.bean.center.user.detail.UserInfo;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.WebActivity;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ChineseFilter;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.main.MainActivity;
 
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -153,13 +159,7 @@ public class Invoker {
         public void open_game_web(String data) {
             PLogger.d("---open_game_web--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            Activity act = appInterface.getAct();
-            //TODO
-//            if (dataObject.optInt("type") == 2) {
-//                UIHelper.showRedboxAct(act == null ? (Activity) App.getActivity() : act, dataObject.optString("url"));
-//            } else {
-//                UIHelper.showWebView_Act(act == null ? (Activity) App.getActivity() : act, dataObject.optString("title"), dataObject.optString("url"));
-//            }
+            UIShow.showWebActivity(appInterface.getAct(), dataObject.optInt("type"), dataObject.optString("url"));
         }
 
         // 关闭loading页面
@@ -167,13 +167,9 @@ public class Invoker {
             PLogger.d("---hide_loading--->" + data);
             try {
                 Activity act = appInterface.getAct();
-                //TODO 单独处理新H5页面的loading关闭策略
-//                if (act != null && act instanceof Redbox_Act) {
-//                    ((Redbox_Act) act).hideLoadingView();
-//                } else if (act != null && act instanceof AAMainAct) {
-//                    //关闭摇钱树loading。切水果tab无需主动关闭
-//                    ((AAMainAct) act).closeCashCowLoading();
-//                }
+                if (act != null && act instanceof WebActivity) {
+                    ((WebActivity) act).hideLoading();
+                }
                 //缓存最后一条访问别人摇钱树的uid
                 if (!TextUtils.isEmpty(JSCMD_cache_uid)) {
                     Map<String, Object> params = new HashMap<>();
@@ -192,7 +188,7 @@ public class Invoker {
         public void play_sound(String data) {
             PLogger.d("---play_sound--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            //TODO
+            //TODO 待配置文档
 //            if ("cashcow".equalsIgnoreCase(dataObject.optString("game"))) {
 //                PlayerPool.getInstance().playSound(AppCfg.ASet.getCashcow_asset_url() + dataObject.optString("url"));
 //            } else {
@@ -217,15 +213,14 @@ public class Invoker {
             PLogger.d("---get_app_data--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
-            //TODO
-//            UserDetail userDetail = AppModel.getInstance().getUserDetail();
+            UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
             Map<String, Object> responseObject = new HashMap<>();
-//            responseObject.put("uid", AppCtx.getUid());
-//            responseObject.put("auth", URLEncoder.encode(AppCtx.getCookie()));
-//            responseObject.put("user_type", "8956".equals(AppCtx.APP_ID) ? 2 : 1);//只根据主渠道进行区分
-//            responseObject.put("gender", userDetail.getGender());
-//            responseObject.put("is_vip", userDetail.isMonthMail());
-//            responseObject.put("version", 2);//1为之前的缘分吧版本（礼物版），2为红包来了之后的缘分吧版本
+            responseObject.put("uid", userInfo.getUid());
+            responseObject.put("auth", URLEncoder.encode(ModuleMgr.getLoginMgr().getCookie()));
+            responseObject.put("user_type", "8956".equals(ModuleMgr.getAppMgr().getMainChannelID()) ? 2 : 1);//只根据主渠道进行区分
+            responseObject.put("gender", userInfo.getGender());
+            responseObject.put("is_vip", userInfo.isVip());
+            responseObject.put("version", 2);//1为之前的缘分吧版本（礼物版），2为红包来了之后的缘分吧版本
 
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
         }
@@ -322,10 +317,14 @@ public class Invoker {
         public void change_title(String data) {
             PLogger.d("---change_title--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            final String title = dataObject.optString("title");
-
-            final Activity act = appInterface.getAct();
-            //TODO
+            Activity act = appInterface.getAct();
+            if (act != null && act instanceof BaseActivity) {
+                try {// catch页面中可能未include base_title的情况
+                    ((BaseActivity) act).setTitle(dataObject.optString("title"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         // 屏幕震动
@@ -350,27 +349,28 @@ public class Invoker {
         public void enter_tab(String data) {
             PLogger.d("---enter_tab--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            // tab页面索引， 类型为1（红包），2（消息），3（擂台），4（我的）5（发现）
+            // tab页面索引
             int index = 1;
             switch (dataObject.optInt("index")) {
                 case 1:
-                    index = Constant.MAIN_TAB_3;
+                    index = FinalKey.MAIN_TAB_1;
                     break;
                 case 2:
-                    index = Constant.MAIN_TAB_2;
+                    index = FinalKey.MAIN_TAB_2;
                     break;
                 case 3:
-                    index = Constant.MAIN_TAB_4;
+                    index = FinalKey.MAIN_TAB_3;
                     break;
                 case 4:
-                    index = Constant.MAIN_TAB_5;
-                    break;
-                case 5:
-                    index = Constant.MAIN_TAB_1;
+                    index = FinalKey.MAIN_TAB_4;
                     break;
             }
             Activity act = appInterface.getAct();
-            //TODO 首页tab切换
+            if (act != null && act instanceof MainActivity) {
+                ((MainActivity) act).changeTab(index, null);
+            } else {
+                UIShow.showMainWithTabData(act, index, null);
+            }
         }
 
         // 获取设备信息
@@ -403,17 +403,6 @@ public class Invoker {
 //            });
         }
 
-        // 吐槽别人
-        public void mock_other(String data) {
-            PLogger.d("---mock_other--->" + data);
-            JSONObject dataObject = JsonUtil.getJsonObject(data);
-            Activity act = appInterface.getAct();
-            //跳转到私聊页面并按照指定的id发送一条吐槽消息
-//            UIHelper.showMail_Chat_Act(act == null ? App.getActivity() : act,
-//                    String.valueOf(AppModel.getInstance().getUserDetail().getUid()),
-//                    dataObject.optString("target_uid"), 1, dataObject.optString("msg_id"));
-        }
-
         // 吐司提示
         public void show_toast(String data) {
             PLogger.d("---show_toast--->" + data);
@@ -429,6 +418,27 @@ public class Invoker {
             //TODO
 //            UIHelper.showCMDPaymentAct(act == null ? (Activity) App.getActivity() : act, dataObject.optInt("pay_id"),
 //                    dataObject.optString("desc"), dataObject.optString("money"));//money价格(元)
+        }
+
+        // 获取认证状态
+        public void get_identify_status(String data) {
+            PLogger.d("---get_identify_status--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("mobile_auth_status", userInfo.getMobileAuthStatus());
+            responseObject.put("idcard_auth_status", userInfo.getIdcard_auth_status());
+            responseObject.put("bank_auth_status", userInfo.getBankAuthStatus());
+            responseObject.put("video_auth_status", userInfo.getVideoAuthStatus());
+
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+        }
+
+        // 刷新个人详情
+        public void refresh_userdetail(String data) {
+            PLogger.d("---refresh_userdetail--->" + data);
+            ModuleMgr.getCenterMgr().reqMyInfo();
         }
     }
 

@@ -25,6 +25,7 @@ public class UserInfo extends UserBasic {
     private int bankAuthStatus; // 银行卡认证 0未提交， 1 待审核中，2-失败， 3 通过
     private int mobileAuthStatus;// 手机认证  0未提交， 3-通过
     private int videoAuthStatus; // 视频认证   0未提交， 1 待审核中，2-失败， 3 通过
+    private int idcard_auth_status;//身份证认证 0未提交， 1 待审核中，2-失败， 3 通过
     private int channel_sid;
     private int channel_uid;
     private int real_status;
@@ -56,6 +57,7 @@ public class UserInfo extends UserBasic {
             // I
             this.setVip(detailObject.optBoolean("is_vip"));
             this.setVipEnd(detailObject.optLong("vip_end"));
+            this.setIdcard_auth_status(detailObject.optInt("idcard_auth_status"));
 
             // K
             this.setKf_id(detailObject.optInt("kf_id"));
@@ -101,6 +103,14 @@ public class UserInfo extends UserBasic {
 
     public void setBankAuthStatus(int bankAuthStatus) {
         this.bankAuthStatus = bankAuthStatus;
+    }
+
+    public int getIdcard_auth_status() {
+        return idcard_auth_status;
+    }
+
+    public void setIdcard_auth_status(int idcard_auth_status) {
+        this.idcard_auth_status = idcard_auth_status;
     }
 
     public String getActivities() {
@@ -240,6 +250,7 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.bankAuthStatus);
         dest.writeInt(this.mobileAuthStatus);
         dest.writeInt(this.videoAuthStatus);
+        dest.writeInt(this.idcard_auth_status);
         dest.writeInt(this.channel_sid);
         dest.writeInt(this.channel_uid);
         dest.writeInt(this.real_status);
@@ -261,6 +272,7 @@ public class UserInfo extends UserBasic {
         this.bankAuthStatus = in.readInt();
         this.mobileAuthStatus = in.readInt();
         this.videoAuthStatus = in.readInt();
+        this.idcard_auth_status = in.readInt();
         this.channel_sid = in.readInt();
         this.channel_uid = in.readInt();
         this.real_status = in.readInt();

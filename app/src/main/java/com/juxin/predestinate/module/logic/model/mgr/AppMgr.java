@@ -33,12 +33,7 @@ public interface AppMgr extends ModuleBase {
     /**
      * @return 获取渠道标识
      */
-    String getMainChannel();
-
-    /**
-     * @return 获取子渠道号
-     */
-    String getSubChannel();
+    String getUMChannel();
 
     /**
      * @return 获取主渠道号

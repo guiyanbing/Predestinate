@@ -33,7 +33,11 @@
     <string name="portrait_tips_man">上传真实头像 非真实头像不会得到推荐</string>
     <string name="portrait_tips_women">上传真实美观头像 获得奖励提高80%</string>
     <string name="ext_nickname_hit">填写昵称</string>
+    <string name="ext_account_number_hit">手机号/用户ID</string>
+    <string name="ext_password_hit">密码</string>
     <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
+    <string name="txt_forget_password">忘记密码？</string>
+    <string name="txt_free_reg">免费注册</string>
     <string name="button_reg">一键注册</string>
     <string name="toast_nickname_isnull">请填写昵称</string>
     <string name="toast_avatar_isnull">请上传头像</string>
@@ -47,9 +51,11 @@
     <string name="txt_phone">手机号</string>
     <string name="txt_verifycode">验证码</string>
     <string name="txt_setpwd">设置密码</string>
-    <string name="ext_setpwd_hit">设置登录密码4~16位</string>
+    <string name="ext_setpwd_hit">设置登录密码</string>
     <string name="bt_send_code_normal">点击获取</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
+    <string name="bt_login">登录</string>
+    <string name="bt_reg">注册</string>
 
     <!-- 用户资料 -->
     <string name="user_center_fragment">我的</string>
@@ -115,10 +121,13 @@
     <string name="tip_net_error">很遗憾，现在无网络</string>
     <string name="tip_data_empty">没有数据，客官等会再来吧！</string>
     <string name="tip_click_refresh">点击刷新</string>
+    <string name="tip_is_loading">正在努力加载中...</string>
 
     <!--activity标题-->
     <string name="title_loginact">登录</string>
     <string name="title_findpwdact">找回密码</string>
+    <string name="title_recommend_filter">筛选</string>
+    <string name="title_recommend">推荐的人</string>
 
 
     <!-- xList 后期可能删掉，不要用-->
@@ -148,5 +157,10 @@
     <string name="good_friend">亲密好友</string>
     <string name="hongbao_tips">已存入零钱，可直接提现</string>
     <string name="hongbao_go">查看领取详情</string>
+
+    <!--推荐的人-->
+    <string name="txt_chosen_hit">已选对象类型</string>
+    <string name="txt_choose_more_hit">点击添加更多</string>
+    <string name="txt_chosen_del_hit">删除</string>
     <string name="all_friends">全部好友</string>
 </resources>

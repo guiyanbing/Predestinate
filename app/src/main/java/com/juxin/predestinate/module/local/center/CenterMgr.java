@@ -45,24 +45,18 @@ public class CenterMgr implements ModuleBase, PObserver {
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_App_Login:
-                IMProxy.getInstance().connect();//登录成功之后连接socket
-
-                // 请求个人资料
+                PLogger.d("---MT_App_Login--->" + value);
                 if ((Boolean) value) {
-                    reqMyInfo();
+                    IMProxy.getInstance().connect();//登录成功之后连接socket
+                    reqMyInfo();// 请求个人资料
                 } else {
+                    IMProxy.getInstance().logout();//退出登录的时候退出socket
                     userDetail = null;
                     setMyInfo(null);
                 }
                 break;
-            case MsgType.MT_App_CoreService:// socket已连接，登录
-                long uid = ModuleMgr.getLoginMgr().getUid();
-                String auth = ModuleMgr.getLoginMgr().getAuth();
-                if (uid == 0 || TextUtils.isEmpty(auth)) {
-                    PLogger.d("---CenterMgr--->MT_App_CoreService：auth is empty.");
-                } else {
-                    IMProxy.getInstance().login(uid, auth);
-                }
+            case MsgType.MT_App_CoreService://socket已连接，登录
+                IMProxy.getInstance().login();
                 break;
         }
     }
@@ -82,9 +76,10 @@ public class CenterMgr implements ModuleBase, PObserver {
 
     /**
      * 找回密码
-     * @param mobile 手机号
+     *
+     * @param mobile   手机号
      * @param password 新密码
-     * @param code 验证码
+     * @param code     验证码
      * @param complete
      */
     public void resetPassword(String mobile, String password, String code, RequestComplete complete) {

@@ -3,8 +3,6 @@ package com.juxin.predestinate.module.logic.baseui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -17,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
-
 
 /**
  * DialogFragment扩展基类
@@ -114,32 +111,6 @@ public class BaseDialogFragment extends DialogFragment implements DialogInterfac
         }
         window.setAttributes(lp);
     }
-
-    /**
-     * 该方法 主要是为了在界面跳转时
-     * 出现跳转缓慢 再次打开dialog的时候
-     * dialog显示不正确的时候调用
-     * <p>
-     * （那个时候 会产生线程阻塞 然后 onResume 不会执行 界面不能刷新， 所以采用handler消息通知的方式来强制调用刷新）
-     * <p>
-     * <p/>
-     * 其他情况禁止调用以及重载
-     */
-    public void refreshDialog() {
-        handler.sendEmptyMessage(1000);
-    }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1000:
-                    onResume();
-                    break;
-            }
-        }
-    };
 
     /**
      * 设置显示位置

@@ -1,11 +1,11 @@
 package com.juxin.predestinate.module.logic.model.impl;
 
 import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
@@ -16,12 +16,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
 import com.juxin.predestinate.module.logic.request.RequestParam;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +42,7 @@ public class HttpMgrImpl implements HttpMgr {
     @Override
     public void release() {
     }
+
     @Override
     public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostNoCacheHttp(urlParam, null, null, post_param, requestCallback);
@@ -51,7 +54,7 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
-    public HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback){
+    public HTCallBack reqGetAndCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
         return reqGetAndCacheHttp(urlParam, null, get_param, requestCallback);
     }
 
@@ -67,8 +70,10 @@ public class HttpMgrImpl implements HttpMgr {
 
 
     // ================ 以下为基础接口，不要重载 =====================
+
     /**
      * Post: 加密，不缓存
+     *
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -76,13 +81,14 @@ public class HttpMgrImpl implements HttpMgr {
      * @param requestCallback
      * @return
      */
-    private HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, String> headerMap,Map<String, Object> get_param,
-                                   Map<String, Object> post_param, RequestComplete requestCallback) {
+    private HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
+                                          Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
     }
 
     /**
      * Post: 加密，缓存
+     *
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -90,13 +96,14 @@ public class HttpMgrImpl implements HttpMgr {
      * @param requestCallback
      * @return
      */
-    private HTCallBack reqPostAndCacheHttp(UrlParam urlParam, Map<String, String> headerMap,Map<String, Object> get_param,
-                                          Map<String, Object> post_param, RequestComplete requestCallback) {
+    private HTCallBack reqPostAndCacheHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
+                                           Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostHttp(urlParam, headerMap, get_param, post_param, RequestParam.CacheType.CT_Cache_Params, true, requestCallback);
     }
 
     /**
      * Get: 加密，不缓存
+     *
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -109,6 +116,7 @@ public class HttpMgrImpl implements HttpMgr {
 
     /**
      * Get: 加密，缓存
+     *
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -121,6 +129,7 @@ public class HttpMgrImpl implements HttpMgr {
 
     /**
      * get
+     *
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -130,12 +139,13 @@ public class HttpMgrImpl implements HttpMgr {
      * @return
      */
     private HTCallBack reqGetHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
-                               RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+                                  RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
         return reqHttp(urlParam, headerMap, null, get_param, null, cacheType, isEncrypt, requestCallback);
     }
 
     /**
      * post
+     *
      * @param urlParam
      * @param headerMap
      * @param get_param
@@ -145,14 +155,14 @@ public class HttpMgrImpl implements HttpMgr {
      * @param requestCallback
      * @return
      */
-    private HTCallBack reqPostHttp(UrlParam urlParam, Map<String, String> headerMap,Map<String, Object> get_param,
+    private HTCallBack reqPostHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
                                    Map<String, Object> post_param, RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
         return reqHttp(urlParam, headerMap, null, get_param, post_param, cacheType, isEncrypt, requestCallback);
     }
 
     private HTCallBack reqHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, File> file_param,
-                                   Map<String, Object> get_param, Map<String, Object> post_param,
-                                   RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+                               Map<String, Object> get_param, Map<String, Object> post_param,
+                               RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
         RequestParam requestParam = new RequestParam();
         requestParam.setUrlParam(urlParam);
         requestParam.setHead_param(headerMap);
@@ -168,7 +178,6 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
-        //TODO 添加完整请求及基础解析
         final UrlParam urlParam = requestParam.getUrlParam();
         final Map<String, String> headerMap = requestParam.getHead_param();
         final Map<String, Object> get_param = requestParam.getGet_param();
@@ -206,13 +215,12 @@ public class HttpMgrImpl implements HttpMgr {
             String cacheStr = PCache.getInstance().getCache(cacheUrl);
             if (cacheStr != null) {
                 PLogger.d("response cache，request url：" + url + "\ncache String：" + cacheStr);
-//                result.setOk();
-//                result.setCache(true);//设置为cache数据
+                result.setOk();
+                result.setCache(true);//设置为cache数据
                 result.parseJson(cacheStr);
 
                 //缓存回调
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
-
             }
         }
 
@@ -242,16 +250,16 @@ public class HttpMgrImpl implements HttpMgr {
                 } catch (Exception e) {
                     PLogger.d("response fail，request url：" + url);
                     PLogger.printThrowable(e);
-//                    result.setError();//设置失败
-//                    result.setCache(false);
+                    result.setError();//设置失败
+                    result.setCache(false);
                     if (requestCallback != null) requestCallback.onRequestComplete(result);
                     return;
                 }
                 String resultString = sb.toString();
                 PLogger.d("response OK，request url：" + url + "\nresponse：" + resultString);
 
-//                result.setOk();//设置成功
-//                result.setCache(false);//设置为cache数据
+                result.setOk();//设置成功
+                result.setCache(false);//设置为cache数据
                 result.parseJson(resultString);
 
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
@@ -265,8 +273,8 @@ public class HttpMgrImpl implements HttpMgr {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 PLogger.d("response fail，request url：" + url);
                 PLogger.printThrowable(t);
-//                result.setError();//设置失败
-//                result.setCache(false);
+                result.setError();//设置失败
+                result.setCache(false);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 

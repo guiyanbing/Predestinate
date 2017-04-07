@@ -22,12 +22,8 @@
             <!-- 头像部分-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/px604_dp">
-
-                <com.juxin.predestinate.ui.start.RegHeadBg
-                    android:id="@+id/rg_head"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                android:layout_height="@dimen/px604_dp"
+                android:background="@drawable/p1_reghead_bg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -36,25 +32,24 @@
                     android:orientation="vertical">
 
                     <RelativeLayout
-                        android:layout_width="@dimen/px240_dp"
-                        android:layout_height="@dimen/px240_dp"
+                        android:layout_width="@dimen/px270_dp"
+                        android:layout_height="@dimen/px270_dp"
                         android:layout_marginTop="@dimen/px80_dp">
 
                         <ImageView
                             android:id="@+id/img_header"
-                            android:layout_width="@dimen/px250_dp"
-                            android:layout_height="@dimen/px250_dp"
-                            android:background="@color/white"
+                            android:layout_width="@dimen/px240_dp"
+                            android:layout_height="@dimen/px240_dp"
+                            android:layout_centerInParent="true"
                             android:clickable="true"
-                            android:src="@drawable/p1_head_default" />
+                            android:src="@drawable/p1_reg_head" />
 
                         <ImageView
                             android:layout_width="@dimen/px80_dp"
                             android:layout_height="@dimen/px80_dp"
-                            android:layout_alignBottom="@+id/img_header"
-                            android:layout_alignRight="@+id/img_header"
-                            android:gravity="center"
-                            android:src="@drawable/r1_reg_camera" />
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/p1_reg_camera" />
 
                     </RelativeLayout>
 
@@ -81,57 +76,6 @@
 
             <View style="@style/divider_line_gap70px" />
 
-            <!--<RelativeLayout-->
-            <!--android:id="@+id/layout_reg_info_birth"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/px120_dp"-->
-            <!--android:layout_marginLeft="@dimen/px50_dp"-->
-            <!--android:layout_marginRight="@dimen/px50_dp">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/txt_reg_info_birth"-->
-            <!--style="@style/text_regTip_left"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:hint="生日"-->
-            <!--android:maxLines="1" />-->
-
-            <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="@dimen/px15_dp"-->
-            <!--android:src="@drawable/ic_user_go" />-->
-            <!--</RelativeLayout>-->
-
-            <!--<View style="@style/divider_line_gap70px" />-->
-
-            <!--<RelativeLayout-->
-            <!--android:id="@+id/layout_reg_info_addr"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/px120_dp"-->
-            <!--android:layout_marginLeft="@dimen/px50_dp"-->
-            <!--android:layout_marginRight="@dimen/px50_dp">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/txt_reg_info_addr"-->
-            <!--style="@style/text_regTip_left"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:hint="地区"-->
-            <!--android:maxLines="1" />-->
-
-            <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="@dimen/px15_dp"-->
-            <!--android:src="@drawable/ic_user_go" />-->
-            <!--</RelativeLayout>-->
-
-            <!--<View style="@style/divider_line_gap70px" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -152,7 +96,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/px120_dp">
 
-                        <include layout="@layout/r1_choose_man" />
+                        <include layout="@layout/p1_choose_man" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -167,7 +111,7 @@
                         android:layout_height="@dimen/px180_dp"
                         android:layout_marginLeft="@dimen/px120_dp">
 
-                        <include layout="@layout/r1_choose_woman" />
+                        <include layout="@layout/p1_choose_woman" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -201,16 +145,6 @@
                     android:textSize="@dimen/px45_sp" />
 
             </RelativeLayout>
-
-            <!--<TextView-->
-            <!--android:id="@+id/txt_switch_acount"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="40dip"-->
-            <!--android:layout_marginTop="@dimen/px20_dp"-->
-            <!--android:gravity="center"-->
-            <!--android:text="切换账号"-->
-            <!--android:textColor="@color/blue"-->
-            <!--android:textSize="@dimen/px36_sp" />-->
 
             <View
                 android:layout_width="match_parent"

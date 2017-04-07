@@ -20,7 +20,7 @@ public class NavUserAct extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         isCanBack(false);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.r1_nav_act);
+        setContentView(R.layout.p1_nav_act);
         initView();
     }
 

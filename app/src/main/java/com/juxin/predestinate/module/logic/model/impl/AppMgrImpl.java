@@ -14,6 +14,7 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.utils.ViewUtils;
 import com.juxin.predestinate.BuildConfig;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.ServerTime;
@@ -37,8 +38,9 @@ public class AppMgrImpl implements AppMgr {
     private String simo = "";           // SIM卡供应商
     private String mac = "";            // 网络mac地址
 
-    private String mainChannelID;       // 应用id 主渠道号
-    private String subChannelID;        //子渠道号
+    private String UMChannel;           // 友盟渠道名称
+    private String mainChannelID;       // 应用id，即主渠道号
+    private String subChannelID;        // 子渠道号
 
     @Override
     public void init() {
@@ -57,8 +59,9 @@ public class AppMgrImpl implements AppMgr {
 
             mac = NetworkUtils.getMacAddress(App.context);
 
-            subChannelID = PkgHelper.getSubChannel(App.context, "999"); //appInfo.metaData.getInt("sID");
+            UMChannel = PkgHelper.getMarket(App.context, App.context.getResources().getString(R.string.app_name) + "_2_999");
             mainChannelID = PkgHelper.getMainChannel(App.context, "2"); //appInfo.metaData.getInt("sUID");
+            subChannelID = PkgHelper.getSubChannel(App.context, "999"); //appInfo.metaData.getInt("sID");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -87,13 +90,8 @@ public class AppMgrImpl implements AppMgr {
     }
 
     @Override
-    public String getMainChannel() {
-        return null;
-    }
-
-    @Override
-    public String getSubChannel() {
-        return null;
+    public String getUMChannel() {
+        return UMChannel;
     }
 
     @Override

@@ -17,7 +17,8 @@ import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 
 /**
- * 注册页头部背景
+ * //TODO 待移除
+ * 注册页头部背景)
  * Created YAO on 2017/3/27.
  */
 

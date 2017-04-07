@@ -64,7 +64,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     protected void onCreate(Bundle savedInstanceState) {
         isCanBack(false);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.r1_user_reg_info_act);
+        setContentView(R.layout.p1_user_reg_info_act);
         initTitle();
         initView();
         initData();

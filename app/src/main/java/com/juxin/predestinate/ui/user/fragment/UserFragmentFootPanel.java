@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.app.FragmentActivity;
@@ -97,7 +98,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_Setting_id:// 设置
-                UIShow.showUserSetAct((FragmentActivity) getContext());
+                UIShow.showUserSetAct((Activity) getContext(), 100);
                 break;
         }
     }

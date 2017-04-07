@@ -42,14 +42,6 @@ public class Constant {
     // 视频
     public static final int INT_CHAT_VIDEO = 301;   // 聊天小视频
 
-    // 首页tab标记，从左到右依次为1-4
-    public static final int MAIN_TAB_1 = 0x01;
-    public static final int MAIN_TAB_2 = 0x02;
-    public static final int MAIN_TAB_3 = 0x03;
-    public static final int MAIN_TAB_4 = 0x04;
-    public static final int MAIN_TAB_5 = 0X05;
-
-
     public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
     public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
 }
