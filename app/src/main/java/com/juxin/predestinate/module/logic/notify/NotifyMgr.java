@@ -24,7 +24,7 @@ import java.util.Calendar;
 /**
  * 消息通知管理manager
  */
-public class NotifyMgr implements ModuleBase  {
+public class NotifyMgr implements ModuleBase {
 
     @Override
     public void init() {
