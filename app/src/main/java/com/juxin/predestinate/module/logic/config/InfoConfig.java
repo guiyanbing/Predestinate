@@ -34,7 +34,8 @@ public class InfoConfig extends BaseData {
             job,//工作
             weight,//体重
             star,  //星座
-            constellation; // 生日与星座关联配表
+            constellation,// 生日与星座关联配表
+            age;//年龄
 
     @Override
     public void parseJson(String s) {
@@ -50,6 +51,17 @@ public class InfoConfig extends BaseData {
             height.getSubmit().add(i == 149 ? 0 + "" : i + "");
             height.getSubmitMap().put(i == 149 ? "不限" : i + "cm", i == 149 ? 0 + "" : i + "");
             height.getShowMap().put(i == 149 ? 0 + "" : i + "", i == 149 ? "不限" : i + "cm");
+        }
+        age = new SimpleConfig();
+        age.setShow(new ArrayList<String>());
+        age.setSubmit(new ArrayList<String>());
+        age.setSubmitMap(new HashMap<String, String>());
+        age.setShowMap(new HashMap<String, String>());
+        for (int i = 17; i <= 60; i++) {
+            age.getShow().add(i == 17 ? "不限" : i + "岁");
+            age.getSubmit().add(i == 17 ? 0 + "" : i + "");
+            age.getSubmitMap().put(i == 17 ? "不限" : i + "岁", i == 17 ? 0 + "" : i + "");
+            age.getShowMap().put(i == 17 ? 0 + "" : i + "", i == 17 ? "不限" : i + "岁");
         }
 
         income = new SimpleConfig();
@@ -115,6 +127,20 @@ public class InfoConfig extends BaseData {
      */
     public SimpleConfig getEduN() {
         return removeLimitIndex(edu);
+    }
+
+    /**
+     * @return 获取带不限的年龄值
+     */
+    public SimpleConfig getAge() {
+        return age;
+    }
+
+    /**
+     * @return 获取不带不限的正常年龄值
+     */
+    public SimpleConfig getAgeN() {
+        return removeLimitIndex(age);
     }
 
     //==================以下为非单独处理内容======================
