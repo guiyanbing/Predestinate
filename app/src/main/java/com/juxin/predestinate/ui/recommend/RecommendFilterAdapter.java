@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
@@ -31,9 +32,11 @@ public class RecommendFilterAdapter extends XRecyclerView.Adapter<RecommendFilte
     public static final int FILTER_TAG_CHOSEN = 0;
     public static final int FILTER_TAG = 1;
     private TagItemClickListener mListener;
+    private int tag;
 
     public RecommendFilterAdapter(Context context, List<TagInfo> list, int tag, TagItemClickListener mListener) {
         this.context = context;
+        this.tag = tag;
         this.list = list;
         this.mListener = mListener;
     }
@@ -55,6 +58,13 @@ public class RecommendFilterAdapter extends XRecyclerView.Adapter<RecommendFilte
                 mListener.itemClick(position, holder.tv_tagName);
             }
         });
+        if (tag == FILTER_TAG_CHOSEN) {
+            holder.tv_tagName.setTextColor(context.getResources().getColor(R.color.btn_getcode_stroke));
+            holder.rl_item.setBackgroundResource(R.drawable.p1_tag_chosen_bg);
+        } else if (tag == FILTER_TAG) {
+            holder.tv_tagName.setTextColor(context.getResources().getColor(R.color.text_zhuyao_black));
+            holder.rl_item.setBackgroundResource(R.drawable.p1_tag_bg);
+        }
     }
 
     @Override
@@ -64,10 +74,12 @@ public class RecommendFilterAdapter extends XRecyclerView.Adapter<RecommendFilte
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tv_tagName;
+        RelativeLayout rl_item;
 
         public MyViewHolder(View view) {
             super(view);
             tv_tagName = (TextView) view.findViewById(R.id.tv_tagName);
+            rl_item = (RelativeLayout) view.findViewById(R.id.rl_item);
         }
     }
 

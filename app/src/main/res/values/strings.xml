@@ -163,6 +163,8 @@
     <string name="txt_chosen_hit">已选对象类型</string>
     <string name="txt_choose_more_hit">点击添加更多</string>
     <string name="txt_chosen_del_hit">删除</string>
+    <string name="toast_chosen_tagmax">最多选择三个标签哦</string>
+    <string name="toast_chosen_repeat">标签不可以重复哦</string>
 
     <!-- 消息 -->
     <string name="message_xiaou">小友消息</string>
