@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.UserLogin;
+import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
@@ -18,6 +19,8 @@ public enum UrlParam {
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
     reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
+    //检查软件升级
+    checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 

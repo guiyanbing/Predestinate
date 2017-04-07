@@ -38,7 +38,7 @@ public class AppMgrImpl implements AppMgr {
     private String simo = "";           // SIM卡供应商
     private String mac = "";            // 网络mac地址
 
-    private String mainChannel;         // 友盟渠道名称
+    private String UMChannel;           // 友盟渠道名称
     private String mainChannelID;       // 应用id，即主渠道号
     private String subChannelID;        // 子渠道号
 
@@ -59,7 +59,7 @@ public class AppMgrImpl implements AppMgr {
 
             mac = NetworkUtils.getMacAddress(App.context);
 
-            mainChannel = PkgHelper.getMarket(App.context, App.context.getResources().getString(R.string.app_name) + "_2_999");
+            UMChannel = PkgHelper.getMarket(App.context, App.context.getResources().getString(R.string.app_name) + "_2_999");
             mainChannelID = PkgHelper.getMainChannel(App.context, "2"); //appInfo.metaData.getInt("sUID");
             subChannelID = PkgHelper.getSubChannel(App.context, "999"); //appInfo.metaData.getInt("sID");
         } catch (PackageManager.NameNotFoundException e) {
@@ -90,13 +90,8 @@ public class AppMgrImpl implements AppMgr {
     }
 
     @Override
-    public String getMainChannel() {
-        return mainChannel;
-    }
-
-    @Override
-    public String getSubChannel() {
-        return null;
+    public String getUMChannel() {
+        return UMChannel;
     }
 
     @Override

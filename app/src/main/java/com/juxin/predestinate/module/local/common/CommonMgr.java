@@ -82,4 +82,17 @@ public class CommonMgr implements ModuleBase {
         return false;
     }
 
+    /**
+     * 检查应用升级
+     *
+     * @param complete 界面回调
+     */
+    public void checkUpdate(RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道号
+        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道号
+        postParams.put("platform", 1);// 平台 1-android， 2-ios
+        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());// 版本号(整数)
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.checkUpdate, postParams, complete);
+    }
 }

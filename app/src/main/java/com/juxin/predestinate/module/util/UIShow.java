@@ -307,7 +307,7 @@ public class UIShow {
      */
     public static void showUpdateDialog(FragmentActivity activity, AppUpdate appUpdate, Runnable runnable) {
         if (appUpdate == null) return;
-        if (appUpdate.getVer() > ModuleMgr.getAppMgr().getVerCode()) {
+        if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
             UpdateDialog updateDialog = new UpdateDialog();
             updateDialog.setData(appUpdate, runnable);
             updateDialog.showDialog(activity);

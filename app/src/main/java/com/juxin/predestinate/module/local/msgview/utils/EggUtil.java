@@ -112,8 +112,8 @@ public class EggUtil {
             sb.append("\n").append("vercode: ").append(ModuleMgr.getAppMgr().getVerCode());
             sb.append("\n").append("vername: ").append(ModuleMgr.getAppMgr().getVerName());
             sb.append("\n").append("packagename: ").append(ModuleMgr.getAppMgr().getPackageName());
-            sb.append("\n").append("mainchannel: ").append(ModuleMgr.getAppMgr().getMainChannel());
-            sb.append("\n").append("subchannel: ").append(ModuleMgr.getAppMgr().getSubChannel());
+            sb.append("\n").append("mainchannelID: ").append(ModuleMgr.getAppMgr().getMainChannelID());
+            sb.append("\n").append("subchannelID: ").append(ModuleMgr.getAppMgr().getSubChannelID());
             sb.append("\n").append("imei: ").append(ModuleMgr.getAppMgr().getIMEI());
             sb.append("\n").append("imsi: ").append(ModuleMgr.getAppMgr().getIMSI());
             sb.append("\n").append("mac: ").append(ModuleMgr.getAppMgr().getMAC());
