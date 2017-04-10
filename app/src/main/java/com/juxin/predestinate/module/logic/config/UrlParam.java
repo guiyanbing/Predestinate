@@ -19,6 +19,8 @@ public enum UrlParam {
     reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
     reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
+    mobileAuth("s/uinfo/MobileAuth"),//手机认证
+    feedBack("s/uinfo/FeedBack"),//意见反馈
     //检查软件升级
     checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
 

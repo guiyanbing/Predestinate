@@ -22,6 +22,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 import java.lang.ref.WeakReference;
 
@@ -151,11 +152,11 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
                     }
                 }, "根据缓存文件的大小，清理时间将持续几秒至几分钟不等，请耐心等待", "清除缓存", "取消", "清理", true, R.color.text_zhuyao_black);
                 break;
-//            case R.id.rl_feedback://意见反馈客服
-////                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), MailSpecialID.customerService.getSpecialIDName());
-////                UIShow.showFeedBackAct(this);
-//                UIShow.showAboutAct(this);
-//                break;
+            case R.id.rl_feedback://意见反馈客服
+//                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), MailSpecialID.customerService.getSpecialIDName());
+//                UIShow.showFeedBackAct(this);
+                UIShow.showFeedBackAct(this);
+                break;
         }
     }
 
