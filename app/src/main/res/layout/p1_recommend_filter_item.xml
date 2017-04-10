@@ -16,10 +16,13 @@
         android:text="小云" />
 
     <ImageView
-        android:layout_width="@dimen/px15_dp"
-        android:layout_height="@dimen/px15_dp"
+        android:id="@+id/iv_mark"
+        android:layout_width="@dimen/px35_dp"
+        android:layout_height="@dimen/px35_dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:visibility="visible"
+        android:background="@drawable/p1_tag_mark_bg"
         android:layout_marginRight="@dimen/px10_dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/p1_tag_mark" />
 </RelativeLayout>

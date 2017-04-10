@@ -40,7 +40,7 @@ public class RecommendFilterAct extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_recommendfilter_act);
-        setTitle(getResources().getString(R.string.title_recommend_filter));
+        setBackView(getResources().getString(R.string.title_recommend_filter));
         setTitleRight("提交", R.color.title_right_commit, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
