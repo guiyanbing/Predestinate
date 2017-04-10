@@ -143,6 +143,7 @@
     <string name="xlistview_header_hint_loading_female">正在锁定帅哥...</string>
     <string name="chat_move_up_to_cancel">手指上滑 取消发送</string>
     <string name="chat_release_to_cancel">松开手指 取消发送</string>
+
     <!--小友模块标题-->
     <string name="label">标签互动</string>
     <string name="intimacy">最近亲密度</string>
@@ -162,6 +163,14 @@
     <string name="txt_chosen_hit">已选对象类型</string>
     <string name="txt_choose_more_hit">点击添加更多</string>
     <string name="txt_chosen_del_hit">删除</string>
+    <string name="toast_chosen_tagmax">最多选择三个标签哦</string>
+    <string name="toast_chosen_repeat">标签不可以重复哦</string>
+
+    <!-- 消息 -->
+    <string name="message_xiaou">小友消息</string>
+    <string name="message_close">关闭</string>
+    <string name="message_replay">回复</string>
+
     <string name="all_friends">全部好友</string>
     <string name="ok">确定</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/rl_item"
     android:layout_height="wrap_content"
     android:background="@drawable/p1_tag_chosen_bg">
 
@@ -9,13 +10,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/px39_sp"
         android:text="小云" />
 
     <ImageView
-        android:layout_width="@dimen/px15_dp"
-        android:layout_height="@dimen/px15_dp"
+        android:id="@+id/iv_mark"
+        android:layout_width="@dimen/px35_dp"
+        android:layout_height="@dimen/px35_dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:visibility="visible"
+        android:background="@drawable/p1_tag_mark_bg"
         android:layout_marginRight="@dimen/px10_dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/p1_tag_mark" />
 </RelativeLayout>

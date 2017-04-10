@@ -7,10 +7,11 @@ import com.juxin.mumu.bean.net.BaseData;
  * Created YAO on 2017/4/6.
  */
 
-public class TagInfo{
+public class TagInfo {
 
     private String tagName;
     private int tagMark;//标识
+    private int position;
 
     public String getTagName() {
         return tagName;
@@ -28,4 +29,11 @@ public class TagInfo{
         this.tagMark = tagMark;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }
