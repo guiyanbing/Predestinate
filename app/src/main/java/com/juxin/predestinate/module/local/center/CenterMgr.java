@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.ui.start.FindPwdAct;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,11 +67,12 @@ public class CenterMgr implements ModuleBase, PObserver {
      *
      * @param mobile
      * @param complete
+     * @param tag      301-小友密码重置, 302-小友手机认证
      */
-    public void reqVerifyCode(String mobile, RequestComplete complete) {
+    public void reqVerifyCode(String mobile, RequestComplete complete, int tag) {
         HashMap<String, Object> postparam = new HashMap<>();
         postparam.put("mobile", mobile);
-        postparam.put("tag", 301);//tag 301小友密码重置
+        postparam.put("tag", tag);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode, postparam, complete);
     }
 
@@ -88,6 +90,37 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("password", password);
         postparam.put("code", code);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.resetPassword, postparam, complete);
+    }
+
+    /**
+     * 手机认证
+     *
+     * @param uid
+     * @param mobile   手机号
+     * @param password 新密码
+     * @param code     验证码
+     * @param complete
+     */
+    public void mobileAuth(long uid, String mobile, String password, String code, RequestComplete complete) {
+        HashMap<String, Object> postparam = new HashMap<>();
+        postparam.put("uid", uid);
+        postparam.put("mobile", mobile);
+        postparam.put("pwd", password);
+        postparam.put("code", code);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.mobileAuth, postparam, complete);
+    }
+
+    /**
+     * 意见反馈
+     * @param contract 联系方式
+     * @param views 意见
+     * @param complete
+     */
+    public void feedBack(String contract, String views, RequestComplete complete) {
+        HashMap<String, Object> postparam = new HashMap<>();
+        postparam.put("contract", contract);
+        postparam.put("views", views);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.feedBack, postparam, complete);
     }
 
     /**

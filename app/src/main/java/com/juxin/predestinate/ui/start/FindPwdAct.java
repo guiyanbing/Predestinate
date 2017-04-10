@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -21,23 +22,38 @@ import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.CommonUtil;
 
 /**
- * 找回密码
+ * 找回密码(绑定手机)
  * Created YAO on 2017/3/24.
  */
 
 public class FindPwdAct extends BaseActivity implements View.OnClickListener, RequestComplete {
     private EditText et_phone, et_code, et_pwd;
     private Button bt_send_code, bt_submit;
-    private String phone, code,pwd;
-    private boolean timerSwitch=true;
+    private String phone, code, pwd;
+    private boolean timerSwitch = true;
     private SendEnableThread sendthread = null;
     private Handler m_Handler = null;
+    public static final int OPEN_FINDPWD = 0x1;
+    public static final int OPEN_BINDPHONE = 0x2;
+    private int openAct;
+    private int getCodetag;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_findpwd_act);
-        setBackView(getResources().getString(R.string.title_findpwdact));
+        initAct();
+        setBackView(OPEN_FINDPWD == openAct ? getResources().getString(R.string.title_findpwdact) : getResources().getString(R.string.title_phone_certification));
         initView();
+    }
+
+    private void initAct() {
+        openAct = getIntent().getIntExtra("openAct", OPEN_FINDPWD);
+        if (OPEN_FINDPWD == openAct) {
+            getCodetag = 301;
+        } else if (OPEN_BINDPHONE == openAct) {
+            getCodetag = 302;
+        }
     }
 
     private void initView() {
@@ -68,13 +84,17 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
         switch (v.getId()) {
             case R.id.bt_send_code:
                 if (checkPhone()) {
-                    ModuleMgr.getCenterMgr().reqVerifyCode(phone, this);
+                    ModuleMgr.getCenterMgr().reqVerifyCode(phone, this, getCodetag);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                 }
                 break;
             case R.id.bt_submit:
-                if (checkPhone()&&checkSubmitInfo()) {
-                    ModuleMgr.getCenterMgr().resetPassword(phone, pwd, code, this);
+                if (checkPhone() && checkSubmitInfo()) {
+                    if (OPEN_FINDPWD == openAct) {
+                        ModuleMgr.getCenterMgr().resetPassword(phone, pwd, code, this);
+                    } else {
+                        ModuleMgr.getCenterMgr().mobileAuth(ModuleMgr.getCenterMgr().getMyInfo().getUid(), phone, pwd, code, this);
+                    }
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                 }
                 break;
@@ -83,16 +103,16 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
     }
 
     private boolean checkSubmitInfo() {
-            code = et_code.getText().toString();
-            if (TextUtils.isEmpty(code)) {
-                PToast.showShort(getResources().getString(R.string.toast_code_isnull));
-                return false;
-            }
-            pwd = et_pwd.getText().toString();
-            if (TextUtils.isEmpty(pwd)) {
-                PToast.showShort(getResources().getString(R.string.toast_setpwd_isnull));
-                return false;
-            }
+        code = et_code.getText().toString();
+        if (TextUtils.isEmpty(code)) {
+            PToast.showShort(getResources().getString(R.string.toast_code_isnull));
+            return false;
+        }
+        pwd = et_pwd.getText().toString();
+        if (TextUtils.isEmpty(pwd)) {
+            PToast.showShort(getResources().getString(R.string.toast_setpwd_isnull));
+            return false;
+        }
         return true;
     }
 
@@ -129,6 +149,7 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
             }
         }
     }
+
     @Override
     public void onRequestComplete(HttpResponse response) {
         LoadingDialog.closeLoadingDialog();
@@ -147,11 +168,18 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
                 bt_send_code.setEnabled(true);
                 PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
             }
-        }else if(response.getUrlParam()== UrlParam.resetPassword){
-            if (response.isOk()){
-                PToast.showShort("找回密码成功");
+        } else if (response.getUrlParam() == UrlParam.resetPassword) {
+            if (response.isOk()) {
+                PToast.showShort(getResources().getString(R.string.toast_resetpwd_ok));
                 back();
-            }else{
+            } else {
+                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+            }
+        } else if (response.getUrlParam() == UrlParam.mobileAuth) {
+            if (response.isOk()) {
+                PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
+                back();
+            } else {
                 PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
             }
 

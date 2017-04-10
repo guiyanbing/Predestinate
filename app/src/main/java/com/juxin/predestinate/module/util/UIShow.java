@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
+import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
@@ -157,11 +158,24 @@ public class UIShow {
     }
 
     /**
-     * 打开找回密码页
+     * 打开找回密码页(手机绑定)
+     *
+     * @param activity
+     * @param openAct  要打开的activity(FindPwdAct.OPEN_FINDPWD 找回密码  FindPwdAct.OPEN_BINDPHONE 绑定手机)
      */
-    public static void showFindPwdAct(FragmentActivity activity) {
+    public static void showFindPwdAct(FragmentActivity activity, int openAct) {
         Intent intent = new Intent(activity, FindPwdAct.class);
+        intent.putExtra("openAct", openAct);
         activity.startActivity(intent);
+    }
+
+    /**
+     * 打开意见反馈页面
+     *
+     * @param activity
+     */
+    public static void showFeedBackAct(FragmentActivity activity) {
+        activity.startActivity(new Intent(activity, FeedBackAct.class));
     }
 
     //============================== 小友模块相关跳转 =============================
@@ -213,6 +227,7 @@ public class UIShow {
         Intent intent = new Intent(activity, RecommendAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开推荐的人筛选页面
      */

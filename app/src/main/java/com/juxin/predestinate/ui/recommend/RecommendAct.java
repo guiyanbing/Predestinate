@@ -32,10 +32,10 @@ public class RecommendAct extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_recommend_act);
         setTitle(getResources().getString(R.string.title_recommend));
-        setTitleRight("筛选", R.color.title_right_commit, new View.OnClickListener() {
+        setTitleRight(getResources().getString(R.string.title_right_filter), R.color.title_right_commit, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIShow.showRecommendFilterAct(RecommendAct.this );
+                UIShow.showRecommendFilterAct(RecommendAct.this);
             }
         });
         initView();
