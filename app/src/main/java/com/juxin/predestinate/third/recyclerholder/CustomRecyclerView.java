@@ -139,6 +139,13 @@ public class CustomRecyclerView extends LinearLayout {
     }
 
     /**
+     * 显示XrecyclerView
+     */
+    public void showPageRecyclerView() {
+        customFrameLayout.show(R.id.common_pagerecylerview);
+    }
+
+    /**
      * 隐藏所有
      */
     public void GoneAll() {

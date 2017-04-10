@@ -19,8 +19,8 @@ import com.juxin.predestinate.module.util.UIUtil;
 
 
 /**
- * 排行榜奖品弹框，只在每日第一次切换到排行榜tab时显示
- * Created by ZRP on 2016/9/1.
+ * 消息红包弹框
+ * Created by zm on 2017/3/.
  */
 public class RedPacketDialog extends BaseDialogFragment implements View.OnClickListener {
 

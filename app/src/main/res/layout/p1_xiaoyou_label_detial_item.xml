@@ -35,7 +35,8 @@
         android:layout_marginTop="@dimen/px20_dp"
         android:text="@string/intimacy"
         android:textColor="@color/color_BDBDBD"
-        android:textSize="@dimen/px34_sp"/>
+        android:textSize="@dimen/px34_sp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/friend_Label_detial_txv_num"
@@ -46,6 +47,7 @@
         android:layout_marginBottom="@dimen/px20_dp"
         android:text="123456"
         android:textColor="@color/color_FF9900"
-        android:textSize="@dimen/px34_sp"/>
+        android:textSize="@dimen/px34_sp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -35,12 +35,18 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
         mCustomSearchView.setOnTextChangedListener(this);
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.contact));
-        setTitleRight("确定", this);
+        setTitleRight(getString(R.string.ok), this);
         lvFriends = (RecyclerView) findViewById(R.id.xiaoyou_sele_lv_list);
     }
 
     private void changeTitleRight() {
-
+        if (arrSimpleFriends != null){
+            if (arrSimpleFriends.size()>0){
+                setTitleRight(getString(R.string.ok)+"("+arrSimpleFriends.size()+")", this);
+            }else {
+                setTitleRight(getString(R.string.ok), this);
+            }
+        }
     }
 
     //设置右侧确定按钮的逻辑

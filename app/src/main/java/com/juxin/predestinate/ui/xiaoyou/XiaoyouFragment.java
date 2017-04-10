@@ -21,6 +21,7 @@ import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.FriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
+import com.juxin.predestinate.ui.xiaoyou.zanshi.ClosenessUpgradeDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,10 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
                         UIShow.showTabGroupAct(getActivity());
 //                        RedPacketDialog dialog = new RedPacketDialog();
 //                        dialog.showDialog(getActivity());
+
+                        //测试
+                        ClosenessUpgradeDialog dialog = new ClosenessUpgradeDialog();
+                        dialog.showDialog(getActivity());
                     }else if (position == 1){
                         UIShow.showCloseFriendsAct(getActivity());
                     }

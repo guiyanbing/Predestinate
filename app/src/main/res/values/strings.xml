@@ -180,4 +180,6 @@
     <string name="message_close">关闭</string>
     <string name="message_replay">回复</string>
 
+    <string name="all_friends">全部好友</string>
+    <string name="ok">确定</string>
 </resources>

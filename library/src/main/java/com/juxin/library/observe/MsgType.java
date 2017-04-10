@@ -124,4 +124,10 @@ public class MsgType {
     public static final String MT_Socket_Read_Content = "MT_Socket_Read_Content";
 
     // -----------------------------socket相关 end---------------------------------
+
+    /**
+     * 一键打招呼完成后回调用
+     */
+    public static final String MT_Say_Hello_Notice = "MT_Say_Hello_Notice";
+
 }

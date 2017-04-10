@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.juxin.library.view.CircleImageView
+            android:id="@+id/say_hello_item_avatar"
+            style="@style/avatar_big"
+            android:src="@drawable/p1_head_default" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/say_hello_item_avatar"
+            android:layout_alignRight="@id/say_hello_item_avatar"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/say_hello_item_auth_state"
+                style="@style/icon_middle_center"
+                android:layout_margin="@dimen/px5_dp"
+                android:src="@drawable/p1_rz_ico"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/say_hello_item_vip_state"
+                style="@style/icon_middle_center"
+                android:layout_margin="@dimen/px5_dp"
+                android:src="@drawable/p1_vip_ico"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/say_hello_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px30_dp"
+        android:textColor="@color/text_zhuyao_black" />
+</LinearLayout>

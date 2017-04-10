@@ -1,5 +1,6 @@
 package com.juxin.predestinate.bean.center.user.light;
 
+import android.os.Parcel;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
@@ -40,6 +41,10 @@ public class UserInfoLightweight extends UserBasic {
 //            "tm": 1481856586
 //    }
 
+
+    private boolean isVip;      // 是否是VIP
+    private boolean isAuth;      // 是否是认证用户
+
     public void parseUserInfoLightweight(UserDetail userInfo) {
         if (userInfo == null)
             return;
@@ -53,7 +58,63 @@ public class UserInfoLightweight extends UserBasic {
         if (TextUtils.isEmpty(jsonResult)) {
             return;
         }
-
         JSONObject jsonObject = getJsonObject(jsonResult);
+        if (!jsonObject.has("is_vip")) {
+            setVip(jsonObject.optBoolean("is_vip"));
+        }
+        if (jsonObject.has("is_auth")) {
+            setAuth(jsonObject.optBoolean("is_auth"));
+        }
+
     }
+
+    public boolean isVip() {
+        return isVip;
+    }
+
+    public void setVip(boolean vip) {
+        isVip = vip;
+    }
+
+    public boolean isAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(boolean auth) {
+        isAuth = auth;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isAuth ? (byte) 1 : (byte) 0);
+    }
+
+    public UserInfoLightweight() {
+    }
+
+    protected UserInfoLightweight(Parcel in) {
+        super(in);
+        this.isVip = in.readByte() != 0;
+        this.isAuth = in.readByte() != 0;
+    }
+
+    public static final Creator<UserInfoLightweight> CREATOR = new Creator<UserInfoLightweight>() {
+        @Override
+        public UserInfoLightweight createFromParcel(Parcel source) {
+            return new UserInfoLightweight(source);
+        }
+
+        @Override
+        public UserInfoLightweight[] newArray(int size) {
+            return new UserInfoLightweight[size];
+        }
+    };
 }
