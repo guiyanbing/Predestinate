@@ -34,7 +34,7 @@ public class AutoGridLayoutManager extends GridLayoutManager {
     @Override
     public void onMeasure(RecyclerView.Recycler recycler,
                           RecyclerView.State state, int widthSpec, int heightSpec) {
-        if (measuredHeight <= 0) {
+        if (measuredHeight <= 0 && recycler.getScrapList().size() != 0) {
             View view = recycler.getViewForPosition(0);
             if (view != null) {
                 measureChild(view, widthSpec, heightSpec);

@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.local.common;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -7,6 +9,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.ui.mail.sayhi.SayHelloDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,4 +98,34 @@ public class CommonMgr implements ModuleBase {
         postParams.put("version", ModuleMgr.getAppMgr().getVerCode());// 版本号(整数)
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.checkUpdate, postParams, complete);
     }
+    /**
+     * 获取每日推荐列表（一键打招呼列表）
+     *
+     * @param complete
+     */
+    public void getSayHiList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqSayHiList, null, complete);
+    }
+
+    /**
+     * 一键打招呼的状态Key
+     *
+     * @return
+     */
+    private String getSayHelloKey() {
+        return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
+    }
+
+    /**
+     * 显示一键打招呼对话框
+     *
+     * @param context
+     */
+    public void showSayHelloDialog(FragmentActivity context) {
+//        if (checkDateAndSave(getSayHelloKey())) {
+            SayHelloDialog sayHelloDialog = new SayHelloDialog();
+            sayHelloDialog.showDialog(context);
+//        }
+    }
+
 }

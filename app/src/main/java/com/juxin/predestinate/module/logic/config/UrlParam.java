@@ -24,6 +24,9 @@ public enum UrlParam {
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
+    reqSayHiList("s/reco/DayRecommend", UserInfoLightweightList.class, true),
+
+
     //============================== 用户资料相关接口 =============================
 
     reqSetInfo("i/uinfo/SecSetInfo", true),  // 用户设置更新
