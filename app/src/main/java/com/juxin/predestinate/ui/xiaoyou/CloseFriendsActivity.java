@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.xiaoyou;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -65,6 +66,18 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
             public void onItemClick(View convertView, int position) {
                 LabelsList.LabelInfo info = mCloseFriendsAdapter.getItem(position);
                 UIShow.showNewTabAct(CloseFriendsActivity.this,info.getId());
+            }
+        });
+        lvList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+//                Log.e("TTTTTTTTTTTT","dx="+dx+";dy="+dy);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
         });
     }

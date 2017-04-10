@@ -54,6 +54,7 @@
                 android:layout_weight="126"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/upgrade_ll_center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/px70_dp"
@@ -75,22 +76,24 @@
                 android:textSize="@dimen/px40_sp"
                 android:textColor="@color/color_666666"
                 android:text="你们俩的关系更近一步了"/>
-            <TextView
-                android:id="@+id/upgrade_btn_ok"
-                android:layout_width="match_parent"
-                android:paddingTop="@dimen/px30_dp"
-                android:layout_height="@dimen/px200_dp"
-                android:textColor="@color/color_47cfd3"
-                android:textSize="@dimen/px40_sp"
-                android:background="@drawable/upgrade_btn_bg"
-                android:gravity="center"
-                android:text="知道了"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/px30_dp"
-                android:background="@color/white"
-                android:layout_marginTop="-68dp"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/upgrade_btn_ok"
+            android:layout_width="match_parent"
+            android:paddingTop="@dimen/px30_dp"
+            android:layout_height="@dimen/px200_dp"
+            android:textColor="@color/color_47cfd3"
+            android:textSize="@dimen/px40_sp"
+            android:layout_below="@+id/upgrade_ll_center"
+            android:background="@drawable/upgrade_btn_bg"
+            android:gravity="center"
+            android:text="知道了"/>
+        <TextView
+            android:layout_below="@+id/upgrade_ll_center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px30_dp"
+            android:background="@color/white"
+            android:layout_marginTop="-2dp"/>
 
     </RelativeLayout>
 

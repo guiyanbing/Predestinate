@@ -16,8 +16,6 @@ public class CloseFriendsAdapter extends BaseRecyclerViewAdapter<LabelsList.Labe
 
     @Override
     public int[] getItemLayouts() {
-
-        //zhushi
         return new int[]{R.layout.p1_xiaoyou_intimacy_item};
     }
 
