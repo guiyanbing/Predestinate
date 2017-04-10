@@ -5,76 +5,77 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/user_mail_notify_ly"
+    <LinearLayout
+        android:id="@+id/floating_tip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tm_bg"
-        android:padding="@dimen/px15_dp">
+        android:layout_height="@dimen/px200_dp"
+        android:background="#A8000000"
+        android:gravity="center">
 
-        <ImageView
-            android:id="@+id/user_mail_notify_icon"
-            android:layout_width="@dimen/px150_dp"
-            android:layout_height="@dimen/px150_dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher" />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/user_mail_notify_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/px15_dp"
-            android:layout_toRightOf="@+id/user_mail_notify_icon"
-            android:singleLine="true"
-            android:text="王艳艳"
-            android:textColor="@color/theme_color_red"
-            android:textSize="@dimen/px45_sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/user_mail_notify_icon"
-            android:layout_marginLeft="@dimen/px15_dp"
-            android:layout_toRightOf="@+id/user_mail_notify_icon"
-            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/user_img"
+                android:layout_width="@dimen/px150_dp"
+                android:layout_height="@dimen/px150_dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/px25_dp"
+                android:layout_marginRight="@dimen/px25_dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_head" />
 
             <TextView
-                android:id="@+id/user_mail_notify_content"
-                android:layout_width="0dp"
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_alignTop="@+id/user_img"
+                android:layout_toRightOf="@+id/user_img"
+                android:singleLine="true"
+                android:text="Lisa"
+                android:textColor="@color/white"
+                android:textSize="@dimen/px45_sp" />
+
+            <TextView
+                android:id="@+id/user_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/user_img"
+                android:layout_toRightOf="@+id/user_img"
                 android:singleLine="true"
                 android:text="你好，请问你在吗？"
                 android:textColor="@color/white"
                 android:textSize="@dimen/px39_sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/chat"
-                style="@style/button_middle"
-                android:paddingBottom="@dimen/px9_dp"
-                android:paddingTop="@dimen/px9_dp"
-                android:text="联系她"
-                android:visibility="gone" />
-            <!-- 判断男女进行字体显示：他、她 -->
+                android:id="@+id/btn_ignore"
+                style="@style/button_middle_list"
+                android:layout_marginRight="@dimen/px30_dp"
+                android:background="@drawable/p1_notify_close_btn"
+                android:text="@string/message_close"
+                android:textColor="#888"
+                android:textSize="@dimen/px36_sp" />
+
+            <TextView
+                android:id="@+id/btn_reply"
+                style="@style/button_middle_list"
+                android:layout_marginRight="@dimen/px30_dp"
+                android:text="@string/message_replay"
+                android:textColor="@color/white"
+                android:textSize="@dimen/px36_sp" />
         </LinearLayout>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="@dimen/px36_dp"
-            android:paddingRight="@dimen/px12_dp"
-            android:visibility="gone">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/p1_ic_edit_del" />
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <TextView
+    <View
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
