@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.TypeConvUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
@@ -11,6 +12,78 @@ import com.juxin.predestinate.ui.mail.item.MailItemType;
  */
 
 public class BaseMessage implements IBaseMessage {
+
+    //数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟
+    public static int ONE = 1;
+    public static int TWO = 2;
+    public static int THREE = 3;
+    public static int FOUR = 4;
+
+
+    public enum BaseMessageType {
+        text(TextMessage.class, 2),//文本消息
+//        hi(SayMessage.class, 3),//打招呼
+//        read(SystemMessage.class, 7),//已读
+//        heart(HeartMessage.class, 8),//对我心动的消息
+//        hint(HintMessage.class, 9), //小提示，在消息框中为灰色小字
+//        voice(VoiceMessage.class, 10), //语音消息
+//        videoSmall(VideoSmallMessage.class, 11), //小视频
+//        img(ImgMessage.class, 12), //图片
+//        act(ActivityMessage.class, 13),//活动
+//        addFriend(FriendsMessage.class, 14),//好友消息
+//        game(InterActMessage.class, 15),//游戏互动消息
+//        html(HtmlMessage.class, 17)//html消息
+        ;
+        //  del_msg(DeleteMessage.class),//删除消息类型
+
+        public Class<? extends BaseMessage> msgClass = null;
+        public int msgType;
+
+        BaseMessageType(Class<? extends BaseMessage> msgClass, int msgType) {
+            this.msgClass = msgClass;
+            this.msgType = msgType;
+        }
+
+        public static BaseMessageType getBaseMessageByType(String str) {
+            for (BaseMessageType messageType : BaseMessageType.values()) {
+                if (messageType.toString().equals(str)) {
+                    return messageType;
+                }
+            }
+            return null;
+        }
+
+        public static BaseMessageType valueOf(int msgType) {
+            for (BaseMessageType messageType : BaseMessageType.values()) {
+                if (messageType.getMsgType() == msgType) {
+                    return messageType;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取消息对应的结构体
+         *
+         * @param type
+         * @return
+         */
+        public static Class<? extends BaseMessage> getMsgClass(int type) {
+            try {
+                BaseMessageType messageType = BaseMessageType.valueOf("Msg_" + type);
+                return messageType.msgClass;
+            } catch (Exception e) {
+                MMLog.autoDebug(type);
+            }
+            return null;
+        }
+
+        public int getMsgType() {
+            return this.msgType;
+        }
+    }
+
+    private int dataSource = 1;//数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟消息
 
     private String channelID;
     private String whisperID;
@@ -190,5 +263,13 @@ public class BaseMessage implements IBaseMessage {
 
     public void setMailItemStyle(int mailItemStyle) {
         MailItemStyle = mailItemStyle;
+    }
+
+    public int getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(int dataSource) {
+        this.dataSource = dataSource;
     }
 }

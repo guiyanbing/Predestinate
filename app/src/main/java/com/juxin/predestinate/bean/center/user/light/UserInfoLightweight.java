@@ -40,10 +40,21 @@ public class UserInfoLightweight extends UserBasic {
 //        "status": "ok",
 //            "tm": 1481856586
 //    }
+    private long time;
+    private String infoJson;//存储json
 
 
     private boolean isVip;      // 是否是VIP
     private boolean isAuth;      // 是否是认证用户
+
+    public UserInfoLightweight() {
+    }
+
+    public UserInfoLightweight(long uid, String infoJson, long time) {
+        this.uid = uid;
+        this.infoJson = infoJson;
+        this.time = time;
+    }
 
     public void parseUserInfoLightweight(UserDetail userInfo) {
         if (userInfo == null)
@@ -58,6 +69,7 @@ public class UserInfoLightweight extends UserBasic {
         if (TextUtils.isEmpty(jsonResult)) {
             return;
         }
+
         JSONObject jsonObject = getJsonObject(jsonResult);
         if (!jsonObject.has("is_vip")) {
             setVip(jsonObject.optBoolean("is_vip"));
@@ -97,8 +109,7 @@ public class UserInfoLightweight extends UserBasic {
         dest.writeByte(this.isAuth ? (byte) 1 : (byte) 0);
     }
 
-    public UserInfoLightweight() {
-    }
+
 
     protected UserInfoLightweight(Parcel in) {
         super(in);
@@ -117,4 +128,20 @@ public class UserInfoLightweight extends UserBasic {
             return new UserInfoLightweight[size];
         }
     };
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public String getInfoJson() {
+        return infoJson;
+    }
+
+    public void setInfoJson(String infoJson) {
+        this.infoJson = infoJson;
+    }
 }

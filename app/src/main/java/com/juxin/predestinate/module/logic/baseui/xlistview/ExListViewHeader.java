@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.juxin.predestinate.R;
 
 public class ExListViewHeader extends LinearLayout {

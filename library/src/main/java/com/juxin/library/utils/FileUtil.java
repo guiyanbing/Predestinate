@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
@@ -43,6 +44,23 @@ public class FileUtil {
         return false;
     }
 
+    /**
+     * 判断文件夹是否存在，如果不存在则创建
+     *
+     * @param strFolder 文件夹路径
+     * @return 是否存在或者创建成功
+     */
+    public static boolean isFolderExists(String strFolder) {
+        File file = new File(strFolder);
+        if (!file.exists()) {
+            if (file.mkdirs()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * 获取文件扩展名。
@@ -91,11 +109,13 @@ public class FileUtil {
     public static String getFileName(String filePath) {
         if (TextUtils.isEmpty(filePath)) return "";
 
+        String fileName = "";
         int slash = filePath.lastIndexOf('/');
-        if ((slash > -1) && (slash < (filePath.length()))) {
-            return filePath.substring(slash, filePath.length());
+        if ((slash > -1) && (slash + 1 < (filePath.length()))) {
+            fileName = filePath.substring(slash + 1, filePath.length());
         }
-        return filePath;
+        fileName = Pattern.compile("[\\s\\\\/:\\*\\?\\\"<>\\|]").matcher(fileName).replaceAll("");
+        return fileName;
     }
 
     /**
@@ -113,7 +133,6 @@ public class FileUtil {
             PLogger.printThrowable(t);
         }
     }
-
 
     /**
      * 获取除扩展名以外的部分
@@ -331,6 +350,41 @@ public class FileUtil {
         }
 
         return success;
+    }
+
+    /**
+     * 将文件从assets目录拷贝到指定文件目录
+     *
+     * @param context  上下文，用于读取assets目录
+     * @param fileName 文件在assets目录中的文件名
+     * @param path     文件拷贝路径
+     * @return 是否拷贝成功
+     */
+    public static boolean copyApkFromAssets(Context context, String fileName, String path) {
+        boolean copyIsFinish = false;
+        InputStream is = null;
+        FileOutputStream fos = null;
+        try {
+            is = context.getAssets().open(fileName);
+            File file = new File(path);
+            file.createNewFile();
+            fos = new FileOutputStream(file);
+            byte[] temp = new byte[1024];
+            int i = 0;
+            while ((i = is.read(temp)) > 0) {
+                fos.write(temp, 0, i);
+            }
+            copyIsFinish = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) is.close();
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+            }
+        }
+        return copyIsFinish;
     }
 
     /**
@@ -722,6 +776,7 @@ public class FileUtil {
             }
         }
     }
+
     /**
      * 从assets里边读取字符串
      *

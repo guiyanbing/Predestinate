@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * 用户信息基类
  */
 public class UserBasic extends BaseData implements Parcelable {
-    private long uid;            // 用户Id
+    public long uid;            // 用户Id
     private String avatar;       // 头像
     private int avatar_status;   // 头像状态 -1:没有数据  0:正在审核 1:审核通过 2:未通过 3:未上传（老版本） 4：好 5：很好 6待复审 7 新版未审核
     private int gender;          // 性别 1男2女
@@ -71,6 +71,10 @@ public class UserBasic extends BaseData implements Parcelable {
 
     public long getUid() {
         return uid;
+    }
+
+    public String getSUid() {
+        return String.valueOf(uid);
     }
 
     public void setUid(long uid) {

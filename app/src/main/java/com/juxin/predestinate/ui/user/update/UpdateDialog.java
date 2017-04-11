@@ -73,11 +73,9 @@ public class UpdateDialog extends BaseDialogFragment implements DownloadListener
      * 初始化数据
      *
      * @param appUpdate 软件升级信息
-     * @param runnable  非强制更新时点击取消按钮执行的操作
      */
-    public void setData(AppUpdate appUpdate, Runnable runnable) {
+    public void setData(AppUpdate appUpdate) {
         this.appUpdate = appUpdate;
-        this.runnable = runnable;
     }
 
     @Override

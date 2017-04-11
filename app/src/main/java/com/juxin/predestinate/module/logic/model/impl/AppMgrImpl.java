@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.logic.model.impl;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -9,8 +10,8 @@ import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.juxin.library.enc.MD5;
 import com.juxin.library.log.PSP;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.utils.ViewUtils;
 import com.juxin.predestinate.BuildConfig;
@@ -21,6 +22,7 @@ import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.util.PkgHelper;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ import java.util.List;
 public class AppMgrImpl implements AppMgr {
 
     private String packageName = "";    // 软件包名
+    private String signature = "";      // 软件签名
     private int versionCode = 0;        // 软件版本号
     private String versionName = "";    // 软件版本名称
 
@@ -42,26 +45,39 @@ public class AppMgrImpl implements AppMgr {
     private String mainChannelID;       // 应用id，即主渠道号
     private String subChannelID;        // 子渠道号
 
+    @SuppressLint("HardwareIds")
     @Override
     public void init() {
         try {
             PackageManager packageManager = App.context.getPackageManager();
             PackageInfo packInfo;
             packInfo = packageManager.getPackageInfo(App.context.getPackageName(), 0);
+            // 获取软件基本信息
             versionCode = packInfo.versionCode;
             versionName = packInfo.versionName;
             packageName = packInfo.packageName;
 
+            // 获取硬件信息
             TelephonyManager mTm = (TelephonyManager) App.context.getSystemService(Context.TELEPHONY_SERVICE);
             imei = mTm.getDeviceId();
             imsi = mTm.getSubscriberId();
             simo = mTm.getSimOperator();
-
             mac = NetworkUtils.getMacAddress(App.context);
 
             UMChannel = PkgHelper.getMarket(App.context, App.context.getResources().getString(R.string.app_name) + "_2_999");
             mainChannelID = PkgHelper.getMainChannel(App.context, "2"); //appInfo.metaData.getInt("sUID");
             subChannelID = PkgHelper.getSubChannel(App.context, "999"); //appInfo.metaData.getInt("sID");
+
+            // 获取签名
+            List<PackageInfo> apps = packageManager.getInstalledPackages(PackageManager.GET_SIGNATURES);
+            Iterator<PackageInfo> iterator = apps.iterator();
+            while (iterator.hasNext()) {
+                PackageInfo packageinfo = iterator.next();
+                String thisName = packageinfo.packageName;
+                if (thisName.equals(getPackageName())) {
+                    signature = packageinfo.signatures[0].toCharsString();
+                }
+            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,6 +93,11 @@ public class AppMgrImpl implements AppMgr {
     @Override
     public String getPackageName() {
         return packageName;
+    }
+
+    @Override
+    public String getSignature() {
+        return signature;
     }
 
     @Override
@@ -149,7 +170,7 @@ public class AppMgrImpl implements AppMgr {
 
     @Override
     public int getDeviceID() {
-        return MD5.getMD5("" + mac + imei);
+        return EncryptUtil.getHashCode(mac + imei);
     }
 
     // ================软件状态信息================

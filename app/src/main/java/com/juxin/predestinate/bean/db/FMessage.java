@@ -4,7 +4,7 @@ package com.juxin.predestinate.bean.db;
  * Created by Kind on 2017/3/22.
  */
 
-public class Fmessage {
+public class FMessage {
 
     public static final String FMESSAGE_TABLE = "fmessage";
 

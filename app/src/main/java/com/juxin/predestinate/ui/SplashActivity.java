@@ -8,14 +8,10 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.start.NavUserAct;
 
@@ -37,19 +33,7 @@ public class SplashActivity extends BaseActivity {
 
     private void initData() {
         LocationMgr.getInstance().start();//启动定位
-        //请求软件升级接口
-        ModuleMgr.getCommonMgr().checkUpdate(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                isRequestResponse = true;
-                if (response.isOk()) {
-                    UIShow.showUpdateDialog(SplashActivity.this, (AppUpdate) response.getBaseData(), runnable);
-                }
-            }
-        });
     }
-
-    private boolean isAnimationEnd = false, isRequestResponse = false;
 
     private void jumpAnimation() {
         ImageView iv_splash = (ImageView) findViewById(R.id.iv_splash);
@@ -63,7 +47,6 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                isAnimationEnd = true;
                 skipLogic();
             }
 
@@ -79,21 +62,9 @@ public class SplashActivity extends BaseActivity {
     }
 
     /**
-     * 非强制升级点击取消之后继续执行跳转操作
-     */
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            skipLogic();
-        }
-    };
-
-    /**
      * Intent跳转
      */
     private void skipLogic() {
-        if (!isAnimationEnd || !isRequestResponse) return;
-
         Intent intent = null;
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
             ModuleMgr.getCenterMgr().reqMyInfo();

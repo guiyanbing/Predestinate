@@ -1,9 +1,10 @@
 package com.juxin.predestinate.ui.recommend;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -39,7 +40,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
     HashMap<String, Object> post_param;
     private int page = 1;//页码，要请求的数据页数
     private boolean b_resetPage;//重置页码标记
-
+    private ArrayList<String> uidList = new ArrayList<>();// 推荐的人uid列表
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,29 +56,51 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
         initView();
     }
 
-    //获取数据
-    public void getHttpData() {
+    //获取推荐的人数据
+    public void getRecommendData() {
         cv_common.showLoading();
         b_resetPage = true;
         ModuleMgr.getCommonMgr().sysRecommend(this, 1, post_param);
     }
-
+    /**
+     * 初始化 uid 列表
+     */
+    private void fillUidList() {
+        if (data.size() > 0) {
+            uidList.clear();
+            for (int i = 0; i < data.size(); i++) {
+                if (data.size() <= 10) {
+                    uidList.add(data.get(i).getUid() + "");
+                } else if (data.size() > 10) {
+                    if (i == 10) {
+                        break;
+                    } else {
+                        uidList.add(data.get(i).getUid() + "");
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * 获取轻量级用户信息
+     */
+    private void getUserInfo(ArrayList<String> uidList) {
+//        ModuleMgr.getChatMgr().getUserInfoLightweightList(uidList, this);
+    }
     private void initView() {
         cv_common = (CustomRecyclerView) findViewById(R.id.cv_common);
         recyclerView = cv_common.getXRecyclerView();
-//        List<String> list = new ArrayList<>();
-//        list.add("小明");
-//        list.add("晓云");
-//        list.add("佐助");
-        adapter = new RecommendAdapter(this, null);
+        adapter = new RecommendAdapter();
+        recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_recommend_item_space));
-        getHttpData();
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this,
+//                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_recommend_item_space));
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.common_divider_sample);
+        recyclerView.addItemDecoration(recyclerView.new DividerItemDecoration(dividerDrawable));
+        getRecommendData();
     }
 
     @Override
@@ -101,10 +124,13 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
                         page++;
                     }
                     data.addAll(list);
+                    //TODO 获取用户简略信息
+//                    fillUidList();
+//                    getUserInfo(uidList);
                     adapter.setList(data);
                     cv_common.showXrecyclerView();
                 }
-                if (list.size() < 20) {
+                if (list.size() < 10) {
                     recyclerView.setLoadingMoreEnabled(false);
 //                    exListView.addFooterView(divider_footer);
                 } else {
@@ -142,7 +168,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
             }else if(bundle.getIntArray("tags")!=null){
                 post_param.put("tags",bundle.getIntArray("tags"));
             }
-            getHttpData();
+            getRecommendData();
         }
     }
 

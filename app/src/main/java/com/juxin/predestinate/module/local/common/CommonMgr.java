@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -96,8 +97,11 @@ public class CommonMgr implements ModuleBase {
         postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道号
         postParams.put("platform", 1);// 平台 1-android， 2-ios
         postParams.put("version", ModuleMgr.getAppMgr().getVerCode());// 版本号(整数)
+        postParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));// 软件签名sha1
+        postParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());// 包名
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.checkUpdate, postParams, complete);
     }
+
     /**
      * 获取每日推荐列表（一键打招呼列表）
      *
@@ -123,8 +127,8 @@ public class CommonMgr implements ModuleBase {
      */
     public void showSayHelloDialog(FragmentActivity context) {
 //        if (checkDateAndSave(getSayHelloKey())) {
-            SayHelloDialog sayHelloDialog = new SayHelloDialog();
-            sayHelloDialog.showDialog(context);
+        SayHelloDialog sayHelloDialog = new SayHelloDialog();
+        sayHelloDialog.showDialog(context);
 //        }
     }
 
@@ -133,11 +137,12 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void sysRecommend(RequestComplete complete,final int cur,HashMap<String, Object> post_param) {
+    public void sysRecommend(RequestComplete complete, final int cur, HashMap<String, Object> post_param) {
         post_param.put("page", cur);
         post_param.put("limit", 10);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysRecommend, post_param, complete);
     }
+
     /**
      * 系统标签
      *
