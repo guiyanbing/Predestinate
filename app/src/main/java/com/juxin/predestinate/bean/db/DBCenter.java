@@ -12,14 +12,14 @@ import rx.Observable;
 public class DBCenter {
 
     private BriteDatabase mDatabase;
-    private DBCenterFmessage centerFmessage;
+    private DBCenterFMessage centerFmessage;
 
     public DBCenter(BriteDatabase database) {
         this.mDatabase = database;
-        centerFmessage = new DBCenterFmessage(database);
+        centerFmessage = new DBCenterFMessage(database);
     }
 
-    /******************** Fmessage **************************/
+    /******************** FMessage **************************/
 
 
     /**
@@ -76,5 +76,5 @@ public class DBCenter {
         return centerFmessage.delete(whisperID);
     }
 
-    /********************Fmessage end **************************/
+    /********************FMessage end **************************/
 }

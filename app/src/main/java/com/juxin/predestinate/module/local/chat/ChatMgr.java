@@ -17,6 +17,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 /**
  *
  * Created by Kind on 2017/3/28.
@@ -24,11 +27,17 @@ import javax.inject.Inject;
 
 public class ChatMgr implements ModuleBase {
 
+    private RecMessageMgr messageMgr = new RecMessageMgr();
+
     @Inject
     DBCenter dbCenter;
 
     @Override
     public void init() {
+        App.getmAppComponent().inject(this);
+        messageMgr.init();
+
+
         App.getAppComponent().inject(this);
         BaseMessage baseMessage = new BaseMessage();
         baseMessage.setWhisperID("1");
@@ -37,11 +46,19 @@ public class ChatMgr implements ModuleBase {
         baseMessage.setContent("xxxx");
         baseMessage.setStatus(1);
         onReceiving(baseMessage);
+
+        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
+        listObservable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+
+            }
+        });
     }
 
     @Override
     public void release() {
-
+        messageMgr.release();
     }
 
     /**

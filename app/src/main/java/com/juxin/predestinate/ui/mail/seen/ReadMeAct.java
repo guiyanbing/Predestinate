@@ -19,7 +19,6 @@ public class ReadMeAct extends BaseActivity {
 
     private XRecyclerView recyclerView;
     private CustomRecyclerView customRecyclerView;
-    private XRecyclerView xRecyclerView;
     private ReadMeAdapter readMeAdapter;
 
     @Override
