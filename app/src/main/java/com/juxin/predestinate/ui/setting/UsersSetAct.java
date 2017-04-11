@@ -154,7 +154,6 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.rl_feedback://意见反馈客服
 //                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), MailSpecialID.customerService.getSpecialIDName());
-//                UIShow.showFeedBackAct(this);
                 UIShow.showFeedBackAct(this);
                 break;
         }

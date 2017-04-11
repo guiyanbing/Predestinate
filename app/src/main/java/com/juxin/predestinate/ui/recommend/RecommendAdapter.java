@@ -14,6 +14,7 @@ import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.CircularCoverView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.recommend.RecommendPeople;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 
@@ -26,11 +27,19 @@ import java.util.List;
 
 public class RecommendAdapter extends XRecyclerView.Adapter<RecommendAdapter.MyViewHolder> {
     private Context context;
-    private List<String> list;
+    private List<RecommendPeople> list;
 
-    public RecommendAdapter(Context context, List<String> list) {
+    public RecommendAdapter(Context context, List<RecommendPeople> list) {
         this.context = context;
         this.list = list;
+    }
+    public void setList(List<RecommendPeople> datas) {
+        this.list = datas;
+        notifyDataSetChanged();
+    }
+
+    public List<RecommendPeople> getList() {
+        return list;
     }
 
     @Override
@@ -43,7 +52,7 @@ public class RecommendAdapter extends XRecyclerView.Adapter<RecommendAdapter.MyV
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        holder.tv_nickname.setText(list.get(position));
+//        holder.tv_nickname.setText(list.get(position));
         holder.bt_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

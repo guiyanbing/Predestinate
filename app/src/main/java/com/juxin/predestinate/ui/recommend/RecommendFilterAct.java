@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.recommend;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.recommend.TagInfo;
+import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.AddressPicker;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.RangePicker;
@@ -21,6 +23,7 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -36,35 +39,60 @@ public class RecommendFilterAct extends BaseActivity {
     private List<TagInfo> listTag, listChosen;
     private final int spanCount = 3;
 
+    private int age_min, age_max, provinceID, cityID;
+
+    private int tags[];
+    private Intent data;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_recommendfilter_act);
         setBackView(getResources().getString(R.string.title_recommend_filter));
+        data = new Intent();
         setTitleRight("提交", R.color.title_right_commit, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 筛选请求
-                String chosen = "";
                 for (int i = 0; i < listChosen.size(); i++) {
-                    chosen += listChosen.get(i).getTagName() + "--";
+                    TagInfo tagInfo = listChosen.get(i);
+                    switch (tagInfo.getTagType()) {
+                        case 0://印象tag
+                            Bundle bundle = new Bundle();
+                            bundle.putIntArray("tags", tags);
+                            data.putExtras(bundle);
+                            break;
+                        case 1://地区
+                            data.putExtra("province", provinceID);
+                            data.putExtra("city", cityID);
+                            break;
+                        case 2://年龄
+                            data.putExtra("age_min", age_min);
+                            data.putExtra("age_max", age_max);
+                            break;
+                    }
                 }
-                MMToast.showShort(chosen);
+                setResult(200, data);
             }
         });
         initView();
     }
 
     private void getTag() {
-        listTag = new ArrayList<>();
         listChosen = new ArrayList<>();
-        String tags[] = {"选择地区", "年龄", "开放的都市少女", "爽快", "可爱", "萝莉", "御姐"};
-        for (int i = 0; i < tags.length; i++) {
+        listTag = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
             TagInfo tagInfo = new TagInfo();
-            tagInfo.setTagName(tags[i]);
-            tagInfo.setPosition(i);
+            if (i==0){
+                tagInfo.setTagName("选择地区");
+                tagInfo.setTagType(1);
+            }else if(i==1){
+                tagInfo.setTagName("年龄");
+                tagInfo.setTagType(2);
+            }
             listTag.add(tagInfo);
         }
+        TagInfoList tags = getIntent().getParcelableExtra("tags");
+        listTag.addAll(tags.getTagInfos());
     }
 
     //选择地区
@@ -72,13 +100,14 @@ public class RecommendFilterAct extends BaseActivity {
         PickerDialogUtil.showAddressPickerDialog2(this, new AddressPicker.OnAddressPickListener() {
             @Override
             public void onAddressPicked(City city) {
+                provinceID = city.getProvinceID();
+                cityID = city.getCityID();
                 if ("update".equals(type)) {
                     TagInfo tagInfo = listChosen.get(position);
-                    tagInfo.setTagMark(city.getCityID());
                     tagInfo.setTagName(city.getProvinceName() + city.getCityName());
                 } else if ("add".equals(type)) {
                     TagInfo tagInfo = new TagInfo();
-                    tagInfo.setTagMark(city.getCityID());
+                    tagInfo.setTagType(1);
                     tagInfo.setTagName(city.getProvinceName() + city.getCityName());
                     tagInfo.setPosition(position);
                     listChosen.add(tagInfo);
@@ -93,6 +122,7 @@ public class RecommendFilterAct extends BaseActivity {
         PickerDialogUtil.showRangePickerDialog(this, new RangePicker.OnRangePickListener() {
             @Override
             public void onRangePicked(String firstText, String secondText) {
+//                age_max= secondText;
                 if ("update".equals(type)) {
                     TagInfo tagInfo = listChosen.get(position);
                     tagInfo.setTagName(firstText + "~" + secondText);
