@@ -53,6 +53,14 @@ public final class ModuleMgr {
         initStatic(context);
         getAppMgr();
         getHttpMgr();
+
+        getCommonMgr();
+        getLoginMgr();
+        getCenterMgr();
+
+        getChatMgr();
+        getNotifyMgr();
+        getTipsBarMgr();
     }
 
     private static void initStatic(Context context) {
@@ -186,6 +194,7 @@ public final class ModuleMgr {
      * 聊天消息管理
      */
     private static ChatMgr chatMgr = null;
+
     public static ChatMgr getChatMgr() {
         if (chatMgr == null) {
             chatMgr = new ChatMgr();

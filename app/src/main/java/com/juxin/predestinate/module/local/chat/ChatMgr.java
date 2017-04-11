@@ -29,7 +29,7 @@ public class ChatMgr implements ModuleBase {
 
     @Override
     public void init() {
-        App.getmAppComponent().inject(this);
+        App.getAppComponent().inject(this);
         BaseMessage baseMessage = new BaseMessage();
         baseMessage.setWhisperID("1");
         baseMessage.setSendID(1);

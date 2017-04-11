@@ -2,7 +2,7 @@ package com.juxin.predestinate.module.util;
 
 import android.util.Base64;
 
-import com.juxin.library.enc.MD5;
+import com.juxin.library.utils.EncryptUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class Url_Enc {
                 }
             }
         }
-        return MD5.encode(builder.toString());
+        return EncryptUtil.md5(builder.toString());
     }
 
     private static String getHashMethodJsonStr(Map<String, Object> getParams, String jsonStr) {
@@ -81,7 +81,7 @@ public class Url_Enc {
         if (jsonStr != null) {
             builder.append(jsonStr);
         }
-        return MD5.encode(builder.toString());
+        return EncryptUtil.md5(builder.toString());
     }
 
     /**
