@@ -34,7 +34,7 @@ public class ChatMgr implements ModuleBase {
 
     @Override
     public void init() {
-        App.getmAppComponent().inject(this);
+        App.getAppComponent().inject(this);
         messageMgr.init();
 
 
