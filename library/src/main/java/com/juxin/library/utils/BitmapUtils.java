@@ -1,6 +1,7 @@
 package com.juxin.library.utils;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -22,8 +24,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.juxin.library.log.PLogger;
 
@@ -66,23 +70,16 @@ public final class BitmapUtils {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
-
         if (height > reqHeight || width > reqWidth) {
-
-            final int heightRatio = Math.round((float) height
-                    / (float) reqHeight);
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
             final int widthRatio = Math.round((float) width / (float) reqWidth);
 
             int ratio = heightRatio < widthRatio ? heightRatio : widthRatio;
             // inSampleSize只能是2的次幂  将ratio就近取2的次幂的值
-            if (ratio < 3)
-                inSampleSize = ratio;
-            else if (ratio < 6.5)
-                inSampleSize = 4;
-            else if (ratio < 8)
-                inSampleSize = 8;
-            else
-                inSampleSize = ratio;
+            if (ratio < 3) inSampleSize = ratio;
+            else if (ratio < 6.5) inSampleSize = 4;
+            else if (ratio < 8) inSampleSize = 8;
+            else inSampleSize = ratio;
         }
         return inSampleSize;
     }
@@ -835,5 +832,407 @@ public final class BitmapUtils {
             bitmap.recycle();
         }
         return rotatedBitmap;
+    }
+
+    // =========================================================================
+
+    /**
+     * 通过byte流创建Bitmap
+     */
+    public static Bitmap bytesToBitmap(byte[] bytes) {
+        if (bytes != null && bytes.length != 0) {
+            try {
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            } catch (Error e) {
+                PLogger.printThrowable(e);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 从Uri中获取图片
+     *
+     * @param cr  ContentResolver对象
+     * @param uri 图片的Uri
+     * @return Bitmap
+     */
+    public static Bitmap getBitmapFromUri(ContentResolver cr, Uri uri) {
+        try {
+            return BitmapFactory.decodeStream(cr.openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            PLogger.printThrowable(e);
+        }
+        return null;
+    }
+
+    /**
+     * 根据宽度和长度进行缩放图片
+     *
+     * @param path 图片的路径
+     * @param w    宽度
+     * @param h    长度
+     * @return Bitmap
+     */
+    public static Bitmap createBitmap(String path, int w, int h) {
+        try {
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            // 这里是整个方法的关键，inJustDecodeBounds设为true时将不为图片分配内存。
+            BitmapFactory.decodeFile(path, opts);
+            int srcWidth = opts.outWidth;// 获取图片的原始宽度
+            int srcHeight = opts.outHeight;// 获取图片原始高度
+            int destWidth = 0;
+            int destHeight = 0;
+            // 缩放的比例
+            double ratio = 0.0;
+            if (srcWidth < w || srcHeight < h) {
+                ratio = 0.0;
+                destWidth = srcWidth;
+                destHeight = srcHeight;
+            } else if (srcWidth > srcHeight) {// 按比例计算缩放后的图片大小，maxLength是长或宽允许的最大长度
+                ratio = (double) srcWidth / w;
+                destWidth = w;
+                destHeight = (int) (srcHeight / ratio);
+            } else {
+                ratio = (double) srcHeight / h;
+                destHeight = h;
+                destWidth = (int) (srcWidth / ratio);
+            }
+            BitmapFactory.Options newOpts = new BitmapFactory.Options();
+            // 缩放的比例，缩放是很难按准备的比例进行缩放的，目前我只发现只能通过inSampleSize来进行缩放，其值表明缩放的倍数，SDK中建议其值是2的指数值
+            newOpts.inSampleSize = (int) ratio + 1;
+            // inJustDecodeBounds设为false表示把图片读进内存中
+            newOpts.inJustDecodeBounds = false;
+            // 设置大小，这个一般是不准确的，是以inSampleSize的为准，但是如果不设置却不能缩放
+            newOpts.outHeight = destHeight;
+            newOpts.outWidth = destWidth;
+            // 获取缩放后图片
+            return BitmapFactory.decodeFile(path, newOpts);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取圆角图片
+     */
+    public static Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, pixels, pixels, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
+    /**
+     * 获取正方形的圆角图片
+     */
+    public static Bitmap toSquareRoundCorner(Bitmap bitmap, int pixels) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int grp = Math.abs(width - height);
+        if (width > height) {
+            width = width - grp;
+        } else if (height > width) {
+            height = height - grp;
+        }
+
+        Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        Rect rect = new Rect(0, 0, width, height);
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, pixels, pixels, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
+    /**
+     * 读取图片属性：旋转的角度
+     *
+     * @param path 图片绝对路径
+     * @return degree旋转的角度
+     */
+    public static int readPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
+
+    /**
+     * 压缩图片
+     */
+    public static Bitmap getSmallBitmap(String filePath) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, 480, 800);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        Bitmap bm = BitmapFactory.decodeFile(filePath, options);
+        if (bm == null) {
+            return null;
+        }
+        int degree = readPictureDegree(filePath);
+        bm = rotateBitmap(bm, degree);
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        } finally {
+            try {
+                if (baos != null)
+                    baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return bm;
+    }
+
+    /**
+     * 获取图片大小
+     */
+    @SuppressLint("NewApi")
+    public static int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {    //API 19
+            return bitmap.getAllocationByteCount();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
+            return bitmap.getByteCount();
+        }
+        return bitmap.getRowBytes() * bitmap.getHeight();                //earlier version
+    }
+
+    /**
+     * 旋转bitmap
+     */
+    private static Bitmap rotateBitmap(Bitmap bitmap, int rotate) {
+        if (bitmap == null) return null;
+
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+
+        // Setting post rotate to 90
+        Matrix mtx = new Matrix();
+        mtx.postRotate(rotate);
+        return Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
+    }
+
+    /**
+     * 顺时针旋转保存图片。
+     */
+    public static void rotateBitmap(String filePath, String saveFile, int rotate) {
+        Bitmap bm = BitmapFactory.decodeFile(filePath);
+
+        if (bm == null) {
+            return;
+        }
+
+        bm = rotateBitmap(bm, rotate);
+        FileOutputStream fos = null;
+
+        try {
+            fos = new FileOutputStream(saveFile);
+            bm.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+        } catch (FileNotFoundException e) {
+        } finally {
+            try {
+                if (fos != null)
+                    fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 图片转换byte[]
+     */
+    public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
+        if (needRecycle) {
+            bmp.recycle();
+        }
+
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /**
+     * 原图压缩方法
+     */
+    public static byte[] compressBitmap(Bitmap bitmap, float size) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        int quality = 75;
+        while (baos.toByteArray().length / 1024f > size) {
+            quality = quality - 4;
+            baos.reset();
+            if (quality <= 0) {
+                break;
+            }
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        }
+        return baos.toByteArray();
+    }
+
+    /**
+     * 压缩图片
+     */
+    public static byte[] compressImageToBytes(Bitmap image, int iScaleSize, int iMaxW, int iMaxH) {
+        int w = image.getWidth();
+        int h = image.getHeight();
+
+        Bitmap thumbBmp = image;
+        if ((w > iMaxW) || (h > iMaxH)) {
+            float iRw = iMaxW / w;
+            float iRh = iMaxH / h;
+            float iR = Math.min(iRw, iRh);
+            w = Math.round(w * iR);
+            h = Math.round(h * iR);
+            thumbBmp = Bitmap.createScaledBitmap(thumbBmp, w, h, true);
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        thumbBmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        int options = 80;
+        while (baos.toByteArray().length / 1024 > iScaleSize) {
+            baos.reset();
+            options -= 10;// 每次都减少10
+            thumbBmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        }
+        return baos.toByteArray();
+    }
+
+    /**
+     * 将Drawable转化为Bitmap
+     *
+     * @param drawable Drawable
+     * @return Bitmap
+     */
+    public static Bitmap getBitmapFromDrawable(Drawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, drawable
+                .getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    /**
+     * bitmap转为base64
+     */
+    public static String bitmapToBase64(Bitmap bitmap) {
+        String result = null;
+        ByteArrayOutputStream baos = null;
+        try {
+            if (bitmap != null) {
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+                baos.flush();
+                baos.close();
+
+                byte[] bitmapBytes = baos.toByteArray();
+                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (baos != null) {
+                    baos.flush();
+                    baos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * base64转为bitmap
+     */
+    public static Bitmap base64ToBitmap(String base64Data) {
+        byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    /**
+     * 将bitmap保存到sd卡
+     *
+     * @param savePath 保存文件路径
+     * @return File
+     */
+    public static File saveBitmap(Bitmap bitmap, String savePath) {
+        File file = new File(savePath);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            fos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) try {
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
 }
