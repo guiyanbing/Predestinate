@@ -128,4 +128,106 @@ public class CommonMgr implements ModuleBase {
 //        }
     }
 
+    //============================== 小友模块相关接口 =============================
+    /**
+     * 好友标签分组成员
+     *
+     * @param complete
+     */
+    public void getTagGroupMember(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqTagGroupMember, null, complete);
+    }
+
+    /**
+     * 增加自己的好友的
+     *
+     * @param complete
+     */
+    public void addFriendTag(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddFriendTag, null, complete);
+    }
+
+    /**
+     * 添加标签分组
+     *
+     * @param complete
+     */
+    public void addTagGroup(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddFriendTag, null, complete);
+    }
+
+    /**
+     * 添加好友标签分组成员
+     *
+     * @param complete
+     */
+    public void addTagGroupMember(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, null, complete);
+    }
+
+    /**
+     * 删除自己好友的 tag
+     *
+     * @param complete
+     */
+    public void delFriendTag(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelFriendTag, null, complete);
+    }
+
+    /**
+     * 删除标签分组
+     *
+     * @param complete
+     */
+    public void delTagGroup(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroup, null, complete);
+    }
+
+    /**
+     * 删除好友标签分组成员
+     *
+     * @param complete
+     */
+    public void delTagGroupMember(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroupMember, null, complete);
+    }
+
+    /**
+     * 好友列表
+     *
+     * @param complete
+     */
+    public void getFriendList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqFriendList, null, complete);
+    }
+
+    /**
+     * 最近互动好友列表
+     *
+     * @param complete
+     */
+    public void getLatestInteractiveList(int page,int limit,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("page",page );// 第几页
+        postParams.put("limit", limit);// 每页条数
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLatestInteractive, postParams, complete);
+    }
+
+    /**
+     * 修改标签分组
+     *
+     * @param complete
+     */
+    public void ModifyTagGroup(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqModifyTagGroup, null, complete);
+    }
+
+    /**
+     * 好友标签分组
+     *
+     * @param complete
+     */
+    public void getTagGroupList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqTagGroup, null, complete);
+    }
 }

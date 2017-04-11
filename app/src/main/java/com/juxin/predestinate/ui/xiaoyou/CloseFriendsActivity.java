@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.xiaoyou;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -68,18 +67,100 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
                 UIShow.showNewTabAct(CloseFriendsActivity.this,info.getId());
             }
         });
-        lvList.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-//                Log.e("TTTTTTTTTTTT","dx="+dx+";dy="+dy);
-            }
+//        lvList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//                //判断是当前layoutManager是否为LinearLayoutManager
+//                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+//                if (layoutManager instanceof LinearLayoutManager) {
+//                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+//                    //获取最后一个可见view的位置
+//                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+//                    //获取第一个可见view的位置
+//                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+//                    Log.e("TTTTTTTTTTTT", lvList + "||||" + recyclerView);
+//                    Log.e("TTTTTTTTTTTT", "dx=" + dx + ";dy=" + dy + "||||" + lvList.getTop()+"|||"+firstItemPosition);
+//                    //
+//                    //                    if (foodsArrayList.get(firstItemPosition) instanceof Foods) {
+//                    //                        int foodTypePosion = ((Foods) foodsArrayList.get(firstItemPosition)).getFood_stc_posion();
+//                    //                        FoodsTypeListview.getChildAt(foodTypePosion).setBackgroundResource(R.drawable.choose_item_selected);
+//                    //                    }
+//
+//                    if (firstItemPosition > 0)
+//                        firstItemPosition--;
+//                    int section = getSectionForPosition(firstItemPosition);
+//                    int nextSection = getSectionForPosition(firstItemPosition + 1);
+//                    int nextSecPosition = getPositionForSection(+nextSection);
+//
+//                    firstItemPosition++;
+//                    if (firstItemPosition != lastItemPosition) {
+//                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) invite_title_layout.getLayoutParams();
+//                        params.topMargin = 0;
+//                        invite_title_layout.setLayoutParams(params);
+//                        if (listMembers.size() == 1) {
+//                            invite_title_layout.setVisibility(View.GONE);
+//                        }
+//
+//                        if (getPositionForSection(section) != -1) {
+//                            invite_title.setText(listMembers.size() == 0 ? "A" : listMembers.get(getPositionForSection(section)).getSortKey());
+//                        }
+//                    }
+//                    if (nextSecPosition == firstVisibleItem + 1) {
+//                        View childView = view.getChildAt(0);
+//                        if (childView != null) {
+//                            int titleHeight = invite_title_layout.getHeight();
+//                            int bottom = childView.getBottom();
+//                            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) invite_title_layout.getLayoutParams();
+//                            if (bottom < titleHeight) {
+//                                float pushedDistance = bottom - titleHeight;
+//                                params.topMargin = (int) pushedDistance;
+//                                invite_title_layout.setLayoutParams(params);
+//                            } else {
+//                                if (params.topMargin != 0) {
+//                                    params.topMargin = 0;
+//                                    invite_title_layout.setLayoutParams(params);
+//                                }
+//                            }
+//                        }
+//                    }
+//                    lastFirstVisibleItem = firstVisibleItem;
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//        });
+//        FoodsNameRecycle.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//            }
+//
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//                //判断是当前layoutManager是否为LinearLayoutManager
+//                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+//                if (layoutManager instanceof LinearLayoutManager) {//                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
 
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
+        //                    //获取最后一个可见view的位置
+//                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+//                    //获取第一个可见view的位置
+//                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+//                    if (foodsArrayList.get(firstItemPosition) instanceof Foods) {
+//                        int foodTypePosion = ((Foods) foodsArrayList.get(firstItemPosition)).getFood_stc_posion();
+//                        FoodsTypeListview.getChildAt(foodTypePosion).setBackgroundResource(R.drawable.choose_item_selected);
+//                    }
+//                    System.out.println(lastItemPosition + "   " + firstItemPosition);
+//                }
+//            }
+//        });
     }
 
     //设置右侧确定按钮的逻辑
@@ -91,7 +172,7 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
     //测试
     private void testData(){
         arrLabelinfos = new ArrayList<>();
-        for (int i = 0 ;i < 10;i++){
+        for (int i = 0 ;i < 20;i++){
             LabelsList.LabelInfo info = new LabelsList.LabelInfo();
             info.setId(i);
             info.setLabelName("标签" + i);
@@ -114,4 +195,27 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
         super.onDestroy();
         mCustomSearchView.onDestroy();
     }
+
+    /**
+     * 根据ListView的当前位置获取分类的首字母的Char ascii值
+     */
+//    public int getSectionForPosition(int position) {
+//        if ((arrLabelinfos.size() - 1) > position && arrLabelinfos.get(position).getSortKey().length() != 0)
+//            return listMembers.get(position).getSortKey().charAt(0);
+//        else
+//            return 0;
+//    }
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     */
+//    public int getPositionForSection(int section) {
+//        for (int i = 0; i < listMembers.size(); i++) {
+//            String sortStr = listMembers.get(i).getSortKey();
+//            char firstChar = sortStr.toUpperCase().charAt(0);
+//            if (firstChar == section) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 }

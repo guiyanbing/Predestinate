@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -42,7 +44,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
     private XRecyclerView lvList;
     private CustomSearchView mCustomSearchView;//自定义的搜索控件
     private FriendsAdapter mFriendsAdapter;
-    private int page = 0;//当前页
+    private int page = 1;//当前页
     private int pageLimits = 20;//一页的条数
     @Nullable
     @Override
@@ -50,6 +52,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.xiaoyou_fragment);
         initView();
+        ModuleMgr.getCommonMgr().getLatestInteractiveList(page,pageLimits,this);
         return getContentView();
     }
 
@@ -141,6 +144,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
 
     @Override
     public void onRequestComplete(HttpResponse response) {
+        Log.e("TTTTTTTTTTGG",response.getResponseString()+"|||");
         if (response.isOk()){//请求返回成功
             FriendsList lists = (FriendsList) response.getBaseData();
             List<FriendsList.FriendInfo> friendInfos = lists.getArr_frends();

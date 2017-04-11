@@ -33,11 +33,23 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
             vh.friend_item_txv_title.setVisibility(View.GONE);
             //            Log.e("TTTTTTT",info.getNickname()+"||");
         } else if(info.getType() == 0){
-            if ((position > 0 && getItem(position-1).getType() == 1) || position == 0){
+            // 根据position获取分类的首字母的Char ascii值
+            int section = getSectionForPosition(position);
+
+            // 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
+            if (position == getPositionForSection(section)) {
                 vh.friend_item_txv_title.setVisibility(View.VISIBLE);
-            }else {
+                vh.friend_item_txv_title.setText(info.getSortKey());
+            } else {
                 vh.friend_item_txv_title.setVisibility(View.GONE);
             }
+
+//            if ((position > 0 && getItem(position-1).getType() == 1) || position == 0){
+//                vh.friend_item_txv_title.setVisibility(View.VISIBLE);
+//                vh.friend_item_txv_title.setText(info.getSortKey());
+//            }else {
+//                vh.friend_item_txv_title.setVisibility(View.GONE);
+//            }
             vh.showLately();
             //friend_item_txv_intimacy 根据性别设置提示文字
             if (info.getGender() == 1){
@@ -49,7 +61,7 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
             }
             //处理list条目
             //            vh.friend_item_img_head;
-            //            vh.friend_item_txv_name;
+            vh.friend_item_txv_name.setText(info.getNickname());
             //            vh.frien
         }
     }
@@ -58,7 +70,27 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
     public int getRecycleViewItemType(int position) {
         return 0;
     }
+    /**
+     * 根据ListView的当前位置获取分类的首字母的Char ascii值
+     */
+    public int getSectionForPosition(int position) {
+        return getItem(position).getSortKey().charAt(0);
+    }
 
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     */
+    public int getPositionForSection(int section) {
+        for (int i = 0; i < getItemCount(); i++) {
+            String sortStr = getList().get(i).getSortKey();
+            char firstChar = sortStr.toUpperCase().charAt(0);
+            if (firstChar == section) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
     class MyViewHolder {
         ImageView friend_item_img_head, friend_item_img_vip, friend_item_img_dynamic, friend_item_img_photo, friend_item_img_right;
         TextView friend_item_txv_name, friend_item_txv_intimacy, friend_item_txv_describe, friend_item_txv_num,friend_item_txv_title;
