@@ -7,14 +7,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 
+import com.juxin.library.log.PToast;
+import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -231,9 +238,20 @@ public class UIShow {
     /**
      * 打开推荐的人筛选页面
      */
-    public static void showRecommendFilterAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, RecommendFilterAct.class);
-        activity.startActivity(intent);
+    public static void showRecommendFilterAct(final FragmentActivity activity) {
+        LoadingDialog.show(activity, activity.getResources().getString(R.string.tip_is_loading));
+        ModuleMgr.getCommonMgr().sysTags(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()){
+                    Intent intent = new Intent(activity, RecommendFilterAct.class);
+                    intent.putExtra("tags", (TagInfoList) response.getBaseData());
+                    activity.startActivityForResult(intent,100);
+                }else {
+                    PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                }
+            }
+        });
     }
 
     /**

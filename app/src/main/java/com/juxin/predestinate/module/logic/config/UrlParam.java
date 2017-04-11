@@ -5,6 +5,10 @@ import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.bean.recommend.RecommendPeople;
+import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
+import com.juxin.predestinate.bean.recommend.TagInfo;
+import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
@@ -21,6 +25,8 @@ public enum UrlParam {
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("s/uinfo/MobileAuth"),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
+    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class,true),//推荐的人
+    sysTags("s/reco/SysTags",TagInfoList.class),//推荐的人标签
     //检查软件升级
     checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
 

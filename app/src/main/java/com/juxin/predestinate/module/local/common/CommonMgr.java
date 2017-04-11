@@ -128,6 +128,28 @@ public class CommonMgr implements ModuleBase {
 //        }
     }
 
+    /**
+     * 推荐的人
+     *
+     * @param complete
+     */
+    public void sysRecommend(RequestComplete complete,final int cur,HashMap<String, Object> post_param) {
+        post_param.put("page", cur);
+        post_param.put("limit", 10);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysRecommend, post_param, complete);
+    }
+    /**
+     * 系统标签
+     *
+     * @param complete
+     */
+    public void sysTags(RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("page", 1);
+        post_param.put("limit", 20);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysTags, post_param, complete);
+    }
+
     //============================== 小友模块相关接口 =============================
     /**
      * 好友标签分组成员
