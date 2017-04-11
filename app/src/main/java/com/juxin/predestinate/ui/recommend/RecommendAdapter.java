@@ -22,7 +22,7 @@ import java.util.List;
  * Created YAO on 2017/3/30.
  */
 
-public class RecommendAdapter extends BaseRecyclerViewAdapter {
+public class RecommendAdapter extends BaseRecyclerViewAdapter<RecommendPeople> {
     private List<RecommendPeople> recommendPeopleList;
 
     public void setRecommendList(List<RecommendPeople> recommendPeopleList) {
@@ -31,7 +31,7 @@ public class RecommendAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public int[] getItemLayouts() {
-        return new int[R.layout.p1_recommend_item];
+        return new int[]{R.layout.p1_recommend_item};
     }
 
     @Override
