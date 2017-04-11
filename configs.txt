@@ -1,5 +1,5 @@
 ﻿#APK 签名key文件目录
-storeFile = /Users/Kind/Documents/StudioProjects/key/xiaoyou.jks
+storeFile = ../../../key/xiaoyou.jks
 
 #APK 签名key密码（第一重密码）
 storePassword = xiaoyou123
@@ -18,7 +18,7 @@ VersionCode = 10000000
 VersionName = 1.0.0
 
 #APK输出目录
-#ApkPath = /Users/Kind/Documents/StudioProjects/apk/
+ApkPath = ../../K_GEN_APK/Predestinate/
 
 #App名称
 AppName = xiaoyou
