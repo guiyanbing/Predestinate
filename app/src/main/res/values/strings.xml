@@ -25,6 +25,7 @@
     <string name="toast_feedback_submit">提交成功，感谢您的支持</string>
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
+    <string name="contact_kefu">联系客服</string>
     <!-- 注册/个人中心 -->
     <string name="str_not_filled">未填写</string>
     <string name="upload_head_man">上传真实头像\n非真头像不会得到推荐</string>
@@ -100,6 +101,7 @@
     <string name="goods_pay_weixin">微信</string>
     <string name="goods_pay_alipay">支付宝</string>
     <string name="goods_pay_other">其他</string>
+    <string name="goods_pay">立即充值</string>
 
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>

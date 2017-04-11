@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:paddingTop="@dimen/px35_dp">
 
     <LinearLayout
         android:id="@+id/type_header"
@@ -16,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="1px"
             android:layout_weight="4"
-            android:background="@color/text_ciyao_gray" />
+            android:background="@color/color_DDDDDD" />
 
         <TextView
             android:layout_width="0dp"
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="1px"
             android:layout_weight="4"
-            android:background="@color/text_ciyao_gray" />
+            android:background="@color/color_DDDDDD" />
 
     </LinearLayout>
 
@@ -44,7 +44,11 @@
         android:orientation="horizontal">
 
         <!--微信-->
+        <!--<com.juxin.library.view.CustomFrameLayout-->
+            <!--android:layout_width=""-->
+            <!--android:layout_height=""></com.juxin.library.view.CustomFrameLayout>-->
         <RelativeLayout
+            android:id="@+id/pay_type_wexin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px36_dp"
@@ -54,10 +58,12 @@
             android:padding="@dimen/px15_dp">
 
             <ImageView
+                android:id="@+id/pay_choose_wexin"
                 android:layout_width="@dimen/px30_dp"
                 android:layout_height="@dimen/px30_dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/p1_choose_btn" />
+                android:background="@drawable/p1_choose_btn"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,6 +90,7 @@
 
         <!--支付宝-->
         <RelativeLayout
+            android:id="@+id/pay_type_alipay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px36_dp"
@@ -93,10 +100,12 @@
             android:padding="@dimen/px15_dp">
 
             <ImageView
+                android:id="@+id/pay_choose_alipay"
                 android:layout_width="@dimen/px30_dp"
                 android:layout_height="@dimen/px30_dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/p1_choose_btn" />
+                android:background="@drawable/p1_choose_btn"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,6 +132,7 @@
 
         <!--其他-->
         <RelativeLayout
+            android:id="@+id/pay_type_other"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px36_dp"
@@ -132,10 +142,12 @@
             android:padding="@dimen/px15_dp">
 
             <ImageView
+                android:id="@+id/pay_choose_other"
                 android:layout_width="@dimen/px30_dp"
                 android:layout_height="@dimen/px30_dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/p1_choose_btn" />
+                android:background="@drawable/p1_choose_btn"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

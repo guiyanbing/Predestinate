@@ -5,14 +5,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px200_dp"
+        android:layout_height="@dimen/px160_dp"
         android:background="@drawable/p1_pay_bg"
         android:padding="@dimen/px15_dp">
 
         <ImageView
             android:id="@+id/iv_choose"
-            android:layout_width="@dimen/px50_dp"
-            android:layout_height="@dimen/px50_dp"
+            android:layout_width="@dimen/px48_dp"
+            android:layout_height="@dimen/px48_dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/p1_choose_btn" />
 

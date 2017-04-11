@@ -20,7 +20,6 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-
         ImageView img_choose = viewHolder.findViewById(R.id.iv_choose);
         TextView tv_goods = viewHolder.findViewById(R.id.tv_goods);
         TextView tv_offers = viewHolder.findViewById(R.id.tv_offers);
