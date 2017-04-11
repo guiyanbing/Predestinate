@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class RecommendPeople extends BaseData {
     private long uid;//用户uid
     private boolean is_sayhi;//是否打过招呼
-    private String tm;//推荐的时间戳
+    private long tm;//推荐的时间戳
 
     public long getUid() {
         return uid;
@@ -31,11 +31,11 @@ public class RecommendPeople extends BaseData {
         this.is_sayhi = is_sayhi;
     }
 
-    public String getTm() {
+    public long getTm() {
         return tm;
     }
 
-    public void setTm(String tm) {
+    public void setTm(long tm) {
         this.tm = tm;
     }
 
@@ -44,6 +44,6 @@ public class RecommendPeople extends BaseData {
         JSONObject jsonObject = getJsonObject(jsonStr);
         this.uid = jsonObject.optLong("uid");
         this.is_sayhi = jsonObject.optBoolean("is_sayhi");
-        this.tm = jsonObject.optString("tm");
+        this.tm = jsonObject.optLong("tm");
     }
 }
