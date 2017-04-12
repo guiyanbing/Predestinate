@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
@@ -23,7 +24,6 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -77,15 +77,15 @@ public class RecommendFilterAct extends BaseActivity {
         initView();
     }
 
-    private void getTag() {
+    private void initTag() {
         listChosen = new ArrayList<>();
         listTag = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             TagInfo tagInfo = new TagInfo();
-            if (i==0){
+            if (i == 0) {
                 tagInfo.setTagName("选择地区");
                 tagInfo.setTagType(1);
-            }else if(i==1){
+            } else if (i == 1) {
                 tagInfo.setTagName("年龄");
                 tagInfo.setTagType(2);
             }
@@ -122,14 +122,15 @@ public class RecommendFilterAct extends BaseActivity {
         PickerDialogUtil.showRangePickerDialog(this, new RangePicker.OnRangePickListener() {
             @Override
             public void onRangePicked(String firstText, String secondText) {
-//                age_max= secondText;
+                age_min = InfoConfig.getInstance().getAgeN().getSubmitWithShow(firstText);
+                age_max = InfoConfig.getInstance().getAgeN().getSubmitWithShow(secondText);
                 if ("update".equals(type)) {
                     TagInfo tagInfo = listChosen.get(position);
-                    tagInfo.setTagName(firstText + "~" + secondText);
+                    tagInfo.setTagName(firstText + ("不限".equals(secondText) ? "以上" : "~" + secondText));
                     tagInfo.setPosition(position);
                 } else if ("add".equals(type)) {
                     TagInfo tagInfo = new TagInfo();
-                    tagInfo.setTagName(firstText + "~" + secondText);
+                    tagInfo.setTagName(firstText + ("不限".equals(secondText) ? "以上" : "~" + secondText));
                     tagInfo.setPosition(position);
                     listChosen.add(tagInfo);
                 }
@@ -199,7 +200,7 @@ public class RecommendFilterAct extends BaseActivity {
 
 
     private void initView() {
-        getTag();
+        initTag();
         cv_chosen = (CustomRecyclerView) findViewById(R.id.cv_tag_chosen);
         cv_tag = (CustomRecyclerView) findViewById(R.id.cv_tag);
         tv_del = (TextView) findViewById(R.id.tv_del);

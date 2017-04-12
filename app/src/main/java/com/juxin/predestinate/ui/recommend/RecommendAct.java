@@ -98,7 +98,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        recyclerView.addItemDecoration(new DividerItemDecoration(this,
 //                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_recommend_item_space));
-        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.common_divider_sample);
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.p1_recommend_item_space);
         recyclerView.addItemDecoration(recyclerView.new DividerItemDecoration(dividerDrawable));
         getRecommendData();
     }
@@ -164,8 +164,10 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
                 post_param.put("city",data.getIntExtra("city", -1));
             }else if(data.getIntExtra("age_min", -1) != -1){
                 post_param.put("age_min",data.getIntExtra("age_min", -1));
+            }else if (data.getIntExtra("age_max", -1) != -1){
                 post_param.put("age_max",data.getIntExtra("age_max", -1));
-            }else if(bundle.getIntArray("tags")!=null){
+            }
+            else if(bundle.getIntArray("tags")!=null){
                 post_param.put("tags",bundle.getIntArray("tags"));
             }
             getRecommendData();
