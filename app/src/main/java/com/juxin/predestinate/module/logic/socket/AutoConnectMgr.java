@@ -5,7 +5,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.juxin.library.enc.MD5;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -223,7 +223,7 @@ public class AutoConnectMgr implements SocketCallback {
     private NetData getLoginData() {
         long curTime = ServerTime.getServerTime().getTimeInMillis() / 1000;
         // 注意：md字段md5加密字符串为string的拼接
-        String md = MD5.encode(String.valueOf(uid) + String.valueOf(curTime) + token).toUpperCase();
+        String md = EncryptUtil.md5(String.valueOf(uid) + String.valueOf(curTime) + token).toUpperCase();
         Map<String, Object> loginMap = new HashMap<>();
         loginMap.put("fid", uid);
         loginMap.put("mt", curTime);

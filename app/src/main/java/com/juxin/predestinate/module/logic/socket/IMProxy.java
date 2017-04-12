@@ -41,7 +41,7 @@ public class IMProxy {
      * 登录socket
      *
      * @param uid   登录用户的uid
-     * @param token MD5(pw)
+     * @param token EncryptUtil.md5(pw)
      */
     public void login(long uid, String token) {
         try {

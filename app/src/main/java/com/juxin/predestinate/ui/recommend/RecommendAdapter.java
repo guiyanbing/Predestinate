@@ -1,22 +1,19 @@
 package com.juxin.predestinate.ui.recommend;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.CircularCoverView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.recommend.RecommendPeople;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 import java.util.List;
 
@@ -25,87 +22,84 @@ import java.util.List;
  * Created YAO on 2017/3/30.
  */
 
-public class RecommendAdapter extends XRecyclerView.Adapter<RecommendAdapter.MyViewHolder> {
-    private Context context;
-    private List<RecommendPeople> list;
+public class RecommendAdapter extends BaseRecyclerViewAdapter {
+    private List<RecommendPeople> recommendPeopleList;
 
-    public RecommendAdapter(Context context, List<RecommendPeople> list) {
-        this.context = context;
-        this.list = list;
-    }
-    public void setList(List<RecommendPeople> datas) {
-        this.list = datas;
-        notifyDataSetChanged();
-    }
-
-    public List<RecommendPeople> getList() {
-        return list;
+    public void setRecommendList(List<RecommendPeople> recommendPeopleList) {
+        this.recommendPeopleList = recommendPeopleList;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                context).inflate(R.layout.p1_recommend_item, parent,
-                false));
-        return holder;
+    public int[] getItemLayouts() {
+        return new int[]{R.layout.p1_recommend_item};
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-//        holder.tv_nickname.setText(list.get(position));
-        holder.bt_send_msg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PToast.showShort("打开私聊");//TODO
-            }
-        });
-        holder.bt_greet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PToast.showShort("打招呼请求");//TODO
-                changeGreetButton(holder.iv_greet, holder.tv_greet, false);
-            }
-        });
-        showIdentity(2, holder.iv_identity, false, true);
-        setIntroduction(holder.tv_introduction);
-        holder.tv_sign.setText("这家伙很懒");
-        long time = 11111111;//TODO 时间
-        holder.tv_online_time.setText(TimeUtil.formatBeforeTime(time * 1000));
-        holder.iv_head.setBackgroundResource(R.drawable.ic_launcher);
-        holder.iv_head.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PToast.showShort("查看资料跳转");
-            }
-        });
+    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
+//        UserInfoLightweight userinfo =(UserInfoLightweight)getItem(position);
+//        final RecommendPeople recommendPeople = recommendPeopleList.get(position);
+//        TextView tv_nickname = viewHolder.findViewById(R.id.tv_nickname);
+//        final TextView tv_greet = viewHolder.findViewById(R.id.tv_greet);
+//        TextView tv_introduction = viewHolder.findViewById(R.id.tv_introduction);
+//        TextView tv_sign = viewHolder.findViewById(R.id.tv_sign);
+//        TextView tv_online_time = viewHolder.findViewById(R.id.tv_online_time);
+//        CircularCoverView iv_head = viewHolder.findViewById(R.id.iv_head);
+//        final ImageView iv_greet = viewHolder.findViewById(R.id.iv_greet);
+//        ImageView iv_identity = viewHolder.findViewById(R.id.iv_identity);
+//        LinearLayout bt_send_msg = viewHolder.findViewById(R.id.bt_send_msg);
+//        LinearLayout bt_greet = viewHolder.findViewById(R.id.bt_greet);
+//
+////        tv_nickname.setText(userinfo.getNickname());
+//        bt_send_msg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PToast.showShort("打开私聊");//TODO
+//            }
+//        });
+//        changeGreetButton(iv_greet, tv_greet, recommendPeople.is_sayhi());
+//        bt_greet.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (recommendPeople.is_sayhi()){
+//                    PToast.showShort("已打过招呼");
+//                }else{
+//                    PToast.showShort("打招呼请求");//TODO
+//                    changeGreetButton(iv_greet, tv_greet, false);
+//                }
+//
+//            }
+//        });
+//        showIdentity(2, iv_identity, false, true);
+//        setIntroduction(tv_introduction);
+//        tv_sign.setText("这家伙很懒");
+//        tv_online_time.setText(TimeUtil.formatBeforeTime(recommendPeople.getTm() * 1000));
+//        iv_head.setBackgroundResource(R.drawable.ic_launcher);
+//        iv_head.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PToast.showShort("查看资料跳转");
+//            }
+//        });
     }
 
     @Override
-    public int getItemCount() {
-        return list.size();
+    public int getRecycleViewItemType(int position) {
+        return 0;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_nickname, tv_greet, tv_introduction, tv_sign, tv_online_time;
-        LinearLayout bt_send_msg, bt_greet;
-        CircularCoverView iv_head;
-        ImageView iv_greet;
-        ImageView iv_identity;
 
-        public MyViewHolder(View view) {
-            super(view);
-            tv_nickname = (TextView) view.findViewById(R.id.tv_nickname);
-            tv_greet = (TextView) view.findViewById(R.id.tv_greet);
-            tv_introduction = (TextView) view.findViewById(R.id.tv_introduction);
-            tv_sign = (TextView) view.findViewById(R.id.tv_sign);
-            tv_online_time = (TextView) view.findViewById(R.id.tv_online_time);
-            iv_head = (CircularCoverView) view.findViewById(R.id.iv_head);
-            iv_greet = (ImageView) view.findViewById(R.id.iv_greet);
-            iv_identity = (ImageView) view.findViewById(R.id.iv_identity);
-            bt_send_msg = (LinearLayout) view.findViewById(R.id.bt_send_msg);
-            bt_greet = (LinearLayout) view.findViewById(R.id.bt_greet);
-        }
-    }
+//    class MyViewHolder extends RecyclerView.ViewHolder {
+//        TextView tv_nickname, tv_greet, tv_introduction, tv_sign, tv_online_time;
+//        LinearLayout bt_send_msg, bt_greet;
+//        CircularCoverView iv_head;
+//        ImageView iv_greet;
+//        ImageView iv_identity;
+//
+//        public MyViewHolder(View view) {
+//            super(view);
+//
+//        }
+//    }
 
     //设置基本信息
     private void setIntroduction(TextView textView) {
@@ -116,10 +110,10 @@ public class RecommendAdapter extends XRecyclerView.Adapter<RecommendAdapter.MyV
         String height = TextUtils.isEmpty(dataheight) ? "" : dataage + "cm";
         String city = datacity;
         if (!TextUtils.isEmpty(age) && !TextUtils.isEmpty(height) || !TextUtils.isEmpty(city)) {
-            age+="/";
+            age += "/";
         }
         if (!TextUtils.isEmpty(height) && !TextUtils.isEmpty(city)) {
-            height+="/";
+            height += "/";
         }
         textView.setText(age + height + city);
     }

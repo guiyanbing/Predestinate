@@ -36,4 +36,12 @@ public class UserInfoLightweightList extends BaseData {
         }
         return lightweightLists;
     }
+
+    public ArrayList<UserInfoLightweight> getLightweightLists() {
+        return lightweightLists;
+    }
+
+    public void setLightweightLists(ArrayList<UserInfoLightweight> lightweightLists) {
+        this.lightweightLists = lightweightLists;
+    }
 }

@@ -17,6 +17,13 @@ public interface AppMgr extends ModuleBase {
     String getPackageName();
 
     /**
+     * 获取当前软件签名
+     *
+     * @return 当前软件签名，如果未获取到，返回""
+     */
+    String getSignature();
+
+    /**
      * 获取应用的版本号
      *
      * @return 版本号，如果没有获取到返回0

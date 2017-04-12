@@ -200,10 +200,9 @@ public class TipsBarMgr implements ModuleBase, PObserver {
     @Override
     public void onMessage(String key, Object value) {
         if (TextUtils.isEmpty(key)) return;
-        Msg msg = (Msg) value;
         switch (key) {
             case MsgType.MT_APP_Suspension_Notice:
-                Map<String, Object> parms = (Map<String, Object>) msg.getData();
+                Map<String, Object> parms = (Map<String, Object>) value;
                 if (parms.containsKey(TipsMgrTag)) {
                     if (parms.get(TipsMgrTag).equals(TipsMgr_Result)) {
                         if (parms.containsKey(TipsMgrType)) {
@@ -237,7 +236,7 @@ public class TipsBarMgr implements ModuleBase, PObserver {
             case MsgType.MT_Network_Status_Change:
                 //网络变换提示条
                 if (getTipsBarData().getIntegerMap().containsKey(TipsBarType.Show_Network_Status_Change)) {
-                    if (!(boolean) msg.getData()) {
+                    if (!(boolean) value) {
                         executSpecial(TipsBarType.Show_Network_Status_Change, "MT_Network_Status_Change");
                     } else {
                         if (viewGroup.getChildCount() != 0) {

@@ -336,16 +336,13 @@ public class UIShow {
      *
      * @param activity  FragmentActivity上下文
      * @param appUpdate 软件升级信息
-     * @param runnable  非强制更新时点击取消按钮执行的操作
      */
-    public static void showUpdateDialog(FragmentActivity activity, AppUpdate appUpdate, Runnable runnable) {
+    public static void showUpdateDialog(FragmentActivity activity, AppUpdate appUpdate) {
         if (appUpdate == null) return;
         if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
             UpdateDialog updateDialog = new UpdateDialog();
-            updateDialog.setData(appUpdate, runnable);
+            updateDialog.setData(appUpdate);
             updateDialog.showDialog(activity);
-        } else {
-            if (runnable != null) runnable.run();
         }
     }
 }

@@ -91,6 +91,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.start.WebEntranceActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
         <!-- ============= 小友模块start ============= -->
         <activity
             android:name=".ui.xiaoyou.TabGroupActivity"

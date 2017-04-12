@@ -121,6 +121,11 @@
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
 
+#gif
+-dontwarn pl.droidsonroids.gif.**
+-keep public class pl.droidsonroids.gif.GifIOException{<init>(int);}
+-keep class pl.droidsonroids.gif.GifInfoHandle{<init>(long,int,int,int);}
+
 # ==============GreenDao start================
 -keepclassmembers class * extends org.greenrobot.**greendao.**AbstractDao {
 public static java.lang.String TABLENAME;
