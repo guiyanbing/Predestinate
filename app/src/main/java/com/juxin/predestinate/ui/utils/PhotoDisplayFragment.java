@@ -15,7 +15,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.third.TouchImageView;
+import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
 
 /**
  * PhotoDisplayAct：查看大图Fragment页面

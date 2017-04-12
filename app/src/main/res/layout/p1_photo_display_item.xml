@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.xiaoyou.friends.module.baseui.TouchImageView
+    <com.juxin.predestinate.module.logic.baseui.custom.TouchImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

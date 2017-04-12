@@ -19,7 +19,7 @@
             android:layout_height="@dimen/px235_dp"
             android:paddingLeft="@dimen/px35_dp">
 
-            <com.xiaoyou.friends.module.baseui.CircleImageView
+            <com.juxin.library.view.CircleImageView
                 android:id="@+id/mail_item_headpic"
                 style="@style/avatar_middle"
                 android:layout_centerInParent="true"
@@ -90,7 +90,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.xiaoyou.friends.module.baseui.EmojiTextView
+                <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView
                     android:id="@+id/mail_item_last_msg"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"

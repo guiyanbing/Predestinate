@@ -19,6 +19,7 @@ public class WebActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        isCanBack(false);
         int type = getIntent().getIntExtra("type", 1);
         String url = getIntent().getStringExtra("url");
         if (type == 2) {

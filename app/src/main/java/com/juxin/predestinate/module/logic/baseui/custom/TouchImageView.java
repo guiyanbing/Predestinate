@@ -10,7 +10,7 @@
  * Extends Android ImageView to include pinch zooming, panning, fling and double tap zoom.
  */
 
-package com.juxin.predestinate.third;
+package com.juxin.predestinate.module.logic.baseui.custom;
 
 import android.annotation.TargetApi;
 import android.content.Context;
