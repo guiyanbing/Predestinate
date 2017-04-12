@@ -14,6 +14,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -215,5 +216,22 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     private void setMyInfo(String resultStr) {
         PSP.getInstance().put(INFO_SAVE_KEY, resultStr);
+    }
+
+    /**
+     * 图片上传时截取的字符串
+     * <p>
+     * 短存储： oss
+     * 长存储： jxfile
+     * @param picUrl
+     * @return
+     */
+    public String getInterceptUrl(String picUrl) {
+        if (TextUtils.isEmpty(picUrl)) return "";
+        String tag = Constant.STR_SHORT_TAG;
+        if (picUrl.contains(Constant.STR_LONG_TAG)) {
+            tag = Constant.STR_LONG_TAG;
+        }
+        return StringUtils.getAfterWithFlag(picUrl, tag);
     }
 }

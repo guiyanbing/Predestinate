@@ -18,8 +18,8 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.util.PhotoUtils;
 
 /**
  * 头像上传原图裁剪容器
@@ -126,20 +126,20 @@ public class ClipViewLayout extends RelativeLayout {
             return;
         }
 
-        String path = PhotoUtils.getRealFilePathFromUri(getContext(), uri);
+        String path = BitmapUtil.getRealFilePathFromUri(getContext(), uri);
         if (TextUtils.isEmpty(path)) {
             return;
         }
 
         //原图可能很大，现在手机照出来都3000*2000左右了，直接加载可能会OOM
         //这里decode出1080*1920 左右的照片
-        Bitmap bitmap = PhotoUtils.decodeSampledBitmap(path, 720, 1280);
+        Bitmap bitmap = BitmapUtil.decodeSampledBitmap(path, 720, 1280);
         if (bitmap == null) {
             return;
         }
 
         //竖屏拍照的照片，直接使用的话，会旋转90度，下面代码把角度旋转过来
-        int rotation = PhotoUtils.readPictureDegree(path); //查询旋转角度
+        int rotation = BitmapUtil.readPictureDegree(path); //查询旋转角度
         Log.i("android", "image rotation: " + rotation);
         Matrix m = new Matrix();
         m.setRotate(rotation);
@@ -337,7 +337,7 @@ public class ClipViewLayout extends RelativeLayout {
         Bitmap zoomedCropBitmap = null;
         try {
             cropBitmap = Bitmap.createBitmap(imageView.getDrawingCache(), rect.left, rect.top, rect.width(), rect.height());
-            zoomedCropBitmap = PhotoUtils.zoomBitmap(cropBitmap, 300, 300);
+            zoomedCropBitmap = BitmapUtil.zoomBitmap(cropBitmap, 300, 300);
         } catch (Exception e) {
             e.printStackTrace();
         }

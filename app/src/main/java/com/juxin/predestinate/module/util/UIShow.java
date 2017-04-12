@@ -243,6 +243,7 @@ public class UIShow {
         ModuleMgr.getCommonMgr().sysTags(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
                 if (response.isOk()){
                     Intent intent = new Intent(activity, RecommendFilterAct.class);
                     intent.putExtra("tags", (TagInfoList) response.getBaseData());

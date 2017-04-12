@@ -93,6 +93,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_Game_id:// 游戏
+                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyouapp.cn:30081/static/fish_box/");
                 break;
 
             case CenterItemID.i_Center_About_id: // 关于

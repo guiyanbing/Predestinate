@@ -17,7 +17,6 @@ public class TagInfo  extends BaseData implements Parcelable {
 
     private String tagName;//标签名字
     private int tagID;//标签id
-    private int position;
     private int tagType = 0;//tag类型 0印象tag，1地区，2年龄
 
     public int getTagType() {
@@ -44,13 +43,6 @@ public class TagInfo  extends BaseData implements Parcelable {
         this.tagID = tagID;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
     @Override
     public void parseJson(String jsonStr) {
@@ -69,7 +61,6 @@ public class TagInfo  extends BaseData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.tagName);
         dest.writeInt(this.tagID);
-        dest.writeInt(this.position);
         dest.writeInt(this.tagType);
     }
 
@@ -79,7 +70,6 @@ public class TagInfo  extends BaseData implements Parcelable {
     protected TagInfo(Parcel in) {
         this.tagName = in.readString();
         this.tagID = in.readInt();
-        this.position = in.readInt();
         this.tagType = in.readInt();
     }
 
