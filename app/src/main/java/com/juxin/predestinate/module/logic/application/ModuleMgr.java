@@ -54,6 +54,7 @@ public final class ModuleMgr {
         initStatic(context);
         getAppMgr();
         getHttpMgr();
+        getMediaMgr();
 
         getCommonMgr();
         getLoginMgr();

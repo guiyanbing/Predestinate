@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.help.AlbumHelper;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.util.PhotoUtils;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class ResetOrFinishAct extends BaseActivity implements View.OnClickListen
         if (TextUtils.isEmpty(imgPath)) {
             return;
         }
-        Bitmap bitmap = PhotoUtils.decodeSampledBitmap(imgPath, 720, 1280);
+        Bitmap bitmap = BitmapUtil.decodeSampledBitmap(imgPath, 720, 1280);
         if (bitmap == null) {
             return;
         }
