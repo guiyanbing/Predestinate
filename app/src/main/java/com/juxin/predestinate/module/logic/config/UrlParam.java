@@ -4,10 +4,9 @@ import com.juxin.predestinate.bean.UserLogin;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.net.BaseData;
-import com.juxin.predestinate.bean.recommend.RecommendPeople;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
-import com.juxin.predestinate.bean.recommend.TagInfo;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
@@ -25,8 +24,8 @@ public enum UrlParam {
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("s/uinfo/MobileAuth"),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
-    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class,true),//推荐的人
-    sysTags("s/reco/SysTags",TagInfoList.class),//推荐的人标签
+    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
+    sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
     //检查软件升级
     checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
 
@@ -45,6 +44,9 @@ public enum UrlParam {
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
     //获取昵称和头像的最近变更 list
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
+
+    // 上传文件
+    uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class),
 
     //============================== 小友模块相关接口 =============================
     //好友标签分组成员
@@ -76,6 +78,15 @@ public enum UrlParam {
      */
     UrlParam(final String spliceUrl, final Class<? extends BaseData> parseClass) {
         this(spliceUrl, parseClass, false);
+    }
+
+    /**
+     * host+接口url+解析bean
+     */
+    UrlParam(final String host, final String spliceUrl, final Class<? extends BaseData> parseClass) {
+        this.host = host;
+        this.spliceUrl = spliceUrl;
+        this.parseClass = parseClass;
     }
 
     /**

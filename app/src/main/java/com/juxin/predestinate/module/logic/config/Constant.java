@@ -8,6 +8,7 @@ public class Constant {
 
     public static final String NO_HOST = "no_host";
     public static final String HOST_URL = "http://123.59.187.13:10001/";
+    public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
     public static final int MS = 9;                 //消息版本号
