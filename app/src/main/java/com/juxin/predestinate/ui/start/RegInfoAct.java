@@ -16,9 +16,12 @@ import android.widget.TextView;
 
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CustomFrameLayout;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
@@ -26,12 +29,16 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.PhotoUtils;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -206,11 +213,6 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                             public void onRequestComplete(HttpResponse response) {
                                 if (response.isOk()) {
                                     UserReg userReg = (UserReg) response.getBaseData();
-                                    //TODO 保存信息到个人资料
-//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(accountObject.optLong("uid"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(postParams.get("nickname") + "");
-//                        ModuleMgr.getCenterMgr().getMyInfo().setScity(accountObject.optInt("city"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setSprovince(accountObject.optInt("province"));
                                     ModuleMgr.getLoginMgr().putAllLoginInfo(userReg.getUid(), userReg.getPassword() + "", userReg.getCookie(), false);
                                     UIShow.showMainClearTask(RegInfoAct.this);
                                 } else {
@@ -282,35 +284,34 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
      */
     @Override
     public void onComplete(final String... path) {
-//        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
-//            return;
-//        }
-//        if (FileUtil.isExist(path[0])) {
-//            LoadingDialog.show(RegInfoAct.this, "头像上传，请稍侯");
-//            ModuleMgr.getCommonMgr().sendHttpFile(Constant.INT_AVATAR, path[0], null, new HttpMgr.IReqComplete() {
-//                @Override
-//                public void onReqComplete(HttpResult result) {
-//                    LoadingDialog.closeLoadingDialog();
-//                    if (result.isOk()) {
-//                        UpLoadResult upLoadResult = (UpLoadResult) result.getBaseData();
-//                        String pic = upLoadResult.getHttpPathPic();
-//                        if (!TextUtils.isEmpty(pic)) {
-//                            isCompleteHead = true;
-//                            headPicBitmap = PhotoUtils.getSmallBitmap(path[0]);
-//                            img_header.setImageBitmap(headPicBitmap);
-//                            _photoUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
-//                            resetSubmit();
-//                        }
-//                    } else {
-//                        MMToast.showShort("头像上传失败，请重试");
-//                    }
-//                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
-//                }
-//            });
-//        } else {
-//            MMToast.showShort("图片地址无效");
-//        }
-//        }
+        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
+            return;
+        }
+        if (FileUtil.isExist(path[0])) {
+            LoadingDialog.show(RegInfoAct.this, "头像上传，请稍侯");
+            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, path[0], new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    LoadingDialog.closeLoadingDialog();
+                    if (response.isOk()) {
+                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                        String pic = upLoadResult.getHttpPathPic();
+                        if (!TextUtils.isEmpty(pic)) {
+                            isCompleteHead = true;
+                            headPicBitmap = PhotoUtils.getSmallBitmap(path[0]);
+                            img_header.setImageBitmap(headPicBitmap);
+                            _photoUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
+                            resetSubmit();
+                        }
+                    } else {
+                        MMToast.showShort("头像上传失败，请重试");
+                    }
+                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
+                }
+            });
+        } else {
+            MMToast.showShort("图片地址无效");
+        }
     }
 
     @Override

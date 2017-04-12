@@ -45,4 +45,8 @@ public class Constant {
 
     public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
     public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
+
+    // ------ 文件长存储/短存储 start --------
+    public static final String STR_SHORT_TAG = "oss";    // 短存储图片截取标志
+    public static final String STR_LONG_TAG = "jxfile";  // 长存储图片截取标志
 }
