@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -36,7 +35,8 @@ import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
-import com.juxin.predestinate.ui.user.paygoods.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
@@ -283,6 +283,13 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivity(intent);
+    }
+
+    /**
+     * 打开VIP开通页
+     */
+    public static void showGoodsVipAct(Context context) {
+        context.startActivity(new Intent(context, GoodsVipAct.class));
     }
 
     /**

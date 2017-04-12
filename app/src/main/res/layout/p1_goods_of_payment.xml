@@ -3,7 +3,8 @@
     android:id="@+id/rl_payment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/px35_dp">
+    android:paddingTop="@dimen/px35_dp"
+    android:background="@color/white">
 
     <!-- 支付方式 -->
     <LinearLayout

@@ -106,6 +106,14 @@
     <string name="goods_pay">充值</string>
     <string name="goods_pay_immediately">立即充值</string>
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>
+    <string name="goods_vip_title">开通VIP</string>
+    <string name="goods_vip_user">已开通VIP用户：</string>
+    <string name="goods_vip_users">人</string>
+    <string name="goods_vip_tips">开通VIP可与所有美女聊天</string>
+    <string name="goods_vip_dredge">立即开通</string>
+    <string name="goods_vip_privilege">VIP特权</string>
+    <string name="goods_vip_kefu">咨询客服</string>
+    <string name="goods_vip_banner_tip">请前往‘我的-设置-活动相关’页面</string>
 
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>
