@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.paygoods;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -94,6 +95,8 @@ public class GoodsDiamondAct extends BaseActivity implements View.OnClickListene
                 break;
 
             case R.id.btn_contact:  // 联系客服
+
+                startActivity(new Intent(this, GoodsDiamondDialog.class));
                 break;
         }
     }

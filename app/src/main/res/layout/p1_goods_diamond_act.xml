@@ -56,14 +56,17 @@
                 android:text="@string/goods_diamond_type"
                 android:textColor="@color/text_ciyao_gray" />
 
+            <!-- 商品列表 -->
             <LinearLayout
                 android:id="@+id/pay_type_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
 
+            <!-- 支付方式 -->
             <include layout="@layout/p1_goods_of_payment" />
 
+            <!-- 充值按钮 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +77,7 @@
                     style="@style/button_big"
                     android:layout_marginBottom="@dimen/px80_dp"
                     android:layout_marginTop="@dimen/px50_dp"
-                    android:text="@string/goods_pay" />
+                    android:text="@string/goods_pay_immediately" />
             </LinearLayout>
 
             <LinearLayout
