@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.user.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -93,10 +92,11 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_Game_id:// 游戏
+                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyouapp.cn:30081/static/fish_box/");
                 break;
 
             case CenterItemID.i_Center_About_id: // 关于
-                UIShow.show(getContext(), WebEntranceActivity.class );
+                UIShow.show(getContext(), WebEntranceActivity.class);
                 break;
 
             case CenterItemID.i_Center_Setting_id:// 设置

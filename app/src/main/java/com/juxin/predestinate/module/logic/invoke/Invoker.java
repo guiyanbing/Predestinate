@@ -5,9 +5,9 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.utils.BitmapUtils;
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
@@ -49,6 +49,7 @@ public class Invoker {
     public static final String JSCMD_update_data = "update_data";       // 通知游戏刷新数据（充值，分享等可能要更新个人信息的操作后调用）
     public static final String JSCMD_game_guide = "game_guide";         // 游戏引导：event:“rob_other”引导的事件（rob_other为引导抢夺红包）
     public static final String JSCMD_cancel_dialog = "cancel_dialog";   // 取消cmd型对话框（取消分享，取消充值才发送）
+    public static final String JSCMD_diamondCountChange = "diamondCountChange"; //钻石的数量变更通知js
 
     public static String JSCMD_cache_uid = "";//缓存的访问uid
 
@@ -432,7 +433,7 @@ public class Invoker {
         public void show_toast(String data) {
             PLogger.d("---show_toast--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            MMToast.showShort(dataObject.optString("content"));
+            PToast.showShort(dataObject.optString("content"));
         }
 
         // 开启支付页面
@@ -478,7 +479,7 @@ public class Invoker {
                     PLogger.d("------>" + path[0]);
                     // 将选取的图片进行质量压缩并将二进制流转换为base64字符串
                     Map<String, Object> responseObject = new HashMap<>();
-                    responseObject.put("imageData", BitmapUtils.bitmapToBase64(BitmapUtils.getSmallBitmap(path[0])));//base64格式字符串
+                    responseObject.put("imageData", BitmapUtil.bitmapToBase64(BitmapUtil.getSmallBitmap(path[0])));//base64格式字符串
                     doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
                 }
             });
@@ -491,11 +492,52 @@ public class Invoker {
             List<File> files = new LinkedList<>();
             JSONArray imageDataList = JsonUtil.getJsonArray(dataObject.optString("imageDataList"));
             for (int i = 0; i < imageDataList.length(); i++) {
-                files.add(BitmapUtils.saveBitmap(BitmapUtils.base64ToBitmap(imageDataList.optString(i)),
+                files.add(BitmapUtil.saveBitmap(BitmapUtil.base64ToBitmap(imageDataList.optString(i)),
                         DirType.getUploadDir() + System.currentTimeMillis() + "_" + i));//将base64的数据转换成File对象
             }
             int type = dataObject.optInt("type");//101 头像 , 102 相册 , 103 消息图片 ,104 /动态图片, 105 身份验证
             //TODO 图片上传，上传完成之后删除本地存储的缓存文件
+        }
+
+        // 跳转到钻石购买页面
+        public void jump_to_shop(String data) {
+            PLogger.d("---jump_to_shop--->" + data);
+            Activity act = appInterface.getAct();
+            UIShow.showGoodsDiamondAct(act == null ? App.context : act);
+        }
+
+        // ------------------------------游戏用cmd---------------------------------
+
+        // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid
+        public void choose_friend(String data) {
+            PLogger.d("---choose_friend--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            //TODO 客户端弹窗，选择用户之后回调js，以下内容在弹窗确认点击回调中实现
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("target_id", "");//TODO 被选择人uid
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+        }
+
+        // 获取鱼分享：分享鱼。分享成功后，回调js
+        public void get_fish_to_share(String data) {
+            PLogger.d("---get_fish_to_share--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            long fishid = dataObject.optLong("fishid");//鱼的id，分享用
+
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("share_success", true);//分享成功或者是失败//TODO 以下内容在分享成功回调中实现
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+        }
+
+        // 领取金币并分享：分享金币领取状态。分享成功后，回调js
+        public void get_gold_to_share(String data) {
+            PLogger.d("---get_gold_to_share--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            int goldCount = dataObject.optInt("goldCount");//金币的个数
+
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("share_success", true);//分享成功或者是失败//TODO 以下内容在分享成功回调中实现
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
         }
     }
 

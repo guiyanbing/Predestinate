@@ -2,12 +2,13 @@ package com.juxin.predestinate.module.logic.media;
 
 import android.text.TextUtils;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.BitmapUtil;
-import com.juxin.mumu.bean.utils.FileUtil;
+import com.juxin.library.utils.BitmapUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -96,9 +97,9 @@ public class MediaMgr implements ModuleBase {
      */
     private void uploadImage(UrlParam urlParam, final String uri, Map<String, Object> post_param, final RequestComplete logicCallBack) {
         Map<String, File> uploadFile = new HashMap<>();
-        final String path = BitmapUtil.getSmallBitmapAndSave(uri);
+        final String path = BitmapUtil.getSmallBitmapAndSave(uri, DirType.getUploadDir());
         if (TextUtils.isEmpty(path)) {
-            MMLog.autoDebug("图片地址无效");
+            PLogger.d("图片地址无效");
             return;
         }
         uploadFile.put("pic", new File(path));
