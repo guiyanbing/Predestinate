@@ -1,27 +1,20 @@
 package com.juxin.predestinate.ui.mail;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
-import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
-import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +95,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         listMail.setPullRefreshEnable(false);
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
+
+
     }
 
     @Override

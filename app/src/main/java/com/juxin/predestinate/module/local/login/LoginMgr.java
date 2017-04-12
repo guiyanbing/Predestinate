@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.juxin.library.enc.MD5;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
@@ -196,7 +196,7 @@ public class LoginMgr implements ModuleBase {
     public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback, final boolean hasJump) {
         HashMap<String, Object> userAccount = new HashMap<>();
         userAccount.put("name", uid);
-        userAccount.put("pwd", MD5.encode(pwd));
+        userAccount.put("pwd", EncryptUtil.md5(pwd));
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLogin, userAccount, requestCallback);
     }
@@ -224,7 +224,7 @@ public class LoginMgr implements ModuleBase {
      */
     public void putAllLoginInfo(long uid, String password, String cookie, boolean isUserLogin) {
         setUid(uid + "");
-        PSP.getInstance().put(LOGINMGR_AUTH, MD5.encode(password));
+        PSP.getInstance().put(LOGINMGR_AUTH, EncryptUtil.md5(password));
         putUserInfo(uid, password); //保存登录账户到list配置
         setCookie(cookie);//在setLoginInfo方法之前执行
         setLoginInfo(uid, isUserLogin);  //设置登录状态

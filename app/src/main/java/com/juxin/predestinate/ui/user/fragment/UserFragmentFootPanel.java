@@ -12,6 +12,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.start.WebEntranceActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_About_id: // 关于
+                UIShow.show(getContext(), WebEntranceActivity.class );
                 break;
 
             case CenterItemID.i_Center_Setting_id:// 设置

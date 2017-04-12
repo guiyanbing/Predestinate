@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.juxin.mumu.bean.utils.ByteUtil;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
+import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -21,12 +22,10 @@ import rx.functions.Func1;
  * Created by Kind on 2017/3/28.
  */
 
-public class DBCenterFmessage {
-    private final int ERROR = -1;
-
+public class DBCenterFMessage {
     private BriteDatabase mDatabase;
 
-    public DBCenterFmessage(BriteDatabase database) {
+    public DBCenterFMessage(BriteDatabase database) {
         this.mDatabase = database;
     }
 
@@ -53,35 +52,35 @@ public class DBCenterFmessage {
      */
     public long insertMsg(BaseMessage baseMessage) {
         if (baseMessage == null) {
-            return ERROR;
+            return DBConstant.ERROR;
         }
 
         try {
             final ContentValues values = new ContentValues();
             if (baseMessage.getChannelID() != null)
-                values.put(Fmessage.COLUMN_CHANNELID, baseMessage.getChannelID());
+                values.put(FMessage.COLUMN_CHANNELID, baseMessage.getChannelID());
 
             if (baseMessage.getWhisperID() != null)
-                values.put(Fmessage.COLUMN_WHISPERID, baseMessage.getWhisperID());
+                values.put(FMessage.COLUMN_WHISPERID, baseMessage.getWhisperID());
 
             if (baseMessage.getMsgID() != -1)
-                values.put(Fmessage.COLUMN_MSGID, baseMessage.getMsgID());
+                values.put(FMessage.COLUMN_MSGID, baseMessage.getMsgID());
 
             if (baseMessage.getcMsgID() != -1)
-                values.put(Fmessage.COLUMN_CMSGID, baseMessage.getcMsgID());
+                values.put(FMessage.COLUMN_CMSGID, baseMessage.getcMsgID());
 
-            values.put(Fmessage.COLUMN_SENDID, baseMessage.getSendID());
-            values.put(Fmessage.COLUMN_TYPE, baseMessage.getType());
-            values.put(Fmessage.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
-            values.put(Fmessage.COLUMN_FSTATUS, 1);// 默认为1插入的时候
-            values.put(Fmessage.COLUMN_FSTATUS, baseMessage.getTime());
-            values.put(Fmessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
+            values.put(FMessage.COLUMN_SENDID, baseMessage.getSendID());
+            values.put(FMessage.COLUMN_TYPE, baseMessage.getType());
+            values.put(FMessage.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
+            values.put(FMessage.COLUMN_FSTATUS, 1);// 默认为1插入的时候
+            values.put(FMessage.COLUMN_FSTATUS, baseMessage.getTime());
+            values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
 
-            return mDatabase.insert(Fmessage.FMESSAGE_TABLE, values);
+            return mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return ERROR;
+        return DBConstant.ERROR;
     }
 
     /**
@@ -91,7 +90,7 @@ public class DBCenterFmessage {
      */
     public int updateMsg(BaseMessage baseMessage){
         if(baseMessage == null){
-            return ERROR;
+            return DBConstant.ERROR;
         }
 
         try {
@@ -102,34 +101,34 @@ public class DBCenterFmessage {
             String sql;
             String[] str;
             if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {
-                sql = Fmessage.COLUMN_CHANNELID + " = ? AND " + Fmessage.COLUMN_WHISPERID + " = ? AND " + Fmessage.COLUMN_CMSGID + " = ?";
+                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_CMSGID + " = ?";
                 str = new String[]{channelID, whisperID, String.valueOf(cMsgID)};
             } else if (!TextUtils.isEmpty(channelID)) {
-                sql = Fmessage.COLUMN_CHANNELID + " = ? AND " + Fmessage.COLUMN_CMSGID + " = ?";
+                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_CMSGID + " = ?";
                 str = new String[]{channelID, String.valueOf(cMsgID)};
             } else {
-                sql = Fmessage.COLUMN_WHISPERID + " = ? AND " + Fmessage.COLUMN_CMSGID + " = ?";
+                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_CMSGID + " = ?";
                 str = new String[]{whisperID, String.valueOf(cMsgID)};
             }
 
 
             final ContentValues values = new ContentValues();
             if (baseMessage.getMsgID() != -1)
-                values.put(Fmessage.COLUMN_MSGID, baseMessage.getMsgID());
+                values.put(FMessage.COLUMN_MSGID, baseMessage.getMsgID());
 
             if (baseMessage.getStatus() != -1)
-                values.put(Fmessage.COLUMN_STATUS, baseMessage.getStatus());
+                values.put(FMessage.COLUMN_STATUS, baseMessage.getStatus());
 
             if (baseMessage.getTime() != -1)
-                values.put(Fmessage.COLUMN_TIME, baseMessage.getTime());
+                values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
 
             if (baseMessage.getContentJson() != null)
-                values.put(Fmessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
-            return mDatabase.update(Fmessage.FMESSAGE_TABLE, values, sql, str);
+                values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ERROR;
+        return DBConstant.ERROR;
     }
 
 
@@ -146,15 +145,15 @@ public class DBCenterFmessage {
         if(TextUtils.isEmpty(channelID) && TextUtils.isEmpty(whisperID)){
             return null;
         }
-        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(Fmessage.FMESSAGE_TABLE)
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
                 .append(" WHERE ")
-                .append(Fmessage.COLUMN_CHANNELID + " = ")
+                .append(FMessage.COLUMN_CHANNELID + " = ")
                 .append(channelID)
                 .append(" AND ")
-                .append(Fmessage.COLUMN_WHISPERID + " = ")
+                .append(FMessage.COLUMN_WHISPERID + " = ")
                 .append(whisperID)
                 .append(" ORDER BY ")
-                .append(Fmessage._ID)
+                .append(FMessage._ID)
                 .append(" DESC")
                 .append(" LIMIT ")
                 .append(start + "," + offset);
@@ -168,7 +167,7 @@ public class DBCenterFmessage {
      * @return
      */
     public Observable<List<BaseMessage>> queryBySqlFmessage(String sql) {
-        return mDatabase.createQuery(Fmessage.FMESSAGE_TABLE, sql)
+        return mDatabase.createQuery(FMessage.FMESSAGE_TABLE, sql)
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override
                     public List<BaseMessage> call(SqlBrite.Query query) {
@@ -186,16 +185,16 @@ public class DBCenterFmessage {
         try {
             while (cursor.moveToNext()) {
                 result.add(new BaseMessage(
-                        CursorUtil.getString(cursor, Fmessage.COLUMN_CHANNELID),
-                        CursorUtil.getString(cursor, Fmessage.COLUMN_WHISPERID),
-                        CursorUtil.getLong(cursor, Fmessage.COLUMN_SENDID),
-                        CursorUtil.getLong(cursor, Fmessage.COLUMN_MSGID),
-                        CursorUtil.getLong(cursor, Fmessage.COLUMN_CMSGID),
-                        CursorUtil.getInt(cursor, Fmessage.COLUMN_TYPE),
-                        CursorUtil.getInt(cursor, Fmessage.COLUMN_STATUS),
-                        CursorUtil.getInt(cursor, Fmessage.COLUMN_FSTATUS),
-                        CursorUtil.getLong(cursor, Fmessage.COLUMN_TIME),
-                        CursorUtil.getString(cursor, Fmessage.COLUMN_CONTENT)
+                        CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
+                        CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
+                        CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),
+                        CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID),
+                        CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID),
+                        CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE),
+                        CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
+                        CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
+                        CursorUtil.getLong(cursor, FMessage.COLUMN_TIME),
+                        CursorUtil.getString(cursor, FMessage.COLUMN_CONTENT)
                 ));
             }
         } catch (Exception e) {
@@ -212,6 +211,6 @@ public class DBCenterFmessage {
      * @return
      */
     public int delete(long whisperID){
-        return mDatabase.delete(Fmessage.FMESSAGE_TABLE, Fmessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
+        return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
     }
 }

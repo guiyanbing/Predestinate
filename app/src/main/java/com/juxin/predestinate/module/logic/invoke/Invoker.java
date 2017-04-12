@@ -6,12 +6,15 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.utils.BitmapUtils;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
+import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -21,11 +24,15 @@ import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.main.MainActivity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -252,6 +259,24 @@ public class Invoker {
 //            });
         }
 
+        // 获得用户自己的数据 （包含用户的账户余额等数据）
+        public void get_user_detail(String data) {
+            PLogger.d("---get_user_detail--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("uid", userInfo.getUid());
+            responseObject.put("avatar", userInfo.getAvatar());
+            responseObject.put("avatar_status", userInfo.getAvatar_status());
+            responseObject.put("nickname", userInfo.getNickname());
+            responseObject.put("gender", userInfo.getGender());
+            responseObject.put("is_vip", userInfo.isVip());
+            responseObject.put("money", userInfo.getMoney());
+
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+        }
+
         // 弹出模态对话框
         public void show_dialog(String data) {
             PLogger.d("---show_dialog--->" + data);
@@ -439,6 +464,38 @@ public class Invoker {
         public void refresh_userdetail(String data) {
             PLogger.d("---refresh_userdetail--->" + data);
             ModuleMgr.getCenterMgr().reqMyInfo();
+        }
+
+        // 照片选取：打开相册或相机，选取或拍摄完成之后回调图片的base64字符串给js(先进行图片质量压缩)
+        public void get_image_data(String data) {
+            PLogger.d("---get_image_data--->" + data);
+            final JSONObject dataObject = JsonUtil.getJsonObject(data);
+            Activity act = appInterface.getAct();
+            ImgSelectUtil.getInstance().pickPhotoGallery(act == null ? App.context : act, new ImgSelectUtil.OnChooseCompleteListener() {
+                @Override
+                public void onComplete(String... path) {
+                    if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) return;
+                    PLogger.d("------>" + path[0]);
+                    // 将选取的图片进行质量压缩并将二进制流转换为base64字符串
+                    Map<String, Object> responseObject = new HashMap<>();
+                    responseObject.put("imageData", BitmapUtils.bitmapToBase64(BitmapUtils.getSmallBitmap(path[0])));//base64格式字符串
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+                }
+            });
+        }
+
+        // 图片数据转换成url：将图片上传服务器，并回调图片服务器地址给js
+        public void image_data_to_url(String data) {
+            PLogger.d("---image_data_to_url--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            List<File> files = new LinkedList<>();
+            JSONArray imageDataList = JsonUtil.getJsonArray(dataObject.optString("imageDataList"));
+            for (int i = 0; i < imageDataList.length(); i++) {
+                files.add(BitmapUtils.saveBitmap(BitmapUtils.base64ToBitmap(imageDataList.optString(i)),
+                        DirType.getUploadDir() + System.currentTimeMillis() + "_" + i));//将base64的数据转换成File对象
+            }
+            int type = dataObject.optInt("type");//101 头像 , 102 相册 , 103 消息图片 ,104 /动态图片, 105 身份验证
+            //TODO 图片上传，上传完成之后删除本地存储的缓存文件
         }
     }
 
