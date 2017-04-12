@@ -12,6 +12,7 @@ import com.juxin.predestinate.module.local.center.CenterMgr;
 import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
@@ -129,6 +130,19 @@ public final class ModuleMgr {
             addModule(centerMgr);
         }
         return centerMgr;
+    }
+
+    /**
+     * 文件管理
+     */
+    private static MediaMgr mediaMgr = null;
+
+    public static MediaMgr getMediaMgr() {
+        if (mediaMgr == null) {
+            mediaMgr = new MediaMgr();
+            addModule(mediaMgr);
+        }
+        return mediaMgr;
     }
 
     /**

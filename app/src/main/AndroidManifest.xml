@@ -124,6 +124,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.user.paygoods.GoodsDiamondDialog"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/No_Background" />
+
         <!-- ============= 相机相册模块start ============= -->
         <activity
             android:name=".module.local.album.activity.TransferActivity"
