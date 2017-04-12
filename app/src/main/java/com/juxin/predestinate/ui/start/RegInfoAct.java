@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.mumu.bean.utils.MMToast;
@@ -34,7 +35,6 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.PhotoUtils;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -298,7 +298,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                         String pic = upLoadResult.getHttpPathPic();
                         if (!TextUtils.isEmpty(pic)) {
                             isCompleteHead = true;
-                            headPicBitmap = PhotoUtils.getSmallBitmap(path[0]);
+                            headPicBitmap = BitmapUtil.getSmallBitmap(path[0]);
                             img_header.setImageBitmap(headPicBitmap);
                             _photoUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
                             resetSubmit();
