@@ -223,8 +223,9 @@ public class CenterMgr implements ModuleBase, PObserver {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, params, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk())
+                if (response.isOk()) {
                     reqMyInfo();
+                }
             }
         });
     }
@@ -248,11 +249,9 @@ public class CenterMgr implements ModuleBase, PObserver {
                             return;
                         }
                         final String avatarUrl = getInterceptUrl(pic);
-                        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, new HashMap<String, Object>() {
-                            {
-                                put(EditKey.s_key_avatar, avatarUrl);
-                            }
-                        }, complete);
+                        HashMap<String, Object> postParams = new HashMap<>();
+                        postParams.put(EditKey.s_key_avatar, avatarUrl);
+                        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
                     }
                 }
             });
