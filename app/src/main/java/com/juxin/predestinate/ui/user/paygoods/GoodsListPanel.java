@@ -10,6 +10,7 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,13 @@ import java.util.List;
  * Created by Su on 2017/3/31.
  */
 
-public class GoodsListPanel extends BaseViewPanel {
+public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
 
     private RecyclerView recyclerView;
     private GoodsListAdapter adapter;
+
+    private int position = 0;
 
     public GoodsListPanel(Context context) {
         super(context);
@@ -39,6 +42,7 @@ public class GoodsListPanel extends BaseViewPanel {
         recyclerView.addItemDecoration(new ItemSpaces((int) (10 * toDpMutliple)));
 
         adapter = new GoodsListAdapter();
+        adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
         List<String> data = new ArrayList<>();
@@ -51,6 +55,16 @@ public class GoodsListPanel extends BaseViewPanel {
         data.add("7");
         data.add("8");
         adapter.setList(data);
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    @Override
+    public void onItemClick(View convertView, int position) {
+        this.position = position;
+        adapter.updateData(position);
     }
 
     /**

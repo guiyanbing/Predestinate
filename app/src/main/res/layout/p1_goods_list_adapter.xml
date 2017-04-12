@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/pay_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px160_dp"
         android:background="@drawable/p1_pay_bg"
@@ -11,10 +12,11 @@
 
         <ImageView
             android:id="@+id/iv_choose"
-            android:layout_width="@dimen/px48_dp"
-            android:layout_height="@dimen/px48_dp"
+            android:layout_width="@dimen/px46_dp"
+            android:layout_height="@dimen/px46_dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/p1_choose_btn" />
+            android:background="@drawable/p1_choose_btn"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
