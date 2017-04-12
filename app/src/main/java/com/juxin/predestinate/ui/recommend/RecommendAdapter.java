@@ -88,19 +88,6 @@ public class RecommendAdapter extends BaseRecyclerViewAdapter {
     }
 
 
-//    class MyViewHolder extends RecyclerView.ViewHolder {
-//        TextView tv_nickname, tv_greet, tv_introduction, tv_sign, tv_online_time;
-//        LinearLayout bt_send_msg, bt_greet;
-//        CircularCoverView iv_head;
-//        ImageView iv_greet;
-//        ImageView iv_identity;
-//
-//        public MyViewHolder(View view) {
-//            super(view);
-//
-//        }
-//    }
-
     //设置基本信息
     private void setIntroduction(TextView textView) {
         String dataage = "21";

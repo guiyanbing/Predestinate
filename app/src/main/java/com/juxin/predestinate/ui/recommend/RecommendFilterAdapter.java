@@ -20,6 +20,8 @@ import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.recommend.TagInfo;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 import java.util.List;
 
@@ -28,68 +30,45 @@ import java.util.List;
  * Created YAO on 2017/3/30.
  */
 
-public class RecommendFilterAdapter extends XRecyclerView.Adapter<RecommendFilterAdapter.MyViewHolder> {
-    private Context context;
-    private List<TagInfo> list;
+public class RecommendFilterAdapter extends BaseRecyclerViewAdapter<TagInfo> {
     public static final int FILTER_TAG_CHOSEN = 0;
     public static final int FILTER_TAG = 1;
-    private TagItemClickListener mListener;
     private int tag;
+    private Context context;
 
-    public RecommendFilterAdapter(Context context, List<TagInfo> list, int tag, TagItemClickListener mListener) {
-        this.context = context;
+
+    public void setTagType(Context context, int tag) {
         this.tag = tag;
-        this.list = list;
-        this.mListener = mListener;
+        this.context = context;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                context).inflate(R.layout.p1_recommend_filter_item, parent,
-                false));
-        return holder;
+    public int[] getItemLayouts() {
+        return new int[]{R.layout.p1_recommend_filter_item};
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.tv_tagName.setText(list.get(position).getTagName());
-        holder.tv_tagName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.itemClick(position, holder.tv_tagName);
-            }
-        });
+    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
+        TagInfo tagInfo = getItem(position);
+        final TextView tv_tagName = viewHolder.findViewById(R.id.tv_tagName);
+        ImageView iv_mark = viewHolder.findViewById(R.id.iv_mark);
+        RelativeLayout rl_item = viewHolder.findViewById(R.id.rl_item);
+
+        tv_tagName.setText(tagInfo.getTagName());
         if (tag == FILTER_TAG_CHOSEN) {
-            holder.iv_mark.setVisibility(View.INVISIBLE);
-            holder.tv_tagName.setTextColor(context.getResources().getColor(R.color.btn_getcode_stroke));
-            holder.rl_item.setBackgroundResource(R.drawable.p1_tag_chosen_bg);
+            iv_mark.setVisibility(View.INVISIBLE);
+            tv_tagName.setTextColor(context.getResources().getColor(R.color.btn_getcode_stroke));
+            rl_item.setBackgroundResource(R.drawable.p1_tag_chosen_bg);
         } else if (tag == FILTER_TAG) {
-            holder.iv_mark.setVisibility(position>1?View.INVISIBLE:View.VISIBLE);
-            holder.tv_tagName.setTextColor(context.getResources().getColor(R.color.text_zhuyao_black));
-            holder.rl_item.setBackgroundResource(R.drawable.p1_tag_bg);
+            iv_mark.setVisibility(position > 1 ? View.INVISIBLE : View.VISIBLE);
+            tv_tagName.setTextColor(context.getResources().getColor(R.color.text_zhuyao_black));
+            rl_item.setBackgroundResource(R.drawable.p1_tag_bg);
         }
     }
 
     @Override
-    public int getItemCount() {
-        return list.size();
+    public int getRecycleViewItemType(int position) {
+        return 0;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tagName;
-        RelativeLayout rl_item;
-        ImageView iv_mark;
-
-        public MyViewHolder(View view) {
-            super(view);
-            tv_tagName = (TextView) view.findViewById(R.id.tv_tagName);
-            iv_mark = (ImageView) view.findViewById(R.id.iv_mark);
-            rl_item = (RelativeLayout) view.findViewById(R.id.rl_item);
-        }
-    }
-
-    public interface TagItemClickListener {
-        void itemClick(int position, View itemView);
-    }
 }
