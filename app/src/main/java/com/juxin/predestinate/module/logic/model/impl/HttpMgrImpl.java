@@ -59,6 +59,11 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
+    public HTCallBack uploadFile(UrlParam urlParam, Map<String, Object> post_param, Map<String, File> file_param, RequestComplete requestCallback) {
+        return reqHttp(urlParam, null, file_param, null, post_param, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
+    }
+
+    @Override
     public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
         if (FileUtil.isExist(filePath)) {
             if (downloadListener != null) downloadListener.onSuccess(url, filePath);

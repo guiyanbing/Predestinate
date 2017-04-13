@@ -22,7 +22,7 @@ import java.util.List;
  * Created YAO on 2017/3/30.
  */
 
-public class RecommendAdapter extends BaseRecyclerViewAdapter<RecommendPeople> {
+class RecommendAdapter extends BaseRecyclerViewAdapter {
     private List<RecommendPeople> recommendPeopleList;
 
     public void setRecommendList(List<RecommendPeople> recommendPeopleList) {
@@ -36,7 +36,7 @@ public class RecommendAdapter extends BaseRecyclerViewAdapter<RecommendPeople> {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-//        UserInfoLightweight userinfo = (UserInfoLightweight) getItem(position);
+//        UserInfoLightweight userinfo =(UserInfoLightweight)getItem(position);
 //        final RecommendPeople recommendPeople = recommendPeopleList.get(position);
 //        TextView tv_nickname = viewHolder.findViewById(R.id.tv_nickname);
 //        final TextView tv_greet = viewHolder.findViewById(R.id.tv_greet);
@@ -87,24 +87,6 @@ public class RecommendAdapter extends BaseRecyclerViewAdapter<RecommendPeople> {
         return 0;
     }
 
-
-//    @Override
-//    public int getItemCount() {
-//        return list.size();
-//    }
-
-//    class MyViewHolder extends RecyclerView.ViewHolder {
-//        TextView tv_nickname, tv_greet, tv_introduction, tv_sign, tv_online_time;
-//        LinearLayout bt_send_msg, bt_greet;
-//        CircularCoverView iv_head;
-//        ImageView iv_greet;
-//        ImageView iv_identity;
-//
-//        public MyViewHolder(View view) {
-//            super(view);
-//
-//        }
-//    }
 
     //设置基本信息
     private void setIntroduction(TextView textView) {

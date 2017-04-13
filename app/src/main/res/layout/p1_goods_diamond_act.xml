@@ -16,12 +16,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -49,29 +49,58 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="@dimen/px40_dp"
+                android:paddingTop="@dimen/px40_dp"
+                android:paddingLeft="@dimen/px40_dp"
+                android:paddingRight="@dimen/px40_dp"
+                android:paddingBottom="@dimen/px10_dp"
                 android:text="@string/goods_diamond_type"
                 android:textColor="@color/text_ciyao_gray" />
 
+            <!-- 商品列表 -->
             <LinearLayout
                 android:id="@+id/pay_type_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
 
+            <!-- 支付方式 -->
             <include layout="@layout/p1_goods_of_payment" />
+
+            <!-- 充值按钮 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/px50_dp">
+
+                <Button
+                    android:id="@+id/btn_recharge"
+                    style="@style/button_big"
+                    android:layout_marginBottom="@dimen/px80_dp"
+                    android:layout_marginTop="@dimen/px50_dp"
+                    android:text="@string/goods_pay_immediately" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/px130_dp"
+                android:paddingBottom="@dimen/px50_dp"
+                android:orientation="horizontal">
 
                 <ImageView
+                    android:layout_width="@dimen/px50_dp"
+                    android:layout_height="@dimen/px50_dp"
+                    android:src="@drawable/p1_qq_kefu" />
+
+                <TextView
+                    android:id="@+id/btn_contact"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:text="@string/contact_kefu"
+                    android:textColor="@color/color_B1B1B1" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

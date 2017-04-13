@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,10 +19,10 @@ import com.juxin.predestinate.module.logic.baseui.picker.picker.AddressPicker;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.RangePicker;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,29 +36,28 @@ public class RecommendFilterAct extends BaseActivity {
     TextView tv_del;
     RecommendFilterAdapter chosenAdapter, tagAdapter;
     private List<TagInfo> listTag, listChosen;
-    private final int spanCount = 3;
 
     private int age_min, age_max, provinceID, cityID;
 
-    private int tags[];
-    private Intent data;
+    private List<Integer> tagsList = new ArrayList<>();
+    private final int areaTagId = -11;
+    private final int ageTagId = -12;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_recommendfilter_act);
         setBackView(getResources().getString(R.string.title_recommend_filter));
-        data = new Intent();
         setTitleRight("提交", R.color.title_right_commit, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tagsList.clear();
+                Intent data = new Intent();
                 for (int i = 0; i < listChosen.size(); i++) {
                     TagInfo tagInfo = listChosen.get(i);
                     switch (tagInfo.getTagType()) {
                         case 0://印象tag
-                            Bundle bundle = new Bundle();
-                            bundle.putIntArray("tags", tags);
-                            data.putExtras(bundle);
+                            tagsList.add(listChosen.get(i).getTagID());
                             break;
                         case 1://地区
                             data.putExtra("province", provinceID);
@@ -71,23 +69,35 @@ public class RecommendFilterAct extends BaseActivity {
                             break;
                     }
                 }
+                if (tagsList.size() > 0) {
+                    int tags[] = new int[tagsList.size()];
+                    for (int i = 0; i < tagsList.size(); i++) {
+                        tags[i] = tagsList.get(i);
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putIntArray("tags", tags);
+                    data.putExtras(bundle);
+                }
                 setResult(200, data);
+                back();
             }
         });
         initView();
     }
 
-    private void getTag() {
+    private void initTag() {
         listChosen = new ArrayList<>();
         listTag = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             TagInfo tagInfo = new TagInfo();
-            if (i==0){
+            if (i == 0) {
                 tagInfo.setTagName("选择地区");
                 tagInfo.setTagType(1);
-            }else if(i==1){
+                tagInfo.setTagID(areaTagId);
+            } else if (i == 1) {
                 tagInfo.setTagName("年龄");
                 tagInfo.setTagType(2);
+                tagInfo.setTagID(ageTagId);
             }
             listTag.add(tagInfo);
         }
@@ -96,20 +106,24 @@ public class RecommendFilterAct extends BaseActivity {
     }
 
     //选择地区
-    private void addArea(final int position, final String type) {
+    private void addArea(final String type) {
         PickerDialogUtil.showAddressPickerDialog2(this, new AddressPicker.OnAddressPickListener() {
             @Override
             public void onAddressPicked(City city) {
                 provinceID = city.getProvinceID();
                 cityID = city.getCityID();
                 if ("update".equals(type)) {
-                    TagInfo tagInfo = listChosen.get(position);
-                    tagInfo.setTagName(city.getProvinceName() + city.getCityName());
+                    for (int i = 0; i < listChosen.size(); i++) {
+                        if (listChosen.get(i).getTagID() == areaTagId) {
+                            TagInfo tagInfo = listChosen.get(i);
+                            tagInfo.setTagName(city.getProvinceName() + city.getCityName());
+                        }
+                    }
                 } else if ("add".equals(type)) {
                     TagInfo tagInfo = new TagInfo();
                     tagInfo.setTagType(1);
                     tagInfo.setTagName(city.getProvinceName() + city.getCityName());
-                    tagInfo.setPosition(position);
+                    tagInfo.setTagID(areaTagId);
                     listChosen.add(tagInfo);
                 }
                 chosenAdapter.notifyDataSetChanged();
@@ -118,19 +132,24 @@ public class RecommendFilterAct extends BaseActivity {
     }
 
     //选择年龄
-    private void addAge(final int position, final String type) {
+    private void addAge(final String type) {
         PickerDialogUtil.showRangePickerDialog(this, new RangePicker.OnRangePickListener() {
             @Override
             public void onRangePicked(String firstText, String secondText) {
-//                age_max= secondText;
+                age_min = InfoConfig.getInstance().getAgeN().getSubmitWithShow(firstText);
+                age_max = InfoConfig.getInstance().getAgeN().getSubmitWithShow(secondText);
                 if ("update".equals(type)) {
-                    TagInfo tagInfo = listChosen.get(position);
-                    tagInfo.setTagName(firstText + "~" + secondText);
-                    tagInfo.setPosition(position);
+                    for (int i = 0; i < listChosen.size(); i++) {
+                        if (listChosen.get(i).getTagID() == ageTagId) {
+                            TagInfo tagInfo = listChosen.get(i);
+                            tagInfo.setTagName(firstText + ("不限".equals(secondText) ? "以上" : "~" + secondText));
+                        }
+                    }
                 } else if ("add".equals(type)) {
                     TagInfo tagInfo = new TagInfo();
-                    tagInfo.setTagName(firstText + "~" + secondText);
-                    tagInfo.setPosition(position);
+                    tagInfo.setTagName(firstText + ("不限".equals(secondText) ? "以上" : "~" + secondText));
+                    tagInfo.setTagType(2);
+                    tagInfo.setTagID(ageTagId);
                     listChosen.add(tagInfo);
                 }
                 chosenAdapter.notifyDataSetChanged();
@@ -142,11 +161,11 @@ public class RecommendFilterAct extends BaseActivity {
     private boolean checkRepeatAdd(int position) {
         if (listChosen.size() > 0) {
             for (int i = 0; i < listChosen.size(); i++) {
-                if (listChosen.get(i).getPosition() == position) {
-                    if (position == 0) {
-                        addArea(position, "update");
-                    } else if (position == 1) {
-                        addAge(position, "update");
+                if (listChosen.get(i).getTagID() == listTag.get(position).getTagID()) {
+                    if (listChosen.get(i).getTagID() == areaTagId) {
+                        addArea("update");
+                    } else if (listChosen.get(i).getTagID() == ageTagId) {
+                        addAge("update");
                     } else {
                         MMToast.showShort(getResources().getString(R.string.toast_chosen_repeat));
                     }
@@ -157,18 +176,32 @@ public class RecommendFilterAct extends BaseActivity {
         return false;
     }
 
+    private void initAdapter(RecyclerView recycleView, RecommendFilterAdapter adapter, List<TagInfo> list) {
+        adapter.setList(list);
+        int spanCount = 3;
+        recycleView.setLayoutManager(new GridLayoutManager(this, spanCount));
+        recycleView.setAdapter(adapter);
+        recycleView.addItemDecoration(new SpaceItemDecoration((int) getResources().getDimension(R.dimen.px20_dp)));
+    }
+
     private void initRecycleView() {
         rv_chosen = cv_chosen.getRecyclerView();
         rv_tag = cv_tag.getRecyclerView();
-        tagAdapter = new RecommendFilterAdapter(this, listTag, RecommendFilterAdapter.FILTER_TAG, new RecommendFilterAdapter.TagItemClickListener() {
+        tagAdapter = new RecommendFilterAdapter(this,RecommendFilterAdapter.FILTER_TAG);
+        chosenAdapter = new RecommendFilterAdapter(this,RecommendFilterAdapter.FILTER_TAG_CHOSEN);
+        initAdapter(rv_tag, tagAdapter, listTag);
+        initAdapter(rv_chosen, chosenAdapter, listChosen);
+        cv_tag.showRecyclerView();
+        cv_chosen.showRecyclerView();
+        tagAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
-            public void itemClick(int position, View itemView) {
+            public void onItemClick(View convertView, int position) {
                 if (!checkRepeatAdd(position)) {
                     if (listChosen.size() < 3) {
                         if (position == 0) {
-                            addArea(position, "add");
+                            addArea("add");
                         } else if (position == 1) {
-                            addAge(position, "add");
+                            addAge("add");
                         } else {
                             listChosen.add(listTag.get(position));
                             chosenAdapter.notifyDataSetChanged();
@@ -179,27 +212,11 @@ public class RecommendFilterAct extends BaseActivity {
                 }
             }
         });
-        chosenAdapter = new RecommendFilterAdapter(this, listChosen, RecommendFilterAdapter.FILTER_TAG_CHOSEN, new RecommendFilterAdapter.TagItemClickListener() {
-            @Override
-            public void itemClick(int position, View itemView) {
-                MMToast.showShort("点击了chosen");
-            }
-        });
-        rv_tag.setLayoutManager(new GridLayoutManager(this, spanCount));
-        rv_chosen.setLayoutManager(new GridLayoutManager(this, spanCount));
-        rv_tag.setAdapter(tagAdapter);
-        rv_chosen.setAdapter(chosenAdapter);
-        rv_tag.setItemAnimator(new DefaultItemAnimator());
-        rv_chosen.setItemAnimator(new DefaultItemAnimator());
-        rv_tag.addItemDecoration(new SpaceItemDecoration((int) getResources().getDimension(R.dimen.px20_dp)));
-        rv_chosen.addItemDecoration(new SpaceItemDecoration((int) getResources().getDimension(R.dimen.px20_dp)));
-        cv_tag.showRecyclerView();
-        cv_chosen.showRecyclerView();
     }
 
 
     private void initView() {
-        getTag();
+        initTag();
         cv_chosen = (CustomRecyclerView) findViewById(R.id.cv_tag_chosen);
         cv_tag = (CustomRecyclerView) findViewById(R.id.cv_tag);
         tv_del = (TextView) findViewById(R.id.tv_del);
@@ -217,11 +234,11 @@ public class RecommendFilterAct extends BaseActivity {
 
     }
 
-    class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+    private class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
         private int space;
 
-        public SpaceItemDecoration(int space) {
+        SpaceItemDecoration(int space) {
             this.space = space;
         }
 

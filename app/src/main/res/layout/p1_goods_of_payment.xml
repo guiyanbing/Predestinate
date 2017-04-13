@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_payment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="@dimen/px35_dp"
     android:background="@color/white">
 
+    <!-- 支付方式 -->
     <LinearLayout
         android:id="@+id/type_header"
         android:layout_width="match_parent"
@@ -16,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="1px"
             android:layout_weight="4"
-            android:background="@color/text_ciyao_gray" />
+            android:background="@color/color_DDDDDD" />
 
         <TextView
             android:layout_width="0dp"
@@ -33,10 +36,10 @@
             android:layout_width="0dp"
             android:layout_height="1px"
             android:layout_weight="4"
-            android:background="@color/text_ciyao_gray" />
-
+            android:background="@color/color_DDDDDD" />
     </LinearLayout>
 
+    <!-- 具体布局 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,73 +47,99 @@
         android:orientation="horizontal">
 
         <!--微信-->
-        <RelativeLayout
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_type_wexin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px36_dp"
             android:layout_marginRight="@dimen/px36_dp"
-            android:layout_weight="1"
-            android:background="@drawable/p1_pay_bg"
-            android:padding="@dimen/px15_dp">
+            android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="@dimen/px30_dp"
-                android:layout_height="@dimen/px30_dp"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/p1_choose_btn" />
-
+            <!-- 未选中-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/p1_pay_bg_off"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/px15_dp">
 
                 <ImageView
-                    android:layout_width="@dimen/px80_dp"
-                    android:layout_height="@dimen/px80_dp"
+                    android:layout_width="@dimen/px65_dp"
+                    android:layout_height="@dimen/px65_dp"
                     android:background="@drawable/p1_goods_pay_weixin" />
 
                 <TextView
-                    android:id="@+id/pay_weixin"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/px80_dp"
                     android:gravity="center"
                     android:paddingLeft="@dimen/px10_dp"
                     android:text="@string/goods_pay_weixin"
                     android:textColor="@color/p1_pay_text_color"
-                    android:textSize="@dimen/px42_sp" />
+                    android:textSize="@dimen/px40_sp" />
             </LinearLayout>
-        </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/p1_pay_bg_on"
+                android:padding="@dimen/px15_dp">
+
+                <ImageView
+                    android:layout_width="@dimen/px30_dp"
+                    android:layout_height="@dimen/px30_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/p1_choose_btn" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/px65_dp"
+                        android:layout_height="@dimen/px65_dp"
+                        android:background="@drawable/p1_goods_pay_weixin" />
+
+                    <TextView
+                        android:id="@+id/pay_weixin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px80_dp"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/px10_dp"
+                        android:text="@string/goods_pay_weixin"
+                        android:textColor="@color/p1_pay_text_color"
+                        android:textSize="@dimen/px40_sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
 
         <!--支付宝-->
-        <RelativeLayout
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_type_alipay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px36_dp"
             android:layout_marginRight="@dimen/px36_dp"
-            android:layout_weight="1"
-            android:background="@drawable/p1_pay_bg"
-            android:padding="@dimen/px15_dp">
+            android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="@dimen/px30_dp"
-                android:layout_height="@dimen/px30_dp"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/p1_choose_btn" />
-
+            <!-- 未选中 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/p1_pay_bg_off"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/px15_dp">
 
                 <ImageView
-                    android:layout_width="@dimen/px80_dp"
-                    android:layout_height="@dimen/px80_dp"
+                    android:layout_width="@dimen/px65_dp"
+                    android:layout_height="@dimen/px65_dp"
                     android:background="@drawable/p1_goods_pay_alipay" />
 
                 <TextView
-                    android:id="@+id/pay_alipay"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/px80_dp"
                     android:gravity="center"
@@ -119,45 +148,112 @@
                     android:textColor="@color/p1_pay_text_color"
                     android:textSize="@dimen/px38_sp" />
             </LinearLayout>
-        </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/p1_pay_bg_on"
+                android:padding="@dimen/px15_dp">
+
+                <ImageView
+                    android:layout_width="@dimen/px30_dp"
+                    android:layout_height="@dimen/px30_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/p1_choose_btn" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/px65_dp"
+                        android:layout_height="@dimen/px65_dp"
+                        android:background="@drawable/p1_goods_pay_alipay" />
+
+                    <TextView
+                        android:id="@+id/pay_alipay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px80_dp"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/px10_dp"
+                        android:text="@string/goods_pay_alipay"
+                        android:textColor="@color/p1_pay_text_color"
+                        android:textSize="@dimen/px38_sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
 
         <!--其他-->
-        <RelativeLayout
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_type_other"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px36_dp"
             android:layout_marginRight="@dimen/px36_dp"
-            android:layout_weight="1"
-            android:background="@drawable/p1_pay_bg"
-            android:padding="@dimen/px15_dp">
+            android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="@dimen/px30_dp"
-                android:layout_height="@dimen/px30_dp"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/p1_choose_btn" />
-
+            <!-- 未选中 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/p1_pay_bg_off"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/px15_dp">
 
                 <ImageView
-                    android:layout_width="@dimen/px80_dp"
-                    android:layout_height="@dimen/px80_dp"
+                    android:layout_width="@dimen/px65_dp"
+                    android:layout_height="@dimen/px65_dp"
                     android:background="@drawable/p1_goods_pay_other" />
 
                 <TextView
-                    android:id="@+id/pay_other"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/px80_dp"
                     android:gravity="center"
                     android:paddingLeft="@dimen/px10_dp"
                     android:text="@string/goods_pay_other"
                     android:textColor="@color/p1_pay_text_color"
-                    android:textSize="@dimen/px42_sp" />
+                    android:textSize="@dimen/px40_sp" />
             </LinearLayout>
-        </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/p1_pay_bg_on"
+                android:padding="@dimen/px15_dp">
+
+                <ImageView
+                    android:layout_width="@dimen/px30_dp"
+                    android:layout_height="@dimen/px30_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/p1_choose_btn" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/px65_dp"
+                        android:layout_height="@dimen/px65_dp"
+                        android:background="@drawable/p1_goods_pay_other" />
+
+                    <TextView
+                        android:id="@+id/pay_other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/px80_dp"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/px10_dp"
+                        android:text="@string/goods_pay_other"
+                        android:textColor="@color/p1_pay_text_color"
+                        android:textSize="@dimen/px40_sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
     </LinearLayout>
 </RelativeLayout>

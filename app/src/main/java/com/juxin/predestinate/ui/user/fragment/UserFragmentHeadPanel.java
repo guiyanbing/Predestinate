@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.user.fragment;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,18 +10,24 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 个人中心条目头部
  */
-public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
+public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, PObserver, ImgSelectUtil.OnChooseCompleteListener {
 
     private ImageView user_head, vip_status;
     private TextView user_nick, user_id, vip_end;
@@ -53,6 +60,8 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
         functionPanel = new UserFragmentFunctionPanel(getContext());
         function_container.addView(functionPanel.getContentView());
+
+        MsgMgr.getInstance().attach(this);
     }
 
     /**
@@ -100,5 +109,24 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
             return;
         }
         PLogger.d("path=== " + path[0]);
+        LoadingDialog.show((FragmentActivity) getContext(), "正在上传头像");
+        ModuleMgr.getCenterMgr().uploadAvatar(path[0], new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    LoadingDialog.closeLoadingDialog();
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_MyInfo_Change:
+                refreshView();
+                break;
+        }
     }
 }

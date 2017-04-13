@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/img_pop_pic"
+            style="@style/avatar_big"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/px35_dp" />
+
+        <EditText
+            android:id="@+id/edtTxt_user_nickname"
+            android:layout_width="150dip"
+            android:layout_height="26dip"
+            android:layout_alignTop="@+id/img_pop_pic"
+            android:layout_toRightOf="@+id/img_pop_pic"
+            android:background="@drawable/p1_edit_pop_bg"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingLeft="5dip"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="#999999"
+            android:digits="1234567890."
+            android:textSize="14sp" />
+    </RelativeLayout>
+</LinearLayout>

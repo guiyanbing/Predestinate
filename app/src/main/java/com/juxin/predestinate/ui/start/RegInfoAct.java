@@ -1,9 +1,9 @@
 package com.juxin.predestinate.ui.start;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -14,11 +14,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.BitmapUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CustomFrameLayout;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
@@ -26,6 +29,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -49,15 +53,14 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     private CustomFrameLayout fl_choose_man, fl_choose_woman;
 
     // 保存临时数据
-    private String _nickname, _province, _city, _district, _photoUrl;
+    private String _nickname, _province, _city, _photoUrl;
     private int _gender = 1;
     private HashMap<String, Object> commitMap;
     private boolean canSubmit = false;
 
     private boolean isCompleteHead;             // 是否已设置头像
     private Bitmap headPicBitmap;               // 头像btm
-    private String pickFile;                    // 头像地址
-    private LocationMgr.PointD pointD;          // GPS定位
+
     private UrlParam urlParam = UrlParam.reqRegister;  // 默认为常规注册
 
     @Override
@@ -93,11 +96,11 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
 
     private void initData() {
         commitMap = new HashMap<>();
-        pointD = LocationMgr.getInstance().getPointD();
+        LocationMgr.PointD pointD = LocationMgr.getInstance().getPointD();
         if (pointD != null) {
             _province = TextUtils.isEmpty(pointD.province) ? "" : pointD.province;
             _city = TextUtils.isEmpty(pointD.city) ? "" : pointD.city;
-            _district = TextUtils.isEmpty(pointD.district) ? "" : pointD.district;
+            String _district = TextUtils.isEmpty(pointD.district) ? "" : pointD.district;
             if (_province.equals(_city)) {          // 直辖市
                 _province = _city;
                 _city = _district;
@@ -148,14 +151,13 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     }
 
     // 设置提交btn
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void resetSubmit() {
         if (checkInputInfo()) { // 信息完整
             canSubmit = true;
             btn_reg_info_submit.setBackgroundResource(R.drawable.r1_btn_login_bg);
         } else {
             canSubmit = false;
-            btn_reg_info_submit.setBackgroundColor(getResources().getColor(R.color.color_e8e8e8));
+            btn_reg_info_submit.setBackgroundColor(ContextCompat.getColor(this, R.color.color_e8e8e8));
         }
     }
 
@@ -206,11 +208,6 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                             public void onRequestComplete(HttpResponse response) {
                                 if (response.isOk()) {
                                     UserReg userReg = (UserReg) response.getBaseData();
-                                    //TODO 保存信息到个人资料
-//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(accountObject.optLong("uid"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(postParams.get("nickname") + "");
-//                        ModuleMgr.getCenterMgr().getMyInfo().setScity(accountObject.optInt("city"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setSprovince(accountObject.optInt("province"));
                                     ModuleMgr.getLoginMgr().putAllLoginInfo(userReg.getUid(), userReg.getPassword() + "", userReg.getCookie(), false);
                                     UIShow.showMainClearTask(RegInfoAct.this);
                                 } else {
@@ -242,7 +239,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         public void afterTextChanged(Editable s) {
             if (TextUtils.isEmpty(s.toString()) || s.length() < 2) {
                 canSubmit = false;
-                btn_reg_info_submit.setBackgroundColor(getResources().getColor(R.color.color_e8e8e8));
+                btn_reg_info_submit.setBackgroundColor(ContextCompat.getColor(RegInfoAct.this, R.color.color_e8e8e8));
                 return;
             }
             _nickname = s.toString();
@@ -282,35 +279,34 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
      */
     @Override
     public void onComplete(final String... path) {
-//        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
-//            return;
-//        }
-//        if (FileUtil.isExist(path[0])) {
-//            LoadingDialog.show(RegInfoAct.this, "头像上传，请稍侯");
-//            ModuleMgr.getCommonMgr().sendHttpFile(Constant.INT_AVATAR, path[0], null, new HttpMgr.IReqComplete() {
-//                @Override
-//                public void onReqComplete(HttpResult result) {
-//                    LoadingDialog.closeLoadingDialog();
-//                    if (result.isOk()) {
-//                        UpLoadResult upLoadResult = (UpLoadResult) result.getBaseData();
-//                        String pic = upLoadResult.getHttpPathPic();
-//                        if (!TextUtils.isEmpty(pic)) {
-//                            isCompleteHead = true;
-//                            headPicBitmap = PhotoUtils.getSmallBitmap(path[0]);
-//                            img_header.setImageBitmap(headPicBitmap);
-//                            _photoUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
-//                            resetSubmit();
-//                        }
-//                    } else {
-//                        MMToast.showShort("头像上传失败，请重试");
-//                    }
-//                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
-//                }
-//            });
-//        } else {
-//            MMToast.showShort("图片地址无效");
-//        }
-//        }
+        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
+            return;
+        }
+        if (FileUtil.isExist(path[0])) {
+            LoadingDialog.show(RegInfoAct.this, "头像上传，请稍侯");
+            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, path[0], new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    LoadingDialog.closeLoadingDialog();
+                    if (response.isOk()) {
+                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                        String pic = upLoadResult.getHttpPathPic();
+                        if (!TextUtils.isEmpty(pic)) {
+                            isCompleteHead = true;
+                            headPicBitmap = BitmapUtil.getSmallBitmap(path[0]);
+                            img_header.setImageBitmap(headPicBitmap);
+                            _photoUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
+                            resetSubmit();
+                        }
+                    } else {
+                        MMToast.showShort("头像上传失败，请重试");
+                    }
+                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
+                }
+            });
+        } else {
+            MMToast.showShort("图片地址无效");
+        }
     }
 
     @Override

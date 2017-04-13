@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.juxin.predestinate.third.TouchImageView;
+import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
 
 import java.util.List;
 

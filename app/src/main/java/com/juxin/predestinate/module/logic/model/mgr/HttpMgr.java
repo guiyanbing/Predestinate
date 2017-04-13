@@ -8,7 +8,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,6 +35,11 @@ public interface HttpMgr extends ModuleBase {
      * 发起普通请求
      */
     HTCallBack request(RequestParam requestParam);
+
+    /**
+     * 文件上传
+     */
+    HTCallBack uploadFile(UrlParam urlParam, Map<String, Object> post_param, Map<String, File> file_param, RequestComplete requestCallback);
 
     /**
      * 文件下载

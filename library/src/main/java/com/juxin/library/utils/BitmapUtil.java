@@ -1,6 +1,5 @@
 package com.juxin.library.utils;
 
-
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -37,14 +36,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
-public final class BitmapUtils {
+/**
+ * bitmap操作工具类
+ */
+public final class BitmapUtil {
 
     private static final int DEFAULT_BLUR_RADIUS = 12;
-
-    private BitmapUtils() {
-    }
-
 
     /**
      * 得到压缩后的Bitmap，主要用于Activity中设置大图背景
@@ -95,6 +94,37 @@ public final class BitmapUtils {
         Matrix matrixRotateLeft = new Matrix();
         matrixRotateLeft.setRotate(angle);
         return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrixRotateLeft, true);
+    }
+
+    /**
+     * 旋转图片
+     *
+     * @param original 原始图片
+     * @param angle    旋转的角度
+     * @return Bitmap
+     */
+    public static Bitmap rotate(Bitmap original, final int angle) {
+        if ((angle % 360) == 0) {
+            return original;
+        }
+
+        final boolean dimensionsChanged = angle == 90 || angle == 270;
+        final int oldWidth = original.getWidth();
+        final int oldHeight = original.getHeight();
+        final int newWidth = dimensionsChanged ? oldHeight : oldWidth;
+        final int newHeight = dimensionsChanged ? oldWidth : oldHeight;
+
+        Bitmap bitmap = Bitmap.createBitmap(newWidth, newHeight, original.getConfig());
+        Canvas canvas = new Canvas(bitmap);
+
+        Matrix matrix = new Matrix();
+        matrix.preTranslate((newWidth - oldWidth) / 2f, (newHeight - oldHeight) / 2f);
+        matrix.postRotate(angle, bitmap.getWidth() / 2f, bitmap.getHeight() / 2);
+        canvas.drawBitmap(original, matrix, null);
+
+        original.recycle();
+
+        return bitmap;
     }
 
     /**
@@ -287,7 +317,7 @@ public final class BitmapUtils {
         return degree;
     }
 
-    public static byte[] generateBitstream(Bitmap src, Bitmap.CompressFormat format, int quality) {
+    public static byte[] generateByteArray(Bitmap src, Bitmap.CompressFormat format, int quality) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         src.compress(format, quality, os);
         return os.toByteArray();
@@ -371,8 +401,7 @@ public final class BitmapUtils {
     }
 
     public static Bitmap clipCircleBitmap(Bitmap bitmap) {
-        if (bitmap == null || bitmap.isRecycled())
-            return null;
+        if (bitmap == null || bitmap.isRecycled()) return null;
 
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -427,8 +456,14 @@ public final class BitmapUtils {
         return output;
     }
 
-    public static Bitmap getBluredBitmap(Bitmap sentBitmap) {
-        return getBluredBitmap(sentBitmap, DEFAULT_BLUR_RADIUS);
+    /**
+     * 获取高斯模糊的bitmap，默认模糊度为12
+     *
+     * @param sentBitmap Bitmap
+     * @return Bitmap
+     */
+    public static Bitmap getBlurredBitmap(Bitmap sentBitmap) {
+        return getBlurredBitmap(sentBitmap, DEFAULT_BLUR_RADIUS);
     }
 
     /**
@@ -438,7 +473,7 @@ public final class BitmapUtils {
      * @param radius     radius
      * @return Bitmap
      */
-    public static Bitmap getBluredBitmap(Bitmap sentBitmap, int radius) {
+    public static Bitmap getBlurredBitmap(Bitmap sentBitmap, int radius) {
 
         // Stack Blur v1.0 from
         // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
@@ -692,7 +727,6 @@ public final class BitmapUtils {
         }
     }
 
-
     private static Bitmap getCompressedBitmap(String path, int maxWidth) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -737,9 +771,16 @@ public final class BitmapUtils {
             return resultBitmap;
         }
         return null;
-
     }
 
+    /**
+     * 根据uri解析得到Bitmap
+     *
+     * @param resolver
+     * @param uri
+     * @param maxDim
+     * @return
+     */
     public static Bitmap decodeImage(final ContentResolver resolver, final Uri uri, final int maxDim) {
         // Get original dimensions
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -800,37 +841,10 @@ public final class BitmapUtils {
         return bitmap;
     }
 
-    public static Bitmap rotate(Bitmap original, final int angle) {
-        if ((angle % 360) == 0) {
-            return original;
-        }
-
-        final boolean dimensionsChanged = angle == 90 || angle == 270;
-        final int oldWidth = original.getWidth();
-        final int oldHeight = original.getHeight();
-        final int newWidth = dimensionsChanged ? oldHeight : oldWidth;
-        final int newHeight = dimensionsChanged ? oldWidth : oldHeight;
-
-        Bitmap bitmap = Bitmap.createBitmap(newWidth, newHeight, original.getConfig());
-        Canvas canvas = new Canvas(bitmap);
-
-        Matrix matrix = new Matrix();
-        matrix.preTranslate((newWidth - oldWidth) / 2f, (newHeight - oldHeight) / 2f);
-        matrix.postRotate(angle, bitmap.getWidth() / 2f, bitmap.getHeight() / 2);
-        canvas.drawBitmap(original, matrix, null);
-
-        original.recycle();
-
-        return bitmap;
-    }
-
     public static Bitmap getImage(Context context, final Uri uri, int maxDimen) {
-        final int size = maxDimen;
-        Bitmap bitmap = decodeImage(context.getContentResolver(), uri, size);
+        Bitmap bitmap = decodeImage(context.getContentResolver(), uri, maxDimen);
         Bitmap rotatedBitmap = rotate(bitmap, getExifOrientation(context.getContentResolver(), uri));
-        if (bitmap != rotatedBitmap) {
-            bitmap.recycle();
-        }
+        if (bitmap != rotatedBitmap && bitmap != null) bitmap.recycle();
         return rotatedBitmap;
     }
 
@@ -1011,9 +1025,8 @@ public final class BitmapUtils {
         options.inJustDecodeBounds = false;
 
         Bitmap bm = BitmapFactory.decodeFile(filePath, options);
-        if (bm == null) {
-            return null;
-        }
+        if (bm == null) return null;
+
         int degree = readPictureDegree(filePath);
         bm = rotateBitmap(bm, degree);
         ByteArrayOutputStream baos = null;
@@ -1022,13 +1035,28 @@ public final class BitmapUtils {
             bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         } finally {
             try {
-                if (baos != null)
-                    baos.close();
+                if (baos != null) baos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return bm;
+    }
+
+    /**
+     * 读取图片并压缩图片，获取小图的存储路径
+     *
+     * @param filePath 原图片地址
+     * @return 压缩之后的小图地址
+     */
+    public static String getSmallBitmapAndSave(String filePath, String storeFolder) {
+        Bitmap smallBitmap = getSmallBitmap(filePath);
+        String savePath = saveBitmap(smallBitmap, storeFolder + UUID.randomUUID().toString() + ".jpg");
+        if (smallBitmap != null && !smallBitmap.isRecycled()) {
+            smallBitmap.recycle();
+            smallBitmap = null;
+        }
+        return savePath;
     }
 
     /**
@@ -1171,52 +1199,47 @@ public final class BitmapUtils {
     }
 
     /**
+     * 从sd卡路径读取bitmap
+     *
+     * @param path 文件本地路径
+     * @return bitmap
+     */
+    public static String imagePathToBase64(String path) {
+        return encodeToBase64(getSmallBitmap(path), Bitmap.CompressFormat.JPEG, 100);
+    }
+
+    /**
      * bitmap转为base64
      */
-    public static String bitmapToBase64(Bitmap bitmap) {
-        String result = null;
-        ByteArrayOutputStream baos = null;
+    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
+        String base64 = "";
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         try {
-            if (bitmap != null) {
-                baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-                baos.flush();
-                baos.close();
-
-                byte[] bitmapBytes = baos.toByteArray();
-                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
-            }
-        } catch (IOException e) {
+            image.compress(compressFormat, quality, byteArrayOS);
+            base64 = Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+            byteArrayOS.close();
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (baos != null) {
-                    baos.flush();
-                    baos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-        return result;
+        return base64.replaceAll("\n", "");
     }
 
     /**
      * base64转为bitmap
      */
-    public static Bitmap base64ToBitmap(String base64Data) {
-        byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedBytes = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
     /**
      * 将bitmap保存到sd卡
      *
      * @param savePath 保存文件路径
-     * @return File
+     * @return 文件保存路径
      */
-    public static File saveBitmap(Bitmap bitmap, String savePath) {
+    public static String saveBitmap(Bitmap bitmap, String savePath) {
+        if (bitmap == null || TextUtils.isEmpty(savePath)) return null;
         File file = new File(savePath);
         FileOutputStream fos = null;
         try {
@@ -1227,12 +1250,84 @@ public final class BitmapUtils {
             e.printStackTrace();
         } finally {
             if (fos != null) try {
-                fos.flush();
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return file;
+        return savePath;
+    }
+
+    /**
+     * 图片等比例压缩
+     *
+     * @param filePath
+     * @param reqWidth  期望的宽
+     * @param reqHeight 期望的高
+     * @return
+     */
+    public static Bitmap decodeSampledBitmap(String filePath, int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = BitmapUtil.calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+    /**
+     * 图片缩放到指定宽高
+     * <p/>
+     * 非等比例压缩，图片会被拉伸
+     *
+     * @param bitmap 源位图对象
+     * @param w      要缩放的宽度
+     * @param h      要缩放的高度
+     * @return 新Bitmap对象
+     */
+    public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        float scaleWidth = ((float) w / width);
+        float scaleHeight = ((float) h / height);
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap newBmp = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+        return newBmp;
+    }
+
+    /**
+     * Try to return the absolute file path from the given Uri  兼容了file:///开头的 和 content://开头的情况
+     *
+     * @param context
+     * @param uri
+     * @return the file path or null
+     */
+    public static String getRealFilePathFromUri(final Context context, final Uri uri) {
+        if (null == uri) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null)
+            data = uri.getPath();
+        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
     }
 }

@@ -11,7 +11,6 @@ import android.widget.EditText;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -21,6 +20,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.CommonUtil;
 
+import java.lang.ref.WeakReference;
+
 /**
  * 找回密码(绑定手机)
  * Created YAO on 2017/3/24.
@@ -28,16 +29,15 @@ import com.juxin.predestinate.module.util.CommonUtil;
 
 public class FindPwdAct extends BaseActivity implements View.OnClickListener, RequestComplete {
     private EditText et_phone, et_code, et_pwd;
-    private Button bt_send_code, bt_submit;
+    private Button bt_send_code;
     private String phone, code, pwd;
     private boolean timerSwitch = true;
     private SendEnableThread sendthread = null;
-    private Handler m_Handler = null;
     public static final int OPEN_FINDPWD = 0x1;
     public static final int OPEN_BINDPHONE = 0x2;
     private int openAct;
     private int getCodetag;
-
+    private final MyHandler m_Handler = new MyHandler(this);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,22 +61,14 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
         et_code = (EditText) findViewById(R.id.et_code);
         et_pwd = (EditText) findViewById(R.id.et_pwd);
         bt_send_code = (Button) findViewById(R.id.bt_send_code);
-        bt_submit = (Button) findViewById(R.id.bt_submit);
-        bt_submit.setOnClickListener(this);
+        findViewById(R.id.bt_submit).setOnClickListener(this);
         bt_send_code.setOnClickListener(this);
-        m_Handler = new Handler() {
-            public final void handleMessage(Message msg) {
-                if (msg.what > 0) {
-                    bt_send_code.setText(String.format(getString(R.string.bt_send_code_press), msg.what));
-
-                } else {
-                    timerSwitch = true;
-                    bt_send_code.setText(getResources().getString(R.string.bt_send_code_normal));
-                    bt_send_code.setEnabled(true);
-                }
-            }
-        };
-        bt_send_code.setEnabled(timerSwitch ? true : false);
+//        m_Handler = new Handler() {
+//            public final void handleMessage(Message msg) {
+//
+//            }
+//        };
+        bt_send_code.setEnabled(timerSwitch);
     }
 
     @Override
@@ -118,7 +110,7 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
 
     private boolean checkPhone() {
         phone = et_phone.getText().toString();
-        if (phone == null || "".equals(phone)) {
+        if ("".equals(phone)) {
             PToast.showShort(getResources().getString(R.string.toast_phone_isnull));
             return false;
         }
@@ -129,16 +121,34 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
         return true;
     }
 
-    public class SendEnableThread extends Thread {
-        private boolean isStop = false;
 
-        public void setStop(boolean isStop) {
-            this.isStop = isStop;
+    private static class MyHandler extends Handler {
+        private WeakReference<FindPwdAct> mActivity;
+
+        MyHandler(FindPwdAct act) {
+            this.mActivity = new WeakReference<>(act);
         }
 
+        @Override
+        public void handleMessage(Message msg) {
+            FindPwdAct act = mActivity.get();
+            if (act != null) {
+                if (msg.what > 0) {
+                    act.bt_send_code.setText(String.format(act.getString(R.string.bt_send_code_press), msg.what));
+
+                } else {
+                    act.timerSwitch = true;
+                    act.bt_send_code.setText(act.getResources().getString(R.string.bt_send_code_normal));
+                    act.bt_send_code.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    private class SendEnableThread extends Thread {
         public void run() {
             int count = 60;
-            while (!isStop && count >= 0) {
+            while (count >= 0) {
                 try {
                     Thread.sleep(1000);
                     m_Handler.sendEmptyMessage(count);
@@ -182,7 +192,6 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
             } else {
                 PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
             }
-
         }
     }
 }

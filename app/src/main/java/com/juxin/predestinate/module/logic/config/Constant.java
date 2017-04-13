@@ -8,6 +8,7 @@ public class Constant {
 
     public static final String NO_HOST = "no_host";
     public static final String HOST_URL = "http://123.59.187.13:10001/";
+    public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
     public static final int MS = 9;                 //消息版本号
@@ -19,8 +20,6 @@ public class Constant {
     public static final Boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
     public static final String SETTING_MESSAGE = "setting_message";             //是否进行消息提示，存储key及默认值
     public static final Boolean SETTING_MESSAGE_DEFAULT = true;
-    public static final String SETTING_STEALTH = "setting_stealth";             //是否隐身，存储key及默认值
-    public static final Boolean SETTING_STEALTH_DEFAULT = true;
     public static final String SETTING_VIBRATION = "setting_vibration";         //是否进行新消息震动提示，存储key及默认值
     public static final Boolean SETTING_VIBRATION_DEFAULT = true;
     public static final String SETTING_VOICE = "setting_voice";                 //是否进行新消息声音提示，存储key及默认值
@@ -32,7 +31,7 @@ public class Constant {
     public static final int INT_AVATAR = 101;       // 头像
     public static final int INT_ALBUM = 102;        // 相册
     public static final int INT_CHAT_PIC = 103;     // 聊天图片
-    public static final int INT_PRAISE_PIC = 104;   // 集赞图片
+    public static final int INT_PRAISE_PIC = 104;   // 集赞图片: 暂时替代动态图片和身份验证
 
     // 语音
     public static final int INT_CHAT_VOICE = 201;   // 聊天语音
@@ -44,4 +43,8 @@ public class Constant {
 
     public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
     public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
+
+    // ------ 文件长存储/短存储 start --------
+    public static final String STR_SHORT_TAG = "oss";    // 短存储图片截取标志
+    public static final String STR_LONG_TAG = "jxfile";  // 长存储图片截取标志
 }

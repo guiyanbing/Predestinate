@@ -12,8 +12,12 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.ui.utils.EmojiFilter;
+
+import java.util.HashMap;
 
 /**
  * 编辑签名页面
@@ -120,7 +124,9 @@ public class UserEditSignAct extends BaseActivity implements TextWatcher, OnClic
 
     private void updateAndClose() {
         String contact = editTxt_sign_content.getText().toString().trim();
-        // TODO 修改个人资料
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put(EditKey.s_key_sign, contact);
+        ModuleMgr.getCenterMgr().updateMyInfo(postParams);
         finish();
     }
 }

@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -166,7 +168,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param intent   跳转intent，默认传null
      */
     public void changeTab(int tab_type, Intent intent) {
-        MMLog.autoDebug("---changeTab--->tab_type：" + tab_type);
+        PLogger.d("---changeTab--->tab_type：" + tab_type);
         if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到消息tab
             switchContent(mailFragment);
         } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到小友tab
@@ -176,5 +178,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到我的tab
             switchContent(userFragment);
         }
+    }
+
+    private long firstExitTime = 0;// 用于判断双击退出时间间隔
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            long doubleExitTime = System.currentTimeMillis();
+            if (doubleExitTime - firstExitTime < 2000) {
+                finish();//假退出，只关闭当前页面
+            } else {
+                firstExitTime = doubleExitTime;
+                PToast.showShort(getResources().getString(R.string.tip_quit));
+            }
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
     }
 }

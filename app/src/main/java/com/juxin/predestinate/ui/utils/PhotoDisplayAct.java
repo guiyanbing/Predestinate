@@ -19,7 +19,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.third.TouchImageView;
+import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;

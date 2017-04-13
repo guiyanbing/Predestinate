@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -35,7 +36,8 @@ import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
-import com.juxin.predestinate.ui.user.paygoods.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
@@ -223,7 +225,7 @@ public class UIShow {
     /**
      * 打开设置页
      */
-    public static void showUserSetAct(Activity context, int resultCode) {
+    public static void showUserSetAct(final Activity context, final int resultCode) {
         context.startActivityForResult(new Intent(context, UsersSetAct.class), resultCode);
     }
 
@@ -243,11 +245,12 @@ public class UIShow {
         ModuleMgr.getCommonMgr().sysTags(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()){
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk()) {
                     Intent intent = new Intent(activity, RecommendFilterAct.class);
                     intent.putExtra("tags", (TagInfoList) response.getBaseData());
-                    activity.startActivityForResult(intent,100);
-                }else {
+                    activity.startActivityForResult(intent, 100);
+                } else {
                     PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                 }
             }
@@ -283,6 +286,13 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivity(intent);
+    }
+
+    /**
+     * 打开VIP开通页
+     */
+    public static void showGoodsVipAct(Context context) {
+        context.startActivity(new Intent(context, GoodsVipAct.class));
     }
 
     /**
@@ -344,5 +354,59 @@ public class UIShow {
             updateDialog.setData(appUpdate);
             updateDialog.showDialog(activity);
         }
+    }
+
+    /**
+     * 打开私信聊天内容页
+     *
+     * @param mContext  上下文
+     * @param whisperID 私聊ID
+     * @param name      名称（可有可无）
+     */
+    public static void showPrivateChatAct(Context mContext, long whisperID, String name) {
+        showPrivateChatAct(mContext, whisperID, name, -1, null);
+    }
+
+    /**
+     * 打开私信聊天内容页
+     *
+     * @param mContext  上下文
+     * @param whisperID 私聊ID
+     * @param name      名称（可有可无）
+     * @param replyMsg  回复消息。一般情况是null
+     */
+    public static void showPrivateChatAct(Context mContext, long whisperID, String name, String replyMsg) {
+        showPrivateChatAct(mContext, whisperID, name, -1, replyMsg);
+    }
+
+    /**
+     * 打开私信聊天内容页
+     *
+     * @param mContext  上下文
+     * @param whisperID 私聊ID
+     * @param name      名称（可有可无）
+     * @param kf_id     是否机器人（可有可无）
+     */
+    public static void showPrivateChatAct(Context mContext, long whisperID, String name, int kf_id) {
+        showPrivateChatAct(mContext, whisperID, name, kf_id, null);
+    }
+
+    /**
+     * 打开私信聊天内容页
+     *
+     * @param mContext  上下文
+     * @param whisperID 私聊ID
+     * @param name      名称（可有可无）
+     * @param kf_id     是否机器人（可有可无）
+     * @param replyMsg  回复消息。一般情况是null
+     */
+    public static void showPrivateChatAct(final Context mContext, final long whisperID, final String name, final int kf_id, final String replyMsg) {
+        Intent intent = new Intent(mContext, PrivateChatAct.class);
+        intent.putExtra("whisperID", whisperID);
+        intent.putExtra("name", name);
+        if (replyMsg != null)
+            intent.putExtra("replyMsg", replyMsg);
+        intent.putExtra("kf_id", kf_id);
+        mContext.startActivity(intent);
     }
 }
