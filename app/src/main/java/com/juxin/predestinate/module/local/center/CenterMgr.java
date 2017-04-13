@@ -217,6 +217,17 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 批量获取用户简略信息
+     */
+    public void reqUserSimpleList(final String[] uids, RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, new HashMap<String, Object>() {
+            {
+                put("uidlist", uids);
+            }
+        }, complete);
+    }
+
+    /**
      * 修改个人信息
      */
     public void updateMyInfo(final HashMap<String, Object> params) {
