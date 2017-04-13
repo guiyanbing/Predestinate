@@ -24,6 +24,8 @@ public class UserBasic extends BaseData implements Parcelable {
     // 地址
     private String province;      // 完整省份
     private String city;          // 完整城市
+    private String provinceName;  // 展示省份
+    private String cityName;      // 展示城市
     private int scity;            // 城市代码
     private int sprovince;        // 省份代码
 
@@ -67,6 +69,8 @@ public class UserBasic extends BaseData implements Parcelable {
         this.setSprovince(pid);
         this.setProvince(AreaConfig.getInstance().getProvinceByID(pid));
         this.setCity(AreaConfig.getInstance().getCityByID(cit));
+        this.setProvinceName(AreaConfig.getInstance().getProvinceNameByID(pid));
+        this.setCityName(AreaConfig.getInstance().getCityNameByID(cit));
     }
 
     public long getUid() {
@@ -126,9 +130,25 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     public String getAddress() {
-        String _province = (TextUtils.isEmpty(province) || "不限".equals(province)) ? "" : province;
-        String _city = (TextUtils.isEmpty(city) || "不限".equals(city)) ? "" : " " + city;
+        String _province = (TextUtils.isEmpty(provinceName) || "不限".equals(provinceName)) ? "" : provinceName;
+        String _city = (TextUtils.isEmpty(cityName) || "不限".equals(cityName)) ? "" : " " + cityName;
         return _province + _city;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public void setProvince(String province) {

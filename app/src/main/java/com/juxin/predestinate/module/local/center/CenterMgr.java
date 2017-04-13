@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.center;
 
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -7,6 +8,7 @@ import android.widget.EditText;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -16,6 +18,7 @@ import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -63,6 +66,10 @@ public class CenterMgr implements ModuleBase, PObserver {
                 break;
             case MsgType.MT_App_CoreService://socket已连接，登录
                 IMProxy.getInstance().login();
+                break;
+
+            case MsgType.MT_Update_MyInfo:
+                reqMyInfo();
                 break;
         }
     }
@@ -193,6 +200,10 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if (response.isOk()) {
                     userDetail = (UserDetail) response.getBaseData();
 
+                    if (!response.isCache()){
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
+                    }
+
                     // 持久化必须放在这里，不能放在UserDetail解析里
                     try {
                         JSONObject json = new JSONObject(response.getResponseString());
@@ -225,7 +236,9 @@ public class CenterMgr implements ModuleBase, PObserver {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     reqMyInfo();
+                    return;
                 }
+                PToast.showShort("修改失败");
             }
         });
     }
