@@ -1,7 +1,5 @@
 package com.juxin.predestinate.module.local.center;
 
-import android.support.v4.app.FragmentActivity;
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,7 +20,6 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.bean.file.UpLoadResult;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -32,7 +29,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.module.util.CommonUtil;
-import com.juxin.predestinate.ui.start.FindPwdAct;
 
 import org.json.JSONException;
 import org.json.JSONObject;
