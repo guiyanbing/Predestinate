@@ -5,7 +5,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 
@@ -14,7 +13,7 @@ import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
  * xiaoyouFragment的适配器
  * Created by zm on 2017/3/25.
  */
-public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendInfo> {
+public class FriendsAdapter extends BaseFriendsAdapter<FriendsList.FriendInfo> {
 
     @Override
     public int[] getItemLayouts() {
@@ -31,7 +30,6 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
             vh.friend_item_txv_name.setText(info.getNickname() + "");
             vh.friend_item_txv_describe.setText(info.getDescribe() + "");
             vh.friend_item_txv_title.setVisibility(View.GONE);
-            //            Log.e("TTTTTTT",info.getNickname()+"||");
         } else if(info.getType() == 0){
             // 根据position获取分类的首字母的Char ascii值
             int section = getSectionForPosition(position);
@@ -44,12 +42,6 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
                 vh.friend_item_txv_title.setVisibility(View.GONE);
             }
 
-//            if ((position > 0 && getItem(position-1).getType() == 1) || position == 0){
-//                vh.friend_item_txv_title.setVisibility(View.VISIBLE);
-//                vh.friend_item_txv_title.setText(info.getSortKey());
-//            }else {
-//                vh.friend_item_txv_title.setVisibility(View.GONE);
-//            }
             vh.showLately();
             //friend_item_txv_intimacy 根据性别设置提示文字
             if (info.getGender() == 1){
@@ -57,7 +49,7 @@ public class FriendsAdapter extends BaseRecyclerViewAdapter<FriendsList.FriendIn
                 vh.friend_item_txv_num.setText(info.getIntimacy()+"");
             }else {
                 vh.friend_item_txv_intimacy.setText(R.string.income);
-                vh.friend_item_txv_num.setText(info.getIntimacy()+"元");
+                vh.friend_item_txv_num.setText(info.getIncome()+"元");
             }
             //处理list条目
             //            vh.friend_item_img_head;

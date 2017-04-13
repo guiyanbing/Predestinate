@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -206,8 +205,9 @@ public class UIShow {
     /**
      * 打开添加联系人页面
      */
-    public static void showSelectContactAct(FragmentActivity activity) {
+    public static void showSelectContactAct(long tab,FragmentActivity activity) {
         Intent intent = new Intent(activity, SelectContactActivity.class);
+        intent.putExtra("tab",tab);
         activity.startActivity(intent);
     }
 

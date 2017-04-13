@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +18,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.third.pinyin.Pinyin;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
+import com.juxin.predestinate.ui.xiaoyou.adapter.BaseFriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.adapter.FriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.BaseFriendInfo;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
@@ -41,9 +41,9 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
     private LinearLayout llSeach;
     private TextView txvTile;
     private RecyclerView mRecyclerView;
-    private FriendsAdapter mFriendsAdapter;
+    private BaseFriendsAdapter mFriendsAdapter;
 
-    private List<FriendsList.FriendInfo> arrSearchList;//数据
+    private List<BaseFriendInfo> arrSearchList;//数据
     private HTCallBack mHTCallBack;
     private OnTextChangedListener mOnTextChangedListener;//监听
 
@@ -79,7 +79,18 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mRecyclerView.setAdapter(mFriendsAdapter);
+
+        //测试
+        mRecyclerView.setVisibility(View.GONE);
         initSearchView();
+    }
+
+    public void setAdapter(BaseFriendsAdapter adapter){
+        this.mFriendsAdapter = adapter;
+        mRecyclerView.setAdapter(mFriendsAdapter);
+        arrSearchList.clear();
+        arrSearchList.addAll(adapter.getList());
+        toPinYin();
     }
     /**
      * 初始化搜索框
@@ -122,52 +133,54 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                //判断是当前layoutManager是否为LinearLayoutManager
-                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-                if (layoutManager instanceof LinearLayoutManager) {
-                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
-                    //获取最后一个可见view的位置
-//                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
-                    //获取第一个可见view的位置
-                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
-//                    Log.e("TTTTTTTTTTTT", "dx=" + dx + ";dy=" + dy + "||||" + mRecyclerView.getTop() + "|||" + firstItemPosition);
+                if (dy != 0) {
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    //判断是当前layoutManager是否为LinearLayoutManager
+                    // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                        //获取最后一个可见view的位置
+                        //                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+                        //获取第一个可见view的位置
+                        int firstItemPosition = linearManager.findFirstVisibleItemPosition();
 
-                    int section = getSectionForPosition(firstItemPosition);
-                    int nextSection = getSectionForPosition(firstItemPosition + 1);
-                    int nextSecPosition = getPositionForSection(+nextSection);
+                        int section = getSectionForPosition(firstItemPosition);
+                        int nextSection = getSectionForPosition(firstItemPosition + 1);
+                        int nextSecPosition = getPositionForSection(+nextSection);
+//                        Log.e("TTTTTTTTTTTT", "dx=" + dx + ";dy=" + dy + "||||" + /*mRecyclerView.getTop() + "|||"*/ +firstItemPosition + "|||" + lastFirstVisibleItem/*+"||"+section+"||"+nextSection+"||"+nextSecPosition+"||"+getPositionForSection(section)*/);
 
-                    if (firstItemPosition != lastFirstVisibleItem) {
-                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) llSeach.getLayoutParams();
-                        params.topMargin = 0;
-                        llSeach.setLayoutParams(params);
-                        if (arrSearchList.size() == 1) {
-                            llSeach.setVisibility(View.GONE);
+                        if (firstItemPosition != lastFirstVisibleItem) {
+                            if (getPositionForSection(section) != -1) {
+                                showTitleLayout(arrSearchList.size() == 0 ? "A" : arrSearchList.get(getPositionForSection(section)).getSortKey());
+                            }
+                            MarginLayoutParams params = (MarginLayoutParams) llSeach.getLayoutParams();
+                            params.topMargin = 0;
+                            llSeach.setLayoutParams(params);
+                            //                        if (arrSearchList.size() == 1) {
+                            //                            llSeach.setVisibility(View.GONE);
+                            //                        }
+
                         }
-
-                        if (getPositionForSection(section) != -1) {
-                            showTitleLayout(arrSearchList.size() == 0 ? "A" : arrSearchList.get(getPositionForSection(section)).getSortKey());
-                        }
-                    }
-                    if (nextSecPosition == firstItemPosition + 1) {
-                        View childView = recyclerView.getChildAt(0);
-                        if (childView != null) {
-                            int titleHeight = llSeach.getHeight();
-                            int bottom = childView.getBottom();
-                            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) llSeach.getLayoutParams();
-                            if (bottom < titleHeight) {
-                                float pushedDistance = bottom - titleHeight;
-                                params.topMargin = (int) pushedDistance;
-                                llSeach.setLayoutParams(params);
-                            } else {
-                                if (params.topMargin != 0) {
-                                    params.topMargin = 0;
+                        if (nextSecPosition == firstItemPosition + 1) {
+                            View childView = recyclerView.getChildAt(0);
+                            if (childView != null) {
+                                int titleHeight = llSeach.getHeight();
+                                int bottom = childView.getBottom();
+                                MarginLayoutParams params = (MarginLayoutParams) llSeach.getLayoutParams();
+                                if (bottom < titleHeight) {
+                                    float pushedDistance = bottom - titleHeight;
+                                    params.topMargin = (int) pushedDistance;
                                     llSeach.setLayoutParams(params);
+                                } else {
+                                    if (params.topMargin != 0) {
+                                        params.topMargin = 0;
+                                        llSeach.setLayoutParams(params);
+                                    }
                                 }
                             }
                         }
+                        lastFirstVisibleItem = firstItemPosition;
                     }
-                    lastFirstVisibleItem = firstItemPosition;
                 }
             }
 
@@ -195,6 +208,10 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
         txvNoFriend.setVisibility(View.GONE);
         llSeach.setVisibility(View.VISIBLE);
         txvTile.setText(title + "");
+    }
+
+    public void setListVisibility(int visibility){
+        mRecyclerView.setVisibility(visibility);
     }
 
     /**
@@ -274,7 +291,7 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
             info2.setNickname("不是"+i);
             arrSearchList.add(info2);
         }
-        mFriendsAdapter.setList(arrSearchList);
+//        mFriendsAdapter.setList(arrSearchList);
     }
 
     public void toPinYin(){

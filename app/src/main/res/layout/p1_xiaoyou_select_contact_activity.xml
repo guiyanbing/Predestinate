@@ -10,8 +10,8 @@
         android:id="@+id/xiaoyou_sele_csv_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/xiaoyou_sele_lv_list"
+    <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
+        android:id="@+id/xiaoyou_sele_crlv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

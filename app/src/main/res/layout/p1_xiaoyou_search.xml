@@ -22,6 +22,7 @@
             android:hint="@string/search_tip"
             android:minHeight="47dp"
             android:paddingLeft="@dimen/px17_dp"
+            android:imeOptions="actionDone"
             android:singleLine="true"/>
 
         <EditText
@@ -30,6 +31,7 @@
             android:visibility="invisible"/>
     </RelativeLayout>
 
+    <!--<View-->
 
     <TextView
         android:id="@+id/search_txv_title_no_friends"

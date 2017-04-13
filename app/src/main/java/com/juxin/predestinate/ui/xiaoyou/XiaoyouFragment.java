@@ -44,18 +44,21 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
     private XRecyclerView lvList;
     private CustomSearchView mCustomSearchView;//自定义的搜索控件
     private FriendsAdapter mFriendsAdapter;
-    private int page = 1;//当前页
+    private int page = 0;//当前页
     private int pageLimits = 20;//一页的条数
+    private FriendsUtils mFriendsUtils;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.xiaoyou_fragment);
+        mFriendsUtils = new FriendsUtils();
+        mFriendsUtils.reqFriendsList();
         initView();
-        ModuleMgr.getCommonMgr().getLatestInteractiveList(page,pageLimits,this);
+        reqFriendList();
         return getContentView();
     }
-
+    //初始化
     private void initView(){
         setTitle("小友");
         crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_frag_crlv_list);
@@ -65,8 +68,6 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
         lvList.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mCustomSearchView = (CustomSearchView) findViewById(R.id.xiaoyou_frag_csv_search);
-        //        mCustomSearchView = new CustomSearchView(getContext());
-//        lvList.addHeaderView(mCustomSearchView);
         mCustomSearchView.setOnTextChangedListener(this);
         initDataHead();
         arrDatas = new ArrayList<>();
@@ -75,6 +76,10 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
         mFriendsAdapter.setList(arrDatas);
         lvList.setAdapter(mFriendsAdapter);
         initListener();
+    }
+    //请求互动好友
+    private void reqFriendList(){
+        ModuleMgr.getCommonMgr().getLatestInteractiveList(page,pageLimits,this);
     }
 
     private void initListener(){
@@ -127,6 +132,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
         if (arrFriends != null){
             arrDatas.addAll(arrFriends);
         }
+        mFriendsAdapter.setList(arrDatas);
     }
 
     @Override
@@ -144,7 +150,12 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-        Log.e("TTTTTTTTTTGG",response.getResponseString()+"|||");
+//        crlvList.s
+        testData();
+        crlvList.showXrecyclerView();
+        lvList.refreshComplete();
+        lvList.loadMoreComplete();
+        Log.e("TTTTTTTTTTGG",response.getResponseString()+"|||"+page);
         if (response.isOk()){//请求返回成功
             FriendsList lists = (FriendsList) response.getBaseData();
             List<FriendsList.FriendInfo> friendInfos = lists.getArr_frends();
@@ -163,15 +174,52 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
             crlvList.showNetError();
             MMToast.showShort("请求失败，请检查您的网络");
         }
+        crlvList.showXrecyclerView();
     }
 
     @Override
     public void onRefresh() {//刷新
         page = 0;
+        reqFriendList();
     }
 
     @Override
     public void onLoadMore() {//加载更多
         page++;
+        reqFriendList();
+    }
+
+    private void testData(){
+        if (arrFriends == null){
+            arrFriends = new ArrayList<>();
+        }
+        if (page == 0 ){
+            arrFriends.clear();
+            arrDatas.clear();
+            addDataBack();
+        }
+        for (int i = 0 ;i < 5 ;i++){
+            FriendsList.FriendInfo info = new FriendsList.FriendInfo();
+            info.setNickname("小茜" + page + i);
+            info.setGender(1);
+            info.setIntimacy(i * i);
+            info.setIncome(i * i * i);
+
+            FriendsList.FriendInfo info1 = new FriendsList.FriendInfo();
+            info1.setNickname("冷暖自知" + page + i);
+            info1.setGender(2);
+            info1.setIntimacy(i * i);
+            info1.setIncome(i * i * i);
+
+            FriendsList.FriendInfo info2 = new FriendsList.FriendInfo();
+            info2.setNickname("妮娜" + page + i);
+            info2.setGender(2);
+            info2.setIntimacy(i * i);
+            info2.setIncome(i * i * i);
+            arrDatas.add(info);
+            arrDatas.add(info1);
+            arrDatas.add(info2);
+        }
+        Log.e("TTTTTTTTTTTKKK","执行了此方法");
     }
 }

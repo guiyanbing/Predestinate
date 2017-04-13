@@ -5,11 +5,10 @@ import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.net.BaseData;
-import com.juxin.predestinate.bean.recommend.RecommendPeople;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
-import com.juxin.predestinate.bean.recommend.TagInfo;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.start.UserReg;
+import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.Map;
@@ -50,7 +49,7 @@ public enum UrlParam {
     //好友标签分组成员
     reqTagGroupMember("/s/friend/TagGroupMember", SimpleFriendsList.class),
     //增加自己的好友的 tag
-    reqAddFriendTag("/s/friend/AddFriendTag", SimpleFriendsList.class),
+    reqAddFriendTag("/s/friend/AddFriendTag", null),
     //添加标签分组
     reqAddTagGroup("/s/friend/AddTagGroup", SimpleFriendsList.class),
     //添加好友标签分组成员
@@ -68,7 +67,7 @@ public enum UrlParam {
     //修改标签分组
     reqModifyTagGroup("/s/friend/ModifyTagGroup", SimpleFriendsList.class),
     //好友标签分组
-    reqTagGroup("/s/friend/TagGroup", SimpleFriendsList.class),
+    reqTagGroup("/s/friend/TagGroup", LabelsList.class),
 
     // 最后一个，占位
     LastUrlParam("");

@@ -1,7 +1,9 @@
 package com.juxin.predestinate.module.local.common;
 
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
@@ -12,8 +14,11 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.sayhi.SayHelloDialog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 通用，新版本
@@ -179,7 +184,14 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroup(RequestComplete complete) {
+    public void addTagGroup(List<String> tag_name,List<Long> uid_list,RequestComplete complete) {
+        Gson gson = new Gson();
+        String names = gson.toJson(tag_name);
+        String list = gson.toJson(uid_list);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tag_name",names );// 标签名字
+        postParams.put("uid_list", list);// 标签成员
+//        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddFriendTag, null, complete);
     }
 
@@ -188,7 +200,13 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroupMember(RequestComplete complete) {
+    public void addTagGroupMember(long tag,Set<Long> uids,RequestComplete complete) {
+        Gson gson = new Gson();
+        String list = gson.toJson(uids);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tag",tag );// 标签id
+        postParams.put("uids", list);// 要删除的uid
+        Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, null, complete);
     }
 
@@ -206,8 +224,10 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void delTagGroup(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroup, null, complete);
+    public void delTagGroup(int tag_id,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tag_id",tag_id );// tag_id
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroup, postParams, complete);
     }
 
     /**
@@ -215,7 +235,12 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void delTagGroupMember(RequestComplete complete) {
+    public void delTagGroupMember(int tag,List<Long> uids,RequestComplete complete) {
+        Gson gson = new Gson();
+        String list = gson.toJson(uids);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tag",tag );// 标签id
+        postParams.put("uids", list);// 要删除的uid
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroupMember, null, complete);
     }
 
@@ -245,7 +270,10 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void ModifyTagGroup(RequestComplete complete) {
+    public void ModifyTagGroup(int tag_id,String name,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tag_id",tag_id );// 标签 ID
+        postParams.put("name", name);// 新的分组名字
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqModifyTagGroup, null, complete);
     }
 
@@ -256,5 +284,20 @@ public class CommonMgr implements ModuleBase {
      */
     public void getTagGroupList(RequestComplete complete) {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqTagGroup, null, complete);
+    }
+
+    /**
+     * 批量获取用户简略信息
+     *
+     * @param complete
+     */
+    public void getUserSimpleList(ArrayList<String> userLists,RequestComplete complete) {
+//        Gson gson = new Gson();
+//        String uidlist = gson.toJson(userLists);
+        String[] uidlist = userLists.toArray(new String[userLists.size()]);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uidlist",uidlist );// uids
+        Log.e("TTTTTNNN",uidlist+"");
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
     }
 }
