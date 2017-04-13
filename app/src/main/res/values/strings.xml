@@ -10,7 +10,6 @@
     <string name="base_title_back">返回</string>
 
     <!--设置-->
-    <string name="switch_acceptmsg">接受新消息通知</string>
     <string name="switch_stealth">一键隐身</string>
     <string name="switch_shaker">震动提醒</string>
     <string name="switch_voice">声音提醒</string>
@@ -27,6 +26,7 @@
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
     <string name="contact_kefu">联系客服</string>
+    <string name="toast_update_ok">修改成功</string>
     <!-- 注册/个人中心 -->
     <string name="str_not_filled">未填写</string>
     <string name="upload_head_man">上传真实头像\n非真头像不会得到推荐</string>

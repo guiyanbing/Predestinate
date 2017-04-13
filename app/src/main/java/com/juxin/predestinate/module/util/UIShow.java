@@ -223,7 +223,7 @@ public class UIShow {
     /**
      * 打开设置页
      */
-    public static void showUserSetAct(Activity context, int resultCode) {
+    public static void showUserSetAct(final Activity context, final int resultCode) {
         context.startActivityForResult(new Intent(context, UsersSetAct.class), resultCode);
     }
 
@@ -244,11 +244,11 @@ public class UIShow {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 LoadingDialog.closeLoadingDialog();
-                if (response.isOk()){
+                if (response.isOk()) {
                     Intent intent = new Intent(activity, RecommendFilterAct.class);
                     intent.putExtra("tags", (TagInfoList) response.getBaseData());
-                    activity.startActivityForResult(intent,100);
-                }else {
+                    activity.startActivityForResult(intent, 100);
+                } else {
                     PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                 }
             }

@@ -8,6 +8,7 @@ import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.UserReg;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
@@ -26,6 +27,8 @@ public enum UrlParam {
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
+    getSetting("s/uinfo/GetSetting", Setting.class,true),//获取设置信息
+    updateSetting("s/uinfo/UpdateSetting",true),//设置信息修改
     //检查软件升级
     checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
 
