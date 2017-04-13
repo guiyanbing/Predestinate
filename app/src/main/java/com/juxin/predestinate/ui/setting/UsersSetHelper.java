@@ -7,7 +7,11 @@ import android.widget.SeekBar;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+
+import java.util.HashMap;
 
 /**
  * Created YAO on 2017/3/29.
@@ -38,7 +42,7 @@ public class UsersSetHelper {
         });
     }
 
-    interface OnHideInputListener{
+    interface OnHideInputListener {
         void clickOutSide();
     }
 
@@ -51,7 +55,7 @@ public class UsersSetHelper {
      * @param event
      * @return
      */
-    public static boolean isShouldHideInput(View v, MotionEvent event, OnHideInputListener listener ) {
+    public static boolean isShouldHideInput(View v, MotionEvent event, OnHideInputListener listener) {
         if (v != null && (v instanceof EditText)) {
             int[] leftTop = {0, 0};
             //获取输入框当前的location位置
@@ -71,23 +75,19 @@ public class UsersSetHelper {
         return false;
     }
 
-    static Boolean SEEKBAR_ISON;
-
-    interface OnSeekBarListener {
-        void seekBarChange(boolean thum);
-    }
+    static Boolean SEEKBAR_ON;
 
     /**
      * 设置滑动条
+     *
      * @param seekBar
-     * @param onSeekBarListener
      */
-    public static void setSeekBar(final SeekBar seekBar, final OnSeekBarListener onSeekBarListener) {
-        if (PSP.getInstance().getBoolean(Constant.SETTING_STEALTH, Constant.SETTING_STEALTH_DEFAULT)) {
-            SEEKBAR_ISON = true;
+    public static void setSeekBar(final SeekBar seekBar) {
+        if (ModuleMgr.getCenterMgr().getSetting().isStealth()) {
+            SEEKBAR_ON = true;
             seekBar.setProgress(100);
         } else {
-            SEEKBAR_ISON = false;
+            SEEKBAR_ON = false;
             seekBar.setProgress(0);
         }
         seekBar.setOnTouchListener(new View.OnTouchListener() {
@@ -96,16 +96,19 @@ public class UsersSetHelper {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     switch (v.getId()) {
                         case R.id.sb_stealth://一键隐身
-                            if (SEEKBAR_ISON) {
-                                SEEKBAR_ISON = false;
-                                PSP.getInstance().put(Constant.SETTING_STEALTH, SEEKBAR_ISON);
+                            HashMap<String,Object> post_param= new HashMap<>();
+                            if (SEEKBAR_ON) {
+                                SEEKBAR_ON = false;
+                                ModuleMgr.getCenterMgr().getSetting().setStealth(1);
                                 seekBar.setProgress(0);
+                                post_param.put("stealth",1);
                             } else {
-                                SEEKBAR_ISON = true;
-                                PSP.getInstance().put(Constant.SETTING_STEALTH, SEEKBAR_ISON);
+                                SEEKBAR_ON = true;
+                                ModuleMgr.getCenterMgr().getSetting().setStealth(0);
                                 seekBar.setProgress(100);
+                                post_param.put("stealth",0);
                             }
-                            onSeekBarListener.seekBarChange(SEEKBAR_ISON);
+                            ModuleMgr.getCenterMgr().updateSetting(post_param);
                             break;
                     }
                 }

@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -223,7 +222,7 @@ public class UIShow {
     /**
      * 打开设置页
      */
-    public static void showUserSetAct(Activity context, int resultCode) {
+    public static void showUserSetAct(final Activity context, final int resultCode) {
         context.startActivityForResult(new Intent(context, UsersSetAct.class), resultCode);
     }
 
@@ -244,11 +243,11 @@ public class UIShow {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 LoadingDialog.closeLoadingDialog();
-                if (response.isOk()){
+                if (response.isOk()) {
                     Intent intent = new Intent(activity, RecommendFilterAct.class);
                     intent.putExtra("tags", (TagInfoList) response.getBaseData());
-                    activity.startActivityForResult(intent,100);
-                }else {
+                    activity.startActivityForResult(intent, 100);
+                } else {
                     PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                 }
             }

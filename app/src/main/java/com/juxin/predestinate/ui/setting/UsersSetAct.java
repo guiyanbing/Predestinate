@@ -25,6 +25,7 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * 设置
@@ -37,7 +38,6 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
     private EditText et_voice_price, et_video_price;
     private SeekBar sb_stealth;
     // false是开true是开
-    private Boolean Stealth_Status;
 
     private String old_voice_price, old_video_price;
     private boolean voiceChange, videoChange;
@@ -86,20 +86,11 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
         sb_stealth = (SeekBar) findViewById(R.id.sb_stealth);
         et_voice_price = (EditText) findViewById(R.id.et_voice_price);
         et_video_price = (EditText) findViewById(R.id.et_video_price);
-        et_voice_price.setText("10");//TODO 获取当前设置的价格
-        et_video_price.setText("20");
         UsersSetHelper.setCursorRight(et_voice_price);
         UsersSetHelper.setCursorRight(et_video_price);
-        UsersSetHelper.setSeekBar(sb_stealth, new UsersSetHelper.OnSeekBarListener() {
-            @Override
-            public void seekBarChange(boolean thum) {
-                if (thum) {
-                    //隐身
-                } else {
-                    //非隐身
-                }
-            }
-        });
+        et_voice_price.setText("" + ModuleMgr.getCenterMgr().getSetting().getVoice_price());
+        et_video_price.setText("" + ModuleMgr.getCenterMgr().getSetting().getVideo_price());
+        UsersSetHelper.setSeekBar(sb_stealth);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -154,8 +145,8 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.rl_feedback://意见反馈客服
 //                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), MailSpecialID.customerService.getSpecialIDName());
-//                UIShow.showFeedBackAct(this);
-                UIShow.showRecommendAct(this);//TODO 推荐的人测试
+                UIShow.showFeedBackAct(this);
+//                UIShow.showRecommendAct(this);//TODO 推荐的人测试
                 break;
         }
     }
@@ -238,18 +229,6 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    //价格更新请求
-    private void priceUpdate() {
-        if (voiceChange) {
-            PToast.showShort("更新语音价格");
-            voiceChange = false;
-        }
-        if (videoChange) {
-            PToast.showShort("更新视频价格");
-            videoChange = false;
-        }
-    }
-
     //价格输入规范检查
     private void checkInput() {
         if (TextUtils.isEmpty(et_voice_price.getText()) || Integer.parseInt(et_voice_price.getText().toString()) < 10) {
@@ -258,6 +237,29 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
         }
         if (TextUtils.isEmpty(et_video_price.getText()) || Integer.parseInt(et_video_price.getText().toString()) < 20) {
             et_video_price.setText(old_video_price);
+            videoChange = false;
+        }
+    }
+
+    //价格更新请求
+    private void priceUpdate() {
+        if (voiceChange) {
+            //更新语音价格
+            int voice = Integer.parseInt(et_voice_price.getText().toString());
+            HashMap<String, Object> post_param = new HashMap<>();
+            post_param.put("voice_price", voice);
+            ModuleMgr.getCenterMgr().getSetting().setVoice_price(voice);
+            ModuleMgr.getCenterMgr().updateSetting(post_param);
+            //TODO
+            voiceChange = false;
+        }
+        if (videoChange) {
+            //更新视频价格
+            int video = Integer.parseInt(et_video_price.getText().toString());
+            HashMap<String,Object> post_param= new HashMap<>();
+            post_param.put("video_price",video);
+            ModuleMgr.getCenterMgr().getSetting().setVideo_price(video);
+            ModuleMgr.getCenterMgr().updateSetting(post_param);
             videoChange = false;
         }
     }

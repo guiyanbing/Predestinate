@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.center;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -7,18 +8,23 @@ import android.widget.EditText;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.StringUtils;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.settting.Setting;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 
 import org.json.JSONException;
@@ -32,7 +38,9 @@ import java.util.HashMap;
 public class CenterMgr implements ModuleBase, PObserver {
 
     private static final String INFO_SAVE_KEY = "INFO_SAVE_KEY"; // 本地化个人资料key
+    private static final String SETTING_SAVE_KEY = "SETTING_SAVE_KEY"; // 本地化设置key
     private UserDetail userDetail = null;
+    private Setting setting = null;
 
     @Override
     public void init() {
@@ -51,10 +59,12 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if ((Boolean) value) {
                     IMProxy.getInstance().connect();//登录成功之后连接socket
                     reqMyInfo();// 请求个人资料
+                    reqSetting();//请求设置信息
                 } else {
                     IMProxy.getInstance().logout();//退出登录的时候退出socket
                     userDetail = null;
                     setMyInfo(null);
+                    putSettingPsp(null);
                 }
                 break;
             case MsgType.MT_App_CoreService://socket已连接，登录
@@ -113,8 +123,9 @@ public class CenterMgr implements ModuleBase, PObserver {
 
     /**
      * 意见反馈
+     *
      * @param contract 联系方式
-     * @param views 意见
+     * @param views    意见
      * @param complete
      */
     public void feedBack(String contract, String views, RequestComplete complete) {
@@ -223,6 +234,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      * <p>
      * 短存储： oss
      * 长存储： jxfile
+     *
      * @param picUrl
      * @return
      */
@@ -234,4 +246,62 @@ public class CenterMgr implements ModuleBase, PObserver {
         }
         return StringUtils.getAfterWithFlag(picUrl, tag);
     }
+
+    /*设置信息*/
+
+    /**
+     * 获取系统设置信息
+     */
+    public void reqSetting() {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getSetting, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    setting = (Setting) response.getBaseData();
+                    try {
+                        JSONObject json = new JSONObject(response.getResponseString());
+                        putSettingPsp(json.optString("res"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+    /**
+     * 更新系统设置信息
+     */
+    public void updateSetting(HashMap<String,Object> post_param) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateSetting, post_param, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    PToast.showShort(App.context.getResources().getString(R.string.toast_update_ok));
+                }else{
+                    PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                }
+            }
+        });
+    }
+    /**
+     * 获取我的设置信息
+     */
+    public Setting getSetting() {
+        if (setting == null) {
+            setting = new Setting();
+            String result = PSP.getInstance().getString(SETTING_SAVE_KEY, "");
+            if (!TextUtils.isEmpty(result)) {
+                setting.parseJson(result);
+            }
+        }
+        return setting;
+    }
+
+    /**
+     * 保存设置信息Json串到SP
+     */
+    private void putSettingPsp(String resultStr) {
+        PSP.getInstance().put(SETTING_SAVE_KEY, resultStr);
+    }
+
 }

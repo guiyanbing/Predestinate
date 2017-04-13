@@ -154,5 +154,4 @@ public class CommonMgr implements ModuleBase {
         post_param.put("limit", 20);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysTags, post_param, complete);
     }
-
 }
