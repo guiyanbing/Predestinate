@@ -538,6 +538,12 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!--修改弹框 EditPopupWindow-->
+    <style name="AnimLeft" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/push_left_in</item>
+        <item name="android:windowExitAnimation">@anim/push_left_out</item>
+    </style>
+
     <style name="button_rank_gift_dialog" parent="button_middle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

@@ -93,9 +93,13 @@
     <string name="user_info_edit_name">昵称修改</string>
     <string name="user_info_edit_sign">个性签名</string>
     <string name="user_info_edit_limit">%1$d/%2$d</string>
+    <string name="user_info_edit_suc">修改成功</string>
     <string name="user_info_put_name">请输入昵称</string>
     <string name="user_info_put_sign">请输入个性签名</string>
     <string name="user_info_show_all">已经显示全部</string>
+    <string name="user_info_avatar_suc">上传成功</string>
+    <string name="user_info_avatar_fail">上传失败</string>
+    <string name="user_info_avatar_upload">正在上传头像</string>
 
     <string name="goods_diamond_title">钻石充值</string>
     <string name="goods_diamond_remain">余额</string>
@@ -143,6 +147,7 @@
     <string name="tip_data_empty">没有数据，客官等会再来吧！</string>
     <string name="tip_click_refresh">点击刷新</string>
     <string name="tip_is_loading">正在努力加载中...</string>
+    <string name="tip_quit">再按一次退出小友</string>
 
     <!--activity标题-->
     <string name="title_right_submit">提交</string>

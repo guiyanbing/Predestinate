@@ -8,14 +8,19 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ChineseFilter;
@@ -27,9 +32,9 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +58,7 @@ public class Invoker {
 
     public static String JSCMD_cache_uid = "";//缓存的访问uid
 
+    private Gson gson = new Gson();
     private WebAppInterface appInterface = new WebAppInterface(App.context, null);
     private Object webView;
 
@@ -230,34 +236,43 @@ public class Invoker {
             responseObject.put("is_vip", userInfo.isVip());
             responseObject.put("version", 2);//1为之前的缘分吧版本（礼物版），2为红包来了之后的缘分吧版本
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // 根据uid获取用户信息
         public void get_user_info(String data) {
             PLogger.d("---get_user_info--->" + data);
             final JSONObject dataObject = JsonUtil.getJsonObject(data);
-            //TODO
-//            RequestHolder.getInstance().requestLiteUserInfo(dataObject.optString("uid"), new RequestHolder.OnRequestListener() {
-//                @Override
-//                public void onResult(String requestUrl, boolean isSuccess, String data) {
-//                    if (isSuccess) {
-//                        JSONObject content = JsonUtil.getJsonObject(data);
-//                        Map<String, Object> responseObject = new HashMap<>();
-//                        responseObject.put("uid", content.optString("uid"));
-//                        responseObject.put("avatar", content.optString("avatar"));
-//                        responseObject.put("avatar_status", content.optInt("avatar_status"));
-//                        responseObject.put("nickname", content.optString("nickname"));
-//                        responseObject.put("gender", content.optInt("gender"));
-//                        responseObject.put("is_vip", content.optInt("ismonth") == 1);
-//
-//                        String responseString = JsonUtil.mapToJSONString(responseObject);
-//                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), responseString);
-//                    } else {
-//                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
-//                    }
-//                }
-//            });
+            ModuleMgr.getCenterMgr().reqUserSimpleList(new String[]{dataObject.optString("uid")}, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
+                        if (lightweightList != null) {
+                            ArrayList<UserInfoLightweight> lightweightLists = lightweightList.getLightweightLists();
+                            if (lightweightLists != null && !lightweightLists.isEmpty()) {
+                                UserInfoLightweight weight = lightweightLists.get(0);
+                                Map<String, Object> responseObject = new HashMap<>();
+                                responseObject.put("uid", weight.getUid());
+                                responseObject.put("avatar", weight.getAvatar());
+                                responseObject.put("avatar_status", weight.getAvatar_status());
+                                responseObject.put("nickname", weight.getNickname());
+                                responseObject.put("gender", weight.getGender());
+                                responseObject.put("is_vip", weight.isVip());
+
+                                String responseString = gson.toJson(responseObject);
+                                doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), responseString);
+                            } else {
+                                doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
+                            }
+                        } else {
+                            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
+                        }
+                    } else {
+                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
+                    }
+                }
+            });
         }
 
         // 获得用户自己的数据 （包含用户的账户余额等数据）
@@ -275,7 +290,7 @@ public class Invoker {
             responseObject.put("is_vip", userInfo.isVip());
             responseObject.put("money", userInfo.getMoney());
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // 弹出模态对话框
@@ -362,13 +377,13 @@ public class Invoker {
         // 加密网络请求
         public void safe_request(String data) {
             PLogger.d("---safe_request--->" + data);
-            cmdRequest(JsonUtil.getJsonObject(data), true);
+            cmdRequest(JsonUtil.getJsonObject(data));
         }
 
         // 普通网络请求
         public void normal_request(String data) {
             PLogger.d("---normal_request--->" + data);
-            cmdRequest(JsonUtil.getJsonObject(data), false);
+            cmdRequest(JsonUtil.getJsonObject(data));
         }
 
         // 切换到主tab页
@@ -407,7 +422,7 @@ public class Invoker {
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("devicemodel", android.os.Build.MODEL);//解密后的服务端返回（安卓注意大小写）
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // 进入别人的个人中心页面
@@ -458,7 +473,7 @@ public class Invoker {
             responseObject.put("bank_auth_status", userInfo.getBankAuthStatus());
             responseObject.put("video_auth_status", userInfo.getVideoAuthStatus());
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // 刷新个人详情
@@ -479,8 +494,8 @@ public class Invoker {
                     PLogger.d("------>" + path[0]);
                     // 将选取的图片进行质量压缩并将二进制流转换为base64字符串
                     Map<String, Object> responseObject = new HashMap<>();
-                    responseObject.put("imageData", BitmapUtil.bitmapToBase64(BitmapUtil.getSmallBitmap(path[0])));//base64格式字符串
-                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+                    responseObject.put("imageData", BitmapUtil.imagePathToBase64(path[0]));//base64格式字符串
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
                 }
             });
         }
@@ -488,15 +503,23 @@ public class Invoker {
         // 图片数据转换成url：将图片上传服务器，并回调图片服务器地址给js
         public void image_data_to_url(String data) {
             PLogger.d("---image_data_to_url--->" + data);
-            JSONObject dataObject = JsonUtil.getJsonObject(data);
-            List<File> files = new LinkedList<>();
+            final JSONObject dataObject = JsonUtil.getJsonObject(data);
+            final List<String> files = new LinkedList<>();
             JSONArray imageDataList = JsonUtil.getJsonArray(dataObject.optString("imageDataList"));
             for (int i = 0; i < imageDataList.length(); i++) {
-                files.add(BitmapUtil.saveBitmap(BitmapUtil.base64ToBitmap(imageDataList.optString(i)),
+                files.add(BitmapUtil.saveBitmap(BitmapUtil.decodeBase64(imageDataList.optString(i)),
                         DirType.getUploadDir() + System.currentTimeMillis() + "_" + i));//将base64的数据转换成File对象
             }
-            int type = dataObject.optInt("type");//101 头像 , 102 相册 , 103 消息图片 ,104 /动态图片, 105 身份验证
-            //TODO 图片上传，上传完成之后删除本地存储的缓存文件
+            // 图片上传，上传完成之后删除本地存储的缓存文件
+            ModuleMgr.getMediaMgr().sendHttpMultiFiles(dataObject.optInt("type"), 0, new MediaMgr.OnMultiFilesUploadComplete() {
+                @Override
+                public void onUploadComplete(ArrayList<String> mediaUrls) {
+                    Map<String, Object> responseObject = new HashMap<>();
+                    responseObject.put("urlList", mediaUrls.toArray());
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+                    for (String s : files) FileUtil.deleteFile(s);
+                }
+            }, (String[]) files.toArray());
         }
 
         // 跳转到钻石购买页面
@@ -515,7 +538,7 @@ public class Invoker {
             //TODO 客户端弹窗，选择用户之后回调js，以下内容在弹窗确认点击回调中实现
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("target_id", "");//TODO 被选择人uid
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // 获取鱼分享：分享鱼。分享成功后，回调js
@@ -526,7 +549,7 @@ public class Invoker {
 
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("share_success", true);//分享成功或者是失败//TODO 以下内容在分享成功回调中实现
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // 领取金币并分享：分享金币领取状态。分享成功后，回调js
@@ -537,19 +560,20 @@ public class Invoker {
 
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("share_success", true);//分享成功或者是失败//TODO 以下内容在分享成功回调中实现
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JsonUtil.mapToJSONString(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
     }
 
     /**
-     * 游戏交互-请求转发
+     * 游戏交互-请求转发，判断是否为go服务器接口进行url-hash加密，
      *
      * @param dataObject JS传递的JSONObject
-     * @param isEnc      是否为加密请求
      */
-    private void cmdRequest(final JSONObject dataObject, boolean isEnc) {
+    private void cmdRequest(final JSONObject dataObject) {
         JSONObject bodyObject = JsonUtil.getJsonObject(dataObject.optString("body"));
-        ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"), isEnc, dataObject.optString("url"),
+        String url = dataObject.optString("url");
+        ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"),
+                !TextUtils.isEmpty(url) && url.contains(Constant.HOST_URL), url,
                 ChineseFilter.JSONObjectToMap(bodyObject), new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {

@@ -13,39 +13,14 @@ import org.json.JSONObject;
  * Created by Kind on 16/3/22.
  */
 public class UserInfoLightweight extends UserBasic {
-//    {
-//        "res": {
-//        "list": [
-//        {
-//            "avatar": "http://image1.yuanfenba.net/uploads/oss/photo/20161108/1478595301708993772.png",
-//                "avatar_status": 1,
-//                "birthday": "1988-09-09",
-//                "city": 110108,
-//                "distance": "16",
-//                "gender": 2,
-//                "height": 166,
-//                "is_month": false,
-//                "is_online": false,
-//                "is_say_hello": false,
-//                "is_vip": false,
-//                "kf_id": 0,
-//                "last_online": 0,
-//                "nickname": "小友客服",
-//                "nickname_status": 0,
-//                "province": 110000,
-//                "uid": 9999
-//        }
-//        ]
-//    },
-//        "status": "ok",
-//            "tm": 1481856586
-//    }
+
     private long time;
-    private String infoJson;//存储json
+    private String infoJson;    //存储json
 
-
-    private boolean isVip;      // 是否是VIP
-    private boolean isAuth;      // 是否是认证用户
+    private String alias;       // 别名
+    private boolean isVip;      // 是否vip
+    private boolean isAuth;     // 是否认证
+    private String signname;    // 签名
 
     public UserInfoLightweight() {
     }
@@ -57,8 +32,7 @@ public class UserInfoLightweight extends UserBasic {
     }
 
     public void parseUserInfoLightweight(UserDetail userInfo) {
-        if (userInfo == null)
-            return;
+        if (userInfo == null) return;
     }
 
     /**
@@ -66,18 +40,37 @@ public class UserInfoLightweight extends UserBasic {
      */
     @Override
     public void parseJson(String jsonResult) {
-        if (TextUtils.isEmpty(jsonResult)) {
-            return;
-        }
+        if (TextUtils.isEmpty(jsonResult)) return;
 
         JSONObject jsonObject = getJsonObject(jsonResult);
-        if (!jsonObject.has("is_vip")) {
-            setVip(jsonObject.optBoolean("is_vip"));
-        }
-        if (jsonObject.has("is_auth")) {
-            setAuth(jsonObject.optBoolean("is_auth"));
-        }
+        this.setAlias(jsonObject.optString("alias"));
+        this.setVip(jsonObject.optBoolean("is_vip"));
+        this.setAuth(jsonObject.optBoolean("is_auth"));
+        this.setSignname(jsonObject.optString("signname"));
+    }
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public String getInfoJson() {
+        return infoJson;
+    }
+
+    public void setInfoJson(String infoJson) {
+        this.infoJson = infoJson;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public boolean isVip() {
@@ -96,6 +89,13 @@ public class UserInfoLightweight extends UserBasic {
         isAuth = auth;
     }
 
+    public String getSignname() {
+        return signname;
+    }
+
+    public void setSignname(String signname) {
+        this.signname = signname;
+    }
 
     @Override
     public int describeContents() {
@@ -105,16 +105,22 @@ public class UserInfoLightweight extends UserBasic {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeLong(this.time);
+        dest.writeString(this.infoJson);
+        dest.writeString(this.alias);
         dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isAuth ? (byte) 1 : (byte) 0);
+        dest.writeString(this.signname);
     }
-
-
 
     protected UserInfoLightweight(Parcel in) {
         super(in);
+        this.time = in.readLong();
+        this.infoJson = in.readString();
+        this.alias = in.readString();
         this.isVip = in.readByte() != 0;
         this.isAuth = in.readByte() != 0;
+        this.signname = in.readString();
     }
 
     public static final Creator<UserInfoLightweight> CREATOR = new Creator<UserInfoLightweight>() {
@@ -129,19 +135,15 @@ public class UserInfoLightweight extends UserBasic {
         }
     };
 
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
-
-    public String getInfoJson() {
-        return infoJson;
-    }
-
-    public void setInfoJson(String infoJson) {
-        this.infoJson = infoJson;
+    @Override
+    public String toString() {
+        return "UserInfoLightweight{" +
+                "time=" + time +
+                ", infoJson='" + infoJson + '\'' +
+                ", alias='" + alias + '\'' +
+                ", isVip=" + isVip +
+                ", isAuth=" + isAuth +
+                ", signname='" + signname + '\'' +
+                '}';
     }
 }

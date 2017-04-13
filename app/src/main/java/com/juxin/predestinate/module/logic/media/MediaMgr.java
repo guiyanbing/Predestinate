@@ -67,7 +67,7 @@ public class MediaMgr implements ModuleBase {
      * @param complete   完成回调
      * @param url        文件地址
      */
-    public void sendHttpMutiFiles(final int sourceType, int index, final OnMutilFilesUploadComplete complete, final String... url) {
+    public void sendHttpMultiFiles(final int sourceType, int index, final OnMultiFilesUploadComplete complete, final String... url) {
         if (mediaUrls == null) mediaUrls = new ArrayList<>();
         if (index >= url.length) {
             complete.onUploadComplete(mediaUrls);
@@ -87,21 +87,21 @@ public class MediaMgr implements ModuleBase {
                             String post_url = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
                             mediaUrls.add(post_url);
                         }
-                        sendHttpMutiFiles(sourceType, tempIndex, complete, url);
+                        sendHttpMultiFiles(sourceType, tempIndex, complete, url);
                     } else {
-                        sendHttpMutiFiles(sourceType, tempIndex, complete, url);
+                        sendHttpMultiFiles(sourceType, tempIndex, complete, url);
                     }
                 }
             });
         } else {
-            sendHttpMutiFiles(sourceType, tempIndex, complete, url);  // 跳过不存在文件继续上传
+            sendHttpMultiFiles(sourceType, tempIndex, complete, url);  // 跳过不存在文件继续上传
         }
     }
 
     /**
      * 多文件上传结果回调
      */
-    public interface OnMutilFilesUploadComplete {
+    public interface OnMultiFilesUploadComplete {
         /**
          * @param mediaUrls 上传成功文件地址
          */

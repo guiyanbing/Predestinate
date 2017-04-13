@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.local.center;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -30,7 +29,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.module.util.CommonUtil;
-import com.juxin.predestinate.ui.start.FindPwdAct;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +72,10 @@ public class CenterMgr implements ModuleBase, PObserver {
                 break;
             case MsgType.MT_App_CoreService://socket已连接，登录
                 IMProxy.getInstance().login();
+                break;
+
+            case MsgType.MT_Update_MyInfo:
+                reqMyInfo();
                 break;
         }
     }
@@ -203,6 +205,10 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if (response.isOk()) {
                     userDetail = (UserDetail) response.getBaseData();
 
+                    if (!response.isCache()){
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
+                    }
+
                     // 持久化必须放在这里，不能放在UserDetail解析里
                     try {
                         JSONObject json = new JSONObject(response.getResponseString());
@@ -227,6 +233,17 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 批量获取用户简略信息
+     */
+    public void reqUserSimpleList(final String[] uids, RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, new HashMap<String, Object>() {
+            {
+                put("uidlist", uids);
+            }
+        }, complete);
+    }
+
+    /**
      * 修改个人信息
      */
     public void updateMyInfo(final HashMap<String, Object> params) {
@@ -235,7 +252,9 @@ public class CenterMgr implements ModuleBase, PObserver {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     reqMyInfo();
+                    return;
                 }
+                PToast.showShort("修改失败");
             }
         });
     }
