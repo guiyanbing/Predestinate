@@ -1,7 +1,6 @@
 package com.juxin.predestinate.ui.setting;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -75,7 +74,8 @@ public class FeedBackAct extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_suggest_count.setText(s.length() + "/120");
+//                s.length() + "/120"
+                tv_suggest_count.setText(String.format("%s/120", s.length()));
                 selectionStart = et_suggest.getSelectionStart();
                 selectionEnd = et_suggest.getSelectionEnd();
                 if (temp.length() > maxCount) {

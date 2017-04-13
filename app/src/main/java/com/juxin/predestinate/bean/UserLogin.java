@@ -12,19 +12,11 @@ import org.json.JSONObject;
  */
 public class UserLogin extends BaseData {
     private String cookie;
-//TODO 待接入userdetail
-//    private UserDetail userDetail = new UserDetail();
 
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
         this.setCookie(jsonObject.optString("cookie"));
-
-        //用户资料
-        if (!jsonObject.isNull("userinfo")) {
-            String userinfo = jsonObject.optString("userinfo");
-//            this.userDetail.parseJson(userinfo);
-        }
 
     }
 
@@ -36,9 +28,5 @@ public class UserLogin extends BaseData {
     public void setCookie(String cookie) {
         this.cookie = cookie;
     }
-
-//    public UserDetail getUserDetail() {
-//        return userDetail;
-//    }
 
 }

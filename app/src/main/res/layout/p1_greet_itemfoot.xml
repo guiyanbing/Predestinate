@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="@dimen/px30_dp">
+            android:padding="@dimen/act_space">
 
             <ImageView
                 android:layout_width="@dimen/px60_dp"
@@ -35,7 +35,7 @@
         </LinearLayout>
 
         <View
-            android:layout_width="@dimen/px3_dp"
+            android:layout_width="1px"
             android:layout_height="@dimen/px40_dp"
             android:background="@color/divider" />
 
@@ -46,7 +46,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="@dimen/px30_dp">
+            android:padding="@dimen/act_space">
 
             <ImageView
                 android:id="@+id/iv_greet"

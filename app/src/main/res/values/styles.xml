@@ -423,7 +423,7 @@
         <item name="android:text">小云</item>
     </style>
 
-    <style name="txt_item_introduction" parent="text_middle">
+    <style name="txt_item_introduction" parent="text_small">
         <item name="android:textColor">@color/text_ciyao_gray</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>

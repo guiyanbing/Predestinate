@@ -5,11 +5,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import com.juxin.library.controls.xRecyclerView.ProgressStyle;
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;

@@ -16,6 +16,8 @@
     <string name="switch_acceptmsg_tip">打开该按钮，即表示你愿意接受系统推荐给你的消息</string>
     <string name="switch_stealth_tip">打开该按钮，即表示不再出现在推荐列表中</string>
     <string name="button_feedback">意见反馈</string>
+    <string name="button_active">活动相关</string>
+    <string name="button_clean_chathistory">清空聊天记录</string>
     <string name="button_clean_cache">清除缓存</string>
     <string name="button_clean_cache_tip">缓存状态良好</string>
     <string name="button_exit">退出登录</string>
@@ -29,7 +31,7 @@
     <string name="toast_update_ok">修改成功</string>
     <!-- 注册/个人中心 -->
     <string name="str_not_filled">未填写</string>
-    <string name="upload_head_man">上传真实头像\n非真头像不会得到推荐</string>
+    <string name="upload_head_man">上传真实头像\n非真实头像不会得到推荐</string>
     <string name="upload_head_female">上传真实优质头像\n更容易获得奖励</string>
     <string name="txt_head_ts">请上传真实、清晰美观的个人近照，\n上传宠物照、照片不清晰、裸露的照片不予通过</string>
     <string name="portrait_tips_man">上传真实头像 非真实头像不会得到推荐</string>
