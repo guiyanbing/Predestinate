@@ -13,6 +13,9 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.ui.user.edit.EditKey;
+
+import java.util.HashMap;
 
 /**
  * 编辑内容 通用界面
@@ -98,7 +101,9 @@ public class EditContentAct extends BaseActivity implements View.OnClickListener
      */
     private void saveAndFinish() {
         String contact = editText.getText().toString().trim();
-        // TODO 请求修改个人资料接口
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put(EditKey.s_key_nickName, contact);
+        ModuleMgr.getCenterMgr().updateMyInfo(postParams);
         finish();
     }
 
