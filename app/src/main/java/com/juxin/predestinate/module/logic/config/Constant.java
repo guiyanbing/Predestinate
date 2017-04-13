@@ -31,7 +31,7 @@ public class Constant {
     public static final int INT_AVATAR = 101;       // 头像
     public static final int INT_ALBUM = 102;        // 相册
     public static final int INT_CHAT_PIC = 103;     // 聊天图片
-    public static final int INT_PRAISE_PIC = 104;   // 集赞图片
+    public static final int INT_PRAISE_PIC = 104;   // 集赞图片: 暂时替代动态图片和身份验证
 
     // 语音
     public static final int INT_CHAT_VOICE = 201;   // 聊天语音
