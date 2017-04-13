@@ -1052,12 +1052,12 @@ public final class BitmapUtil {
      */
     public static String getSmallBitmapAndSave(String filePath, String storeFolder) {
         Bitmap smallBitmap = getSmallBitmap(filePath);
-        File file = saveBitmap(smallBitmap, storeFolder + UUID.randomUUID().toString() + ".jpg");
+        String savePath = saveBitmap(smallBitmap, storeFolder + UUID.randomUUID().toString() + ".jpg");
         if (smallBitmap != null && !smallBitmap.isRecycled()) {
             smallBitmap.recycle();
             smallBitmap = null;
         }
-        return file == null ? null : file.getAbsolutePath();
+        return savePath;
     }
 
     /**
@@ -1243,9 +1243,9 @@ public final class BitmapUtil {
      * 将bitmap保存到sd卡
      *
      * @param savePath 保存文件路径
-     * @return File
+     * @return 文件保存路径
      */
-    public static File saveBitmap(Bitmap bitmap, String savePath) {
+    public static String saveBitmap(Bitmap bitmap, String savePath) {
         if (bitmap == null || TextUtils.isEmpty(savePath)) return null;
         File file = new File(savePath);
         FileOutputStream fos = null;
@@ -1262,7 +1262,7 @@ public final class BitmapUtil {
                 e.printStackTrace();
             }
         }
-        return file;
+        return savePath;
     }
 
     /**
