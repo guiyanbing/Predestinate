@@ -6,6 +6,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
@@ -14,6 +15,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +24,8 @@ import java.util.Map;
  * Created by Su on 2017/4/12.
  */
 public class MediaMgr implements ModuleBase {
+
+    private ArrayList<String> mediaUrls = new ArrayList<>();  // 维护多文件上传地址
 
     @Override
     public void init() {
@@ -53,6 +57,55 @@ public class MediaMgr implements ModuleBase {
      */
     public void sendHttpFileVideo(int sourceType, String url, String url2, RequestComplete complete) {
         sendHttpFile(sourceType, url, url2, complete);
+    }
+
+    /**
+     * 多文件上传
+     *
+     * @param sourceType 上传类型
+     * @param index      上传指定位置文件
+     * @param complete   完成回调
+     * @param url        文件地址
+     */
+    public void sendHttpMutiFiles(final int sourceType, int index, final OnMutilFilesUploadComplete complete, final String... url) {
+        if (mediaUrls == null) mediaUrls = new ArrayList<>();
+        if (index >= url.length) {
+            complete.onUploadComplete(mediaUrls);
+            mediaUrls.clear();
+            return;
+        }
+
+        final int tempIndex = index + 1;
+        if (FileUtil.isExist(url[index])) {  // 当文件存在时，才进行上传任务
+            sendHttpFile(sourceType, url[index], new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                        String pic = upLoadResult.getHttpPathPic();
+                        if (!TextUtils.isEmpty(pic)) {
+                            String post_url = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
+                            mediaUrls.add(post_url);
+                        }
+                        sendHttpMutiFiles(sourceType, tempIndex, complete, url);
+                    } else {
+                        sendHttpMutiFiles(sourceType, tempIndex, complete, url);
+                    }
+                }
+            });
+        } else {
+            sendHttpMutiFiles(sourceType, tempIndex, complete, url);  // 跳过不存在文件继续上传
+        }
+    }
+
+    /**
+     * 多文件上传结果回调
+     */
+    public interface OnMutilFilesUploadComplete {
+        /**
+         * @param mediaUrls 上传成功文件地址
+         */
+        void onUploadComplete(ArrayList<String> mediaUrls);
     }
 
     /**

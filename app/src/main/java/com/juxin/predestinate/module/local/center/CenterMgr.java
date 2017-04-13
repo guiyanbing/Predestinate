@@ -15,15 +15,20 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.R;
+import com.juxin.mumu.bean.utils.FileUtil;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 
@@ -123,9 +128,8 @@ public class CenterMgr implements ModuleBase, PObserver {
 
     /**
      * 意见反馈
-     *
      * @param contract 联系方式
-     * @param views    意见
+     * @param views 意见
      * @param complete
      */
     public void feedBack(String contract, String views, RequestComplete complete) {
@@ -223,6 +227,51 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 修改个人信息
+     */
+    public void updateMyInfo(final HashMap<String, Object> params) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, params, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    reqMyInfo();
+                }
+            }
+        });
+    }
+
+    /**
+     * 上传头像
+     *
+     * @param url      图片本地地址
+     * @param complete 上传完成回调
+     */
+    public void uploadAvatar(final String url, final RequestComplete complete) {
+        if (FileUtil.isExist(url)) {
+            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, url, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        FileUtil.deleteFile(url);  // 删除裁切文件
+                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                        String pic = upLoadResult.getHttpPathPic();
+                        if (TextUtils.isEmpty(pic)) {
+                            return;
+                        }
+                        final String avatarUrl = getInterceptUrl(pic);
+                        HashMap<String, Object> postParams = new HashMap<>();
+                        postParams.put(EditKey.s_key_avatar, avatarUrl);
+                        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
+                    }
+                }
+            });
+        } else {
+            LoadingDialog.closeLoadingDialog();
+            MMToast.showShort("图片地址无效");
+        }
+    }
+
+    /**
      * 保存个人信息Json串到SP
      */
     private void setMyInfo(String resultStr) {
@@ -234,9 +283,6 @@ public class CenterMgr implements ModuleBase, PObserver {
      * <p>
      * 短存储： oss
      * 长存储： jxfile
-     *
-     * @param picUrl
-     * @return
      */
     public String getInterceptUrl(String picUrl) {
         if (TextUtils.isEmpty(picUrl)) return "";

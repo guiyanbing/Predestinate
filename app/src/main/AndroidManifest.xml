@@ -120,15 +120,20 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.paygoods.GoodsDiamondAct"
+            android:name=".ui.user.paygoods.diamond.GoodsDiamondAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.paygoods.GoodsDiamondDialog"
+            android:name=".ui.user.paygoods.diamond.GoodsDiamondDialog"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/No_Background" />
+
+        <activity
+            android:name=".ui.user.paygoods.vip.GoodsVipAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <!-- ============= 相机相册模块start ============= -->
         <activity

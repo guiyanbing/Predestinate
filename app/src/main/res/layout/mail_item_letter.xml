@@ -108,7 +108,7 @@
                     android:textSize="@dimen/px36_sp"
                     android:visibility="gone" />
 
-                <com.xiaoyou.friends.module.baseui.EmojiTextView
+                <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView
                     android:id="@+id/mail_item_last_msg"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
