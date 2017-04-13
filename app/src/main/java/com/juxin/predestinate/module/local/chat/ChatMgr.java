@@ -45,7 +45,7 @@ public class ChatMgr implements ModuleBase {
         baseMessage.setcMsgID(1);
         baseMessage.setContent("xxxx");
         baseMessage.setStatus(1);
-        onReceiving(baseMessage);6
+        onReceiving(baseMessage);
 
         Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
