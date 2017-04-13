@@ -9,9 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,73 +50,48 @@ public final class JsonUtil {
 
     public static String mapToJSONString(Map<String, Object> map) {
         JSONObject json = mapToJSON(map);
-
-        if (json == null) {
-            return "";
-        }
-
+        if (json == null) return "";
         return json.toString();
     }
 
     public static JSONObject mapToJSON(Map<String, Object> map) {
-        if (map == null) {
-            return null;
-        }
+        if (map == null) return null;
 
         JSONObject json = new JSONObject();
-
         try {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 String key = entry.getKey();
-
-                if (key == null) {
-                    continue;
-                }
-
+                if (key == null) continue;
                 json.put(key, wrap(entry.getValue()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return json;
     }
 
     public static JSONArray arrayToJSONArray(Collection array) {
-        if (array == null) {
-            return null;
-        }
+        if (array == null) return null;
 
         JSONArray jsonArray = new JSONArray();
-
-        for (Object anArray : array) {
-            jsonArray.put(wrap(anArray));
-        }
-
+        for (Object anArray : array) jsonArray.put(wrap(anArray));
         return jsonArray;
     }
 
     public static JSONArray arrayToJSONArray(Object array) {
-        if (array == null || !array.getClass().isArray()) {
-            return null;
-        }
+        if (array == null || !array.getClass().isArray()) return null;
 
         JSONArray jsonArray = new JSONArray();
-
         final int length = Array.getLength(array);
-        List<Object> values = new ArrayList<Object>(length);
-
         for (int i = 0; i < length; ++i) {
             jsonArray.put(wrap(Array.get(array, i)));
         }
-
         return jsonArray;
     }
 
     public static Object wrap(Object o) {
-        if (o == null) {
-            return null;
-        }
+        if (o == null) return null;
+
         if (o instanceof JSONArray || o instanceof JSONObject) {
             return o;
         }
@@ -131,11 +104,9 @@ public final class JsonUtil {
             } else if (o.getClass().isArray()) {
                 return arrayToJSONArray(o);
             }
-
             if (o instanceof Map) {
                 return mapToJSON((Map) o);
             }
-
             if (o instanceof Boolean ||
                     o instanceof Byte ||
                     o instanceof Character ||

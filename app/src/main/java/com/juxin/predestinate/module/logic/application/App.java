@@ -8,7 +8,6 @@ import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
-import com.juxin.predestinate.bean.db.cache.DBCache;
 import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
 
 /**
@@ -50,9 +49,21 @@ public class App extends Application {
         ModuleMgr.getLoginMgr().initCookie();
     }
 
+    /**
+     * @return 获取当前展示的activity对象，如果activity为null则返回applicationContext
+     */
     public static Context getActivity() {
         return activity == null ? context : activity;
     }
+
+    /**
+     * @return 获取dagger2管理的全局实例
+     */
+    public static AppComponent getAppComponent() {
+        return mAppComponent;
+    }
+
+    // ------------------------- 私有方法 ----------------------------
 
     /**
      * DB初始化
@@ -63,9 +74,4 @@ public class App extends Application {
                 .dBModule(new DBModule(App.uid))
                 .build();
     }
-
-    public static AppComponent getAppComponent() {
-        return mAppComponent;
-    }
-
 }

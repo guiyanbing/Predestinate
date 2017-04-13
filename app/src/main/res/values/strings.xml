@@ -145,6 +145,7 @@
     <string name="tip_data_empty">没有数据，客官等会再来吧！</string>
     <string name="tip_click_refresh">点击刷新</string>
     <string name="tip_is_loading">正在努力加载中...</string>
+    <string name="tip_quit">再按一次退出小友</string>
 
     <!--activity标题-->
     <string name="title_right_submit">提交</string>

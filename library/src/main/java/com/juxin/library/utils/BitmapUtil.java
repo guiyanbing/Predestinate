@@ -1025,9 +1025,8 @@ public final class BitmapUtil {
         options.inJustDecodeBounds = false;
 
         Bitmap bm = BitmapFactory.decodeFile(filePath, options);
-        if (bm == null) {
-            return null;
-        }
+        if (bm == null) return null;
+
         int degree = readPictureDegree(filePath);
         bm = rotateBitmap(bm, degree);
         ByteArrayOutputStream baos = null;
@@ -1200,43 +1199,39 @@ public final class BitmapUtil {
     }
 
     /**
+     * 从sd卡路径读取bitmap
+     *
+     * @param path 文件本地路径
+     * @return bitmap
+     */
+    public static String imagePathToBase64(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
+        if (path.toLowerCase().endsWith(".jpg") || path.toLowerCase().endsWith(".jpeg")) {
+            compressFormat = Bitmap.CompressFormat.JPEG;
+        } else if (path.toLowerCase().endsWith(".png")) {
+            compressFormat = Bitmap.CompressFormat.PNG;
+        }
+        return encodeToBase64(bitmap, compressFormat, 100);
+    }
+
+    /**
      * bitmap转为base64
      */
-    public static String bitmapToBase64(Bitmap bitmap) {
-        String result = null;
-        ByteArrayOutputStream baos = null;
-        try {
-            if (bitmap != null) {
-                baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-                baos.flush();
-                baos.close();
-
-                byte[] bitmapBytes = baos.toByteArray();
-                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (baos != null) {
-                    baos.flush();
-                    baos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
+    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        image.compress(compressFormat, quality, byteArrayOS);
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
 
     /**
      * base64转为bitmap
      */
-    public static Bitmap base64ToBitmap(String base64Data) {
-        byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedBytes = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
     /**
