@@ -169,6 +169,20 @@ public class BaseActivity extends FragmentActivity {
      * 设置返回按钮，同时设置标题
      *
      * @param resourcesId 返回按钮id
+     * @param title       标题文字
+     */
+    public void setBackView(int resourcesId, String title) {
+        View view = this.findViewById(resourcesId);
+        view.setVisibility(View.VISIBLE);
+        setBackView(view);
+
+        setTitle(title);
+    }
+
+    /**
+     * 设置返回按钮，同时设置标题
+     *
+     * @param resourcesId 返回按钮id
      * @param showLeftTip 是否显示返回按钮文字
      * @param title       标题文字
      * @param titleColor  标题颜色

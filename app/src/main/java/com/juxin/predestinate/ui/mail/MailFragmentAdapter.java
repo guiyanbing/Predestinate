@@ -55,6 +55,16 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setLocalAvatar(R.drawable.p1_xxicon01);
         messageLists.add(baseMessage);
 
+        baseMessage = new BaseMessage();
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
+      //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
+        baseMessage.setWeight(BaseMessage.In_Weight);
+        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
+        baseMessage.setName("谁看过我");
+        baseMessage.setAboutme("26人查看了我");
+        baseMessage.setLocalAvatar(R.drawable.p1_xxicon02);
+        messageLists.add(baseMessage);
+
 //        if(!b){
 //            //活动
 //            baseMessage = new BaseMessage();

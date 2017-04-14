@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.xiaoyou.friends.module.msgview.chatview.ChatViewLayout
+        <com.juxin.predestinate.module.local.msgview.ChatViewLayout
             android:id="@+id/privatechat_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -41,9 +41,9 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
          super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
         setTitle("信箱");
-        setTitleRight("忽略未读", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        setTitleRight("忽略未读", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
                 //忽略所有未读消息
 //                PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
 //                    @Override
@@ -56,8 +56,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 //                        MMToast.showShort("忽略成功!");
 //                    }
 //                }, "忽略未读消息,但消息不会删除.", "忽略消息");
-            }
-        });
+//            }
+//        });
         initView();
        // addMessageListener(MsgType.User_List_Msg_Change, this);
     //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
@@ -175,6 +175,7 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 
             //            break;
                     case visitors_msg: // 最近访问
+                        UIShow.showPrivateChatAct(getActivity(), 1, null);
                       //  UIShow.showNearVisitorContent(getActivity());
                         break;
                 }
