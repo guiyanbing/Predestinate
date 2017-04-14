@@ -19,7 +19,7 @@
             android:layout_height="@dimen/px235_dp"
             android:paddingLeft="@dimen/px35_dp">
 
-            <com.juxin.library.view.CircleImageView
+            <ImageView
                 android:id="@+id/mail_item_headpic"
                 style="@style/avatar_middle"
                 android:layout_centerInParent="true"

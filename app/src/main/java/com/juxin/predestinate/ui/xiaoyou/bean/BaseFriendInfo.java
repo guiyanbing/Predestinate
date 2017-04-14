@@ -8,7 +8,7 @@ import com.juxin.predestinate.bean.net.BaseData;
  */
 public abstract class BaseFriendInfo extends BaseData {
 
-    protected String nickname;//昵称
+    protected String nickname = "#";//昵称
     protected String sortKey;
 
     public String getNickname() {

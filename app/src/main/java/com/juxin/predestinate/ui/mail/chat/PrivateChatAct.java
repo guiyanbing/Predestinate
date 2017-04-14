@@ -20,6 +20,7 @@ import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -218,34 +219,34 @@ public class PrivateChatAct extends BaseActivity {
 
 
     private void setNickName(String nickName) {
-//        String str = whisperID + "";
-//        MailMsgID mailMsgID = MailMsgID.getMailMsgID(whisperID);
-//        if (mailMsgID != null) {
-//            switch (mailMsgID) {
-////                case matchmaker_msg://红娘
-////                    str = ModuleMgr.getChatListMgr().getMatchMakerNickname();
-////                    break;
-//            }
-//        } else {
-////            if (!TextUtils.isEmpty(nickName)) {
-////                if (nickName.length() > 10) {
-////                    str = nickName.substring(0, 8);
-////                } else {
-////                    str = nickName;
-////                }
-////            }
+        String str = whisperID + "";
+        MailMsgID mailMsgID = MailMsgID.getMailMsgID(whisperID);
+        if (mailMsgID != null) {
+            switch (mailMsgID) {
+//                case matchmaker_msg://红娘
+//                    str = ModuleMgr.getChatListMgr().getMatchMakerNickname();
+//                    break;
+            }
+        } else {
 //            if (!TextUtils.isEmpty(nickName)) {
-//                str = nickName;
+//                if (nickName.length() > 10) {
+//                    str = nickName.substring(0, 8);
+//                } else {
+//                    str = nickName;
+//                }
 //            }
-//        }
-//        // setBackView(R.id.back_view, str.length() > 10 ? ("与" + str + "...的私信") : ("与" + str + "的私信"));
-//        setBackView(R.id.back_view, str);
+            if (!TextUtils.isEmpty(nickName)) {
+                str = nickName;
+            }
+        }
+        // setBackView(R.id.back_view, str.length() > 10 ? ("与" + str + "...的私信") : ("与" + str + "的私信"));
+        setBackView(R.id.base_title_back, str);
     }
 
     private void initView() {
         onTitleInit();
        // viewGroup = (CustomFrameLayout) LayoutInflater.from(this).inflate(R.layout.y2_tips_view_group, null);
-       // privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
+        privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
 
 //        if(message != null && ChatListMgr.Folder.sys_notice.equals(message.getFolder())){
 //            privateChat.getChatAdapter().setFolder(ChatListMgr.Folder.sys_notice);

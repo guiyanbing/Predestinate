@@ -100,8 +100,8 @@ public class HttpResponse extends BaseData {
 
     @Override
     public void parseJson(String jsonStr) {
-        responseString = jsonStr;
-        JSONObject json = getJsonObject(jsonStr);
+        responseString = TextUtils.isEmpty(jsonStr) ? "{}" : jsonStr;
+        JSONObject json = getJsonObject(responseString);
 
         status = json.optString("status");
         msg = json.optString("msg");

@@ -3,14 +3,15 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
+import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
     }
 
     public void updateAllData() {
-//        List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getFriendsList();
+        List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getMsgList();
 //        Boolean b = false;
 //        for(BaseMessage tmp : messageLists){
 //            MailMsgID mailMsgID = MailMsgID.getMailMsgID(tmp.getLWhisperID());
@@ -41,19 +42,29 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 //                }
 //            }
 //        }
-//
-//        MMLog.autoDebug("messageLists=多少人=" + messageLists.size());
-//
-//        //邀请好友
-//        BaseMessage baseMessage = new BaseMessage();
-//        baseMessage.setWhisperID(String.valueOf(MailMsgID.invite_friends_msg.type));
-//        baseMessage.setWeight(BaseMessage.Great_Weight);
-//        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-//        baseMessage.setName("邀请好友");
-//        baseMessage.setAboutme(CommonConfig.getInstance().getInvite_award());
-//        baseMessage.setLocalAvatar(R.drawable.y2_msg_1);
-//        messageLists.add(baseMessage);
-//
+
+        MMLog.autoDebug("messageLists=多少人=" + messageLists.size());
+
+
+        BaseMessage baseMessage = new BaseMessage();
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.recommend_msg.type));
+        baseMessage.setWeight(BaseMessage.Great_Weight);
+        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
+        baseMessage.setName("推荐的人");
+        baseMessage.setAboutme("系统为您匹配到7人");
+        baseMessage.setLocalAvatar(R.drawable.p1_xxicon01);
+        messageLists.add(baseMessage);
+
+        baseMessage = new BaseMessage();
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
+      //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
+        baseMessage.setWeight(BaseMessage.In_Weight);
+        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
+        baseMessage.setName("谁看过我");
+        baseMessage.setAboutme("26人查看了我");
+        baseMessage.setLocalAvatar(R.drawable.p1_xxicon02);
+        messageLists.add(baseMessage);
+
 //        if(!b){
 //            //活动
 //            baseMessage = new BaseMessage();
@@ -85,8 +96,8 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 //
 //        baseMessage.setLocalAvatar(R.drawable.y2_msg_3);
 //        messageLists.add(baseMessage);
-//
-//        //最近来访
+
+        //最近来访
 //        baseMessage = new BaseMessage();
 //        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
 //        baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
@@ -95,11 +106,11 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 //        baseMessage.setName("最近来访");
 //        baseMessage.setAboutme("点击查看");
 //        baseMessage.setLocalAvatar(R.drawable.y2_msg_4);
-//        messageLists.add(baseMessage);
-//
-//        setList(messageLists);
-//        SortList.sortWeightTimeListView(getList());
-//        notifyDataSetChanged();
+      //  messageLists.add(baseMessage);
+
+        setList(messageLists);
+        SortList.sortWeightTimeListView(getList());
+        notifyDataSetChanged();
     }
 
     @Override
@@ -137,10 +148,10 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
             if (mailItemType != null) {
                 switch (mailItemType){
                     case Mail_Item_Ordinary:
-                    //    vh.customMailItem.showItemLetter(msgData);
+                        vh.customMailItem.showItemLetter(msgData);
                         break;
                     case Mail_Item_Act:
-                    //    vh.customMailItem.showItemAct(msgData);
+                        vh.customMailItem.showItemAct(msgData);
                         break;
                 }
             }

@@ -5,10 +5,10 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.util.TimerUtil;
 
@@ -225,10 +225,9 @@ public class AutoConnectMgr implements SocketCallback {
         // 注意：md字段md5加密字符串为string的拼接
         String md = EncryptUtil.md5(String.valueOf(uid) + String.valueOf(curTime) + token).toUpperCase();
         Map<String, Object> loginMap = new HashMap<>();
-        loginMap.put("fid", uid);
-        loginMap.put("mt", curTime);
+        loginMap.put("tm", curTime);
         loginMap.put("md", md);
-        loginMap.put("xt", 0);//0为安卓,3为IOS,其他则不包含此字段
+        loginMap.put("os", 1);//系统类型(1为安卓, 2为IOS,其他则不包含此字段)
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
         return data;
@@ -255,20 +254,20 @@ public class AutoConnectMgr implements SocketCallback {
         if (!TextUtils.isEmpty(content)) {
             try {
                 JSONObject contentObject = new JSONObject(content);
-                if (contentObject.has("mt")) {
-                    ServerTime.setServerTime(contentObject.optLong("mt"));//保存服务器时间戳
+                if (contentObject.has("tm")) {
+                    ServerTime.setServerTime(contentObject.optLong("tm"));//保存服务器时间戳
                 }
                 //socket登录处理
-                if (contentObject.has("s")) {
-                    int s = contentObject.optInt("s");//登录状态，0表示成功，其他见下面详情
-                    if (s == 0) {//登录成功
+                if (contentObject.has("status")) {
+                    int status = contentObject.optInt("status");//登录状态，0表示成功，其他见下面详情
+                    if (status == 0) {//登录成功
                         heartBeating = true;
                         loopHeartbeatStatus();
                         incrementTime = 0;
                         onStatusChange(TCPConstant.SOCKET_STATUS_Login_Success, "socket用户登录成功：" + content);
                     } else {//登录失败，默认为与服务器断开连接，重新连接
                         onStatusChange(TCPConstant.SOCKET_STATUS_Login_Fail, "socket用户登录失败：" + content);
-                        switch (s) {
+                        switch (status) {
                             case -1://json解析错误
                                 PLogger.d("socket登录---->json解析错误");
                                 break;
@@ -296,9 +295,8 @@ public class AutoConnectMgr implements SocketCallback {
                 }
 
                 //消息重要字段解析
-                long msgId = -1, sender = -1;//消息id，发送者id
-                if (contentObject.has("d")) msgId = contentObject.optLong("d");
-                if (contentObject.has("fid")) sender = contentObject.optLong("fid");
+                long msgId = contentObject.optLong("mid", -1);//消息id
+                long sender = contentObject.optLong("fid", -1);//发送者id
 
                 //消息接收反馈
                 simpleSocket.send(getLoopbackData(header.type, msgId).getBytes());
@@ -318,8 +316,8 @@ public class AutoConnectMgr implements SocketCallback {
      */
     private NetData getLoopbackData(int msgType, long msgId) {
         Map<String, Object> loopbackMap = new HashMap<>();
-        loopbackMap.put("s", 0);
-        loopbackMap.put("d", msgId);
+        loopbackMap.put("status", 0);
+        loopbackMap.put("mid", msgId);
         return new NetData(uid, msgType, gson.toJson(loopbackMap));
     }
 

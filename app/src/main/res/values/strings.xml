@@ -216,4 +216,6 @@
 
     <string name="all_friends">全部好友</string>
     <string name="ok">确定</string>
+    <string name="level">亲密等级</string>
+    <string name="intimate_member">亲密成员</string>
 </resources>

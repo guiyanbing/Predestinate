@@ -10,13 +10,9 @@
         android:id="@+id/xiaoyou_frag_csv_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <!--<ListView-->
-        <!--android:id="@+id/xiaoyou_frag_lv_list"-->
+    <!--<com.juxin.predestinate.ui.xiaoyou.zanshi.view.LevelView-->
         <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:divider="@android:color/transparent"-->
-        <!--android:descendantFocusability="afterDescendants"-->
-        <!--android:dividerHeight="@dimen/px1_dp"/>-->
+        <!--android:layout_height="60dp"/>-->
     <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
         android:id="@+id/xiaoyou_frag_crlv_list"
         android:layout_width="match_parent"

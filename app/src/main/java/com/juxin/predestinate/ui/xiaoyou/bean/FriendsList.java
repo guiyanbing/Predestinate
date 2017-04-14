@@ -5,7 +5,6 @@ import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,28 +14,25 @@ import java.util.List;
 public class FriendsList extends BaseData {
     private List arr_frends;
 
-    private List RanksList = new ArrayList();
-
     public List getArr_frends() {
         return arr_frends;
     }
 
     @Override
     public void parseJson(String s) {
-        //        this.setPageInfo(getPageInfo(getJsonObject(s), RankInfor.class));
-        //        RanksList = (ArrayList) getBaseDataList(getJsonObject(s).optJSONArray("players"), RankInfor.class);
-        arr_frends = getBaseDataList(getJsonObject(s).optJSONArray(""), FriendInfo.class);
-        //        this.setSelf_rank(getJsonObject(s).optLong("self_rank"));
+        arr_frends = getBaseDataList(getJsonObject(s).optJSONArray("list"), FriendInfo.class);
     }
 
     public static class FriendInfo extends BaseFriendInfo {
+
         private long uid;//用户ID
         private String avatar;//头像地址
         private String describe;//信息描述
         private int isVip;//是否为vip
         private int isHavaDynamic;//是否有动态
         private int isUpdatePhoto;//是否有图片动态
-        private int intimacy;//亲密度
+        private int intimacy;//24 小时亲密度  (男性用户)
+        private double income;//24 小时收益	 (女性用户)
         private int gender; // 性别 1男2女
         private int type = 0;//type=0为亲密互动信息，type=1为head条目信息
         private int icon;//图片资源
@@ -46,6 +42,11 @@ public class FriendsList extends BaseData {
             JSONObject jsonObject = getJsonObject(s);
             //json串解析
             this.setUid(jsonObject.optLong("uid"));
+            this.setIntimacy(jsonObject.optInt("intimate"));
+            this.setIncome(jsonObject.optDouble("income"));
+            //待定
+            this.setAvatar(jsonObject.optString("avatar"));
+            this.setGender(jsonObject.optInt("gender"));
             //            this.setUid(jsonObject.optLong("uid"));
             //            this.setAvatar(jsonObject.optString("avatar"));
             //            this.setNickname(jsonObject.optString("nickname"));
@@ -132,6 +133,14 @@ public class FriendsList extends BaseData {
 
         public void setDescribe(String describe) {
             this.describe = describe;
+        }
+
+        public double getIncome() {
+            return income;
+        }
+
+        public void setIncome(double income) {
+            this.income = income;
         }
 
         @Override

@@ -9,10 +9,12 @@ import android.view.View;
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.IntimacyFriendsAdapter;
@@ -32,7 +34,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     private XRecyclerView lvList;
     private CustomSearchView mCustomSearchView;
 
-    private ArrayList<LabelsList.LabelInfo> arrLabes;
+    private ArrayList<LabelsList.LabelInfo> arrLabes = new ArrayList<>();
     private IntimacyFriendsAdapter mIntimacyFriendsAdapter;
     private int page = 0;//当前页
     private int pageLimits = 20;//一页的条数
@@ -42,6 +44,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_xiaoyou_tabgroup_activity);
         initView();
+        ModuleMgr.getCommonMgr().getTagGroupList(this);
     }
 
     private void initView() {
@@ -58,12 +61,17 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.tab_group));
         setTitleRight("新建标签", this);
+        initListener();
     }
-
-    private void changeTitleRight() {
-
+    private void initListener(){
+        mIntimacyFriendsAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
+            @Override
+            public void onItemClick(View convertView, int position) {
+                LabelsList.LabelInfo info = mIntimacyFriendsAdapter.getItem(position);
+                UIShow.showNewTabAct(TabGroupActivity.this,info.getId());
+            }
+        });
     }
-
     //设置右侧确定按钮的逻辑
     @Override
     public void onClick(View v) {
@@ -87,6 +95,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onRequestComplete(HttpResponse response) {
+//        Log.e("TTTTTTTTTTTTTTh",response.getResponseString()+"||");
         if (response.isOk()){//请求返回成功
             LabelsList lists = (LabelsList) response.getBaseData();
             List<LabelsList.LabelInfo> labelInfos = lists.getArr_labels();
@@ -94,6 +103,11 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
                 arrLabes.clear();
             }
             arrLabes.addAll(labelInfos);
+
+            //// TODO: 2017/4/12 用于测试
+            testData();
+            lvList.setLoadingMoreEnabled(arrLabes.size() >= pageLimits ? true:false);
+
             if (labelInfos != null && !labelInfos.isEmpty()) {
                 lvList.setLoadingMoreEnabled(labelInfos.size() >= pageLimits ? true:false);
                 mIntimacyFriendsAdapter.setList(arrLabes);
@@ -105,6 +119,9 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
             crlvList.showNetError();
             MMToast.showShort("请求失败，请检查您的网络");
         }
+
+        //测试使用
+        crlvList.showXrecyclerView();
     }
 
     @Override
@@ -115,5 +132,20 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onLoadMore() {
         page++;
+    }
+
+
+    //测试
+    private void testData(){
+        if (arrLabes == null){
+            arrLabes = new ArrayList<>();
+        }
+        for (int i = 0;i < 10 ;i++){
+            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
+            info.setLabelName("测试");
+            info.setNum(i);
+            arrLabes.add(info);
+        }
+        mIntimacyFriendsAdapter.setList(arrLabes);
     }
 }

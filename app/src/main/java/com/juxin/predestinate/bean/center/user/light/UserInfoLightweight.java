@@ -40,6 +40,7 @@ public class UserInfoLightweight extends UserBasic {
      */
     @Override
     public void parseJson(String jsonResult) {
+        super.parseJson(jsonResult);
         if (TextUtils.isEmpty(jsonResult)) return;
 
         JSONObject jsonObject = getJsonObject(jsonResult);

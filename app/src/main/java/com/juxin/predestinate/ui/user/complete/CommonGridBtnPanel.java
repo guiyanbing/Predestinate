@@ -82,7 +82,7 @@ public class CommonGridBtnPanel extends BaseViewPanel{
     }
 
     public enum BTN_KEY {
-        IMG("图片", R.drawable.y1_talk_more_1),           //发送图片按钮
+        IMG("图片", R.drawable.chat_input_grid_img_selector),           //发送图片按钮
         VIDEO("小视频", R.drawable.y1_talk_more_3),       //小视频
         TREASURE("守护宝藏", R.drawable.y2_talk_more_4),    //宝藏
         ;

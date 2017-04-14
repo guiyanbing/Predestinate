@@ -5,17 +5,13 @@ package com.juxin.predestinate.ui.mail.item;
  */
 public enum MailMsgID {
 
-	/**邀请好友**/
-	invite_friends_msg(1),
-
-	/**活动**/
-	act_msg(8000),
-
-	/**新朋友**/
-	new_friend_msg(2),
+	/**推荐的人**/
+	recommend_msg(1),
 
 	/**最近来访**/
-	visitors_msg(3);
+	visitors_msg(2),
+
+	;
 
 	public long type;
 	MailMsgID(long type) {

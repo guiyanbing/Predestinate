@@ -23,6 +23,8 @@ public class IntimacyFriendsAdapter extends BaseRecyclerViewAdapter<LabelsList.L
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
         MyViewHolder vh = new MyViewHolder(viewHolder);
         final LabelsList.LabelInfo info = getItem(position);
+        vh.friend_intimacy_txv_label.setText(info.getLabelName()+"");
+        vh.friend_intimacy_txv_num.setText(info.getNum()+"人");
     }
 
     @Override

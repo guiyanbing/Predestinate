@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.mail;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
+import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +41,9 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
          super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
         setTitle("信箱");
-        setTitleRight("忽略未读", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        setTitleRight("忽略未读", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
                 //忽略所有未读消息
 //                PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
 //                    @Override
@@ -53,8 +56,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 //                        MMToast.showShort("忽略成功!");
 //                    }
 //                }, "忽略未读消息,但消息不会删除.", "忽略消息");
-            }
-        });
+//            }
+//        });
         initView();
        // addMessageListener(MsgType.User_List_Msg_Change, this);
     //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
@@ -78,18 +81,18 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         mailFragmentAdapter.updateAllData();
 
         listMail.setPullLoadEnable(false);
-//        listMail.setMenuCreator(new SwipeMenuCreator() {
-//            @Override
-//            public void create(SwipeMenu menu) {
-//                if (menu.getViewType() == 1) {
-//                    menu.setTitle("忽略");
-//                } else {
-//                    menu.setTitle("删除");
-//                }
-//                menu.setTitleSize(18);
-//                menu.setTitleColor(Color.WHITE);
-//            }
-//        });
+        listMail.setMenuCreator(new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                if (menu.getViewType() == 1) {
+                    menu.setTitle("忽略");
+                } else {
+                    menu.setTitle("删除");
+                }
+                menu.setTitleSize(18);
+                menu.setTitleColor(Color.WHITE);
+            }
+        });
 
         listMail.setPullLoadEnable(false);
         listMail.setPullRefreshEnable(false);
@@ -119,14 +122,14 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case invite_friends_msg: //邀请好友
-                        break;
-                    case act_msg: //活动
-                    //    ModuleMgr.getChatListMgr().markSingleAsRead(item.getLWhisperID());
-                        break;
-                    case new_friend_msg: //新朋友
+//                    case invite_friends_msg: //邀请好友
+//                        break;
+//                    case act_msg: //活动
+//                    //    ModuleMgr.getChatListMgr().markSingleAsRead(item.getLWhisperID());
+//                        break;
+//                    case new_friend_msg: //新朋友
                    //     ModuleMgr.getChatListMgr().markNewFriendMsgAsRead();
-                        break;
+                  //      break;
                     case visitors_msg:
                     //    ModuleMgr.getChatListMgr().updateVisit();
                         break;
@@ -150,25 +153,29 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(message.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case invite_friends_msg: //邀请好友
-                   //     UIShow.showInviteFriendAct(getActivity());
+                    case recommend_msg://推荐的人
+                        UIShow.showRecommendAct(getActivity());
                         break;
-                    case act_msg: //活动
+                  //  case invite_friends_msg: //邀请好友
+                   //     UIShow.showInviteFriendAct(getActivity());
+              //          break;
+             //       case act_msg: //活动
                   //      UIShow.showActivityAct(getActivity());
 //                        EnvelopeShowDialog envelopeShowDialog = new EnvelopeShowDialog(getActivity(),null);
 //                        envelopeShowDialog.showDialog((FragmentActivity) getContext());
                         //             startActivity(new Intent(getActivity(), CeShiXAct.class));
 
                         // startActivity(new Intent(getActivity(), CeShiFamiliarAct.class));
-                        break;
-                    case new_friend_msg: //新朋友
+             //           break;
+           //         case new_friend_msg: //新朋友
                   //      UIShow.showNewFriendAct(getActivity());
                         //     startActivity(new Intent(getActivity(), EnvelopeDetailsAct.class));
 
                         //        startActivity(new Intent(getActivity(), HttpWebServiceActivity.class));
 
-                        break;
+            //            break;
                     case visitors_msg: // 最近访问
+                        UIShow.showPrivateChatAct(getActivity(), 1, null);
                       //  UIShow.showNearVisitorContent(getActivity());
                         break;
                 }
