@@ -1,9 +1,9 @@
 package com.juxin.predestinate.ui.start;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.BitmapUtil;
@@ -38,8 +37,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 
 /**
@@ -56,15 +53,14 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     private CustomFrameLayout fl_choose_man, fl_choose_woman;
 
     // 保存临时数据
-    private String _nickname, _province, _city, _district, _photoUrl;
+    private String _nickname, _province, _city, _photoUrl;
     private int _gender = 1;
     private HashMap<String, Object> commitMap;
     private boolean canSubmit = false;
 
     private boolean isCompleteHead;             // 是否已设置头像
     private Bitmap headPicBitmap;               // 头像btm
-    private String pickFile;                    // 头像地址
-    private LocationMgr.PointD pointD;          // GPS定位
+
     private UrlParam urlParam = UrlParam.reqRegister;  // 默认为常规注册
 
     @Override
@@ -100,11 +96,11 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
 
     private void initData() {
         commitMap = new HashMap<>();
-        pointD = LocationMgr.getInstance().getPointD();
+        LocationMgr.PointD pointD = LocationMgr.getInstance().getPointD();
         if (pointD != null) {
             _province = TextUtils.isEmpty(pointD.province) ? "" : pointD.province;
             _city = TextUtils.isEmpty(pointD.city) ? "" : pointD.city;
-            _district = TextUtils.isEmpty(pointD.district) ? "" : pointD.district;
+            String _district = TextUtils.isEmpty(pointD.district) ? "" : pointD.district;
             if (_province.equals(_city)) {          // 直辖市
                 _province = _city;
                 _city = _district;
@@ -155,14 +151,13 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
     }
 
     // 设置提交btn
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void resetSubmit() {
         if (checkInputInfo()) { // 信息完整
             canSubmit = true;
             btn_reg_info_submit.setBackgroundResource(R.drawable.r1_btn_login_bg);
         } else {
             canSubmit = false;
-            btn_reg_info_submit.setBackgroundColor(getResources().getColor(R.color.color_e8e8e8));
+            btn_reg_info_submit.setBackgroundColor(ContextCompat.getColor(this, R.color.color_e8e8e8));
         }
     }
 
@@ -244,7 +239,7 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
         public void afterTextChanged(Editable s) {
             if (TextUtils.isEmpty(s.toString()) || s.length() < 2) {
                 canSubmit = false;
-                btn_reg_info_submit.setBackgroundColor(getResources().getColor(R.color.color_e8e8e8));
+                btn_reg_info_submit.setBackgroundColor(ContextCompat.getColor(RegInfoAct.this, R.color.color_e8e8e8));
                 return;
             }
             _nickname = s.toString();

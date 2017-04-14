@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.notify.NotifyMgr;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
 import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
+import com.tencent.smtt.sdk.QbSdk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,8 @@ public final class ModuleMgr {
      */
     public static void initModule(Context context) {
         initStatic(context);
+        initTBSX5(context);
+
         getAppMgr();
         getHttpMgr();
         getMediaMgr();
@@ -71,6 +74,28 @@ public final class ModuleMgr {
         PSP.getInstance().init(context);    //初始化sharedPreferences存储
         MsgMgr.getInstance().initUiThread();//初始化主线程消息监听
         RequestHelper.getInstance().init(context);    //初始化网络请求
+    }
+
+    /**
+     * 初始化腾讯X5内核
+     *
+     * @param context 保证context为applicationContext
+     */
+    private static void initTBSX5(Context context) {
+        //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+            @Override
+            public void onViewInitFinished(boolean arg0) {
+                //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+                PLogger.d("Tencent tbs x5 is load " + arg0);
+            }
+
+            @Override
+            public void onCoreInitFinished() {
+            }
+        };
+        //x5内核初始化接口
+        QbSdk.initX5Environment(context, cb);
     }
 
     /**

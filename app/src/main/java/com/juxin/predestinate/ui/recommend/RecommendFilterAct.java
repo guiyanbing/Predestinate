@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
@@ -38,7 +36,6 @@ public class RecommendFilterAct extends BaseActivity {
     TextView tv_del;
     RecommendFilterAdapter chosenAdapter, tagAdapter;
     private List<TagInfo> listTag, listChosen;
-    private final int spanCount = 3;
 
     private int age_min, age_max, provinceID, cityID;
 
@@ -109,7 +106,7 @@ public class RecommendFilterAct extends BaseActivity {
     }
 
     //选择地区
-    private void addArea(final int position, final String type) {
+    private void addArea(final String type) {
         PickerDialogUtil.showAddressPickerDialog2(this, new AddressPicker.OnAddressPickListener() {
             @Override
             public void onAddressPicked(City city) {
@@ -135,7 +132,7 @@ public class RecommendFilterAct extends BaseActivity {
     }
 
     //选择年龄
-    private void addAge(final int position, final String type) {
+    private void addAge(final String type) {
         PickerDialogUtil.showRangePickerDialog(this, new RangePicker.OnRangePickListener() {
             @Override
             public void onRangePicked(String firstText, String secondText) {
@@ -166,9 +163,9 @@ public class RecommendFilterAct extends BaseActivity {
             for (int i = 0; i < listChosen.size(); i++) {
                 if (listChosen.get(i).getTagID() == listTag.get(position).getTagID()) {
                     if (listChosen.get(i).getTagID() == areaTagId) {
-                        addArea(position, "update");
+                        addArea("update");
                     } else if (listChosen.get(i).getTagID() == ageTagId) {
-                        addAge(position, "update");
+                        addAge("update");
                     } else {
                         MMToast.showShort(getResources().getString(R.string.toast_chosen_repeat));
                     }
@@ -179,9 +176,9 @@ public class RecommendFilterAct extends BaseActivity {
         return false;
     }
 
-    private void initAdapter(RecyclerView recycleView, RecommendFilterAdapter adapter, List<TagInfo> list, int tag) {
-        adapter.setTagType(this, tag);
+    private void initAdapter(RecyclerView recycleView, RecommendFilterAdapter adapter, List<TagInfo> list) {
         adapter.setList(list);
+        int spanCount = 3;
         recycleView.setLayoutManager(new GridLayoutManager(this, spanCount));
         recycleView.setAdapter(adapter);
         recycleView.addItemDecoration(new SpaceItemDecoration((int) getResources().getDimension(R.dimen.px20_dp)));
@@ -190,10 +187,10 @@ public class RecommendFilterAct extends BaseActivity {
     private void initRecycleView() {
         rv_chosen = cv_chosen.getRecyclerView();
         rv_tag = cv_tag.getRecyclerView();
-        tagAdapter = new RecommendFilterAdapter();
-        chosenAdapter = new RecommendFilterAdapter();
-        initAdapter(rv_tag, tagAdapter, listTag, RecommendFilterAdapter.FILTER_TAG);
-        initAdapter(rv_chosen, chosenAdapter, listChosen, RecommendFilterAdapter.FILTER_TAG_CHOSEN);
+        tagAdapter = new RecommendFilterAdapter(this,RecommendFilterAdapter.FILTER_TAG);
+        chosenAdapter = new RecommendFilterAdapter(this,RecommendFilterAdapter.FILTER_TAG_CHOSEN);
+        initAdapter(rv_tag, tagAdapter, listTag);
+        initAdapter(rv_chosen, chosenAdapter, listChosen);
         cv_tag.showRecyclerView();
         cv_chosen.showRecyclerView();
         tagAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
@@ -202,9 +199,9 @@ public class RecommendFilterAct extends BaseActivity {
                 if (!checkRepeatAdd(position)) {
                     if (listChosen.size() < 3) {
                         if (position == 0) {
-                            addArea(position, "add");
+                            addArea("add");
                         } else if (position == 1) {
-                            addAge(position, "add");
+                            addAge("add");
                         } else {
                             listChosen.add(listTag.get(position));
                             chosenAdapter.notifyDataSetChanged();
@@ -237,11 +234,11 @@ public class RecommendFilterAct extends BaseActivity {
 
     }
 
-    class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+    private class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
         private int space;
 
-        public SpaceItemDecoration(int space) {
+        SpaceItemDecoration(int space) {
             this.space = space;
         }
 

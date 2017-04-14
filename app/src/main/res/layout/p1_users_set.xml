@@ -95,8 +95,8 @@
                     android:background="@null"
                     android:gravity="center_vertical|right"
                     android:inputType="number"
-                    android:text="10"
                     android:maxLength="7"
+                    android:text="10"
                     android:textColor="@color/bg_reghead_end"
                     android:textSize="12sp" />
 
@@ -156,8 +156,8 @@
                     android:background="@null"
                     android:gravity="center_vertical|right"
                     android:inputType="number"
-                    android:text="20"
                     android:maxLength="7"
+                    android:text="20"
                     android:textColor="@color/bg_reghead_end"
                     android:textSize="12sp" />
 
@@ -193,6 +193,30 @@
             <View style="@style/divider_line" />
 
             <RelativeLayout
+                android:id="@+id/rl_active"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/button_active"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/y1_right_go" />
+            </RelativeLayout>
+
+            <include layout="@layout/center_information_line" />
+
+            <RelativeLayout
                 android:id="@+id/rl_feedback"
                 style="@style/center_set_item"
                 android:layout_height="@dimen/center_item_height">
@@ -212,6 +236,23 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/y1_right_go" />
+            </RelativeLayout>
+
+            <include layout="@layout/center_information_line" />
+
+            <RelativeLayout
+                android:id="@+id/rl_clean_chathistory"
+                style="@style/center_set_item"
+                android:layout_height="@dimen/center_item_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/button_clean_chathistory"
+                    android:textColor="@color/text_zhuyao_black"
+                    android:textSize="@dimen/center_item_txt" />
             </RelativeLayout>
 
             <include layout="@layout/center_information_line" />

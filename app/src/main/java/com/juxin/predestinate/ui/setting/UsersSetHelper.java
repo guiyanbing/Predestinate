@@ -5,11 +5,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
 
-import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.config.Constant;
 
 import java.util.HashMap;
 
@@ -79,10 +76,8 @@ public class UsersSetHelper {
 
     /**
      * 设置滑动条
-     *
-     * @param seekBar
      */
-    public static void setSeekBar(final SeekBar seekBar) {
+    static void setSeekBar(final SeekBar seekBar) {
         if (ModuleMgr.getCenterMgr().getSetting().isStealth()) {
             SEEKBAR_ON = true;
             seekBar.setProgress(100);

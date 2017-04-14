@@ -22,7 +22,7 @@ import java.util.List;
  * Created YAO on 2017/3/30.
  */
 
-public class RecommendAdapter extends BaseRecyclerViewAdapter {
+class RecommendAdapter extends BaseRecyclerViewAdapter {
     private List<RecommendPeople> recommendPeopleList;
 
     public void setRecommendList(List<RecommendPeople> recommendPeopleList) {
