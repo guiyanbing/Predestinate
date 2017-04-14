@@ -1,19 +1,21 @@
 package com.juxin.predestinate.ui.user.check.other;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.custom.FlowLayout;
+import com.juxin.predestinate.module.logic.baseui.flow.TagAdapter;
+import com.juxin.predestinate.module.logic.baseui.flow.TagFlowLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 他人标签
@@ -21,9 +23,8 @@ import java.util.List;
  */
 
 public class UserOtherLabelAct extends BaseActivity implements View.OnClickListener {
-
-    private List<String> labels; // 标签
-    private FlowLayout mFlowLayout;
+    private List<String> labels = new ArrayList<>(); // 标签
+    private TagFlowLayout mFlowLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +42,10 @@ public class UserOtherLabelAct extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
-        mFlowLayout = (FlowLayout) findViewById(R.id.flowlayout);
+        mFlowLayout = (TagFlowLayout) findViewById(R.id.flowlayout);
 
         initLabels();
+        initTagFlowLayout();
     }
 
     /**
@@ -52,27 +54,7 @@ public class UserOtherLabelAct extends BaseActivity implements View.OnClickListe
     private void initLabels() {
         mFlowLayout.removeAllViews();
         if (labels != null) labels.clear();
-
-        labels = ModuleMgr.getCenterMgr().getMyInfo().getImpressions();
-
-        labels.add("标签1");
-        labels.add("标签2");
-        labels.add("标签3");
-        labels.add("标签4");
-        labels.add("标签5");
-        labels.add("标签6");
-        for (int i = 0; i < labels.size(); i++) {
-
-            LayoutInflater inflater = (LayoutInflater)
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.common_label_layout, null);
-            LinearLayout labelLayout = (LinearLayout) view.findViewById(R.id.label);
-            labelLayout.setBackgroundResource(R.drawable.label_white_bg);
-
-            TextView label_text = (TextView) view.findViewById(R.id.label_text);
-            label_text.setText(labels.get(i));
-            mFlowLayout.addView(view);
-        }
+        labels.addAll(ModuleMgr.getCenterMgr().getMyInfo().getImpressions());
     }
 
     @Override
@@ -80,8 +62,41 @@ public class UserOtherLabelAct extends BaseActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.base_title_right_txt:  // 保存
+
+                labels.add("ksjinj");
+                mAdapter.notifyDataChanged();
+
                 break;
         }
+    }
 
+
+    private TagAdapter<String> mAdapter;
+
+    private void initTagFlowLayout() {
+        mFlowLayout.setAdapter(mAdapter = new TagAdapter<String>(labels) {
+            @Override
+            public View getView(com.juxin.predestinate.module.logic.baseui.flow.FlowLayout parent, int position, String s) {
+                TextView tv = (TextView) LayoutInflater.from(UserOtherLabelAct.this).inflate(R.layout.p1_flow_tv,
+                        mFlowLayout, false);
+                tv.setText(s);
+                return tv;
+            }
+        });
+
+        mFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, com.juxin.predestinate.module.logic.baseui.flow.FlowLayout parent) {
+                Log.d("TagFlowLayout===11=", labels.get(position));
+                return true;
+            }
+        });
+
+        mFlowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+            @Override
+            public void onSelected(Set<Integer> selectPosSet) {
+                Log.d("TagFlowLayout===22=", selectPosSet.toString());
+            }
+        });
     }
 }

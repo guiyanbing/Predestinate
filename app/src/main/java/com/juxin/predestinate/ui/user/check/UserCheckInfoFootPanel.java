@@ -10,10 +10,12 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.FlowLayout;
+import com.juxin.predestinate.module.logic.baseui.flow.TagFlowLayout;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.edit.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +24,9 @@ import java.util.List;
 public class UserCheckInfoFootPanel extends BaseViewPanel {
     private final int channel;
     private UserDetail userDetail;
-    private List<String> labels; // 资料介绍标签
+    private List<String> labels = new ArrayList<>(); // 资料介绍标签
 
-    private FlowLayout mFlowLayout;
+    private TagFlowLayout mFlowLayout;
     private LinearLayout albumLayout, videoLayout;
     private AlbumHorizontalPanel albumPanel, videoPanel;
 
@@ -40,7 +42,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
     private void initView() {
         albumLayout = (LinearLayout) findViewById(R.id.album_item);
         videoLayout = (LinearLayout) findViewById(R.id.video_item);
-        mFlowLayout = (FlowLayout) findViewById(R.id.flowlayout);
+        mFlowLayout = (TagFlowLayout) findViewById(R.id.flowlayout);
 
         findViewById(R.id.item_sign).setOnClickListener(listener);
         findViewById(R.id.item_dynamic).setOnClickListener(listener);
@@ -64,13 +66,9 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         mFlowLayout.removeAllViews();
         if (labels != null) labels.clear();
 
-        labels = userDetail.getImpressions();
-        for (int i = 0; i < labels.size(); i++) {
-            View view = createView(R.layout.common_label_layout);
-            TextView label_text = (TextView) view.findViewById(R.id.label_text);
-            label_text.setText(labels.get(i));
-            mFlowLayout.addView(view);
-        }
+        labels.addAll(userDetail.getImpressions());
+
+
     }
 
     private final NoDoubleClickListener listener = new NoDoubleClickListener() {
