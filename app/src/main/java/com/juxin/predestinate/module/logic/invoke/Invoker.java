@@ -327,10 +327,7 @@ public class Invoker {
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             Activity act = appInterface.getAct();
-            //TODO
-//            UIHelper.showMail_Chat_Act(act == null ? (Activity) App.getActivity() : act,
-//                    String.valueOf(AppModel.getInstance().getUserDetail().getUid()),
-//                    dataObject.optString("target_uid"));
+            UIShow.showPrivateChatAct(act == null ? App.context : act, dataObject.optLong("target_uid"), "");
         }
 
         // 侧滑出app页面
@@ -508,10 +505,11 @@ public class Invoker {
             JSONArray imageDataList = JsonUtil.getJsonArray(dataObject.optString("imageDataList"));
             for (int i = 0; i < imageDataList.length(); i++) {
                 files.add(BitmapUtil.saveBitmap(BitmapUtil.decodeBase64(imageDataList.optString(i)),
-                        DirType.getUploadDir() + System.currentTimeMillis() + "_" + i));//将base64的数据转换成File对象
+                        DirType.getUploadDir() + System.currentTimeMillis() + "_" + i + ".jpg"));//将base64的数据保存成jpg文件
             }
             // 图片上传，上传完成之后删除本地存储的缓存文件
-            ModuleMgr.getMediaMgr().sendHttpMultiFiles(dataObject.optInt("type"), 0, new MediaMgr.OnMultiFilesUploadComplete() {
+            int type = dataObject.optInt("type");
+            ModuleMgr.getMediaMgr().sendHttpMultiFiles(type == 105 ? 104 : type, 0, new MediaMgr.OnMultiFilesUploadComplete() {
                 @Override
                 public void onUploadComplete(ArrayList<String> mediaUrls) {
                     Map<String, Object> responseObject = new HashMap<>();
@@ -519,7 +517,7 @@ public class Invoker {
                     doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
                     for (String s : files) FileUtil.deleteFile(s);
                 }
-            }, (String[]) files.toArray());
+            }, (String[]) files.toArray(new String[files.size()]));
         }
 
         // 跳转到钻石购买页面

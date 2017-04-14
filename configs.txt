@@ -1,5 +1,5 @@
 ﻿#APK 签名key文件目录
-storeFile = /Users/Kind/Documents/StudioProjects/key/xiaoyou.jks
+storeFile = ../../../key/xiaoyou.jks
 
 #APK 签名key密码（第一重密码）
 storePassword = xiaoyou123
