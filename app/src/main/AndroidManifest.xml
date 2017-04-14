@@ -87,6 +87,16 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.user.check.other.UserOtherSetAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.user.check.other.UserOtherLabelAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.user.check.edit.UserEditSignAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

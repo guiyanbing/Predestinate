@@ -100,6 +100,19 @@
     <string name="user_info_avatar_suc">上传成功</string>
     <string name="user_info_avatar_fail">上传失败</string>
     <string name="user_info_avatar_upload">正在上传头像</string>
+    <string name="user_other_info_set">资料设置</string>
+    <string name="user_other_remark_name">备注名</string>
+    <string name="user_other_set_chat_voice">为TA设置语音接听</string>
+    <string name="user_other_set_chat_video">为TA设置视频接听</string>
+    <string name="user_other_set_chat_price">钻石/分</string>
+    <string name="user_other_set_chat_stick">消息置顶</string>
+    <string name="user_other_set_chat_disturb">消息免打扰</string>
+    <string name="user_other_set_chat_clear">清空聊天记录</string>
+    <string name="user_other_set_chat_del">删除聊天记录</string>
+    <string name="user_other_set_chat_shield">屏蔽</string>
+    <string name="user_other_set_complain">投诉</string>
+    <string name="user_other_label">标签</string>
+    <string name="user_other_label_often">常用标签</string>
 
     <string name="goods_diamond_title">钻石充值</string>
     <string name="goods_diamond_remain">余额</string>
