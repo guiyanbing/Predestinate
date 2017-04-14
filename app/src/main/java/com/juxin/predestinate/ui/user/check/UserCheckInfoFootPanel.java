@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.user.check;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
-import com.juxin.predestinate.module.logic.baseui.custom.FlowLayout;
+import com.juxin.predestinate.module.logic.baseui.flow.TagAdapter;
 import com.juxin.predestinate.module.logic.baseui.flow.TagFlowLayout;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.edit.AlbumHorizontalPanel;
@@ -64,11 +65,20 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
      */
     private void initLabels() {
         mFlowLayout.removeAllViews();
+        mFlowLayout.setSelectEffect(false);
         if (labels != null) labels.clear();
 
         labels.addAll(userDetail.getImpressions());
-
-
+        mFlowLayout.setAdapter(new TagAdapter<String>(labels) {
+            @Override
+            public View getView(com.juxin.predestinate.module.logic.baseui.flow.FlowLayout parent, int position, String s) {
+                TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.p1_flow_tv,
+                        mFlowLayout, false);
+                tv.setBackgroundResource(R.drawable.label_common_bg);
+                tv.setText(s);
+                return tv;
+            }
+        });
     }
 
     private final NoDoubleClickListener listener = new NoDoubleClickListener() {
