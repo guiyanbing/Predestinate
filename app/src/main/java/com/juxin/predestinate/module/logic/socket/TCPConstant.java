@@ -6,14 +6,14 @@ package com.juxin.predestinate.module.logic.socket;
 public class TCPConstant {
 
     // socket测试服连接地址
-    public static final String HOST = "103.25.39.118";      //socket连接IP地址
-    public static final int PORT = 15102;                   //socket连接端口
+    public static final String HOST = "123.59.187.13";      //socket连接IP地址
+    public static final int PORT = 10050;                   //socket连接端口
 
     // --------------socket常量----------------
     public static final int MSG_ID_Login = 1;               //长连接登录消息id
-    public static final int MSG_ID_KICK_Offline = 65533;    //异地登陆踢下线消息id
-    public static final int MSG_ID_Heartbeat_Reply = 65534; //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
-    public static final int MSG_ID_Heartbeat = 65535;       //普通心跳消息id
+    public static final int MSG_ID_SERVER_RECEIVE = 997;    //通知客户端某条消息已经收到
+    public static final int MSG_ID_KICK_Offline = 998;      //异地登陆踢下线消息id
+    public static final int MSG_ID_Heartbeat_Reply = 999;   //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
     public static final long Heartbeat_Time = 60 * 1000;    //心跳时间间隔，60s
 
     /**

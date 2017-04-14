@@ -47,7 +47,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_recommend_act);
         post_param = new HashMap<>();
-        setTitle(getResources().getString(R.string.title_recommend));
+        setBackView(getResources().getString(R.string.title_recommend));
         setTitleRight(getResources().getString(R.string.title_right_filter), R.color.title_right_commit, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
