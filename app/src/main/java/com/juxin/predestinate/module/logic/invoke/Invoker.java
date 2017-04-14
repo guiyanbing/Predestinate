@@ -130,7 +130,7 @@ public class Invoker {
      * @param responseString 调用传值
      */
     public void doInJS(String callbackName, String callbackID, String responseString) {
-        doInJS("javascript:" + callbackName + "(\'" + callbackID + "\',\'" + responseString + "\')");
+        doInJS("javascript:" + callbackName + "(\'" + callbackID + "\',\'" + ChineseFilter.toUnicode(responseString) + "\')");
     }
 
     /**
@@ -260,8 +260,7 @@ public class Invoker {
                                 responseObject.put("gender", weight.getGender());
                                 responseObject.put("is_vip", weight.isVip());
 
-                                String responseString = gson.toJson(responseObject);
-                                doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), responseString);
+                                doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
                             } else {
                                 doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
                             }

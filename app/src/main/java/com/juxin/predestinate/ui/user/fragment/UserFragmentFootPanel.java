@@ -79,7 +79,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_Auth_id: // 认证
-                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/FateWeb/pages/identify/identify.html");
+                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/FateWeb/pages/identify/identify.html?v=" + System.currentTimeMillis());
                 break;
 
             case CenterItemID.i_Center_GoodsVip_id:// VIP充值
