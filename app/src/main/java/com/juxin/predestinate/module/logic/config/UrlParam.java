@@ -10,6 +10,7 @@ import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.UserReg;
+import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.Map;
@@ -55,6 +56,26 @@ public enum UrlParam {
     //============================== 小友模块相关接口 =============================
     //好友标签分组成员
     reqTagGroupMember("/s/friend/TagGroupMember", SimpleFriendsList.class),
+    //增加自己的好友的 tag
+    reqAddFriendTag("/s/friend/AddFriendTag", null),
+    //添加标签分组
+    reqAddTagGroup("/s/friend/AddTagGroup", SimpleFriendsList.class),
+    //添加好友标签分组成员
+    reqAddTagGroupMember("/s/friend/AddTagGroupMember", SimpleFriendsList.class),
+    //删除自己好友的 tag
+    reqDelFriendTag("/s/friend/DelFriendTag", SimpleFriendsList.class),
+    //删除标签分组
+    reqDelTagGroup("/s/friend/DelTagGroup", SimpleFriendsList.class),
+    //删除好友标签分组成员
+    reqDelTagGroupMember("/s/friend/DelTagGroupMember", SimpleFriendsList.class),
+    //好友列表
+    reqFriendList("/s/friend/FriendList", SimpleFriendsList.class),
+    //最近互动好友列表
+    reqLatestInteractive("/s/friend/LatestInteractive", SimpleFriendsList.class),
+    //修改标签分组
+    reqModifyTagGroup("/s/friend/ModifyTagGroup", SimpleFriendsList.class),
+    //好友标签分组
+    reqTagGroup("/s/friend/TagGroup", LabelsList.class),
 
     // 最后一个，占位
     LastUrlParam("");

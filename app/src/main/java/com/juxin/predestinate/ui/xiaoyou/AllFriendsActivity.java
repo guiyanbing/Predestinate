@@ -2,12 +2,15 @@ package com.juxin.predestinate.ui.xiaoyou;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
+import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
 
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 public class AllFriendsActivity extends BaseActivity implements View.OnClickListener,CustomSearchView.OnTextChangedListener {
 
     private ArrayList<SimpleFriendsList.SimpleFriendInfo> arrSimpleFriends;
+    private CustomRecyclerView crlvList;
     private RecyclerView lvFriends;
     private CustomSearchView mCustomSearchView;
 
@@ -35,7 +39,14 @@ public class AllFriendsActivity extends BaseActivity implements View.OnClickList
         mCustomSearchView.setOnTextChangedListener(this);
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.all_friends));
-        lvFriends = (RecyclerView) findViewById(R.id.xiaoyou_sele_lv_list);
+        crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_sele_crlv_list);
+        lvFriends = crlvList.getRecyclerView();
+        lvFriends.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        lvFriends.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+//        mSelectFriendsAdapter = new SelectFriendsAdapter();
+//        lvFriends.setAdapter(mSelectFriendsAdapter);
+//        lvFriends = (RecyclerView) findViewById(R.id.xiaoyou_sele_lv_list);
     }
 
     private void changeTitleRight() {

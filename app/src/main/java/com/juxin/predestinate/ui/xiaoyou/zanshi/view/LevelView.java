@@ -1,25 +1,30 @@
 package com.juxin.predestinate.ui.xiaoyou.zanshi.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.View;
+
+import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.util.UIUtil;
 
 
 /**
  * 等级控件
  * Created by zm on 2016/8/23
  */
-public class LevelView extends LinearLayout {
+public class LevelView extends View {
 
-    //    private String[] boyText = {"初来乍到", "出手大方", "一掷千金", "挥金如土", "腰缠万贯", "锦衣玉食", "名门望族", "商贾巨子", "富可敌国", "富甲天下"};
-    //    private String[] girlText = {"初见世面", "天生丽质", "红粉佳人", "小家碧玉", "大家闺秀", "百花魁首", "一笑倾城", "国色天香", "绝世无双", "貌若天仙"};
     private final Context context;
-    private TextView tv_level_num, tv_level_tip;
-    private LinearLayout ll_ring;
-    private final int maxLevel = 10;
+    private Paint paint;
+    private Bitmap mBitmap;
+    private int[] levels = new int[]{R.drawable.p1_lv00b, R.drawable.p1_lv01b, R.drawable.p1_lv02b, R.drawable.p1_lv03b, R.drawable.p1_lv04b, R.drawable.p1_lv05b, R.drawable.p1_lv06b};
 
     public LevelView(Context context) {
         this(context, null);
@@ -33,45 +38,26 @@ public class LevelView extends LinearLayout {
 
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = inflater.inflate(R.layout.y2_levelview_ex, this);
-//        ll_ring = (LinearLayout) view.findViewById(R.id.ll_ring);
-//        tv_level_num = (TextView) view.findViewById(R.id.tv_level_num);
-//        tv_level_tip = (TextView) view.findViewById(R.id.tv_level_tip);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(UIUtil.dp2px(2));
+        paint.setColor(getResources().getColor(R.color.blue));
+        paint.setStyle(Paint.Style.STROKE);
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.p1_lv03b);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        drawLevel(canvas);
     }
 
-    /**
-     * 设置等级
-     *@param  gender 用户性别
-     * @param experience 经验值
-     */
-    public void setLevelView(long experience,int gender) {
-//        int ExPercent;
-//        int position = 0;
-//        int level = CommonConfig.getInstance().getLevel(experience, CommonConfig.getInstance().getBoyLevelInfo());
-//        if (level > 0) {
-//            position = level - 1;
-//        }
-//        int currentEx = CommonConfig.getInstance().getBoyLevelInfo().get(position).getExperience();//当前等级经验值
-//        if (level < maxLevel) {
-//            int nextEx = CommonConfig.getInstance().getBoyLevelInfo().get(position + 1).getExperience();
-//            ExPercent = (int) (100.0 / ((float) (nextEx - currentEx) / (float) (experience - currentEx)));
-//        } else {
-//            ExPercent = 100;
-//        }
-//        RingGraph ringGraph = new RingGraph(context, new float[]{ExPercent, 100 - ExPercent});
-//        ll_ring.addView(ringGraph);
-//        String beforetxt = "V";
-//        SpannableStringBuilder builder = new SpannableStringBuilder(beforetxt);
-//        StyleSpan span = new StyleSpan(Typeface.ITALIC);
-//        builder.setSpan(span, 0, beforetxt.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE); //设置前面的字体
-//        builder.append(level + "");
-//        tv_level_num.setText(builder);
-//        tv_level_tip.setText(gender == 1 ? CommonConfig.getInstance().getBoyLevelInfo().get(position).getTip() : CommonConfig.getInstance().getGirlLevelInfo().get(position).getTip());
+    private void drawLevel(Canvas canvas) {
+        RectF oval = new RectF(0, 0, UIUtil.dp2px(43.3f), UIUtil.dp2px(43.3f));
+        canvas.drawCircle(UIUtil.dp2px(21.65f), UIUtil.dp2px(21.65f), UIUtil.dp2px(21.65f), paint);
+        canvas.drawArc(oval, -180, 0, false, paint);
+        Rect df = new Rect(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
+        RectF def = new RectF(UIUtil.dp2px(9.3f), UIUtil.dp2px(5.6f), UIUtil.dp2px(35f), UIUtil.dp2px(36.3f));
+        canvas.drawBitmap(mBitmap, df, def, null);
     }
 }

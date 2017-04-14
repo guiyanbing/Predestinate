@@ -17,10 +17,10 @@ import java.util.List;
 /**
  * 登录界面：账号密码列表 Adapter
  */
-public class UserPrivacyAdapter extends ExBaseAdapter<UP> {
+class UserPrivacyAdapter extends ExBaseAdapter<UP> {
     private OnDelItemListener mDelItemListener;
 
-    public UserPrivacyAdapter(Context context, List datas) {
+    UserPrivacyAdapter(Context context, List datas) {
         super(context, datas);
     }
 
@@ -53,16 +53,16 @@ public class UserPrivacyAdapter extends ExBaseAdapter<UP> {
     }
 
     private class ViewHolder {
-        public TextView username;
-        public ImageView userdelete;
+        TextView username;
+        ImageView userdelete;
     }
 
     // --------------------与Activity交互-------------------------------------
-    public interface OnDelItemListener {
+    interface OnDelItemListener {
         void onDelClick(int position);
     }
 
-    public void setDelListener(OnDelItemListener listener) {
+    void setDelListener(OnDelItemListener listener) {
         this.mDelItemListener = listener;
     }
 }

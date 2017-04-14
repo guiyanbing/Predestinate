@@ -34,9 +34,8 @@ import java.util.HashMap;
 public class UsersSetAct extends BaseActivity implements View.OnClickListener {
     private TextView desc_clean;
     private static String cache;
-    private MyHandler handler;
+    private final CleanCacheHandler handler = new CleanCacheHandler(this);
     private EditText et_voice_price, et_video_price;
-    private SeekBar sb_stealth;
     // false是开true是开
 
     private String old_voice_price, old_video_price;
@@ -51,10 +50,10 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
         initView();
     }
 
-    static class MyHandler extends Handler {
+    private static class CleanCacheHandler extends Handler {
         final WeakReference<UsersSetAct> mActivity;
 
-        MyHandler(UsersSetAct act) {
+        CleanCacheHandler(UsersSetAct act) {
             mActivity = new WeakReference<>(act);
         }
 
@@ -78,18 +77,19 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
     }
 
     private void initView() {
-        handler = new MyHandler(this);
         findViewById(R.id.rl_exit).setOnClickListener(this);
         findViewById(R.id.rl_clean).setOnClickListener(this);
         findViewById(R.id.rl_feedback).setOnClickListener(this);
+        findViewById(R.id.rl_clean_chathistory).setOnClickListener(this);
+        findViewById(R.id.rl_active).setOnClickListener(this);
         desc_clean = (TextView) findViewById(R.id.desc_clean);
-        sb_stealth = (SeekBar) findViewById(R.id.sb_stealth);
+        SeekBar sb_stealth = (SeekBar) findViewById(R.id.sb_stealth);
         et_voice_price = (EditText) findViewById(R.id.et_voice_price);
         et_video_price = (EditText) findViewById(R.id.et_video_price);
         UsersSetHelper.setCursorRight(et_voice_price);
         UsersSetHelper.setCursorRight(et_video_price);
-        et_voice_price.setText("" + ModuleMgr.getCenterMgr().getSetting().getVoice_price());
-        et_video_price.setText("" + ModuleMgr.getCenterMgr().getSetting().getVideo_price());
+        et_voice_price.setText(String.valueOf(ModuleMgr.getCenterMgr().getSetting().getVoice_price()));
+        et_video_price.setText(String.valueOf(ModuleMgr.getCenterMgr().getSetting().getVideo_price()));
         UsersSetHelper.setSeekBar(sb_stealth);
         new Thread(new Runnable() {
             @Override
@@ -144,9 +144,14 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
                 }, "根据缓存文件的大小，清理时间将持续几秒至几分钟不等，请耐心等待", "清除缓存", "取消", "清理", true, R.color.text_zhuyao_black);
                 break;
             case R.id.rl_feedback://意见反馈客服
-//                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), MailSpecialID.customerService.getSpecialIDName());
                 UIShow.showFeedBackAct(this);
-//                UIShow.showRecommendAct(this);//TODO 推荐的人测试
+                break;
+            case R.id.rl_clean_chathistory://清空聊天记录
+                //TODO 清理聊天记录
+                UIShow.showRecommendAct(this);//推荐的人测试
+                break;
+            case R.id.rl_active://活动相关
+                //TODO 跳转活动相关网页
                 break;
         }
     }
@@ -172,7 +177,6 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
             }
             return super.dispatchTouchEvent(ev);
         }
-        // 必不可少，否则所有的组件都不会有TouchEvent了
         if (getWindow().superDispatchTouchEvent(ev)) {
             return true;
         }
@@ -209,7 +213,7 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void afterTextChanged(Editable s) {
-                voiceChange = !old_voice_price.equals(s);
+                voiceChange = !old_voice_price.equals(s.toString());
             }
         });
         et_video_price.addTextChangedListener(new TextWatcher() {
@@ -224,7 +228,7 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void afterTextChanged(Editable s) {
-                videoChange = !old_video_price.equals(s);
+                videoChange = !old_video_price.equals(String.valueOf(s));
             }
         });
     }
@@ -250,14 +254,13 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
             post_param.put("voice_price", voice);
             ModuleMgr.getCenterMgr().getSetting().setVoice_price(voice);
             ModuleMgr.getCenterMgr().updateSetting(post_param);
-            //TODO
             voiceChange = false;
         }
         if (videoChange) {
             //更新视频价格
             int video = Integer.parseInt(et_video_price.getText().toString());
-            HashMap<String,Object> post_param= new HashMap<>();
-            post_param.put("video_price",video);
+            HashMap<String, Object> post_param = new HashMap<>();
+            post_param.put("video_price", video);
             ModuleMgr.getCenterMgr().getSetting().setVideo_price(video);
             ModuleMgr.getCenterMgr().updateSetting(post_param);
             videoChange = false;

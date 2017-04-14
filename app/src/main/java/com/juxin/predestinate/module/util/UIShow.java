@@ -36,10 +36,13 @@ import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
+import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
+import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
@@ -207,8 +210,9 @@ public class UIShow {
     /**
      * 打开添加联系人页面
      */
-    public static void showSelectContactAct(FragmentActivity activity) {
+    public static void showSelectContactAct(long tab,FragmentActivity activity) {
         Intent intent = new Intent(activity, SelectContactActivity.class);
+        intent.putExtra("tab",tab);
         activity.startActivity(intent);
     }
 
@@ -217,6 +221,15 @@ public class UIShow {
      */
     public static void showNewTabAct(FragmentActivity activity, long tab) {
         Intent intent = new Intent(activity, NewTabActivity.class);
+        intent.putExtra("tab", tab);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 打开添加亲密好友页面
+     */
+    public static void showIntimacyDetailAct(FragmentActivity activity, int tab) {
+        Intent intent = new Intent(activity, IntimacyDetailActivity.class);
         intent.putExtra("tab", tab);
         activity.startActivity(intent);
     }
@@ -306,6 +319,20 @@ public class UIShow {
      */
     public static void showUserSecretAct(Context context) {
         context.startActivity(new Intent(context, UserSecretAct.class));
+    }
+
+    /**
+     * 打开他人资料设置页
+     */
+    public static void showUserOtherSetAct(Context context) {
+        context.startActivity(new Intent(context, UserOtherSetAct.class));
+    }
+
+    /**
+     * 打开他人标签页
+     */
+    public static void showUserOtherLabelAct(Context context) {
+        context.startActivity(new Intent(context, UserOtherLabelAct.class));
     }
 
     // -----------------------消息提示跳转 start--------------------------

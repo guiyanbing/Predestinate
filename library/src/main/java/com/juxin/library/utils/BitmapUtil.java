@@ -1205,25 +1205,23 @@ public final class BitmapUtil {
      * @return bitmap
      */
     public static String imagePathToBase64(String path) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-        Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
-        if (path.toLowerCase().endsWith(".jpg") || path.toLowerCase().endsWith(".jpeg")) {
-            compressFormat = Bitmap.CompressFormat.JPEG;
-        } else if (path.toLowerCase().endsWith(".png")) {
-            compressFormat = Bitmap.CompressFormat.PNG;
-        }
-        return encodeToBase64(bitmap, compressFormat, 100);
+        return encodeToBase64(getSmallBitmap(path), Bitmap.CompressFormat.JPEG, 100);
     }
 
     /**
      * bitmap转为base64
      */
     public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
+        String base64 = "";
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+        try {
+            image.compress(compressFormat, quality, byteArrayOS);
+            base64 = Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+            byteArrayOS.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return base64.replaceAll("\n", "");
     }
 
     /**

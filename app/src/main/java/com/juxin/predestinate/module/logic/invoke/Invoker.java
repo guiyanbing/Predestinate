@@ -494,7 +494,7 @@ public class Invoker {
                     PLogger.d("------>" + path[0]);
                     // 将选取的图片进行质量压缩并将二进制流转换为base64字符串
                     Map<String, Object> responseObject = new HashMap<>();
-                    responseObject.put("imageData", BitmapUtil.imagePathToBase64(path[0]).replaceAll("\n", ""));//base64格式字符串
+                    responseObject.put("imageData", BitmapUtil.imagePathToBase64(path[0]));//base64格式字符串
                     doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
                 }
             });

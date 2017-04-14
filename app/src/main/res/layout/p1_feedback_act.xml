@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px25_dp"
+        android:layout_marginTop="@dimen/top_space"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -21,19 +21,20 @@
             android:background="@null"
             android:gravity="top"
             android:hint="@string/ext_feedback_hit"
-            android:padding="@dimen/px25_dp"
+            android:padding="@dimen/act_space"
             android:textColorHint="@color/text_ciyao_gray"
-            android:textSize="@dimen/px45_sp" />
+            android:textSize="@dimen/txt_middle" />
 
         <TextView
             android:id="@+id/tv_suggest_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/px10_dp"
-            android:layout_marginRight="@dimen/px25_dp"
+            android:layout_marginRight="@dimen/act_space"
             android:gravity="right"
             android:text="0/120"
-            android:textColor="@color/text_ciyao_gray" />
+            android:textColor="@color/text_ciyao_gray"
+            android:textSize="@dimen/txt_big" />
 
         <View
             android:layout_width="match_parent"
@@ -46,24 +47,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/px25_dp">
+            android:padding="@dimen/act_space">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ext_feedback_contact"
                 android:textColor="@color/text_zhuyao_black"
-                android:textSize="@dimen/px46_sp" />
+                android:textSize="@dimen/txt_big" />
 
             <EditText
                 android:id="@+id/et_contact"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/act_space"
                 android:layout_weight="1"
                 android:background="@null"
+                android:textColorHint="@color/text_ciyao_gray"
                 android:hint="@string/ext_feedback_contact_hit"
                 android:maxLength="30"
-                android:textSize="@dimen/px45_sp" />
+                android:textSize="@dimen/txt_middle" />
 
         </LinearLayout>
 

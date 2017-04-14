@@ -5,14 +5,14 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
+import com.juxin.predestinate.ui.xiaoyou.bean.IntimacyList;
 
 
 /**
  * 亲密好友首页
  * Created by zm on 2016/9/7.
  */
-public class CloseFriendsAdapter extends BaseRecyclerViewAdapter<LabelsList.LabelInfo> {
+public class CloseFriendsAdapter extends BaseRecyclerViewAdapter<IntimacyList.IntimacyInfo> {
 
     @Override
     public int[] getItemLayouts() {
@@ -22,9 +22,9 @@ public class CloseFriendsAdapter extends BaseRecyclerViewAdapter<LabelsList.Labe
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
         MyViewHolder vh = new MyViewHolder(viewHolder);
-        LabelsList.LabelInfo info = getItem(position);
+        IntimacyList.IntimacyInfo info = getItem(position);
         vh.tevName.setText(info.getLabelName()+"");
-        vh.tevNum.setText(info.getNum()+"人");
+        vh.tevNum.setText(info.getArr_friends().size()+"人");
 
     }
 

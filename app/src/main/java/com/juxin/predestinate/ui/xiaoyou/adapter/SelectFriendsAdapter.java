@@ -8,52 +8,36 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
  * 选择联系人页面适配
  * Created by zm on 2016/9/7.
  */
-public class SelectFriendsAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList.SimpleFriendInfo> {
+public class SelectFriendsAdapter extends BaseFriendsAdapter<SimpleFriendsList.SimpleFriendInfo> {
 
     private OnContactSelect contactSelect;
+    private Set<SimpleFriendsList.SimpleFriendInfo> uids = new HashSet<>();
 
     private void setChecked(int position) {
         if (getItem(position) != null) {
             getItem(position).setIsCheck(!getItem(position).isCheck());
             notifyDataSetChanged();
+            if (getItem(position).isCheck()){
+                uids.add(getItem(position));
+            }else {
+                uids.remove(getItem(position));
+            }
             if (contactSelect != null) {
-                contactSelect.onSelectChange(getList());
+                contactSelect.onSelectChange(uids);
             }
         }
-    }
-
-    /**
-     * 根据ListView的当前位置获取分类的首字母的Char ascii值
-     */
-    public int getSectionForPosition(int position) {
-        return getItem(position).getSortKey().charAt(0);
-    }
-
-    /**
-     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
-     */
-    public int getPositionForSection(int section) {
-        int count = getListSize();
-        for (int i = 0; i < count; i++) {
-            String sortStr = getList().get(i).getSortKey();
-            char firstChar = sortStr.toUpperCase().charAt(0);
-            if (firstChar == section) {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     @Override
@@ -154,7 +138,15 @@ public class SelectFriendsAdapter extends BaseRecyclerViewAdapter<SimpleFriendsL
         notifyDataSetChanged();
     }
 
+    public Set<SimpleFriendsList.SimpleFriendInfo> getUids(){
+        return this.uids;
+    }
+
+    public void setOnContactSelectLinear(OnContactSelect mOnContactSelect){
+        this.contactSelect = mOnContactSelect;
+    }
+
     public interface OnContactSelect {
-        void onSelectChange(List<SimpleFriendsList.SimpleFriendInfo> list);
+        void onSelectChange(Set<SimpleFriendsList.SimpleFriendInfo> list);
     }
 }

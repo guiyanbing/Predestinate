@@ -100,15 +100,12 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
                                 UserLogin userLogin = (UserLogin) response.getBaseData();
                                 userLogin.getCookie();
                                 loginMgr.putAllLoginInfo(currentUserID, currentUserPwd, userLogin.getCookie(), true);
-//                        // 临时资料设置
-//                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
-//                        ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
                                 UIShow.showMainClearTask(LoginAct.this);
                             } else {
                                 PToast.showShort(getResources().getString(R.string.toast_login_iserror));
                             }
                         }
-                    }, true);
+                    });
                 }
                 break;
 

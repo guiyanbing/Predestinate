@@ -47,7 +47,6 @@ public class LoginMgr implements ModuleBase {
     private final static String LOGIN_USER_KEY = "LOGIN_USER_KEY";      // 保存当前登录过的账号信息
 
     public boolean IF_PW_RESET = false;                                 // 密码已是否重置
-    public static boolean hasLogin = false;                             //是否已经登录
     public static String cookie = null;
 
     @Override
@@ -190,10 +189,8 @@ public class LoginMgr implements ModuleBase {
 
     /**
      * 登录
-     *
-     * @param hasJump 登录后是否需要跳转
      */
-    public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback, final boolean hasJump) {
+    public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback) {
         HashMap<String, Object> userAccount = new HashMap<>();
         userAccount.put("name", uid);
         userAccount.put("pwd", EncryptUtil.md5(pwd));

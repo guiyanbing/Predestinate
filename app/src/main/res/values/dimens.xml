@@ -223,5 +223,9 @@
     <!-- 底部提示高度 -->
     <dimen name="tip_footer_height">@dimen/px116_dp</dimen>
 
-
+    <dimen name="act_space">@dimen/px35_dp</dimen>
+    <dimen name="top_space">@dimen/px25_dp</dimen>
+    <dimen name="txt_big">@dimen/px46_sp</dimen>
+    <dimen name="txt_middle">@dimen/px45_sp</dimen>
+    <dimen name="txt_small">@dimen/px39_sp</dimen>
 </resources>

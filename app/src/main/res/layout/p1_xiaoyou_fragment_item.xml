@@ -4,13 +4,35 @@
               android:layout_height="wrap_content"
               android:background="@color/white"
               android:orientation="vertical">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/search_title_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/px90_dp"-->
+        <!--android:background="@color/bg_color"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:orientation="horizontal"-->
+
+        <!--android:paddingLeft="@dimen/px60_dp"-->
+        <!--android:paddingTop="5.3dp"-->
+        <!--android:visibility="gone">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/search_txv_title"-->
+            <!--android:layout_width="26.7dp"-->
+            <!--android:layout_height="26.7dp"-->
+            <!--android:paddingBottom="@dimen/px15_dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="A"-->
+            <!--android:textColor="@color/color_aaaaaa"-->
+            <!--android:textSize="14sp"/>-->
+    <!--</LinearLayout>-->
     <TextView
         android:id="@+id/friend_item_txv_title"
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/px50_dp"
-        android:layout_height="@dimen/px92_dp"
+        android:paddingLeft="@dimen/px86_dp"
+        android:layout_height="@dimen/px90_dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/px36_sp"
+        android:textSize="14sp"
         android:textColor="@color/color_B0B0B0"
         android:background="@color/bg_color"
         android:visibility="gone"
@@ -42,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/px25_dp"
+                android:textColor="@color/color_zhuyao"
                 android:text="@string/label"/>
 
             <ImageView

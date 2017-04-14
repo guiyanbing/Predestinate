@@ -87,6 +87,16 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.user.check.other.UserOtherSetAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.user.check.other.UserOtherLabelAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.user.check.edit.UserEditSignAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -113,6 +123,9 @@
             android:name=".ui.xiaoyou.NewTabActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.xiaoyou.IntimacyDetailActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.user.check.edit.UserSecretAct"

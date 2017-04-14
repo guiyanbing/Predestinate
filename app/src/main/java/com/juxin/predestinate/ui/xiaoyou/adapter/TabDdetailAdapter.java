@@ -16,6 +16,12 @@ import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
  */
 public class TabDdetailAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList.SimpleFriendInfo> {
 
+    private int type ;
+
+    public TabDdetailAdapter(int type) {
+        this.type = type;
+    }
+
     @Override
     public int[] getItemLayouts() {
         return new int[]{R.layout.p1_xiaoyou_label_detial_item};
@@ -28,6 +34,9 @@ public class TabDdetailAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList
         //设置具体label的亲密度数据
         vh.txvName.setText(info.getNickname());
         //        vh.imgHead 设置头像
+        if (type == 1){
+            vh.txvNum.setText(info.getIntimate()+"");
+        }
     }
 
     @Override
@@ -50,8 +59,13 @@ public class TabDdetailAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList
             txvName =  convertView.findViewById(R.id.friend_Label_detial_txv_name);
             txvIntimate = convertView.findViewById(R.id.friend_Label_detial_txv_intimate);
             txvNum = convertView.findViewById(R.id.friend_Label_detial_txv_num);
-            txvIntimate.setVisibility(View.GONE);
-            txvNum.setVisibility(View.GONE);
+            if (type == 1){
+                txvIntimate.setVisibility(View.VISIBLE);
+                txvNum.setVisibility(View.VISIBLE);
+            }else {
+                txvIntimate.setVisibility(View.GONE);
+                txvNum.setVisibility(View.GONE);
+            }
         }
     }
 
