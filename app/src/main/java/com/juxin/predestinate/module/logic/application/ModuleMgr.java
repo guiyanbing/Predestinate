@@ -9,6 +9,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.local.center.CenterMgr;
+import com.juxin.predestinate.module.local.chat.ChatListMgr;
 import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
@@ -241,6 +242,19 @@ public final class ModuleMgr {
             addModule(chatMgr);
         }
         return chatMgr;
+    }
+
+    /**
+     * 聊天listMg管理
+     */
+    private static ChatListMgr chatListMgr = null;
+
+    public static ChatListMgr getChatListMgr() {
+        if (chatListMgr == null) {
+            chatListMgr = new ChatListMgr();
+            addModule(chatListMgr);
+        }
+        return chatListMgr;
     }
 
 }

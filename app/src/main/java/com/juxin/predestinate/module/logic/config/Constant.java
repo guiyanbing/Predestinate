@@ -47,4 +47,7 @@ public class Constant {
     // ------ 文件长存储/短存储 start --------
     public static final String STR_SHORT_TAG = "oss";    // 短存储图片截取标志
     public static final String STR_LONG_TAG = "jxfile";  // 长存储图片截取标志
+
+    public static final String SINCE_GROWTHID = "since_growthid"; //消息自增长ID
+    public static final long SINCE_GROWTHID_DEFAULT = -1;         // 默认值
 }

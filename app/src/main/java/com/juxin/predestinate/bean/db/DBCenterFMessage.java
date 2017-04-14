@@ -74,7 +74,7 @@ public class DBCenterFMessage {
             values.put(FMessage.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
             values.put(FMessage.COLUMN_FSTATUS, 1);// 默认为1插入的时候
             values.put(FMessage.COLUMN_FSTATUS, baseMessage.getTime());
-            values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
+            values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
             return mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
         }catch (Exception e) {
@@ -122,8 +122,8 @@ public class DBCenterFMessage {
             if (baseMessage.getTime() != -1)
                 values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
 
-            if (baseMessage.getContentJson() != null)
-                values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getContentJson()));
+            if (baseMessage.getJsonStr() != null)
+                values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
             return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
         } catch (Exception e) {
             e.printStackTrace();
