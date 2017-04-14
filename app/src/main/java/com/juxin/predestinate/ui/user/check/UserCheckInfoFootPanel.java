@@ -78,6 +78,10 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.item_sign:   // 标签
+
+                    // 测试
+                    UIShow.showUserOtherSetAct(getContext());
+
                     break;
 
                 case R.id.item_dynamic: // 动态
