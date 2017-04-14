@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.FriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
-import com.juxin.predestinate.ui.xiaoyou.zanshi.ClosenessUpgradeDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,8 +93,8 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
 //                        dialog.showDialog(getActivity());
 
                         //测试
-                        ClosenessUpgradeDialog dialog = new ClosenessUpgradeDialog();
-                        dialog.showDialog(getActivity());
+//                        ClosenessUpgradeDialog dialog = new ClosenessUpgradeDialog();
+//                        dialog.showDialog(getActivity());
                     }else if (position == 1){
                         UIShow.showCloseFriendsAct(getActivity());
                     }
@@ -155,7 +153,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
         crlvList.showXrecyclerView();
         lvList.refreshComplete();
         lvList.loadMoreComplete();
-        Log.e("TTTTTTTTTTGG",response.getResponseString()+"|||"+page);
+//        Log.e("TTTTTTTTTTGG",response.getResponseString()+"|||"+page);
         if (response.isOk()){//请求返回成功
             FriendsList lists = (FriendsList) response.getBaseData();
             List<FriendsList.FriendInfo> friendInfos = lists.getArr_frends();
@@ -198,7 +196,8 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
             arrDatas.clear();
             addDataBack();
         }
-        for (int i = 0 ;i < 5 ;i++){
+        if (page == 0)
+        for (int i = 0 ;i < 2 ;i++){
             FriendsList.FriendInfo info = new FriendsList.FriendInfo();
             info.setNickname("小茜" + page + i);
             info.setGender(1);
@@ -220,6 +219,6 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
             arrDatas.add(info1);
             arrDatas.add(info2);
         }
-        Log.e("TTTTTTTTTTTKKK","执行了此方法");
+//        Log.e("TTTTTTTTTTTKKK","执行了此方法");
     }
 }

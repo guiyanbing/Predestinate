@@ -3,10 +3,11 @@ package com.juxin.predestinate.ui.xiaoyou;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -14,7 +15,7 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.CloseFriendsAdapter;
-import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
+import com.juxin.predestinate.ui.xiaoyou.bean.IntimacyList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
 
 import java.util.ArrayList;
@@ -26,18 +27,19 @@ import java.util.ArrayList;
 public class CloseFriendsActivity extends BaseActivity implements View.OnClickListener,CustomSearchView.OnTextChangedListener {
 
     //控件
-    //控件
     private CustomRecyclerView crlvList;
-    private XRecyclerView lvList;
+    private RecyclerView lvList;
     private CustomSearchView mCustomSearchView;//自定义的搜索控件
 
-    private ArrayList<LabelsList.LabelInfo> arrLabelinfos;
+    private ArrayList<IntimacyList.IntimacyInfo> arrLabelinfos;
     private CloseFriendsAdapter mCloseFriendsAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_xiaoyou_close_friends_activity);
+        arrLabelinfos = FriendsUtils.intimacyInfos;
+        Log.e("TTTTTTTclose",arrLabelinfos.size()+"||");
         initView();
     }
 
@@ -45,7 +47,7 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.good_friend));
         crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_close_friends_lv_list);
-        lvList = crlvList.getXRecyclerView();
+        lvList = crlvList.getRecyclerView();
         lvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         lvList.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
@@ -54,17 +56,20 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
         mCloseFriendsAdapter = new CloseFriendsAdapter();
 
         //测试
-        testData();
+//        testData();
 
         lvList.setAdapter(mCloseFriendsAdapter);
+        crlvList.showRecyclerView();
+        mCloseFriendsAdapter.setList(arrLabelinfos);
         initListener();
     }
     private void initListener(){
         mCloseFriendsAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
             public void onItemClick(View convertView, int position) {
-                LabelsList.LabelInfo info = mCloseFriendsAdapter.getItem(position);
-                UIShow.showNewTabAct(CloseFriendsActivity.this,info.getId());
+                IntimacyList.IntimacyInfo info = mCloseFriendsAdapter.getItem(position);
+                // TODO: 2017/4/13 待处理
+                UIShow.showIntimacyDetailAct(CloseFriendsActivity.this,position);
             }
         });
 //        lvList.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -171,15 +176,15 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
 
     //测试
     private void testData(){
-        arrLabelinfos = new ArrayList<>();
-        for (int i = 0 ;i < 20;i++){
-            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
-            info.setId(i);
-            info.setLabelName("标签" + i);
-            info.setNum(i+i);
-            arrLabelinfos.add(info);
-        }
-        mCloseFriendsAdapter.setList(arrLabelinfos);
+//        arrLabelinfos = new ArrayList<>();
+//        for (int i = 0 ;i < 20;i++){
+//            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
+//            info.setId(i);
+//            info.setLabelName("标签" + i);
+//            info.setNum(i+i);
+//            arrLabelinfos.add(info);
+//        }
+//        mCloseFriendsAdapter.setList(arrLabelinfos);
     }
     @Override
     public void onTextChanged(CharSequence str) {

@@ -31,16 +31,21 @@ public class FriendsAdapter extends BaseFriendsAdapter<FriendsList.FriendInfo> {
             vh.friend_item_txv_describe.setText(info.getDescribe() + "");
             vh.friend_item_txv_title.setVisibility(View.GONE);
         } else if(info.getType() == 0){
-            // 根据position获取分类的首字母的Char ascii值
-            int section = getSectionForPosition(position);
-
-            // 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
-            if (position == getPositionForSection(section)) {
-                vh.friend_item_txv_title.setVisibility(View.VISIBLE);
-                vh.friend_item_txv_title.setText(info.getSortKey());
-            } else {
+            if (getItem(position-1).getType() == 0){
                 vh.friend_item_txv_title.setVisibility(View.GONE);
+            }else {
+                vh.friend_item_txv_title.setVisibility(View.VISIBLE);
             }
+//            // 根据position获取分类的首字母的Char ascii值
+//            int section = getSectionForPosition(position);
+//
+//            // 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
+//            if (position == getPositionForSection(section)) {
+//                vh.friend_item_txv_title.setVisibility(View.VISIBLE);
+//                vh.friend_item_txv_title.setText(info.getSortKey());
+//            } else {
+//                vh.friend_item_txv_title.setVisibility(View.GONE);
+//            }
 
             vh.showLately();
             //friend_item_txv_intimacy 根据性别设置提示文字

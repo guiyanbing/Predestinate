@@ -31,7 +31,10 @@
             android:visibility="invisible"/>
     </RelativeLayout>
 
-    <!--<View-->
+    <View
+        android:id="@+id/search_view_v"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px28_dp"/>
 
     <TextView
         android:id="@+id/search_txv_title_no_friends"

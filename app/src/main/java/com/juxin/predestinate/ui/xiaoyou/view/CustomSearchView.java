@@ -42,6 +42,7 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
     private TextView txvTile;
     private RecyclerView mRecyclerView;
     private BaseFriendsAdapter mFriendsAdapter;
+    private View mView;
 
     private List<BaseFriendInfo> arrSearchList;//数据
     private HTCallBack mHTCallBack;
@@ -71,6 +72,7 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
         toPinYin();
 
         editText = (ClearEditText) findViewById(R.id.search_edt_search);
+        mView = findViewById(R.id.search_view_v);
         txvNoFriend = (TextView) findViewById(R.id.search_txv_title_no_friends);
         llSeach = (LinearLayout) findViewById(R.id.search_title_layout);
         txvTile = (TextView) findViewById(R.id.search_txv_title);
@@ -201,11 +203,13 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
 
     public void showNoData(){
         txvNoFriend.setVisibility(View.VISIBLE);
+        mView.setVisibility(View.VISIBLE);
         llSeach.setVisibility(View.GONE);
     }
 
     public void showTitleLayout(String title){
         txvNoFriend.setVisibility(View.GONE);
+        mView.setVisibility(View.GONE);
         llSeach.setVisibility(View.VISIBLE);
         txvTile.setText(title + "");
     }
