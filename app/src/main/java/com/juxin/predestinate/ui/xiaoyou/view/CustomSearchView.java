@@ -68,8 +68,8 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
         this.setOrientation(VERTICAL);
         mFriendsAdapter = new FriendsAdapter();
 
-        testData();
-        toPinYin();
+//        testData();
+//        toPinYin();
 
         editText = (ClearEditText) findViewById(R.id.search_edt_search);
         mView = findViewById(R.id.search_view_v);
@@ -88,10 +88,10 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
     }
 
     public void setAdapter(BaseFriendsAdapter adapter){
+        mView.setVisibility(View.GONE);
         this.mFriendsAdapter = adapter;
         mRecyclerView.setAdapter(mFriendsAdapter);
-        arrSearchList.clear();
-        arrSearchList.addAll(adapter.getList());
+        arrSearchList = adapter.getList();
         toPinYin();
     }
     /**

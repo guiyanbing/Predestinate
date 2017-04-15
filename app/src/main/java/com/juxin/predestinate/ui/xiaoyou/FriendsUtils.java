@@ -27,6 +27,7 @@ public class FriendsUtils implements RequestComplete {
     public static ArrayList<IntimacyList.IntimacyInfo> intimacyInfos;
     public static List<SimpleFriendsList.SimpleFriendInfo> arr_uids;
     public void reqFriendsList(){
+        intimacyInfos = getLevelInfo();
         ModuleMgr.getCommonMgr().getFriendList(this);
     }
 
@@ -60,7 +61,6 @@ public class FriendsUtils implements RequestComplete {
                 if (friendInfos != null && !friendInfos.isEmpty()){
                     friends.addAll(friendInfos);
                     Log.e("TTTTTTTTTTTfUtils", "friens_size=" + friends.size() + "|||");
-                    intimacyInfos = getLevelInfo();
                     int size = arr_uids.size();
                     for (int i = 0;i < size && i < friends.size();i++){
                         arr_uids.get(i).setUserInfoLightweight(friends.get(i));

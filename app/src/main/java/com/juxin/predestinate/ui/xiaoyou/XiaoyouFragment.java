@@ -95,6 +95,8 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
                         //测试
 //                        ClosenessUpgradeDialog dialog = new ClosenessUpgradeDialog();
 //                        dialog.showDialog(getActivity());
+//                        BottomGiftDialog dialog = new BottomGiftDialog();
+//                        dialog.showDialog(getActivity());
                     }else if (position == 1){
                         UIShow.showCloseFriendsAct(getActivity());
                     }

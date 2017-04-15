@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
@@ -74,8 +75,9 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
 
     private void creatNewTag() {
         ArrayList name = new ArrayList();
-        name.add("name");
+        name.add("好友");
         ArrayList list = new ArrayList();
+        list.add("60230");
         ModuleMgr.getCommonMgr().addTagGroup(name, list, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -116,6 +118,9 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK&&data != null){
+            ArrayList<SimpleFriendsList.SimpleFriendInfo> list;
+            list = data.getExtras().getParcelableArrayList("infos");
+            Log.e("TTTTTTTTTT",list+"|||"+list.size()+"||");
             ModuleMgr.getCommonMgr().getTagGroupMember(this);
         }
     }

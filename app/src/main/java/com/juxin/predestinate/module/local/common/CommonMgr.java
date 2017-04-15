@@ -184,11 +184,16 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroup(List<String> tag_name,List<Long> uid_list,RequestComplete complete) {
-        Gson gson = new Gson();
-        String names = gson.toJson(tag_name);
-        String list = gson.toJson(uid_list);
+    public void addTagGroup(List<String> tag_name,List<String> uid_list,RequestComplete complete) {
+
+//        "tag_name": ["新标签2","sssss","aaaa"]	// 标签名字,
+//        "uid_list": [10000,12222,13333]			// opt 标签成员
+        String names = "[\"新标签2\",\"sssss\",\"aaaa\"]";
+        String list = "[10000,12222,13333]";
+        //        String[] names = tag_name.toArray(new String[tag_name.size()]);
+//        String[] list = uid_list.toArray(new String[uid_list.size()]);
         Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
         postParams.put("tag_name",names );// 标签名字
         postParams.put("uid_list", list);// 标签成员
 //        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);

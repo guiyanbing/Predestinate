@@ -87,7 +87,7 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
             for (SimpleFriendsList.SimpleFriendInfo info:mSelectFriendsAdapter.getUids()){
                 set.add(info.getUid());
             }
-            ModuleMgr.getCommonMgr().addTagGroupMember(tab,set,this);
+            ModuleMgr.getCommonMgr().addTagGroupMember(tab, set, this);
         }
     }
 
@@ -107,7 +107,7 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-        Log.e("TTTTTTTTTTselectContact", response.getResponseString()+"|||");
+        Log.e("TTTTTTTTTTselectContact", response.getResponseString() + "|||");
         if (response.getUrlParam() == UrlParam.reqAddTagGroupMember){
             if (response.isOk()){//请求返回成功
                 MMToast.showShort("添加成功");
@@ -118,6 +118,15 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
                 setResult(RESULT_OK, intent);
                 SelectContactActivity.this.finish();
              }else {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                ArrayList<SimpleFriendsList.SimpleFriendInfo> list = new ArrayList();
+                list.addAll(mSelectFriendsAdapter.getUids());
+                bundle.putParcelableArrayList("infos", list);
+                Log.e("TTTTTYYYY",list+"|||"+list.size());
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
+                SelectContactActivity.this.finish();
                 MMToast.showShort("添加失败，请重试");
             }
         }else {
@@ -126,6 +135,7 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
                 SimpleFriendsList lists = (SimpleFriendsList) response.getBaseData();
                 List<SimpleFriendsList.SimpleFriendInfo> friendInfos = lists.getArr_frends();
                 arrSimpleFriends.addAll(friendInfos);
+                testData();
                 if (arrSimpleFriends.size() > 0){
                     mSelectFriendsAdapter.setList(arrSimpleFriends);
                     crlvList.showRecyclerView();
@@ -152,5 +162,40 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onSelectChange(Set<SimpleFriendsList.SimpleFriendInfo> list) {
         changeTitleRight(list.size());
+    }
+
+    //测试
+    private void testData(){
+        if (arrSimpleFriends == null){
+            arrSimpleFriends = new ArrayList<>();
+        }
+//        UserInfoLightweight infoLightweight = new UserInfoLightweight();
+//        infoLightweight.setAlias("小小");
+//        infoLightweight.setTime(100000);
+//        infoLightweight.setAvatar("地址");
+//        infoLightweight.setNickname("测试");
+        for (int i = 0 ;i < 10;i++){
+            SimpleFriendsList.SimpleFriendInfo info = new SimpleFriendsList.SimpleFriendInfo();
+            info.setNickname("测试"+i);
+//            info.setUserInfoLightweight(infoLightweight);
+            arrSimpleFriends.add(info);
+            SimpleFriendsList.SimpleFriendInfo info1 = new SimpleFriendsList.SimpleFriendInfo();
+            info1.setNickname("你好"+i);
+//            info1.setUserInfoLightweight(infoLightweight);
+            arrSimpleFriends.add(info1);
+            SimpleFriendsList.SimpleFriendInfo info2 = new SimpleFriendsList.SimpleFriendInfo();
+            info2.setNickname("不是"+i);
+//            info2.setUserInfoLightweight(infoLightweight);
+            arrSimpleFriends.add(info2);
+            SimpleFriendsList.SimpleFriendInfo info3 = new SimpleFriendsList.SimpleFriendInfo();
+            info3.setNickname("wwww"+i);
+//            info3.setUserInfoLightweight(infoLightweight);
+            arrSimpleFriends.add(info3);
+            SimpleFriendsList.SimpleFriendInfo info4 = new SimpleFriendsList.SimpleFriendInfo();
+            info4.setNickname("我们"+i);
+//            info4.setUserInfoLightweight(infoLightweight);
+            arrSimpleFriends.add(info4);
+        }
+        //        mFriendsAdapter.setList(arrSearchList);
     }
 }

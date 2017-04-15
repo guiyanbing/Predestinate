@@ -1,6 +1,9 @@
 package com.juxin.predestinate.ui.xiaoyou.bean;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.net.BaseData;
 
@@ -25,11 +28,50 @@ public class SimpleFriendsList extends BaseData{
         arr_frends = getBaseDataList(getJsonObject(s).optJSONArray("list"), SimpleFriendInfo.class);
     }
 
-    public static class SimpleFriendInfo extends BaseFriendInfo {
+    public static class SimpleFriendInfo extends BaseFriendInfo implements Parcelable{
         private long uid;//用户ID
         private boolean isCheck;//选中状态 为true：选中 ；为false：未选中
         private int Intimate;
         private UserInfoLightweight mUserInfoLightweight;
+
+        public SimpleFriendInfo(){
+
+        }
+        protected SimpleFriendInfo(Parcel in) {
+            nickname = in.readString();
+            sortKey = in.readString();
+            uid = in.readLong();
+            isCheck = in.readByte() != 0;
+            Intimate = in.readInt();
+            mUserInfoLightweight = in.readParcelable(UserInfoLightweight.class.getClassLoader());
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(nickname);
+            dest.writeString(sortKey);
+            dest.writeLong(uid);
+            dest.writeByte((byte) (isCheck ? 1 : 0));
+            dest.writeInt(Intimate);
+            dest.writeParcelable(mUserInfoLightweight, flags);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<SimpleFriendInfo> CREATOR = new Creator<SimpleFriendInfo>() {
+            @Override
+            public SimpleFriendInfo createFromParcel(Parcel in) {
+                return new SimpleFriendInfo(in);
+            }
+
+            @Override
+            public SimpleFriendInfo[] newArray(int size) {
+                return new SimpleFriendInfo[size];
+            }
+        };
 
         @Override
         public void parseJson(String s) {
@@ -86,11 +128,11 @@ public class SimpleFriendsList extends BaseData{
         public String toString() {
             return "RankList{" +
                     "uid=" + uid +
-//                    ", avatar=" + avatar +
+                    ", sortKey=" + sortKey +
                     ", nickname=" + nickname +
-                    //                    ", gender=" + gender +
-                    //                    ", score=" + score +
-                    //                    ", exp=" + exp +
+                    ", isCheck=" + isCheck +
+                    ", Intimate=" + Intimate +
+                    ", mUserInfoLightweight=" + mUserInfoLightweight +
                     '}';
         }
     }
