@@ -175,7 +175,17 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         return true;
     }
 
+    /**
+     * 设置选择反馈
+     */
+    public void setSelectEffect(boolean mAutoSelectEffect) {
+        this.mAutoSelectEffect = mAutoSelectEffect;
+    }
 
+    /**
+     * 设置最大选择数量
+     * @param count
+     */
     public void setMaxSelectCount(int count) {
         if (mSelectedView.size() > count) {
             mSelectedView.clear();

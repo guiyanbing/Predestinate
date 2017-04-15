@@ -6,7 +6,7 @@
     android:layout_marginRight="@dimen/px30_dp"
     android:layout_marginTop="@dimen/px15_dp"
     android:background="@drawable/p1_flow_tag_bg"
-    android:paddingLeft="@dimen/px30_dp"
-    android:paddingRight="@dimen/px30_dp"
+    android:paddingLeft="@dimen/px40_dp"
+    android:paddingRight="@dimen/px40_dp"
     android:textColor="@drawable/p1_flow_text_color"
     android:textSize="@dimen/px36_sp"/>
