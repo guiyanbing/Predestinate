@@ -492,8 +492,8 @@
     </style>
 
     <style name="chat_input_btn">
-        <item name="android:layout_width">@dimen/px84_dp</item>
-        <item name="android:layout_height">@dimen/px84_dp</item>
+        <item name="android:layout_width">@dimen/px100_dp</item>
+        <item name="android:layout_height">@dimen/px100_dp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 

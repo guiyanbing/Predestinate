@@ -96,7 +96,7 @@ public class ChatExtendPanel extends ChatViewPanel {
 //                            recordDialog.setData(getChatInstance());
 //                            recordDialog.showDialog((FragmentActivity) App.activity);
                             break;
-                        case TREASURE:
+                     //   case TREASURE:
 //                            List<Long> longList = new ArrayList<Long>();
 //                            longList.add(getChatInstance().chatAdapter.getLWhisperId());
 //                            ModuleMgr.getMsgCommonMgr().treasureSendInvitation(longList, new HttpMgr.IReqComplete() {
@@ -111,7 +111,7 @@ public class ChatExtendPanel extends ChatViewPanel {
 //                                    }
 //                                }
 //                            });
-                            break;
+                       //     break;
                     }
                 }
             }

@@ -193,7 +193,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 break;
             case R.id.input_monthly:
                 //  UIShow.showGoodsMonthlyLetterAct((Activity) getContext(), UIHelper.PAY_ACT);
-            //    UIShow.showMonthMailAct((Activity) getContext());
+                //    UIShow.showMonthMailAct((Activity) getContext());
 
                 break;
         }
@@ -274,14 +274,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     public void sendSystemMsgTyping() {
         if (getChatInstance().chatAdapter.isTyping()) {
             getChatInstance().chatAdapter.setTyping(false);
-       //     ModuleMgr.getMsgCommonMgr().sendSystemMsgTyping(getChatInstance().chatAdapter.getWhisperId(), "", getChatInstance().chatAdapter.getIsKF_ID(), null);
+            //     ModuleMgr.getMsgCommonMgr().sendSystemMsgTyping(getChatInstance().chatAdapter.getWhisperId(), "", getChatInstance().chatAdapter.getIsKF_ID(), null);
         }
     }
 
     public void sendSystemMsgCancelInput() {
         if (!getChatInstance().chatAdapter.isTyping()) {
             getChatInstance().chatAdapter.setTyping(true);
-        //    ModuleMgr.getMsgCommonMgr().sendSystemMsgCancelInput(getChatInstance().chatAdapter.getWhisperId(), "", getChatInstance().chatAdapter.getIsKF_ID(), null);
+            //    ModuleMgr.getMsgCommonMgr().sendSystemMsgCancelInput(getChatInstance().chatAdapter.getWhisperId(), "", getChatInstance().chatAdapter.getIsKF_ID(), null);
         }
     }
 
@@ -322,15 +322,13 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到文本输入模式。
      */
     private void onClickChatText() {
-        chatBtnExpression.setVisibility(View.GONE);
+        chatBtnExpression.setVisibility(View.VISIBLE);
 
         chatBtnVoice.setVisibility(View.VISIBLE);
         chatTextEdit.setVisibility(View.VISIBLE);
 
         chatBtnText.setVisibility(View.INVISIBLE);
-
         chatVoiceRecord.setVisibility(View.INVISIBLE);
-
         chat_rel.setVisibility(View.VISIBLE);
 
         showSendBtn();

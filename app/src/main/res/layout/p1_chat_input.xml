@@ -56,21 +56,14 @@
                 <ImageView
                     android:id="@+id/chat_voice"
                     style="@style/chat_input_btn"
-                    android:src="@drawable/y1_talk_jianang_2" />
+                    android:src="@drawable/chat_input_voice_btn_selector" />
 
                 <ImageView
                     android:id="@+id/chat_text"
                     style="@style/chat_input_btn"
-                    android:src="@drawable/y1_talk_jianpan"
+                    android:src="@drawable/chat_input_keyboard_btn_selector"
                     android:visibility="invisible" />
             </FrameLayout>
-
-            <ImageView
-                android:id="@+id/chat_expression"
-                style="@style/chat_input_btn"
-                android:layout_marginLeft="@dimen/px28_dp"
-                android:src="@drawable/chat_btn_expression"
-                android:visibility="gone" />
 
             <View
                 style="@style/divider_line_vertical"
@@ -101,6 +94,19 @@
 
             <View style="@style/divider_line_vertical" />
 
+            <ImageView
+                android:id="@+id/chat_expression"
+                style="@style/chat_input_btn"
+                android:layout_marginLeft="@dimen/px28_dp"
+                android:src="@drawable/chat_input_btn_expression"
+                android:visibility="visible" />
+
+            <ImageView
+                style="@style/chat_input_btn"
+                android:layout_marginLeft="@dimen/px28_dp"
+                android:src="@drawable/chat_input_gift_btn_expression"
+                android:visibility="visible" />
+
             <RelativeLayout
                 android:id="@+id/chat_rel"
                 android:layout_width="wrap_content"
@@ -115,7 +121,7 @@
 
                     <ImageView
                         style="@style/chat_input_btn"
-                        android:src="@drawable/y1_talk_more" />
+                        android:src="@drawable/chat_input_more_btn_selector" />
                 </LinearLayout>
 
                 <TextView
