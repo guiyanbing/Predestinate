@@ -4,11 +4,14 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
@@ -26,9 +29,11 @@ import java.util.Set;
  */
 public class CommonMgr implements ModuleBase {
 
+    private CommonConfig commonConfig;//服务器静态配置
+
     @Override
     public void init() {
-
+        requestStaticConfig();
     }
 
     @Override
@@ -73,6 +78,37 @@ public class CommonMgr implements ModuleBase {
         headerParams.put("Accept", "application/jx-json");
         headerParams.put("Content-Type", "application/jx-json");
         return headerParams;
+    }
+
+    /**
+     * 请求服务器在线配置
+     */
+    public void requestStaticConfig() {
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());//渠道号
+        requestParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());//子渠道号
+        requestParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());//包名
+        requestParams.put("platform", 1);//平台 1-android， 2-ios
+        requestParams.put("version", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.staticConfig, requestParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    commonConfig = (CommonConfig) response.getBaseData();
+                }
+                if (commonConfig == null) {
+                    PLogger.d("------>static config request fail.");
+                    commonConfig = new CommonConfig();
+                }
+            }
+        });
+    }
+
+    /**
+     * @return 获取服务器静态配置对象
+     */
+    public CommonConfig getCommonConfig() {
+        return commonConfig;
     }
 
     /**
@@ -161,6 +197,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     //============================== 小友模块相关接口 =============================
+
     /**
      * 好友标签分组成员
      *
@@ -184,12 +221,12 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroup(List<String> tag_name,List<Long> uid_list,RequestComplete complete) {
+    public void addTagGroup(List<String> tag_name, List<Long> uid_list, RequestComplete complete) {
         Gson gson = new Gson();
         String names = gson.toJson(tag_name);
         String list = gson.toJson(uid_list);
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag_name",names );// 标签名字
+        postParams.put("tag_name", names);// 标签名字
         postParams.put("uid_list", list);// 标签成员
 //        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddFriendTag, null, complete);
@@ -200,11 +237,11 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroupMember(long tag,Set<Long> uids,RequestComplete complete) {
+    public void addTagGroupMember(long tag, Set<Long> uids, RequestComplete complete) {
         Gson gson = new Gson();
         String list = gson.toJson(uids);
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag",tag );// 标签id
+        postParams.put("tag", tag);// 标签id
         postParams.put("uids", list);// 要删除的uid
         Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, null, complete);
@@ -224,9 +261,9 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void delTagGroup(int tag_id,RequestComplete complete) {
+    public void delTagGroup(int tag_id, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag_id",tag_id );// tag_id
+        postParams.put("tag_id", tag_id);// tag_id
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroup, postParams, complete);
     }
 
@@ -235,11 +272,11 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void delTagGroupMember(int tag,List<Long> uids,RequestComplete complete) {
+    public void delTagGroupMember(int tag, List<Long> uids, RequestComplete complete) {
         Gson gson = new Gson();
         String list = gson.toJson(uids);
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag",tag );// 标签id
+        postParams.put("tag", tag);// 标签id
         postParams.put("uids", list);// 要删除的uid
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroupMember, null, complete);
     }
@@ -258,9 +295,9 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void getLatestInteractiveList(int page,int limit,RequestComplete complete) {
+    public void getLatestInteractiveList(int page, int limit, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("page",page );// 第几页
+        postParams.put("page", page);// 第几页
         postParams.put("limit", limit);// 每页条数
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLatestInteractive, postParams, complete);
     }
@@ -270,9 +307,9 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void ModifyTagGroup(int tag_id,String name,RequestComplete complete) {
+    public void ModifyTagGroup(int tag_id, String name, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag_id",tag_id );// 标签 ID
+        postParams.put("tag_id", tag_id);// 标签 ID
         postParams.put("name", name);// 新的分组名字
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqModifyTagGroup, null, complete);
     }
@@ -291,13 +328,13 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void getUserSimpleList(ArrayList<String> userLists,RequestComplete complete) {
+    public void getUserSimpleList(ArrayList<String> userLists, RequestComplete complete) {
 //        Gson gson = new Gson();
 //        String uidlist = gson.toJson(userLists);
         String[] uidlist = userLists.toArray(new String[userLists.size()]);
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uidlist",uidlist );// uids
-        Log.e("TTTTTNNN",uidlist+"");
+        postParams.put("uidlist", uidlist);// uids
+        Log.e("TTTTTNNN", uidlist + "");
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
     }
 }
