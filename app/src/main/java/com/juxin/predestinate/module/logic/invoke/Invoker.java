@@ -123,14 +123,27 @@ public class Invoker {
     }
 
     /**
-     * 本地调用执行JS逻辑
+     * 本地调用执行JS逻辑：特殊情况主动调用，如base64图片传输，无需转码
      *
      * @param callbackName   回调方法名
      * @param callbackID     回调id
      * @param responseString 调用传值
+     * @param isTranscode    是否进行字符串转码
+     */
+    public void doInJS(String callbackName, String callbackID, String responseString, boolean isTranscode) {
+        doInJS("javascript:" + callbackName + "(\'" + callbackID + "\',\'" +
+                (isTranscode ? ChineseFilter.toUnicode(responseString) : responseString) + "\')");
+    }
+
+    /**
+     * 本地调用执行JS逻辑，默认进行字符串转码，以支持中文字符串的传输
+     *
+     * @param callbackName   回调方法名
+     * @param callbackID     回调id
+     * @param responseString 是否进行字符串转码
      */
     public void doInJS(String callbackName, String callbackID, String responseString) {
-        doInJS("javascript:" + callbackName + "(\'" + callbackID + "\',\'" + ChineseFilter.toUnicode(responseString) + "\')");
+        doInJS(callbackName, callbackID, responseString, true);
     }
 
     /**
@@ -491,7 +504,7 @@ public class Invoker {
                     // 将选取的图片进行质量压缩并将二进制流转换为base64字符串
                     Map<String, Object> responseObject = new HashMap<>();
                     responseObject.put("imageData", BitmapUtil.imagePathToBase64(path[0]));//base64格式字符串
-                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject), false);
                 }
             });
         }
