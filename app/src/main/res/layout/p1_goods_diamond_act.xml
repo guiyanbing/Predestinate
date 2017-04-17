@@ -6,12 +6,20 @@
 
     <include layout="@layout/base_title" />
 
+    <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
+        android:id="@+id/cv_common"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"/>
+
     <ScrollView
+        android:id="@+id/pay_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fadingEdge="none"
         android:overScrollMode="always"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
