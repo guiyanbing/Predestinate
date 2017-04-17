@@ -78,7 +78,7 @@ class RecommendAdapter extends BaseRecyclerViewAdapter {
         setIntroduction(tv_introduction, userinfo);
         tv_sign.setText(userinfo.getSignname());
         tv_online_time.setText(TimeUtil.formatBeforeTime(recommendPeople.getTm() * 1000));
-        ImageLoader.loadAvatar(context, userinfo.getAvatar(), iv_head);
+        ImageLoader.loadRoundCorners(context, userinfo.getAvatar(),10, iv_head);
         iv_head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
