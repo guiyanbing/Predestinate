@@ -130,8 +130,9 @@ public class CenterMgr implements ModuleBase, PObserver {
 
     /**
      * 意见反馈
+     *
      * @param contract 联系方式
-     * @param views 意见
+     * @param views    意见
      * @param complete
      */
     public void feedBack(String contract, String views, RequestComplete complete) {
@@ -205,7 +206,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if (response.isOk()) {
                     userDetail = (UserDetail) response.getBaseData();
 
-                    if (!response.isCache()){
+                    if (!response.isCache()) {
                         MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
                     }
 
@@ -235,12 +236,10 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 批量获取用户简略信息
      */
-    public void reqUserSimpleList(final String[] uids, RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, new HashMap<String, Object>() {
-            {
-                put("uidlist", uids);
-            }
-        }, complete);
+    public void reqUserSimpleList(final long[] uidList, RequestComplete complete) {
+        HashMap<String,Object> post_param= new HashMap<>();
+        post_param.put("uidlist",uidList);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqUserSimpleList, post_param, complete);
     }
 
     /**
@@ -333,21 +332,23 @@ public class CenterMgr implements ModuleBase, PObserver {
             }
         });
     }
+
     /**
      * 更新系统设置信息
      */
-    public void updateSetting(HashMap<String,Object> post_param) {
+    public void updateSetting(HashMap<String, Object> post_param) {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateSetting, post_param, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     PToast.showShort(App.context.getResources().getString(R.string.toast_update_ok));
-                }else{
+                } else {
                     PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                 }
             }
         });
     }
+
     /**
      * 获取我的设置信息
      */

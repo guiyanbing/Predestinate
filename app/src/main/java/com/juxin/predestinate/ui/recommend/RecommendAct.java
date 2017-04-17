@@ -12,6 +12,8 @@ import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.recommend.RecommendPeople;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -24,6 +26,7 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,11 +39,12 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
     CustomRecyclerView cv_common;
     XRecyclerView recyclerView;
     RecommendAdapter adapter;
-    List<RecommendPeople> data = new ArrayList<>();
+    List<RecommendPeople> recommendData = new ArrayList<>();
     HashMap<String, Object> post_param;
     private int page = 1;//页码，要请求的数据页数
     private boolean b_resetPage;//重置页码标记
-    private ArrayList<String> uidList = new ArrayList<>();// 推荐的人uid列表
+    private ArrayList<Long> uidList = new ArrayList<>();// 推荐的人uid列表
+    private long[] uids;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,27 +72,53 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
      * 初始化 uid 列表
      */
     private void fillUidList() {
-        if (data.size() > 0) {
+        if (recommendData.size() > 0) {
             uidList.clear();
-            for (int i = 0; i < data.size(); i++) {
-                if (data.size() <= 10) {
-                    uidList.add(data.get(i).getUid() + "");
-                } else if (data.size() > 10) {
+            for (int i = 0; i < recommendData.size(); i++) {
+                if (recommendData.size() <= 10) {
+                    uidList.add(recommendData.get(i).getUid());
+                } else if (recommendData.size() > 10) {
                     if (i == 10) {
                         break;
                     } else {
-                        uidList.add(data.get(i).getUid() + "");
+                        uidList.add(recommendData.get(i).getUid());
                     }
                 }
             }
+            if (uidList.size() > 0) {
+                uids = new long[uidList.size()];
+                for (int i = 0; i < uidList.size(); i++) {
+                    uids[i] = uidList.get(i);
+                }
+            }
+            getUserInfo(uids);
         }
     }
 
     /**
      * 获取轻量级用户信息
      */
-    private void getUserInfo(ArrayList<String> uidList) {
-//        ModuleMgr.getChatMgr().getUserInfoLightweightList(uidList, this);
+    private void getUserInfo(long[] uids) {
+        MMLog.d("yao", "uids1==" + Arrays.toString(uids));
+        ModuleMgr.getCenterMgr().reqUserSimpleList(uids, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
+                if (lightweightList != null) {
+                    ArrayList<UserInfoLightweight> lightweightLists = lightweightList.getLightweightLists();
+                    if (null == lightweightLists) {
+                        cv_common.showNetError();
+                        return;
+                    }
+                    if (lightweightLists.size() == 0) {
+                        return;
+                    }
+                    adapter.setRecommendList(RecommendAct.this,recommendData);
+                    adapter.setList(lightweightLists);
+                    cv_common.showXrecyclerView();
+                }
+            }
+        });
     }
 
     private void initView() {
@@ -123,23 +153,20 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
                     if (b_resetPage) {
                         page = 2;
                         if (list.size() > 0)
-                            data.clear();
+                            recommendData.clear();
                     } else {
                         page++;
                     }
-                    data.addAll(list);
-                    //TODO 获取用户简略信息
-//                    fillUidList();
-//                    getUserInfo(uidList);
-                    adapter.setList(data);
-                    cv_common.showXrecyclerView();
+                    recommendData.addAll(list);
+                    //获取用户简略信息
+                    fillUidList();
                 }
                 if (list.size() < 10) {
                     recyclerView.setLoadingMoreEnabled(false);
 //                    exListView.addFooterView(divider_footer);
                 } else {
                     recyclerView.setLoadingMoreEnabled(true);
-                    MMLog.d("yao","loadingMoreEnable");
+                    MMLog.d("yao", "loadingMoreEnable");
                 }
             } else {
                 if (adapter.getList() != null && adapter.getList().size() > 0) {
@@ -185,13 +212,13 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
     public void onRefresh() {
         b_resetPage = true;
         ModuleMgr.getCommonMgr().sysRecommend(this, 1, post_param);
-        MMLog.d("yao","onRefresh");
+        MMLog.d("yao", "onRefresh");
     }
 
     @Override
     public void onLoadMore() {
         b_resetPage = false;
         ModuleMgr.getCommonMgr().sysRecommend(this, page, post_param);
-        MMLog.d("yao","onLoadMore");
+        MMLog.d("yao", "onLoadMore");
     }
 }
