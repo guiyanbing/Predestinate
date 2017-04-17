@@ -68,8 +68,8 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
         this.setOrientation(VERTICAL);
         mFriendsAdapter = new FriendsAdapter();
 
-        testData();
-        toPinYin();
+//        testData();
+//        toPinYin();
 
         editText = (ClearEditText) findViewById(R.id.search_edt_search);
         mView = findViewById(R.id.search_view_v);
@@ -82,22 +82,29 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mRecyclerView.setAdapter(mFriendsAdapter);
 
+        editText.setCursorVisible(false);
         //测试
         mRecyclerView.setVisibility(View.GONE);
         initSearchView();
     }
 
     public void setAdapter(BaseFriendsAdapter adapter){
+        mView.setVisibility(View.GONE);
         this.mFriendsAdapter = adapter;
         mRecyclerView.setAdapter(mFriendsAdapter);
-        arrSearchList.clear();
-        arrSearchList.addAll(adapter.getList());
+        arrSearchList = adapter.getList();
         toPinYin();
     }
     /**
      * 初始化搜索框
      */
     private void initSearchView() {
+        editText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setCursorVisible(true);
+            }
+        });
         editText.setOnSearchClickListener(new ClearEditText.OnSearchClickListener() {
             @Override
             public void onSearchClick(View view) {
@@ -116,6 +123,7 @@ public class CustomSearchView extends LinearLayout implements RequestComplete {
                 //                filterData(s.toString());
                 if (isOpenList == true && !TextUtils.isEmpty(s.toString())) {
                     reqSearch(s.toString());
+                    editText.setCursorVisible(false);
                 }
                 if (mOnTextChangedListener != null) {
                     mOnTextChangedListener.onTextChanged(s);

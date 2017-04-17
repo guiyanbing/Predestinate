@@ -148,7 +148,6 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.rl_clean_chathistory://清空聊天记录
                 //TODO 清理聊天记录
-                UIShow.showRecommendAct(this);//推荐的人测试
                 break;
             case R.id.rl_active://活动相关
                 //TODO 跳转活动相关网页

@@ -34,7 +34,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     private XRecyclerView lvList;
     private CustomSearchView mCustomSearchView;
 
-    private ArrayList<LabelsList.LabelInfo> arrLabes = new ArrayList<>();
+    public static ArrayList<LabelsList.LabelInfo> arrLabes = new ArrayList<>();
     private IntimacyFriendsAdapter mIntimacyFriendsAdapter;
     private int page = 0;//当前页
     private int pageLimits = 20;//一页的条数
@@ -44,6 +44,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_xiaoyou_tabgroup_activity);
         initView();
+        crlvList.showLoading();
         ModuleMgr.getCommonMgr().getTagGroupList(this);
     }
 
@@ -67,7 +68,8 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
         mIntimacyFriendsAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
             public void onItemClick(View convertView, int position) {
-                LabelsList.LabelInfo info = mIntimacyFriendsAdapter.getItem(position);
+                LabelsList.LabelInfo info = arrLabes.get(position);
+//                Log.e("TTTTTTTTT",info.getId()+"||"+info.getLabelName());
                 UIShow.showNewTabAct(TabGroupActivity.this,info.getId());
             }
         });
@@ -81,8 +83,9 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onTextChanged(CharSequence str) {
         if (TextUtils.isEmpty(str)){
-
+            crlvList.setVisibility(View.VISIBLE);
         }else {
+            crlvList.setVisibility(View.GONE);
             mCustomSearchView.showNoData();
         }
     }
@@ -91,6 +94,12 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     protected void onDestroy() {
         super.onDestroy();
         mCustomSearchView.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIntimacyFriendsAdapter.setList(arrLabes);
     }
 
     @Override
@@ -104,9 +113,9 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
             }
             arrLabes.addAll(labelInfos);
 
-            //// TODO: 2017/4/12 用于测试
-            testData();
-            lvList.setLoadingMoreEnabled(arrLabes.size() >= pageLimits ? true:false);
+//            //// TODO: 2017/4/12 用于测试
+//            testData();
+//            lvList.setLoadingMoreEnabled(arrLabes.size() >= pageLimits ? true:false);
 
             if (labelInfos != null && !labelInfos.isEmpty()) {
                 lvList.setLoadingMoreEnabled(labelInfos.size() >= pageLimits ? true:false);
@@ -120,8 +129,8 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
             MMToast.showShort("请求失败，请检查您的网络");
         }
 
-        //测试使用
-        crlvList.showXrecyclerView();
+//        //测试使用
+//        crlvList.showXrecyclerView();
     }
 
     @Override
@@ -137,15 +146,15 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
 
     //测试
     private void testData(){
-        if (arrLabes == null){
-            arrLabes = new ArrayList<>();
-        }
-        for (int i = 0;i < 10 ;i++){
-            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
-            info.setLabelName("测试");
-            info.setNum(i);
-            arrLabes.add(info);
-        }
-        mIntimacyFriendsAdapter.setList(arrLabes);
+//        if (arrLabes == null){
+//            arrLabes = new ArrayList<>();
+//        }
+//        for (int i = 0;i < 10 ;i++){
+//            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
+//            info.setLabelName("测试");
+//            info.setNum(i);
+//            arrLabes.add(info);
+//        }
+//        mIntimacyFriendsAdapter.setList(arrLabes);
     }
 }

@@ -7,6 +7,7 @@
 
     <include layout="@layout/base_title"/>
     <com.juxin.predestinate.ui.xiaoyou.view.LabelDetailsHeadView
+        android:id="@+id/xiaoyou_newtab_crlv_ldhv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView

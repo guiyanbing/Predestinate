@@ -213,7 +213,7 @@ public class UIShow {
     public static void showSelectContactAct(long tab,FragmentActivity activity) {
         Intent intent = new Intent(activity, SelectContactActivity.class);
         intent.putExtra("tab",tab);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent,0);
     }
 
     /**

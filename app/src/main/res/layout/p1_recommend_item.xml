@@ -11,15 +11,10 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/act_space">
 
-        <com.juxin.library.view.CircularCoverView
+        <ImageView
             android:id="@+id/iv_head"
             style="@style/avatar_small"
-            android:background="@drawable/ic_launcher"
-            app:cover_color="@color/white"
-            app:left_bottom_radius="@dimen/px15_dp"
-            app:left_top_radius="@dimen/px15_dp"
-            app:right_bottom_radius="@dimen/px15_dp"
-            app:right_top_radius="@dimen/px15_dp" />
+            android:src="@drawable/ic_launcher" />
 
         <RelativeLayout
             android:layout_width="wrap_content"

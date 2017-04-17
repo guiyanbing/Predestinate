@@ -256,7 +256,7 @@ public class Invoker {
         public void get_user_info(String data) {
             PLogger.d("---get_user_info--->" + data);
             final JSONObject dataObject = JsonUtil.getJsonObject(data);
-            ModuleMgr.getCenterMgr().reqUserSimpleList(new String[]{dataObject.optString("uid")}, new RequestComplete() {
+            ModuleMgr.getCenterMgr().reqUserSimpleList(new long[]{dataObject.optLong("uid")}, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     if (response.isOk()) {

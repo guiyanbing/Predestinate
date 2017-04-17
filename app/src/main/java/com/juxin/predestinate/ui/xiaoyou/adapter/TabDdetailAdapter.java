@@ -1,6 +1,9 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +20,7 @@ import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 public class TabDdetailAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList.SimpleFriendInfo> {
 
     private int type ;
+    private Context mContext;
 
     public TabDdetailAdapter(int type) {
         this.type = type;
@@ -28,12 +32,20 @@ public class TabDdetailAdapter extends BaseRecyclerViewAdapter<SimpleFriendsList
     }
 
     @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
+        return super.onCreateViewHolder(parent, viewType);
+    }
+
+    @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
         MyViewHolder vh = new MyViewHolder(viewHolder);
         final SimpleFriendsList.SimpleFriendInfo info = getItem(position);
         //设置具体label的亲密度数据
         vh.txvName.setText(info.getNickname());
         //        vh.imgHead 设置头像
+
+//        ImageLoader.loadRoundCorners(mContext, info.getUserInfoLightweight().getAvatar(), 0, vh.imgHead);
         if (type == 1){
             vh.txvNum.setText(info.getIntimate()+"");
         }
