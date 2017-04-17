@@ -129,6 +129,8 @@
                     android:id="@+id/chat_send"
                     android:layout_width="@dimen/px150_dp"
                     android:layout_height="@dimen/px100_dp"
+                    android:layout_marginLeft="@dimen/px30_dp"
+                    android:layout_marginRight="@dimen/px30_dp"
                     android:background="@drawable/y1_chatinput_send_bg"
                     android:gravity="center"
                     android:text="发送"
