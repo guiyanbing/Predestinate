@@ -63,7 +63,7 @@ public enum UrlParam {
     //增加自己的好友的 tag
     reqAddFriendTag("s/friend/AddFriendTag", null,true),
     //添加标签分组
-    reqAddTagGroup("s/friend/AddTagGroup", SimpleFriendsList.class,true),
+    reqAddTagGroup("s/friend/AddTagGroup", LabelsList.class,true),
     //添加好友标签分组成员
     reqAddTagGroupMember("s/friend/AddTagGroupMember", SimpleFriendsList.class,true),
     //删除自己好友的 tag

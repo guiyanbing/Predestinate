@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -77,10 +78,15 @@ public class LabelDetailsHeadView extends LinearLayout implements RequestComplet
         //设置头部信息
         friend_label_head_txv_name.setText(name);
         friend_label_head_txv_num.setText(num);
+        friend_label_head_txv_name.setSelection(friend_label_head_txv_name.getText().length());
     }
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-
+        if (response.isOk()){//请求返回成功
+            MMToast.showShort("修改成功");
+         }else {
+            MMToast.showShort("修改失败");
+        }
     }
 }

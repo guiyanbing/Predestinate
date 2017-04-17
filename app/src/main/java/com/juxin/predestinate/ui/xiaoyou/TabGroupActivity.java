@@ -67,7 +67,8 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
         mIntimacyFriendsAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
             public void onItemClick(View convertView, int position) {
-                LabelsList.LabelInfo info = mIntimacyFriendsAdapter.getItem(position);
+                LabelsList.LabelInfo info = arrLabes.get(position);
+//                Log.e("TTTTTTTTT",info.getId()+"||"+info.getLabelName());
                 UIShow.showNewTabAct(TabGroupActivity.this,info.getId());
             }
         });

@@ -22,10 +22,6 @@ import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.LabelDetailsHeadView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +41,7 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     private long tab ;
     private int page = 0;//当前页
     private int pageLimits = 20;//一页的条数
+    private LabelsList.LabelInfo info = null ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +76,15 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
         rvList.setAdapter(mTabDdetailAdapter);
         mLabelDetailsHeadView.setTab(tab);
         crlvList.showRecyclerView();
+        for (int i = 0;i<TabGroupActivity.arrLabes.size();i++){
+            if (tab == TabGroupActivity.arrLabes.get(i).getId()){
+                info = TabGroupActivity.arrLabes.get(i);
+                break;
+            }
+        }
+        if (info != null){
+            mLabelDetailsHeadView.setHeadData(info.getLabelName(),"标签成员("+info.getList().size()+")");
+        }
     }
 
     private void creatNewTag() {
@@ -91,22 +97,42 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
             public void onRequestComplete(HttpResponse response) {
                 //                Log.e("TTTTTTTTTTTTTTnewtag", response.getResponseString() + "||");
                 if (response.isOk()) {//请求返回成功
-                    JSONArray array = response.getJsonArray("list");
-                    if (array != null) {
-                        JSONObject object = null;
-                        try {
-                            object = array.getJSONObject(0);
-                            tab = object.optLong("id");
-                            mLabelDetailsHeadView.setTab(tab);
-                            String name = object.optString("desc");
-                            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
-                            info.setId(tab);
-                            info.setLabelName(name);
-                            TabGroupActivity.arrLabes.add(info);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    LabelsList lists = (LabelsList) response.getBaseData();
+                    List<LabelsList.LabelInfo> labelInfos = lists.getArr_labels();
+                    if (labelInfos!= null){
+                        TabGroupActivity.arrLabes = (ArrayList)labelInfos;
+                    }
+
+                    for(int i = 0 ;i< TabGroupActivity.arrLabes.size();i++){
+                        if (mLabelDetailsHeadView.getName().equals(TabGroupActivity.arrLabes.get(i).getLabelName())){
+                            tab = TabGroupActivity.arrLabes.get(i).getId();
+                            break;
                         }
                     }
+
+//                    if (labelInfos != null && !labelInfos.isEmpty()) {
+//                        lvList.setLoadingMoreEnabled(labelInfos.size() >= pageLimits ? true:false);
+//                        mIntimacyFriendsAdapter.setList(arrLabes);
+//                        crlvList.showXrecyclerView();
+//                    }else{
+//                        crlvList.showNoData();
+//                    }
+//                    JSONArray array = response.getJsonArray("list");
+//                    if (array != null) {
+//                        JSONObject object = null;
+//                        try {
+//                            object = array.getJSONObject(0);
+//                            tab = object.optLong("id");
+//                            mLabelDetailsHeadView.setTab(tab);
+//                            String name = object.optString("desc");
+//                            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
+//                            info.setId(tab);
+//                            info.setLabelName(name);
+//                            TabGroupActivity.arrLabes.add(info);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
                 }
             }
         });
@@ -139,6 +165,7 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
                 arrFriendinfos.addAll(list);
             }
             mTabDdetailAdapter.setList(arrFriendinfos);
+            mLabelDetailsHeadView.setHeadData(info.getLabelName(), "标签成员("+arrFriendinfos.size() + ")");
 //            Log.e("TTTTTTTTTT",list+"|||"+list.size()+"||");
 //            ModuleMgr.getCommonMgr().getTagGroupMember(this);
         }
