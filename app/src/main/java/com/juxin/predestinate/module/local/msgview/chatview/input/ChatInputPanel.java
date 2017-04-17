@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.juxin.library.utils.InputUtils;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
@@ -19,7 +17,6 @@ import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.msgview.utils.EggUtil;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 
 /**

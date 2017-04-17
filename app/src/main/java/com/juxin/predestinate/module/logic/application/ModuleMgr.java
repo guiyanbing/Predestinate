@@ -13,6 +13,7 @@ import com.juxin.predestinate.module.local.chat.ChatListMgr;
 import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.local.msgview.PhizMgr;
 import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
@@ -256,5 +257,17 @@ public final class ModuleMgr {
         }
         return chatListMgr;
     }
+
+    private static PhizMgr phizMgr = null;
+
+    public static PhizMgr getPhizMgr() {
+        if (phizMgr == null) {
+            phizMgr = new PhizMgr();
+            addModule(phizMgr);
+        }
+        return phizMgr;
+    }
+
+
 
 }
