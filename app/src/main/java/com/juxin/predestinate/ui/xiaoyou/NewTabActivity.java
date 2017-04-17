@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
@@ -18,7 +18,9 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.TabDdetailAdapter;
+import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
+import com.juxin.predestinate.ui.xiaoyou.view.LabelDetailsHeadView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,9 +37,10 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
 
     //控件
     private CustomRecyclerView crlvList;
-    private XRecyclerView rvList;
+    private RecyclerView rvList;
+    private LabelDetailsHeadView mLabelDetailsHeadView;
     //其他
-    private ArrayList<SimpleFriendsList.SimpleFriendInfo> arrFriendinfos;
+    private ArrayList<SimpleFriendsList.SimpleFriendInfo> arrFriendinfos = new ArrayList<>();
     private TabDdetailAdapter mTabDdetailAdapter;
     private long tab ;
     private int page = 0;//当前页
@@ -47,17 +50,25 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tab = getIntent().getLongExtra("tab",-1);
-        if (tab == -1){
-            creatNewTag();
-        }
         setContentView(R.layout.p1_xiaoyou_newtab_activity);
         initView();
+        if (tab == -1){
+            creatNewTag();
+        }else {
+            List<Long> listIds = getFriendIds();
+            for (int i = 0 ;i < listIds.size();i++){
+                SimpleFriendsList.SimpleFriendInfo info = new SimpleFriendsList.SimpleFriendInfo();
+                info.setUid(listIds.get(i));
+                info.setUserInfoLightweight(FriendsUtils.getHandleUserInfo(info));
+                arrFriendinfos.add(info);
+            }
+        }
     }
 
     private void initView() {
+        mLabelDetailsHeadView = (LabelDetailsHeadView) findViewById(R.id.xiaoyou_newtab_crlv_ldhv);
         crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_newtab_crlv_list);
-        rvList = crlvList.getXRecyclerView();
-        rvList.setLoadingListener(this);
+        rvList = crlvList.getRecyclerView();
         rvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvList.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
@@ -66,22 +77,19 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
         setTitleRight("添加成员", this);
         mTabDdetailAdapter = new TabDdetailAdapter(0);
         rvList.setAdapter(mTabDdetailAdapter);
-        if (tab == -1) {
-
-        } else {
-
-        }
+        mLabelDetailsHeadView.setTab(tab);
+        crlvList.showRecyclerView();
     }
 
     private void creatNewTag() {
         ArrayList name = new ArrayList();
-        name.add("好友");
+        name.add(mLabelDetailsHeadView.getName()+"");
         ArrayList list = new ArrayList();
-        list.add("60230");
+//        list.add("60230");
         ModuleMgr.getCommonMgr().addTagGroup(name, list, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-//                Log.e("TTTTTTTTTTTTTTnewtag", response.getResponseString() + "||");
+                //                Log.e("TTTTTTTTTTTTTTnewtag", response.getResponseString() + "||");
                 if (response.isOk()) {//请求返回成功
                     JSONArray array = response.getJsonArray("list");
                     if (array != null) {
@@ -89,11 +97,17 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
                         try {
                             object = array.getJSONObject(0);
                             tab = object.optLong("id");
+                            mLabelDetailsHeadView.setTab(tab);
+                            String name = object.optString("desc");
+                            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
+                            info.setId(tab);
+                            info.setLabelName(name);
+                            TabGroupActivity.arrLabes.add(info);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                 }
+                }
             }
         });
     }
@@ -101,7 +115,7 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
     //设置右侧确定按钮的逻辑
     @Override
     public void onClick(View v) {
-        UIShow.showSelectContactAct(tab,this);
+        UIShow.showSelectContactAct(tab, this);
     }
 
     @Override
@@ -120,9 +134,23 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
         if (resultCode == RESULT_OK&&data != null){
             ArrayList<SimpleFriendsList.SimpleFriendInfo> list;
             list = data.getExtras().getParcelableArrayList("infos");
-            Log.e("TTTTTTTTTT",list+"|||"+list.size()+"||");
-            ModuleMgr.getCommonMgr().getTagGroupMember(this);
+//            Log.e("TTTTTT", list + "||" + arrFriendinfos);
+            if (list != null){
+                arrFriendinfos.addAll(list);
+            }
+            mTabDdetailAdapter.setList(arrFriendinfos);
+//            Log.e("TTTTTTTTTT",list+"|||"+list.size()+"||");
+//            ModuleMgr.getCommonMgr().getTagGroupMember(this);
         }
+    }
+
+    private List<Long> getFriendIds(){
+        for (int i = 0;i < TabGroupActivity.arrLabes.size();i++ ){
+            if (tab == TabGroupActivity.arrLabes.get(i).getId()){
+                return TabGroupActivity.arrLabes.get(i).getList();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -135,9 +163,11 @@ public class NewTabActivity extends BaseActivity implements View.OnClickListener
             }
             arrFriendinfos.addAll(friendInfos);
             if (friendInfos != null && !friendInfos.isEmpty()) {
-                rvList.setLoadingMoreEnabled(friendInfos.size() >= pageLimits ? true:false);
+                for (int i = 0;i < friendInfos.size();i++){
+                    friendInfos.get(i).setUserInfoLightweight(FriendsUtils.getHandleUserInfo(friendInfos.get(i)));
+                }
                 mTabDdetailAdapter.setList(arrFriendinfos);
-                crlvList.showXrecyclerView();
+                crlvList.showRecyclerView();
             }else{
                 crlvList.showNoData();
             }

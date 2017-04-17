@@ -6,10 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -18,7 +16,6 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
-import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.SelectFriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
@@ -60,15 +57,19 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
         crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_sele_crlv_list);
         lvFriends = crlvList.getRecyclerView();
         lvFriends.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        lvFriends.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+//        lvFriends.addItemDecoration(new DividerItemDecoration(this,
+//                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mSelectFriendsAdapter = new SelectFriendsAdapter();
         mSelectFriendsAdapter.setOnContactSelectLinear(this);
         lvFriends.setAdapter(mSelectFriendsAdapter);
     }
 
     private void reqFriendlist(){
-        ModuleMgr.getCommonMgr().getFriendList(this);
+        if (FriendsUtils.arr_uids.size()==0){
+            ModuleMgr.getCommonMgr().getFriendList(this);
+        }else {
+            arrSimpleFriends.addAll(FriendsUtils.arr_uids);
+        }
     }
 
     private void changeTitleRight(int num) {
@@ -83,9 +84,9 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (mSelectFriendsAdapter.getUids().size() >0 ){
-            Set<Long> set = new HashSet<>();
+            Set<String> set = new HashSet<>();
             for (SimpleFriendsList.SimpleFriendInfo info:mSelectFriendsAdapter.getUids()){
-                set.add(info.getUid());
+                set.add(info.getUid()+"");
             }
             ModuleMgr.getCommonMgr().addTagGroupMember(tab, set, this);
         }
@@ -107,26 +108,19 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-        Log.e("TTTTTTTTTTselectContact", response.getResponseString() + "|||");
+//        Log.e("TTTTTTTTTTselectContact", response.getResponseString() + "|||");
         if (response.getUrlParam() == UrlParam.reqAddTagGroupMember){
             if (response.isOk()){//请求返回成功
-                MMToast.showShort("添加成功");
-                Intent intent = new Intent();
-                Gson gson = new Gson();
-                String str_infos = gson.toJson(mSelectFriendsAdapter.getUids());
-                intent.putExtra("infos", str_infos);
-                setResult(RESULT_OK, intent);
-                SelectContactActivity.this.finish();
-             }else {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 ArrayList<SimpleFriendsList.SimpleFriendInfo> list = new ArrayList();
                 list.addAll(mSelectFriendsAdapter.getUids());
                 bundle.putParcelableArrayList("infos", list);
-                Log.e("TTTTTYYYY",list+"|||"+list.size());
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);
                 SelectContactActivity.this.finish();
+                SelectContactActivity.this.finish();
+             }else {
                 MMToast.showShort("添加失败，请重试");
             }
         }else {
@@ -145,7 +139,7 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
                 }else {
                     crlvList.showNoData();
                 }
-                Log.e("TTTTTTTTTTselectContact", response.getResponseString() + "||"+arrSimpleFriends.size());
+//                Log.e("TTTTTTTTTTselectContact", response.getResponseString() + "||"+arrSimpleFriends.size());
             }else {//请求失败
                 mCustomSearchView.setListVisibility(View.GONE);
                 crlvList.showNetError("网络异常，点击刷新", new View.OnClickListener() {

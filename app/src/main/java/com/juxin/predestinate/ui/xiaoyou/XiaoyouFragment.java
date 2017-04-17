@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -89,6 +88,14 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
                 if (info != null && info.getType() == 1){
                     if (position == 0){
                         UIShow.showTabGroupAct(getActivity());
+
+
+//                        BottomGiftDialog dialog = new BottomGiftDialog();
+//                        dialog.showDialog(getActivity());
+//                        GiftPopup popup = new GiftPopup(getContext());
+////                        popup.showAtLocation(popup.getContentView(), Gravity.BOTTOM,0,0);
+//                        popup.show();
+
 //                        RedPacketDialog dialog = new RedPacketDialog();
 //                        dialog.showDialog(getActivity());
 
@@ -164,6 +171,9 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
             }
             arrFriends.addAll(friendInfos);
             if (friendInfos != null && !friendInfos.isEmpty()) {
+                for (int i = 0;i < friendInfos.size();i++){
+                    friendInfos.get(i).setUserInfoLightweight(FriendsUtils.getHandleUserInfo(friendInfos.get(i)));
+                }
                 lvList.setLoadingMoreEnabled(friendInfos.size() >= pageLimits ? true:false);
                 mFriendsAdapter.setList(arrFriends);
                 crlvList.showXrecyclerView();
@@ -172,7 +182,7 @@ public class XiaoyouFragment extends BaseFragment implements CustomSearchView.On
             }
         }else {//请求失败
             crlvList.showNetError();
-            MMToast.showShort("请求失败，请检查您的网络");
+//            MMToast.showShort("请求失败，请检查您的网络");
         }
         crlvList.showXrecyclerView();
     }

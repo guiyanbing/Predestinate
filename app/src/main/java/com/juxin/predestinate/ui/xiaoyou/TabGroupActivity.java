@@ -34,7 +34,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     private XRecyclerView lvList;
     private CustomSearchView mCustomSearchView;
 
-    private ArrayList<LabelsList.LabelInfo> arrLabes = new ArrayList<>();
+    public static ArrayList<LabelsList.LabelInfo> arrLabes = new ArrayList<>();
     private IntimacyFriendsAdapter mIntimacyFriendsAdapter;
     private int page = 0;//当前页
     private int pageLimits = 20;//一页的条数
@@ -94,6 +94,12 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mIntimacyFriendsAdapter.setList(arrLabes);
+    }
+
+    @Override
     public void onRequestComplete(HttpResponse response) {
 //        Log.e("TTTTTTTTTTTTTTh",response.getResponseString()+"||");
         if (response.isOk()){//请求返回成功
@@ -137,15 +143,15 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
 
     //测试
     private void testData(){
-        if (arrLabes == null){
-            arrLabes = new ArrayList<>();
-        }
-        for (int i = 0;i < 10 ;i++){
-            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
-            info.setLabelName("测试");
-            info.setNum(i);
-            arrLabes.add(info);
-        }
-        mIntimacyFriendsAdapter.setList(arrLabes);
+//        if (arrLabes == null){
+//            arrLabes = new ArrayList<>();
+//        }
+//        for (int i = 0;i < 10 ;i++){
+//            LabelsList.LabelInfo info = new LabelsList.LabelInfo();
+//            info.setLabelName("测试");
+//            info.setNum(i);
+//            arrLabes.add(info);
+//        }
+//        mIntimacyFriendsAdapter.setList(arrLabes);
     }
 }

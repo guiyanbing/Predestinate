@@ -1,6 +1,9 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,11 +18,17 @@ import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
  */
 public class FriendsAdapter extends BaseFriendsAdapter<FriendsList.FriendInfo> {
 
+    private Context mContext;
+
     @Override
     public int[] getItemLayouts() {
         return new int[]{R.layout.p1_xiaoyou_fragment_item};
     }
-
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
+        return super.onCreateViewHolder(parent, viewType);
+    }
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
         MyViewHolder vh = new MyViewHolder(viewHolder);
@@ -36,20 +45,10 @@ public class FriendsAdapter extends BaseFriendsAdapter<FriendsList.FriendInfo> {
             }else {
                 vh.friend_item_txv_title.setVisibility(View.VISIBLE);
             }
-//            // 根据position获取分类的首字母的Char ascii值
-//            int section = getSectionForPosition(position);
-//
-//            // 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
-//            if (position == getPositionForSection(section)) {
-//                vh.friend_item_txv_title.setVisibility(View.VISIBLE);
-//                vh.friend_item_txv_title.setText(info.getSortKey());
-//            } else {
-//                vh.friend_item_txv_title.setVisibility(View.GONE);
-//            }
 
             vh.showLately();
             //friend_item_txv_intimacy 根据性别设置提示文字
-            if (info.getGender() == 1){
+            if (info.getUserInfoLightweight().getGender() == 1){
                 vh.friend_item_txv_intimacy.setText(R.string.intimacy);
                 vh.friend_item_txv_num.setText(info.getIntimacy()+"");
             }else {
@@ -58,6 +57,7 @@ public class FriendsAdapter extends BaseFriendsAdapter<FriendsList.FriendInfo> {
             }
             //处理list条目
             //            vh.friend_item_img_head;
+//            ImageLoader.loadRoundCorners(mContext, info.getUserInfoLightweight().getAvatar(), 0, vh.friend_item_img_head);
             vh.friend_item_txv_name.setText(info.getNickname());
             //            vh.frien
         }
@@ -116,10 +116,12 @@ public class FriendsAdapter extends BaseFriendsAdapter<FriendsList.FriendInfo> {
             friend_item_img_photo.setVisibility(View.GONE);
             friend_item_img_vip.setVisibility(View.GONE);
             friend_item_txv_num.setVisibility(View.GONE);
+            friend_item_txv_intimacy.setVisibility(View.GONE);
         }
 
         public void showLately() {
             friend_item_txv_num.setVisibility(View.VISIBLE);
+            friend_item_txv_intimacy.setVisibility(View.VISIBLE);
             friend_item_img_right.setVisibility(View.GONE);
             friend_item_img_dynamic.setVisibility(View.GONE);
             friend_item_img_photo.setVisibility(View.GONE);

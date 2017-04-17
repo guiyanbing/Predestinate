@@ -30,6 +30,7 @@ public class GiftsList extends BaseData {
         private int intimacy;
         private double stone;
         private int icon;
+        private boolean isShow = false;
 
         @Override
         public void parseJson(String s) {
@@ -77,6 +78,14 @@ public class GiftsList extends BaseData {
 
         public void setIcon(int icon) {
             this.icon = icon;
+        }
+
+        public boolean isShow() {
+            return isShow;
+        }
+
+        public void setIsShow(boolean isShow) {
+            this.isShow = isShow;
         }
 
         @Override

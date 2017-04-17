@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.juxin.predestinate.R;
@@ -39,7 +38,7 @@ public class CloseFriendsActivity extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_xiaoyou_close_friends_activity);
         arrLabelinfos = FriendsUtils.intimacyInfos;
-        Log.e("TTTTTTTclose",arrLabelinfos.size()+"||");
+//        Log.e("TTTTTTTclose",arrLabelinfos.size()+"||");
         initView();
     }
 

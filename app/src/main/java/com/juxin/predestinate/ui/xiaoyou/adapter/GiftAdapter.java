@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,9 +27,18 @@ public class GiftAdapter extends BaseRecyclerViewAdapter<GiftsList.GiftInfo> {
         MyViewHolder vh = new MyViewHolder(viewHolder);
         final GiftsList.GiftInfo info = getItem(position);
         vh.txvGifName.setText(info.getName());
-        vh.txvIntimate.setText(info.getIntimacy()+"");
-        vh.txvNeedStone.setText(info.getStone()+"");
+        vh.txvIntimate.setText("亲密度+"+info.getIntimacy());
+        vh.txvNeedStone.setText(info.getStone() + "");
         vh.img.setBackgroundResource(info.getIcon());
+        if (!info.isShow()){
+//            vh.llTop.setVisibility(View.INVISIBLE);
+            vh.llTop.setBackgroundResource(R.color.white);
+            vh.txvIntimate.setVisibility(View.INVISIBLE);
+        }else {
+//            vh.llTop.setVisibility(View.VISIBLE);
+            vh.llTop.setBackgroundResource(R.drawable.gift_item_bg);
+            vh.txvIntimate.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

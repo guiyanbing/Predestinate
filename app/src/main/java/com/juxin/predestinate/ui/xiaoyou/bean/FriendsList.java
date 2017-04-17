@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.xiaoyou.bean;
 
 
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
@@ -143,6 +144,10 @@ public class FriendsList extends BaseData {
             this.income = income;
         }
 
+        public void setUserInfoLightweight(UserInfoLightweight userInfoLightweight) {
+            mUserInfoLightweight = userInfoLightweight;
+            setNickname(mUserInfoLightweight.getNickname());
+        }
         @Override
         public String toString() {
             return "RankList{" +

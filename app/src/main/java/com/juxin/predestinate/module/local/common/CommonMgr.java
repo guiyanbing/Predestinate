@@ -222,19 +222,18 @@ public class CommonMgr implements ModuleBase {
      * @param complete
      */
     public void addTagGroup(List<String> tag_name,List<String> uid_list,RequestComplete complete) {
-
 //        "tag_name": ["新标签2","sssss","aaaa"]	// 标签名字,
 //        "uid_list": [10000,12222,13333]			// opt 标签成员
-        String names = "[\"新标签2\",\"sssss\",\"aaaa\"]";
-        String list = "[10000,12222,13333]";
-        //        String[] names = tag_name.toArray(new String[tag_name.size()]);
-//        String[] list = uid_list.toArray(new String[uid_list.size()]);
+//        String names = "[\"新标签2\"]";
+//        String list = "[\"10000\",\"12222\"]";
+        String[] names = tag_name.toArray(new String[tag_name.size()]);
+        String[] list = uid_list.toArray(new String[uid_list.size()]);
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
         postParams.put("tag_name",names );// 标签名字
         postParams.put("uid_list", list);// 标签成员
 //        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddFriendTag, null, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroup, postParams, complete);
     }
 
     /**
@@ -242,14 +241,14 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroupMember(long tag, Set<Long> uids, RequestComplete complete) {
-        Gson gson = new Gson();
-        String list = gson.toJson(uids);
+    public void addTagGroupMember(long tag, Set<String> uids, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
+        Log.e("TTTTTTTTTTTTTTTBB11", tag + "||" + uids);
+        String[] list = uids.toArray(new String[uids.size()]);
+        Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
         postParams.put("tag", tag);// 标签id
         postParams.put("uids", list);// 要删除的uid
-        Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, null, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, postParams, complete);
     }
 
     /**
@@ -283,7 +282,7 @@ public class CommonMgr implements ModuleBase {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("tag", tag);// 标签id
         postParams.put("uids", list);// 要删除的uid
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroupMember, null, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroupMember, postParams, complete);
     }
 
     /**
@@ -312,11 +311,11 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void ModifyTagGroup(int tag_id, String name, RequestComplete complete) {
+    public void ModifyTagGroup(long tag_id, String name, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("tag_id", tag_id);// 标签 ID
         postParams.put("name", name);// 新的分组名字
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqModifyTagGroup, null, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqModifyTagGroup, postParams, complete);
     }
 
     /**
@@ -339,7 +338,21 @@ public class CommonMgr implements ModuleBase {
         String[] uidlist = userLists.toArray(new String[userLists.size()]);
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uidlist", uidlist);// uids
-        Log.e("TTTTTNNN", uidlist + "");
+//        Log.e("TTTTTNNN", uidlist + "");
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
+    }
+
+    /**
+     * 送礼物
+     *
+     * @param complete
+     */
+    public void givePresent(long uid,long tuid,int id,int count, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", uid);// 收礼物的uid
+        postParams.put("tuid", tuid);// 送礼物的用户id
+        postParams.put("id", id);// 礼物id
+        postParams.put("count", count);// 礼物数量
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.givePresent, postParams, complete);
     }
 }

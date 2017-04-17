@@ -1,6 +1,9 @@
 package com.juxin.predestinate.ui.xiaoyou.adapter;
 
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +27,7 @@ public class SelectFriendsAdapter extends BaseFriendsAdapter<SimpleFriendsList.S
 
     private OnContactSelect contactSelect;
     private Set<SimpleFriendsList.SimpleFriendInfo> uids = new HashSet<>();
+    private Context mContext;
 
     private void setChecked(int position) {
         if (getItem(position) != null) {
@@ -44,7 +48,11 @@ public class SelectFriendsAdapter extends BaseFriendsAdapter<SimpleFriendsList.S
     public int[] getItemLayouts() {
         return new int[]{R.layout.p1_xiaoyou_select_contact_item};
     }
-
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mContext = parent.getContext();
+        return super.onCreateViewHolder(parent, viewType);
+    }
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
         MyViewHolder vh = new MyViewHolder(viewHolder);
@@ -83,20 +91,27 @@ public class SelectFriendsAdapter extends BaseFriendsAdapter<SimpleFriendsList.S
         vh.txvName.setText(info.getNickname()+"");
         //设置头像
         //        vh.imgHead
-
-        vh.invite_msg_info_layout.setOnClickListener(new View.OnClickListener() {
+//        ImageLoader.loadRoundCorners(mContext, info.getUserInfoLightweight().getAvatar(), 0, vh.imgHead);
+//        vh.invite_msg_info_layout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("TTTTTTTTTTT","zhixing11");
+//                setChecked(position);
+//            }
+//        });
+        this.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(View convertView, int position) {
                 setChecked(position);
             }
         });
 
-        vh.chbSel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setChecked(position);
-            }
-        });
+//        vh.chbSel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setChecked(position);
+//            }
+//        });
     }
 
     @Override

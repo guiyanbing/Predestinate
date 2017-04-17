@@ -32,7 +32,6 @@ public class SimpleFriendsList extends BaseData{
         private long uid;//用户ID
         private boolean isCheck;//选中状态 为true：选中 ；为false：未选中
         private int Intimate;
-        private UserInfoLightweight mUserInfoLightweight;
 
         public SimpleFriendInfo(){
 
@@ -105,10 +104,6 @@ public class SimpleFriendsList extends BaseData{
 
         public void setIntimate(int intimate) {
             Intimate = intimate;
-        }
-
-        public UserInfoLightweight getUserInfoLightweight() {
-            return mUserInfoLightweight;
         }
 
         public void setUserInfoLightweight(UserInfoLightweight userInfoLightweight) {

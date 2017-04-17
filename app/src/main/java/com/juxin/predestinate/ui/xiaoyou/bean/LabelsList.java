@@ -38,7 +38,7 @@ public class LabelsList extends BaseData {
             JSONObject jsonObject = getJsonObject(s);
             //json串解析
             this.setId(jsonObject.optLong("id"));
-            this.setLabelName(jsonObject.optString("labelName"));
+            this.setLabelName(jsonObject.optString("desc"));
             if (!jsonObject.isNull("list")) {
                 JSONArray jsonArray = jsonObject.optJSONArray("list");
                 for (int i = 0; i < jsonArray.length(); i++) {
