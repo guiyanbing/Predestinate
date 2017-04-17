@@ -339,4 +339,16 @@ public class CommonMgr implements ModuleBase {
         Log.e("TTTTTNNN", uidlist + "");
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
     }
+
+    /**
+     * 支付商品价格List
+     *
+     * @param payType 充值类型：1—钻石， 2-vip
+     */
+    public void reqCommodityList(int payType, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("platform", 1); // 平台： 1 android 2 ios 3 公众号 4 web
+        postParms.put("ctype", payType);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqCommodityList, postParms, complete);
+    }
 }

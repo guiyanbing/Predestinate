@@ -6,6 +6,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
@@ -79,6 +80,9 @@ public enum UrlParam {
     reqModifyTagGroup("/s/friend/ModifyTagGroup", SimpleFriendsList.class),
     //好友标签分组
     reqTagGroup("/s/friend/TagGroup", LabelsList.class),
+
+    //============ 支付 =============
+    reqCommodityList("s/pay/CList", PayGoods.class),  // 商品列表
 
     // 最后一个，占位
     LastUrlParam("");

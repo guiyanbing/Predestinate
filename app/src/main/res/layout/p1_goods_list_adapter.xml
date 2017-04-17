@@ -52,7 +52,7 @@
             android:gravity="center_vertical"
             android:paddingRight="@dimen/px35_dp"
             android:text="200￥"
-            android:textColor="@color/p1_pay_text_color"
+            android:textColor="@color/text_theme_blue"
             android:textSize="@dimen/px43_sp" />
 
     </RelativeLayout>
