@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.paygoods;
 
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
 
 /**
  * 通用商品列表adapter
@@ -24,7 +26,7 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
-        final String data = (String) getItem(position);
+        final PayGood data = (PayGood) getItem(position);
 
         RelativeLayout payItem = viewHolder.findViewById(R.id.pay_item);
         ImageView img_choose = viewHolder.findViewById(R.id.iv_choose);
@@ -35,6 +37,11 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
         // 选中状态
         payItem.setSelected(selectPosition == position);
         img_choose.setVisibility(selectPosition == position ? View.VISIBLE : View.GONE);
+
+        // 设置数据
+        tv_goods.setText(data.getName());
+        tv_money.setText(data.getPrice() + Html.fromHtml("&#165;").toString());
+
     }
 
     public void updateData(int positon) {

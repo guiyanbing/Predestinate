@@ -10,6 +10,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -181,6 +182,7 @@ public class CommonMgr implements ModuleBase {
     public void sysRecommend(RequestComplete complete, final int cur, HashMap<String, Object> post_param) {
         post_param.put("page", cur);
         post_param.put("limit", 10);
+        post_param.put("tm", ServerTime.getServerTime().getTimeInMillis());
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysRecommend, post_param, complete);
     }
 
@@ -340,6 +342,18 @@ public class CommonMgr implements ModuleBase {
         postParams.put("uidlist", uidlist);// uids
 //        Log.e("TTTTTNNN", uidlist + "");
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
+    }
+
+    /**
+     * 支付商品价格List
+     *
+     * @param payType 充值类型：1—钻石， 2-vip
+     */
+    public void reqCommodityList(int payType, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("platform", 1); // 平台： 1 android 2 ios 3 公众号 4 web
+        postParms.put("ctype", payType);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqCommodityList, postParms, complete);
     }
 
     /**

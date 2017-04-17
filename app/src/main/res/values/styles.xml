@@ -499,20 +499,22 @@
     </style>
 
     <style name="chat_input_btn">
-        <item name="android:layout_width">@dimen/px84_dp</item>
-        <item name="android:layout_height">@dimen/px84_dp</item>
+        <item name="android:layout_width">@dimen/px100_dp</item>
+        <item name="android:layout_height">@dimen/px100_dp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
     <style name="chat_input_text_edit">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">@dimen/title_footer_height</item>
+        <item name="android:minHeight">@dimen/px94_dp</item>
         <item name="android:maxHeight">@dimen/px240_dp</item>
         <item name="android:inputType">textMultiLine</item>
-        <item name="android:background">@null</item>
+        <item name="android:background">@drawable/btn_chat_edit_selector</item>
         <item name="android:textColorHint">@color/tip_light_gray</item>
         <item name="android:textColor">@color/text_zhuyao_black</item>
+        <item name="android:layout_marginTop">@dimen/px18_dp</item>
+        <item name="android:layout_marginBottom">@dimen/px18_dp</item>
         <item name="android:textSize">@dimen/px45_sp</item>
         <item name="android:padding">@dimen/px25_dp</item>
         <item name="android:gravity">center_vertical</item>

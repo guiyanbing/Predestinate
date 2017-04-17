@@ -57,4 +57,14 @@ public class CommonConfig extends BaseData {
     public void setSquareHead(String squareHead) {
         this.squareHead = squareHead;
     }
+
+    @Override
+    public String toString() {
+        return "CommonConfig{" +
+                "presentList=" + presentList +
+                ", vipAuthority=" + vipAuthority +
+                ", reportList=" + reportList +
+                ", squareHead='" + squareHead + '\'' +
+                '}';
+    }
 }

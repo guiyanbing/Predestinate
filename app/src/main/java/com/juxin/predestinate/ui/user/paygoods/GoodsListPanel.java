@@ -11,9 +11,9 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 商品列表通用panel
@@ -44,17 +44,10 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
         adapter = new GoodsListAdapter();
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
+    }
 
-        List<String> data = new ArrayList<>();
-        data.add("1");
-        data.add("2");
-        data.add("3");
-        data.add("4");
-        data.add("5");
-        data.add("6");
-        data.add("7");
-        data.add("8");
-        adapter.setList(data);
+    public void refresh(ArrayList<PayGood> payGoodList) {
+        adapter.setList(payGoodList);
     }
 
     public int getPosition() {
@@ -67,9 +60,6 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
         adapter.updateData(position);
     }
 
-    /**
-     * margin
-     */
     private class ItemSpaces extends RecyclerView.ItemDecoration {
         private int space;
 

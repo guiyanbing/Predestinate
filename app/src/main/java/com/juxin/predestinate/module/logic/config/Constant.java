@@ -50,4 +50,8 @@ public class Constant {
 
     public static final String SINCE_GROWTHID = "since_growthid"; //消息自增长ID
     public static final long SINCE_GROWTHID_DEFAULT = -1;         // 默认值
+
+    // 支付类型
+    public static final int GOOD_DIAMOND = 1;    //钻石
+    public static final int GOOD_VIP = 2;        //VIP服务
 }
