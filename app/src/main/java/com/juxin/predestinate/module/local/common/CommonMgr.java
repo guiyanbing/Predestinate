@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.common;
 
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
@@ -245,9 +244,8 @@ public class CommonMgr implements ModuleBase {
      */
     public void addTagGroupMember(long tag, Set<String> uids, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        Log.e("TTTTTTTTTTTTTTTBB11", tag + "||" + uids);
         String[] list = uids.toArray(new String[uids.size()]);
-        Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
+//        Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
         postParams.put("tag", tag);// 标签id
         postParams.put("uids", list);// 要删除的uid
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, postParams, complete);

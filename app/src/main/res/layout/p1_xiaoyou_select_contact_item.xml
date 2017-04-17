@@ -106,17 +106,17 @@
             <!--android:textSize="14.3dp" />-->
     <!--</LinearLayout>-->
 </RelativeLayout>
-<LinearLayout
-    android:id="@+id/invite_msg_divider_line"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/px200_dp"
-    android:background="@color/white">
-    <View
-        android:layout_width="match_parent"
-        android:background="@color/fengexian_gray"
-        android:layout_height="1dp" />
-</LinearLayout>
+<!--<LinearLayout-->
+    <!--android:id="@+id/invite_msg_divider_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:paddingLeft="@dimen/px200_dp"-->
+    <!--android:background="@color/white">-->
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:background="@color/fengexian_gray"-->
+        <!--android:layout_height="1dp" />-->
+<!--</LinearLayout>-->
 
 </LinearLayout>
 

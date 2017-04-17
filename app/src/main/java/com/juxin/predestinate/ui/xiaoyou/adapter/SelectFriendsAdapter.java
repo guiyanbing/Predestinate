@@ -77,16 +77,16 @@ public class SelectFriendsAdapter extends BaseFriendsAdapter<SimpleFriendsList.S
             vh.invite_catalog_divider_2.setVisibility(View.GONE);
         }
 
-        if (position + 1 < getList().size()) {
-            int temp = getSectionForPosition(position + 1);
-            if (position + 1 == getPositionForSection(temp)) {
-                vh.invite_msg_divider_line.setVisibility(View.GONE);
-            } else {
-                vh.invite_msg_divider_line.setVisibility(View.VISIBLE);
-            }
-        } else {
-            vh.invite_msg_divider_line.setVisibility(View.GONE);
-        }
+//        if (position + 1 < getList().size()) {
+//            int temp = getSectionForPosition(position + 1);
+//            if (position + 1 == getPositionForSection(temp)) {
+//                vh.invite_msg_divider_line.setVisibility(View.GONE);
+//            } else {
+//                vh.invite_msg_divider_line.setVisibility(View.VISIBLE);
+//            }
+//        } else {
+//            vh.invite_msg_divider_line.setVisibility(View.GONE);
+//        }
 
         vh.txvName.setText(info.getNickname()+"");
         //设置头像
@@ -139,7 +139,7 @@ public class SelectFriendsAdapter extends BaseFriendsAdapter<SimpleFriendsList.S
             invite_msg_info_layout = convertView.findViewById(R.id.invite_msg_info_layout);
             imgHead = convertView.findViewById(R.id.xiaoyou_select_img_head);
             txvName = convertView.findViewById(R.id.xiaoyou_select_txv_name);
-            invite_msg_divider_line = convertView.findViewById(R.id.invite_msg_divider_line);
+//            invite_msg_divider_line = convertView.findViewById(R.id.invite_msg_divider_line);
         }
     }
 

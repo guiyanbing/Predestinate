@@ -48,6 +48,12 @@ public class LabelDetailsHeadView extends LinearLayout implements RequestComplet
         }
         friend_label_head_txv_name.setText("新建标签"+i);
         friend_label_head_txv_name.setSelection(friend_label_head_txv_name.getText().length());
+        friend_label_head_txv_name.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                friend_label_head_txv_name.setCursorVisible(true);
+            }
+        });
         friend_label_head_txv_name.setOnKeyListener(new View.OnKeyListener() {
 
             @Override
@@ -61,6 +67,7 @@ public class LabelDetailsHeadView extends LinearLayout implements RequestComplet
                 return false;
             }
         });
+        friend_label_head_txv_name.setCursorVisible(false);
     }
 
     public String getName(){
@@ -85,6 +92,7 @@ public class LabelDetailsHeadView extends LinearLayout implements RequestComplet
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()){//请求返回成功
             MMToast.showShort("修改成功");
+            friend_label_head_txv_name.setCursorVisible(false);
          }else {
             MMToast.showShort("修改失败");
         }

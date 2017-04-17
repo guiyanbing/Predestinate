@@ -16,6 +16,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
+import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.adapter.SelectFriendsAdapter;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 import com.juxin.predestinate.ui.xiaoyou.view.CustomSearchView;
@@ -57,8 +58,8 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
         crlvList = (CustomRecyclerView) findViewById(R.id.xiaoyou_sele_crlv_list);
         lvFriends = crlvList.getRecyclerView();
         lvFriends.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-//        lvFriends.addItemDecoration(new DividerItemDecoration(this,
-//                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+        lvFriends.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mSelectFriendsAdapter = new SelectFriendsAdapter();
         mSelectFriendsAdapter.setOnContactSelectLinear(this);
         lvFriends.setAdapter(mSelectFriendsAdapter);
@@ -95,8 +96,9 @@ public class SelectContactActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onTextChanged(CharSequence str) {
         if (TextUtils.isEmpty(str)){
-
+            crlvList.setVisibility(View.VISIBLE);
         }else {
+            crlvList.setVisibility(View.GONE);
             mCustomSearchView.showNoData();
         }
     }

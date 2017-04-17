@@ -44,6 +44,7 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_xiaoyou_tabgroup_activity);
         initView();
+        crlvList.showLoading();
         ModuleMgr.getCommonMgr().getTagGroupList(this);
     }
 
@@ -82,8 +83,9 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onTextChanged(CharSequence str) {
         if (TextUtils.isEmpty(str)){
-
+            crlvList.setVisibility(View.VISIBLE);
         }else {
+            crlvList.setVisibility(View.GONE);
             mCustomSearchView.showNoData();
         }
     }
@@ -111,9 +113,9 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
             }
             arrLabes.addAll(labelInfos);
 
-            //// TODO: 2017/4/12 用于测试
-            testData();
-            lvList.setLoadingMoreEnabled(arrLabes.size() >= pageLimits ? true:false);
+//            //// TODO: 2017/4/12 用于测试
+//            testData();
+//            lvList.setLoadingMoreEnabled(arrLabes.size() >= pageLimits ? true:false);
 
             if (labelInfos != null && !labelInfos.isEmpty()) {
                 lvList.setLoadingMoreEnabled(labelInfos.size() >= pageLimits ? true:false);
@@ -127,8 +129,8 @@ public class TabGroupActivity extends BaseActivity implements View.OnClickListen
             MMToast.showShort("请求失败，请检查您的网络");
         }
 
-        //测试使用
-        crlvList.showXrecyclerView();
+//        //测试使用
+//        crlvList.showXrecyclerView();
     }
 
     @Override
