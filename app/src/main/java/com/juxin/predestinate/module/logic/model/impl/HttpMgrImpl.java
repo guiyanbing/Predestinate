@@ -44,6 +44,16 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
+    public HTCallBack reqPost(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param, Map<String, Object> post_param, RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+        return reqPostHttp(urlParam, headerMap, get_param, post_param, cacheType, isEncrypt, requestCallback);
+    }
+
+    @Override
+    public HTCallBack reqGet(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param, RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
+        return reqGetHttp(urlParam, headerMap, get_param, cacheType, isEncrypt, requestCallback);
+    }
+
+    @Override
     public HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostNoCacheHttp(urlParam, null, null, post_param, requestCallback);
     }

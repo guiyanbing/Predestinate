@@ -10,10 +10,26 @@ public class Constant {
     public static final String HOST_URL = "http://123.59.187.13:10001/";
     public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
 
+    // -------------------------正式服地址---------------------------
+//    public static final String FATE_IT_HTTP = "http://api2.app.yuanfenba.net/";         //php正式服地址
+//    public static final String FATE_IT_GO = "http://g.api.yuanfenba.net/";              //go正式服务器地址
+//    public static final String FATE_IT_HTTP_PIC = "http://upload.img.yuanfenba.net/";   //图片上传正式服地址
+//    public static final String FATE_IT_PROTOCOL = "http://p.app.yuanfenba.net/";        //支付正式服地址
+
+    // -------------------------测试服地址---------------------------
+    public static final String FATE_IT_HTTP = "http://test.api2.app.yuanfenba.net/";        //php测试服地址
+    public static final String FATE_IT_GO = "http://123.59.187.33:8681/";                   //go测试服务器地址
+    public static final String FATE_IT_HTTP_PIC = "http://test.upload.img.yuanfenba.net/";  //图片测试正式服地址
+    public static final String FATE_IT_PROTOCOL = "http://test.p.app.yuanfenba.net/";       //支付测试服地址
+
+    // -------------------------版本信息常量---------------------------
+
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
     public static final int MS = 9;                 //消息版本号
     public static final int PLATFORM_TYPE = 2;      //平台号
     public static final int SUB_VERSION = 3;        //客户端版本号
+
+    // -------------------------K-V---------------------------
 
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
     public static final String SETTING_QUIT_MESSAGE = "setting_quit_message";   //是否进行锁屏弹窗，存储key及默认值

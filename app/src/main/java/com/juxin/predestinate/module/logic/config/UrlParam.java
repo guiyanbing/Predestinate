@@ -6,12 +6,11 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.net.BaseData;
-import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.UserReg;
-import com.juxin.predestinate.module.local.common.CommonConfig;
+import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
@@ -36,7 +35,7 @@ public enum UrlParam {
     //检查软件升级
     checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
     //检查服务器静态配置
-    staticConfig("i/staticdata/Check", CommonConfig.class, false),
+    staticConfig(Constant.FATE_IT_HTTP, "public/getASet", null, false),
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
@@ -56,33 +55,33 @@ public enum UrlParam {
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 
     // 上传文件
-    uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class),
+    uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================
     //好友标签分组成员
-    reqTagGroupMember("s/friend/TagGroupMember", SimpleFriendsList.class,true),
+    reqTagGroupMember("s/friend/TagGroupMember", SimpleFriendsList.class, true),
     //增加自己的好友的 tag
-    reqAddFriendTag("s/friend/AddFriendTag", null,true),
+    reqAddFriendTag("s/friend/AddFriendTag", null, true),
     //添加标签分组
-    reqAddTagGroup("s/friend/AddTagGroup", LabelsList.class,true),
+    reqAddTagGroup("s/friend/AddTagGroup", LabelsList.class, true),
     //添加好友标签分组成员
-    reqAddTagGroupMember("s/friend/AddTagGroupMember", SimpleFriendsList.class,true),
+    reqAddTagGroupMember("s/friend/AddTagGroupMember", SimpleFriendsList.class, true),
     //删除自己好友的 tag
-    reqDelFriendTag("s/friend/DelFriendTag", SimpleFriendsList.class,true),
+    reqDelFriendTag("s/friend/DelFriendTag", SimpleFriendsList.class, true),
     //删除标签分组
-    reqDelTagGroup("s/friend/DelTagGroup", SimpleFriendsList.class,true),
+    reqDelTagGroup("s/friend/DelTagGroup", SimpleFriendsList.class, true),
     //删除好友标签分组成员
-    reqDelTagGroupMember("s/friend/DelTagGroupMember", SimpleFriendsList.class,true),
+    reqDelTagGroupMember("s/friend/DelTagGroupMember", SimpleFriendsList.class, true),
     //好友列表
-    reqFriendList("s/friend/FriendList", SimpleFriendsList.class,true),
+    reqFriendList("s/friend/FriendList", SimpleFriendsList.class, true),
     //最近互动好友列表
-    reqLatestInteractive("s/friend/LatestInteractive", FriendsList.class,true),
+    reqLatestInteractive("s/friend/LatestInteractive", FriendsList.class, true),
     //修改标签分组
-    reqModifyTagGroup("s/friend/ModifyTagGroup", SimpleFriendsList.class,true),
+    reqModifyTagGroup("s/friend/ModifyTagGroup", SimpleFriendsList.class, true),
     //好友标签分组
-    reqTagGroup("s/friend/TagGroup", LabelsList.class,true),
+    reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
     //送礼物
-    givePresent("s/present/GivePresent", null,true),
+    givePresent("s/present/GivePresent", null, true),
 
     //============ 支付 =============
     reqCommodityList("s/pay/CList", PayGoods.class),  // 商品列表
@@ -100,12 +99,20 @@ public enum UrlParam {
     // --------------构造方法 start--------------
 
     /**
-     * 接口url+解析bean+是否需要登录
+     * host+接口url+解析bean
      */
-    UrlParam(final String spliceUrl, final Class<? extends BaseData> parseClass, final boolean needLogin) {
+    UrlParam(final String host, final String spliceUrl, final Class<? extends BaseData> parseClass, final boolean needLogin) {
+        this.host = host;
         this.spliceUrl = spliceUrl;
         this.parseClass = parseClass;
         this.needLogin = needLogin;
+    }
+
+    /**
+     * 接口url+解析bean+是否需要登录
+     */
+    UrlParam(final String spliceUrl, final Class<? extends BaseData> parseClass, final boolean needLogin) {
+        this(Constant.HOST_URL, spliceUrl, parseClass, needLogin);
     }
 
     /**
@@ -113,15 +120,6 @@ public enum UrlParam {
      */
     UrlParam(final String spliceUrl, final Class<? extends BaseData> parseClass) {
         this(spliceUrl, parseClass, false);
-    }
-
-    /**
-     * host+接口url+解析bean
-     */
-    UrlParam(final String host, final String spliceUrl, final Class<? extends BaseData> parseClass) {
-        this.host = host;
-        this.spliceUrl = spliceUrl;
-        this.parseClass = parseClass;
     }
 
     /**

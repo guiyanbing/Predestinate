@@ -7,6 +7,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
@@ -85,23 +86,16 @@ public class CommonMgr implements ModuleBase {
      */
     public void requestStaticConfig() {
         Map<String, Object> requestParams = new HashMap<>();
-        requestParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());//渠道号
-        requestParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());//子渠道号
-        requestParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());//包名
-        requestParams.put("platform", 1);//平台 1-android， 2-ios
-        requestParams.put("version", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.staticConfig, requestParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    commonConfig = (CommonConfig) response.getBaseData();
-                }
-                if (commonConfig == null) {
-                    PLogger.d("------>static config request fail.");
-                    commonConfig = new CommonConfig();
-                }
-            }
-        });
+        requestParams.put("ver", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.staticConfig, null, requestParams,
+                RequestParam.CacheType.CT_Cache_Url, true, new RequestComplete() {
+                    @Override
+                    public void onRequestComplete(HttpResponse response) {
+                        PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                        commonConfig = new CommonConfig();
+                        commonConfig.parseJson(response.getResponseString());
+                    }
+                });
     }
 
     /**
@@ -222,7 +216,7 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void addTagGroup(List<String> tag_name,List<String> uid_list,RequestComplete complete) {
+    public void addTagGroup(List<String> tag_name, List<String> uid_list, RequestComplete complete) {
 //        "tag_name": ["新标签2","sssss","aaaa"]	// 标签名字,
 //        "uid_list": [10000,12222,13333]			// opt 标签成员
 //        String names = "[\"新标签2\"]";
@@ -230,8 +224,8 @@ public class CommonMgr implements ModuleBase {
         String[] names = tag_name.toArray(new String[tag_name.size()]);
         String[] list = uid_list.toArray(new String[uid_list.size()]);
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
-        postParams.put("tag_name",names );// 标签名字
+        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
+        postParams.put("tag_name", names);// 标签名字
         postParams.put("uid_list", list);// 标签成员
 //        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroup, postParams, complete);
@@ -359,7 +353,7 @@ public class CommonMgr implements ModuleBase {
      *
      * @param complete
      */
-    public void givePresent(long uid,long tuid,int id,int count, RequestComplete complete) {
+    public void givePresent(long uid, long tuid, int id, int count, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", uid);// 收礼物的uid
         postParams.put("tuid", tuid);// 送礼物的用户id

@@ -17,6 +17,35 @@ import java.util.Map;
 public interface HttpMgr extends ModuleBase {
 
     /**
+     * post请求
+     *
+     * @param urlParam        UrlParam请求接口实例
+     * @param headerMap       请求头map
+     * @param get_param       get参数map，url拼接
+     * @param post_param      post参数map
+     * @param cacheType       缓存类型
+     * @param isEncrypt       是否为加密请求
+     * @param requestCallback 请求回调
+     * @return HTCallBack请求实例
+     */
+    HTCallBack reqPost(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
+                       Map<String, Object> post_param, RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback);
+
+    /**
+     * get请求
+     *
+     * @param urlParam        UrlParam请求接口实例
+     * @param headerMap       请求头map
+     * @param get_param       get参数map，url拼接
+     * @param cacheType       缓存类型
+     * @param isEncrypt       是否为加密请求
+     * @param requestCallback 请求回调
+     * @return HTCallBack请求实例
+     */
+    HTCallBack reqGet(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
+                      RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback);
+
+    /**
      * Post: 加密，不缓存
      */
     HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback);
