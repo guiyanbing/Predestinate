@@ -12,6 +12,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.msgview.smile.GiftItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
 
 import java.util.List;
@@ -39,14 +40,14 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilepackagesView = (HorizontalListView) findViewById(R.id.chat_smile_packages);
         smilePackageLayouts = (FrameLayout) findViewById(R.id.chat_smile_package_layouts);
 
-//        chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getSmileMgr().getSmilePacks().getPackages());
+//        chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
 //        smilepackagesView.setAdapter(chatSmileAdapter);
 //        smilepackagesView.setOnItemClickListener(this);
 //        chatSmileAdapter.setCheckPosition(0);
-//
-//        addView_Package_Default();
-//
-//        show(false);
+
+        addView_Package_Default();
+
+        show(false);
     }
 
     public void resetSmilePackages() {
@@ -54,11 +55,13 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             return;
         }
 
-       // if (ChatListMgr.Folder.sys_notice == getChatInstance().chatAdapter.getFolder()) {
-            // chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages(new String[]{"gift"}));
-       // } else {
-            //  chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages());
-       // }
+    //    chatSmileAdapter.setList(ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
+
+//        if (ChatListMgr.Folder.sys_notice == getChatInstance().chatAdapter.getFolder()) {
+//             chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages(new String[]{"gift"}));
+//        } else {
+//              chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages());
+//        }
     }
 
     private void addView_Package_Default() {
@@ -90,16 +93,16 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             return;
         }
 //
-//        if ("smallface".equals(smilePackage.getType())) {
-//            addView_Package_Default();
-//        } else if ("bigface".equals(smilePackage.getType())) {
-//            addView_Package_Big(smilePackage.getItems(), 0);
-//        } else if ("minigame".equals(smilePackage.getType())) {
-//            addView_Package_Big(smilePackage.getItems(), 1);
-//        } else if ("gift".equals(smilePackage.getType())) {
-//            ModuleMgr.getSmileMgr().reqGiftLevel(getChatInstance().chatAdapter.getLWhisperId(), null);
-//            addView_Package_Gift(ModuleMgr.getSmileMgr().getGiftShop().getItems());
-//        }
+        if ("smallface".equals(smilePackage.getType())) {
+            addView_Package_Default();
+        } else if ("bigface".equals(smilePackage.getType())) {
+            addView_Package_Big(smilePackage.getItems(), 0);
+        } else if ("minigame".equals(smilePackage.getType())) {
+            addView_Package_Big(smilePackage.getItems(), 1);
+        } else if ("gift".equals(smilePackage.getType())) {
+      //      ModuleMgr.getSmileMgr().reqGiftLevel(getChatInstance().chatAdapter.getLWhisperId(), null);
+    //        addView_Package_Gift(ModuleMgr.getSmileMgr().getGiftShop().getItems());
+        }
     }
 
     /**

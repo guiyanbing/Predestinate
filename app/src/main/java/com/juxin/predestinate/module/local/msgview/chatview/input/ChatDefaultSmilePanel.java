@@ -5,9 +5,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
+import com.juxin.predestinate.module.logic.baseui.custom.ViewPagerAdapter;
 import com.juxin.predestinate.module.util.UIUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,10 @@ public class ChatDefaultSmilePanel extends ChatBaseSmilePanel implements Adapter
     public void initView() {
         vp = (ViewPager) findViewById(R.id.chat_panel_viewpager);
 //
-//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
-//        vp.setAdapter(viewPagerAdapter);
-//
-//        initPointsView(vp, viewPagerAdapter.getCount());
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
+        vp.setAdapter(viewPagerAdapter);
+
+        initPointsView(vp, viewPagerAdapter.getCount());
     }
 
     private List<View> getAllViews() {

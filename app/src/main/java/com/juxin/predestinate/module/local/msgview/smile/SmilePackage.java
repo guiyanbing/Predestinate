@@ -1,11 +1,10 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
 import com.juxin.mumu.bean.net.BaseData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Created by Kind on 2017/3/31.
  */

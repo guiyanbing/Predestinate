@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.base;
 
 import android.content.Context;
 import android.view.View;
-
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
 
