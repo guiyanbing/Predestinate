@@ -27,22 +27,8 @@
 2. 软件中数据库使用[GreenDao](https://github.com/greenrobot/greenDAO)，进行数据库操作时各自学习使用。`./bean/db/`目录下的文件为GreenDao自动生成，请勿上传。
 
 ## 测试接口
-- 清除已经心动过、忽略过状态 测试接口：http://test.app.xiaoyouapp.cn:8681/l/gm/CleanHeartCache?uid=xxx
-- 心动测试接口：http://test.app.xiaoyouapp.cn:8681/l/heart/HeartServer?uid=xxx&to_uid=xxx&type=1
-- 活动消息的测试接口：http://test.app.xiaoyouapp.cn:8681/test/TestNews?uid=xxx
-- 系统消息的测试接口：http://test.app.xiaoyouapp.cn:8681/test/TestSys?uid=xxx
-- 加好友消息的测试接口：http://test.app.xiaoyouapp.cn:8681/l/userrelation/AddFriend?uid=xxx&toid=xxx
-- 钻石 金币测试接口：http://test.app.xiaoyouapp.cn:8681/l/gm/TestGemAndCoins?uid=xxx&coin_type=1&num=1000 (coin_type：1-钻石， 2-金币 num：数量 大于0为加，小于零为减)
-- 消费货币(宝石、金币)：http://test.app.xiaoyouapp.cn:8681/l/gm/CostCoin?uid=xxx&to_uid=xxx&coin_type=1&cnt=100 (coin_type:1-钻石， 2-金币 cnt:消耗数量 to_uid:消费的目标对象,to_uid == uid则自己消耗)
-- 开通vip: http://test.app.xiaoyouapp.cn:8681/l/gm/ChangeVipEndTime?uid=xxx&months=1
-- 开通包月: http://test.app.xiaoyouapp.cn:8681/l/gm/ChangeMonthEndTime?uid=xxx&months=1
-- 清除绑定手机号：http://test.app.xiaoyouapp.cn:8681/l/gm/CleanBindPhone?uid=xxx&phone=186xxx&tag=303 (功能标记301-小友密码重置，302-小友绑定手机号,303 解绑手机号)
-- 清除短信次数限制：http://test.app.xiaoyouapp.cn:8681/l/gm/CleanShortMsgTimes?phone=xxx&tag=301 (功能标记301-小友密码重置，302-小友绑定手机号)
-- 添加粉丝接口：：http://test.app.xiaoyouapp.cn:8681/l/gm/AddFuns?uid=xxx&to_uid=xxx (to_uid:目标用户id,成为to_uid的粉丝)
-- 添加红包：：http://test.app.xiaoyouapp.cn:8681/l/gm/AddRedOwn?uid=xxx&num=100 (num:单位分)
-- 游戏发奖励接口(post提交)：http://test.app.xiaoyouapp.cn:8681/l/prize/Award {"uidlist":[80000044],"type":10200}(uidlist:用户排行榜，从第一名到第N名 type:10100-魅力榜日榜 10200-魅力榜周榜 20100-富豪榜日榜 20200-富豪榜周榜 40100-过关榜日榜 40200-过关榜周榜)
-- 测试接口：http://doc.api.yuanfenba.net/pkg/yuanfen/yfb_service/modules/gm/
-- 通用接口测试地址：http://test.msg.yuanfenba.net:8681/test/TestPage
+
+- 待文档
 
 ## 开发定义说明文档
 
@@ -58,14 +44,4 @@
 
 ### socket协议
 
-要点：
-1. 消息通过socket长连接进行接收，通过http短连接进行发送。
-2. socket登录时，须先发送一次65535类型的心跳消息，再发送登录消息。
-3. 心跳回送机制：保持长连接的心跳消息类型为65532，客户端发送该类型心跳之后，服务端会回复一条同类型的空消息作为应答。
-如果服务端未在规定时间内应答的话socket重新进行连接。
-4. 多账号登录踢下线机制[待服务器对接]
-5. 所有发送和接收的消息体经过xxtea加密，socket内部逻辑已做处理，外部无需关心。
-
-周隆的联调服务器：103.25.36.7:8823
-
-具体实现见：[IMProxy.java](./friends/src/main/java/com/xiaoyou/friends/module/service/IMProxy.java)与[AutoConnectMgr.java](./friends/src/main/java/com/xiaoyou/friends/module/service/AutoConnectMgr.java)
+- 待文档
