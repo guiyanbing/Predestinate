@@ -47,8 +47,7 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
                 //忽略所有未读消息
 //                PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
 //                    @Override
-//                    public void onCancel() {
-//                    }
+//                    public void onCancel() {}
 //
 //                    @Override
 //                    public void onSubmit() {

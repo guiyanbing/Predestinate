@@ -50,7 +50,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.recommend_msg.type));
         baseMessage.setWeight(BaseMessage.Great_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-        baseMessage.setName("推荐的人");
+        baseMessage.setName("最近来访");
         baseMessage.setAboutme("系统为您匹配到7人");
         baseMessage.setLocalAvatar(R.drawable.p1_xxicon01);
         messageLists.add(baseMessage);
@@ -60,7 +60,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
       //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
         baseMessage.setWeight(BaseMessage.In_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-        baseMessage.setName("谁看过我");
+        baseMessage.setName("谁关注我");
         baseMessage.setAboutme("26人查看了我");
         baseMessage.setLocalAvatar(R.drawable.p1_xxicon02);
         messageLists.add(baseMessage);

@@ -9,7 +9,7 @@
         android:id="@+id/base_title_tab"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_footer_height"
-        android:background="@color/white">
+        android:background="@drawable/main_top_female_bg">
 
         <LinearLayout
             android:id="@+id/base_title_back"
@@ -65,7 +65,7 @@
             android:ellipsize="end"
             android:maxEms="7"
             android:maxLines="1"
-            android:textColor="@color/color_zhuyao"
+            android:textColor="@color/white"
             android:textSize="@dimen/px52_sp" />
 
         <com.juxin.library.unread.BadgeView
