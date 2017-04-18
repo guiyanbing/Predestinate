@@ -22,8 +22,8 @@
             android:padding="@dimen/act_space">
 
             <ImageView
-                android:layout_width="@dimen/px60_dp"
-                android:layout_height="@dimen/px60_dp"
+                android:layout_width="@dimen/px55_dp"
+                android:layout_height="@dimen/px55_dp"
                 android:src="@drawable/p1_msg" />
 
             <TextView
@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px10_dp"
                 android:text="私信TA"
+                android:textSize="@dimen/px43_sp"
                 android:textColor="@color/txt_item_sign" />
         </LinearLayout>
 
@@ -50,8 +51,8 @@
 
             <ImageView
                 android:id="@+id/iv_greet"
-                android:layout_width="@dimen/px60_dp"
-                android:layout_height="@dimen/px60_dp"
+                android:layout_width="@dimen/px55_dp"
+                android:layout_height="@dimen/px55_dp"
                 android:src="@drawable/p1_greet_normal" />
 
             <TextView
@@ -59,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px10_dp"
+                android:textSize="@dimen/px43_sp"
                 android:text="打个招呼"
                 android:textColor="@color/txt_item_sign" />
         </LinearLayout>

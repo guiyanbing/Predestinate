@@ -69,6 +69,7 @@ class RecommendAdapter extends BaseRecyclerViewAdapter {
                     PToast.showShort("已打过招呼");
                 } else {
                     PToast.showShort("打招呼请求");//TODO
+                    recommendPeople.setIs_sayhi(true);
                     changeGreetButton(iv_greet, tv_greet, false);
                 }
 
