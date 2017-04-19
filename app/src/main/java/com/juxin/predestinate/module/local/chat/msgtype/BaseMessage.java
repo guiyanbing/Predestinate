@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.TypeConvUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
@@ -11,13 +10,8 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,20 +21,21 @@ import java.util.Map;
 public class BaseMessage implements IBaseMessage {
 
     public enum BaseMessageType {
-        text(TextMessage.class, 2),//文本消息
-//        hi(SayMessage.class, 3),//打招呼
-//        read(SystemMessage.class, 7),//已读
-//        heart(HeartMessage.class, 8),//对我心动的消息
-//        hint(HintMessage.class, 9), //小提示，在消息框中为灰色小字
-//        voice(VoiceMessage.class, 10), //语音消息
-//        videoSmall(VideoSmallMessage.class, 11), //小视频
-//        img(ImgMessage.class, 12), //图片
-//        act(ActivityMessage.class, 13),//活动
-//        addFriend(FriendsMessage.class, 14),//好友消息
-//        game(InterActMessage.class, 15),//游戏互动消息
-//        html(HtmlMessage.class, 17)//html消息
+
+        common(CommonMessage.class, 2),//文本消息
+        hi(TextMessage.class, 3),//打招呼
+        readMe(TextMessage.class, 4),//谁看过我
+        concern(ConcernMessage.class, 5),//关注
+        system(SystemMessage.class, 7),//系统消息
+        gift(GiftMessage.class, 10),//礼物消息
+        redEnvelopes(RedEnvelopesMessage.class, 12),//聊天红包
+        hint(TextMessage.class, 14),//小提示消息
+        wantGift(TextMessage.class, 15),//索要礼物消息
+        redEnvelopesBalance(TextMessage.class, 17),//红包余额变动消息
+        html(HtmlMessage.class, 19),//html消息
+        wantGiftTwo(GiftMessage.class, 20),//索要礼物消息第二版
+        video(VideoMessage.class, 24),//视频消息
         ;
-        //  del_msg(DeleteMessage.class),//删除消息类型
 
         public Class<? extends BaseMessage> msgClass = null;
         public int msgType;
@@ -88,11 +83,6 @@ public class BaseMessage implements IBaseMessage {
             return this.msgType;
         }
     }
-
-
-
-
-
 
 
 
