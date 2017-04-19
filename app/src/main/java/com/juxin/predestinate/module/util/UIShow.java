@@ -6,16 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.APKUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
@@ -23,6 +27,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
@@ -210,10 +215,10 @@ public class UIShow {
     /**
      * 打开添加联系人页面
      */
-    public static void showSelectContactAct(long tab,FragmentActivity activity) {
+    public static void showSelectContactAct(long tab, FragmentActivity activity) {
         Intent intent = new Intent(activity, SelectContactActivity.class);
-        intent.putExtra("tab",tab);
-        activity.startActivityForResult(intent,0);
+        intent.putExtra("tab", tab);
+        activity.startActivityForResult(intent, 0);
     }
 
     /**
@@ -373,12 +378,33 @@ public class UIShow {
      * @param activity  FragmentActivity上下文
      * @param appUpdate 软件升级信息
      */
-    public static void showUpdateDialog(FragmentActivity activity, AppUpdate appUpdate) {
+    public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate) {
         if (appUpdate == null) return;
-        if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
+        // 如果不同包名且已安装升级包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
+        if (!TextUtils.isEmpty(appUpdate.getPackage_name())
+                && !ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())
+                && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
+            PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
+                @Override
+                public void onCancel() {
+                }
+
+                @Override
+                public void onSubmit() {
+                    if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
+                        activity.moveTaskToBack(activity.isTaskRoot());
+                    }
+                }
+            }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
+        }
+        // 如果同包名或者包名返回为空，只要返回的版本号>当前已安装的版本号，就弹窗进行下载更新
+        else if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
+            ModuleMgr.getCommonMgr().updateSaveUP();//更新时先保存用户信息备用
             UpdateDialog updateDialog = new UpdateDialog();
             updateDialog.setData(appUpdate);
             updateDialog.showDialog(activity);
+        } else {
+//            PToast.showShort("您当前的版本为最新的");//TODO 判断activity是设置页面的instance之后弹出提示
         }
     }
 
@@ -434,5 +460,18 @@ public class UIShow {
             intent.putExtra("replyMsg", replyMsg);
         intent.putExtra("kf_id", kf_id);
         mContext.startActivity(intent);
+    }
+
+    /**
+     * 通过配置调起的web-dialog弹框
+     *
+     * @param activity FragmentActivity实例
+     */
+    public static void showWebPushDialog(FragmentActivity activity) {
+        CommonConfig commonConfig = ModuleMgr.getCommonMgr().getCommonConfig();
+        if (commonConfig.canPushShow()) {
+            WebPushDialog webPushAct = new WebPushDialog(activity, commonConfig.getPush_url(), commonConfig.getPushrate());
+            webPushAct.showDialog(activity);
+        }
     }
 }

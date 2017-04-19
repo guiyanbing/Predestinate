@@ -7,24 +7,24 @@ import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.NotificationsUtils;
 import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.module.util.Url_Enc;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,7 +44,6 @@ public class LoginMgr implements ModuleBase {
     private final static String LOGINMGR_UID = "LOGINMGR_UID";          // 保存当前登录用户账号信息 uid, pw
     private final static String LOGINMGR_COOKIE = "LOGINMGR_COOKIE";    // 保存当前登录用户cookie
     private final static String LOGINMGR_AUTH = "LOGINMGR_AUTH";        // 保存当前登录用户的密码md5
-    private final static String LOGIN_USER_KEY = "LOGIN_USER_KEY";      // 保存当前登录过的账号信息
 
     public boolean IF_PW_RESET = false;                                 // 密码已是否重置
     public static String cookie = null;
@@ -97,7 +96,7 @@ public class LoginMgr implements ModuleBase {
     private List<UP> getUserJson() {
         List<UP> upList = new ArrayList<>();
         try {
-            String key = PSP.getInstance().getString(LOGIN_USER_KEY, null);
+            String key = PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null);
             if (!TextUtils.isEmpty(key)) {
                 JSONObject jsonObject = new JSONObject(key);
                 JSONArray jsonArray = jsonObject.optJSONArray("user");
@@ -105,8 +104,8 @@ public class LoginMgr implements ModuleBase {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject object = jsonArray.optJSONObject(i);
                     up = new UP();
-                    up.setUid(Long.valueOf(Url_Enc.decryptDES(object.optString("sUid"))));
-                    up.setPw(Url_Enc.decryptDES(object.optString("sPw")));
+                    up.setUid(Long.valueOf(EncryptUtil.decryptDES(object.optString("sUid"), FinalKey.UP_DES_KEY)));
+                    up.setPw(EncryptUtil.decryptDES(object.optString("sPw"), FinalKey.UP_DES_KEY));
                     up.setTm(object.optLong("tm"));
                     upList.add(up);
                 }
@@ -141,13 +140,13 @@ public class LoginMgr implements ModuleBase {
             JSONObject tmpJson;
             for (UP tmp : upList) {
                 tmpJson = new JSONObject();
-                tmpJson.put("sUid", Url_Enc.encryptDES(String.valueOf(tmp.getUid())));
-                tmpJson.put("sPw", Url_Enc.encryptDES(String.valueOf(tmp.getPw())));
+                tmpJson.put("sUid", EncryptUtil.encryptDES(String.valueOf(tmp.getUid()), FinalKey.UP_DES_KEY));
+                tmpJson.put("sPw", EncryptUtil.encryptDES(String.valueOf(tmp.getPw()), FinalKey.UP_DES_KEY));
                 tmpJson.put("tm", tmp.getTm());
                 jsonArray.put(tmpJson);
             }
             jsonObject.put("user", jsonArray);
-            PSP.getInstance().put(LOGIN_USER_KEY, jsonObject.toString());
+            PSP.getInstance().put(FinalKey.LOGIN_USER_KEY, jsonObject.toString());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,8 +228,9 @@ public class LoginMgr implements ModuleBase {
 
     /**
      * 设置登录信息，并发送登录信息。
+     *
      * @param uid
-     * @param isUserLogin　进行登录请求或处于登录状态
+     * @param isUserLogin 　进行登录请求或处于登录状态
      * @return
      */
     public boolean setLoginInfo(long uid, boolean isUserLogin) {
@@ -248,7 +248,7 @@ public class LoginMgr implements ModuleBase {
             App.uid = uid;
             App.isLogin = true;
         }
-        MMLog.d("yao","isLogin="+App.isLogin+"==isUserLogin=="+isUserLogin);
+        MMLog.d("yao", "isLogin=" + App.isLogin + "==isUserLogin==" + isUserLogin);
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, App.isLogin);
         return App.isLogin;
     }

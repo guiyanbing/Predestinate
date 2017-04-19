@@ -17,7 +17,7 @@ public class DirType {
      * 文件夹名称
      */
     private enum Dir {
-        cache, download, apk, video, voice, image, upload
+        root, cache, download, apk, video, voice, image, upload
     }
 
     private static final String SD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -40,9 +40,22 @@ public class DirType {
     private static final String IMAGE = DIR_ROOT + Dir.image + File.separator;
     private static final String UPLOAD = DIR_ROOT + Dir.upload + File.separator;
 
-    private static boolean isFolderExists(String folder) {
+    /**
+     * 文件夹是否存在/是否创建成功（不存在则创建）
+     *
+     * @param folder 文件夹路径
+     * @return 文件夹是否存在/是否创建成功
+     */
+    public static boolean isFolderExists(String folder) {
         File file = new File(folder);
         return file.exists() || file.mkdirs();
+    }
+
+    /**
+     * @return 获取软件名根目录
+     */
+    public static String getRootDir() {
+        return isFolderExists(DIR_ROOT) ? DIR_ROOT : "";
     }
 
     /**

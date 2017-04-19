@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 
 /**
@@ -30,6 +31,7 @@ public class BaseDialogFragment extends DialogFragment implements DialogInterfac
     private int _animationsResId;
     private boolean _cancelable = true;
     private DialogInterface.OnDismissListener onDismissListener;
+    private DialogInterface.OnCancelListener onCancelListener;
 
     private LayoutInflater inflater;
     private ViewGroup container;
@@ -81,26 +83,30 @@ public class BaseDialogFragment extends DialogFragment implements DialogInterfac
             window.setWindowAnimations(this._animationsResId);
         }
 
-        //设置宽度
-        if (this.dialog_width_ratio > 0) {
-            setWidthRatio(this.dialog_width_ratio);
+        if (isExactSize) {
             lp.width = this._width;
-        } else if (this.dialog_width_ratio == -2) {
-            lp.width = LinearLayout.LayoutParams.MATCH_PARENT;
-        } else {
-            lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        }
-
-        //设置高度
-        if (this.dialog_height_ratio > 0) {
-            setHeightRatio(this.dialog_height_ratio);
             lp.height = this._height;
-        } else if (this.dialog_height_ratio == -2) {
-            lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
         } else {
-            lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        }
+            //设置宽度
+            if (this.dialog_width_ratio > 0) {
+                setWidthRatio(this.dialog_width_ratio);
+                lp.width = this._width;
+            } else if (this.dialog_width_ratio == -2) {
+                lp.width = LinearLayout.LayoutParams.MATCH_PARENT;
+            } else {
+                lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            }
 
+            //设置高度
+            if (this.dialog_height_ratio > 0) {
+                setHeightRatio(this.dialog_height_ratio);
+                lp.height = this._height;
+            } else if (this.dialog_height_ratio == -2) {
+                lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
+            } else {
+                lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            }
+        }
         //设置位置
         if (_gravity != 0) {
             lp.gravity = _gravity;
@@ -138,11 +144,25 @@ public class BaseDialogFragment extends DialogFragment implements DialogInterfac
 
     @Override
     public void onCancel(DialogInterface dialog) {
+        if (onCancelListener != null) onCancelListener.onCancel(dialog);
         super.onCancel(dialog);
     }
 
+    private boolean isExactSize = false;
     private double dialog_width_ratio;
     private double dialog_height_ratio;
+
+    /**
+     * 直接设置页面的宽高，权重大于设置页面屏幕宽高比例的比例
+     *
+     * @param width  宽度
+     * @param height 高度
+     */
+    public void setSize(int width, int height) {
+        isExactSize = true;
+        this._width = width;
+        this._height = height;
+    }
 
     /**
      * 设置Dialog的屏幕占比
@@ -226,10 +246,12 @@ public class BaseDialogFragment extends DialogFragment implements DialogInterfac
      */
     public void showDialog(FragmentActivity context) {
         try {
-            if (!this.isAdded()) {
+            if (!isAdded()) {
                 FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
                 transaction.add(this, context.toString());
                 transaction.commitAllowingStateLoss();
+            } else {
+                PLogger.d("---BaseDialogFragment--->The BaseDialogFragment is already show.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -238,5 +260,9 @@ public class BaseDialogFragment extends DialogFragment implements DialogInterfac
 
     public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
         this.onDismissListener = onDismissListener;
+    }
+
+    public void setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) {
+        this.onCancelListener = onCancelListener;
     }
 }

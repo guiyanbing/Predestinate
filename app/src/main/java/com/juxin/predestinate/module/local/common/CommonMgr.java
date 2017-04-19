@@ -1,23 +1,32 @@
 package com.juxin.predestinate.module.local.common;
 
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.sayhi.SayHelloDialog;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,12 +130,14 @@ public class CommonMgr implements ModuleBase {
         return false;
     }
 
+    // ---------------------------- 软件升级 start ------------------------------
+
     /**
      * 检查应用升级
      *
-     * @param complete 界面回调
+     * @param activity FragmentActivity实例
      */
-    public void checkUpdate(RequestComplete complete) {
+    public void checkUpdate(final FragmentActivity activity) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道号
         postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道号
@@ -134,8 +145,43 @@ public class CommonMgr implements ModuleBase {
         postParams.put("version", ModuleMgr.getAppMgr().getVerCode());// 版本号(整数)
         postParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));// 软件签名sha1
         postParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());// 包名
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.checkUpdate, postParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.checkUpdate, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    UIShow.showUpdateDialog(activity, (AppUpdate) response.getBaseData());
+                }
+            }
+        });
     }
+
+    /**
+     * 将用户信息写入文件，跨软件升级使用
+     */
+    public void updateSaveUP() {
+        String str_json = PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null);
+        if (!TextUtils.isEmpty(str_json)) {
+            String cacheDir = Environment.getExternalStorageDirectory().getAbsoluteFile() +
+                    File.separator + "xiaou" + File.separator;
+            if (DirType.isFolderExists(cacheDir)) {
+                File file = new File(cacheDir + "user_cache");
+                OutputStreamWriter out = null;
+                try {
+                    out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
+                    out.write(str_json);//向文件写入内容
+                } catch (Exception e) {
+                    PLogger.printThrowable(e);
+                } finally {
+                    try {
+                        if (out != null) out.close();// 关闭输出流
+                    } catch (Exception e) {
+                        PLogger.printThrowable(e);
+                    }
+                }
+            }
+        }
+    }
+    // ---------------------------- 软件升级 end ------------------------------
 
     /**
      * 获取每日推荐列表（一键打招呼列表）

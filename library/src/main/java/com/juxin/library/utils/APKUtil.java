@@ -181,19 +181,18 @@ public class APKUtil {
     }
 
     /**
-     * 判断APP是否安装过
+     * 判断指定包名的APP是否已经安装
      *
-     * @param context
-     * @param sPkgName
-     * @return
+     * @param context     上下文
+     * @param packageName 需要检测的包名
+     * @return 是否已经安装了指定包名的软件
      */
-    public static boolean getAppIsInstall(Context context, String sPkgName) {
+    public static boolean isAppInstalled(Context context, String packageName) {
         final PackageManager packageManager = context.getPackageManager();
         // 获取所有已安装程序的包信息
-        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
-        for (int i = 0; i < pinfo.size(); i++) {
-            if (pinfo.get(i).packageName.equalsIgnoreCase(sPkgName))
-                return true;
+        List<PackageInfo> infoList = packageManager.getInstalledPackages(0);
+        for (int i = 0; i < infoList.size(); i++) {
+            if (infoList.get(i).packageName.equalsIgnoreCase(packageName)) return true;
         }
         return false;
     }

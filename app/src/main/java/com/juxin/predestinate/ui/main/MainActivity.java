@@ -11,13 +11,10 @@ import android.view.View;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.plaza.PlazaFragment;
@@ -47,15 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initData() {
-        //请求软件升级接口
-        ModuleMgr.getCommonMgr().checkUpdate(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    UIShow.showUpdateDialog(MainActivity.this, (AppUpdate) response.getBaseData());
-                }
-            }
-        });
+        ModuleMgr.getCommonMgr().checkUpdate(this);//检查应用升级
+        UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
     }
 
     private void initFragment() {

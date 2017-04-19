@@ -1,19 +1,11 @@
 package com.juxin.predestinate.module.util;
 
-import android.util.Base64;
-
 import com.juxin.library.utils.EncryptUtil;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.IvParameterSpec;
 
 /**
  * 加密
@@ -166,102 +158,6 @@ public class Url_Enc {
         //getParams.remove("hash");
         //Log.e("=============", "=========" + builder.toString());
         return builder.toString();
-    }
-
-    public static String encryptDES(String encryptString) throws Exception {
-        return encryptDES(encryptString, "yfb+-73+");
-    }
-
-    public static String decryptDES(String encryptString) throws Exception {
-        return decryptDES(encryptString, "yfb+-73+");
-    }
-
-    //第二用加密方式
-    public static String encryptDESSecond(String encryptString) throws Exception {
-        return encryptDESPCK(encryptString, "yuasa%kk");
-    }
-
-    //第二用解密方式
-    public static String decryptDESSecond(String encryptString) throws Exception {
-        return decryptDESPCK(encryptString, "yuasa%kk");
-    }
-
-    /**
-     * 加密
-     *
-     * @param encryptString 需要加密的串
-     * @param encryptKey    加密Key
-     * @return
-     * @throws Exception
-     */
-    public static String encryptDES(String encryptString, String encryptKey) throws Exception {
-        IvParameterSpec zeroIv = new IvParameterSpec(encryptKey.getBytes());
-        DESKeySpec desKey = new DESKeySpec(encryptKey.getBytes());
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-        SecretKey securekey = keyFactory.generateSecret(desKey);
-        Cipher cipher = Cipher.getInstance("DES");
-        cipher.init(Cipher.ENCRYPT_MODE, securekey, zeroIv);
-        byte[] encryptedData = cipher.doFinal(encryptString.getBytes());
-        return Base64.encodeToString(encryptedData, Base64.DEFAULT);
-    }
-
-    /**
-     * 解密
-     *
-     * @param decryptString 需要解密的串
-     * @param decryptKey    加密Key
-     * @return
-     * @throws Exception
-     */
-    public static String decryptDES(String decryptString, String decryptKey) throws Exception {
-        IvParameterSpec zeroIv = new IvParameterSpec(decryptKey.getBytes());
-        byte[] byteMi = Base64.decode(decryptString, Base64.DEFAULT);
-        DESKeySpec desKey = new DESKeySpec(decryptKey.getBytes());
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-        SecretKey securekey = keyFactory.generateSecret(desKey);
-        Cipher cipher = Cipher.getInstance("DES");
-        cipher.init(Cipher.DECRYPT_MODE, securekey, zeroIv);
-        byte decryptedData[] = cipher.doFinal(byteMi);
-        return new String(decryptedData);
-    }
-
-    /**
-     * 加密
-     *
-     * @param encryptString 需要加密的串
-     * @param encryptKey    加密Key
-     * @return
-     * @throws Exception
-     */
-    public static String encryptDESPCK(String encryptString, String encryptKey) throws Exception {
-        IvParameterSpec zeroIv = new IvParameterSpec(encryptKey.getBytes());
-        DESKeySpec desKey = new DESKeySpec(encryptKey.getBytes());
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-        SecretKey securekey = keyFactory.generateSecret(desKey);
-        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, securekey, zeroIv);
-        byte[] encryptedData = cipher.doFinal(encryptString.getBytes());
-        return Base64.encodeToString(encryptedData, Base64.NO_WRAP);
-    }
-
-    /**
-     * 解密
-     *
-     * @param decryptString 需要解密的串
-     * @param decryptKey    加密Key
-     * @return
-     * @throws Exception
-     */
-    public static String decryptDESPCK(String decryptString, String decryptKey) throws Exception {
-        IvParameterSpec zeroIv = new IvParameterSpec(decryptKey.getBytes());
-        byte[] byteMi = Base64.decode(decryptString, Base64.NO_WRAP);
-        DESKeySpec desKey = new DESKeySpec(decryptKey.getBytes());
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-        SecretKey securekey = keyFactory.generateSecret(desKey);
-        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, securekey, zeroIv);
-        byte decryptedData[] = cipher.doFinal(byteMi);
-        return new String(decryptedData);
     }
 
     // ===============================  老缘分吧地址加密 Start ==============================================
