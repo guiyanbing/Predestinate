@@ -96,7 +96,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                 PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
                     @Override
                     public void onOptionPicked(String option) {
-                        age = InfoConfig.getInstance().getIncomeN().getSubmitWithShow(option);
+                        age = InfoConfig.getInstance().getAgeN().getSubmitWithShow(option);
                         ageVlaue = option;
                         txt_reg_info_age.setText(ageVlaue);
                     }

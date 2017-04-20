@@ -31,7 +31,7 @@ public interface HttpMgr extends ModuleBase {
      */
     HTCallBack reqPost(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
                        Map<String, Object> post_param, RequestParam.CacheType cacheType,
-                       boolean isJsonRequest, boolean isEncrypt, RequestComplete requestCallback);
+                       boolean isEncrypt, boolean isJsonRequest, RequestComplete requestCallback);
 
     /**
      * get请求

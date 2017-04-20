@@ -191,46 +191,10 @@ public class LoginMgr implements ModuleBase {
         postParams.put("nickname", nickname);
         long randNum = new Random().nextLong();
         postParams.put("r", randNum);
-        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, requestCallback);
+//        return ModuleMgr.getHttpMgr().reqPost(urlParam, null, null, postParams,
+//                RequestParam.CacheType.CT_Cache_No, true, false, requestCallback);
+        return   ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, requestCallback);
     }
-
-//    /**
-//     * 账号注册
-//     */
-//    public HTCallBack onRegister(UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
-//
-//
-//        postParams.put("flag", 0);  // 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
-//        postParams.put("user_client_type", 2); // 2为android 3为iphone
-//        postParams.put("s_uid", ModuleMgr.getAppMgr().getAppID());
-//        postParams.put("s_sid", ModuleMgr.getAppMgr().getSourceID());
-//        postParams.put("ie", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-//        postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-//        postParams.put("mc", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-//        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
-//        postParams.put("ms", 7); //1、支持语音 2、新机器人 3、新新机器人 4、支持视频 5、支持Y币 6、支持钻石、礼物 7、红包版本 8、红包来了单独APP
-//
-//        long randNum = new Random().nextLong();
-//        postParams.put("r", randNum);
-//
-//        Map<String, String> headerMap = new HashMap<>();
-//        headerMap.put("User-Agent", "");
-//
-//
-//
-//        postParams.put("client_type", 1); // 1为android 2为iphone
-//        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
-//        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
-//        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-//        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-//        postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-//        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
-//        postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
-//        HashMap<String, Object> getParams = new HashMap<>();
-//        getParams.put("vcode", new Random().nextLong());
-//
-//        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, getParams, postParams, requestCallback);
-//    }
 
     /**
      * 登录
