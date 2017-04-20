@@ -564,4 +564,9 @@
         <item name="android:textColor">@color/text_zhuyao_black</item>
         <item name="android:textSize">@dimen/px39_sp</item>
     </style>
+
+    <style name="NoMultipoint">
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+    </style>
 </resources>

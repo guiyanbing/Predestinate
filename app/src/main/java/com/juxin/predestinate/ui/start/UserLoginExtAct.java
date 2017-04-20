@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
@@ -30,55 +30,28 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-/**
- * 用户登录页面
- * Created by Su on 2016/12/12.
- */
-public class LoginAct extends BaseActivity implements OnItemClickListener, OnClickListener, UserPrivacyAdapter.OnDelItemListener {
-
-    private LoginMgr loginMgr;
-
-    // UI Object
+public class UserLoginExtAct extends BaseActivity implements OnItemClickListener, OnClickListener, UserPrivacyAdapter.OnDelItemListener {
     private EditText et_uid, et_pwd;
     private ImageView iv_arrow;
     private ListView lv_userData;
+
+
     private UserPrivacyAdapter privacyAdapter;
 
-    private long currentUserID;     // 登录页默认展示的ID
-    private String currentUserPwd;  // 登录页默认pwd
+    private long currentUserID;// 登录页默认展示的ID
+    private String currentUserPwd;
     private int position;           // 当前用户所在list位置
+    private LoginMgr loginMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isCanBack(false);
         super.onCreate(savedInstanceState);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        setContentView(R.layout.p1_login_act);
-        setBackView(getResources().getString(R.string.title_loginact));
+        setContentView(R.layout.user_login_act);
+        setBackView("用户登录");
         initView();
         initData();
     }
 
-    private void initView() {
-        loginMgr = ModuleMgr.getLoginMgr();
-        lv_userData = (ListView) findViewById(R.id.list_user_login_account);
-        et_uid = (EditText) findViewById(R.id.et_uid);
-        et_pwd = (EditText) findViewById(R.id.et_pwd);
-        iv_arrow = (ImageView) findViewById(R.id.img_user_login_arrow);
-        findViewById(R.id.bt_submit).setOnClickListener(this);
-        findViewById(R.id.bt_reg).setOnClickListener(this);
-        findViewById(R.id.layout_parent).setOnClickListener(this);
-        findViewById(R.id.txt_user_reset_pw).setOnClickListener(this);
-        this.iv_arrow.setOnClickListener(this);
-        this.lv_userData.setOnItemClickListener(this);
-        this.et_uid.setOnClickListener(this);
-        // 列表
-        privacyAdapter = new UserPrivacyAdapter(this, loginMgr.getUserList());
-        privacyAdapter.setDelListener(this);
-        lv_userData.setAdapter(privacyAdapter);
-    }
-
-    // 初始化用户列表
     private void initData() {
         List<UP> userList = loginMgr.getUserList();
         showCurrentUser(userList);
@@ -89,10 +62,29 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         }
     }
 
+    private void initView() {
+        loginMgr = ModuleMgr.getLoginMgr();
+        this.lv_userData = (ListView) findViewById(R.id.list_user_login_account);
+        findViewById(R.id.layout_parent).setOnClickListener(this);
+        this.et_uid = (EditText) findViewById(R.id.edtTxt_user_login_username);
+        this.et_pwd = (EditText) findViewById(R.id.edtTxt_user_login_password);
+        this.iv_arrow = (ImageView) findViewById(R.id.img_user_login_arrow);
+        findViewById(R.id.btn_user_login_submit).setOnClickListener(this);
+        findViewById(R.id.txt_user_login_toReg).setOnClickListener(this);
+        this.iv_arrow.setOnClickListener(this);
+        this.lv_userData.setOnItemClickListener(this);
+        this.et_uid.setOnClickListener(this);
+        // 列表
+        privacyAdapter = new UserPrivacyAdapter(this, loginMgr.getUserList());
+        privacyAdapter.setDelListener(this);
+        lv_userData.setAdapter(privacyAdapter);
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_submit://提交
+            case R.id.btn_user_login_submit:
                 if (validInput()) {
                     loginMgr.onLogin(this, currentUserID, currentUserPwd, new RequestComplete() {
                         @Override
@@ -109,7 +101,14 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
                                     JSONObject json = jsonObject.optJSONObject("user_info");
                                     ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
                                     ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
-                                    UIShow.showMainClearTask(LoginAct.this);
+
+                                    // 判断是否缺失数据,缺失则继续跳转到用户注册
+                                    if (json.optInt("miss_info") == 1) {
+                                        PToast.showLong("请完善您的资料");
+                                        UIShow.showUserInfoCompleteAct(UserLoginExtAct.this);
+                                        return;
+                                    }
+                                    UIShow.showMainClearTask(UserLoginExtAct.this);
                                 } else {
                                     PToast.showShort(getResources().getString(R.string.toast_login_iserror));
                                 }
@@ -120,32 +119,30 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
                     });
                 }
                 break;
-
             case R.id.img_user_login_arrow:
                 if (lv_userData.getVisibility() == View.GONE) {
                     startAnimate();
                     return;
                 }
-                endAnimate();
                 break;
-
             case R.id.layout_parent:
             case R.id.et_uid:
                 endAnimate();
                 break;
-
-            case R.id.bt_reg:
-                UIShow.showRegInfoAct(this);
+            case R.id.txt_user_login_toReg:
+                UIShow.showUserRegInfoAct(this);
                 finish();
-                break;
-
-            case R.id.txt_user_reset_pw:  // 跳转重置密码
-                UIShow.showFindPwdAct(this,FindPwdAct.OPEN_FINDPWD);
                 break;
         }
     }
 
-    // 检查输入信息是否为空
+    private void showCurrentUserData() {
+        et_uid.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserID + "");
+        et_uid.setSelection(loginMgr.getUserList().size() > 0 ? String.valueOf(currentUserID).length() : 0);
+        et_pwd.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserPwd);
+    }
+
+
     private boolean validInput() {
         String uid = et_uid.getText().toString();
         if (TextUtils.isEmpty(uid)) {
@@ -168,7 +165,6 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         endAnimate();
     }
 
-    @Override
     public void onDelClick(int position) {
         UP user = loginMgr.removeLoginUser(position);
         if (loginMgr.getUserList().size() <= 0) {
@@ -184,27 +180,6 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         privacyAdapter.setList(loginMgr.getUserList());
     }
 
-    @Override
-    public void back() {
-        UIShow.showNavUserAct(this);
-        super.back();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (loginMgr.IF_PW_RESET) {   // 忘记密码重置成功后
-            position = 0;
-            showCurrentUser(loginMgr.getUserList());
-            loginMgr.setResetStatus(false);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        privacyAdapter.setDelListener(null);
-    }
 
     // =========================== uid/pw展示 =========================================
     private void showCurrentUser(List<UP> userList) {
@@ -216,12 +191,6 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         }
         showCurrentUserData();
         privacyAdapter.setList(userList);
-    }
-
-    private void showCurrentUserData() {
-        et_uid.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserID + "");
-        et_uid.setSelection(loginMgr.getUserList().size() > 0 ? String.valueOf(currentUserID).length() : 0);
-        et_pwd.setText(loginMgr.getUserList().size() <= 0 ? "" : currentUserPwd);
     }
 
     // =========================== 账户列表显隐动画 =========================================
@@ -246,6 +215,4 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
                 })
                 .start();
     }
-
-
 }

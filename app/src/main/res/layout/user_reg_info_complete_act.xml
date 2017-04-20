@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/p2_bg_user_reg"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            style="@style/NoMultipoint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:paddingTop="20dip">
+
+            <TextView
+                android:id="@+id/txt_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="完善资料，是社交成功的第一步哦"
+                android:textColor="#fd6b8f"
+                android:textSize="15sp" />
+
+            <com.juxin.library.view.CircleImageView
+                android:id="@+id/img_reg_info_upload_photo"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_marginTop="20dip"
+                android:clickable="true"
+                android:src="@drawable/btn_reg_upload_photo_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="上传真实照片"
+                android:textColor="#494949"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="交友成功率将大大提升"
+                android:textColor="#494949"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/layout_reg_info_job"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_marginTop="10dip"
+                android:paddingLeft="2dip">
+
+                <TextView
+                    android:id="@+id/txt_reg_info_job_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="职业"
+                    android:textColor="#494949"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_user_go" />
+
+                <TextView
+                    android:id="@+id/txt_reg_info_job"
+                    android:layout_width="150dip"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dip"
+                    android:layout_toRightOf="@+id/txt_reg_info_job_desc"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="请选择 "
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <RelativeLayout
+                android:id="@+id/layout_reg_info_edu"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:paddingLeft="2dip">
+
+                <TextView
+                    android:id="@+id/txt_reg_info_edu_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="学历"
+                    android:textColor="#494949"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_user_go" />
+
+                <TextView
+                    android:id="@+id/txt_reg_info_edu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dip"
+                    android:layout_toRightOf="@+id/txt_reg_info_edu_desc"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="请选择"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <RelativeLayout
+                android:id="@+id/layout_reg_info_income"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:paddingLeft="2dip">
+
+                <TextView
+                    android:id="@+id/txt_reg_info_income_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="收入"
+                    android:textColor="#494949"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_user_go" />
+
+                <TextView
+                    android:id="@+id/txt_reg_info_income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dip"
+                    android:layout_toRightOf="@+id/txt_reg_info_income_desc"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="请选择"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <RelativeLayout
+                android:id="@+id/layout_reg_info_height"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:paddingLeft="2dip">
+
+                <TextView
+                    android:id="@+id/txt_reg_info_height_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="身高"
+                    android:textColor="#494949"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_user_go" />
+
+                <TextView
+                    android:id="@+id/txt_reg_info_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dip"
+                    android:layout_toRightOf="@+id/txt_reg_info_height_desc"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="请选择"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <RelativeLayout
+                android:id="@+id/layout_reg_info_marry"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:paddingLeft="2dip">
+
+                <TextView
+                    android:id="@+id/txt_reg_info_marry_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="婚姻"
+                    android:textColor="#494949"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_user_go" />
+
+                <TextView
+                    android:id="@+id/txt_reg_info_marry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dip"
+                    android:layout_toRightOf="@+id/txt_reg_info_marry_desc"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="请选择"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <Button
+                android:id="@+id/user_reg_info_complete_submit"
+                android:layout_width="match_parent"
+                android:layout_height="35dip"
+                android:layout_marginBottom="20dip"
+                android:layout_marginTop="50dip"
+                android:background="@drawable/btn_upload_head_redback_selector"
+                android:text="完成"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
