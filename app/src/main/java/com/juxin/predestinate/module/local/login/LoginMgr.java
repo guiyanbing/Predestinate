@@ -178,22 +178,19 @@ public class LoginMgr implements ModuleBase {
         postParams.put("user_client_type", 2); // 2为android 3为iphone
         postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());
         postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());
-        postParams.put("ie", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-        postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-        postParams.put("mc", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
+        postParams.put("ie", ModuleMgr.getAppMgr().getIMEI());
+        postParams.put("is", ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("mc", ModuleMgr.getAppMgr().getMAC());
+        postParams.put("simoperator", ModuleMgr.getAppMgr().getSimOperator());
         postParams.put("ms", 7); //1、支持语音 2、新机器人 3、新新机器人 4、支持视频 5、支持Y币 6、支持钻石、礼物 7、红包版本 8、红包来了单独APP
         postParams.put("ver", 5);//客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4 5，取消排队
-        postParams.put("app_key", BaseUtil.sha1(BaseUtil.getInstallPackageSignature()));
+        postParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
         postParams.put("age", age);
         postParams.put("gender", gender);
         postParams.put("nickname", nickname);
-        long randNum = new Random().nextLong();
-        postParams.put("r", randNum);
-//        return ModuleMgr.getHttpMgr().reqPost(urlParam, null, null, postParams,
-//                RequestParam.CacheType.CT_Cache_No, true, false, requestCallback);
-        return   ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, requestCallback);
+        postParams.put("r", new Random().nextLong());
+        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, requestCallback);
     }
 
     /**

@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public enum UrlParam {
 
-    reqRegister("public/quickReg2", UserReg.class),//注册接口
+    reqRegister("pubtest/quickReg", UserReg.class),//注册接口
     modifyUserData("user/modifyUserData"),//修改用户资料
     reqLogin("public/login"),//普通登录接口
     reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
