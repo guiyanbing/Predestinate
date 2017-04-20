@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.request;
 
 import android.content.Context;
+
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
@@ -9,9 +10,11 @@ import com.juxin.library.request.Requester;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.Url_Enc;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -82,11 +85,7 @@ public class RequestHelper {
                                              Map<String, Object> get_param, Map<String, Object> post_param,
                                              Map<String, File> file_params, boolean isEncrypt) {
         if (isEncrypt) {//是否加密 加密
-            if (file_params == null && post_param != null) {//post加密。文件上传使用的为post，故同时判断两者
-                url = Url_Enc.appendJsonUrl(url, get_param, new Gson().toJson(post_param));
-            } else {//其余请求为get请求
-                url = Url_Enc.appendUrl(url, get_param, null);
-            }
+            url = Url_Enc.appendUrl(url, get_param, post_param);//只要是加密请求，不管post或get都进行url拼接
         }
         if (headerMap == null) headerMap = new HashMap<>();
 
