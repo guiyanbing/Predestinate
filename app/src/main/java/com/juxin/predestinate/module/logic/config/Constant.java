@@ -7,7 +7,7 @@ package com.juxin.predestinate.module.logic.config;
 public class Constant {
 
     public static final String NO_HOST = "no_host";
-    public static final String HOST_URL = "http://123.59.187.13:10001/";
+    public static final String HOST_URL = "http://api2.app.yuanfenba.net/";
     public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
 
     // -------------------------正式服地址---------------------------

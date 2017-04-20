@@ -33,12 +33,12 @@ public class NavUserAct extends BaseActivity {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_login:   // 跳转到用户登录页面
-                    UIShow.showLoginAct(NavUserAct.this);
+                case R.id.btn_login:
+                    UIShow.showUserLoginExtAct(NavUserAct.this);
                     break;
 
-                case R.id.btn_reg:   // 跳转到用户注册页面
-                    UIShow.showRegInfoAct(NavUserAct.this);  // 跳新版注册
+                case R.id.btn_reg:
+                    UIShow.showUserRegInfoAct(NavUserAct.this);
                     break;
             }
         }

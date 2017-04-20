@@ -44,6 +44,7 @@
     <string name="txt_free_reg">免费注册</string>
     <string name="button_reg">一键注册</string>
     <string name="toast_nickname_isnull">请填写昵称</string>
+    <string name="toast_age_isnull">请选择您的年龄</string>
     <string name="toast_avatar_isnull">请上传头像</string>
     <string name="toast_phone_isnull">手机号码不能为空</string>
     <string name="toast_phone_iserror">您输入的手机号码不正确</string>

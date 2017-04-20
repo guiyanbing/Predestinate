@@ -36,6 +36,9 @@ import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.RegInfoAct;
+import com.juxin.predestinate.ui.start.UserLoginExtAct;
+import com.juxin.predestinate.ui.start.UserRegInfoAct;
+import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
@@ -164,12 +167,33 @@ public class UIShow {
         Intent intent = new Intent(activity, LoginAct.class);
         activity.startActivity(intent);
     }
+    /**
+     * 打开登录页
+     */
+    public static void showUserLoginExtAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, UserLoginExtAct.class);
+        activity.startActivity(intent);
+    }
 
     /**
      * 打开注册页
      */
     public static void showRegInfoAct(FragmentActivity activity) {
         Intent intent = new Intent(activity, RegInfoAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开注册页
+     */
+    public static void showUserRegInfoAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, UserRegInfoAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开资料完善页
+     */
+    public static void showUserInfoCompleteAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
         activity.startActivity(intent);
     }
 

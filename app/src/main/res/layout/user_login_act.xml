@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/p2_bg_user_reg"
+        android:orientation="vertical">
+
+        <include layout="@layout/base_title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:layout_marginTop="30dip"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edtTxt_user_login_username"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dip"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:ems="10"
+                android:hint="手机/账户"
+                android:inputType="text"
+                android:paddingLeft="13dip"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/img_user_login_arrow"
+                android:layout_width="38dip"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="10dip"
+                android:paddingRight="15dip"
+                android:src="@drawable/filter_down_arrow" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_color" />
+
+        <EditText
+            android:id="@+id/edtTxt_user_login_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:background="@color/white"
+            android:hint="密码"
+            android:inputType="text"
+            android:paddingLeft="18dip"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_color" />
+
+        <Button
+            android:id="@+id/btn_user_login_submit"
+            android:layout_width="match_parent"
+            android:layout_height="35dip"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="20dip"
+            android:background="@drawable/btn_upload_head_redback_selector"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_user_login_toReg"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="20dip"
+                android:gravity="center"
+                android:text="免费注册"
+                android:textColor="@color/pink"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_user_login_boundary"
+        android:layout_width="match_parent"
+        android:layout_height="71dip"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/view_user_login_boundary">
+
+        <ListView
+            android:id="@+id/list_user_login_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

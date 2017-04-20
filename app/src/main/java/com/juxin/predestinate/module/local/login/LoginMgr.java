@@ -22,6 +22,7 @@ import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.NotificationsUtils;
 import com.juxin.predestinate.module.util.TimeUtil;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -171,30 +173,88 @@ public class LoginMgr implements ModuleBase {
     /**
      * 账号注册
      */
-    public HTCallBack onRegister(UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
-        postParams.put("client_type", 1); // 1为android 2为iphone
-        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
-        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
-        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-        postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
+    public HTCallBack onRegister(UrlParam urlParam, String nickname, int age, int gender, RequestComplete requestCallback) {
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("flag", 0);// 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
+        postParams.put("user_client_type", 2); // 2为android 3为iphone
+        postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());
+        postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());
+        postParams.put("ie", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
+        postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("mc", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
+        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
+        postParams.put("ms", 7); //1、支持语音 2、新机器人 3、新新机器人 4、支持视频 5、支持Y币 6、支持钻石、礼物 7、红包版本 8、红包来了单独APP
+        postParams.put("ver", 5);//客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4 5，取消排队
+        postParams.put("app_key", BaseUtil.sha1(BaseUtil.getInstallPackageSignature()));
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
-        HashMap<String, Object> getParams = new HashMap<>();
-        getParams.put("vcode", new Random().nextLong());
-
-        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, getParams, postParams, requestCallback);
+        postParams.put("age", age);
+        postParams.put("gender", gender);
+        postParams.put("nickname", nickname);
+        long randNum = new Random().nextLong();
+        postParams.put("r", randNum);
+        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, requestCallback);
     }
+
+//    /**
+//     * 账号注册
+//     */
+//    public HTCallBack onRegister(UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
+//
+//
+//        postParams.put("flag", 0);  // 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
+//        postParams.put("user_client_type", 2); // 2为android 3为iphone
+//        postParams.put("s_uid", ModuleMgr.getAppMgr().getAppID());
+//        postParams.put("s_sid", ModuleMgr.getAppMgr().getSourceID());
+//        postParams.put("ie", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
+//        postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+//        postParams.put("mc", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
+//        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
+//        postParams.put("ms", 7); //1、支持语音 2、新机器人 3、新新机器人 4、支持视频 5、支持Y币 6、支持钻石、礼物 7、红包版本 8、红包来了单独APP
+//
+//        long randNum = new Random().nextLong();
+//        postParams.put("r", randNum);
+//
+//        Map<String, String> headerMap = new HashMap<>();
+//        headerMap.put("User-Agent", "");
+//
+//
+//
+//        postParams.put("client_type", 1); // 1为android 2为iphone
+//        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
+//        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
+//        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
+//        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+//        postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
+//        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
+//        postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
+//        HashMap<String, Object> getParams = new HashMap<>();
+//        getParams.put("vcode", new Random().nextLong());
+//
+//        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, getParams, postParams, requestCallback);
+//    }
 
     /**
      * 登录
      */
     public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback) {
         HashMap<String, Object> userAccount = new HashMap<>();
-        userAccount.put("name", uid);
-        userAccount.put("pwd", EncryptUtil.md5(pwd));
+        userAccount.put("username", uid);
+//        userAccount.put("pwd", EncryptUtil.md5(pwd));
+        userAccount.put("password", pwd);
+        userAccount.put("ms", 7);  //消息版本号(MS) Y币版本：5，缘分吧红包版：7，红包来了：9 消息排队版
+        userAccount.put("ver", 5);  //客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4 5，取消排队
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLogin, userAccount, requestCallback);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param post_param
+     * @param requestCallback
+     */
+    public void modifyUserData(HashMap<String, Object> post_param, RequestComplete requestCallback) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.modifyUserData, post_param, requestCallback);
     }
 
     /**
@@ -215,14 +275,13 @@ public class LoginMgr implements ModuleBase {
      *
      * @param uid
      * @param password
-     * @param cookie
      * @param isUserLogin
      */
-    public void putAllLoginInfo(long uid, String password, String cookie, boolean isUserLogin) {
+    public void putAllLoginInfo(long uid, String password, boolean isUserLogin) {
         setUid(uid + "");
         PSP.getInstance().put(LOGINMGR_AUTH, EncryptUtil.md5(password));
         putUserInfo(uid, password); //保存登录账户到list配置
-        setCookie(cookie);//在setLoginInfo方法之前执行
+//        setCookie(cookie);//在setLoginInfo方法之前执行
         setLoginInfo(uid, isUserLogin);  //设置登录状态
     }
 

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/NoMultipoint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/p2_bg_user_reg">
+
+    <include layout="@layout/base_title"/>
+
+    <ScrollView
+        style="@style/NoMultipoint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:paddingTop="20dip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edtTxt_reg_info_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="35dip"
+                android:layout_marginTop="20dip"
+                android:background="@color/transparent"
+                android:hint="请输入您的昵称"
+                android:inputType="text"
+                android:paddingLeft="10dip"
+                android:singleLine="true"
+                android:textColor="#494949"
+                android:textColorHint="#494949"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <RelativeLayout
+                android:id="@+id/layout_reg_info_age"
+                android:layout_width="match_parent"
+                android:layout_height="40dip">
+
+                <TextView
+                    android:id="@+id/txt_reg_info_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10dip"
+                    android:singleLine="true"
+                    android:text="请选择您的年龄"
+                    android:textColor="#494949"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_user_go" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#494949" />
+
+            <RadioGroup
+                android:id="@+id/rg_reg_info_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_reg_info_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25dip"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableLeft="@drawable/radio_male_selector"
+                    android:drawablePadding="10dip"
+                    android:padding="0dip"
+                    android:text="男"
+                    android:textColor="@color/hei_color" />
+
+                <RadioButton
+                    android:id="@+id/radio_reg_info_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dip"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_selector"
+                    android:drawablePadding="10dip"
+                    android:padding="0dip"
+                    android:text="女"
+                    android:textColor="@color/hei_color" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btn_reg_info_submit"
+                android:layout_width="match_parent"
+                android:layout_height="35dip"
+                android:layout_marginTop="50dip"
+                android:background="@drawable/btn_upload_head_redback_selector"
+                android:text="立即注册"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -203,19 +203,19 @@ public class RegInfoAct extends BaseActivity implements ImgSelectUtil.OnChooseCo
                             }
                         });
                         fillCommitMap();
-                        htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, commitMap, new RequestComplete() {
-                            @Override
-                            public void onRequestComplete(HttpResponse response) {
-                                if (response.isOk()) {
-                                    UserReg userReg = (UserReg) response.getBaseData();
-                                    ModuleMgr.getLoginMgr().putAllLoginInfo(userReg.getUid(), userReg.getPassword() + "", userReg.getCookie(), false);
-                                    UIShow.showMainClearTask(RegInfoAct.this);
-                                } else {
-                                    PToast.showShort("注册失败");
-                                }
-                                LoadingDialog.closeLoadingDialog(300);
-                            }
-                        });
+//                        htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, commitMap, new RequestComplete() {
+//                            @Override
+//                            public void onRequestComplete(HttpResponse response) {
+//                                if (response.isOk()) {
+//                                    UserReg userReg = (UserReg) response.getBaseData();
+//                                    ModuleMgr.getLoginMgr().putAllLoginInfo(userReg.getUid(), userReg.getPassword() + "", userReg.getCookie(), false);
+//                                    UIShow.showMainClearTask(RegInfoAct.this);
+//                                } else {
+//                                    PToast.showShort("注册失败");
+//                                }
+//                                LoadingDialog.closeLoadingDialog(300);
+//                            }
+//                        });
                     }
                     break;
 

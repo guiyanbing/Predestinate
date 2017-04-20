@@ -135,5 +135,10 @@
     <color name="gray_9d9d9d">#9d9d9d</color>
 
     <color name="title_right_commit">#00D3D2</color>
+
+    <color name="hei_color">#666666</color>
+
+    <color name="gray">#ff7f7f7f</color>
+    <color name="pink">#ff89a9</color>
 </resources>
 
