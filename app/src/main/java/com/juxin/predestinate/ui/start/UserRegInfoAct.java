@@ -100,22 +100,10 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                         ageVlaue = option;
                         txt_reg_info_age.setText(ageVlaue);
                     }
-                }, InfoConfig.getInstance().getAgeN().getShow(), "18岁", "月收入");
-//                PickerDialogUtil.showAgePickerDialog(this, new OnSingleTextSelecterListener() {
-//                    @Override
-//                    public void selected(int selectTextId, String selectTextValue) {
-//                        age = selectTextId;
-//                        ageVlaue = selectTextValue;
-//                        txt_reg_info_age.setText(selectTextValue);
-//                    }
-//                }, ageVlaue, false);
-                //TODO 年龄选择框
-                age = 18;
-                ageVlaue = "18岁";
-                txt_reg_info_age.setText(ageVlaue);
+                }, InfoConfig.getInstance().getAgeN().getShow(), "18岁", "年龄");
                 break;
             case R.id.btn_reg_info_submit:
-                if (checkInputInfo()) {
+                if (validInput()) {
                     htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, nickname, age, gender, new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
@@ -124,7 +112,8 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                                 if ("success".equals(jsonObject.optString("respCode"))) {
                                     JSONObject accountObject = jsonObject.optJSONObject("user_account");
                                     ModuleMgr.getLoginMgr().putAllLoginInfo(accountObject.optInt("uid"), accountObject.optString("password") + "", false);
-                                    UIShow.showMainClearTask(UserRegInfoAct.this);
+                                    UIShow.showUserInfoCompleteAct(UserRegInfoAct.this);
+
                                 } else {
                                     PToast.showShort("注册失败");
                                 }
@@ -144,7 +133,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
      *
      * @return
      */
-    private boolean checkInputInfo() {
+    private boolean validInput() {
         nickname = et_nickname.getText().toString();
         if (TextUtils.isEmpty(nickname)) {
             PToast.showShort(getResources().getString(R.string.toast_nickname_isnull));

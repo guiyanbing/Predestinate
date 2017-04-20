@@ -29,6 +29,10 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.UIShow;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -245,7 +249,17 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                     ModuleMgr.getLoginMgr().modifyUserData(postParams, new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.getResponseString());
+                                if ("success".equals(jsonObject.optString("result"))) {
+                                    UIShow.showMainClearTask(UserRegInfoCompleteAct.this);
+                                } else {
+                                    PToast.showShort("注册失败，请稍候再试");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            LoadingDialog.closeLoadingDialog(300);
                         }
                     });
                 }
