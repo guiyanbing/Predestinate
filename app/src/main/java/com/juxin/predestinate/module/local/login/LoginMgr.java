@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -244,7 +243,8 @@ public class LoginMgr implements ModuleBase {
         userAccount.put("ms", 7);  //消息版本号(MS) Y币版本：5，缘分吧红包版：7，红包来了：9 消息排队版
         userAccount.put("ver", 5);  //客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4 5，取消排队
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount, RequestParam.CacheType.CT_Cache_No, true, requestCallback);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount,
+                RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
     }
 
     /**

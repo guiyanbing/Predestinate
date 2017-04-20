@@ -34,26 +34,26 @@ public class ChatMgr implements ModuleBase {
 
     @Override
     public void init() {
-        App.getAppComponent().inject(this);
-        messageMgr.init();
-
-
-        App.getAppComponent().inject(this);
-        BaseMessage baseMessage = new BaseMessage();
-        baseMessage.setWhisperID("1");
-        baseMessage.setSendID(1);
-        baseMessage.setcMsgID(1);
-        baseMessage.setContent("xxxx");
-        baseMessage.setStatus(1);
-        onReceiving(baseMessage);
-
-        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
-        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-
-            }
-        });
+//        App.getAppComponent().inject(this);
+//        messageMgr.init();
+//
+//
+////        App.getAppComponent().inject(this);
+//        BaseMessage baseMessage = new BaseMessage();
+//        baseMessage.setWhisperID("1");
+//        baseMessage.setSendID(1);
+//        baseMessage.setcMsgID(1);
+//        baseMessage.setContent("xxxx");
+//        baseMessage.setStatus(1);
+//        onReceiving(baseMessage);
+//
+//        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
+//        listObservable.subscribe(new Action1<List<BaseMessage>>() {
+//            @Override
+//            public void call(List<BaseMessage> baseMessages) {
+//
+//            }
+//        });
     }
 
     @Override

@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.module.util.ByteUtil;
-import com.juxin.predestinate.module.util.JniUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -84,7 +84,7 @@ public class NetData implements Parcelable {
         try {
             tmp = new String(buffer, 10, this.length);
             if (!TextUtils.isEmpty(tmp)) {
-                tmp = JniUtil.GetDecryptString(tmp);
+                tmp = new String(JniUtil.GetDecryptString(tmp));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class NetData implements Parcelable {
         try {
             tmp = new String(buffer, 6, this.length);
             if (!TextUtils.isEmpty(tmp)) {
-                tmp = JniUtil.GetDecryptString(tmp);
+                tmp = new String(JniUtil.GetDecryptString(tmp));
             }
         } catch (Exception e) {
             e.printStackTrace();

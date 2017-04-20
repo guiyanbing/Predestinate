@@ -28,9 +28,10 @@ public class RequestParam {
     private Map<String, Object> post_param;                 //post请求参数
     private Map<String, File> file_param;                   //文件上传参数
     private RequestComplete requestCallback;                //请求回调
-    private RequestComplete logicCallBack;                //logic回调
+    private RequestComplete logicCallBack;                  //logic回调
     private CacheType cacheType = CacheType.CT_Cache_No;    //缓存类型：默认不缓存
     private boolean needEncrypt = false;                    //是否加密：默认不加密
+    private boolean jsonRequest = true;                     //是否为application/json格式提交的post数据：默认为application/json
 
     public RequestType getRequestType() {
         return requestType;
@@ -110,5 +111,13 @@ public class RequestParam {
 
     public void setNeedEncrypt(boolean needEncrypt) {
         this.needEncrypt = needEncrypt;
+    }
+
+    public boolean isJsonRequest() {
+        return jsonRequest;
+    }
+
+    public void setJsonRequest(boolean jsonRequest) {
+        this.jsonRequest = jsonRequest;
     }
 }
