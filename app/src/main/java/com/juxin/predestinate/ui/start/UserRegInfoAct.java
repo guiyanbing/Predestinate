@@ -111,7 +111,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                                 JSONObject jsonObject = new JSONObject(response.getResponseString());
                                 if ("success".equals(jsonObject.optString("respCode"))) {
                                     JSONObject accountObject = jsonObject.optJSONObject("user_account");
-                                    ModuleMgr.getLoginMgr().putAllLoginInfo(accountObject.optInt("uid"), accountObject.optString("password") + "", false);
+                                    ModuleMgr.getLoginMgr().putAllLoginInfo(accountObject.optInt("username"), accountObject.optString("password") + "", false);
                                     UIShow.showUserInfoCompleteAct(UserRegInfoAct.this);
 
                                 } else {
