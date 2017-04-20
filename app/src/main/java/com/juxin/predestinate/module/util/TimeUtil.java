@@ -865,8 +865,7 @@ public class TimeUtil extends TimeBaseUtil {
      * 获取当前时间戳，以秒为单位
      */
     public static String getCurrentTimeMil() {
-        String ts = System.currentTimeMillis() / 1000 + "";
-        return ts;
+        return System.currentTimeMillis() / 1000 + "";
     }
 
     // 返回毫秒

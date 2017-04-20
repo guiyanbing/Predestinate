@@ -1,4 +1,4 @@
-package com.juxin.predestinate.module.util;
+package com.juxin.library.utils;
 
 public class JniUtil {
     static {
@@ -7,5 +7,5 @@ public class JniUtil {
 
     public static native String GetEncryptString(String data);
 
-    public static native String GetDecryptString(String data);
+    public static native byte[] GetDecryptString(String data);
 }
