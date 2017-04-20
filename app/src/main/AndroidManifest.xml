@@ -152,6 +152,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
+        <activity
+            android:name=".ui.pay.PayListAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+
         <!-- ============= 相机相册模块start ============= -->
         <activity
             android:name=".module.local.album.activity.TransferActivity"
