@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.mail;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,8 +18,6 @@ import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-import com.juxin.predestinate.ui.pay.PayListAct;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
