@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
@@ -262,6 +263,14 @@ public class HttpMgrImpl implements HttpMgr {
         httpResultCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // Headers与Raw双重保证Cookie的成功获取
+                if (urlParam == UrlParam.reqLogin || urlParam == UrlParam.reqRegister) {
+                    String cookie = response.headers().get("Set-Cookie");
+                    if (TextUtils.isEmpty(cookie)) {
+                        cookie = response.raw().header("Set-Cookie");
+                    }
+                    ModuleMgr.getLoginMgr().setCookie(StringUtils.getBeforeNoFlag(cookie, ";"));
+                }
                 StringBuilder sb = new StringBuilder();
                 try {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
