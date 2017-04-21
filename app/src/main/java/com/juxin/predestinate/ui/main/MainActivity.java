@@ -19,6 +19,7 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.plaza.PlazaFragment;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
+import com.juxin.predestinate.ui.web.WebFragment;
 import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -27,6 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private MailFragment mailFragment;
     private XiaoyouFragment xiaoyouFragment;
     private PlazaFragment plazaFragment;
+    private WebFragment webFragment;
     private UserFragment userFragment;
 
     private BaseFragment current;  // 当前的fragment
@@ -53,6 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mailFragment = new MailFragment();
         xiaoyouFragment = new XiaoyouFragment();
         plazaFragment = new PlazaFragment();
+        webFragment = new WebFragment();
         userFragment = new UserFragment();
 
         switchContent(mailFragment);
@@ -62,13 +65,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         View mail_layout = findViewById(R.id.mail_layout);
         View xiaoyou_layout = findViewById(R.id.xiaoyou_layout);
         View plaza_layout = findViewById(R.id.plaza_layout);
+        View web_layout = findViewById(R.id.web_layout);
         View user_layout = findViewById(R.id.user_layout);
 
-        views = new View[]{mail_layout, xiaoyou_layout, plaza_layout, user_layout};
+        views = new View[]{mail_layout, xiaoyou_layout, plaza_layout, web_layout, user_layout};
 
         mail_layout.setOnClickListener(this);
         xiaoyou_layout.setOnClickListener(this);
         plaza_layout.setOnClickListener(this);
+        web_layout.setOnClickListener(this);
         user_layout.setOnClickListener(this);
     }
 
@@ -104,6 +109,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tabSwitchHandler.sendEmptyMessage(R.id.xiaoyou_layout);
         } else if (fragment == plazaFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.plaza_layout);
+        } else if (fragment == webFragment) {
+            tabSwitchHandler.sendEmptyMessage(R.id.web_layout);
         } else if (fragment == userFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.user_layout);
         }
@@ -129,6 +136,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.plaza_layout:
                 switchContent(plazaFragment);
+                break;
+            case R.id.web_layout:
+                switchContent(webFragment);
                 break;
             case R.id.user_layout:
                 switchContent(userFragment);
@@ -159,13 +169,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     public void changeTab(int tab_type, Intent intent) {
         PLogger.d("---changeTab--->tab_type：" + tab_type);
-        if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到消息tab
+        if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到发现tab
             switchContent(mailFragment);
-        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到小友tab
+        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(xiaoyouFragment);
-        } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到广场tab
+        } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab
             switchContent(plazaFragment);
-        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到我的tab
+        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到书城tab
+            switchContent(webFragment);
+        } else if (FinalKey.MAIN_TAB_5 == tab_type) {//跳转到我的tab
             switchContent(userFragment);
         }
     }

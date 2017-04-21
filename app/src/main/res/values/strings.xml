@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">小友</string>
+    <string name="app_name">缘分吧</string>
     <string name="app_storage_name">xiaou</string>
 
     <!-- 主页Fragment -->
-    <string name="main_btn_mail">消息</string>
-    <string name="main_btn_xiaoyou">小友</string>
-    <string name="main_btn_plaza">广场</string>
+    <string name="main_btn_mail">发现</string>
+    <string name="main_btn_xiaoyou">消息</string>
+    <string name="main_btn_plaza">风云榜</string>
+    <string name="main_btn_web">书城</string>
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
 
@@ -21,7 +22,7 @@
     <string name="button_clean_cache">清除缓存</string>
     <string name="button_clean_cache_tip">缓存状态良好</string>
     <string name="button_exit">退出登录</string>
-    <string name="ext_feedback_hit">填写对小友的意见和建议</string>
+    <string name="ext_feedback_hit">填写对缘分吧的意见和建议</string>
     <string name="ext_feedback_contact">联系方式</string>
     <string name="ext_feedback_contact_hit">（手机/微信/邮箱）</string>
     <string name="toast_feedback_submit">提交成功，感谢您的支持</string>
@@ -161,7 +162,7 @@
     <string name="tip_data_empty">没有数据，客官等会再来吧！</string>
     <string name="tip_click_refresh">点击刷新</string>
     <string name="tip_is_loading">正在努力加载中...</string>
-    <string name="tip_quit">再按一次退出小友</string>
+    <string name="tip_quit">再按一次退出缘分吧</string>
 
     <!--activity标题-->
     <string name="title_right_submit">提交</string>

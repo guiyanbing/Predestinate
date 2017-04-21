@@ -228,6 +228,7 @@
     </style>
 
     <!-- *****************icon图标****************** -->
+
     <!-- 个人中心图标icon -->
     <style name="icon_middle_center" parent="icon_middle">
         <item name="android:layout_width">@dimen/px64_dp</item>
@@ -271,6 +272,22 @@
         <item name="android:layout_height">@dimen/px32_dp</item>
     </style>
 
+    <!-- ============== 主页样式 ==================-->
+
+    <!-- 主页tab icon -->
+    <style name="icon_middle_main" parent="icon_middle">
+        <item name="android:layout_width">@dimen/px65_dp</item>
+        <item name="android:layout_height">@dimen/px65_dp</item>
+    </style>
+
+    <!-- 主页tab 文字样式 -->
+    <style name="text_tab_main" parent="text_middle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/px9_dp</item>
+        <item name="android:textColor">@color/main_bottom_text_color</item>
+        <item name="android:textSize">@dimen/px34_sp</item>
+    </style>
 
     <!-- ============== 个人中心 ==================-->
     <!-- 个人中心点击item的样式 -->
@@ -370,6 +387,7 @@
         <item name="android:layout_marginLeft">@dimen/px70_dp</item>
         <item name="android:layout_marginRight">@dimen/px70_dp</item>
     </style>
+
     <style name="Transparent_Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -378,6 +396,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
     <style name="Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>

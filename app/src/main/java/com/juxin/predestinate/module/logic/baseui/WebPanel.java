@@ -2,10 +2,13 @@ package com.juxin.predestinate.module.logic.baseui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.View;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
@@ -28,13 +31,15 @@ import com.tencent.smtt.sdk.WebViewClient;
 public class WebPanel extends BasePanel {
 
     private String url;
+    private boolean isLoadingInnerControl = true;    //是否由内部控制loading的展示逻辑
 
     private CustomFrameLayout customFrameLayout;
     private WebView webView;
 
-    public WebPanel(Context context, String url) {
+    public WebPanel(Context context, String url, boolean isLoadingInnerControl) {
         super(context);
         this.url = url;
+        this.isLoadingInnerControl = isLoadingInnerControl;
         setContentView(R.layout.common_web_panel);
 
         initView();
@@ -69,13 +74,23 @@ public class WebPanel extends BasePanel {
             @Override
             public void onReceivedTitle(WebView webView, String s) {
                 super.onReceivedTitle(webView, s);
-                if (titleListener != null) titleListener.onTitle(s);
+                if (webListener != null) webListener.onTitle(s);
             }
         });
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-                webView.loadUrl(url);
+                PLogger.d("-----shouldOverrideUrlLoading---->" + url);
+                if (url.startsWith("weixin://")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    if (intent.resolveActivity(getContext().getPackageManager()) == null) {
+                        PToast.showShort("很抱歉，您的手机未安装微信");
+                    } else {
+                        getContext().startActivity(intent);
+                    }
+                } else {
+                    webView.loadUrl(url);
+                }
                 return true;
             }
 
@@ -83,12 +98,14 @@ public class WebPanel extends BasePanel {
             public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(webView, errorCode, description, failingUrl);
                 customFrameLayout.showOfIndex(1);
+                if (webListener != null) webListener.onLoadFinish(WebLoadStatus.ERROR);
             }
 
             @Override
             public void onPageFinished(WebView webView, String url) {
                 PLogger.d("-----onPageFinished---->" + url);
-                customFrameLayout.showOfIndex(0);
+                if (isLoadingInnerControl) hideLoading();
+                if (webListener != null) webListener.onLoadFinish(WebLoadStatus.FINISH);
             }
 
             @Override
@@ -118,7 +135,7 @@ public class WebPanel extends BasePanel {
     /**
      * 隐藏loading并展示WebView
      */
-    public void hideLoading(){
+    public void hideLoading() {
         customFrameLayout.showOfIndex(0);
     }
 
@@ -132,19 +149,36 @@ public class WebPanel extends BasePanel {
         CookieSyncManager.getInstance().sync();
     }
 
-    private TitleListener titleListener;
+    private WebListener webListener;
 
     /**
      * 设置网页标题监听
      */
-    public void setTitleListener(TitleListener titleListener) {
-        this.titleListener = titleListener;
+    public void setWebListener(WebListener webListener) {
+        this.webListener = webListener;
     }
 
     /**
      * 网页标题监听
      */
-    public interface TitleListener {
+    public interface WebListener {
+        /**
+         * 解析网页得到title
+         *
+         * @param title html title
+         */
         void onTitle(String title);
+
+        /**
+         * 页面加载完成，由多方控制，如onPageFinished，cmd-hide_loading
+         */
+        void onLoadFinish(WebLoadStatus loadStatus);
+    }
+
+    /**
+     * 网络加载状态
+     */
+    public enum WebLoadStatus {
+        ERROR, FINISH
     }
 }

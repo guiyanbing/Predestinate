@@ -414,6 +414,9 @@ public class Invoker {
                 case 4:
                     index = FinalKey.MAIN_TAB_4;
                     break;
+                case 5:
+                    index = FinalKey.MAIN_TAB_5;
+                    break;
             }
             Activity act = appInterface.getAct();
             if (act != null && act instanceof MainActivity) {
