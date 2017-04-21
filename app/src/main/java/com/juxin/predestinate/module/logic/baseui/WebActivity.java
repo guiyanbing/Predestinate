@@ -33,11 +33,15 @@ public class WebActivity extends BaseActivity {
         setBackView();
 
         LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
-        webPanel = new WebPanel(this, url);
-        webPanel.setTitleListener(new WebPanel.TitleListener() {
+        webPanel = new WebPanel(this, url, true);
+        webPanel.setWebListener(new WebPanel.WebListener() {
             @Override
             public void onTitle(String title) {
                 setTitle(title);
+            }
+
+            @Override
+            public void onLoadFinish(WebPanel.WebLoadStatus loadStatus) {
             }
         });
         web_container.addView(webPanel.getContentView());

@@ -27,7 +27,7 @@ public class Constant {
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
     public static final int MS = 9;                 //消息版本号
     public static final int PLATFORM_TYPE = 2;      //平台号
-    public static final int SUB_VERSION = 3;        //客户端版本号
+    public static final int SUB_VERSION = 5;        //客户端版本号
 
     // -------------------------K-V---------------------------
 
