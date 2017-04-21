@@ -22,12 +22,12 @@ import java.util.Map;
  */
 public enum UrlParam {
 
-    reqRegister("pubtest/quickReg", UserReg.class),//注册接口
+    reqRegister(Constant.FATE_IT_HTTP,"pubtest/quickReg",null,false),//注册接口
     modifyUserData("user/modifyUserData"),//修改用户资料
-    reqLogin("public/login"),//普通登录接口
-    reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
+    reqLogin(Constant.FATE_IT_HTTP,"public/login",null,false),//普通登录接口
+    reqReqVerifyCode("public/sendSMS"),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
-    mobileAuth("s/uinfo/MobileAuth"),//手机认证
+    mobileAuth("public/sendSMS"),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签

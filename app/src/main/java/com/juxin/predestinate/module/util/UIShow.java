@@ -35,6 +35,7 @@ import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
+import com.juxin.predestinate.ui.start.PhoneVerify_Act;
 import com.juxin.predestinate.ui.start.RegInfoAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
@@ -206,6 +207,18 @@ public class UIShow {
     public static void showFindPwdAct(FragmentActivity activity, int openAct) {
         Intent intent = new Intent(activity, FindPwdAct.class);
         intent.putExtra("openAct", openAct);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 手机绑定
+     *
+     * @param activity
+     * @param isVerify  是否绑定手机
+     */
+    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify) {
+        Intent intent = new Intent(activity, PhoneVerify_Act.class);
+        intent.putExtra("isVerify", isVerify);
         activity.startActivity(intent);
     }
 

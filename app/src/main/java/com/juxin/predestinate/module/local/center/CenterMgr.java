@@ -26,7 +26,9 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.module.util.CommonUtil;
 
@@ -62,7 +64,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if ((Boolean) value) {
                     IMProxy.getInstance().connect();//登录成功之后连接socket
                     reqMyInfo();// 请求个人资料
-                    reqSetting();//请求设置信息
+//                    reqSetting();//请求设置信息
                 } else {
                     IMProxy.getInstance().logout();//退出登录的时候退出socket
                     userDetail = null;
@@ -92,6 +94,20 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("mobile", mobile);
         postparam.put("tag", tag);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode, postparam, complete);
+    }
+
+    /**
+     * 请求手机验证码
+     *
+     * @param mobile
+     * @param complete
+     */
+    public void reqVerifyCodeEx(String mobile, RequestComplete complete) {
+        HashMap<String, Object> getparam = new HashMap<>();
+        getparam.put("ts", TimeUtil.getCurrentTimeMil());
+        getparam.put("cellPhone", mobile);
+        getparam.put("type", "1");
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null,getparam, RequestParam.CacheType.CT_Cache_Url,true, complete);
     }
 
     /**
@@ -126,6 +142,20 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("pwd", password);
         postparam.put("code", code);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.mobileAuth, postparam, complete);
+    }
+    /**
+     * 手机认证
+     *
+     * @param mobile   手机号
+     * @param code     验证码
+     * @param complete
+     */
+    public void mobileAuthEx(String mobile,  String code, RequestComplete complete) {
+        HashMap<String, Object> getParams = new HashMap<>();
+        getParams.put("ts", TimeUtil.getCurrentTimeMil());
+        getParams.put("cellPhone", mobile);
+        getParams.put("verifyCode", code);
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.mobileAuth, null,getParams, RequestParam.CacheType.CT_Cache_No,true, complete);
     }
 
     /**

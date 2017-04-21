@@ -176,10 +176,10 @@ public class LoginMgr implements ModuleBase {
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("flag", 0);// 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
         postParams.put("user_client_type", 2); // 2为android 3为iphone
-        postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());
-        postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());
+        postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());// ModuleMgr.getAppMgr().getMainChannelID()
+        postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());//ModuleMgr.getAppMgr().getSubChannelID()
         postParams.put("ie", ModuleMgr.getAppMgr().getIMEI());
-        postParams.put("is", ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
         postParams.put("mc", ModuleMgr.getAppMgr().getMAC());
         postParams.put("simoperator", ModuleMgr.getAppMgr().getSimOperator());
         postParams.put("ms", 7); //1、支持语音 2、新机器人 3、新新机器人 4、支持视频 5、支持Y币 6、支持钻石、礼物 7、红包版本 8、红包来了单独APP
@@ -190,7 +190,11 @@ public class LoginMgr implements ModuleBase {
         postParams.put("gender", gender);
         postParams.put("nickname", nickname);
         postParams.put("r", new Random().nextLong());
-        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, requestCallback);
+        MMLog.d("yao", "s_uid=" + postParams.get("s_uid")
+                + "s_sid=" + postParams.get("s_sid") + "ie=" +
+                postParams.get("ie") + "app_key=" + postParams.get("app_key") + "pkgname=" + postParams.get("pkgname") + "simoperator=" + postParams.get("simoperator") + "mc=" + postParams.get("mc") + "is=" + postParams.get("is"));
+//        return ModuleMgr.getHttpMgr().reqPost(urlParam, null, null, postParams, RequestParam.CacheType.CT_Cache_No, true, false, requestCallback);
+        return  ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam,postParams,requestCallback);
     }
 
     /**

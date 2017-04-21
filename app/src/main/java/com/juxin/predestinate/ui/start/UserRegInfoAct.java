@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.JniUtil;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -108,10 +110,12 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                         @Override
                         public void onRequestComplete(HttpResponse response) {
                             try {
-                                JSONObject jsonObject = new JSONObject(response.getResponseString());
+                               String jsonResult = new String(JniUtil.GetDecryptString(response.getResponseString()));
+                                JSONObject jsonObject = new JSONObject(jsonResult);
+                                MMLog.d("yao","jsonObject="+jsonObject);
                                 if ("success".equals(jsonObject.optString("respCode"))) {
                                     JSONObject accountObject = jsonObject.optJSONObject("user_account");
-                                    ModuleMgr.getLoginMgr().putAllLoginInfo(accountObject.optInt("username"), accountObject.optString("password") + "", false);
+                                    ModuleMgr.getLoginMgr().putAllLoginInfo(Long.parseLong(accountObject.optString("username")), accountObject.optString("password") + "", false);
                                     UIShow.showUserInfoCompleteAct(UserRegInfoAct.this);
 
                                 } else {

@@ -70,7 +70,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private int requestType;
 
-    private boolean ifUpHead;             // 是否已设置头像
+    private boolean ifUpHead=true;             // 是否已设置头像
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
