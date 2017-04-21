@@ -104,7 +104,6 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void reqVerifyCodeEx(String mobile, RequestComplete complete) {
         HashMap<String, Object> getparam = new HashMap<>();
-        getparam.put("ts", TimeUtil.getCurrentTimeMil());
         getparam.put("cellPhone", mobile);
         getparam.put("type", "1");
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null,getparam, RequestParam.CacheType.CT_Cache_Url,true, complete);
@@ -152,7 +151,6 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void mobileAuthEx(String mobile,  String code, RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
-        getParams.put("ts", TimeUtil.getCurrentTimeMil());
         getParams.put("cellPhone", mobile);
         getParams.put("verifyCode", code);
         ModuleMgr.getHttpMgr().reqGet(UrlParam.mobileAuth, null,getParams, RequestParam.CacheType.CT_Cache_No,true, complete);

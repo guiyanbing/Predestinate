@@ -6,7 +6,9 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
@@ -52,6 +54,8 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
                 case R.id.ll_rank://跳转到排行榜
                     break;
                 case R.id.ll_wallet://跳转到钱包
+                    //手机绑定
+                    UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getMobileAuthStatus()==3);
                     break;
             }
         }

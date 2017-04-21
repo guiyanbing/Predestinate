@@ -25,19 +25,19 @@ public class NavUserAct extends BaseActivity {
     }
 
     private void initView() {
-        findViewById(R.id.btn_reg).setOnClickListener(clickListener);
-        findViewById(R.id.btn_login).setOnClickListener(clickListener);
+        findViewById(R.id.btn_user_nav_reg).setOnClickListener(clickListener);
+        findViewById(R.id.btn_user_nav_login).setOnClickListener(clickListener);
     }
 
     private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_login:
+                case R.id.btn_user_nav_login:
                     UIShow.showUserLoginExtAct(NavUserAct.this);
                     break;
 
-                case R.id.btn_reg:
+                case R.id.btn_user_nav_reg:
                     UIShow.showUserRegInfoAct(NavUserAct.this);
                     break;
             }

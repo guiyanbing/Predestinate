@@ -209,22 +209,20 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
                     break;
             }
         } else if (response.getUrlParam() == UrlParam.mobileAuth) {
-
-            switch (getCodeResult(response.getResponseString())) {
+            switch (getVerifyResult(response.getResponseString())) {
                 case 0:
                     PToast.showLong("验证码错误。");
-                    bt_send_code.setEnabled(true);
+//                    bt_send_code.setEnabled(true);
                     break;
                 case 1:
                     PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
-//                    AppModel.getInstance().getUserDetail().setVerifyCellphone(true);
-//                    AppModel.getInstance().getUserDetail().setPhone(edtPhone.getText().toString());
+                    ModuleMgr.getCenterMgr().getMyInfo().setMobileAuthStatus(3);
+                    ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
                     isok = true;
                     this.setResult(102);
                     llyfirst.setVisibility(View.GONE);
                     llynext.setVisibility(View.VISIBLE);
                     setFinishedState();
-                    back();
                     break;
             }
         }
@@ -236,7 +234,7 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
      *
      * @author dengxiaohong
      */
-    private int getCodeResult(String str) {
+    private int  getVerifyResult(String str) {
         try {
             JSONObject jsonObject = new JSONObject(str);
             String resCode = jsonObject.optString("respCode");
@@ -255,6 +253,30 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return 0;
+    }
+
+
+    /**
+     * 手机验证结果解析
+     *
+     * @author dengxiaohong
+     */
+    public int getCodeResult(String str)  {
+        try {
+            JSONObject jsonObject = new JSONObject(str);
+            String resCode = jsonObject.optString("respCode");
+            int errno = jsonObject.optInt("errNo");
+            if (resCode == null) {
+                return 0;
+            }
+            if (resCode.equals("success")) {
+                return 1;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return 0;
     }
 

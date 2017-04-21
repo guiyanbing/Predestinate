@@ -216,7 +216,7 @@ public class UIShow {
      * @param activity
      * @param isVerify  是否绑定手机
      */
-    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify) {
+    public static void showPhoneVerify_Act(Context activity, boolean isVerify) {
         Intent intent = new Intent(activity, PhoneVerify_Act.class);
         intent.putExtra("isVerify", isVerify);
         activity.startActivity(intent);

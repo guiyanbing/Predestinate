@@ -26,7 +26,7 @@ public enum UrlParam {
     reqLogin(Constant.FATE_IT_HTTP,"public/login",null,false),//普通登录接口
     reqReqVerifyCode(Constant.FATE_IT_HTTP,"public/sendSMS",null,false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
-    mobileAuth(Constant.FATE_IT_HTTP,"public/sendSMS",null,false),//手机认证
+    mobileAuth(Constant.FATE_IT_HTTP,"user/bindCellPhone",null,true),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
