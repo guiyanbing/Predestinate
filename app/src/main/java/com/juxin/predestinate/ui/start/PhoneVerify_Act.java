@@ -1,12 +1,9 @@
 package com.juxin.predestinate.ui.start;
 
-import android.app.Dialog;
-import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,7 +14,6 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -31,8 +27,6 @@ import org.json.JSONObject;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 手机验证页面
@@ -55,7 +49,6 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
     private boolean isok = false;
 
     // byIQQ phone fare
-    private boolean isfare = false;
     private String phone, code;
     private final MyHandler m_Handler = new MyHandler(this);
     private SendEnableThread sendthread = null;
@@ -138,8 +131,8 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
         txtDesc.setText("您已经验证成功，登录密码为：");
         UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
         if (user != null) {
-//            String password = ModuleMgr.getLoginMgr().getUserList()
-//            txtPhone.setText(password);
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw();
+            txtPhone.setText(password);
         }
     }
 

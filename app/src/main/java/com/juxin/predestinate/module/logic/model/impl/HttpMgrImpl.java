@@ -262,7 +262,6 @@ public class HttpMgrImpl implements HttpMgr {
         httpResultCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
                 StringBuilder sb = new StringBuilder();
                 try {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));

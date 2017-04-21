@@ -21,13 +21,12 @@ import java.util.Map;
  * 管理常用的Url参数信息
  */
 public enum UrlParam {
-
     reqRegister(Constant.FATE_IT_HTTP,"pubtest/quickReg",null,false),//注册接口
-    modifyUserData("user/modifyUserData"),//修改用户资料
+    modifyUserData(Constant.FATE_IT_HTTP,"user/modifyUserData",null,false),//修改用户资料
     reqLogin(Constant.FATE_IT_HTTP,"public/login",null,false),//普通登录接口
-    reqReqVerifyCode("public/sendSMS"),//获取手机验证码
+    reqReqVerifyCode(Constant.FATE_IT_HTTP,"public/sendSMS",null,false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
-    mobileAuth("public/sendSMS"),//手机认证
+    mobileAuth(Constant.FATE_IT_HTTP,"public/sendSMS",null,false),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
