@@ -37,10 +37,13 @@
     <string name="txt_head_ts">请上传真实、清晰美观的个人近照，\n上传宠物照、照片不清晰、裸露的照片不予通过</string>
     <string name="portrait_tips_man">上传真实头像 非真实头像不会得到推荐</string>
     <string name="portrait_tips_women">上传真实美观头像 获得奖励提高80%</string>
-    <string name="ext_nickname_hit">填写昵称</string>
-    <string name="ext_account_number_hit">手机号/用户ID</string>
+    <string name="ext_nickname_hit">请输入您的昵称</string>
+    <string name="ext_age_hit">请选择您的年龄</string>
+    <string name="ext_account_number_hit">手机/账户</string>
     <string name="ext_password_hit">密码</string>
     <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
+    <string name="txt_boy">男</string>
+    <string name="txt_girl">女</string>
     <string name="txt_forget_password">忘记密码？</string>
     <string name="txt_free_reg">免费注册</string>
     <string name="button_reg">一键注册</string>
@@ -55,6 +58,7 @@
     <string name="toast_contact_isnull">请填写您的联系方式</string>
     <string name="toast_suggest_isnull">请填写您的建议</string>
     <string name="toast_setpwd_isnull">请输入您要设置的密码</string>
+    <string name="toast_userdetail_isnull">请完善您的资料</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
     <string name="toast_mobile_authok">手机认证成功</string>
     <string name="toast_resetpwd_ok">请填写您的联系方式</string>

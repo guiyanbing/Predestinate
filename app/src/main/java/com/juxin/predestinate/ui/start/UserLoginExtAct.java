@@ -89,37 +89,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
         switch (v.getId()) {
             case R.id.btn_user_login_submit:
                 if (validInput()) {
-                    loginMgr.onLogin(this, chosenUID, chosenPwd, new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            LoadingDialog.closeLoadingDialog(500);
-                            String jsonResult = response.getResponseString();
-                            try {
-                                JSONObject jsonObject = new JSONObject(jsonResult);
-                                String respCode = jsonObject.optString("respCode");
-                                if ("success".equals(respCode)) {
-                                    // Cookie 在http响应头中返回
-                                    loginMgr.putAllLoginInfo(chosenUID, chosenPwd, true);
-                                    // 临时资料设置
-                                    JSONObject json = jsonObject.optJSONObject("user_info");
-                                    ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
-                                    ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
-
-                                    // 判断是否缺失数据,缺失则继续跳转到用户注册
-                                    if (json.optInt("miss_info") == 1) {
-                                        PToast.showLong("请完善您的资料");
-                                        UIShow.showUserInfoCompleteAct(UserLoginExtAct.this);
-                                        return;
-                                    }
-                                    UIShow.showMainClearTask(UserLoginExtAct.this);
-                                } else {
-                                    PToast.showShort(getResources().getString(R.string.toast_login_iserror));
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    loginMgr.onLogin(this, chosenUID, chosenPwd);
                 }
                 break;
             case R.id.img_user_login_arrow:

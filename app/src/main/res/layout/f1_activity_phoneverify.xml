@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/f1_btn_phoneverify_selector"
+                android:background="@drawable/f1_button_big_bg"
                 android:padding="10dp"
                 android:text="免费获取验证码"
                 android:textColor="@color/white"
@@ -142,13 +142,10 @@
 
         <Button
             android:id="@+id/btn_phoneverify_ok"
+            style="@style/button_big"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/f1_btn_phoneverify_selector"
-            android:text="立即验证"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:text="立即验证" />
     </LinearLayout>
 
     <LinearLayout

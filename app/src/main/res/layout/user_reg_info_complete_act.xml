@@ -275,7 +275,7 @@
                 android:layout_height="35dip"
                 android:layout_marginBottom="20dip"
                 android:layout_marginTop="50dip"
-                android:background="@drawable/btn_upload_head_redback_selector"
+                android:background="@drawable/f1_button_big_bg"
                 android:text="完成"
                 android:textColor="@color/white"
                 android:textSize="16sp"

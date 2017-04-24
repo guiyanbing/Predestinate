@@ -38,7 +38,6 @@ import org.json.JSONObject;
 public class UserRegInfoAct extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private EditText et_nickname;
-    private RelativeLayout rl_age_choose;
     private TextView txt_reg_info_age;
     private RadioGroup rg_gender;
     private Button bt_submit;
@@ -71,14 +70,13 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         et_nickname = (EditText) findViewById(R.id.edtTxt_reg_info_nickname);
-        rl_age_choose = (RelativeLayout) findViewById(R.id.layout_reg_info_age);
         txt_reg_info_age = (TextView) findViewById(R.id.txt_reg_info_age);
         rg_gender = (RadioGroup) findViewById(R.id.rg_reg_info_gender);
         bt_submit = (Button) findViewById(R.id.btn_reg_info_submit);
     }
 
     private void initEvent() {
-        rl_age_choose.setOnClickListener(this);
+        txt_reg_info_age.setOnClickListener(this);
         bt_submit.setOnClickListener(this);
         rg_gender.setOnCheckedChangeListener(this);
     }
@@ -94,7 +92,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.layout_reg_info_age:
+            case R.id.txt_reg_info_age:
                 PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
                     @Override
                     public void onOptionPicked(String option) {

@@ -94,30 +94,7 @@ public class LoginAct extends BaseActivity implements OnItemClickListener, OnCli
         switch (v.getId()) {
             case R.id.bt_submit://提交
                 if (validInput()) {
-                    loginMgr.onLogin(this, currentUserID, currentUserPwd, new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            LoadingDialog.closeLoadingDialog(500);
-                            String jsonResult = response.getResponseString();
-                            try {
-                                JSONObject jsonObject = new JSONObject(jsonResult);
-                                String respCode = jsonObject.optString("respCode");
-                                if ("success".equals(respCode)) {
-                                    // Cookie 在http响应头中返回
-                                    loginMgr.putAllLoginInfo(currentUserID, currentUserPwd, true);
-                                    // 临时资料设置
-                                    JSONObject json = jsonObject.optJSONObject("user_info");
-                                    ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
-                                    ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
-                                    UIShow.showMainClearTask(LoginAct.this);
-                                } else {
-                                    PToast.showShort(getResources().getString(R.string.toast_login_iserror));
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    loginMgr.onLogin(this, currentUserID, currentUserPwd);
                 }
                 break;
 

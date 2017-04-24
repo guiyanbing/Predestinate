@@ -8,6 +8,7 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -21,13 +22,16 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.NotificationsUtils;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -200,7 +204,7 @@ public class LoginMgr implements ModuleBase {
     /**
      * 登录
      */
-    public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback) {
+    public void onLogin(final Activity context, final long uid, final String pwd) {
         HashMap<String, Object> userAccount = new HashMap<>();
         userAccount.put("username", uid);
 //        userAccount.put("pwd", EncryptUtil.md5(pwd));
@@ -209,7 +213,36 @@ public class LoginMgr implements ModuleBase {
         userAccount.put("ver", 5);  //客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4 5，取消排队
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
         ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount,
-                RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
+                RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
+                    @Override
+                    public void onRequestComplete(HttpResponse response) {
+                        LoadingDialog.closeLoadingDialog(500);
+                        String jsonResult = response.getResponseString();
+                        try {
+                            JSONObject jsonObject = new JSONObject(jsonResult);
+                            String respCode = jsonObject.optString("respCode");
+                            if (!"success".equals(respCode)) {
+                                PToast.showShort(context.getResources().getString(R.string.toast_login_iserror));
+                            } else {
+                                // Cookie 在http响应头中返回
+                                putAllLoginInfo(uid, pwd, true);
+                                // 临时资料设置
+                                JSONObject json = jsonObject.optJSONObject("user_info");
+                                ModuleMgr.getCenterMgr().getMyInfo().setNickname(json.optString("nickname"));
+                                ModuleMgr.getCenterMgr().getMyInfo().setUid(json.optLong("uid"));
+                                // 判断是否缺失数据,缺失则继续跳转到用户注册
+                                if (json.optInt("miss_info") == 1) {
+                                    PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
+                                    UIShow.showUserInfoCompleteAct(context);
+                                    return;
+                                }
+                                UIShow.showMainClearTask(context);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     /**

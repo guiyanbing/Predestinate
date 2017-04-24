@@ -193,7 +193,7 @@ public class UIShow {
     /**
      * 打开资料完善页
      */
-    public static void showUserInfoCompleteAct(FragmentActivity activity) {
+    public static void showUserInfoCompleteAct(Context activity) {
         Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
         activity.startActivity(intent);
     }
