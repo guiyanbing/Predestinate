@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,7 +55,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     private final static String HEIGHT_FEMALE_DEFAULT = "160cm";
 
     private ImageView img_reg_info_upload_photo;
-    private RelativeLayout rl_job_choose, rl_edu_choose, rl_income_choose, rl_height_choose, rl_marry_choose;
+    private LinearLayout rl_job_choose, rl_edu_choose, rl_income_choose, rl_height_choose, rl_marry_choose;
     private Button user_reg_info_complete_submit;
     private TextView tv_job, tv_edu, tv_income, tv_height, tv_marry;
 
@@ -98,11 +99,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private void initView() {
         img_reg_info_upload_photo = (ImageView) findViewById(R.id.img_reg_info_upload_photo);
-        rl_job_choose = (RelativeLayout) findViewById(R.id.layout_reg_info_job);
-        rl_edu_choose = (RelativeLayout) findViewById(R.id.layout_reg_info_edu);
-        rl_income_choose = (RelativeLayout) findViewById(R.id.layout_reg_info_income);
-        rl_height_choose = (RelativeLayout) findViewById(R.id.layout_reg_info_height);
-        rl_marry_choose = (RelativeLayout) findViewById(R.id.layout_reg_info_marry);
+        rl_job_choose = (LinearLayout) findViewById(R.id.layout_reg_info_job);
+        rl_edu_choose = (LinearLayout) findViewById(R.id.layout_reg_info_edu);
+        rl_income_choose = (LinearLayout) findViewById(R.id.layout_reg_info_income);
+        rl_height_choose = (LinearLayout) findViewById(R.id.layout_reg_info_height);
+        rl_marry_choose = (LinearLayout) findViewById(R.id.layout_reg_info_marry);
         tv_job = (TextView) findViewById(R.id.txt_reg_info_job);
         tv_edu = (TextView) findViewById(R.id.txt_reg_info_edu);
         tv_income = (TextView) findViewById(R.id.txt_reg_info_income);

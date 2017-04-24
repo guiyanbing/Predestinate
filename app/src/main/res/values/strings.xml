@@ -46,7 +46,7 @@
     <string name="txt_girl">女</string>
     <string name="txt_forget_password">忘记密码？</string>
     <string name="txt_free_reg">免费注册</string>
-    <string name="button_reg">一键注册</string>
+    <string name="button_reg">立即注册</string>
     <string name="toast_nickname_isnull">请填写昵称</string>
     <string name="toast_age_isnull">请选择您的年龄</string>
     <string name="toast_avatar_isnull">请上传头像</string>
@@ -66,11 +66,28 @@
     <string name="txt_phone">手机号</string>
     <string name="txt_verifycode">验证码</string>
     <string name="txt_setpwd">设置密码</string>
+    <string name="txt_verify_tip_up">请输入手机号，获取验证码</string>
+    <string name="txt_verify_tip_down">可以直接用手机号码登录</string>
+    <string name="txt_sendmsg_tip">您的手机将会收到一条有验证码的短信</string>
+    <string name="txt_phoneverify_hit">13574193515</string>
+    <string name="img_verify_girl_des">娃娃头像</string>
+    <string name="txt_phone_desc">保护帐号不被丢失</string>
+    <string name="txt_complete_hit">完善资料，是社交成功的第一步哦</string>
+    <string name="txt_upload_head_hit">上传真实照片\n 交友成功率将大大提升</string>
+    <string name="txt_reg_job_desc">职业</string>
+    <string name="txt_reg_edu_desc">学历</string>
+    <string name="txt_reg_income_desc">收入</string>
+    <string name="txt_reg_height_desc">身高</string>
+    <string name="txt_reg_marry_desc">婚姻</string>
     <string name="ext_setpwd_hit">设置登录密码</string>
+    <string name="ext_phone_hit">请输入手机号码</string>
+    <string name="ext_verifycode_hit">请输入短信中的验证码</string>
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
     <string name="bt_login">登录</string>
     <string name="bt_reg">注册</string>
+    <string name="bt_complete">完成</string>
+    <string name="bt_verify">立即验证</string>
 
     <!-- 用户资料 -->
     <string name="user_center_fragment">我的</string>

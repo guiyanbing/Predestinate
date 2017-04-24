@@ -37,10 +37,8 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
 
     private LinearLayout llyfirst;
     private LinearLayout llynext;
-    private LinearLayout llyok;
     private EditText edtPhone;
     private EditText et_code;
-    private EditText edtfouce;
     private Button bt_send_code;
     private Button btnok;
     private TextView txtPhone;
@@ -104,7 +102,6 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
         llynext = (LinearLayout) this.findViewById(R.id.lly_phoneverify_next);
         edtPhone = (EditText) this.findViewById(R.id.edt_phoneverify_phone);
         et_code = (EditText) this.findViewById(R.id.edt_phoneverify_note);
-        edtfouce = (EditText) this.findViewById(R.id.edt_phoneverify_fouce);
         bt_send_code = (Button) this.findViewById(R.id.btn_phoneverify_begin);
         btnok = (Button) this.findViewById(R.id.btn_phoneverify_ok);
         txtPhone = (TextView) this.findViewById(R.id.txt_phoneverify_phone);
@@ -122,8 +119,6 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
             llynext.setVisibility(View.VISIBLE);
             setFinishedState();
         }
-        edtfouce.setFocusable(true);
-        edtfouce.requestFocus();
         btnok.setText("立即验证");
     }
 
@@ -231,8 +226,6 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
 
     /**
      * 手机验证提交手机解析 result 0 失败,1 成功,2 当前帐号已绑定手机,3 当前手机号已被别人绑定
-     *
-     * @author dengxiaohong
      */
     private int  getVerifyResult(String str) {
         try {
@@ -259,14 +252,11 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
 
     /**
      * 手机验证结果解析
-     *
-     * @author dengxiaohong
      */
     public int getCodeResult(String str)  {
         try {
             JSONObject jsonObject = new JSONObject(str);
             String resCode = jsonObject.optString("respCode");
-            int errno = jsonObject.optInt("errNo");
             if (resCode == null) {
                 return 0;
             }

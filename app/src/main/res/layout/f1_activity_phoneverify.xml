@@ -12,30 +12,34 @@
         android:layout_height="wrap_content"
         android:background="@color/pink1"
         android:paddingBottom="10dp"
+        android:paddingEnd="5dp"
         android:paddingLeft="0dp"
         android:paddingRight="5dp"
+        android:paddingStart="0dp"
         android:paddingTop="5dp">
 
         <ImageView
             android:id="@+id/iv_phoneverify_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:contentDescription="@string/img_verify_girl_des"
             android:src="@drawable/f1_near_visitor_laifang_big" />
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/f1_help_explain"
             android:orientation="vertical"
             android:paddingBottom="20dp"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp">
 
@@ -43,34 +47,17 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="可以直接用手机号码登录"
+                android:text="@string/txt_verify_tip_up"
                 android:textColor="@color/hei_color" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_marginTop="5dp"
-                android:text="保护帐号不被丢失"
+                android:text="@string/txt_verify_tip_down"
                 android:textColor="@color/hei_color" />
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/edt_phoneverify_fouce"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/linearLayout1"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:singleLine="true"
-            android:visibility="gone">
-
-            <requestFocus />
-        </EditText>
 
     </RelativeLayout>
 
@@ -93,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="请输入手机号，获取验证码"
+            android:text="@string/txt_phone_desc"
             android:textColor="@color/gray_text" />
 
         <LinearLayout
@@ -104,13 +91,13 @@
 
             <EditText
                 android:id="@+id/edt_phoneverify_phone"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/f1_edt_phone_selector"
                 android:ems="10"
-                android:hint="请输入手机号码"
-                android:inputType="numberSigned"
+                android:hint="@string/ext_phone_hit"
+                android:inputType="phone"
                 android:maxLength="11"
                 android:padding="10dp" />
 
@@ -119,9 +106,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/f1_button_big_bg"
                 android:padding="10dp"
-                android:text="免费获取验证码"
+                android:text="@string/bt_send_code_normal"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -134,10 +122,10 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/f1_edt_phone_selector"
             android:ems="10"
-            android:hint="请输入短信中的验证码"
+            android:hint="@string/ext_verifycode_hit"
             android:lines="1"
             android:padding="10dp"
-            android:singleLine="true"
+            android:maxLines="1"
             android:visibility="visible" />
 
         <Button
@@ -145,7 +133,7 @@
             style="@style/button_big"
             android:layout_width="match_parent"
             android:layout_marginTop="20dp"
-            android:text="立即验证" />
+            android:text="@string/bt_verify" />
     </LinearLayout>
 
     <LinearLayout
@@ -161,7 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="您的手机将会收到一条有验证码的短信"
+            android:text="@string/txt_sendmsg_tip"
             android:textColor="@color/gray_text" />
 
         <TextView
@@ -169,8 +157,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:text="13574193515"
+            android:text="@string/txt_phoneverify_hit"
             android:textColor="@color/main_bottom_text_color_sel"
             android:textSize="16sp" />
 

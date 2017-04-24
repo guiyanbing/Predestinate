@@ -17,16 +17,16 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip"
-            android:paddingTop="20dip">
+            android:paddingLeft="@dimen/act_space"
+            android:paddingRight="@dimen/act_space"
+            android:paddingTop="@dimen/act_space">
 
             <TextView
                 android:id="@+id/txt_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="完善资料，是社交成功的第一步哦"
+                android:maxLines="1"
+                android:text="@string/txt_complete_hit"
                 android:textColor="#fd6b8f"
                 android:textSize="15sp" />
 
@@ -39,246 +39,104 @@
                 android:src="@drawable/btn_reg_upload_photo_selector" />
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
-                android:text="上传真实照片"
-                android:textColor="#494949"
+                android:gravity="center"
+                android:text="@string/txt_upload_head_hit"
+                android:textColor="@color/color_494949"
                 android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="交友成功率将大大提升"
-                android:textColor="#494949"
-                android:textSize="12sp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layout_reg_info_job"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:layout_marginTop="10dip"
-                android:paddingLeft="2dip">
+                style="@style/reg_info_item"
+                android:layout_marginTop="@dimen/px30_dp">
 
                 <TextView
                     android:id="@+id/txt_reg_info_job_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="职业"
-                    android:textColor="#494949"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_user_go" />
+                    style="@style/text_reg_complete_desc"
+                    android:text="@string/txt_reg_job_desc" />
 
                 <TextView
                     android:id="@+id/txt_reg_info_job"
-                    android:layout_width="150dip"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dip"
-                    android:layout_toRightOf="@+id/txt_reg_info_job_desc"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="请选择 "
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
-            </RelativeLayout>
+                    style="@style/text_reg_complete_info" />
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#494949" />
+            <View style="@style/divider_line_reg" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layout_reg_info_edu"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:paddingLeft="2dip">
+                style="@style/reg_info_item">
 
                 <TextView
                     android:id="@+id/txt_reg_info_edu_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="学历"
-                    android:textColor="#494949"
-                    android:textSize="14sp" />
+                    style="@style/text_reg_complete_desc"
+                    android:text="@string/txt_reg_edu_desc" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_user_go" />
 
                 <TextView
                     android:id="@+id/txt_reg_info_edu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dip"
-                    android:layout_toRightOf="@+id/txt_reg_info_edu_desc"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="请选择"
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
-            </RelativeLayout>
+                    style="@style/text_reg_complete_info" />
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#494949" />
+            <View style="@style/divider_line_reg" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layout_reg_info_income"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:paddingLeft="2dip">
+                style="@style/reg_info_item">
 
                 <TextView
                     android:id="@+id/txt_reg_info_income_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="收入"
-                    android:textColor="#494949"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_user_go" />
+                    style="@style/text_reg_complete_desc"
+                    android:text="@string/txt_reg_income_desc" />
 
                 <TextView
                     android:id="@+id/txt_reg_info_income"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dip"
-                    android:layout_toRightOf="@+id/txt_reg_info_income_desc"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="请选择"
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
-            </RelativeLayout>
+                    style="@style/text_reg_complete_info" />
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#494949" />
+            <View style="@style/divider_line_reg" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layout_reg_info_height"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:paddingLeft="2dip">
+                style="@style/reg_info_item">
 
                 <TextView
                     android:id="@+id/txt_reg_info_height_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="身高"
-                    android:textColor="#494949"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_user_go" />
+                    style="@style/text_reg_complete_desc"
+                    android:text="@string/txt_reg_height_desc" />
 
                 <TextView
                     android:id="@+id/txt_reg_info_height"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dip"
-                    android:layout_toRightOf="@+id/txt_reg_info_height_desc"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="请选择"
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
-            </RelativeLayout>
+                    style="@style/text_reg_complete_info" />
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#494949" />
+            <View style="@style/divider_line_reg" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layout_reg_info_marry"
-                android:layout_width="match_parent"
-                android:layout_height="40dip"
-                android:paddingLeft="2dip">
+                style="@style/reg_info_item">
 
                 <TextView
                     android:id="@+id/txt_reg_info_marry_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="婚姻"
-                    android:textColor="#494949"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_user_go" />
+                    style="@style/text_reg_complete_desc"
+                    android:text="@string/txt_reg_marry_desc" />
 
                 <TextView
                     android:id="@+id/txt_reg_info_marry"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dip"
-                    android:layout_toRightOf="@+id/txt_reg_info_marry_desc"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="请选择"
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
-            </RelativeLayout>
+                    style="@style/text_reg_complete_info" />
+            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#494949" />
+            <View style="@style/divider_line_reg" />
 
             <Button
                 android:id="@+id/user_reg_info_complete_submit"
-                android:layout_width="match_parent"
-                android:layout_height="35dip"
+                style="@style/button_big"
                 android:layout_marginBottom="20dip"
                 android:layout_marginTop="50dip"
-                android:background="@drawable/f1_button_big_bg"
-                android:text="完成"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:text="@string/bt_complete"
                 android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
