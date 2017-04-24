@@ -5,21 +5,26 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
+import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
@@ -27,6 +32,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -56,6 +62,7 @@ import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -511,4 +518,34 @@ public class UIShow {
             webPushAct.showDialog(activity);
         }
     }
+
+    /**
+     * 选择支付
+     * @param activity
+     */
+    public static void showPayListAct(final FragmentActivity activity, int orderID) {
+        LoadingDialog.show(activity, "生成订单中");
+        ModuleMgr.getCommonMgr().reqGenerateOrders(orderID, new RequestComplete() {
+            @Override
+            public void onRequestComplete(final HttpResponse response) {
+                MMLog.autoDebug("Re===" + response.getResponseString());
+                LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        PayGood payGood = new PayGood(response.getResponseString());
+                        if (payGood.isOK()) {
+                            Intent intent = new Intent(activity, PayListAct.class);
+                            intent.putExtra("payGood", (Serializable) payGood);
+                            activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
+                        } else {
+                            MMToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+
 }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 /**
@@ -13,15 +14,17 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 public class BasePayPannel extends BaseViewPanel implements View.OnClickListener {
 
-    public FragmentActivity activity;
+    private FragmentActivity activity;
+    private PayGood payGood;
 
     public ImageView paylist_item_icon;
     public TextView paylist_item_title, paylist_item_remark;
 
 
-    public BasePayPannel(FragmentActivity activity) {
+    public BasePayPannel(FragmentActivity activity, PayGood payGood) {
         super(activity);
         this.activity = activity;
+        this.payGood = payGood;
         setContentView(R.layout.y2_paylist_item);
         findViewById(R.id.paylist_item).setOnClickListener(this);
         paylist_item_icon = (ImageView) findViewById(R.id.paylist_item_icon);
@@ -40,6 +43,10 @@ public class BasePayPannel extends BaseViewPanel implements View.OnClickListener
      */
     public FragmentActivity getActivity() {
         return this.activity;
+    }
+
+    public PayGood getPayGood() {
+        return payGood;
     }
 
     @Override

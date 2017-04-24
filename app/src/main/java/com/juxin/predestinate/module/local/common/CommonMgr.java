@@ -407,4 +407,15 @@ public class CommonMgr implements ModuleBase {
         postParams.put("count", count);// 礼物数量
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.givePresent, postParams, complete);
     }
+
+    /**
+     * 生成订单
+     * @param orderID
+     * @param complete
+     */
+    public void reqGenerateOrders(int orderID, RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("pid", orderID);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqCommodityList, getParms, complete);
+    }
 }

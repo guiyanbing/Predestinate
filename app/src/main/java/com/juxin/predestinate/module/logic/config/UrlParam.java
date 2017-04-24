@@ -21,12 +21,12 @@ import java.util.Map;
  * 管理常用的Url参数信息
  */
 public enum UrlParam {
-    reqRegister("pubtest/quickReg",null,false),//注册接口
-    modifyUserData("user/modifyUserData",null,false),//修改用户资料
-    reqLogin("public/login",null,false),//普通登录接口
-    reqReqVerifyCode("public/sendSMS",null,false),//获取手机验证码
+    reqRegister("pubtest/quickReg", null, false),//注册接口
+    modifyUserData("user/modifyUserData", null, false),//修改用户资料
+    reqLogin("public/login", null, false),//普通登录接口
+    reqReqVerifyCode("public/sendSMS", null, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
-    mobileAuth("user/bindCellPhone",null,true),//手机认证
+    mobileAuth("user/bindCellPhone", null, true),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
@@ -84,7 +84,7 @@ public enum UrlParam {
     givePresent("s/present/GivePresent", null, true),
 
     //============ 支付 =============
-    reqCommodityList("s/pay/CList", PayGoods.class),  // 商品列表
+    reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
 
     // 最后一个，占位
     LastUrlParam("");

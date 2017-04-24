@@ -71,4 +71,5 @@ public class Constant {
     // 支付类型
     public static final int GOOD_DIAMOND = 1;    //钻石
     public static final int GOOD_VIP = 2;        //VIP服务
+    public static final int REQ_PAYLISTACT = 0x15;       //支付请求码
 }

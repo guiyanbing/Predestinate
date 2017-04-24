@@ -103,6 +103,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         listMail.setSwipeItemClickedListener(this);
 
 
+        UIShow.showPayListAct(getActivity(), 56);
+
     }
 
     @Override
