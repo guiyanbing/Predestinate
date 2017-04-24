@@ -37,8 +37,6 @@ public class ChatMgr implements ModuleBase {
 //        App.getAppComponent().inject(this);
 //        messageMgr.init();
 //
-//
-////        App.getAppComponent().inject(this);
 //        BaseMessage baseMessage = new BaseMessage();
 //        baseMessage.setWhisperID("1");
 //        baseMessage.setSendID(1);

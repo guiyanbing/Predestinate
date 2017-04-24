@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.pay.goods.PayGood;
 
 /**
  * Created by Kind on 2017/4/19.
@@ -12,8 +13,8 @@ import com.juxin.predestinate.R;
 public class PayAlipayPannel extends BasePayPannel {
 
 
-    public PayAlipayPannel(FragmentActivity activity) {
-        super(activity);
+    public PayAlipayPannel(FragmentActivity activity, PayGood payGood) {
+        super(activity, payGood);
         setImageIcon(R.drawable.y2_paytype_alipay);
         setTextTitle("支付宝");
         setTextRemark("推荐支付宝用户使用");

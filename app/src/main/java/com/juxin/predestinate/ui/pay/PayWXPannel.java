@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.pay.goods.PayGood;
 
 /**
  * Created by Kind on 2017/4/19.
@@ -11,9 +12,8 @@ import com.juxin.predestinate.R;
 
 public class PayWXPannel extends BasePayPannel {
 
-
-    public PayWXPannel(FragmentActivity activity) {
-        super(activity);
+    public PayWXPannel(FragmentActivity activity, PayGood payGood) {
+        super(activity, payGood);
         setImageIcon(R.drawable.y2_paytype_weixin);
         setTextTitle("微信支付");
         setTextRemark("推荐开通了微信支付功能的用户使用");

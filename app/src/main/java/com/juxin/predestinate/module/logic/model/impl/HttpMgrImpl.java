@@ -78,6 +78,11 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
+    public HTCallBack reqGetNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback) {
+        return reqGetNoCacheHttp(urlParam, null, get_param, requestCallback);
+    }
+
+    @Override
     public HTCallBack uploadFile(UrlParam urlParam, Map<String, Object> post_param, Map<String, File> file_param, RequestComplete requestCallback) {
         return reqHttp(urlParam, null, file_param, null, post_param, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
     }

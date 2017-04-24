@@ -3,7 +3,10 @@ package com.juxin.predestinate.ui.pay;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.LinearLayout;
+
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 /**
@@ -13,6 +16,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 public class PayListAct extends BaseActivity {
 
+    private PayGood payGood;
     private BasePayPannel payAlipayPannel, payWXPannel, payCupPannel, payPhonecardPannel, payAlipayWebPannel, payVoicePannel;
 
     @Override
@@ -21,16 +25,26 @@ public class PayListAct extends BaseActivity {
         setContentView(R.layout.y2_paylistact);
         setBackView(R.id.base_title_back, "支付订单");
 
+        initView();
+    }
+
+    private void initView() {
+        payGood = (PayGood) getIntent().getSerializableExtra("payGood");
+        if (payGood == null) {
+            MMToast.showShort("请求出错");
+            this.finish();
+            return;
+        }
+
 
         LinearLayout pay_listView = (LinearLayout) findViewById(R.id.paytype_list);
 
-
-        payAlipayPannel = new PayAlipayPannel(this);
-        payWXPannel = new PayWXPannel(this);
-        payVoicePannel = new PayVoicePannel(this);
-        payCupPannel = new PayCUPPannel(this);
-        payAlipayWebPannel = new PayAlipayWebPannel(this);
-        payPhonecardPannel = new PayPhoneCardPannel(this);
+        payAlipayPannel = new PayAlipayPannel(this, payGood);
+        payWXPannel = new PayWXPannel(this, payGood);
+        payVoicePannel = new PayVoicePannel(this, payGood);
+        payCupPannel = new PayCUPPannel(this, payGood);
+        payAlipayWebPannel = new PayAlipayWebPannel(this, payGood);
+        payPhonecardPannel = new PayPhoneCardPannel(this, payGood);
 
 
         pay_listView.addView(payAlipayPannel.getContentView());
