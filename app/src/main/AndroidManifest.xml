@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.juxin.predestinate"
-    android:versionCode="10000000"
-    android:versionName="1.0.0">
+    android:versionCode="10200103"
+    android:versionName="3.0.3">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -52,17 +52,20 @@
             android:name=".ui.start.NavUserAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.RegInfoAct"
+            android:name=".ui.start.UserRegInfoAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.LoginAct"
+            android:name=".ui.start.UserRegInfoCompleteAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.UserLoginExtAct"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.user.check.UserCheckInfoAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.FindPwdAct"
+            android:name=".ui.start.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.UsersSetAct"
@@ -151,6 +154,11 @@
             android:name=".ui.mail.chat.PrivateChatAct"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name=".ui.pay.PayListAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
 
         <!-- ============= 相机相册模块start ============= -->
         <activity

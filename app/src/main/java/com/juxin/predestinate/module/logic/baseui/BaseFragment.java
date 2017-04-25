@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 
 /**
+ * 应用内Fragment基类
  * Created by ZRP on 2016/12/2.
  */
 public class BaseFragment extends Fragment {
@@ -41,7 +42,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
     /**

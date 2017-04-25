@@ -38,9 +38,9 @@ ext {
                 targetSDK  : 19,
                 libRxJava  : "2.0.1",
                 libRetrofit: "2.1.0",
-                libOkhttp  : "3.4.1"]
+                libOkhttp  : "3.7.0"]
 
-    cApplicationId = "com.juxin.predestinate"
+    cApplicationId = "com.xiaochen.android.fate_it"
     cConfigTxt = 'configs.txt'
 
     //从配置文件加载的变量

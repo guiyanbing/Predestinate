@@ -1,24 +1,24 @@
 ﻿#APK 签名key文件目录
-storeFile = ../../../key/xiaoyou.jks
+storeFile = ../../../key/fate_it_new.keystore
 
 #APK 签名key密码（第一重密码）
-storePassword = xiaoyou123
+storePassword = fate123
 
 #APK 签名key别名
-keyAlias = xy
+keyAlias = fate
 
 #APK 签名key别名密码（第二重密码）
-keyPassword = xiaoyou123
+keyPassword = fate123
 
 #自定义混淆文件
 PrjProguard = proguard-rules.pro
 
 #版本号
-VersionCode = 10000000
-VersionName = 1.0.0
+VersionCode = 10200103
+VersionName = 3.0.3
 
 #APK输出目录
 ApkPath = ../../K_GEN_APK/Predestinate/
 
 #App名称
-AppName = xiaoyou
+AppName = Fate_It

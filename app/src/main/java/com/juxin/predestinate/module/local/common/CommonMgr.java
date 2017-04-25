@@ -407,4 +407,46 @@ public class CommonMgr implements ModuleBase {
         postParams.put("count", count);// 礼物数量
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.givePresent, postParams, complete);
     }
+
+    /**
+     * 生成订单
+     * @param orderID
+     * @param complete
+     */
+    public void reqGenerateOrders(int orderID, RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("pid", orderID);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqCommodityList, getParms, complete);
+    }
+
+    /**
+     * 微信支付方式
+     * @param complete
+     */
+    public void reqWXMethod(String name, int payID, int payMoney, int payCType, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("subject", name);
+        postParms.put("body", name);
+        postParms.put("productid", payID);
+        postParms.put("total_fee", payMoney);
+
+      //  postParms.put("total_fee", "0.01");// 钱
+        if(payCType > -1){
+            postParms.put("payCType", payCType);
+        }
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWX, postParms, complete);
+    }
+
+
+    public void reqCUPOrAlipayMethod(UrlParam urlParam, String out_trade_no, String name, int payID, int payMoney, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("out_trade_no", out_trade_no);// 订单号
+        postParms.put("subject", name);// 标题
+        postParms.put("body","android-" +  name);
+        postParms.put("productid", payID);
+        postParms.put("total_fee", payMoney);
+        postParms.put("payCType", 1000);
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParms, complete);
+    }
 }

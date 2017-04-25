@@ -10,16 +10,20 @@ import android.text.TextUtils;
 
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
+import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
@@ -27,15 +31,17 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.UsersSetAct;
-import com.juxin.predestinate.ui.start.FindPwdAct;
-import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
-import com.juxin.predestinate.ui.start.RegInfoAct;
+import com.juxin.predestinate.ui.start.PhoneVerifyAct;
+import com.juxin.predestinate.ui.start.UserLoginExtAct;
+import com.juxin.predestinate.ui.start.UserRegInfoAct;
+import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
@@ -52,6 +58,7 @@ import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -160,28 +167,36 @@ public class UIShow {
     /**
      * 打开登录页
      */
-    public static void showLoginAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, LoginAct.class);
+    public static void showUserLoginExtAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, UserLoginExtAct.class);
         activity.startActivity(intent);
     }
 
     /**
      * 打开注册页
      */
-    public static void showRegInfoAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, RegInfoAct.class);
+    public static void showUserRegInfoAct(FragmentActivity activity) {
+        Intent intent = new Intent(activity, UserRegInfoAct.class);
+        activity.startActivity(intent);
+    }
+    /**
+     * 打开资料完善页
+     */
+    public static void showUserInfoCompleteAct(Context activity) {
+        Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
         activity.startActivity(intent);
     }
 
+
     /**
-     * 打开找回密码页(手机绑定)
+     * 手机绑定
      *
      * @param activity
-     * @param openAct  要打开的activity(FindPwdAct.OPEN_FINDPWD 找回密码  FindPwdAct.OPEN_BINDPHONE 绑定手机)
+     * @param isVerify  是否绑定手机
      */
-    public static void showFindPwdAct(FragmentActivity activity, int openAct) {
-        Intent intent = new Intent(activity, FindPwdAct.class);
-        intent.putExtra("openAct", openAct);
+    public static void showPhoneVerify_Act(Context activity, boolean isVerify) {
+        Intent intent = new Intent(activity, PhoneVerifyAct.class);
+        intent.putExtra("isVerify", isVerify);
         activity.startActivity(intent);
     }
 
@@ -474,4 +489,34 @@ public class UIShow {
             webPushAct.showDialog(activity);
         }
     }
+
+    /**
+     * 选择支付
+     * @param activity
+     */
+    public static void showPayListAct(final FragmentActivity activity, int orderID) {
+        LoadingDialog.show(activity, "生成订单中");
+        ModuleMgr.getCommonMgr().reqGenerateOrders(orderID, new RequestComplete() {
+            @Override
+            public void onRequestComplete(final HttpResponse response) {
+                MMLog.autoDebug("Re===" + response.getResponseString());
+                LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        PayGood payGood = new PayGood(response.getResponseString());
+                        if (payGood.isOK()) {
+                            Intent intent = new Intent(activity, PayListAct.class);
+                            intent.putExtra("payGood", (Serializable) payGood);
+                            activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
+                        } else {
+                            MMToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+
 }

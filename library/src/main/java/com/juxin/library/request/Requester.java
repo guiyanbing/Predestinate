@@ -87,6 +87,18 @@ public class Requester {
                         .build();
             }
         });
+        //User-Agent拦截器，过滤掉本地header的User-Agent
+        builder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                final Request originalRequest = chain.request();
+                final Request requestWithUserAgent = originalRequest.newBuilder()
+                        .removeHeader("User-Agent")
+                        .addHeader("User-Agent", "")
+                        .build();
+                return chain.proceed(requestWithUserAgent);
+            }
+        });
         //设置超时
         builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(RW_TIMEOUT, TimeUnit.SECONDS);

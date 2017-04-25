@@ -58,6 +58,10 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 //            }
 //        });
         initView();
+
+      //  Intent intent = new Intent(getActivity(), PayListAct.class);
+      //  startActivity(intent);
+
        // addMessageListener(MsgType.User_List_Msg_Change, this);
     //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
         return getContentView();
@@ -98,6 +102,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
 
+
+        UIShow.showPayListAct(getActivity(), 56);
 
     }
 

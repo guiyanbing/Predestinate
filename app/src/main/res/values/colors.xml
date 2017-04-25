@@ -53,14 +53,13 @@
     <color name="color_FFE27F">#FFE27F</color>
     <color name="color_F1897F">#F1897F</color>
     <color name="color_FAFAFA">#FAFAFA</color>
+    <color name="color_FD698C">#FD698C</color>
     <color name="color_B1B1B1">#B1B1B1</color>
     <color name="color_EEEEEE">#EEEEEE</color>
     <color name="color_FFAE00">#FFAE00</color>
     <color name="color_B2B2B2">#B2B2B2</color>
     <color name="color_F5FFFF">#F5FFFF</color>
     <color name="color_C3C3C3">#C3C3C3</color>
-
-
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
@@ -83,7 +82,7 @@
     <color name="divider">@color/color_BDBDBD</color>
     <color name="icons">@color/white</color>
     <color name="disable">@color/color_DDDDDD</color>
-    <color name="theme_color_red">@color/color_FC615C</color>
+    <color name="theme_color_red">@color/color_FD698C</color>
 
     <!-- 字体 -->
     <color name="text_theme_blue">@color/color_47cfd3</color>
@@ -135,5 +134,15 @@
     <color name="gray_9d9d9d">#9d9d9d</color>
 
     <color name="title_right_commit">#00D3D2</color>
+
+    <color name="hei_color">#666666</color>
+
+    <color name="gray">#ff7f7f7f</color>
+    <color name="pink">#ff89a9</color>
+    <color name="pink1">#ffe2e9</color>
+    <color name="filter_tab_bottom_line">#dddede</color>
+    <color name="gray_text">#666</color>
+    <color name="main_bottom_text_color_sel">@color/theme_color_red</color>
+    <color name="color_494949">#494949</color>
 </resources>
 

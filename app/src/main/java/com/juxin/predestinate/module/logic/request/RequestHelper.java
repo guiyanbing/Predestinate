@@ -1,17 +1,21 @@
 package com.juxin.predestinate.module.logic.request;
 
 import android.content.Context;
-import com.google.gson.Gson;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
+import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.Url_Enc;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -70,24 +74,19 @@ public class RequestHelper {
     /**
      * 网络请求
      *
-     * @param headerMap   请求headerMap
-     * @param url         请求Url
-     * @param get_param   get数据
-     * @param post_param  post数据
-     * @param file_params 文件数据
-     * @param isEncrypt   是否加密
+     * @param headerMap     请求headerMap
+     * @param url           请求Url
+     * @param get_param     get数据
+     * @param post_param    post数据
+     * @param file_params   文件数据
+     * @param isEncrypt     是否加密
+     * @param isJsonRequest 是否为application/json格式提交的post数据
      * @return Call
      */
     public Call<ResponseBody> reqHttpCallUrl(Map<String, String> headerMap, String url,
                                              Map<String, Object> get_param, Map<String, Object> post_param,
-                                             Map<String, File> file_params, boolean isEncrypt) {
-        if (isEncrypt) {//是否加密 加密
-            if (file_params == null && post_param != null) {//post加密。文件上传使用的为post，故同时判断两者
-                url = Url_Enc.appendJsonUrl(url, get_param, new Gson().toJson(post_param));
-            } else {//其余请求为get请求
-                url = Url_Enc.appendUrl(url, get_param, null);
-            }
-        }
+                                             Map<String, File> file_params, boolean isEncrypt, boolean isJsonRequest) {
+        url = Url_Enc.appendUrl(url, get_param, post_param, isEncrypt);
         if (headerMap == null) headerMap = new HashMap<>();
 
         if (file_params != null && file_params.size() > 0) {//post请求，上传文件
@@ -106,8 +105,13 @@ public class RequestHelper {
             return requestAPI.executePostCallUploadCall(headerMap, url, builder.build());
         } else if (post_param != null) {//post请求
             PLogger.d("---request--->带参数的post请求：" + url);
-            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(post_param));
-            return requestAPI.executePostCall(headerMap, url, body);
+            if (isJsonRequest) {
+                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                        isEncrypt ? JniUtil.GetEncryptString(JsonUtil.mapToJSON(post_param).toString()) : JsonUtil.mapToJSON(post_param).toString());
+                return requestAPI.executePostCall(headerMap, url, body);
+            } else {
+                return requestAPI.executePostCall(headerMap, url, post_param);
+            }
         } else if (get_param != null) {//带请求参数的get请求
             PLogger.d("---request--->带参数的get请求：" + url);
             return requestAPI.executeGetCall(headerMap, url, get_param);

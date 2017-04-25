@@ -9,7 +9,7 @@
         android:id="@+id/base_title_tab"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_footer_height"
-        android:background="@drawable/main_top_female_bg">
+        android:background="@color/theme_color_red">
 
         <LinearLayout
             android:id="@+id/base_title_back"
@@ -23,7 +23,7 @@
 
             <ImageView
                 style="@style/icon_small"
-                android:src="@drawable/p1_back_btn" />
+                android:src="@drawable/p1_back_white_btn" />
 
             <TextView
                 android:id="@+id/base_title_view_tip"

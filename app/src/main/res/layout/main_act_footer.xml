@@ -22,15 +22,12 @@
             android:orientation="vertical">
 
             <ImageView
-                style="@style/icon_middle"
+                style="@style/icon_middle_main"
                 android:src="@drawable/tab_msg_btn" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_btn_mail"
-                android:textColor="@color/main_bottom_text_color"
-                android:textSize="@dimen/px34_sp" />
+                style="@style/text_tab_main"
+                android:text="@string/main_btn_mail" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
@@ -57,15 +54,12 @@
             android:orientation="vertical">
 
             <ImageView
-                style="@style/icon_middle"
+                style="@style/icon_middle_main"
                 android:src="@drawable/tab_xiaoyou_btn" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_btn_xiaoyou"
-                android:textColor="@color/main_bottom_text_color"
-                android:textSize="@dimen/px34_sp" />
+                style="@style/text_tab_main"
+                android:text="@string/main_btn_xiaoyou" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
@@ -92,15 +86,12 @@
             android:orientation="vertical">
 
             <ImageView
-                style="@style/icon_middle"
+                style="@style/icon_middle_main"
                 android:src="@drawable/tab_square_btn" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_btn_plaza"
-                android:textColor="@color/main_bottom_text_color"
-                android:textSize="@dimen/px34_sp" />
+                style="@style/text_tab_main"
+                android:text="@string/main_btn_plaza" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
@@ -109,6 +100,38 @@
             android:layout_marginLeft="-10dp"
             android:layout_marginTop="@dimen/px9_dp"
             android:layout_toRightOf="@+id/plaza_ico"
+            android:text="1" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/web_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/web_ico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/icon_middle_main"
+                android:src="@drawable/tab_web_btn" />
+
+            <TextView
+                style="@style/text_tab_main"
+                android:text="@string/main_btn_web" />
+        </LinearLayout>
+
+        <com.juxin.library.unread.BadgeView
+            android:id="@+id/web_number"
+            style="@style/badge_num_big"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:layout_toRightOf="@+id/web_ico"
             android:text="1" />
     </RelativeLayout>
 
@@ -127,15 +150,12 @@
             android:orientation="vertical">
 
             <ImageView
-                style="@style/icon_middle"
+                style="@style/icon_middle_main"
                 android:src="@drawable/tab_my_btn" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/main_btn_user"
-                android:textColor="@color/main_bottom_text_color"
-                android:textSize="@dimen/px34_sp" />
+                style="@style/text_tab_main"
+                android:text="@string/main_btn_user" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView

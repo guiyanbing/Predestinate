@@ -105,6 +105,7 @@
     <dimen name="px99_dp">33.0dp</dimen>
     <dimen name="px100_dp">33.3dp</dimen>
     <dimen name="px104_dp">34.7dp</dimen>
+    <dimen name="px105_dp">35dp</dimen>
     <dimen name="px108_dp">36dp</dimen>
     <dimen name="px110_dp">36.7dp</dimen>
     <dimen name="px111_dp">37.0dp</dimen>
@@ -223,7 +224,7 @@
     <!-- 底部提示高度 -->
     <dimen name="tip_footer_height">@dimen/px116_dp</dimen>
 
-    <dimen name="act_space">@dimen/px35_dp</dimen>
+    <dimen name="act_space">@dimen/px60_dp</dimen>
     <dimen name="top_space">@dimen/px25_dp</dimen>
     <dimen name="txt_big">@dimen/px46_sp</dimen>
     <dimen name="txt_middle">@dimen/px45_sp</dimen>

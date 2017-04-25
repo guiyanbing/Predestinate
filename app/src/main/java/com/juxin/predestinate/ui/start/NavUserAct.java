@@ -25,20 +25,20 @@ public class NavUserAct extends BaseActivity {
     }
 
     private void initView() {
-        findViewById(R.id.btn_reg).setOnClickListener(clickListener);
-        findViewById(R.id.btn_login).setOnClickListener(clickListener);
+        findViewById(R.id.btn_user_nav_reg).setOnClickListener(clickListener);
+        findViewById(R.id.btn_user_nav_login).setOnClickListener(clickListener);
     }
 
     private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_login:   // 跳转到用户登录页面
-                    UIShow.showLoginAct(NavUserAct.this);
+                case R.id.btn_user_nav_login:
+                    UIShow.showUserLoginExtAct(NavUserAct.this);
                     break;
 
-                case R.id.btn_reg:   // 跳转到用户注册页面
-                    UIShow.showRegInfoAct(NavUserAct.this);  // 跳新版注册
+                case R.id.btn_user_nav_reg:
+                    UIShow.showUserRegInfoAct(NavUserAct.this);
                     break;
             }
         }

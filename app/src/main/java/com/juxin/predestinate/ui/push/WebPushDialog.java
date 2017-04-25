@@ -55,7 +55,7 @@ public class WebPushDialog extends BaseDialogFragment {
      */
     private void initView(View view) {
         LinearLayout web_container = (LinearLayout) view.findViewById(R.id.web_container);
-        WebPanel webPanel = new WebPanel(activity, webUrl);
+        WebPanel webPanel = new WebPanel(activity, webUrl, true);
         web_container.removeAllViews();
         web_container.addView(webPanel.getContentView());
     }

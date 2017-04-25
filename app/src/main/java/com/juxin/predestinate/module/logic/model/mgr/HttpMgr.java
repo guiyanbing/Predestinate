@@ -25,11 +25,13 @@ public interface HttpMgr extends ModuleBase {
      * @param post_param      post参数map
      * @param cacheType       缓存类型
      * @param isEncrypt       是否为加密请求
+     * @param isJsonRequest   是否为application/json格式提交的post数据：默认为application/json
      * @param requestCallback 请求回调
      * @return HTCallBack请求实例
      */
     HTCallBack reqPost(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
-                       Map<String, Object> post_param, RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback);
+                       Map<String, Object> post_param, RequestParam.CacheType cacheType,
+                       boolean isEncrypt, boolean isJsonRequest, RequestComplete requestCallback);
 
     /**
      * get请求
@@ -59,6 +61,11 @@ public interface HttpMgr extends ModuleBase {
      * Post: 加密，不缓存
      */
     HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, Map<String, Object> post_param, RequestComplete requestCallback);
+
+    /**
+     * Get: 加密，不缓存
+     */
+    HTCallBack reqGetNoCacheHttp(UrlParam urlParam, Map<String, Object> get_param, RequestComplete requestCallback);
 
     /**
      * Get: 加密，缓存

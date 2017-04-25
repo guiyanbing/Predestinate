@@ -8,25 +8,34 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.library.utils.JniUtil;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.start.LoginResult;
+import com.juxin.predestinate.bean.start.RegResult;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.NotificationsUtils;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -171,30 +180,93 @@ public class LoginMgr implements ModuleBase {
     /**
      * 账号注册
      */
-    public HTCallBack onRegister(UrlParam urlParam, final HashMap<String, Object> postParams, RequestComplete requestCallback) {
-        postParams.put("client_type", 1); // 1为android 2为iphone
-        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());
-        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());
-        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
-        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
-        postParams.put("mac", TextUtils.isEmpty(ModuleMgr.getAppMgr().getMAC()) ? "" : ModuleMgr.getAppMgr().getMAC());
-        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());
+    public void onRegister(final Activity context, UrlParam urlParam, String nickname, int age, int gender) {
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("flag", Constant.regFlag);
+        postParams.put("user_client_type", Constant.clientType);
+        postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());
+        postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());
+        postParams.put("ie", ModuleMgr.getAppMgr().getIMEI());
+        postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("mc", ModuleMgr.getAppMgr().getMAC());
+        postParams.put("simoperator", ModuleMgr.getAppMgr().getSimOperator());
+        postParams.put("ms", Constant.msType);
+        postParams.put("ver", Constant.VERSION);
+        postParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
-        HashMap<String, Object> getParams = new HashMap<>();
-        getParams.put("vcode", new Random().nextLong());
-
-        return ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, getParams, postParams, requestCallback);
+        postParams.put("age", age);
+        postParams.put("gender", gender);
+        postParams.put("nickname", nickname);
+        postParams.put("r", new Random().nextLong());
+        MMLog.d("yao", "s_uid=" + postParams.get("s_uid")
+                + "s_sid=" + postParams.get("s_sid") + "ie=" +
+                postParams.get("ie") + "app_key=" + postParams.get("app_key") + "pkgname=" + postParams.get("pkgname") + "simoperator=" + postParams.get("simoperator") + "mc=" + postParams.get("mc") + "is=" + postParams.get("is"));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                try {
+                    String jsonResult = new String(JniUtil.GetDecryptString(response.getResponseString()));
+                    JSONObject jsonObject = new JSONObject(jsonResult);
+                    if (!"success".equals(jsonObject.optString("respCode"))) {
+                        PToast.showShort(context.getResources().getString(R.string.toast_reg_error));
+                    } else {
+                        RegResult result = new RegResult();
+                        result.parseJson(jsonObject.toString());
+                        putAllLoginInfo(Long.parseLong(result.getUsername()), result.getPassword(), false);
+                        UIShow.showUserInfoCompleteAct(context);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                LoadingDialog.closeLoadingDialog(300);
+            }
+        });
     }
 
     /**
      * 登录
      */
-    public void onLogin(final Activity context, final long uid, final String pwd, RequestComplete requestCallback) {
+    public void onLogin(final Activity context, final long uid, final String pwd) {
         HashMap<String, Object> userAccount = new HashMap<>();
-        userAccount.put("name", uid);
-        userAccount.put("pwd", EncryptUtil.md5(pwd));
+        userAccount.put("username", uid);
+//        userAccount.put("pwd", EncryptUtil.md5(pwd));
+        userAccount.put("password", pwd);
+        userAccount.put("ms", Constant.msType);
+        userAccount.put("ver", Constant.VERSION);
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLogin, userAccount, requestCallback);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount,
+                RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
+                    @Override
+                    public void onRequestComplete(HttpResponse response) {
+                        LoadingDialog.closeLoadingDialog(500);
+                        if (!response.isOk()) {
+                            PToast.showShort(context.getResources().getString(R.string.toast_login_iserror));
+                        } else {
+                            // Cookie 在http响应头中返回
+                            putAllLoginInfo(uid, pwd, true);
+                            // 临时资料设置
+                            LoginResult result = (LoginResult) response.getBaseData();
+                            ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
+                            ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
+                            if (!result.isValidDetailInfo()) {
+                                PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
+                                UIShow.showUserInfoCompleteAct(context);
+                                return;
+                            }
+                            UIShow.showMainClearTask(context);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param post_param
+     * @param requestCallback
+     */
+    public void modifyUserData(HashMap<String, Object> post_param, RequestComplete requestCallback) {
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.modifyUserData,null,null, post_param, RequestParam.CacheType.CT_Cache_No,false,false, requestCallback);
     }
 
     /**
@@ -215,14 +287,13 @@ public class LoginMgr implements ModuleBase {
      *
      * @param uid
      * @param password
-     * @param cookie
      * @param isUserLogin
      */
-    public void putAllLoginInfo(long uid, String password, String cookie, boolean isUserLogin) {
+    public void putAllLoginInfo(long uid, String password, boolean isUserLogin) {
         setUid(uid + "");
         PSP.getInstance().put(LOGINMGR_AUTH, EncryptUtil.md5(password));
         putUserInfo(uid, password); //保存登录账户到list配置
-        setCookie(cookie);//在setLoginInfo方法之前执行
+//        setCookie(cookie);//在setLoginInfo方法之前执行
         setLoginInfo(uid, isUserLogin);  //设置登录状态
     }
 
@@ -235,22 +306,14 @@ public class LoginMgr implements ModuleBase {
      */
     public boolean setLoginInfo(long uid, boolean isUserLogin) {
         App.cookie = getCookie();
-
-        if (isUserLogin) {
-            if (TextUtils.isEmpty(App.cookie) || uid == 0) {
-                App.uid = 0;
-                App.isLogin = false;
-            } else {
-                App.uid = uid;
-                App.isLogin = true;
-            }
-        } else {   // 注册成功
-            App.uid = uid;
-            App.isLogin = true;
-        }
-        MMLog.d("yao", "isLogin=" + App.isLogin + "==isUserLogin==" + isUserLogin);
+        changeIsLogin(isUserLogin && (TextUtils.isEmpty(App.cookie) || uid == 0) ? 0 : uid);
         MsgMgr.getInstance().sendMsg(MsgType.MT_App_Login, App.isLogin);
         return App.isLogin;
+    }
+
+    private void changeIsLogin(long uid) {
+        App.uid = uid;
+        App.isLogin = uid == 0 ? false : true;
     }
 
     /**
@@ -281,22 +344,22 @@ public class LoginMgr implements ModuleBase {
      */
     private void putUserInfo(long uid, String pwd) {
         List<UP> list = getUserJson();
-        if (list == null) {
-            list = new ArrayList<>();
-            list.add(new UP(uid, pwd, TimeUtil.getTimeInMillis()));
-        } else {
-            boolean b = false;
+        if (list != null) {
+            boolean uidRepeat = false;
             for (int i = 0; i < list.size(); i++) {
                 UP up = list.get(i);
                 if (up != null && up.getUid() != 0 && up.getUid() == uid) {
                     up.setPw(pwd);
                     up.setTm(TimeUtil.getTimeInMillis());
-                    b = true;
+                    uidRepeat = true;
                 }
             }
-            if (!b) {//新帐号
+            if (!uidRepeat) {
                 list.add(new UP(uid, pwd, TimeUtil.getTimeInMillis()));
             }
+        } else {
+            list = new ArrayList<>();
+            list.add(new UP(uid, pwd, TimeUtil.getTimeInMillis()));
         }
         if (list.size() != 0) {
             Collections.sort(list);

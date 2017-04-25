@@ -43,8 +43,8 @@ public class App extends Application {
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
 
-        initAppComponent();
         ModuleMgr.initModule(context);
+//        initAppComponent();
         LockScreenMgr.getInstance().registerReceiver();//注册锁屏弹窗
         ModuleMgr.getLoginMgr().initCookie();
     }

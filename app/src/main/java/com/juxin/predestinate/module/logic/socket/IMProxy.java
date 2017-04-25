@@ -17,7 +17,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.start.LoginAct;
+import com.juxin.predestinate.ui.start.UserLoginExtAct;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -367,11 +367,11 @@ public class IMProxy {
      * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
      */
     private void accountInvalid(int reason) {
-        if (reason == 1) {// 踢下线弹窗
-            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
-        } else if (reason == 2) {// 帐号无效
-            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
-        }
+//        if (reason == 1) {// 踢下线弹窗
+//            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
+//        } else if (reason == 2) {// 帐号无效
+//            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
+//        }
     }
 
     /**
@@ -393,11 +393,11 @@ public class IMProxy {
 
                         @Override
                         public void onSubmit() {
-                            UIShow.showActivityClearTask(context, LoginAct.class);
+                            UIShow.showActivityClearTask(context, UserLoginExtAct.class);
                         }
                     }, tip, "提示", "", "确定", false, false);
                 } catch (Exception e) {
-                    UIShow.showActivityClearTask(context, LoginAct.class);
+                    UIShow.showActivityClearTask(context, UserLoginExtAct.class);
                 }
             }
         });

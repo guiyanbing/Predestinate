@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.logic.config;
 
-import com.juxin.predestinate.bean.UserLogin;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -9,7 +8,9 @@ import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
-import com.juxin.predestinate.bean.start.UserReg;
+import com.juxin.predestinate.bean.start.LoginResult;
+import com.juxin.predestinate.bean.start.PhoneVerifyResult;
+import com.juxin.predestinate.bean.start.RegResult;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
@@ -21,12 +22,12 @@ import java.util.Map;
  * 管理常用的Url参数信息
  */
 public enum UrlParam {
-
-    reqRegister("i/reg/Reg", UserReg.class),//注册接口
-    reqLogin("i/reg/CLogin", UserLogin.class),//普通登录接口
-    reqReqVerifyCode("i/ver/ReqRestVerifyCode"),//获取手机验证码
+    reqRegister("pubtest/quickReg", null, false),//注册接口
+    modifyUserData("user/modifyUserData", null, true),//修改用户资料
+    reqLogin("public/login", LoginResult.class, false),//普通登录接口
+    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
-    mobileAuth("s/uinfo/MobileAuth"),//手机认证
+    mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
@@ -84,7 +85,13 @@ public enum UrlParam {
     givePresent("s/present/GivePresent", null, true),
 
     //============ 支付 =============
-    reqCommodityList("s/pay/CList", PayGoods.class),  // 商品列表
+    reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
+
+    reqWX(Constant.FATE_IT_PROTOCOL, "user/wxAllPay", null, true),  //微信支付
+
+    reqUnionPay(Constant.FATE_IT_CUP_HTTP, "user/unionPay", null, true),  //银联支付
+
+    reqAlipay(Constant.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
 
     // 最后一个，占位
     LastUrlParam("");

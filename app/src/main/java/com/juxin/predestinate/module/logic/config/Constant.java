@@ -7,7 +7,8 @@ package com.juxin.predestinate.module.logic.config;
 public class Constant {
 
     public static final String NO_HOST = "no_host";
-    public static final String HOST_URL = "http://123.59.187.13:10001/";
+    //    public static final String HOST_URL = "http://api2.app.yuanfenba.net/";
+    public static final String HOST_URL = "http://test.api2.app.yuanfenba.net/";
     public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
 
     // -------------------------正式服地址---------------------------
@@ -22,12 +23,20 @@ public class Constant {
     public static final String FATE_IT_HTTP_PIC = "http://test.upload.img.yuanfenba.net/";  //图片测试正式服地址
     public static final String FATE_IT_PROTOCOL = "http://test.p.app.yuanfenba.net/";       //支付测试服地址
 
+    public static final String FATE_IT_CUP_HTTP = " http://pay.app.mumu123.cn/";        //银联地址
+
+
+
     // -------------------------版本信息常量---------------------------
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
     public static final int MS = 9;                 //消息版本号
     public static final int PLATFORM_TYPE = 2;      //平台号
-    public static final int SUB_VERSION = 3;        //客户端版本号
+    public static final int SUB_VERSION = 5;        //客户端版本号
+
+    //微信
+    public static String WEIXIN_APP_ID = "wxab302910f007a8ed";//聚鑫 //"wxc56bbddc3c2e0c18";//APPID
+    public final static String WEIXIN_App_Key = "xCNyzKceB8szwWmUqT4laGqK5SapQn5L";
 
     // -------------------------K-V---------------------------
 
@@ -70,4 +79,14 @@ public class Constant {
     // 支付类型
     public static final int GOOD_DIAMOND = 1;    //钻石
     public static final int GOOD_VIP = 2;        //VIP服务
+    public static final int REQ_PAYLISTACT = 0x15;       //支付请求码
+    public static final int PAY_WEIXIN = 0x16;// 微信支付
+
+    /*注册参数*/
+    public static int msType = 7;  //消息版本号(MS) Y币版本：5，缘分吧红包版：7，红包来了：9，消息排队版，自动回复 + 升级关系（测试版）：10，视频通话 + 表情：11
+    //客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4，取消排队：5，自动回复 + 升级关系（测试版）：6，视频通话 + 表情：7
+    public static int VERSION = 5;
+    public static int regFlag = 0;// 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
+    public static int clientType = 2;// 2为android 3为iphone
+
 }
