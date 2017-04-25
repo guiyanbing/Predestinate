@@ -86,6 +86,12 @@ public enum UrlParam {
     //============ 支付 =============
     reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
 
+    reqWX(Constant.FATE_IT_PROTOCOL, "user/wxAllPay", null, true),  //微信支付
+
+    reqUnionPay(Constant.FATE_IT_CUP_HTTP, "user/unionPay", null, true),  //银联支付
+
+    reqAlipay(Constant.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
+
     // 最后一个，占位
     LastUrlParam("");
 

@@ -16,6 +16,8 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 
 public class PayListAct extends BaseActivity {
 
+    public static boolean bPayOkFlag;
+
     private PayGood payGood;
     private BasePayPannel payAlipayPannel, payWXPannel, payCupPannel, payPhonecardPannel, payAlipayWebPannel, payVoicePannel;
 

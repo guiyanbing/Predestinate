@@ -8,6 +8,11 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
+
 /**
  * Created by Kind on 2017/4/19.
  */
@@ -65,4 +70,12 @@ public class BasePayPannel extends BaseViewPanel implements View.OnClickListener
         paylist_item_icon.setImageResource(resId);
     }
 
+
+    public String getOutTradeNo() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+        String key = format.format(new Date());
+        int i = new Random().nextInt(89999) + 10000;
+        String str = key + i;
+        return str;
+    }
 }
