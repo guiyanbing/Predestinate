@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -22,27 +23,20 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
 
 /**
  * 手机验证页面
  *
- * @author dengxiaohong add fare by IQQ
+ * @author XY
  */
-public class PhoneVerify_Act extends BaseActivity implements OnClickListener, RequestComplete {
+public class PhoneVerifyAct extends BaseActivity implements OnClickListener, RequestComplete {
 
-    private LinearLayout llyfirst;
-    private LinearLayout llynext;
-    private EditText edtPhone;
-    private EditText et_code;
-    private Button bt_send_code;
-    private Button btnok;
-    private TextView txtPhone;
-    private TextView txtDesc;
+    private LinearLayout llyfirst,llynext;
+    private EditText edtPhone,et_code;
+    private Button bt_send_code,btnok;
+    private TextView txtPhone,txtDesc;
 
     private boolean isok = false;
 
@@ -62,15 +56,15 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
     }
 
     private static class MyHandler extends Handler {
-        private WeakReference<PhoneVerify_Act> mActivity;
+        private WeakReference<PhoneVerifyAct> mActivity;
 
-        MyHandler(PhoneVerify_Act act) {
+        MyHandler(PhoneVerifyAct act) {
             this.mActivity = new WeakReference<>(act);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            PhoneVerify_Act act = mActivity.get();
+            PhoneVerifyAct act = mActivity.get();
             if (act != null) {
                 if (msg.what > 0) {
                     act.bt_send_code.setText(String.format(act.getString(R.string.bt_send_code_press), msg.what));
@@ -119,11 +113,11 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
             llynext.setVisibility(View.VISIBLE);
             setFinishedState();
         }
-        btnok.setText("立即验证");
+        btnok.setText(getResources().getString(R.string.bt_verify));
     }
 
     private void setFinishedState() {
-        txtDesc.setText("您已经验证成功，登录密码为：");
+        txtDesc.setText(getResources().getString(R.string.txt_verify_complete_desc));
         UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
         if (user != null) {
             String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw();
@@ -180,95 +174,44 @@ public class PhoneVerify_Act extends BaseActivity implements OnClickListener, Re
     public void onRequestComplete(HttpResponse response) {
         LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqReqVerifyCode) {
-            switch (getCodeResult(response.getResponseString())) {
-                case 0:
-                    PToast.showLong("系统忙，请稍候再试。");
-                    bt_send_code.setEnabled(true);
-                    break;
-                case 1:
-                    et_code.requestFocus();
-                    bt_send_code.setEnabled(false);
-                    btnok.setEnabled(true);
-                    if (sendthread == null || sendthread.getState() == State.TERMINATED) {
-                        sendthread = new SendEnableThread();
-                        sendthread.start();
-                    }
-                    break;
-                case 2:
-                    PToast.showLong("您的帐号已与手机绑定，不能再绑定。");
-                    this.finish();
-                    break;
-                case 3:
-                    PToast.showLong("该手机已经被验证过了，请输入其他的手机号。");
-                    bt_send_code.setEnabled(true);
-                    break;
+            PhoneVerifyResult result = (PhoneVerifyResult) response.getBaseData();
+            if (response.isOk()) {
+                et_code.requestFocus();
+                bt_send_code.setEnabled(false);
+                btnok.setEnabled(true);
+                if (sendthread == null || sendthread.getState() == State.TERMINATED) {
+                    sendthread = new SendEnableThread();
+                    sendthread.start();
+                }
+            } else {
+                switch (result.getErrno()) {
+                    case 0:
+                        PToast.showLong(getResources().getString(R.string.toast_server_busy));
+                        bt_send_code.setEnabled(true);
+                        break;
+                    case 1:
+                        PToast.showLong(getResources().getString(R.string.toast_phone_verified));
+                        this.finish();
+                        break;
+                    case 2:
+                        PToast.showLong(getResources().getString(R.string.toast_phone_used));
+                        bt_send_code.setEnabled(true);
+                        break;
+                }
             }
         } else if (response.getUrlParam() == UrlParam.mobileAuth) {
-            switch (getVerifyResult(response.getResponseString())) {
-                case 0:
-                    PToast.showLong("验证码错误。");
-//                    bt_send_code.setEnabled(true);
-                    break;
-                case 1:
-                    PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
-                    ModuleMgr.getCenterMgr().getMyInfo().setMobileAuthStatus(3);
-                    ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
-                    isok = true;
-                    this.setResult(102);
-                    llyfirst.setVisibility(View.GONE);
-                    llynext.setVisibility(View.VISIBLE);
-                    setFinishedState();
-                    break;
+            if (!response.isOk()) {
+                PToast.showLong(getResources().getString(R.string.toast_code_error));
+            } else {
+                PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
+                ModuleMgr.getCenterMgr().getMyInfo().setMobileAuthStatus(3);
+                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
+                isok = true;
+                this.setResult(102);
+                llyfirst.setVisibility(View.GONE);
+                llynext.setVisibility(View.VISIBLE);
+                setFinishedState();
             }
         }
-
     }
-
-    /**
-     * 手机验证提交手机解析 result 0 失败,1 成功,2 当前帐号已绑定手机,3 当前手机号已被别人绑定
-     */
-    private int  getVerifyResult(String str) {
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            String resCode = jsonObject.optString("respCode");
-            int errno = jsonObject.optInt("errNo");
-            if (resCode == null) {
-                return 0;
-            }
-            if (resCode.equals("success")) {
-                return 1;
-            }
-            if (errno == 1) {
-                return 2;
-            } else if (errno == 2) {
-                return 3;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-
-    /**
-     * 手机验证结果解析
-     */
-    public int getCodeResult(String str)  {
-        try {
-            JSONObject jsonObject = new JSONObject(str);
-            String resCode = jsonObject.optString("respCode");
-            if (resCode == null) {
-                return 0;
-            }
-            if (resCode.equals("success")) {
-                return 1;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return 0;
-    }
-
-
 }

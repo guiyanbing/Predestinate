@@ -6,19 +6,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
-import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -32,11 +28,7 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 用户完善信息
@@ -71,13 +63,13 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private int requestType;
 
-    private boolean ifUpHead=true;             // 是否已设置头像
+    private boolean ifUpHead = true;             // 是否已设置头像
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_reg_info_complete_act);
-        setBackView(R.id.base_title_back, "完善资料", new OnClickListener() {
+        setBackView(R.id.base_title_back, getResources().getString(R.string.title_reginfo_complete), new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -117,19 +109,15 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private void fillData() {
         requestType = getIntent().getIntExtra("requestType", REQUEST_TYPE_REGISTER);
+        eduValue = getResources().getString(R.string.txt_reg_edu_default);
+        jobValue = getResources().getString(R.string.txt_reg_job_default);
+        marryValue = getResources().getString(R.string.txt_reg_marry_default);
+        incomeValue = getResources().getString(R.string.txt_reg_income_default);
         if (requestType == REQUEST_TYPE_REGISTER) {
-            eduValue = "大专";
-            jobValue = "企业职工";
-            marryValue = "未婚";
-            incomeValue = "2000-5000";
             int gender = getIntent().getIntExtra("gender", 1);
             heightValue = gender == 1 ? HEIGHT_MALE_DEFAULT : HEIGHT_FEMALE_DEFAULT;
         } else {
             // 从数据库获取用户信息
-            eduValue = "大专";
-            jobValue = "企业职工";
-            marryValue = "未婚";
-            incomeValue = "2000-5000";
             heightValue = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 ? HEIGHT_MALE_DEFAULT : HEIGHT_FEMALE_DEFAULT;
         }
         // 将从数据库获取的信息显示页面上
@@ -139,21 +127,16 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         tv_height.setText(heightValue);
         tv_income.setText(incomeValue);
         // 将用户已经选择的信息保存到将要提交的postParams中
-        if (heightValue != null) {
+        if (heightValue != null)
             postParams.put("height", InfoConfig.getInstance().getHeightN().getSubmitWithShow(heightValue));
-        }
-        if (eduValue != null) {
+        if (eduValue != null)
             postParams.put("edu", InfoConfig.getInstance().getEduN().getSubmitWithShow(eduValue));
-        }
-        if (jobValue != null) {
+        if (jobValue != null)
             postParams.put("job", InfoConfig.getInstance().getJob().getSubmitWithShow(jobValue));
-        }
-        if (marryValue != null) {
+        if (marryValue != null)
             postParams.put("marry", InfoConfig.getInstance().getMarry().getSubmitWithShow(marryValue));
-        }
-        if (incomeValue != null) {
+        if (incomeValue != null)
             postParams.put("income", InfoConfig.getInstance().getIncomeN().getSubmitWithShow(incomeValue));
-        }
     }
 
     private void initEvent() {
@@ -168,7 +151,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private String defValue;
 
-    private void showChooseDlg(final InfoConfig.SimpleConfig data,final String postKey, final TextView tv_show, String title) {
+    private void showChooseDlg(final InfoConfig.SimpleConfig data, final String postKey, final TextView tv_show, String title) {
         PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
             @Override
             public void onOptionPicked(String option) {
@@ -186,79 +169,35 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                 ImgSelectUtil.getInstance().pickPhoto(UserRegInfoCompleteAct.this, this);
                 break;
             case R.id.layout_reg_info_job:
-                defValue=jobValue;
-                showChooseDlg(InfoConfig.getInstance().getJob(),"job",tv_job,"工作情况");
-//                PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
-//                    @Override
-//                    public void onOptionPicked(String option) {
-//                        postParams.put("job", InfoConfig.getInstance().getJob().getSubmitWithShow(option));
-//                        jobValue = option;
-//                        tv_job.setText(jobValue);
-//                    }
-//                }, InfoConfig.getInstance().getJob().getShow(), jobValue, "工作情况");
+                defValue = jobValue;
+                showChooseDlg(InfoConfig.getInstance().getJob(), "job", tv_job, getResources().getString(R.string.daltitle_job));
                 break;
             case R.id.layout_reg_info_edu:
-                defValue=eduValue;
-                showChooseDlg(InfoConfig.getInstance().getEduN(),"edu",tv_edu,"学历");
-//                PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
-//                    @Override
-//                    public void onOptionPicked(String option) {
-//                        postParams.put("edu", InfoConfig.getInstance().getEduN().getSubmitWithShow(option));
-//                        eduValue = option;
-//                        tv_edu.setText(eduValue);
-//                    }
-//                }, InfoConfig.getInstance().getEduN().getShow(), eduValue, "学历");
+                defValue = eduValue;
+                showChooseDlg(InfoConfig.getInstance().getEduN(), "edu", tv_edu, getResources().getString(R.string.daltitle_edu));
                 break;
             case R.id.layout_reg_info_income:
-                defValue=incomeValue;
-                showChooseDlg(InfoConfig.getInstance().getIncomeN(),"income",tv_income,"月收入");
-//                PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
-//                    @Override
-//                    public void onOptionPicked(String option) {
-//                        postParams.put("income", InfoConfig.getInstance().getIncomeN().getSubmitWithShow(option));
-//                        incomeValue = option;
-//                        tv_income.setText(incomeValue);
-//                    }
-//                }, InfoConfig.getInstance().getIncomeN().getShow(), incomeValue, "月收入");
+                defValue = incomeValue;
+                showChooseDlg(InfoConfig.getInstance().getIncomeN(), "income", tv_income, getResources().getString(R.string.daltitle_inccome));
                 break;
             case R.id.layout_reg_info_height:
-                defValue=heightValue;
-                showChooseDlg(InfoConfig.getInstance().getHeightN(),"height",tv_height,"身高");
-//                PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
-//                    @Override
-//                    public void onOptionPicked(String option) {
-//                        postParams.put("height", InfoConfig.getInstance().getHeightN().getSubmitWithShow(option));
-//                        heightValue = option;
-//                        tv_height.setText(heightValue);
-//                    }
-//                }, InfoConfig.getInstance().getHeightN().getShow(), heightValue, "身高");
+                defValue = heightValue;
+                showChooseDlg(InfoConfig.getInstance().getHeightN(), "height", tv_height, getResources().getString(R.string.daltitle_height));
                 break;
             case R.id.layout_reg_info_marry:
-                defValue=marryValue;
-                showChooseDlg(InfoConfig.getInstance().getMarry(),"marry",tv_marry,"婚姻状态");
-//                PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
-//                    @Override
-//                    public void onOptionPicked(String option) {
-//                        postParams.put("marry", InfoConfig.getInstance().getMarry().getSubmitWithShow(option));
-//                        marryValue = option;
-//                        tv_marry.setText(marryValue);
-//                    }
-//                }, InfoConfig.getInstance().getMarry().getShow(), marryValue, "婚姻状态");
+                defValue = marryValue;
+                showChooseDlg(InfoConfig.getInstance().getMarry(), "marry", tv_marry, getResources().getString(R.string.daltitle_marry));
                 break;
             case R.id.user_reg_info_complete_submit:
-                if (!checkInputInfo(true)) {
+                if (validInput()) {
+                    LoadingDialog.show(this, getResources().getString(R.string.loading_reg_update));
                     ModuleMgr.getLoginMgr().modifyUserData(postParams, new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response.getResponseString());
-                                if ("success".equals(jsonObject.optString("result"))) {
-                                    UIShow.showMainClearTask(UserRegInfoCompleteAct.this);
-                                } else {
-                                    PToast.showShort("注册失败，请稍候再试");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            if (response.isOk()) {
+                                UIShow.showMainClearTask(UserRegInfoCompleteAct.this);
+                            } else {
+                                PToast.showShort(getResources().getString(R.string.loading_reg_update_error));
                             }
                             LoadingDialog.closeLoadingDialog(300);
                         }
@@ -297,45 +236,28 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         finish();
     }
 
-    private boolean checkInputInfo(boolean isShowToast) {
-        if (TextUtils.isEmpty(jobValue)) {
-            if (isShowToast) {
-                PToast.showShort("请选择您的职业");
+    private boolean validValue(String[] values, int[] toasts) {
+        for (int i = 0; i < values.length; i++) {
+            if (TextUtils.isEmpty(values[i])) {
+                PToast.showShort(getResources().getString(toasts[i]));
+                return false;
             }
-            return true;
         }
-        if (TextUtils.isEmpty(eduValue)) {
-            if (isShowToast) {
-                PToast.showShort("请选择您的学历");
-            }
-            return true;
-        }
-        if (TextUtils.isEmpty(incomeValue)) {
-            if (isShowToast) {
-                PToast.showShort("请选择您的收入状况");
-            }
-            return true;
-        }
+        return true;
+    }
+
+    private boolean validInput() {
         String heightValue = tv_height.getText().toString();
-        if (TextUtils.isEmpty(heightValue)) {
-            if (isShowToast) {
-                PToast.showShort("请选择您的身高");
-            }
-            return true;
+        String checkValue[] = new String[]{jobValue, eduValue, incomeValue, heightValue, marryValue};
+        int toasts[] = new int[]{R.string.toast_job_isnull, R.string.toast_edu_isnull, R.string.toast_income_isnull, R.string.toast_height_isnull, R.string.toast_marry_isnull};
+        if (!validValue(checkValue, toasts)) {
+            return false;
         }
-        if (TextUtils.isEmpty(marryValue)) {
-            if (isShowToast) {
-                PToast.showShort("请选择您的婚姻状态");
-            }
-            return true;
-        }
-
         if (!ifUpHead) {
-            PToast.showShort("请您上传真实照片做为头像");
-            return true;
+            PToast.showShort(getResources().getString(R.string.toast_head_isnull));
+            return false;
         }
-
-        return false;
+        return true;
     }
 
     private void updateDataToLocal() {

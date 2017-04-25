@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
@@ -38,11 +37,8 @@ import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.UsersSetAct;
-import com.juxin.predestinate.ui.start.FindPwdAct;
-import com.juxin.predestinate.ui.start.LoginAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
-import com.juxin.predestinate.ui.start.PhoneVerify_Act;
-import com.juxin.predestinate.ui.start.RegInfoAct;
+import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
@@ -171,25 +167,11 @@ public class UIShow {
     /**
      * 打开登录页
      */
-    public static void showLoginAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, LoginAct.class);
-        activity.startActivity(intent);
-    }
-    /**
-     * 打开登录页
-     */
     public static void showUserLoginExtAct(FragmentActivity activity) {
         Intent intent = new Intent(activity, UserLoginExtAct.class);
         activity.startActivity(intent);
     }
 
-    /**
-     * 打开注册页
-     */
-    public static void showRegInfoAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, RegInfoAct.class);
-        activity.startActivity(intent);
-    }
     /**
      * 打开注册页
      */
@@ -205,17 +187,6 @@ public class UIShow {
         activity.startActivity(intent);
     }
 
-    /**
-     * 打开找回密码页(手机绑定)
-     *
-     * @param activity
-     * @param openAct  要打开的activity(FindPwdAct.OPEN_FINDPWD 找回密码  FindPwdAct.OPEN_BINDPHONE 绑定手机)
-     */
-    public static void showFindPwdAct(FragmentActivity activity, int openAct) {
-        Intent intent = new Intent(activity, FindPwdAct.class);
-        intent.putExtra("openAct", openAct);
-        activity.startActivity(intent);
-    }
 
     /**
      * 手机绑定
@@ -224,7 +195,7 @@ public class UIShow {
      * @param isVerify  是否绑定手机
      */
     public static void showPhoneVerify_Act(Context activity, boolean isVerify) {
-        Intent intent = new Intent(activity, PhoneVerify_Act.class);
+        Intent intent = new Intent(activity, PhoneVerifyAct.class);
         intent.putExtra("isVerify", isVerify);
         activity.startActivity(intent);
     }
