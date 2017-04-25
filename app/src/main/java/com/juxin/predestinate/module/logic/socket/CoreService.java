@@ -68,5 +68,10 @@ public class CoreService extends Service {
         public void setSystemInfo(int systemInfo) throws RemoteException {
 
         }
+
+        @Override
+        public void sendMsg(NetData data) throws RemoteException {
+
+        }
     }
 }

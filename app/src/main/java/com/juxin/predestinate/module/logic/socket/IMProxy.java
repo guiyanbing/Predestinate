@@ -293,8 +293,13 @@ public class IMProxy {
 
     private class CSCallback extends ICSCallback.Stub {
         @Override
-        public void onMessage(long msgId, boolean group, String groupId, long sender, String contents) throws RemoteException {
-            IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
+        public void onMessage(NetData data) throws RemoteException {
+            //IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
+        }
+
+        @Override
+        public void onSendMsgError(NetData data) throws RemoteException {
+
         }
 
         @Override
