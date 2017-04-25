@@ -179,4 +179,7 @@ dependencies {
     compile files('libs/UPPayAssistEx.jar')
     compile files('libs/UPPayPluginExStd.jar')
     compile files('libs/libammsdk.jar')
+    compile files('libs/banksdk.jar')
+    compile files('libs/vitongpaysdk.jar')
+    compile files('libs/alipaySdk-20161009.jar')
 }
