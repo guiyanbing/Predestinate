@@ -31,9 +31,9 @@
                 android:hint="@string/ext_nickname_hit"
                 android:inputType="text"
                 android:maxLines="1"
-                android:paddingEnd="0dp"
+                android:paddingEnd="5dip"
                 android:paddingLeft="10dip"
-                android:paddingRight="0dp"
+                android:paddingRight="5dip"
                 android:paddingStart="10dip"
                 android:textColor="@color/color_494949"
                 android:textColorHint="@color/color_494949"
@@ -44,22 +44,19 @@
                 android:layout_height="1px"
                 android:background="@color/color_494949" />
 
-                <TextView
-                    android:drawableEnd="@drawable/ic_user_go"
-                    android:drawableRight="@drawable/ic_user_go"
-                    android:id="@+id/txt_reg_info_age"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dip"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingEnd="10dip"
-                    android:paddingLeft="10dip"
-                    android:paddingStart="10dip"
-                    android:text="@string/ext_age_hit"
-                    android:textColor="@color/color_494949"
-                    android:textSize="15sp" />
+            <TextView
+                android:id="@+id/txt_reg_info_age"
+                android:layout_width="match_parent"
+                style="@style/text_reg_complete_info"
+                android:layout_height="40dip"
+                android:gravity="center_vertical"
+                android:paddingEnd="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="5dip"
+                android:paddingStart="10dip"
+                android:text="@string/ext_age_hit"
+                android:textColor="@color/color_494949"
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -78,12 +75,16 @@
                     android:id="@+id/radio_reg_info_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="25dip"
                     android:button="@null"
                     android:checked="true"
                     android:drawableLeft="@drawable/radio_male_selector"
                     android:drawablePadding="10dip"
+                    android:drawableStart="@drawable/radio_male_selector"
                     android:padding="0dip"
+                    android:paddingEnd="25dip"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="25dip"
+                    android:paddingStart="0dp"
                     android:text="@string/txt_boy"
                     android:textColor="@color/hei_color" />
 
@@ -91,11 +92,15 @@
                     android:id="@+id/radio_reg_info_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dip"
                     android:button="@null"
                     android:drawableLeft="@drawable/radio_selector"
                     android:drawablePadding="10dip"
+                    android:drawableStart="@drawable/radio_selector"
                     android:padding="0dip"
+                    android:paddingEnd="0dp"
+                    android:paddingLeft="25dip"
+                    android:paddingRight="0dp"
+                    android:paddingStart="25dip"
                     android:text="@string/txt_girl"
                     android:textColor="@color/hei_color" />
             </RadioGroup>
@@ -104,7 +109,7 @@
                 android:id="@+id/btn_reg_info_submit"
                 style="@style/button_big"
                 android:layout_marginTop="50dip"
-                android:text="立即注册"
+                android:text="@string/button_reg"
                 android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>

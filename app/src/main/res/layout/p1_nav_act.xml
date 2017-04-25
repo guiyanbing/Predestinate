@@ -16,6 +16,7 @@
         android:id="@+id/layout_user_nav"
         android:layout_width="match_parent"
         android:layout_height="50dip"
+        android:paddingBottom="@dimen/px30_dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:gravity="center"

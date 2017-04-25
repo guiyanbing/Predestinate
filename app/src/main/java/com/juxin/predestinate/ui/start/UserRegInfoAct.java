@@ -103,6 +103,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                 }, InfoConfig.getInstance().getAgeN().getShow(), "18岁", "年龄");
                 break;
             case R.id.btn_reg_info_submit:
+
                 if (validInput()) {
                     htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, nickname, age, gender, new RequestComplete() {
                         @Override
