@@ -87,10 +87,7 @@ public class KeepAliveSocket {
     private void checkAndWaitForConnect(){
         socketStateLock.lock();
         while (true) {
-            if (state == SocketState.DISCONNECT_ERROR
-                    || state == SocketState.DISCONNECT_NORMAL
-                    || state == SocketState.CONNECTED_FAILED
-                    || state == SocketState.CONNECTED_SUCCESS) {
+            if (state != SocketState.CONNECTING) {
                 break;
             }else{
                 try {
@@ -103,7 +100,13 @@ public class KeepAliveSocket {
     }
 
     private boolean checkIfCanSendPacket(){
-        return state == SocketState.CONNECTED_SUCCESS;
+        boolean result = false;
+        socketStateLock.lock();
+        if(state == SocketState.CONNECTED_SUCCESS){
+            result = true;
+        }
+        socketStateLock.unlock();
+        return result;
     }
 
 
@@ -119,8 +122,12 @@ public class KeepAliveSocket {
         }
     }
 
-    public void shutDown(boolean instant){
+    public void disconnect(boolean instant){
         socketStateLock.lock();
+        if(state != SocketState.CONNECTED_SUCCESS) {
+            socketStateLock.unlock();
+            return;
+        }
         if(packetWriter != null){
             packetWriter.shutdown(instant);
         }
@@ -133,16 +140,27 @@ public class KeepAliveSocket {
             socket.close();
         } catch (IOException e) {
         }
-
-        state = SocketState.DISCONNECT_NORMAL;
-        socketStateLock.unlock();
-        if(listener != null){
-            listener.onSocketDisconnectNormally();
+        if(packetWriter.isEndWithException() || packerReader.isEndWithException()){
+            state = SocketState.DISCONNECT_ERROR;
+            if(listener != null){
+                listener.onSocketDisconnectByError();
+            }
+        }else{
+            state = SocketState.DISCONNECT_NORMAL;
+            if(listener != null){
+                listener.onSocketDisconnectNormally();
+            }
         }
+        socketStateLock.unlock();
+
     }
 
-    private void shutDownByError(){
+    private void disconnectByError(){
         socketStateLock.lock();
+        if(state != SocketState.CONNECTED_SUCCESS) {
+            socketStateLock.unlock();
+            return;
+        }
         if(packetWriter != null){
             packetWriter.shutdown(true);
         }
@@ -155,19 +173,19 @@ public class KeepAliveSocket {
             socket.close();
         } catch (IOException e) {
         }
-
-        state = SocketState.DISCONNECT_ERROR;
-        socketStateLock.unlock();
-        if(listener != null){
+        if(listener != null && state != SocketState.DISCONNECT_ERROR){
+            state = SocketState.DISCONNECT_ERROR;
             listener.onSocketDisconnectByError();
         }
+        socketStateLock.unlock();
     }
 
     private class PacketWriter{
         private final ArrayBlockingQueue<NetData> queue = new ArrayBlockingQueue(SOCKET_PACKET_QUEUE_SIZE,true);
         private volatile Long shutDownTime = null;
         private volatile boolean shutDownDone = false;
-        private volatile boolean instantShutdown;
+        private volatile boolean instantShutdown = false;
+        private volatile boolean endWithException = false;
         private Lock shutDownLock = new ReentrantLock();
         private Condition shutDownCondition;
 
@@ -180,6 +198,7 @@ public class KeepAliveSocket {
             shutDownTime = null;
             instantShutdown = false;
             shutDownDone = false;
+            endWithException = false;
 
             writerThread = new Thread(new Runnable() {
                 @Override
@@ -206,7 +225,6 @@ public class KeepAliveSocket {
         }
 
         private void writePacket(){
-            boolean endWithException = false;
             NetData packet = null;
             try {
                 while(!done()){
@@ -251,9 +269,13 @@ public class KeepAliveSocket {
             shutDownCondition.signalAll();
             shutDownLock.unlock();
 
-            if(endWithException == true){
-                shutDownByError();
+            if(endWithException == true && !instantShutdown){
+                disconnectByError();
             }
+        }
+
+        public boolean isEndWithException(){
+            return endWithException;
         }
 
         private boolean done(){
@@ -263,9 +285,9 @@ public class KeepAliveSocket {
         private void shutdown(boolean instant){
             if(shutDownDone == true) return;
             shutDownLock.lock();
-            writerThread.interrupt();
-            shutDownTime = System.currentTimeMillis();
             instantShutdown = instant;
+            shutDownTime = System.currentTimeMillis();
+            writerThread.interrupt();
             try {
                 if(shutDownDone == false)
                     shutDownCondition.await();
@@ -280,7 +302,8 @@ public class KeepAliveSocket {
         private final ArrayBlockingQueue<NetData> queue = new ArrayBlockingQueue(SOCKET_PACKET_QUEUE_SIZE,true);
         private volatile Long shutDownTime = null;
         private volatile boolean shutDownDone = false;
-        private volatile boolean instantShutdown;
+        private volatile boolean instantShutdown = false;
+        private volatile boolean endWithException = false;
         private Lock shutDownLock = new ReentrantLock();
         private Condition shutDownCondition;
 
@@ -293,6 +316,7 @@ public class KeepAliveSocket {
             shutDownTime = null;
             instantShutdown = false;
             shutDownDone = false;
+            endWithException = false;
 
             readThread = new Thread(new Runnable() {
                 @Override
@@ -320,9 +344,13 @@ public class KeepAliveSocket {
             shutDownCondition.signalAll();
             shutDownLock.unlock();
 
-            if(endWithException == true){
-                shutDownByError();
+            if(endWithException == true && !instantShutdown){
+                disconnectByError();
             }
+        }
+
+        public boolean isEndWithException(){
+            return endWithException;
         }
 
         private boolean done(){
@@ -332,9 +360,11 @@ public class KeepAliveSocket {
         private void shutdown(boolean instant){
             if(shutDownDone == true) return;
             shutDownLock.lock();
-            readThread.interrupt();
             shutDownTime = System.currentTimeMillis();
             instantShutdown = instant;
+            if(instantShutdown) {
+                readThread.interrupt();
+            }
             try {
                 if(shutDownDone == false)
                     shutDownCondition.await();
