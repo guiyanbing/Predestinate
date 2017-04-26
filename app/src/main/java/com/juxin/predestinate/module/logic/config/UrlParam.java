@@ -93,6 +93,11 @@ public enum UrlParam {
 
     reqAlipay(Constant.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
 
+    reqPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/card", null, true),  //手机卡
+
+    reqSearchPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/checkSZPay", null, true),  //手机卡查询
+
+
     // 最后一个，占位
     LastUrlParam("");
 

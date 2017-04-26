@@ -78,6 +78,16 @@ public class PayWX extends BaseData {
         }
     }
 
+    /**
+     * 手机卡
+     * @param jsonStr
+     */
+    public void PayPhoneCard(String jsonStr) {
+        JSONObject jsonObject = getJsonObject(jsonStr);
+        this.setResult(jsonObject.optString("result"));
+        this.setPayContent(jsonObject.optString("content"));
+    }
+
     public boolean isOK() {
         return isOK;
     }

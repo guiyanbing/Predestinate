@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/f1_pay_honecard_title_bg"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/px60_dp"
+                android:paddingRight="@dimen/px60_dp" >
+
+                <TextView
+                    android:id="@+id/pay_phonecard_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/pay_alipay_bg"
+                    android:paddingBottom="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px15_dp"
+                    android:text="购买服务：回信包月年付--0.01元"
+                    android:textColor="@color/userinfo_list_name"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/pay_phonecard_cardMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/px12_dp"
+                    android:text="50元"
+                    android:textColor="@color/userinfo_back_pink_color"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px42_dp"
+                android:layout_marginRight="@dimen/px42_dp"
+                android:layout_marginTop="@dimen/px30_dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="运  营  商"
+                    android:textColor="#605f5f"
+                    android:textSize="@dimen/sp_16" />
+
+                <Button
+                    android:id="@+id/operator_mobile"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="移动"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <View
+                    android:layout_width="@dimen/px2.3_dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line" />
+
+                <Button
+                    android:id="@+id/operator_unicom"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="联通"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <View
+                    android:layout_width="0.8dip"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line" />
+
+                <Button
+                    android:id="@+id/operator_telecom"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="电信"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dip"
+                android:layout_marginRight="14dip"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="充值面额"
+                    android:textColor="#605f5f"
+                    android:textSize="@dimen/sp_16" />
+
+                <Button
+                    android:id="@+id/credits_ten"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="10"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <View
+                    android:layout_width="0.8dip"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line" />
+
+                <Button
+                    android:id="@+id/credits_thirty"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="30"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <View
+                    android:layout_width="0.8dip"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line" />
+
+                <Button
+                    android:id="@+id/credits_fifty"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="50"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <View
+                    android:layout_width="0.8dip"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line" />
+
+                <Button
+                    android:id="@+id/credits_hundred"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/pay_phonecard_btn_select"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingLeft="@dimen/px24_dp"
+                    android:paddingRight="@dimen/px24_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:text="100"
+                    android:textColor="@color/pay_phonecard_btn_color"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px15_dp"
+                android:layout_marginLeft="@dimen/px42_dp"
+                android:layout_marginRight="@dimen/px42_dp"
+                android:layout_marginTop="@dimen/px36_dp"
+                android:lineSpacingExtra="@dimen/px3_dp"
+                android:text="注：您选择的面额必须与充值卡的实际面额一致，否则可能导致消费不成功或余额丢失"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/pay_phonecard_sn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px42_dp"
+                android:layout_marginRight="@dimen/px42_dp"
+                android:layout_marginTop="@dimen/px15_dp"
+                android:background="@drawable/pay_phonecard_edit_bg"
+                android:hint="输入充值卡序列号"
+                android:inputType="textCapCharacters|phone"
+                android:paddingBottom="@dimen/px30_dp"
+                android:paddingLeft="@dimen/px24_dp"
+                android:paddingRight="@dimen/px24_dp"
+                android:paddingTop="@dimen/px30_dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16" />
+
+            <EditText
+                android:id="@+id/pay_phonecard_pw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px42_dp"
+                android:layout_marginRight="@dimen/px42_dp"
+                android:layout_marginTop="@dimen/px15_dp"
+                android:background="@drawable/pay_phonecard_edit_bg"
+                android:hint="密码"
+                android:inputType="textCapCharacters|phone"
+                android:paddingBottom="@dimen/px30_dp"
+                android:paddingLeft="@dimen/px24_dp"
+                android:paddingRight="@dimen/px24_dp"
+                android:paddingTop="@dimen/px30_dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16" />
+
+            <Button
+                android:id="@+id/pay_phonecard_ok"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px114_dp"
+                android:layout_marginLeft="@dimen/px36_dp"
+                android:layout_marginRight="@dimen/px36_dp"
+                android:layout_marginTop="@dimen/px90_dp"
+                android:background="@drawable/main_top_female_bg"
+                android:text="充值"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px36_dp"
+                android:layout_marginRight="@dimen/px36_dp"
+                android:layout_marginTop="@dimen/px90_dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="支付结余将留在您的充值卡中！"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/pay_phonecard_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="温馨提示"
+                    android:textColor="#1b92ea"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/pay_phonecard_tips_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px36_dp"
+                android:layout_marginRight="@dimen/px36_dp"
+                android:layout_marginTop="@dimen/px30_dp"
+                android:lineSpacingExtra="1dip"
+                android:paddingBottom="4dip"
+                android:text="@string/pay_phonecard_tips_txt"
+                android:textSize="@dimen/sp_14"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -160,6 +160,12 @@
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.pay.utils.PayPhoneCardAct"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+
         <!-- ============= 相机相册模块start ============= -->
         <activity
             android:name=".module.local.album.activity.TransferActivity"

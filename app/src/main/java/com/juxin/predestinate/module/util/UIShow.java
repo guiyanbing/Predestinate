@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
+import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -517,6 +518,14 @@ public class UIShow {
         });
 
     }
+    public static void showPayPhoneCardAct(final FragmentActivity activity, PayGood payGood, String orderID) {
+        Intent intent = new Intent(activity, PayPhoneCardAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("orderID", orderID);
+        activity.startActivityForResult(intent, Constant.PAYMENTACT);
+    }
+
+
 
 
 }
