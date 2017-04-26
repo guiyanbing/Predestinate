@@ -51,11 +51,8 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     private void initData() {
         List<UP> userList = loginMgr.getUserList();
         showCurrentUser(userList);
-
         // 箭头显隐
-        if (userList.size() <= 0) {
-            this.iv_arrow.setVisibility(View.GONE);
-        }
+        if (userList.size() <= 0) this.iv_arrow.setVisibility(View.GONE);
     }
 
     private void initView() {
@@ -81,9 +78,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_user_login_submit:
-                if (validInput()) {
-                    loginMgr.onLogin(this, chosenUID, chosenPwd);
-                }
+                if (validInput()) loginMgr.onLogin(this, chosenUID, chosenPwd);
                 break;
             case R.id.img_user_login_arrow:
                 if (lv_account.getVisibility() == View.GONE) {

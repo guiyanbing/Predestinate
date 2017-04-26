@@ -87,20 +87,6 @@ public class CenterMgr implements ModuleBase, PObserver {
      *
      * @param mobile
      * @param complete
-     * @param tag      301-小友密码重置, 302-小友手机认证
-     */
-    public void reqVerifyCode(String mobile, RequestComplete complete, int tag) {
-        HashMap<String, Object> postparam = new HashMap<>();
-        postparam.put("mobile", mobile);
-        postparam.put("tag", tag);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode, postparam, complete);
-    }
-
-    /**
-     * 请求手机验证码
-     *
-     * @param mobile
-     * @param complete
      */
     public void reqVerifyCodeEx(String mobile, RequestComplete complete) {
         HashMap<String, Object> getparam = new HashMap<>();
@@ -109,39 +95,7 @@ public class CenterMgr implements ModuleBase, PObserver {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null,getparam, RequestParam.CacheType.CT_Cache_Url,true, complete);
     }
 
-    /**
-     * 找回密码
-     *
-     * @param mobile   手机号
-     * @param password 新密码
-     * @param code     验证码
-     * @param complete
-     */
-    public void resetPassword(String mobile, String password, String code, RequestComplete complete) {
-        HashMap<String, Object> postparam = new HashMap<>();
-        postparam.put("phone", mobile);
-        postparam.put("password", password);
-        postparam.put("code", code);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.resetPassword, postparam, complete);
-    }
 
-    /**
-     * 手机认证
-     *
-     * @param uid
-     * @param mobile   手机号
-     * @param password 新密码
-     * @param code     验证码
-     * @param complete
-     */
-    public void mobileAuth(long uid, String mobile, String password, String code, RequestComplete complete) {
-        HashMap<String, Object> postparam = new HashMap<>();
-        postparam.put("uid", uid);
-        postparam.put("mobile", mobile);
-        postparam.put("pwd", password);
-        postparam.put("code", code);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.mobileAuth, postparam, complete);
-    }
     /**
      * 手机认证
      *

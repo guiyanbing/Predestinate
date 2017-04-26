@@ -10,6 +10,7 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.module.logic.config.ServerTime;
+import com.juxin.predestinate.module.logic.socket.v2.KeepAliveSocket;
 import com.juxin.predestinate.module.util.TimerUtil;
 
 import org.json.JSONException;
@@ -28,7 +29,19 @@ import io.reactivex.functions.Consumer;
  *
  * @author ZRP
  */
-public class AutoConnectMgr implements SocketCallback {
+public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener {
+    /**
+     * 连接服务器失败
+     */
+    private final int DISCONNECT_TYPE_CONNECT_FAILED_TO_SEVER = 1;
+    /**
+     * 发送数据超时
+     */
+    private final int DISCONNECT_TYPE_SEND_PACKET_TIMEOUT = 2;
+    /**
+     * 服务器主动断开连接
+     */
+    private final int DISCONNECT_TYPE_SEVER_DISCONNECTED = 3;
 
     private static class SingletonHolder {
         static AutoConnectMgr instance = new AutoConnectMgr();
@@ -39,14 +52,19 @@ public class AutoConnectMgr implements SocketCallback {
     }
 
     /**
-     * SimpleSocket封装了连接服务器、接收、发送数据等功能。
+     * KeepAliveSocket封装了连接服务器、接收、发送数据等功能。
      */
-    private SimpleSocket simpleSocket = null;
+    private KeepAliveSocket socket = null;
     private Gson gson = new Gson();
 
     private ICSCallback iCSCallback = null;
     private long uid = 0;//用户ID
     private String token;//用户token
+
+    private AutoConnectMgr(){
+        socket = new KeepAliveSocket(TCPConstant.HOST, TCPConstant.PORT);
+        socket.setSocketStateListener(this);
+    }
 
     /**
      * 设置回调，和App进行交互。
@@ -94,11 +112,7 @@ public class AutoConnectMgr implements SocketCallback {
         heartbeatSend = 0;
         heartbeatResend = 0;
 
-        if (simpleSocket != null) {
-            SimpleSocket temp = simpleSocket;
-            simpleSocket = null;
-            temp.disconnect();
-        }
+        socket.shutDown(false);
         this.token = null;
     }
 
@@ -121,10 +135,7 @@ public class AutoConnectMgr implements SocketCallback {
      * 以获取到的地址和秘钥登录及时通讯服务器
      */
     private void connect() {
-        simpleSocket = new SimpleSocket();
-        simpleSocket.setRemoteAddress(TCPConstant.HOST, TCPConstant.PORT);
-        simpleSocket.setCallback(this);
-        simpleSocket.connect();
+        socket.connect();
         PLogger.d("connect: ------>socket开始连接，hostIP：" + TCPConstant.HOST + ":" + TCPConstant.PORT);
     }
 
@@ -153,7 +164,7 @@ public class AutoConnectMgr implements SocketCallback {
                 heartbeatResend + "，packet loss：" + (heartbeatSend - heartbeatResend));
         if (!heartBeating) return;
 
-        if (simpleSocket == null) {
+        if (socket == null) {
             heartBeating = false;
             loopHeartbeatStatus();
         } else {
@@ -167,7 +178,7 @@ public class AutoConnectMgr implements SocketCallback {
                 onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "心跳回送失败，socket重新进行连接");
                 connect();
             } else {
-                simpleSocket.send(getRevertHeartbeat().getBytes());
+                socket.sendPacket(getRevertHeartbeat());
             }
         }
     }
@@ -208,13 +219,6 @@ public class AutoConnectMgr implements SocketCallback {
         return getHeartbeat(TCPConstant.MSG_ID_Heartbeat_Reply);
     }
 
-    @Override
-    public void onConnected(SimpleSocket id) {
-        if (id != simpleSocket) return;
-        simpleSocket.send(getLoginData().getBytes());
-        onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
-    }
-
     /**
      * 获取登录信息
      *
@@ -233,21 +237,154 @@ public class AutoConnectMgr implements SocketCallback {
         return data;
     }
 
+
+    /**
+     * @param msgType 消息类型：从消息头中获取
+     * @param msgId   消息id：从消息头中获取
+     * @return 回送消息体结构
+     */
+    private NetData getLoopbackData(int msgType, long msgId) {
+        Map<String, Object> loopbackMap = new HashMap<>();
+        loopbackMap.put("status", 0);
+        loopbackMap.put("mid", msgId);
+        return new NetData(uid, msgType, gson.toJson(loopbackMap));
+    }
+
+    /**
+     * 应用退出登录
+     *
+     * @param reason 退出原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
+     */
+    private void accountInvalid(int reason) {
+        try {
+            if (iCSCallback != null) iCSCallback.accountInvalid(reason);
+        } catch (RemoteException e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    /**
+     * 回送心跳状态变更
+     */
+    private void loopHeartbeatStatus() {
+        try {
+            if (iCSCallback != null) iCSCallback.heartbeatStatus(heartBeating);
+        } catch (RemoteException e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    public void onDisconnect(int type) {
+        //打印日志
+        String disconnectType = "";
+        switch (type) {
+            case DISCONNECT_TYPE_CONNECT_FAILED_TO_SEVER:
+                disconnectType = "连接服务器失败";
+                break;
+            case DISCONNECT_TYPE_SEND_PACKET_TIMEOUT:
+                disconnectType = "发送数据超时";
+                break;
+            case DISCONNECT_TYPE_SEVER_DISCONNECTED:
+                disconnectType = "服务器主动关闭";
+                break;
+        }
+        PLogger.d("socket断开连接：" + disconnectType);
+
+        //暂停心跳，开始断线重连
+        heartBeating = false;
+        loopHeartbeatStatus();
+        heartbeatSend = 0;
+        heartbeatResend = 0;
+
+        onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "socket断开服务器连接");
+        reConnect();
+    }
+
+    /**
+     * 将即时通讯中收到消息通过ICSCallback抛出。
+     */
+    private void onMessage(NetData data,long msgId) {
+        PLogger.d("onMessage:---->msgId:" + msgId + ",sender:" + data.getUid() + ",content:" + data.getContent());
+        try {
+            if (iCSCallback != null) {
+                iCSCallback.onMessage(data);
+            }
+        } catch (DeadObjectException de) {//如果服务挂了，就缓存当前消息，并重启ChatService
+//            CoreService.startChatService(App.context);
+            PLogger.d("---AutoConnectMgr--->DeadObjectException");
+        } catch (RemoteException e) {
+            PLogger.d("---AutoConnectMgr--->RemoteException");
+        }
+    }
+
+    /**
+     * 将即时通讯中的状态变化发送到App中。
+     *
+     * @param type 类型。
+     * @param msg  消息内容。
+     */
+    private void onStatusChange(final int type, final String msg) {
+        PLogger.d(msg);
+
+        try {
+            if (iCSCallback != null) {
+                iCSCallback.onStatusChange(type, msg);
+            }
+        } catch (DeadObjectException de) {//如果服务挂了，就重启聊天service
+//            CoreService.startChatService(App.context);
+            PLogger.d("---AutoConnectMgr--->DeadObjectException");
+        } catch (RemoteException e) {
+            PLogger.d("---AutoConnectMgr--->RemoteException");
+        }
+    }
+
     @Override
-    public void onReceive(SimpleSocket id, PSocketHeader header, byte[] buffer, int length) {
-        if (id != simpleSocket) return;
-        if (header == null || buffer == null || length < 0) return;
+    public void onSocketConnected() {
+        socket.sendPacket(getLoginData());
+        onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
+    }
 
-        String content = "";
-        if (length > 0) content = new String(buffer, 0, length);
-        PLogger.d("---socket消息头：" + header.toString() + "\n---socket消息体：" + content);
+    @Override
+    public void onSocketConnecting() {
 
-        if (header.type == TCPConstant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
+    }
+
+    @Override
+    public void onSocketConnectError() {
+        onDisconnect(DISCONNECT_TYPE_CONNECT_FAILED_TO_SEVER);
+    }
+
+    @Override
+    public void onSendPacketError(KeepAliveSocket.SocketState state, NetData failedData) {
+        PLogger.d("onSendPacketError:---->SocketState:" + state.name() + ",sender:" + failedData.getUid() + ",content:" + failedData.getContent());
+        try {
+            if (iCSCallback != null) {
+                iCSCallback.onSendMsgError(failedData);
+            }
+        } catch (DeadObjectException de) {//如果服务挂了，就缓存当前消息，并重启ChatService
+//            CoreService.startChatService(App.context);
+            PLogger.d("---AutoConnectMgr--->DeadObjectException");
+        } catch (RemoteException e) {
+            PLogger.d("---AutoConnectMgr--->RemoteException");
+        }
+    }
+
+    @Override
+    public void onSocketDisconnectByError() {
+        onDisconnect(DISCONNECT_TYPE_SEND_PACKET_TIMEOUT);
+    }
+
+    @Override
+    public void onReceivePacket(NetData data) {
+        String content = data.getContent();
+        PLogger.d("---socket消息头：" + data.getHeaderString() + "\n---socket消息体：" + content);
+
+        if (data.getMsgType() == TCPConstant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
             accountInvalid(1);
             return;
         }
 
-        if (header.type == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
+        if (data.getMsgType() == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
             heartbeatResend++;
         }
 
@@ -299,122 +436,18 @@ public class AutoConnectMgr implements SocketCallback {
                 long sender = contentObject.optLong("fid", -1);//发送者id
 
                 //消息接收反馈
-                simpleSocket.send(getLoopbackData(header.type, msgId).getBytes());
+                socket.sendPacket(getLoopbackData(data.getMsgType(), msgId));
 
                 //抛出消息
-                onMessage(msgId, false, "", sender, content);
+                onMessage(data,msgId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    /**
-     * @param msgType 消息类型：从消息头中获取
-     * @param msgId   消息id：从消息头中获取
-     * @return 回送消息体结构
-     */
-    private NetData getLoopbackData(int msgType, long msgId) {
-        Map<String, Object> loopbackMap = new HashMap<>();
-        loopbackMap.put("status", 0);
-        loopbackMap.put("mid", msgId);
-        return new NetData(uid, msgType, gson.toJson(loopbackMap));
-    }
-
-    /**
-     * 应用退出登录
-     *
-     * @param reason 退出原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
-     */
-    private void accountInvalid(int reason) {
-        try {
-            if (iCSCallback != null) iCSCallback.accountInvalid(reason);
-        } catch (RemoteException e) {
-            PLogger.printThrowable(e);
-        }
-    }
-
-    /**
-     * 回送心跳状态变更
-     */
-    private void loopHeartbeatStatus() {
-        try {
-            if (iCSCallback != null) iCSCallback.heartbeatStatus(heartBeating);
-        } catch (RemoteException e) {
-            PLogger.printThrowable(e);
-        }
-    }
-
     @Override
-    public void onDisconnect(SimpleSocket id, int type) {
-        if (id != simpleSocket) return;
+    public void onSocketDisconnectNormally() {
 
-        //打印日志
-        String disconnectType = "";
-        switch (type) {
-            case 1:
-                disconnectType = "连接服务器失败";
-                break;
-            case 2:
-                disconnectType = "发送数据超时";
-                break;
-            case 3:
-                disconnectType = "服务器主动关闭";
-                break;
-        }
-        PLogger.d("socket断开连接：" + disconnectType);
-
-        //暂停心跳，开始断线重连
-        heartBeating = false;
-        loopHeartbeatStatus();
-        heartbeatSend = 0;
-        heartbeatResend = 0;
-
-        onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "socket断开服务器连接");
-        reConnect();
-    }
-
-    /**
-     * 将即时通讯中收到消息通过ICSCallback抛出。
-     *
-     * @param msgId    消息Id。
-     * @param group    是否群聊消息。
-     * @param groupId  群聊Id。
-     * @param sender   消息发送者的uid。
-     * @param contents 消息内容，一个json格式的String。
-     */
-    private void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents) {
-        PLogger.d("onMessage:---->msgId:" + msgId + ",sender:" + sender + ",content:" + contents);
-        try {
-            if (iCSCallback != null) {
-                iCSCallback.onMessage(msgId, group, groupId, sender, contents);
-            }
-        } catch (DeadObjectException de) {//如果服务挂了，就缓存当前消息，并重启ChatService
-//            CoreService.startChatService(App.context);
-            PLogger.d("---AutoConnectMgr--->DeadObjectException");
-        } catch (RemoteException e) {
-            PLogger.d("---AutoConnectMgr--->RemoteException");
-        }
-    }
-
-    /**
-     * 将即时通讯中的状态变化发送到App中。
-     *
-     * @param type 类型。
-     * @param msg  消息内容。
-     */
-    private void onStatusChange(final int type, final String msg) {
-        PLogger.d(msg);
-
-        try {
-            if (iCSCallback != null) {
-                iCSCallback.onStatusChange(type, msg);
-            }
-        } catch (DeadObjectException de) {//如果服务挂了，就重启聊天service
-//            CoreService.startChatService(App.context);
-            PLogger.d("---AutoConnectMgr--->DeadObjectException");
-        } catch (RemoteException e) {
-            PLogger.d("---AutoConnectMgr--->RemoteException");
-        }
     }
 }

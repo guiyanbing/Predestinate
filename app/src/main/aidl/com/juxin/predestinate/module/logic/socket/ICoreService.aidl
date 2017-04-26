@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.logic.socket;
 
 // Declare any non-default types here with import statements
 import com.juxin.predestinate.module.logic.socket.ICSCallback;
+import com.juxin.predestinate.module.logic.socket.NetData;
 
 interface ICoreService {
 
@@ -30,4 +31,8 @@ interface ICoreService {
     * 设置系统类型。操作系统
     */
     void setSystemInfo(int systemInfo);
+    /**
+    * 发送消息
+    */
+    void sendMsg(in NetData data);
 }

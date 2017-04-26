@@ -17,7 +17,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.start.LoginAct;
+import com.juxin.predestinate.ui.start.UserLoginExtAct;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -293,8 +293,13 @@ public class IMProxy {
 
     private class CSCallback extends ICSCallback.Stub {
         @Override
-        public void onMessage(long msgId, boolean group, String groupId, long sender, String contents) throws RemoteException {
-            IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
+        public void onMessage(NetData data) throws RemoteException {
+            //IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
+        }
+
+        @Override
+        public void onSendMsgError(NetData data) throws RemoteException {
+
         }
 
         @Override
@@ -388,11 +393,11 @@ public class IMProxy {
 
                         @Override
                         public void onSubmit() {
-                            UIShow.showActivityClearTask(context, LoginAct.class);
+                            UIShow.showActivityClearTask(context, UserLoginExtAct.class);
                         }
                     }, tip, "提示", "", "确定", false, false);
                 } catch (Exception e) {
-                    UIShow.showActivityClearTask(context, LoginAct.class);
+                    UIShow.showActivityClearTask(context, UserLoginExtAct.class);
                 }
             }
         });

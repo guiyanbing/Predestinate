@@ -8,12 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
-import com.juxin.library.utils.JniUtil;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -21,14 +18,7 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.config.UrlParam;
-import com.juxin.predestinate.module.logic.request.HTCallBack;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.module.util.UIShow;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * 注册页面
@@ -55,7 +45,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p2_user_reg_info_act);
-        setBackView("用户注册");
+        setBackView(getResources().getString(R.string.title_reg));
         initView();
         initData();
         initEvent();
@@ -81,14 +71,6 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
         rg_gender.setOnCheckedChangeListener(this);
     }
 
-    private HTCallBack htCallBack;
-
-    private void cancel() {
-        if (htCallBack != null) {
-            htCallBack.cancel();
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -103,29 +85,9 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                 }, InfoConfig.getInstance().getAgeN().getShow(), "18岁", "年龄");
                 break;
             case R.id.btn_reg_info_submit:
-
                 if (validInput()) {
-                    htCallBack = ModuleMgr.getLoginMgr().onRegister(urlParam, nickname, age, gender, new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            try {
-                               String jsonResult = new String(JniUtil.GetDecryptString(response.getResponseString()));
-                                JSONObject jsonObject = new JSONObject(jsonResult);
-                                MMLog.d("yao","jsonObject="+jsonObject);
-                                if ("success".equals(jsonObject.optString("respCode"))) {
-                                    JSONObject accountObject = jsonObject.optJSONObject("user_account");
-                                    ModuleMgr.getLoginMgr().putAllLoginInfo(Long.parseLong(accountObject.optString("username")), accountObject.optString("password") + "", false);
-                                    UIShow.showUserInfoCompleteAct(UserRegInfoAct.this);
-
-                                } else {
-                                    PToast.showShort("注册失败");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            LoadingDialog.closeLoadingDialog(300);
-                        }
-                    });
+                    LoadingDialog.show(this,getResources().getString(R.string.loading_reg));
+                    ModuleMgr.getLoginMgr().onRegister(this,urlParam, nickname, age, gender);
                 }
                 break;
         }

@@ -16,7 +16,8 @@ public class HttpResponse extends BaseData {
 
     private UrlParam urlParam;                  //请求信息
     private String responseString = "";         //原始返回串
-    private String status = null;               //返回状态，ok表示成功返回数据。
+    private String respCode = null;               //返回状态，success表示成功返回数据。
+    private String result = null;               //返回状态，success表示成功返回数据。
     private BaseData baseData = null;           //返回的数据对象
     private String msg = null;                  //返回的提示消息
     private boolean cache = false;              //当前数据是否来自于缓存
@@ -34,7 +35,8 @@ public class HttpResponse extends BaseData {
     }
 
     public void setOk() {
-        this.status = "ok";
+        this.respCode = "success";
+        this.result = "success";
     }
 
     /**
@@ -43,12 +45,13 @@ public class HttpResponse extends BaseData {
      * @return 网络请求结果
      */
     public boolean isOk() {
-        if (TextUtils.isEmpty(status)) return false;
-        return "ok".equals(status);
+        if (TextUtils.isEmpty(respCode) && TextUtils.isEmpty(result)) return false;
+        return "success".equals(respCode) || "success".equals(result);
     }
 
     public void setError() {
-        this.status = "error";
+        this.respCode = "error";
+        this.result = "error";
     }
 
     public String getResponseString() {
@@ -64,14 +67,6 @@ public class HttpResponse extends BaseData {
      */
     public JSONObject getResponseJson() {
         return JsonUtil.getJsonObject(responseString);
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public BaseData getBaseData() {
@@ -103,7 +98,8 @@ public class HttpResponse extends BaseData {
         responseString = TextUtils.isEmpty(jsonStr) ? "{}" : jsonStr;
         JSONObject json = getJsonObject(responseString);
 
-        status = json.optString("status");
+        respCode = json.optString("respCode");
+        result = json.optString("result");
         msg = json.optString("msg");
         //------请求返回的数据体处理------
         baseData = null;
@@ -112,7 +108,7 @@ public class HttpResponse extends BaseData {
             baseData = urlParam.getBaseData();
         }
         if (baseData != null) {
-            baseData.parseJson(json.optString("res"));
+            baseData.parseJson(json.toString());
         }
     }
 }
