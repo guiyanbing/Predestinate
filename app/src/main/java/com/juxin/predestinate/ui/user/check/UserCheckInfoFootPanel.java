@@ -68,7 +68,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         mFlowLayout.setSelectEffect(false);
         if (labels != null) labels.clear();
 
-        labels.addAll(userDetail.getImpressions());
+        //labels.addAll(userDetail.getImpressions());
         mFlowLayout.setAdapter(new TagAdapter<String>(labels) {
             @Override
             public View getView(com.juxin.predestinate.module.logic.baseui.flow.FlowLayout parent, int position, String s) {

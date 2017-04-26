@@ -87,7 +87,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 //        this.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         txvLeft.setText("<");
         txvRight.setText(">");
-        txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getMoney()+"");
+        //txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getMoney()+"");
         mGiftAdapter.setOnItemClickListener(new BaseRecyclerViewHolder.OnItemClickListener() {
             @Override
             public void onItemClick(View convertView, int position) {

@@ -44,7 +44,7 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
      */
     public void refreshView(UserDetail userDetail) {
         if (userDetail == null) return;
-        wallet.setText(String.valueOf(userDetail.getMoney()));
+        //wallet.setText(String.valueOf(userDetail.getMoney()));
     }
 
     private final NoDoubleClickListener clickListener = new NoDoubleClickListener() {
@@ -55,7 +55,7 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
                     break;
                 case R.id.ll_wallet://跳转到钱包
                     //手机绑定
-                    UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getMobileAuthStatus()==3);
+                    //UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getMobileAuthStatus()==3);
                     break;
             }
         }

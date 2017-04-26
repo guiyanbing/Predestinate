@@ -54,7 +54,7 @@ public class UserOtherLabelAct extends BaseActivity implements View.OnClickListe
     private void initLabels() {
         mFlowLayout.removeAllViews();
         if (labels != null) labels.clear();
-        labels.addAll(ModuleMgr.getCenterMgr().getMyInfo().getImpressions());
+        //labels.addAll(ModuleMgr.getCenterMgr().getMyInfo().getImpressions());
     }
 
     @Override
