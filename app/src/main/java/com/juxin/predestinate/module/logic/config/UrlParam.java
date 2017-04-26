@@ -28,6 +28,7 @@ public enum UrlParam {
     reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
+    checkup("public/checkup", null, true),//检查更新
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
@@ -46,7 +47,7 @@ public enum UrlParam {
     //============================== 用户资料相关接口 =============================
 
     reqSetInfo("i/uinfo/SecSetInfo", true),                  // 用户设置更新
-    reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),    // 获取个人资料
+    reqMyInfo("user/detail", UserDetail.class, true),    // 获取个人资料
     reqOtherInfo("s/uinfo/ODetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("s/uinfo/UpdateUserData"),                  // 修改用户个人信息
 

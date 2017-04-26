@@ -12,14 +12,15 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.StringUtils;
-import com.juxin.predestinate.R;
 import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -28,14 +29,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.module.util.CommonUtil;
+import com.juxin.predestinate.ui.user.edit.EditKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 个人中心管理类
@@ -92,7 +93,7 @@ public class CenterMgr implements ModuleBase, PObserver {
         HashMap<String, Object> getparam = new HashMap<>();
         getparam.put("cellPhone", mobile);
         getparam.put("type", "1");
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null,getparam, RequestParam.CacheType.CT_Cache_Url,true, complete);
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null, getparam, RequestParam.CacheType.CT_Cache_Url, true, complete);
     }
 
 
@@ -103,11 +104,11 @@ public class CenterMgr implements ModuleBase, PObserver {
      * @param code     验证码
      * @param complete
      */
-    public void mobileAuthEx(String mobile,  String code, RequestComplete complete) {
+    public void mobileAuthEx(String mobile, String code, RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("cellPhone", mobile);
         getParams.put("verifyCode", code);
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.mobileAuth, null,getParams, RequestParam.CacheType.CT_Cache_No,true, complete);
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.mobileAuth, null, getParams, RequestParam.CacheType.CT_Cache_No, true, complete);
     }
 
     /**
@@ -122,6 +123,21 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("contract", contract);
         postparam.put("views", views);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.feedBack, postparam, complete);
+    }
+    /**
+     * 检查更新
+     * @param complete
+     */
+    public void checkVersion(RequestComplete complete) {
+        HashMap<String, Object> getParams = new HashMap<>();
+        getParams.put("c_uid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道ID
+        getParams.put("c_sid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道
+        getParams.put("platform", "android");// android =1
+//        getParams.put("type", "5");
+        getParams.put("v", ModuleMgr.getAppMgr().getVerCode());
+        getParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
+        getParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkup, getParams, complete);
     }
 
     /**
@@ -182,23 +198,18 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取自己的个人资料
      */
     public void reqMyInfo() {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("ver", Constant.SUB_VERSION);
+
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    userDetail = (UserDetail) response.getBaseData();
-
-                    if (!response.isCache()) {
-                        MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
-                    }
-
-                    // 持久化必须放在这里，不能放在UserDetail解析里
-                    try {
-                        JSONObject json = new JSONObject(response.getResponseString());
-                        setMyInfo(json.optString("res"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                String responseStr = response.getResponseString();
+                if (userDetail == null) userDetail = new UserDetail();
+                userDetail.parseJson(responseStr);
+                setMyInfo(responseStr);         // 保存到SP
+                if (!response.isCache()) {
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
                 }
             }
         });
@@ -219,8 +230,8 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 批量获取用户简略信息
      */
     public void reqUserSimpleList(final long[] uidList, RequestComplete complete) {
-        HashMap<String,Object> post_param= new HashMap<>();
-        post_param.put("uidlist",uidList);
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("uidlist", uidList);
         ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqUserSimpleList, post_param, complete);
     }
 

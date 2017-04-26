@@ -36,6 +36,7 @@ import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
+import com.juxin.predestinate.ui.setting.Setting_Act;
 import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
@@ -258,7 +259,7 @@ public class UIShow {
      * 打开设置页
      */
     public static void showUserSetAct(final Activity context, final int resultCode) {
-        context.startActivityForResult(new Intent(context, UsersSetAct.class), resultCode);
+        context.startActivityForResult(new Intent(context, Setting_Act.class), resultCode);
     }
 
     /**
