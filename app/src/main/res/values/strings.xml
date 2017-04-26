@@ -45,11 +45,27 @@
     <string name="ext_phone_hit">请输入手机号码</string>
     <string name="ext_verifycode_hit">请输入短信中的验证码</string>
     <string name="bt_verify">立即验证</string>
-
     <string name="toast_server_busy">系统忙，请稍候再试。</string>
     <string name="toast_phone_verified">您的帐号已与手机绑定，不能再绑定。</string>
     <string name="toast_phone_used">该手机已经被验证过了，请输入其他的手机号。</string>
     <string name="toast_code_error">验证码错误。</string>
+
+    <!--设置-->
+    <string name="txt_set_account">当前账号：input_field@163.com</string>
+    <string name="txt_newmsg_remind">新消息提醒</string>
+    <string name="txt_shock_remind">震动提醒</string>
+    <string name="txt_voice_remind">声音提醒</string>
+    <string name="txt_offline_remind">退出消息提醒</string>
+    <string name="txt_modify_pwd">修改密码</string>
+    <string name="txt_feedback">意见反馈</string>
+    <string name="txt_version_check">检查更新</string>
+    <string name="txt_app_recommend">应用推荐</string>
+    <string name="txt_activity_about">活动相关</string>
+    <string name="txt_app_about">关于</string>
+    <string name="txt_clear_cache">清除缓存</string>
+    <string name="bt_exit">退出</string>
+    <string name="toast_clearcache_ok">缓存清除成功</string>
+    <string name="toast_clearcache_error">缓存清除失败</string>
 
     <!--注册-->
     <string name="button_reg">立即注册</string>
@@ -212,7 +228,7 @@
     <!--activity标题-->
     <string name="title_right_submit">提交</string>
     <string name="title_right_filter">筛选</string>
-    <string name="title_loginact">登录</string>
+    <string name="title_loginact">用户登录</string>
     <string name="title_reg">用户注册</string>
     <string name="title_findpwdact">找回密码</string>
     <string name="title_recommend_filter">筛选</string>
@@ -220,6 +236,7 @@
     <string name="title_phone_certification">手机认证</string>
     <string name="title_feedback">意见反馈</string>
     <string name="title_reginfo_complete">完善资料</string>
+    <string name="title_set">设置</string>
 
 
     <!-- xList 后期可能删掉，不要用-->

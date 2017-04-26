@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title" />
+
+    <ScrollView
+        style="@style/NoMultipoint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/setting_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="10dip"
+                android:paddingTop="10dip"
+                android:text="@string/txt_set_account"
+                android:textColor="@color/gray_text"
+                android:textSize="13sp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/setting_message"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="@string/txt_newmsg_remind" />
+
+                    <ToggleButton
+                        android:id="@+id/setting_message_iv"
+                        style="@style/set_togglebtn" />
+                </LinearLayout>
+
+                <ImageView style="@style/set_line" />
+
+                <LinearLayout
+                    android:id="@+id/setting_vibration"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="@string/txt_shock_remind" />
+
+                    <ToggleButton
+                        android:id="@+id/setting_vibration_iv"
+                        style="@style/set_togglebtn" />
+                </LinearLayout>
+
+                <ImageView style="@style/set_line" />
+
+                <LinearLayout
+                    android:id="@+id/setting_voice"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="@string/txt_voice_remind" />
+
+                    <ToggleButton
+                        android:id="@+id/setting_voice_iv"
+                        style="@style/set_togglebtn"/>
+                </LinearLayout>
+
+                <ImageView style="@style/set_line" />
+
+                <LinearLayout
+                    android:id="@+id/setting_quit_message"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="@string/txt_offline_remind" />
+
+                    <ToggleButton
+                        android:id="@+id/setting_quit_message_iv"
+                        style="@style/set_togglebtn"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px36_dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/setting_modifypwd"
+                    style="@style/set_txt_item"
+                    android:text="@string/txt_modify_pwd" />
+
+                <ImageView style="@style/set_line" />
+
+                <TextView
+                    android:id="@+id/setting_feedback"
+                    style="@style/set_txt_item"
+                    android:text="@string/txt_feedback" />
+
+                <ImageView style="@style/set_line" />
+
+                <TextView
+                    android:id="@+id/setting_update"
+                    style="@style/set_txt_item"
+                    android:text="@string/txt_version_check" />
+
+                <ImageView style="@style/set_line" />
+
+                <TextView
+                    android:id="@+id/setting_recommend"
+                    style="@style/set_item"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/txt_app_recommend"
+                    android:textColor="@color/gray_text"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    style="@style/set_line"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/setting_action"
+                    style="@style/set_txt_item"
+                    android:text="@string/txt_activity_about" />
+
+
+                <ImageView style="@style/set_line" />
+
+                <TextView
+                    android:id="@+id/setting_about"
+                    style="@style/set_txt_item"
+                    android:text="@string/txt_app_about" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px36_dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/setting_clear_cache"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="@string/txt_clear_cache" />
+
+                    <TextView
+                        android:id="@+id/setting_clear_cache_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="38.5K"
+                        android:textColor="@color/deep_gray_text" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/setting_logoff"
+                style="@style/button_big"
+                android:layout_marginBottom="@dimen/px30_dp"
+                android:layout_marginLeft="@dimen/px60_dp"
+                android:layout_marginRight="@dimen/px60_dp"
+                android:layout_marginTop="15dip"
+                android:text="@string/bt_exit" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -43,7 +43,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_login_act);
-        setBackView("用户登录");
+        setBackView(getResources().getString(R.string.title_loginact));
         initView();
         initData();
     }

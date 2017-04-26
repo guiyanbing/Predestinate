@@ -28,6 +28,7 @@ public enum UrlParam {
     reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
+    checkup("public/checkup", null, true),//检查更新
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
