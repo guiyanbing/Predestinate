@@ -625,4 +625,49 @@
     <style name="divider_line_reg" parent="divider_line">
         <item name="android:background">@color/color_494949</item>
     </style>
+
+    <style name="set_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingBottom">@dimen/px33_dp</item>
+        <item name="android:paddingLeft">@dimen/px60_dp</item>
+        <item name="android:paddingRight">@dimen/px60_dp</item>
+        <item name="android:paddingTop">@dimen/px30_dp</item>
+        <item name="android:background">@drawable/f1_filter_tab_selector</item>
+    </style>
+
+    <style name="set_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/px3_dp</item>
+        <item name="android:layout_marginLeft">@dimen/px60_dp</item>
+        <item name="android:background">@drawable/f1_setting_line</item>
+    </style>
+    <style name="set_desc">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textSize">@dimen/px42_sp</item>
+        <item name="android:background">@null</item>
+    </style>
+    <style name="set_txt_item" parent="set_item">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/gray_text</item>
+        <item name="android:textSize">@dimen/px42_sp</item>
+    </style>
+    <style name="set_togglebtn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">@drawable/f1_setting_ok</item>
+        <item name="android:checked">true</item>
+        <item name="android:textOff"></item>
+        <item name="android:textOn"></item>
+    </style>
+
+
 </resources>

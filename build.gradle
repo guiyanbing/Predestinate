@@ -32,13 +32,18 @@ tasks.withType(JavaCompile) {
 //==================读取配置文件====================
 
 ext {
-    versions = [compileSDK : 24,
-                buildTools : "25.0.1",
-                minSDK     : 15,
-                targetSDK  : 19,
-                libRxJava  : "2.0.1",
-                libRetrofit: "2.1.0",
-                libOkhttp  : "3.7.0"]
+    versions = [compileSDK  : 25,
+                buildTools  : "25.0.2",
+                minSDK      : 15,
+                targetSDK   : 19,
+                supportLib  : "25.3.1",
+                libGlide    : "3.7.0",
+                libRxJava   : "2.0.9",
+                libRxAndroid: "2.0.1",
+                libRetrofit : "2.2.0",
+                libOkhttp   : "3.7.0",
+                libXLog     : "1.3.0",
+                libAnimator : "1.0.5"]
 
     cApplicationId = "com.xiaochen.android.fate_it"
     cConfigTxt = 'configs.txt'
