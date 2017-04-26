@@ -137,12 +137,13 @@ public static java.lang.String TABLENAME;
 # If you do not use Rx:
 -dontwarn rx.**
 # ==============GreenDao end================
+
 # ==============支付================
 #银联
 -dontwarn com.unionpay.**
 -dontnote com.unionpay.**
--dontwarn  cn.gov.pbc.tsm.**
--dontwarn  com.UCMobile..**
+-dontwarn cn.gov.pbc.tsm.**
+-dontwarn com.UCMobile..**
 
 -keep class com.unionpay.** { *;}
 -keep class cn.gov.pbc.tsm.** { *;}
@@ -161,8 +162,6 @@ public static java.lang.String TABLENAME;
 
 -dontnote com.ta.**
 -keep class com.ta.** {*;}
-
--keep class com.ut.** {*;}
 -keep class com.ut.** {*;}
 
 -keep class com.alipay.android.app.IAlixPay{*;}
