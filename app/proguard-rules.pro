@@ -137,3 +137,50 @@ public static java.lang.String TABLENAME;
 # If you do not use Rx:
 -dontwarn rx.**
 # ==============GreenDao end================
+# ==============支付================
+#银联
+-dontwarn com.unionpay.**
+-dontnote com.unionpay.**
+-dontwarn  cn.gov.pbc.tsm.**
+-dontwarn  com.UCMobile..**
+
+-keep class com.unionpay.** { *;}
+-keep class cn.gov.pbc.tsm.** { *;}
+-keep class com.UCMobile.** { *;}
+#微信
+#-libraryjars libs/libammsdk.jar
+-dontwarn com.tencent.**
+-keep class com.tencent.** { *; }
+-keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage { *;}
+-keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
+
+#支付宝
+-dontwarn com.alipay.**
+-dontnote com.alipay.**
+-keep class com.alipay.**  { *;}
+
+-dontnote com.ta.**
+-keep class com.ta.** {*;}
+
+-keep class com.ut.** {*;}
+-keep class com.ut.** {*;}
+
+-keep class com.alipay.android.app.IAlixPay{*;}
+-keep class com.alipay.android.app.IAlixPay$Stub{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
+-keep class com.alipay.sdk.app.PayTask{ public *;}
+-keep class com.alipay.sdk.app.AuthTask{ public *;}
+
+-keep class com.upay.billing.** { *; }
+-dontwarn com.upay.billing.**
+
+-dontwarn com.switfpass.pay.**
+-dontnote com.switfpass.pay.**
+-keep class com.switfpass.pay.** { *; }
+
+-dontwarn eposp.wtf_library.**
+-dontnote eposp.wtf_library.**
+-keep class eposp.wtf_library.** { *; }
+
+# ==============支付 end================
