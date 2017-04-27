@@ -94,6 +94,14 @@ public enum UrlParam {
 
     reqAlipay(Constant.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
 
+    reqPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/card", null, true),  //手机卡
+
+    reqSearchPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/checkSZPay", null, true),  //手机卡查询
+
+    reqangelPayF(Constant.FATE_IT_PROTOCOL, "user/angelPayF", null, true),   // 充值记录页面 银联语音 查询之前是否支付过
+
+
+
     // 最后一个，占位
     LastUrlParam("");
 

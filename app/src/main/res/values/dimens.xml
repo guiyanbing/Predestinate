@@ -6,6 +6,7 @@
     <!-- =================新版通用尺寸hdpi，dp================= -->
     <dimen name="px1_dp">0.3dp</dimen>
     <dimen name="px2_dp">0.7dp</dimen>
+    <dimen name="px2.3_dp">0.8dp</dimen>
     <dimen name="px3_dp">1.0dp</dimen>
     <dimen name="px4_dp">1.3dp</dimen>
     <dimen name="px5_dp">1.7dp</dimen>

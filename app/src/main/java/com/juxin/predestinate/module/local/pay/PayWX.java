@@ -1,14 +1,18 @@
 package com.juxin.predestinate.module.local.pay;
 
+import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
+
+import java.io.Serializable;
 
 /**
  * Created by Kind on 2017/4/25.
  */
 
-public class PayWX extends BaseData {
+public class PayWX extends BaseData implements Serializable{
 
     private boolean isOK = false;//是否正常
 
@@ -44,6 +48,9 @@ public class PayWX extends BaseData {
     }
 
     public PayWX(String jsonStr, int cup) {
+        if(TextUtils.isEmpty(jsonStr)){
+            return;
+        }
         JSONObject jsonObject = getJsonObject(jsonStr);
         String result = jsonObject.optString("result");
         if ("1".equals(result)) {
@@ -56,6 +63,9 @@ public class PayWX extends BaseData {
     }
     //微信
     public PayWX(String jsonStr) {
+        if(TextUtils.isEmpty(jsonStr)){
+            return;
+        }
         JSONObject jsonObject = getJsonObject(jsonStr);
         if (!jsonObject.isNull("payType")) {
             this.setOK(true);
@@ -76,6 +86,37 @@ public class PayWX extends BaseData {
                     break;
             }
         }
+    }
+
+    /**
+     * 手机卡
+     * @param jsonStr
+     */
+    public void onPayPhoneCard(String jsonStr) {
+        JSONObject jsonObject = getJsonObject(jsonStr);
+        this.setResult(jsonObject.optString("result"));
+        this.setPayContent(jsonObject.optString("content"));
+    }
+
+    public void onPayAngelPayF(String jsonStr) {
+        if(TextUtils.isEmpty(jsonStr)){
+            return;
+        }
+        JSONObject jsonObject = getJsonObject(jsonStr);
+
+        String result = jsonObject.optString("result");
+        if ("1".equals(result)) {
+            this.setOK(true);
+            this.setResult(result);
+            JSONObject object = jsonObject.optJSONObject("data");
+            this.setRealName(object.optString("realName"));
+            this.setMobile(object.optString("mobile"));
+            this.setPan(object.optString("pan"));
+            this.setIdcard(object.optString("idcard"));
+        } else {
+            this.setContent(jsonObject.optString("content"));
+        }
+
     }
 
     public boolean isOK() {

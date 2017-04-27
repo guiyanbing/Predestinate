@@ -437,7 +437,15 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWX, postParms, complete);
     }
 
-
+    /**
+     * 银联或支付宝
+     * @param urlParam
+     * @param out_trade_no
+     * @param name
+     * @param payID
+     * @param payMoney
+     * @param complete
+     */
     public void reqCUPOrAlipayMethod(UrlParam urlParam, String out_trade_no, String name, int payID, int payMoney, RequestComplete complete) {
         HashMap<String, Object> postParms = new HashMap<>();
         postParms.put("out_trade_no", out_trade_no);// 订单号
@@ -448,5 +456,41 @@ public class CommonMgr implements ModuleBase {
         postParms.put("payCType", 1000);
 
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParms, complete);
+    }
+
+    /**
+     * 手机充值卡
+     * @param payID
+     * @param orderNo
+     * @param payMoney
+     * @param cardMoney
+     * @param cardType
+     * @param sn
+     * @param password
+     * @param complete
+     */
+    public void reqPhoneCardMethod(int payID, String orderNo, int payMoney, int cardMoney,
+                                   int cardType, String sn, String password, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("productid", payID);
+        postParms.put("orderNo", orderNo);// 订单ID
+        postParms.put("payMoney", payMoney);// 支付金额
+        postParms.put("cardMoney", cardMoney);// 卡面额
+        postParms.put("cardType", cardType);// 运营商类1是联通，2是电信，0移动
+        postParms.put("sn", sn);// 充值卡号
+        postParms.put("password", password);// 充值卡密码
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqPhoneCard, postParms, complete);
+    }
+
+    public void reqSearchPhoneCardMethod(String orderNo,  RequestComplete complete) {
+        HashMap<String, Object> getParams = new HashMap<>();
+        getParams.put("orderNo", orderNo);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSearchPhoneCard, getParams, complete);
+    }
+
+    public void reqangelPayF(RequestComplete complete) {
+        HashMap<String, Object> getParams = new HashMap<>();
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayF, getParams, complete);
     }
 }

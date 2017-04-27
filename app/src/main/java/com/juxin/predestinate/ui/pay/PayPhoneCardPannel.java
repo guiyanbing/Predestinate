@@ -5,13 +5,13 @@ import android.view.View;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * Created by Kind on 2017/4/19.
  */
 
 public class PayPhoneCardPannel extends BasePayPannel {
-
 
     public PayPhoneCardPannel(FragmentActivity activity, PayGood payGood) {
         super(activity, payGood);
@@ -24,5 +24,6 @@ public class PayPhoneCardPannel extends BasePayPannel {
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        UIShow.showPayPhoneCardAct(getActivity(), getPayGood(), getOutTradeNo());
     }
 }

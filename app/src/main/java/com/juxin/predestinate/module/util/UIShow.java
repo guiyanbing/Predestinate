@@ -17,6 +17,7 @@ import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -32,6 +33,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
+import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
+import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -518,6 +521,23 @@ public class UIShow {
         });
 
     }
+
+    public static void showPayPhoneCardAct(final FragmentActivity activity, PayGood payGood, String orderID) {
+        Intent intent = new Intent(activity, PayPhoneCardAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("orderID", orderID);
+        activity.startActivityForResult(intent, Constant.PAYMENTACT);
+    }
+
+    public static void showPayVoiceAct(final FragmentActivity activity, PayGood payGood, PayWX payWX) {
+        Intent intent = new Intent(activity, PayVoiceAct.class);
+        intent.putExtra("payGood", payGood);
+        if(payWX != null){
+            intent.putExtra("payWX", payWX);
+        }
+        activity.startActivityForResult(intent, Constant.PAYMENTACT);
+    }
+
 
 
 }
