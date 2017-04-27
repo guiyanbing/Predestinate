@@ -71,7 +71,7 @@
             android:name=".ui.setting.UsersSetAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.setting.Setting_Act"
+            android:name=".ui.setting.SettingAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.AboutAct"

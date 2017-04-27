@@ -42,9 +42,8 @@ import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.AboutAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
-import com.juxin.predestinate.ui.setting.Setting_Act;
+import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
-import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
@@ -267,7 +266,7 @@ public class UIShow {
      * 打开设置页
      */
     public static void showUserSetAct(final Activity context, final int resultCode) {
-        context.startActivityForResult(new Intent(context, Setting_Act.class), resultCode);
+        context.startActivityForResult(new Intent(context, SettingAct.class), resultCode);
     }
     /**
      * 打开关于页面
