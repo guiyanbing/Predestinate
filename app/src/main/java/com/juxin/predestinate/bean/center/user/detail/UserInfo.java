@@ -33,7 +33,6 @@ public class UserInfo extends UserBasic {
     // -------2017-1-5红包来了添加字段 -------
     private String shareCode;       //邀请码
     private long invite_uid;        //邀请人ID,0表示无邀请人
-    private UserRobbed userRobbed;  //抢夺信息
 
     @Override
     public void parseJson(String s) {
@@ -64,10 +63,6 @@ public class UserInfo extends UserBasic {
         this.setYcoin(detailObject.optInt("ycoin"));
         this.setShareCode(detailObject.optString("shareCode"));
         this.setInvite_uid(detailObject.optLong("invite_uid"));
-
-        UserRobbed userRobbed = new UserRobbed();
-        userRobbed.parseJson(detailObject.optString("rob"));
-        this.setUserRobbed(userRobbed);
     }
 
     public boolean isSayHello() {
@@ -260,13 +255,5 @@ public class UserInfo extends UserBasic {
 
     public void setInvite_uid(long invite_uid) {
         this.invite_uid = invite_uid;
-    }
-
-    public UserRobbed getUserRobbed() {
-        return userRobbed;
-    }
-
-    public void setUserRobbed(UserRobbed userRobbed) {
-        this.userRobbed = userRobbed;
     }
 }

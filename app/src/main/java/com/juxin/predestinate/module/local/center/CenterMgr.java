@@ -226,12 +226,7 @@ public class CenterMgr implements ModuleBase, PObserver {
         getParams.put("uid", uid);
         getParams.put("ver", Constant.SUB_VERSION);
 
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                Log.d("reqOtherInfo", response.getResponseString());
-            }
-        });
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
     }
 
     /**
