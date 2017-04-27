@@ -59,7 +59,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
         user_alias.setText(userProfile.getNickname());
         user_gender.setText(userProfile.getGender() == 1 ? "男，" : "女，");
         user_age.setText(userProfile.getAge() + "，");
-        user_addr.setText(userProfile.getAddress());
+        //user_addr.setText(userProfile.getAddress());
         user_id.setText("ID:" + userProfile.getUid());
     }
 }

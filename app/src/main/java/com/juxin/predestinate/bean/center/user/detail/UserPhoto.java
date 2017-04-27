@@ -1,9 +1,9 @@
-package com.juxin.predestinate.ui.utils;
+package com.juxin.predestinate.bean.center.user.detail;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 
@@ -11,20 +11,18 @@ import org.json.JSONObject;
  * 用户相册
  */
 public class UserPhoto extends BaseData implements Parcelable {
-    private long albumid;        //相册id
+    private long albumid;       //相册id
     private String pic;         //图片地址
     private int status;         //图片状态
-
-    public UserPhoto(int status) {
-        this.status = status;
-    }
+    private String thumb;
 
     @Override
     public void parseJson(String s) {
-        JSONObject jsonObject = getJsonObject(s);
-        this.setAlbumid(jsonObject.optLong("id"));
-        this.setPic(jsonObject.optString("url"));
-        this.setStatus(jsonObject.optInt("status"));
+        JSONObject photoObject = getJsonObject(s);
+        this.setAlbumid(photoObject.optInt("albumid"));
+        this.setPic(photoObject.optString("pic"));
+        this.setThumb(photoObject.optString("thumb"));
+        this.setStatus(photoObject.optInt("status"));
     }
 
     public long getAlbumid() {
@@ -51,6 +49,14 @@ public class UserPhoto extends BaseData implements Parcelable {
         this.status = status;
     }
 
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -61,15 +67,14 @@ public class UserPhoto extends BaseData implements Parcelable {
         dest.writeLong(this.albumid);
         dest.writeString(this.pic);
         dest.writeInt(this.status);
-    }
-
-    public UserPhoto() {
+        dest.writeString(this.thumb);
     }
 
     protected UserPhoto(Parcel in) {
         this.albumid = in.readLong();
         this.pic = in.readString();
         this.status = in.readInt();
+        this.thumb = in.readString();
     }
 
     public static final Creator<UserPhoto> CREATOR = new Creator<UserPhoto>() {
@@ -83,13 +88,4 @@ public class UserPhoto extends BaseData implements Parcelable {
             return new UserPhoto[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "UserPhoto{" +
-                "albumid=" + albumid +
-                ", pic='" + pic + '\'' +
-                ", status=" + status +
-                '}';
-    }
 }

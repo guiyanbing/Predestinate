@@ -143,6 +143,11 @@
     <color name="gray_text">#666</color>
     <color name="main_bottom_text_color_sel">@color/theme_color_red</color>
     <color name="color_494949">#494949</color>
+    <color name="vip_top_sel_color">#fa98b1</color>
+    <color name="userinfo_list_name">#575757</color>
+    <color name="userinfo_back_pink_color">#fd9bb2</color>
+    <!-- 女粉色 -->
+    <color name="picker_pink_color">#fd6c8e</color>
 
     <!-- filter -->
     <color name="filter_tab_color_sel">#ebecec</color>

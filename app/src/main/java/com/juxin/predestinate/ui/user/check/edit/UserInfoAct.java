@@ -75,8 +75,8 @@ public class UserInfoAct extends BaseActivity implements PObserver, ImgSelectUti
         ImageLoader.loadRoundCorners(this, userDetail.getAvatar(), 10, img_header);
         tv_name.setText(userDetail.getNickname());
         tv_age.setText(userDetail.getAge() + "岁");
-        tv_home.setText(userDetail.getAddress());
-        tv_sign.setText(userDetail.getSignName());
+        //tv_home.setText(userDetail.getAddress());
+        //tv_sign.setText(userDetail.getSignName());
     }
 
     private void refreshView() {
@@ -88,8 +88,8 @@ public class UserInfoAct extends BaseActivity implements PObserver, ImgSelectUti
             return;
         }
         tv_name.setText(userDetail.getNickname());
-        tv_home.setText(userDetail.getAddress());
-        tv_sign.setText(userDetail.getSignName());
+        //tv_home.setText(userDetail.getAddress());
+        //tv_sign.setText(userDetail.getSignName());
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
@@ -122,7 +122,7 @@ public class UserInfoAct extends BaseActivity implements PObserver, ImgSelectUti
                     break;
 
                 case R.id.sign_view:// 个性签名
-                    UIShow.showUserEditSignAct(UserInfoAct.this, userDetail.getSignName());
+                    //UIShow.showUserEditSignAct(UserInfoAct.this, userDetail.getSignName());
                     break;
             }
         }

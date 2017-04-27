@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.application;
 
 import android.content.Context;
+import android.os.Process;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -19,6 +20,7 @@ import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
+import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
 import com.juxin.predestinate.module.logic.notify.NotifyMgr;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
 import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
@@ -54,7 +56,28 @@ public final class ModuleMgr {
      * 按等级初始化逻辑模块
      */
     public static void initModule(Context context) {
-        initStatic(context);
+        PLogger.init(BuildConfig.DEBUG);//初始化日志打印，每个进程都初始化一次
+
+        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
+        String packageName = ModuleMgr.getAppMgr().getPackageName();
+        PLogger.d("---processName--->" + processName);
+        if (processName.equals(packageName)) {//主进程
+            preInit(context);
+
+            LockScreenMgr.getInstance().registerReceiver();//注册锁屏弹窗
+            getLoginMgr().initCookie();
+        }
+    }
+
+    /**
+     * 预加载，在进程初始化的时候加载一次
+     */
+    private static void preInit(Context context) {
+        PToast.init(context);                       //初始化toast提示
+        PSP.getInstance().init(context);            //初始化sharedPreferences存储
+        MsgMgr.getInstance().initUiThread();        //初始化主线程消息监听
+        RequestHelper.getInstance().init(context);  //初始化网络请求
+
         initTBSX5(context);
 
         getAppMgr();
@@ -68,14 +91,6 @@ public final class ModuleMgr {
         getChatMgr();
         getNotifyMgr();
         getTipsBarMgr();
-    }
-
-    private static void initStatic(Context context) {
-        PLogger.init(BuildConfig.DEBUG);    //初始化日志打印
-        PToast.init(context);               //初始化toast提示
-        PSP.getInstance().init(context);    //初始化sharedPreferences存储
-        MsgMgr.getInstance().initUiThread();//初始化主线程消息监听
-        RequestHelper.getInstance().init(context);    //初始化网络请求
     }
 
     /**
@@ -267,7 +282,6 @@ public final class ModuleMgr {
         }
         return phizMgr;
     }
-
 
 
 }

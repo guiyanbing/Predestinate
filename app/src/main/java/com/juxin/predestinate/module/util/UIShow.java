@@ -17,6 +17,7 @@ import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -32,6 +33,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
+import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
+import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -182,6 +185,7 @@ public class UIShow {
         Intent intent = new Intent(activity, UserRegInfoAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开资料完善页
      */
@@ -195,7 +199,7 @@ public class UIShow {
      * 手机绑定
      *
      * @param activity
-     * @param isVerify  是否绑定手机
+     * @param isVerify 是否绑定手机
      */
     public static void showPhoneVerify_Act(Context activity, boolean isVerify) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
@@ -407,8 +411,9 @@ public class UIShow {
      *
      * @param activity  FragmentActivity上下文
      * @param appUpdate 软件升级信息
+     * @param isShowTip 是否展示界面提示
      */
-    public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate) {
+    public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
         // 如果不同包名且已安装升级包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
         if (!TextUtils.isEmpty(appUpdate.getPackage_name())
@@ -434,7 +439,7 @@ public class UIShow {
             updateDialog.setData(appUpdate);
             updateDialog.showDialog(activity);
         } else {
-//            PToast.showShort("您当前的版本为最新的");//TODO 判断activity是设置页面的instance之后弹出提示
+            if (isShowTip) PToast.showShort("您当前的版本为最新的");
         }
     }
 
@@ -507,6 +512,7 @@ public class UIShow {
 
     /**
      * 选择支付
+     *
      * @param activity
      */
     public static void showPayListAct(final FragmentActivity activity, int orderID) {
@@ -533,5 +539,19 @@ public class UIShow {
 
     }
 
+    public static void showPayPhoneCardAct(final FragmentActivity activity, PayGood payGood, String orderID) {
+        Intent intent = new Intent(activity, PayPhoneCardAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("orderID", orderID);
+        activity.startActivityForResult(intent, Constant.PAYMENTACT);
+    }
 
+    public static void showPayVoiceAct(final FragmentActivity activity, PayGood payGood, PayWX payWX) {
+        Intent intent = new Intent(activity, PayVoiceAct.class);
+        intent.putExtra("payGood", payGood);
+        if (payWX != null) {
+            intent.putExtra("payWX", payWX);
+        }
+        activity.startActivityForResult(intent, Constant.PAYMENTACT);
+    }
 }

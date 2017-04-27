@@ -112,7 +112,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         heartbeatSend = 0;
         heartbeatResend = 0;
 
-        socket.shutDown(false);
+        socket.disconnect(false);
         this.token = null;
     }
 

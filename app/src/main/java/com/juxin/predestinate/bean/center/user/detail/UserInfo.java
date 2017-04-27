@@ -1,164 +1,164 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
-import android.os.Parcel;
-
 import org.json.JSONObject;
 
 /**
  * 用户基本信息
  */
 public class UserInfo extends UserBasic {
-    private long regTime;       // 注册时间
-    private String signName;    // 备注签名
-    private int signName_status;// 签名审核状态
+    private boolean isSayHello;     // 是否打过招呼 true是打过
+    private String aboutme;         // 内心独白
+    private String complete;        // 资料完整度(%)
+    private int hits;               // 点击数
+    private String c_uid;           // -1机器人
+    private boolean isOnline;       // 在线数
+    private int distance;           // 距离
+    private boolean isFollowed;     // 是否关注
+    private String qqNum;           // QQ号码
+    private int qqNumAuth;          // 1为公开，2为保密
+    private String phone;           // 手机号码
+    private int phoneAuth;          // 1为公开，2为保密
+    private boolean isVip;          // 是否开通VIP
+    private String wechatNum;       //微信号码
+    private int wechatAuth;         // 1为公开, 2为保密
+    private boolean isVerifyCellphone; // 是否绑定了手机
+    private boolean isMonthMail;    // 是否开通包月发信
+    private String reasons;         // 上传头像审核未通过的原因
+    private int photoNum;           // 相册的数目
+    private long regTime;           // 注册时间
+    private boolean isBindRose;     // 是否绑定了红娘
+    private int ycoin = 0;          // Y币
 
-    // 未确定共有字段
-    private int gem;
-    private int status;
 
-    // 自己
-    private String activities;  // 最新动态照片或视频
-    private boolean isVip;      // 是否是VIP
-    private long vipEnd;        // VIP到期时间
-    private String mobile;      // 手机
-    private int money;          // 资产
-    private int bankAuthStatus; // 银行卡认证 0未提交， 1 待审核中，2-失败， 3 通过
-    private int mobileAuthStatus;// 手机认证  0未提交， 3-通过
-    private int videoAuthStatus; // 视频认证   0未提交， 1 待审核中，2-失败， 3 通过
-    private int idcard_auth_status;//身份证认证 0未提交， 1 待审核中，2-失败， 3 通过
-    private int channel_sid;
-    private int channel_uid;
-    private int real_status;
-
-    // 他人
-    private int kf_id;
+    // -------2017-1-5红包来了添加字段 -------
+    private String shareCode;       //邀请码
+    private long invite_uid;        //邀请人ID,0表示无邀请人
 
     @Override
     public void parseJson(String s) {
-        JSONObject jsonObject = getJsonObject(s);
+        super.parseJson(s);
+        JSONObject detailObject = getJsonObject(s);
 
-        this.setActivities(jsonObject.optString("activities"));
-
-        if (!jsonObject.isNull("detail")) {
-            String json = jsonObject.optString("detail");
-            super.parseJson(json);
-            JSONObject detailObject = this.getJsonObject(json);
-
-            // B
-            this.setBankAuthStatus(detailObject.optInt("bank_auth_status"));
-
-            // C
-            this.setChannel_sid(detailObject.optInt("channel_sid"));
-            this.setChannel_uid(detailObject.optInt("channel_uid"));
-
-            // G
-            this.setGem(detailObject.optInt("gem"));
-
-            // I
-            this.setVip(detailObject.optBoolean("is_vip"));
-            this.setVipEnd(detailObject.optLong("vip_end"));
-            this.setIdcard_auth_status(detailObject.optInt("idcard_auth_status"));
-
-            // K
-            this.setKf_id(detailObject.optInt("kf_id"));
-
-            // M
-            this.setMobile(detailObject.optString("mobile"));
-            this.setMobileAuthStatus(detailObject.optInt("mobile_auth_status"));
-            this.setMoney(detailObject.optInt("money"));
-
-            // R
-            this.setRegTime(detailObject.optLong("reg_time"));
-            this.setReal_status(detailObject.optInt("real_status"));
-
-            // S
-            this.setSignName(detailObject.optString("signname"));
-            this.setSignName_status(detailObject.optInt("signname_status"));
-            this.setStatus(detailObject.optInt("status"));
-
-            // V
-            this.setVideoAuthStatus(detailObject.optInt("video_auth_status"));
-        }
+        this.setSayHello(detailObject.optBoolean("isSayHello"));
+        this.setAboutme(detailObject.isNull("aboutme") ? null : detailObject.optString("aboutme"));
+        this.setComplete(detailObject.optString("complete"));
+        this.setHits(detailObject.optInt("hits"));
+        this.setC_uid(detailObject.optString("c_uid"));
+        this.setOnline(detailObject.optBoolean("is_online"));
+        this.setDistance(detailObject.optInt("distance"));
+        this.setFollowed(detailObject.optBoolean("is_followed"));
+        this.setQqNum(detailObject.optString("qq"));
+        this.setQqNumAuth(detailObject.optInt("qq_auth"));
+        this.setPhone(detailObject.optString("mobile"));
+        this.setPhoneAuth(detailObject.optInt("mobile_auth"));
+        this.setVip(detailObject.optBoolean("is_month_mail"));
+        this.setWechatNum(detailObject.optString("wechat"));
+        this.setWechatAuth(detailObject.optInt("wechat_auth"));
+        this.setVerifyCellphone(detailObject.optBoolean("is_verify_cellphone"));
+        this.setMonthMail(detailObject.optBoolean("is_month_mail"));
+        this.setReasons(detailObject.isNull("reasons") ? null : detailObject.optString("reasons"));
+        this.setPhotoNum(detailObject.optInt("photoNum"));
+        this.setRegTime(detailObject.optLong("reg_time"));
+        this.setBindRose(detailObject.optBoolean("is_bind_roes"));
+        this.setYcoin(detailObject.optInt("ycoin"));
+        this.setShareCode(detailObject.optString("shareCode"));
+        this.setInvite_uid(detailObject.optLong("invite_uid"));
     }
 
-    public int getVideoAuthStatus() {
-        return videoAuthStatus;
+    public boolean isSayHello() {
+        return isSayHello;
     }
 
-    public void setVideoAuthStatus(int videoAuthStatus) {
-        this.videoAuthStatus = videoAuthStatus;
+    public void setSayHello(boolean sayHello) {
+        isSayHello = sayHello;
     }
 
-    public int getMobileAuthStatus() {
-        return mobileAuthStatus;
+    public String getAboutme() {
+        return aboutme;
     }
 
-    public void setMobileAuthStatus(int mobileAuthStatus) {
-        this.mobileAuthStatus = mobileAuthStatus;
+    public void setAboutme(String aboutme) {
+        this.aboutme = aboutme;
     }
 
-    public int getBankAuthStatus() {
-        return bankAuthStatus;
+    public String getComplete() {
+        return complete;
     }
 
-    public void setBankAuthStatus(int bankAuthStatus) {
-        this.bankAuthStatus = bankAuthStatus;
+    public void setComplete(String complete) {
+        this.complete = complete;
     }
 
-    public int getIdcard_auth_status() {
-        return idcard_auth_status;
+    public int getHits() {
+        return hits;
     }
 
-    public void setIdcard_auth_status(int idcard_auth_status) {
-        this.idcard_auth_status = idcard_auth_status;
+    public void setHits(int hits) {
+        this.hits = hits;
     }
 
-    public String getActivities() {
-        return activities;
+    public String getC_uid() {
+        return c_uid;
     }
 
-    public void setActivities(String activities) {
-        this.activities = activities;
+    public void setC_uid(String c_uid) {
+        this.c_uid = c_uid;
     }
 
-    public long getRegTime() {
-        return regTime;
+    public boolean isOnline() {
+        return isOnline;
     }
 
-    public void setRegTime(long regTime) {
-        this.regTime = regTime;
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
-    public String getSignName() {
-        return signName;
+    public int getDistance() {
+        return distance;
     }
 
-    public void setSignName(String signName) {
-        this.signName = signName;
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 
-    public int getSignName_status() {
-        return signName_status;
+    public boolean isFollowed() {
+        return isFollowed;
     }
 
-    public void setSignName_status(int signName_status) {
-        this.signName_status = signName_status;
+    public void setFollowed(boolean followed) {
+        isFollowed = followed;
     }
 
-    public int getGem() {
-        return gem;
+    public String getQqNum() {
+        return qqNum;
     }
 
-    public void setGem(int gem) {
-        this.gem = gem;
+    public void setQqNum(String qqNum) {
+        this.qqNum = qqNum;
     }
 
-    public int getStatus() {
-        return status;
+    public int getQqNumAuth() {
+        return qqNumAuth;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setQqNumAuth(int qqNumAuth) {
+        this.qqNumAuth = qqNumAuth;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getPhoneAuth() {
+        return phoneAuth;
+    }
+
+    public void setPhoneAuth(int phoneAuth) {
+        this.phoneAuth = phoneAuth;
     }
 
     public boolean isVip() {
@@ -169,125 +169,91 @@ public class UserInfo extends UserBasic {
         isVip = vip;
     }
 
-    public long getVipEnd() {
-        return vipEnd;
+    public String getWechatNum() {
+        return wechatNum;
     }
 
-    public void setVipEnd(long vipEnd) {
-        this.vipEnd = vipEnd;
+    public void setWechatNum(String wechatNum) {
+        this.wechatNum = wechatNum;
     }
 
-    public String getMobile() {
-        return mobile;
+    public int getWechatAuth() {
+        return wechatAuth;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setWechatAuth(int wechatAuth) {
+        this.wechatAuth = wechatAuth;
     }
 
-    public int getMoney() {
-        return money;
+    public boolean isVerifyCellphone() {
+        return isVerifyCellphone;
     }
 
-    public void setMoney(int money) {
-        this.money = money;
+    public void setVerifyCellphone(boolean verifyCellphone) {
+        isVerifyCellphone = verifyCellphone;
     }
 
-    public int getChannel_sid() {
-        return channel_sid;
+    public boolean isMonthMail() {
+        return isMonthMail;
     }
 
-    public void setChannel_sid(int channel_sid) {
-        this.channel_sid = channel_sid;
+    public void setMonthMail(boolean monthMail) {
+        isMonthMail = monthMail;
     }
 
-    public int getChannel_uid() {
-        return channel_uid;
+    public String getReasons() {
+        return reasons;
     }
 
-    public void setChannel_uid(int channel_uid) {
-        this.channel_uid = channel_uid;
+    public void setReasons(String reasons) {
+        this.reasons = reasons;
     }
 
-    public int getReal_status() {
-        return real_status;
+    public int getPhotoNum() {
+        return photoNum;
     }
 
-    public void setReal_status(int real_status) {
-        this.real_status = real_status;
+    public void setPhotoNum(int photoNum) {
+        this.photoNum = photoNum;
     }
 
-    public int getKf_id() {
-        return kf_id;
+    public long getRegTime() {
+        return regTime;
     }
 
-    public void setKf_id(int kf_id) {
-        this.kf_id = kf_id;
+    public void setRegTime(long regTime) {
+        this.regTime = regTime;
     }
 
-
-    public UserInfo() {
+    public boolean isBindRose() {
+        return isBindRose;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setBindRose(boolean bindRose) {
+        isBindRose = bindRose;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeLong(this.regTime);
-        dest.writeString(this.signName);
-        dest.writeInt(this.signName_status);
-        dest.writeInt(this.gem);
-        dest.writeInt(this.status);
-        dest.writeString(this.activities);
-        dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.vipEnd);
-        dest.writeString(this.mobile);
-        dest.writeInt(this.money);
-        dest.writeInt(this.bankAuthStatus);
-        dest.writeInt(this.mobileAuthStatus);
-        dest.writeInt(this.videoAuthStatus);
-        dest.writeInt(this.idcard_auth_status);
-        dest.writeInt(this.channel_sid);
-        dest.writeInt(this.channel_uid);
-        dest.writeInt(this.real_status);
-        dest.writeInt(this.kf_id);
+    public int getYcoin() {
+        return ycoin;
     }
 
-    protected UserInfo(Parcel in) {
-        super(in);
-        this.regTime = in.readLong();
-        this.signName = in.readString();
-        this.signName_status = in.readInt();
-        this.gem = in.readInt();
-        this.status = in.readInt();
-        this.activities = in.readString();
-        this.isVip = in.readByte() != 0;
-        this.vipEnd = in.readLong();
-        this.mobile = in.readString();
-        this.money = in.readInt();
-        this.bankAuthStatus = in.readInt();
-        this.mobileAuthStatus = in.readInt();
-        this.videoAuthStatus = in.readInt();
-        this.idcard_auth_status = in.readInt();
-        this.channel_sid = in.readInt();
-        this.channel_uid = in.readInt();
-        this.real_status = in.readInt();
-        this.kf_id = in.readInt();
+    public void setYcoin(int ycoin) {
+        this.ycoin = ycoin;
     }
 
-    public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
-        @Override
-        public UserInfo createFromParcel(Parcel source) {
-            return new UserInfo(source);
-        }
+    public String getShareCode() {
+        return shareCode;
+    }
 
-        @Override
-        public UserInfo[] newArray(int size) {
-            return new UserInfo[size];
-        }
-    };
+    public void setShareCode(String shareCode) {
+        this.shareCode = shareCode;
+    }
+
+    public long getInvite_uid() {
+        return invite_uid;
+    }
+
+    public void setInvite_uid(long invite_uid) {
+        this.invite_uid = invite_uid;
+    }
 }

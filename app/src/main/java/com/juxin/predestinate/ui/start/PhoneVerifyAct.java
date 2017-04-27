@@ -204,8 +204,8 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 PToast.showLong(getResources().getString(R.string.toast_code_error));
             } else {
                 PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
-                ModuleMgr.getCenterMgr().getMyInfo().setMobileAuthStatus(3);
-                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
+//                ModuleMgr.getCenterMgr().getMyInfo().setMobileAuthStatus(3);
+//                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
                 isok = true;
                 this.setResult(102);
                 llyfirst.setVisibility(View.GONE);

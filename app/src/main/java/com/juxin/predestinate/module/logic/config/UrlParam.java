@@ -28,7 +28,6 @@ public enum UrlParam {
     reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
-    checkup("public/checkup", null, true),//检查更新
     modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
@@ -36,9 +35,9 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //检查软件升级
-    checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
+    checkUpdate("public/checkup", null, true),
     //检查服务器静态配置
-    staticConfig(Constant.FATE_IT_HTTP, "public/getASet", null, false),
+    staticConfig("public/getASet", null, false),
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
@@ -47,10 +46,10 @@ public enum UrlParam {
 
     //============================== 用户资料相关接口 =============================
 
-    reqSetInfo("i/uinfo/SecSetInfo", true),                  // 用户设置更新
-    reqMyInfo("s/uinfo/UDetail", UserDetail.class, true),    // 获取个人资料
-    reqOtherInfo("s/uinfo/ODetail", UserDetail.class, true), // 获取他人资料
-    updateMyInfo("s/uinfo/UpdateUserData"),                  // 修改用户个人信息
+    reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
+    reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
+    reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
+    updateMyInfo("s/uinfo/UpdateUserData"),                   // 修改用户个人信息
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
@@ -94,6 +93,13 @@ public enum UrlParam {
     reqUnionPay(Constant.FATE_IT_CUP_HTTP, "user/unionPay", null, true),  //银联支付
 
     reqAlipay(Constant.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
+
+    reqPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/card", null, true),  //手机卡
+
+    reqSearchPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/checkSZPay", null, true),  //手机卡查询
+
+    reqangelPayF(Constant.FATE_IT_PROTOCOL, "user/angelPayF", null, true),   // 充值记录页面 银联语音 查询之前是否支付过
+
 
     // 最后一个，占位
     LastUrlParam("");

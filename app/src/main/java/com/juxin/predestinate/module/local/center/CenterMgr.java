@@ -13,16 +13,15 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.StringUtils;
-import com.juxin.predestinate.R;
 import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -40,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 个人中心管理类
@@ -159,23 +159,6 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
-     * 检查更新
-     *
-     * @param complete
-     */
-    public void checkVersion(RequestComplete complete) {
-        HashMap<String, Object> getParams = new HashMap<>();
-        getParams.put("c_uid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道ID
-        getParams.put("c_sid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道
-        getParams.put("platform", "android");// android =1
-//        getParams.put("type", "5");
-        getParams.put("v", ModuleMgr.getAppMgr().getVerCode());
-        getParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
-        getParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkup, getParams, complete);
-    }
-
-    /**
      * 昵称：个人资料限制昵称最大字数
      * 过滤空格 禁止注册的时候 昵称带有空格
      *
@@ -233,23 +216,18 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取自己的个人资料
      */
     public void reqMyInfo() {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("ver", Constant.SUB_VERSION);
+
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    userDetail = (UserDetail) response.getBaseData();
-
-                    if (!response.isCache()) {
-                        MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
-                    }
-
-                    // 持久化必须放在这里，不能放在UserDetail解析里
-                    try {
-                        JSONObject json = new JSONObject(response.getResponseString());
-                        setMyInfo(json.optString("res"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                String responseStr = response.getResponseString();
+                if (userDetail == null) userDetail = new UserDetail();
+                userDetail.parseJson(responseStr);
+                setMyInfo(responseStr);         // 保存到SP
+                if (!response.isCache()) {
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
                 }
             }
         });
@@ -259,11 +237,11 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取他人用户详细信息
      */
     public void reqOtherInfo(final long uid, RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOtherInfo, new HashMap<String, Object>() {
-            {
-                put("uid", uid);
-            }
-        }, complete);
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        getParams.put("ver", Constant.SUB_VERSION);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
     }
 
     /**

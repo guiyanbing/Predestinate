@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import com.alipay.sdk.app.PayTask;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.ui.pay.PayListAct;
 
@@ -57,8 +59,7 @@ public class PayAlipayUtils {
                         PayListAct.bPayOkFlag = true;
                         MMToast.showShort("支付成功");
                         //更新信息
-                      //  UpdateInfo updateInfo = new UpdateInfo(activity, UIHelper.PAYMENTACT);
-                    //    updateInfo.updateInfo();
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
                         // “8000”
