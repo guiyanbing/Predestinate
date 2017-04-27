@@ -10,18 +10,14 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
 
@@ -190,18 +186,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
             }
             case R.id.setting_update:// 软件更新
             {
-                LoadingDialog.show(Setting_Act.this, "检测中请等待...");
-                ModuleMgr.getCenterMgr().checkVersion(new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        if (!response.isOk()) {
-//                            UIShow.showUpdateDialog(Setting_Act.this, (AppUpdate) response.getBaseData());
-                        }else{
-                            PToast.showShort("您当前的版本为最新的");
-                        }
-
-                    }
-                });
+                ModuleMgr.getCommonMgr().checkUpdate(this, true);//检查应用升级
                 break;
             }
             case R.id.setting_recommend:// 积分墙

@@ -8,7 +8,6 @@ import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
-import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
 
 /**
  * Application
@@ -45,8 +44,6 @@ public class App extends MultiDexApplication {
 
         ModuleMgr.initModule(context);
 //        initAppComponent();
-        LockScreenMgr.getInstance().registerReceiver();//注册锁屏弹窗
-        ModuleMgr.getLoginMgr().initCookie();
     }
 
     /**

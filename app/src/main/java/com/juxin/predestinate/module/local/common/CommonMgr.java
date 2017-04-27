@@ -12,6 +12,7 @@ import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
@@ -135,22 +136,25 @@ public class CommonMgr implements ModuleBase {
     /**
      * 检查应用升级
      *
-     * @param activity FragmentActivity实例
+     * @param activity  FragmentActivity实例
+     * @param isShowTip 是否展示界面提示
      */
-    public void checkUpdate(final FragmentActivity activity) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("ssid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道号
-        postParams.put("suid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道号
-        postParams.put("platform", 1);// 平台 1-android， 2-ios
-        postParams.put("version", ModuleMgr.getAppMgr().getVerCode());// 版本号(整数)
-        postParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));// 软件签名sha1
-        postParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());// 包名
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.checkUpdate, postParams, new RequestComplete() {
+    public void checkUpdate(final FragmentActivity activity, final boolean isShowTip) {
+        if (isShowTip) LoadingDialog.show(activity, "检测中请等待...");
+        HashMap<String, Object> getParams = new HashMap<>();
+        getParams.put("c_uid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道ID
+        getParams.put("c_sid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道
+        getParams.put("platform", "android");
+        getParams.put("v", ModuleMgr.getAppMgr().getVerCode());
+        getParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
+        getParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkUpdate, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    UIShow.showUpdateDialog(activity, (AppUpdate) response.getBaseData());
-                }
+                if (isShowTip) LoadingDialog.closeLoadingDialog(300);
+                AppUpdate appUpdate = new AppUpdate();
+                appUpdate.parseJson(response.getResponseString());
+                UIShow.showUpdateDialog(activity, appUpdate, isShowTip);
             }
         });
     }
@@ -410,6 +414,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 生成订单
+     *
      * @param orderID
      * @param complete
      */
@@ -421,6 +426,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 微信支付方式
+     *
      * @param complete
      */
     public void reqWXMethod(String name, int payID, int payMoney, int payCType, RequestComplete complete) {
@@ -430,8 +436,8 @@ public class CommonMgr implements ModuleBase {
         postParms.put("productid", payID);
         postParms.put("total_fee", payMoney);
 
-      //  postParms.put("total_fee", "0.01");// 钱
-        if(payCType > -1){
+        //  postParms.put("total_fee", "0.01");// 钱
+        if (payCType > -1) {
             postParms.put("payCType", payCType);
         }
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWX, postParms, complete);
@@ -439,6 +445,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 银联或支付宝
+     *
      * @param urlParam
      * @param out_trade_no
      * @param name
@@ -450,7 +457,7 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> postParms = new HashMap<>();
         postParms.put("out_trade_no", out_trade_no);// 订单号
         postParms.put("subject", name);// 标题
-        postParms.put("body","android-" +  name);
+        postParms.put("body", "android-" + name);
         postParms.put("productid", payID);
         postParms.put("total_fee", payMoney);
         postParms.put("payCType", 1000);
@@ -460,6 +467,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 手机充值卡
+     *
      * @param payID
      * @param orderNo
      * @param payMoney
@@ -483,7 +491,7 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqPhoneCard, postParms, complete);
     }
 
-    public void reqSearchPhoneCardMethod(String orderNo,  RequestComplete complete) {
+    public void reqSearchPhoneCardMethod(String orderNo, RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("orderNo", orderNo);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSearchPhoneCard, getParams, complete);

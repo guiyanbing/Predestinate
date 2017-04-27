@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.center;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.juxin.library.log.PLogger;
@@ -13,7 +12,6 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
@@ -124,23 +122,6 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("contract", contract);
         postparam.put("views", views);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.feedBack, postparam, complete);
-    }
-
-    /**
-     * 检查更新
-     *
-     * @param complete
-     */
-    public void checkVersion(RequestComplete complete) {
-        HashMap<String, Object> getParams = new HashMap<>();
-        getParams.put("c_uid", ModuleMgr.getAppMgr().getMainChannelID());// 渠道ID
-        getParams.put("c_sid", ModuleMgr.getAppMgr().getSubChannelID());// 子渠道
-        getParams.put("platform", "android");// android =1
-//        getParams.put("type", "5");
-        getParams.put("v", ModuleMgr.getAppMgr().getVerCode());
-        getParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
-        getParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkup, getParams, complete);
     }
 
     /**
