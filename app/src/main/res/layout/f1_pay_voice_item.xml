@@ -18,7 +18,7 @@
         android:padding="12dip"
         android:text="农行"
         android:textSize="@dimen/px45_sp"
-        android:textColor="@color/homeUserSay" />
+        android:textColor="@drawable/f1_pay_cupvoice_item_button_size" />
 
     <TextView
         android:id="@+id/pay_voice_item_right"
@@ -31,6 +31,6 @@
         android:padding="12dip"
         android:text="中行"
         android:textSize="@dimen/px45_sp"
-        android:textColor="@color/homeUserSay" />
+        android:textColor="@drawable/f1_pay_cupvoice_item_button_size" />
 
 </LinearLayout>

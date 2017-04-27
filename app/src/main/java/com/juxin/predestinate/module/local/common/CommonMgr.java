@@ -501,4 +501,40 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> getParams = new HashMap<>();
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayF, getParams, complete);
     }
+
+    public void reqAngelPay(String name, int payID, int total_fee, String pan, String mobile, String idcard, String nickname, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("subject", name);//标题
+        postParms.put("body", name);//
+        postParms.put("productid", payID);// 订单ID
+        postParms.put("total_fee", total_fee);// 钱
+        postParms.put("pan", pan);//卡号
+        postParms.put("mobile", mobile);//电话
+        postParms.put("idcard", idcard);// 身份证
+        postParms.put("realname", nickname);//名称
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPay, postParms, complete);
+    }
+
+    public void reqAngelPayB(String name, int payID, int total_fee, String mobile, String nickname, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("subject", name);//标题
+        postParms.put("body", name);//
+        postParms.put("productid", payID);// 订单ID
+        postParms.put("total_fee", total_fee);// 钱
+        postParms.put("mobile", mobile);//电话
+        postParms.put("realname", nickname);//名称
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayB, postParms, complete);
+    }
+
+    public void reqAnglePayQuery(RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqAnglePayQuery, getParms, complete);
+    }
+
+
+
+
+
 }

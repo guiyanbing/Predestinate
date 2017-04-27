@@ -100,6 +100,12 @@ public enum UrlParam {
 
     reqangelPayF(Constant.FATE_IT_PROTOCOL, "user/angelPayF", null, true),   // 充值记录页面 银联语音 查询之前是否支付过
 
+    reqangelPay(Constant.FATE_IT_PROTOCOL, "user/angelPay", null, true),   //充值记录页面 银联语音 没有绑定用户接口
+
+    reqangelPayB(Constant.FATE_IT_PROTOCOL, "user/angelPayB", null, true),   //充值记录页面 银联语音 绑定用接口
+
+    reqAnglePayQuery(Constant.FATE_IT_PROTOCOL, "user/anglePayQuery", null, true),   //充值记录页面 查询
+
 
     // 最后一个，占位
     LastUrlParam("");

@@ -212,16 +212,22 @@ public class CenterMgr implements ModuleBase, PObserver {
         return userDetail;
     }
 
+    public void reqMyInfo() {
+        reqMyInfo(null);
+    }
     /**
      * 获取自己的个人资料
      */
-    public void reqMyInfo() {
+    public void reqMyInfo(final RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("ver", Constant.SUB_VERSION);
 
         ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                if(complete != null){
+                    complete.onRequestComplete(response);
+                }
                 String responseStr = response.getResponseString();
                 if (userDetail == null) userDetail = new UserDetail();
                 userDetail.parseJson(responseStr);

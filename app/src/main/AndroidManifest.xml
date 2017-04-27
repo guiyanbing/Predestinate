@@ -179,6 +179,15 @@
             android:configChanges="screenSize|keyboard|orientation"
             android:windowSoftInputMode="stateHidden" />
 
+        <activity
+            android:name=".ui.pay.cupvoice.PayCupVoiceDetailAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.pay.cupvoice.PayCupVoiceOkAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+
 
         <!-- ============= 相机相册模块start ============= -->
         <activity
