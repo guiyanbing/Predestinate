@@ -38,9 +38,7 @@ public class PayListAct extends BaseActivity {
             return;
         }
 
-
         LinearLayout pay_listView = (LinearLayout) findViewById(R.id.paytype_list);
-
         payAlipayPannel = new PayAlipayPannel(this, payGood);
         payWXPannel = new PayWXPannel(this, payGood);
         payVoicePannel = new PayVoicePannel(this, payGood);

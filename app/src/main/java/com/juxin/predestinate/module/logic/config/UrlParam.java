@@ -106,6 +106,8 @@ public enum UrlParam {
 
     reqAnglePayQuery(Constant.FATE_IT_PROTOCOL, "user/anglePayQuery", null, true),   //充值记录页面 查询
 
+    reqAliWapPay(Constant.FATE_IT_CUP_HTTP, "user/aliWapPay", null, true),   //支付宝wap充值
+
 
     // 最后一个，占位
     LastUrlParam("");
