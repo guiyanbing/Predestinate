@@ -142,7 +142,8 @@ public class DBCacheCenterFProfile {
             if (!b) {
                 return mDatabase.insert(FProfile.FPROFILE_TABLE, values);
             } else {
-                return mDatabase.update(FProfile.FPROFILE_TABLE, values, FProfile.COLUMN_USERID + " = ? ", lightweight.getSUid());
+//                return mDatabase.update(FProfile.FPROFILE_TABLE, values, FProfile.COLUMN_USERID + " = ? ", lightweight.getSUid());
+                return mDatabase.update(FProfile.FPROFILE_TABLE, values, FProfile.COLUMN_USERID + " = ? ", "");
             }
         } catch (Exception e) {
             e.printStackTrace();

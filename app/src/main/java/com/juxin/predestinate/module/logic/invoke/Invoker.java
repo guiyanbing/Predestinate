@@ -300,7 +300,7 @@ public class Invoker {
             responseObject.put("nickname", userInfo.getNickname());
             responseObject.put("gender", userInfo.getGender());
             responseObject.put("is_vip", userInfo.isVip());
-            responseObject.put("money", userInfo.getMoney());
+            //responseObject.put("money", userInfo.getMoney());
 
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
@@ -480,10 +480,10 @@ public class Invoker {
 
             UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
             Map<String, Object> responseObject = new HashMap<>();
-            responseObject.put("mobile_auth_status", userInfo.getMobileAuthStatus());
-            responseObject.put("idcard_auth_status", userInfo.getIdcard_auth_status());
-            responseObject.put("bank_auth_status", userInfo.getBankAuthStatus());
-            responseObject.put("video_auth_status", userInfo.getVideoAuthStatus());
+//            responseObject.put("mobile_auth_status", userInfo.getMobileAuthStatus());
+//            responseObject.put("idcard_auth_status", userInfo.getIdcard_auth_status());
+//            responseObject.put("bank_auth_status", userInfo.getBankAuthStatus());
+//            responseObject.put("video_auth_status", userInfo.getVideoAuthStatus());
 
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
