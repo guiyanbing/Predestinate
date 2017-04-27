@@ -24,6 +24,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 import java.io.File;
 
@@ -175,10 +176,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
             }
             case R.id.setting_modifypwd: // 修改密码
             {
-//                Intent intentModifyPwd = new Intent(this, UserModifyPwdAct.class);
-////			startActivity(intentModifyPwd);
-//
-//                startActivityForResult(intentModifyPwd, 100);
+                UIShow.showModifyAct(this);
                 break;
             }
             case R.id.setting_feedback:// 意见反馈
@@ -219,8 +217,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
             }
             case R.id.setting_about:// 关于
             {
-//                Intent intentAlbum = new Intent(this, About_Act.class);
-//                startActivity(intentAlbum);
+                UIShow.showAboutAct(Setting_Act.this);
                 break;
             }
             case R.id.setting_clear_cache:// 清除缓存
@@ -238,9 +235,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
 
                     @Override
                     public void onSubmit() {
-                        clearUserInfo();
-                        Setting_Act.this.setResult(200);
-                        Setting_Act.this.finish();
+                        exitLogin();
                     }
                 }, "确定退出登录吗", "退出登录", "取消", "确定", true);
                 break;
@@ -255,11 +250,15 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 200) {
-            setResult(201);
-            finish();
+            exitLogin();
         }
     }
 
+    public void exitLogin(){
+        clearUserInfo();
+        setResult(200);
+        finish();
+    }
     public static void clearUserInfo() {
         // 清除当前登录的用户信息
         ModuleMgr.getLoginMgr().logout();

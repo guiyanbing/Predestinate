@@ -74,6 +74,12 @@
             android:name=".ui.setting.Setting_Act"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.setting.AboutAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.UserModifyPwdAct"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.recommend.RecommendAct"
             android:screenOrientation="portrait" />
         <activity

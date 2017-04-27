@@ -669,5 +669,17 @@
         <item name="android:textOn"></item>
     </style>
 
+    <style name="ext_modify_pwd">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">30dip</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:digits">@string/user_modify_pwd_input_digits</item>
+        <item name="android:textColor">#81868c</item>
+        <item name="android:textColorHint">#c2c3c7</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
 
 </resources>
