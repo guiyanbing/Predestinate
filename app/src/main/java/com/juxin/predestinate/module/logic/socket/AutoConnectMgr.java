@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -42,6 +44,8 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * 服务器主动断开连接
      */
     private final int DISCONNECT_TYPE_SEVER_DISCONNECTED = 3;
+
+    private final Executor connectionExecutor = Executors.newCachedThreadPool();
 
     private static class SingletonHolder {
         static AutoConnectMgr instance = new AutoConnectMgr();
@@ -135,7 +139,12 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * 以获取到的地址和秘钥登录及时通讯服务器
      */
     private void connect() {
-        socket.connect();
+        connectionExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                socket.connect();
+            }
+        });
         PLogger.d("connect: ------>socket开始连接，hostIP：" + TCPConstant.HOST + ":" + TCPConstant.PORT);
     }
 
@@ -178,7 +187,8 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "心跳回送失败，socket重新进行连接");
                 connect();
             } else {
-                socket.sendPacket(getRevertHeartbeat());
+                //socket.sendPacket(getRevertHeartbeat());
+                socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_Heartbeat));
             }
         }
     }
@@ -229,9 +239,12 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         // 注意：md字段md5加密字符串为string的拼接
         String md = EncryptUtil.md5(String.valueOf(uid) + String.valueOf(curTime) + token).toUpperCase();
         Map<String, Object> loginMap = new HashMap<>();
-        loginMap.put("tm", curTime);
+        loginMap.put("fid", uid);
+        loginMap.put("mt", curTime);
         loginMap.put("md", md);
-        loginMap.put("os", 1);//系统类型(1为安卓, 2为IOS,其他则不包含此字段)
+        loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
+        loginMap.put("ms", TCPConstant.MSG_MS);
+
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
         return data;
@@ -340,6 +353,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
 
     @Override
     public void onSocketConnected() {
+        socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_BeforeLogin));
         socket.sendPacket(getLoginData());
         onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
     }
@@ -386,6 +400,10 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
 
         if (data.getMsgType() == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
             heartbeatResend++;
+        }
+        //不处理心跳包
+        if(data.getMsgType() == TCPConstant.MSG_ID_Heartbeat){
+            return;
         }
 
         if (!TextUtils.isEmpty(content)) {

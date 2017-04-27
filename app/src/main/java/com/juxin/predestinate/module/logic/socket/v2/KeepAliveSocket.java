@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.socket.v2;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.logic.socket.TCPConstant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +62,7 @@ public class KeepAliveSocket {
                 listener.onSocketConnecting();
             }
             socket = SocketFactory.getDefault().createSocket();
-            socket.connect(address);
+            socket.connect(address, TCPConstant.SOCKET_CONNECT_TIMEOUT);
             input = socket.getInputStream();
             output = socket.getOutputStream();
             if(packerReader == null || packetWriter == null){
@@ -96,8 +97,9 @@ public class KeepAliveSocket {
                 break;
             }else{
                 try {
-                    PLogger.d("Socket Connect Wait for Connecting");
+                    PLogger.d("Socket Connect Wait for Connecting start");
                     socketConnectCondition.await();
+                    PLogger.d("Socket Connect Wait for Connecting end");
                 } catch (InterruptedException e) {
                 }
             }
@@ -131,11 +133,11 @@ public class KeepAliveSocket {
 
     public void disconnect(boolean instant){
         socketStateLock.lock();
-        PLogger.d("Socket disconnect by instant " + instant + " start");
         if(state != SocketState.CONNECTED_SUCCESS) {
             socketStateLock.unlock();
             return;
         }
+        PLogger.d("Socket disconnect by instant " + instant + " start");
         if(packetWriter != null){
             packetWriter.shutdown(instant);
         }
@@ -313,6 +315,7 @@ public class KeepAliveSocket {
                 if(shutDownDone == false)
                     PLogger.d("Socket send packet thread shutdown wait for done");
                     shutDownCondition.await();
+                    PLogger.d("Socket send packet thread shutdown wait for done");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -394,8 +397,9 @@ public class KeepAliveSocket {
             }
             try {
                 if(shutDownDone == false)
-                    PLogger.d("Socket read packet thread shutdown wait for done");
+                    PLogger.d("Socket read packet thread shutdown wait for done start");
                     shutDownCondition.await();
+                    PLogger.d("Socket read packet thread shutdown wait for done end");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
