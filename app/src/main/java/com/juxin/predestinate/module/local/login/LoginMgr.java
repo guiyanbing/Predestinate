@@ -336,6 +336,12 @@ public class LoginMgr implements ModuleBase {
         setLoginInfo(0, true);
 //        App.appState = App.AppState.AS_Service; //TODO
     }
+    /**
+     * 添加登录用户
+     */
+    public void addLoginUser(long uid, String pwd) {
+        putUserInfo(uid, pwd);
+    }
 
     // **************************内部调用**************************
 

@@ -41,9 +41,9 @@ public class AppMgrImpl implements AppMgr {
     private String simo = "";           // SIM卡供应商
     private String mac = "";            // 网络mac地址
 
-    private String UMChannel;           // 友盟渠道名称
-    private String mainChannelID;       // 应用id，即主渠道号
-    private String subChannelID;        // 子渠道号
+    private String UMChannel = "";      // 友盟渠道名称
+    private String mainChannelID = "";  // 应用id，即主渠道号
+    private String subChannelID = "";   // 子渠道号
 
     @SuppressLint("HardwareIds")
     @Override
@@ -174,6 +174,18 @@ public class AppMgrImpl implements AppMgr {
     }
 
     // ================软件状态信息================
+
+    @Override
+    public String getProcessName(Context context, int pid) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningApps = manager.getRunningAppProcesses();
+        if (runningApps == null) return "";
+
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningApps) {
+            if (processInfo.pid == pid) return processInfo.processName;
+        }
+        return "";
+    }
 
     @Override
     public boolean isDebug() {

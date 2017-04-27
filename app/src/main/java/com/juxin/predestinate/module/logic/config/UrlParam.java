@@ -28,16 +28,16 @@ public enum UrlParam {
     reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
-    checkup("public/checkup", null, true),//检查更新
+    modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("s/uinfo/FeedBack"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //检查软件升级
-    checkUpdate("i/version/CheckVersion", AppUpdate.class, false),
+    checkUpdate("public/checkup", null, true),
     //检查服务器静态配置
-    staticConfig(Constant.FATE_IT_HTTP, "public/getASet", null, false),
+    staticConfig("public/getASet", null, false),
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 
@@ -100,6 +100,11 @@ public enum UrlParam {
 
     reqangelPayF(Constant.FATE_IT_PROTOCOL, "user/angelPayF", null, true),   // 充值记录页面 银联语音 查询之前是否支付过
 
+    reqangelPay(Constant.FATE_IT_PROTOCOL, "user/angelPay", null, true),   //充值记录页面 银联语音 没有绑定用户接口
+
+    reqangelPayB(Constant.FATE_IT_PROTOCOL, "user/angelPayB", null, true),   //充值记录页面 银联语音 绑定用接口
+
+    reqAnglePayQuery(Constant.FATE_IT_PROTOCOL, "user/anglePayQuery", null, true),   //充值记录页面 查询
 
 
     // 最后一个，占位

@@ -248,7 +248,7 @@ public class HttpMgrImpl implements HttpMgr {
             String cacheStr = PCache.getInstance().getCache(cacheUrl);
             if (cacheStr != null) {
                 PLogger.d("response cache，request url：" + url + "\ncache String：" + cacheStr);
-                result.setOk();
+                result.setOK();
                 result.setCache(true);//设置为cache数据
                 result.parseJson(cacheStr);
 
@@ -290,6 +290,7 @@ public class HttpMgrImpl implements HttpMgr {
                 } catch (Exception e) {
                     PLogger.d("response fail，request url：" + url);
                     PLogger.printThrowable(e);
+                    result.setServerResponse();
                     result.setError();//设置失败
                     result.setCache(false);
                     if (requestCallback != null) requestCallback.onRequestComplete(result);
@@ -298,7 +299,8 @@ public class HttpMgrImpl implements HttpMgr {
                 String resultString = sb.toString();
                 PLogger.d("response OK，request url：" + url + "\nresponse：" + resultString);
 
-                result.setOk();//设置成功
+                result.setServerResponse();
+                result.setOK();//设置成功
                 result.setCache(false);//设置为cache数据
                 result.parseJson(resultString);
 

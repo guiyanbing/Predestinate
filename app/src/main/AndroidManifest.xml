@@ -71,7 +71,13 @@
             android:name=".ui.setting.UsersSetAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.setting.Setting_Act"
+            android:name=".ui.setting.SettingAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.AboutAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.UserModifyPwdAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.recommend.RecommendAct"
@@ -172,6 +178,15 @@
             android:name=".ui.pay.cupvoice.PayVoiceAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".ui.pay.cupvoice.PayCupVoiceDetailAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.pay.cupvoice.PayCupVoiceOkAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
 
 
         <!-- ============= 相机相册模块start ============= -->

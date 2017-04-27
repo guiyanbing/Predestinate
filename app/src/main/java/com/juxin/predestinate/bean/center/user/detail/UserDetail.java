@@ -9,6 +9,7 @@ import java.util.List;
  * 用户详细信息
  */
 public class UserDetail extends UserInfo {
+
     private List<UserPhoto> userPhotos = new ArrayList<>();
     private UserRequire userRequire = new UserRequire();
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/px160_dp"
+            android:layout_height="@dimen/px160_dp"
+            android:layout_marginBottom="@dimen/px60_dp"
+            android:layout_marginTop="@dimen/px60_dp"
+            android:background="@drawable/pay_voice_ok_top_call" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dip"
+            android:text="订单已提交，请等待接听银行来电，并按语音提示输入银行卡密码完成支付" />
+
+        <TextView
+            android:id="@+id/pay_voice_ok"
+            style="@style/button_big"
+            android:layout_marginBottom="@dimen/px75_dp"
+            android:layout_marginTop="@dimen/px75_dp"
+            android:text="我已完成支付" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_marginTop="25dip"
+        android:lineSpacingExtra="8dip"
+        android:text="如果2分钟内没有接到银联来电，请点下方电话支付帮助了解详情"
+        android:textColor="@color/pay_txt_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:lineSpacingExtra="8dip"
+        android:text="咨询电话： 010-58980008"
+        android:textColor="@color/pay_txt_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#d7d7d7"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="8dip"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip"
+        android:paddingTop="8dip">
+
+        <ImageView
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:background="@drawable/pay_voice_ok_help_call" />
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1"
+            android:text="电话支付帮助"
+            android:textSize="@dimen/px39_sp"
+            android:textColor="@color/text_zhuyao_black"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/payment_item_right" />
+    </LinearLayout>
+
+</LinearLayout>

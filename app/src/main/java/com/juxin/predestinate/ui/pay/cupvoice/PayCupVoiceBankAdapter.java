@@ -1,14 +1,15 @@
 package com.juxin.predestinate.ui.pay.cupvoice;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
-
+import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.UIShow;
 import java.util.List;
 
 /**
@@ -72,7 +73,7 @@ public class PayCupVoiceBankAdapter extends ExBaseAdapter<String> implements Vie
     }
 
     class ViewHolder {
-        public TextView tv_left, tv_right;
+        TextView tv_left, tv_right;
     }
 
     @Override
@@ -81,7 +82,7 @@ public class PayCupVoiceBankAdapter extends ExBaseAdapter<String> implements Vie
             case R.id.pay_voice_item_left:
             case R.id.pay_voice_item_right:
                 String bank_name = (String) v.getTag();
-             //   UIShow.shoPayCupVoiceDetailAct((Activity) getContext(),payCommodity,bank_name, UIHelper.PAY_VOICEACT);
+                UIShow.shoPayCupVoiceDetailAct((Activity) getContext(), payGood, bank_name, Constant.PAY_VOICEACT);
                 break;
             default:
                 break;

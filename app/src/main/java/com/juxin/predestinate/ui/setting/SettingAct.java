@@ -10,20 +10,17 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 import java.io.File;
 
@@ -33,7 +30,7 @@ import java.io.File;
  *
  * @author Kind
  */
-public class Setting_Act extends BaseActivity implements OnClickListener {
+public class SettingAct extends BaseActivity implements OnClickListener {
 
     private TextView setting_clear_cache_tv, setting_account;
     private ToggleButton setting_message_iv, setting_vibration_iv, setting_voice_iv, setting_quit_message_iv;
@@ -122,7 +119,6 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.setting_message:// 消息
-            {
                 if (Message_Status) {
                     Message_Status = false;
                     PSP.getInstance().put(Constant.SETTING_MESSAGE, Message_Status);
@@ -133,9 +129,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
                     setting_message_iv.setBackgroundResource(R.drawable.f1_setting_ok);
                 }
                 break;
-            }
             case R.id.setting_vibration:// 震动
-            {
                 if (Vibration_Status) {
                     Vibration_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VIBRATION, Vibration_Status);
@@ -146,9 +140,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
                     setting_vibration_iv.setBackgroundResource(R.drawable.f1_setting_ok);
                 }
                 break;
-            }
             case R.id.setting_voice:// 声音
-            {
                 if (Voice_Status) {
                     Voice_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VOICE, Voice_Status);
@@ -159,9 +151,7 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
                     setting_voice_iv.setBackgroundResource(R.drawable.f1_setting_ok);
                 }
                 break;
-            }
             case R.id.setting_quit_message:// 退出消息
-            {
                 if (Quit_Message_Status) {
                     Quit_Message_Status = false;
                     PSP.getInstance().put(Constant.SETTING_QUIT_MESSAGE, Quit_Message_Status);
@@ -172,64 +162,28 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
                     setting_quit_message_iv.setBackgroundResource(R.drawable.f1_setting_ok);
                 }
                 break;
-            }
             case R.id.setting_modifypwd: // 修改密码
-            {
-//                Intent intentModifyPwd = new Intent(this, UserModifyPwdAct.class);
-////			startActivity(intentModifyPwd);
-//
-//                startActivityForResult(intentModifyPwd, 100);
+                UIShow.showModifyAct(this);
                 break;
-            }
             case R.id.setting_feedback:// 意见反馈
-            {
                 //TODO
-//                Intent intentAlbum = new Intent(this, Suggest_Act.class);
-//                startActivity(intentAlbum);
                 break;
-            }
             case R.id.setting_update:// 软件更新
-            {
-                LoadingDialog.show(Setting_Act.this, "检测中请等待...");
-                ModuleMgr.getCenterMgr().checkVersion(new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        if (!response.isOk()) {
-//                            UIShow.showUpdateDialog(Setting_Act.this, (AppUpdate) response.getBaseData());
-                        }else{
-                            PToast.showShort("您当前的版本为最新的");
-                        }
-
-                    }
-                });
+                ModuleMgr.getCommonMgr().checkUpdate(this, true);//检查应用升级
                 break;
-            }
             case R.id.setting_recommend:// 积分墙
-            {
                 PToast.showShort("努力开发中...");
                 break;
-            }
             case R.id.setting_action:// 活动相关
-            {
-                //String title = "活动相关";
-                //UIHelper.showWebView_Act(this, title, appCfg.HD_ABOUT_PROTOCOL);
-//                Intent intentAlbum = new Intent(this, dlg_hd_about.class);
-//                startActivity(intentAlbum);
+                //TODO
                 break;
-            }
             case R.id.setting_about:// 关于
-            {
-//                Intent intentAlbum = new Intent(this, About_Act.class);
-//                startActivity(intentAlbum);
+                UIShow.showAboutAct(SettingAct.this);
                 break;
-            }
             case R.id.setting_clear_cache:// 清除缓存
-            {
                 clearAppCache();
                 break;
-            }
             case R.id.setting_logoff:// 退出登录
-            {
                 PickerDialogUtil.showSimpleTipDialog(this, new SimpleTipDialog.ConfirmListener() {
                     @Override
                     public void onCancel() {
@@ -238,14 +192,10 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
 
                     @Override
                     public void onSubmit() {
-                        clearUserInfo();
-                        Setting_Act.this.setResult(200);
-                        Setting_Act.this.finish();
+                        exitLogin();
                     }
                 }, "确定退出登录吗", "退出登录", "取消", "确定", true);
                 break;
-            }
-
             default:
                 break;
         }
@@ -255,9 +205,14 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 200) {
-            setResult(201);
-            finish();
+            exitLogin();
         }
+    }
+
+    public void exitLogin() {
+        clearUserInfo();
+        setResult(200);
+        finish();
     }
 
     public static void clearUserInfo() {
@@ -266,12 +221,6 @@ public class Setting_Act extends BaseActivity implements OnClickListener {
 
         PSP.getInstance().put("addMsgToUserDate", null);
         PSP.getInstance().put("recommendDate", null);
-
-//        FTCache ftCache = FTCache.get(AppCtx.getAppContext());
-//        ftCache.remove("fate");
-//        ftCache.remove("saw");
-//        ftCache.remove("newest");
-//        ftCache.remove("recommend");
     }
 
     public void clearAppCache() {
