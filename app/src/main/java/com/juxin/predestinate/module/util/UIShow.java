@@ -38,8 +38,11 @@ import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
+import com.juxin.predestinate.ui.setting.AboutAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.Setting_Act;
+import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
+import com.juxin.predestinate.ui.setting.UsersSetAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
@@ -263,6 +266,18 @@ public class UIShow {
      */
     public static void showUserSetAct(final Activity context, final int resultCode) {
         context.startActivityForResult(new Intent(context, Setting_Act.class), resultCode);
+    }
+    /**
+     * 打开关于页面
+     */
+    public static void showAboutAct(final Activity context) {
+        context.startActivity(new Intent(context, AboutAct.class));
+    }
+    /**
+     * 打开修改密码页面
+     */
+    public static void showModifyAct(final Activity context) {
+        context.startActivityForResult(new Intent(context, UserModifyPwdAct.class),100);
     }
 
     /**

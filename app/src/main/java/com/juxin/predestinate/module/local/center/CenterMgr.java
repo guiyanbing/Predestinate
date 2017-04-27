@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.center;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,6 +20,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.settting.Setting;
+import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -28,8 +30,10 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.util.CommonUtil;
+import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.module.util.CommonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,6 +112,36 @@ public class CenterMgr implements ModuleBase, PObserver {
         getParams.put("cellPhone", mobile);
         getParams.put("verifyCode", code);
         ModuleMgr.getHttpMgr().reqGet(UrlParam.mobileAuth, null, getParams, RequestParam.CacheType.CT_Cache_No, true, complete);
+    }
+
+    /**
+     * 修改密码
+     */
+    public void modifyPassword(final Context context, String oldpwd, final String newpwd) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("oldpassword", oldpwd);
+        post_param.put("newpassword", newpwd);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.modifyPassword, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+                try {
+                    JSONObject json = new JSONObject(response.getResponseString());
+                    if ("success".equals(json.optString("result"))) {
+                        PToast.showShort(context.getResources().getString(R.string.toast_update_ok));
+                        LoginMgr loginMgr = ModuleMgr.getLoginMgr();
+                        long uid = loginMgr.getUid();
+                        loginMgr.addLoginUser(uid, newpwd);
+//                        DataCenter.getInstance().update_user_item(AppCtx.getPreference(AppCtx.UserName), newpwd, -1, null);
+                        ((UserModifyPwdAct)context).exitApp();
+                    } else {
+                        PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**

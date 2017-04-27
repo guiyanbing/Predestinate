@@ -66,6 +66,22 @@
     <string name="bt_exit">退出</string>
     <string name="toast_clearcache_ok">缓存清除成功</string>
     <string name="toast_clearcache_error">缓存清除失败</string>
+    <string name="toast_oldpwd_isnull">请输入您的旧密码</string>
+    <string name="toast_pwd_error">请输入6至20位数字或字符的新密码</string>
+    <string name="toast_pwd_next_error">两次输入的密码不一致，请检查后重新输入</string>
+    <string name="txt_logname">缘份吧</string>
+    <string name="txt_vers_def">V1.0.0</string>
+    <string name="txt_email">jiaoyoukf@126.com</string>
+    <string name="txt_copyright">Copyright © 2014</string>
+    <string name="txt_email_desc">客服邮箱:</string>
+    <string name="txt_modifypwd_desc_001">你的缘份吧ID是</string>
+    <string name="txt_modifypwd_desc_002">设置密码后，可以使用ID和密码登录</string>
+    <string name="txt_oldpwd_desc">原密码</string>
+    <string name="ext_oldpwd_hit">请输入您的原密码</string>
+    <string name="txt_newpwd_desc">新密码</string>
+    <string name="ext_newpwd_hit">支持英文和数字，6至20位</string>
+    <string name="txt_replacepwd_desc">确认密码</string>
+    <string name="ext_replacepwd_hit">再次填入新密码</string>
 
     <!--注册-->
     <string name="button_reg">立即注册</string>
@@ -237,6 +253,8 @@
     <string name="title_feedback">意见反馈</string>
     <string name="title_reginfo_complete">完善资料</string>
     <string name="title_set">设置</string>
+    <string name="title_about">关于</string>
+    <string name="title_pwd_set">密码设置</string>
 
 
     <!-- xList 后期可能删掉，不要用-->
