@@ -113,7 +113,7 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onRequestComplete(HttpResponse response) {
                         PayWX payWX = new PayWX();
-                        payWX.PayPhoneCard(response.getResponseString());
+                        payWX.onPayPhoneCard(response.getResponseString());
                         if(!"1".equals(payWX.getResult())){
                             MMToast.showShort("请求失败，请稍后再试");
                             LoadingDialog.closeLoadingDialog();
@@ -136,7 +136,7 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PayWX payWX = new PayWX();
-                payWX.PayPhoneCard(response.getResponseString());
+                payWX.onPayPhoneCard(response.getResponseString());
                 try {
                     if ("1".equals(payWX.getResult())) {
                         LoadingDialog.closeLoadingDialog();

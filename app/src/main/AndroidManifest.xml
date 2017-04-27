@@ -168,6 +168,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
+        <activity
+            android:name=".ui.pay.cupvoice.PayVoiceAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:windowSoftInputMode="stateHidden" />
+
 
         <!-- ============= 相机相册模块start ============= -->
         <activity

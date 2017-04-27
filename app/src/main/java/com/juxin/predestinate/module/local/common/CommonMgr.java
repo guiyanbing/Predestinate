@@ -487,6 +487,10 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("orderNo", orderNo);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSearchPhoneCard, getParams, complete);
+    }
 
+    public void reqangelPayF(RequestComplete complete) {
+        HashMap<String, Object> getParams = new HashMap<>();
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayF, getParams, complete);
     }
 }

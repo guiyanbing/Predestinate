@@ -140,7 +140,6 @@
     <color name="gray">#ff7f7f7f</color>
     <color name="pink">#ff89a9</color>
     <color name="pink1">#ffe2e9</color>
-    <color name="filter_tab_bottom_line">#dddede</color>
     <color name="gray_text">#666</color>
     <color name="main_bottom_text_color_sel">@color/theme_color_red</color>
     <color name="color_494949">#494949</color>
