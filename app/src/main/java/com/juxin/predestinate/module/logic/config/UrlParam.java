@@ -46,10 +46,10 @@ public enum UrlParam {
 
     //============================== 用户资料相关接口 =============================
 
-    reqSetInfo("i/uinfo/SecSetInfo", true),                  // 用户设置更新
-    reqMyInfo("user/detail", UserDetail.class, true),    // 获取个人资料
-    reqOtherInfo("s/uinfo/ODetail", UserDetail.class, true), // 获取他人资料
-    updateMyInfo("s/uinfo/UpdateUserData"),                  // 修改用户个人信息
+    reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
+    reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
+    reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
+    updateMyInfo("s/uinfo/UpdateUserData"),                   // 修改用户个人信息
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),

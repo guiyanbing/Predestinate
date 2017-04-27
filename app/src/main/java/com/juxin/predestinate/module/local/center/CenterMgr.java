@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.center;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.juxin.library.log.PLogger;
@@ -124,8 +125,10 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("views", views);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.feedBack, postparam, complete);
     }
+
     /**
      * 检查更新
+     *
      * @param complete
      */
     public void checkVersion(RequestComplete complete) {
@@ -219,11 +222,16 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取他人用户详细信息
      */
     public void reqOtherInfo(final long uid, RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOtherInfo, new HashMap<String, Object>() {
-            {
-                put("uid", uid);
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        getParams.put("ver", Constant.SUB_VERSION);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                Log.d("reqOtherInfo", response.getResponseString());
             }
-        }, complete);
+        });
     }
 
     /**

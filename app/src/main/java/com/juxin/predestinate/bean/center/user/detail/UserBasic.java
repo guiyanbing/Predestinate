@@ -2,6 +2,7 @@ package com.juxin.predestinate.bean.center.user.detail;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
@@ -52,8 +53,10 @@ public class UserBasic extends BaseData implements Parcelable {
         this.setBirthday(detailObject.optString("birthday"));
         this.setHeight(detailObject.optInt("height"));
 
-        this.setWeight(infoConfig.getWeight().getShowWithSubmit(Integer.valueOf(detailObject.optString("weight"))));
-        this.setStar(infoConfig.getStar().getShowWithSubmit(Integer.valueOf(detailObject.optString("star"))));
+        String weight = detailObject.optString("weight");
+        String star = detailObject.optString("star");
+        this.setWeight(infoConfig.getWeight().getShowWithSubmit(TextUtils.isEmpty(weight) || weight == "null" ? 0 : Integer.valueOf(weight)));
+        this.setStar(infoConfig.getStar().getShowWithSubmit(TextUtils.isEmpty(star) || star == "null" ? 0 : Integer.valueOf(star)));
         this.setEdu(infoConfig.getEdu().getShowWithSubmit(detailObject.optInt("edu")));
         this.setJob(infoConfig.getJob().getShowWithSubmit(detailObject.optInt("job")));
         this.setIncome(infoConfig.getIncome().getShowWithSubmit(detailObject.optInt("income")));

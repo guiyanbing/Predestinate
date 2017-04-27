@@ -63,10 +63,10 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements BaseRecyclerV
     }
 
     public void refresh() {
-        List<SecretMedia> data = secretType == mediaAdapter.SECRET_VIDEO ?
-                userDetail.getSecretVideos() : userDetail.getSecretPhotos();
+//        List<SecretMedia> data = secretType == mediaAdapter.SECRET_VIDEO ?
+//                userDetail.getSecretVideos() : userDetail.getSecretPhotos();
 
-        mediaAdapter.setList(data);
+//        mediaAdapter.setList(data);
     }
 
     @Override
