@@ -44,8 +44,14 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * 服务器主动断开连接
      */
     private final int DISCONNECT_TYPE_SEVER_DISCONNECTED = 3;
-
-    private final Executor connectionExecutor = Executors.newCachedThreadPool();
+    /**
+     * 连接线程池
+     */
+    private final Executor connectionExecutor = Executors.newSingleThreadExecutor();
+    /**
+     * 发送消息线程池
+     */
+    private final Executor sendExecutor = Executors.newSingleThreadExecutor();
 
     private static class SingletonHolder {
         static AutoConnectMgr instance = new AutoConnectMgr();
@@ -118,6 +124,15 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
 
         socket.disconnect(false);
         this.token = null;
+    }
+
+    public void send(final NetData packet){
+        sendExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                socket.sendPacket(packet);
+            }
+        });
     }
 
     // =================以下是关于内部自动连接维护的功能=================
