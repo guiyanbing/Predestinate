@@ -11,7 +11,6 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
-import com.juxin.predestinate.module.logic.socket.v2.KeepAliveSocket;
 import com.juxin.predestinate.module.util.TimerUtil;
 
 import org.json.JSONException;

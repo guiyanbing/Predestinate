@@ -1,8 +1,6 @@
-package com.juxin.predestinate.module.logic.socket.v2;
+package com.juxin.predestinate.module.logic.socket;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.predestinate.module.logic.socket.NetData;
-import com.juxin.predestinate.module.logic.socket.TCPConstant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +18,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.net.SocketFactory;
 
 /**
+ * socket通信内核
  * Created by sks on 2017/4/20.
  */
 public class KeepAliveSocket {
+
     private final int SOCKET_PACKET_QUEUE_SIZE = 500;
     private Socket socket;
     private Lock socketStateLock = new ReentrantLock();
