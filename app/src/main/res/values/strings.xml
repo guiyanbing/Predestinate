@@ -316,6 +316,7 @@
     <string name="pay_errcode_cancel">支付取消</string>
     <string name="pay_errcode_deny">支付被拒绝</string>
     <string name="pay_errcode_unknown">支付出错</string>
+    <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <color name="homeUserSay">#ff333333</color>
 
 </resources>

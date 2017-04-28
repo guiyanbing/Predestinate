@@ -75,6 +75,10 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         // mail_item_letter.setOnClickListener(this);
     }
 
+    public void showGap(){
+        findViewById(R.id.gap_item).setVisibility(VISIBLE);
+    }
+
     /**
      * 显示数据
      *

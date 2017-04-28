@@ -21,6 +21,7 @@ public class CustomMailItem extends LinearLayout {
 
     private Context context;
     private CustomFrameLayout customFrameLayout;
+    private MailItemType mailItemType = null;
 
     public CustomMailItem(Context context) {
         super(context);
@@ -69,11 +70,14 @@ public class CustomMailItem extends LinearLayout {
     /**
      * 显示私聊类型
      */
-    public void showItemLetter(BaseMessage msgData) {
+    public void showItemLetter( BaseMessage msgData) {
         customFrameLayout.show(R.id.chat_fragment_item_letter);
         customLetterMailItem.showData(msgData);
     }
 
+    public void showLetterGap() {
+        customLetterMailItem.showGap();
+    }
 
     /**
      * 模板2
@@ -95,6 +99,9 @@ public class CustomMailItem extends LinearLayout {
         customActMailItem.showData(msgData);
     }
 
+    public void showActGap() {
+        customActMailItem.showGap();
+    }
 
     /**
      * 隐藏所有

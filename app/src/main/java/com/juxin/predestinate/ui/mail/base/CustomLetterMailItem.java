@@ -44,6 +44,11 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
     }
 
     @Override
+    public void showGap() {
+        super.showGap();
+    }
+
+    @Override
     public void showData(BaseMessage msgData) {
         super.showData(msgData);
         this.msgData = msgData;
