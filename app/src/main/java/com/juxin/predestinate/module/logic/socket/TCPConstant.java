@@ -32,7 +32,7 @@ public class TCPConstant {
      */
     public static final int TCP_DATA_Header_Size = 4 + 4 + 2;
 
-    public static final int SOCKET_CONNECT_TIMEOUT = 15000;             //Socket连接时超时时间
+    public static final int SOCKET_CONNECT_TIMEOUT = 0;             //Socket连接时超时时间
     public static final int SOCKET_AUTO_CONNECT_Increment_Time = 5000;  //Socket自动重连时间间隔
     public static final int SOCKET_CONNECT_Heartbeat_Time = 60 * 1000;  //连接服务器的心跳间隔
 }
