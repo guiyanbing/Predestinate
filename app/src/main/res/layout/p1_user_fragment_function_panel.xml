@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:id="@+id/ll_rank"
+        android:id="@+id/ll_vip"
         style="@style/center_pieces_item">
 
         <LinearLayout
@@ -16,15 +16,23 @@
             android:orientation="vertical"
             android:padding="@dimen/px36_dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10_dp"
+                android:text="@string/bt_privilege_vip"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/px36_sp" />
+
             <ImageView
-                style="@style/icon_middle_center"
-                android:src="@drawable/p1_user_fragment_rank" />
+                style="@style/icon_big"
+                android:background="@drawable/f1_user_vip_sel" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/px10_dp"
-                android:text="@string/user_center_fragment_rank"
+                android:text="@string/bt_privilege_under"
                 android:textColor="@color/color_666666"
                 android:textSize="@dimen/px36_sp" />
         </LinearLayout>
@@ -49,16 +57,23 @@
             android:orientation="vertical"
             android:padding="@dimen/px36_dp">
 
-            <ImageView
-                style="@style/icon_middle_center"
-                android:src="@drawable/p1_user_fragment_wallet" />
-
             <TextView
-                android:id="@+id/tv_wallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/px10_dp"
-                android:text="@string/user_center_fragment_wallet"
+                android:text="@string/bt_auth_phone"
+                android:textColor="@color/color_666666"
+                android:textSize="@dimen/px36_sp" />
+
+            <ImageView
+                style="@style/icon_big"
+                android:src="@drawable/f1_user_phone_selector" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px10_dp"
+                android:text="@string/bt_auth_take"
                 android:textColor="@color/color_666666"
                 android:textSize="@dimen/px36_sp" />
         </LinearLayout>

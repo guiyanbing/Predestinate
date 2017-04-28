@@ -16,8 +16,6 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  */
 public class UserFragmentFunctionPanel extends BaseViewPanel {
 
-    private TextView wallet;
-
     public UserFragmentFunctionPanel(Context context) {
         super(context);
         setContentView(R.layout.p1_user_fragment_function_panel);
@@ -26,10 +24,9 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
     }
 
     private void initView() {
-        wallet = (TextView) findViewById(R.id.tv_wallet);
 
         refreshBadge();
-        findViewById(R.id.ll_rank).setOnClickListener(clickListener);
+        findViewById(R.id.ll_vip).setOnClickListener(clickListener);
         findViewById(R.id.ll_wallet).setOnClickListener(clickListener);
     }
 
@@ -44,16 +41,15 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
      */
     public void refreshView(UserDetail userDetail) {
         if (userDetail == null) return;
-        //wallet.setText(String.valueOf(userDetail.getMoney()));
     }
 
     private final NoDoubleClickListener clickListener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.ll_rank://跳转到排行榜
+                case R.id.ll_vip://跳转VIP
                     break;
-                case R.id.ll_wallet://跳转到钱包
+                case R.id.ll_wallet://跳转手机认证
                     //手机绑定
                     //UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getMobileAuthStatus()==3);
                     break;

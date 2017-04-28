@@ -30,7 +30,14 @@
     <string name="button_help">帮助</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
+
     <!-- 个人中心 -->
+    <string name="bt_privilege_under">已开通</string>
+    <string name="bt_privilege_take">立即开通</string>
+    <string name="bt_privilege_vip">VIP特权</string>
+    <string name="bt_auth_under">已认证</string>
+    <string name="bt_auth_take">立即认证</string>
+    <string name="bt_auth_phone">手机认证</string>
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
     <string name="str_not_filled">未填写</string>
@@ -49,6 +56,8 @@
     <string name="toast_phone_verified">您的帐号已与手机绑定，不能再绑定。</string>
     <string name="toast_phone_used">该手机已经被验证过了，请输入其他的手机号。</string>
     <string name="toast_code_error">验证码错误。</string>
+    <string name="user_fragment_header_copy">复制</string>
+    <string name="user_fragment_header_invCode">邀请码：</string>
 
     <!--设置-->
     <string name="txt_set_account">当前账号：input_field@163.com</string>
