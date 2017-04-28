@@ -1,0 +1,47 @@
+package com.juxin.predestinate.ui.xiaoyou.wode.bean;
+
+
+import com.juxin.predestinate.bean.net.BaseData;
+
+import org.json.JSONObject;
+
+import java.util.List;
+
+/**
+ * 标签列表
+ * Created by zm on 17/3/20.
+ */
+public class RedOneKeyList extends BaseData {
+
+    private List redbagFailLists;//失败红包列表
+    private int sucnum;//成功入袋数
+    private double sum;//用户红包总额（分）
+
+    public List getRedbagFailLists() {
+        return redbagFailLists;
+    }
+
+    public int getSucnum() {
+        return sucnum;
+    }
+
+    public void setSucnum(int sucnum) {
+        this.sucnum = sucnum;
+    }
+
+    public double getSum() {
+        return sum;
+    }
+
+    public void setSum(double sum) {
+        this.sum = sum/100f;
+    }
+
+    @Override
+    public void parseJson(String s) {
+        JSONObject jsonObject = getJsonObject(s);
+        this.setSucnum(jsonObject.optInt("sucnum"));
+        this.setSum(jsonObject.optDouble("sum"));
+        redbagFailLists = getBaseDataList(jsonObject.optJSONArray("fail"), RedbagList.RedbagInfo.class);
+    }
+}

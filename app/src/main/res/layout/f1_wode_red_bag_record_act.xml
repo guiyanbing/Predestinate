@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_F0F2F2"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_title" />
+
+    <!--- top start -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/px30_dp"
+        android:paddingTop="@dimen/px90_dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/head_title"
+            android:textColor="@color/color_D6D6D6"
+            android:textSize="@dimen/px42_sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/px18_dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/wode_wallet_tv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textColor="@color/color_FD6C8E"
+                android:textSize="@dimen/px86_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/wode_wallet_tv_money"
+                android:layout_toRightOf="@+id/wode_wallet_tv_money"
+                android:paddingBottom="@dimen/px12_dp"
+                android:text="@string/head_unit"
+                android:textColor="@color/color_D6D6D6"
+                android:textSize="@dimen/px42_sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px60_dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/wode_wallet_tv_draw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@drawable/f1_wode_bt_withdraw_selector"
+                android:gravity="center"
+                android:paddingBottom="@dimen/px30_dp"
+                android:paddingTop="10dip"
+                android:text="@string/head_draw_bt"
+                android:textColor="@color/white"
+                android:textSize="@dimen/px42_sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/wode_wallet_tv_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px45_dp"
+            android:text=""
+            android:textSize="@dimen/px34_sp"/>
+    </LinearLayout>
+    <!--- top end -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="0dp">
+
+        <ImageView
+            android:id="@+id/cursor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/color_E36D87"
+            android:scaleType="matrix" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px2_dp"
+        android:background="@color/color_F0F2F2"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="39.5dp"
+        android:background="@color/color_F0F2F2">
+        <com.juxin.library.controls.smarttablayout.SmartTabLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/wode_wallet_stl_titles"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            app:stl_indicatorAlwaysInCenter="false"
+            app:stl_indicatorWithoutPadding="false"
+            app:stl_indicatorInFront="false"
+            app:stl_indicatorInterpolation="smart"
+            app:stl_indicatorGravity="bottom"
+            app:stl_indicatorColor="@color/color_E36D87"
+            app:stl_indicatorThickness="@dimen/px9_dp"
+            app:stl_indicatorWidth="auto"
+            app:stl_indicatorCornerRadius="0dp"
+            app:stl_overlineColor="#4D000000"
+            app:stl_overlineThickness="0dp"
+            app:stl_underlineColor="@color/transparent"
+            app:stl_underlineThickness="2dp"
+            app:stl_dividerColor="@color/color_E36D87"
+            app:stl_dividerThickness="0dp"
+            app:stl_defaultTabTextAllCaps="false"
+            app:stl_defaultTabTextColor="@color/color_FF413B"
+            app:stl_defaultTabTextSize="@dimen/px46_sp"
+            app:stl_defaultTabTextHorizontalPadding="16dp"
+            app:stl_defaultTabTextMinWidth="0dp"
+            app:stl_distributeEvenly="false"
+            app:stl_clickable="true"
+            app:stl_titleOffset="auto_center"
+            app:stl_drawDecorationAfterTab="false"
+            />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/px4_dp">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/wode_wallet_vp_view_change"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/wode_wallet_tv_server_qq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:padding="@dimen/px12_dp"
+            android:text="@string/service_QQ"
+            android:textColor="@color/color_D6D6D6"
+            android:textSize="@dimen/px42_sp"
+            android:visibility="gone"/>
+    </FrameLayout>
+</LinearLayout>
