@@ -72,10 +72,10 @@ public class KeepAliveSocket {
             packetWriter.init();
             packerReader.init();
 
-            if(listener == null){
+            PLogger.d("Socket connect success");
+            if(listener != null){
                 listener.onSocketConnected();
             }
-            PLogger.d("Socket connect success");
         } catch (IOException e) {
             e.printStackTrace();
             state = SocketState.CONNECTED_FAILED;

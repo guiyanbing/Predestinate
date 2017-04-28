@@ -5,19 +5,19 @@ package com.juxin.predestinate.module.logic.socket;
  */
 public class TCPConstant {
 
+    // socket正式服连接地址
+//    public static final String HOST = "sc.app.yuanfenba.net";//socket连接IP地址
+
     // socket测试服连接地址
     public static final String HOST = "123.59.187.33";      //socket连接IP地址
     public static final int PORT = 8823;                    //socket连接端口
 
     // --------------socket常量----------------
     public static final int MSG_ID_Login = 1;               //长连接登录消息id
-    public static final int MSG_ID_SERVER_RECEIVE = 997;    //通知客户端某条消息已经收到
-    public static final int MSG_ID_KICK_Offline = 998;      //异地登陆踢下线消息id
-    public static final int MSG_ID_Heartbeat_Reply = 999;   //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
-    public static final int MSG_ID_BeforeLogin = 65535;     //登录之前发送的消息id
-    public static final int MSG_ID_Heartbeat = 65532;       //心跳包消息id
+    public static final int MSG_ID_KICK_Offline = 65533;    //异地登陆踢下线消息id
+    public static final int MSG_ID_Heartbeat_Reply = 65532; //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
+    public static final int MSG_ID_Heartbeat = 65535;       //普通心跳消息id，登录使用
     public static final long Heartbeat_Time = 60 * 1000;    //心跳时间间隔，60s
-    public static final int MSG_MS = 11;                   //消息版本号(MS) 视频通话 + 表情：11
 
     /**
      * 即时通许中，CoreService连接服务器时，返回的几种状态。
