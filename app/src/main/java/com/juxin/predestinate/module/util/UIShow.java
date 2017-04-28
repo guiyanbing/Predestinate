@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -589,6 +590,21 @@ public class UIShow {
         Intent intent_web = new Intent(activity, PayWebAct.class);
         intent_web.putExtra("payGood", payGood);
         activity.startActivityForResult(intent_web, Constant.PAYMENTACT_TO);
+    }
+
+
+    /**
+     * 打开QQ客服
+     *
+     * @param context
+     */
+    public static void showQQServer(Context context) {
+        try {
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + 11;
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (Exception e) {
+            MMToast.showShort("QQ客服忙!请等待");
+        }
     }
 
 

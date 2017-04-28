@@ -156,5 +156,7 @@
     <color name="pay_txt_color">#838383</color>
 
     <color name="deep_gray_text">#999</color>
+    <color name="text_gray">#707070</color>
+
 </resources>
 
