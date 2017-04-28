@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.logic.config;
 
-import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -10,11 +9,12 @@ import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
-import com.juxin.predestinate.bean.start.RegResult;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
+import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedOneKeyList;
+import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedbagList;
 
 import java.util.Map;
 
@@ -60,6 +60,33 @@ public enum UrlParam {
     uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================
+    //客户端获得用户红包列表
+    reqRedbagList("fruit/redbaglist", RedbagList.class, true),
+    //客户端用户红包入袋fruit/addredonekey
+    reqAddredTotal("fruit/addredtotalnew",true),
+    // 红包记录--红包入袋 -- 一键入袋(24不能提现)
+    reqAddredonekey("fruit/addredonekey", RedOneKeyList.class,true),
+    // 客户端请求用户提现列表
+    reqWithdrawlist("fruit/withdrawlist",true),
+    // 红包记录--提现申请
+    reqWithdraw("fruit/withdraw",true),
+    // 红包记录--提现申请获取地址
+    reqWithdrawAddress("fruit/withdrawaddress",true),
+    // 红包记录--提现申请修改地址
+    reqWithdrawModify("fruit/withdrawmodify",true),
+    // 获取礼物列表
+    getGiftLists("gift/getGifts",true),
+    // 获取钻石余额
+    getMyDiamand("gift/getMyDiamand",false),
+    // 索要礼物
+    begGift("gift/begGift",true),
+    // 手机验证
+    sendSMS("public/sendSMS",true),
+    // 手机验证
+    bindCellPhone("user/bindCellPhone",true),
+
+
+
     //好友标签分组成员
     reqTagGroupMember("s/friend/TagGroupMember", SimpleFriendsList.class, true),
     //增加自己的好友的 tag

@@ -24,6 +24,7 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.sayhi.SayHelloDialog;
+import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +42,7 @@ import java.util.Set;
 public class CommonMgr implements ModuleBase {
 
     private CommonConfig commonConfig;//服务器静态配置
+    private GiftsList giftLists;//礼物信息
 
     @Override
     public void init() {
@@ -242,6 +244,170 @@ public class CommonMgr implements ModuleBase {
     }
 
     //============================== 小友模块相关接口 =============================
+    /**
+     * 请求礼物列表
+     */
+    public void requestgetGifts() {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                giftLists = new GiftsList();
+                giftLists.parseJson(response.getResponseString());
+            }
+        });
+    }
+
+    /**
+     * @return 获取礼品信息
+     */
+    public GiftsList getGiftLists() {
+        return giftLists;
+    }
+
+    /**
+     * 手机验证
+     *
+     * @param phoneNum 手机号
+     * @param complete 请求完成后回调
+     */
+    public void bindCellPhone(String code,String phoneNum,RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("cellPhone", phoneNum);
+        getParams.put("verifyCode", code);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.bindCellPhone, getParams, complete);
+    }
+
+    /**
+     * 手机验证
+     *
+     * @param phoneNum 手机号
+     * @param complete 请求完成后回调
+     */
+    public void sendSMS(String phoneNum,RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("cellPhone", phoneNum);
+        getParams.put("type", "1");
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.sendSMS, getParams, complete);
+    }
+
+    /**
+     * 获取钻石余额
+     *
+     * @param content 内容
+     * @param complete 请求完成后回调
+     */
+    public void begGift(String content,RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("content", content);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.begGift, getParams, complete);
+    }
+
+    /**
+     * 获取钻石余额
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getMyDiamand(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getMyDiamand, null, complete);
+    }
+
+    /**
+     * 客户端获得用户红包列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getRedbagList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRedbagList, null, complete);
+    }
+
+    /**
+     * 客户端用户红包入袋
+     * @param uid 用户Id
+     * @param money 红包金额(分)
+     * @param redbagid 红包ID
+     * @param type 红包类型 1,2或为空为水果红包和水果排行红包 3为聊天红包 4聊天排名红包 5礼物红包
+     * @param complete 请求完成后回调
+     */
+    public void reqAddredTotal(long uid,double money,long redbagid,int type,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", uid);
+        postParams.put("money", money);
+        postParams.put("redbagid", redbagid);
+        postParams.put("type", type);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddredTotal, postParams, complete);
+    }
+
+    /**
+     * 红包记录--红包入袋 -- 一键入袋(24不能提现)
+     * @param uid 用户Id
+     * @param complete 请求完成后回调
+     */
+    public void reqAddredonekey(long uid,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddredonekey, postParams, complete);
+    }
+
+    /**
+     * 客户端请求用户提现列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void reqWithdrawlist(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawlist, null, complete);
+    }
+
+    /**
+     * 红包记录--提现申请
+     * @param money 提现金额(分)
+     * @param accountname 帐户姓名
+     * @param accountnum 银行卡号/支付宝账号
+     * @param bank 开户行/支付类型
+     * @param subbank 开户支行
+     * @param complete 请求完成后回调
+     */
+    public void reqWithdraw(String money,String accountname,String accountnum,String bank,String subbank,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        postParams.put("money", (Float.parseFloat(money) * 100) + "");
+        postParams.put("accountname", accountname);
+        postParams.put("accountnum", accountnum);
+        postParams.put("bank", bank);
+        postParams.put("subbank", subbank);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdraw, postParams, complete);
+    }
+
+    /**
+     * 红包记录--提现申请获取地址
+     *
+     * @param complete 请求完成后回调
+     */
+    public void reqWithdrawAddress(RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, postParams, complete);
+    }
+
+    /**
+     * 红包记录--提现申请修改地址
+     * @param accountname 请求完成后回调
+     * @param accountnum 请求完成后回调
+     * @param bank 请求完成后回调
+     * @param subbank 请求完成后回调
+     * @param complete 请求完成后回调
+     */
+    public void reqWithdrawModify(int id,String accountname ,String accountnum,String bank,String subbank,RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        postParams.put("id", id);
+        postParams.put("accountname", accountname);
+        postParams.put("accountnum", accountnum);
+        postParams.put("bank", bank);
+        postParams.put("subbank", subbank);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawModify, postParams, complete);
+    }
+
 
     /**
      * 好友标签分组成员
@@ -277,7 +443,6 @@ public class CommonMgr implements ModuleBase {
         postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
         postParams.put("tag_name", names);// 标签名字
         postParams.put("uid_list", list);// 标签成员
-//        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroup, postParams, complete);
     }
 

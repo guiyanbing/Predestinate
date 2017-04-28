@@ -64,6 +64,50 @@
     <color name="color_83A0EC">#83a0ec</color>
     <color name="color_FCFCFC">#fcfcfc</color>
 
+    <color name="color_6495ED">#6495ED</color>
+    <color name="color_71AFEE">#71AFEE</color>
+    <color name="color_888888">#888888</color>
+    <color name="color_131313">#131313</color>
+    <color name="color_595757">#595757</color>
+    <color name="color_F7F7F7">#F7F7F7</color>
+    <color name="color_A6A6A6">#A6A6A6</color>
+    <color name="color_D93A2A">#D93A2A</color>
+    <color name="color_F0F2F2">#F0F2F2</color>
+    <color name="color_D6CAAA">#D6CAAA</color>
+    <color name="color_727171">#727171</color>
+    <color name="color_D6D6D6">#D6D6D6</color>
+    <color name="color_FD6C8E">#FD6C8E</color>
+    <color name="color_9FA0A0">#9FA0A0</color>
+    <color name="color_E36D87">#E36D87</color>
+    <color name="color_EA6684">#EA6684</color>
+    <color name="color_DDDEDE">#DDDEDE</color>
+    <color name="color_FFCB02">#FFCB02</color>
+    <color name="color_F25D71">#F25D71</color>
+    <color name="color_F64051">#F64051</color>
+    <color name="color_FFFDE4">#FFFDE4</color>
+    <color name="color_E4E4E4">#E4E4E4</color>
+    <color name="color_F9F9F9">#F9F9F9</color>
+    <color name="color_FFECB9">#FFECB9</color>
+    <color name="color_FF4582">#FF4582</color>
+    <color name="color_01AAFF">#01AAFF</color>
+    <color name="color_FF413B">#FF413B</color>
+    <color name="color_9A9691">#9A9691</color>
+    <color name="color_D7D8D8">#D7D8D8</color>
+    <color name="color_807F7F">#807F7F</color>
+    <color name="color_F7F4EC">#F7F4EC</color>
+    <color name="color_CFC19A">#CFC19A</color>
+    <color name="color_EA5413">#EA5413</color>
+    <color name="color_C9CACA">#C9CACA</color>
+    <color name="color_C7C8C8">#C7C8C8</color>
+    <color name="color_838383">#838383</color>
+    <color name="color_8A8A8A">#8A8A8A</color>
+    <color name="color_FFB3BA">#FFB3BA</color>
+    <color name="color_DEDEDE">#DEDEDE</color>
+    <color name="color_939393">#939393</color>
+    <color name="color_FFAE35">#FFAE35</color>
+    <color name="red">#FF0000</color>
+
+
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
     <color name="white_per20">#33FFFFFF</color>
