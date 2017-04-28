@@ -135,6 +135,19 @@ public class IMProxy {
     }
 
     /**
+     * socket发消息
+     *
+     * @param netData tcp数据包封装
+     */
+    public void send(NetData netData) {
+        try {
+            if (iCoreService != null) iCoreService.sendMsg(netData);
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+    }
+
+    /**
      * 代理和服务器断开连接（默认不主动断开连接，特殊情况调用）
      */
     public void disconnect() {
