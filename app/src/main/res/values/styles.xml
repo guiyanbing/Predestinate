@@ -153,8 +153,8 @@
     <!-- ***********图片与头像************ -->
     <!-- 普通列表头像大小 -->
     <style name="avatar_big" parent="image">
-        <item name="android:layout_width">@dimen/px250_dp</item>
-        <item name="android:layout_height">@dimen/px250_dp</item>
+        <item name="android:layout_width">@dimen/px222_dp</item>
+        <item name="android:layout_height">@dimen/px222_dp</item>
     </style>
 
     <style name="avatar_middle" parent="image">
@@ -643,6 +643,7 @@
         <item name="android:layout_marginLeft">@dimen/px60_dp</item>
         <item name="android:background">@drawable/f1_setting_line</item>
     </style>
+
     <style name="set_desc">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -653,12 +654,14 @@
         <item name="android:textSize">@dimen/px42_sp</item>
         <item name="android:background">@null</item>
     </style>
+
     <style name="set_txt_item" parent="set_item">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/gray_text</item>
         <item name="android:textSize">@dimen/px42_sp</item>
     </style>
+
     <style name="set_togglebtn">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

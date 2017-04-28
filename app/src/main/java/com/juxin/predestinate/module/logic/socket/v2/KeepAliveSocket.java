@@ -80,10 +80,10 @@ public class KeepAliveSocket {
             e.printStackTrace();
             state = SocketState.CONNECTED_FAILED;
 
+            PLogger.e("Socket connect failed: " + e.getMessage());
             if (listener != null) {
                 listener.onSocketConnectError();
             }
-            PLogger.e("Socket connect failed: " + e.getMessage());
         } finally {
             socketConnectCondition.signalAll();
             socketStateLock.unlock();
@@ -187,11 +187,11 @@ public class KeepAliveSocket {
             socket.close();
         } catch (IOException e) {
         }
+        PLogger.d("Socket disconnect by error end");
         if (listener != null && state != SocketState.DISCONNECT_ERROR) {
             state = SocketState.DISCONNECT_ERROR;
             listener.onSocketDisconnectByError();
         }
-        PLogger.d("Socket disconnect by error end");
         socketStateLock.unlock();
     }
 

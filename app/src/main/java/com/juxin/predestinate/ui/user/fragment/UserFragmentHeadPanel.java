@@ -22,15 +22,15 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.ChineseFilter;
 
 /**
  * 个人中心条目头部
  */
 public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, PObserver, ImgSelectUtil.OnChooseCompleteListener {
 
-    private ImageView user_head, vip_status;
-    private TextView user_nick, user_id, vip_end;
+    private ImageView user_head;
+    private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
 
     private UserDetail myInfo;
@@ -46,16 +46,15 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
     private void initView() {
         user_head = (ImageView) findViewById(R.id.user_head);
         user_nick = (TextView) findViewById(R.id.user_nick);
-        vip_status = (ImageView) findViewById(R.id.user_vip_status);
         user_id = (TextView) findViewById(R.id.user_id);
-        vip_end = (TextView) findViewById(R.id.user_vip_end);
+        iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
 
         //根据屏幕分辨率设置最大显示长度
         user_nick.setMaxEms(App.context.getResources().getDisplayMetrics().density <= 1.5 ? 5 : 7);
 
         user_head.setOnClickListener(this);
         user_nick.setOnClickListener(this);
-        findViewById(R.id.ll_edit).setOnClickListener(this);
+        findViewById(R.id.iv_code_copy).setOnClickListener(this);
 
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
         functionPanel = new UserFragmentFunctionPanel(getContext());
@@ -70,9 +69,10 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
     public void refreshView() {
         myInfo = ModuleMgr.getCenterMgr().getMyInfo();
         ImageLoader.loadRoundCorners(getContext(), myInfo.getAvatar(), 10, user_head);
-        vip_status.setVisibility(myInfo.isVip() ? View.VISIBLE : View.GONE);
         user_id.setText("ID:" + myInfo.getUid());
         user_nick.setText(myInfo.getNickname());
+        iv_invite_code.setText(String.format(getContext().getResources().
+                getString(R.string.center_my_invite_code), myInfo.getShareCode()));
         functionPanel.refreshView(myInfo);
     }
 
@@ -89,9 +89,11 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
             case R.id.user_head://上传头像
                 ImgSelectUtil.getInstance().pickPhoto(getContext(), this);
                 break;
-
-            case R.id.ll_edit://跳转到个人信息页面
-                UIShow.showUserInfoAct(getContext());
+            case R.id.user_nick://修改昵称
+                //TODO 弹出修改昵称popupWindow
+                break;
+            case R.id.iv_code_copy://复制邀请码
+                ChineseFilter.copyString(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getShareCode());
                 break;
         }
     }
