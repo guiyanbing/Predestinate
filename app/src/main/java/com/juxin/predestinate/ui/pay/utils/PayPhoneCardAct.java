@@ -51,6 +51,7 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_pay_phonecardact);
+        setBackView(R.id.base_title_back, "手机卡支付");
 
         initView();
     }

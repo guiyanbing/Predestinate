@@ -7,11 +7,10 @@
 
     <include layout="@layout/base_title" />
 
-    <RelativeLayout
+    <com.juxin.library.view.CustomFrameLayout
+        android:id="@+id/payalipay_web_custom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_color"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <WebView
             android:id="@+id/payalipay_web_webview"
@@ -23,7 +22,7 @@
 
         <include layout="@layout/common_net_error" />
 
-    </RelativeLayout>
+    </com.juxin.library.view.CustomFrameLayout>
 </LinearLayout>
 
 

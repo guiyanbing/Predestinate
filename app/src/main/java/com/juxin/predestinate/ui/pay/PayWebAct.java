@@ -15,8 +15,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import com.juxin.library.utils.NetworkUtils;
+import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -43,8 +43,8 @@ import java.util.regex.Pattern;
 public class PayWebAct extends BaseActivity{
 
     private WebView payalipay_web_webview;
-    private LinearLayout common_loading, common_net_error;
     private PayGood payGood;
+    private CustomFrameLayout customFrameLayout;
 
     private boolean isB = true;
 
@@ -79,9 +79,9 @@ public class PayWebAct extends BaseActivity{
 
     public void initView() {
         payGood = (PayGood) getIntent().getSerializableExtra("payGood");
+        customFrameLayout = (CustomFrameLayout) findViewById(R.id.payalipay_web_custom);
         payalipay_web_webview = (WebView) findViewById(R.id.payalipay_web_webview);
-        common_loading = (LinearLayout) findViewById(R.id.common_loading);
-        common_net_error = (LinearLayout) findViewById(R.id.common_net_error);
+        customFrameLayout.setList(new int[]{R.id.payalipay_web_webview, R.id.common_loading, R.id.common_net_error});
         payalipay_web_webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         initData();
         findViewById(R.id.error_btn).setOnClickListener(new View.OnClickListener() {
@@ -91,14 +91,13 @@ public class PayWebAct extends BaseActivity{
                 initData();
             }
         });
+        customFrameLayout.show(R.id.common_loading);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initData() {
         if (NetworkUtils.isNotConnected(this)) {
-            common_loading.setVisibility(View.GONE);
-            payalipay_web_webview.setVisibility(View.GONE);
-            common_net_error.setVisibility(View.VISIBLE);
+            customFrameLayout.show(R.id.common_net_error);
             return;
         }
 
@@ -228,7 +227,7 @@ public class PayWebAct extends BaseActivity{
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
             MMToast.showShort("加载失败");
-            common_net_error.setVisibility(View.VISIBLE);
+            customFrameLayout.show(R.id.common_net_error);
         }
 
         String str_login = "https://wappaygw.alipay.com/cashier/wapcashier_login.htm";
@@ -243,9 +242,7 @@ public class PayWebAct extends BaseActivity{
         @Override
         public void onPageFinished(WebView view, String url) {
             Log.e("URL", url);
-            common_loading.setVisibility(View.GONE);
-            common_net_error.setVisibility(View.GONE);
-            payalipay_web_webview.setVisibility(View.VISIBLE);
+            customFrameLayout.show(R.id.payalipay_web_webview);
 
             if (url.contains(str_login) && isB) {
                 float f = (float) (0.155 * ModuleMgr.getAppMgr().getScreenHeight());

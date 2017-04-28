@@ -10,7 +10,7 @@
     <com.juxin.library.controls.smarttablayout.SmartTabLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/pay_cupvoice_pager_indicator"
-        android:layout_width="@dimen/px560_dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/px120_dp"
         android:layout_marginLeft="@dimen/px60_dp"
         app:stl_indicatorColor="#FF2828"

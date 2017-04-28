@@ -20,6 +20,7 @@ import com.juxin.mumu.bean.net.BasicNameValuePair;
 import com.juxin.mumu.bean.net.NameValuePair;
 import com.juxin.mumu.bean.utils.MD5;
 import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -85,7 +86,7 @@ public class PayWeixinUtils {
                         onPayment(payGood);
                         return;
                     } else
-                        MMToast.showShort("请求出错，请重新请求");
+                        MMToast.showShort(R.string.request_error);
                 }
 
             }
@@ -177,7 +178,7 @@ public class PayWeixinUtils {
 
     private void To_Pay_WeiXin_Protocol(String payData) {
         if (!payData.startsWith("weixin://")) {
-            MMToast.showShort("请求出错，请重新请求");
+            MMToast.showShort(R.string.request_error);
             return;
         }
         Uri uri = Uri.parse(payData);
@@ -196,7 +197,7 @@ public class PayWeixinUtils {
     private void To_Pay_WeiXin_Http(String payData) {
         if (!payData.startsWith("http://") &&
                 !payData.startsWith("https://")) {
-            MMToast.showShort("请求出错，请重新请求");
+            MMToast.showShort(R.string.request_error);
             return;
         }
         LoadingDialog.show((FragmentActivity) context, "");
