@@ -43,6 +43,10 @@
     <string name="center_vip_left_day">已开通</string>
     <string name="center_phone_to_verify">立即认证</string>
     <string name="center_phone_has_verify">已认证</string>
+    <string name="user_info_send">发信</string>
+    <string name="user_info_hi">打招呼</string>
+    <string name="user_info_video">发视频</string>
+    <string name="user_info_voice">发语音</string>
 
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>

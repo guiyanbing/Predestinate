@@ -24,16 +24,12 @@ public class UserCheckInfoAct extends BaseActivity implements View.OnClickListen
 
     private int channel;
     private UserDetail userProfile;
-    private boolean isState = true;// 检测打招呼状态是否改变
-    private boolean isBeingGreeted = true;// 是否正在打招呼
 
     /**********
      * panel
      ***********/
     private UserCheckInfoHeadPanel headPanel;
     private UserCheckInfoFootPanel footPanel;
-    private RelativeLayout userinfo_message, add_friend;
-    private View userinfo_sayhello;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

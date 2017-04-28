@@ -270,17 +270,19 @@ public class UIShow {
     public static void showUserSetAct(final Activity context, final int resultCode) {
         context.startActivityForResult(new Intent(context, SettingAct.class), resultCode);
     }
+
     /**
      * 打开关于页面
      */
     public static void showAboutAct(final Activity context) {
         context.startActivity(new Intent(context, AboutAct.class));
     }
+
     /**
      * 打开修改密码页面
      */
     public static void showModifyAct(final Activity context) {
-        context.startActivityForResult(new Intent(context, UserModifyPwdAct.class),100);
+        context.startActivityForResult(new Intent(context, UserModifyPwdAct.class), 100);
     }
 
     /**
@@ -319,7 +321,7 @@ public class UIShow {
     }
 
     /**
-     * 打开主页
+     * 打开资料查看页
      */
     public static void showUserCheckInfoAct(Context context) {
         context.startActivity(new Intent(context, UserCheckInfoAct.class));
