@@ -60,6 +60,9 @@
     <color name="color_B2B2B2">#B2B2B2</color>
     <color name="color_F5FFFF">#F5FFFF</color>
     <color name="color_C3C3C3">#C3C3C3</color>
+    <color name="color_D4D4D4">#D4D4D4</color>
+    <color name="color_83A0EC">#83a0ec</color>
+    <color name="color_FCFCFC">#fcfcfc</color>
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>

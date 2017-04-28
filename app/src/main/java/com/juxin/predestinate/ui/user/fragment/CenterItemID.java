@@ -7,48 +7,58 @@ package com.juxin.predestinate.ui.user.fragment;
 
 public class CenterItemID {
     /**
-     * 主页
+     * 我的主页
      **/
-    static final int i_Center_Homepage_id = 0;
+    static final int i_Center_item_1 = 0;
 
     /**
-     * 动态
+     * 谁关注我
      **/
-    static final int i_Center_Dynamic_id = 1;
+    static final int i_Center_item_2 = 1;
 
     /**
-     * 认证
+     * 我的钱包
      **/
-    static final int i_Center_Auth_id = 2;
+    static final int i_Center_item_3 = 2;
 
     /**
-     * VIP充值
+     * 我要赚红包
      */
-    static final int i_Center_GoodsVip_id = 3;
+    static final int i_Center_item_4 = 3;
 
     /**
-     * 钻石
+     * 我的Y币
      **/
-    static final int i_Center_GoodsDiamond_id = 4;
+    static final int i_Center_item_5 = 4;
 
     /**
-     * 礼物
+     * 我的钻石
      **/
-    static final int i_Center_Gift_id = 5;
+    static final int i_Center_item_6 = 5;
 
     /**
-     * 游戏
+     * 我的礼物
      **/
-    static final int i_Center_Game_id = 6;
+    static final int i_Center_item_7 = 6;
 
     /**
-     * 关于
+     * 最近来访
      **/
-    static final int i_Center_About_id = 7;
+    static final int i_Center_item_8 = 7;
 
     /**
-     * 设置
+     * 个人资料
      **/
-    static final int i_Center_Setting_id = 8;
+    static final int i_Center_item_9 = 8;
+
+    /**
+     * 我的相册
+     **/
+    static final int i_Center_item_10 = 9;
+
+    /**
+     * 设置中心
+     **/
+    static final int i_Center_item_11 = 10;
 
 }

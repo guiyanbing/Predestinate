@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:id="@+id/ll_rank"
+        android:id="@+id/ll_vip_privilege"
         style="@style/center_pieces_item">
 
         <LinearLayout
@@ -14,31 +14,36 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/px36_dp">
-
-            <ImageView
-                style="@style/icon_middle_center"
-                android:src="@drawable/p1_user_fragment_rank" />
+            android:padding="@dimen/px30_dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/px10_dp"
-                android:text="@string/user_center_fragment_rank"
-                android:textColor="@color/color_666666"
-                android:textSize="@dimen/px36_sp" />
+                style="@style/text_small"
+                android:text="@string/center_vip_privilege"
+                android:textColor="@color/text_ciyao_gray" />
+
+            <ImageView
+                android:id="@+id/iv_vip_privilege"
+                android:layout_width="@dimen/px80_dp"
+                android:layout_height="@dimen/px80_dp"
+                android:src="@drawable/f1_user_vip_selector" />
+
+            <TextView
+                android:id="@+id/tv_vip_status"
+                style="@style/text_middle"
+                android:text="@string/center_vip_to_open"
+                android:textColor="@color/color_666666" />
         </LinearLayout>
     </RelativeLayout>
 
     <View
         android:layout_width="1px"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/px18_dp"
         android:layout_marginBottom="@dimen/px18_dp"
+        android:layout_marginTop="@dimen/px18_dp"
         android:background="@color/fengexian_gray" />
 
     <RelativeLayout
-        android:id="@+id/ll_wallet"
+        android:id="@+id/ll_phone_verify"
         style="@style/center_pieces_item">
 
         <LinearLayout
@@ -47,20 +52,24 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/px36_dp">
-
-            <ImageView
-                style="@style/icon_middle_center"
-                android:src="@drawable/p1_user_fragment_wallet" />
+            android:padding="@dimen/px30_dp">
 
             <TextView
-                android:id="@+id/tv_wallet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/px10_dp"
-                android:text="@string/user_center_fragment_wallet"
-                android:textColor="@color/color_666666"
-                android:textSize="@dimen/px36_sp" />
+                style="@style/text_small"
+                android:text="@string/center_phone_verify"
+                android:textColor="@color/text_ciyao_gray" />
+
+            <ImageView
+                android:id="@+id/iv_phone_verify"
+                android:layout_width="@dimen/px80_dp"
+                android:layout_height="@dimen/px80_dp"
+                android:src="@drawable/f1_user_phone_selector" />
+
+            <TextView
+                android:id="@+id/tv_verify_status"
+                style="@style/text_middle"
+                android:text="@string/center_phone_to_verify"
+                android:textColor="@color/color_666666" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

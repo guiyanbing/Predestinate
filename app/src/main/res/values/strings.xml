@@ -5,13 +5,11 @@
     <!-- 全局提示语 -->
     <string name="request_error">请求出错!</string>
 
-
-
     <!-- 主页Fragment -->
     <string name="main_btn_mail">发现</string>
     <string name="main_btn_xiaoyou">消息</string>
     <string name="main_btn_plaza">风云榜</string>
-    <string name="main_btn_web">书城</string>
+    <string name="main_btn_web">广场</string>
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
 
@@ -35,7 +33,17 @@
     <string name="button_help">帮助</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
+
     <!-- 个人中心 -->
+    <string name="copy">复制</string>
+    <string name="center_my_invite_code">我的邀请码：%s</string>
+    <string name="center_vip_privilege">VIP特权</string>
+    <string name="center_phone_verify">手机认证</string>
+    <string name="center_vip_to_open">立即开通</string>
+    <string name="center_vip_left_day">已开通</string>
+    <string name="center_phone_to_verify">立即认证</string>
+    <string name="center_phone_has_verify">已认证</string>
+
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
     <string name="str_not_filled">未填写</string>
@@ -152,8 +160,6 @@
 
     <!-- 用户资料 -->
     <string name="user_center_fragment">我的</string>
-    <string name="user_center_fragment_rank">排行榜</string>
-    <string name="user_center_fragment_wallet">钱包</string>
     <string name="check_info_sendmsg">发消息</string>
     <string name="check_info_sayhi">打招呼</string>
     <string name="check_info_gift">送礼物</string>
