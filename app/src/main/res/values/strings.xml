@@ -2,6 +2,11 @@
     <string name="app_name">缘份吧</string>
     <string name="app_storage_name">xiaou</string>
 
+    <!-- 全局提示语 -->
+    <string name="request_error">请求出错!</string>
+
+
+
     <!-- 主页Fragment -->
     <string name="main_btn_mail">发现</string>
     <string name="main_btn_xiaoyou">消息</string>

@@ -39,7 +39,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     private void initView() {
         payGood = (PayGood) getIntent().getSerializableExtra("payGood");
         if (payGood == null) {
-            MMToast.showShort("请求出错");
+            MMToast.showShort(R.string.request_error);
             this.finish();
             return;
         }
@@ -66,7 +66,6 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.paylist_qq).setOnClickListener(this);
         paylist_help_txt = (TextView) findViewById(R.id.paylist_help_txt);
         findViewById(R.id.paylist_help).setOnClickListener(this);
-
     }
 
     @Override
