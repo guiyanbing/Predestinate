@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.logic.model.mgr;
 
+import android.content.Context;
+
 import com.juxin.library.observe.ModuleBase;
 
 /**
@@ -103,6 +105,15 @@ public interface AppMgr extends ModuleBase {
     int getDeviceID();
 
     // ================软件状态信息================
+
+    /**
+     * 获取当前进程名称
+     *
+     * @param context 上下文
+     * @param pid     进程id
+     * @return 进程名称
+     */
+    String getProcessName(Context context, int pid);
 
     /**
      * 是否Debug模式

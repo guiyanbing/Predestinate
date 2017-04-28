@@ -26,13 +26,13 @@ public class Constant {
     public static final String FATE_IT_CUP_HTTP = " http://pay.app.mumu123.cn/";        //银联地址
 
 
-
     // -------------------------版本信息常量---------------------------
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
-    public static final int MS = 9;                 //消息版本号
-    public static final int PLATFORM_TYPE = 2;      //平台号
+    public static final int MS_TYPE = 9;            //消息版本号
+    public static final int PLATFORM_TYPE = 2;      //平台号：2为android，3为iphone
     public static final int SUB_VERSION = 5;        //客户端版本号
+    public static final int REG_FLAG = 0;           //0缘分吧，1爱爱，2同城快约，3附近秘约，标记
 
     //微信
     public static String WEIXIN_APP_ID = "wxab302910f007a8ed";//聚鑫 //"wxc56bbddc3c2e0c18";//APPID
@@ -82,12 +82,10 @@ public class Constant {
     public static final int REQ_PAYLISTACT = 0x15;       //支付请求码
     public static final int PAY_WEIXIN = 0x16;// 微信支付
     public static final int PAYMENTACT = 0x17;
-
-    /*注册参数*/
-    public static int msType = 7;  //消息版本号(MS) Y币版本：5，缘分吧红包版：7，红包来了：9，消息排队版，自动回复 + 升级关系（测试版）：10，视频通话 + 表情：11
-    //客户端版本号（version） 礼物版：1，红包版：2，语音版：3，消息排队 + 私密视频：4，取消排队：5，自动回复 + 升级关系（测试版）：6，视频通话 + 表情：7
-    public static int VERSION = 5;
-    public static int regFlag = 0;// 0缘分吧 1爱爱 2同城快约 3附近秘约 标记
-    public static int clientType = 2;// 2为android 3为iphone
+    public static final int PAY_VOICE_OK = 0x18; // 银联语音支付
+    public static final int PAY_VOICE_DETAIL = 0x19; // 银联语音支付
+    public static final int PAY_VOICEACT = 0x20;// 银联语音支付
+    public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
+    public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
 
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -33,14 +34,18 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
+import com.juxin.predestinate.ui.pay.PayWebAct;
+import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
+import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
+import com.juxin.predestinate.ui.setting.AboutAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
-import com.juxin.predestinate.ui.setting.Setting_Act;
-import com.juxin.predestinate.ui.setting.UsersSetAct;
+import com.juxin.predestinate.ui.setting.SettingAct;
+import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
@@ -183,6 +188,7 @@ public class UIShow {
         Intent intent = new Intent(activity, UserRegInfoAct.class);
         activity.startActivity(intent);
     }
+
     /**
      * 打开资料完善页
      */
@@ -196,7 +202,7 @@ public class UIShow {
      * 手机绑定
      *
      * @param activity
-     * @param isVerify  是否绑定手机
+     * @param isVerify 是否绑定手机
      */
     public static void showPhoneVerify_Act(Context activity, boolean isVerify) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
@@ -262,7 +268,19 @@ public class UIShow {
      * 打开设置页
      */
     public static void showUserSetAct(final Activity context, final int resultCode) {
-        context.startActivityForResult(new Intent(context, Setting_Act.class), resultCode);
+        context.startActivityForResult(new Intent(context, SettingAct.class), resultCode);
+    }
+    /**
+     * 打开关于页面
+     */
+    public static void showAboutAct(final Activity context) {
+        context.startActivity(new Intent(context, AboutAct.class));
+    }
+    /**
+     * 打开修改密码页面
+     */
+    public static void showModifyAct(final Activity context) {
+        context.startActivityForResult(new Intent(context, UserModifyPwdAct.class),100);
     }
 
     /**
@@ -396,8 +414,9 @@ public class UIShow {
      *
      * @param activity  FragmentActivity上下文
      * @param appUpdate 软件升级信息
+     * @param isShowTip 是否展示界面提示
      */
-    public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate) {
+    public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
         // 如果不同包名且已安装升级包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
         if (!TextUtils.isEmpty(appUpdate.getPackage_name())
@@ -423,7 +442,7 @@ public class UIShow {
             updateDialog.setData(appUpdate);
             updateDialog.showDialog(activity);
         } else {
-//            PToast.showShort("您当前的版本为最新的");//TODO 判断activity是设置页面的instance之后弹出提示
+            if (isShowTip) PToast.showShort("您当前的版本为最新的");
         }
     }
 
@@ -496,6 +515,7 @@ public class UIShow {
 
     /**
      * 选择支付
+     *
      * @param activity
      */
     public static void showPayListAct(final FragmentActivity activity, int orderID) {
@@ -532,12 +552,60 @@ public class UIShow {
     public static void showPayVoiceAct(final FragmentActivity activity, PayGood payGood, PayWX payWX) {
         Intent intent = new Intent(activity, PayVoiceAct.class);
         intent.putExtra("payGood", payGood);
-        if(payWX != null){
+        if (payWX != null) {
             intent.putExtra("payWX", payWX);
         }
         activity.startActivityForResult(intent, Constant.PAYMENTACT);
     }
 
+    /**
+     * 新的语音支付详细页面
+     */
+    public static void shoPayCupVoiceDetailAct(Activity context, PayGood payGood, String bank_name, int resultCode) {
+        Intent intent = new Intent(context, PayCupVoiceDetailAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("bank_name", bank_name);
+        context.startActivityForResult(intent, resultCode);
+    }
+
+    /**
+     * 新的语音支付详细页面
+     */
+    public static void showPayCupVoiceOkAct(Activity context, PayGood payGood, String phone,
+                                            String nickname, String number, String bank_id, int resultCode) {
+        Intent intent = new Intent(context, PayCupVoiceOkAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("phone", phone);
+        intent.putExtra("nickname", nickname);
+        if (number != null) {
+            intent.putExtra("number", number);
+        }
+        if (bank_id != null) {
+            intent.putExtra("bank_id", bank_id);
+        }
+        context.startActivityForResult(intent, resultCode);
+    }
+
+    public static void showPayWebAct(FragmentActivity activity, PayGood payGood) {
+        Intent intent_web = new Intent(activity, PayWebAct.class);
+        intent_web.putExtra("payGood", payGood);
+        activity.startActivityForResult(intent_web, Constant.PAYMENTACT_TO);
+    }
+
+
+    /**
+     * 打开QQ客服
+     *
+     * @param context
+     */
+    public static void showQQServer(Context context) {
+        try {
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + 11;
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (Exception e) {
+            MMToast.showShort("QQ客服忙!请等待");
+        }
+    }
 
 
 }

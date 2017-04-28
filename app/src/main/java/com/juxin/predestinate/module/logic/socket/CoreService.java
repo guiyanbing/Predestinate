@@ -71,7 +71,7 @@ public class CoreService extends Service {
 
         @Override
         public void sendMsg(NetData data) throws RemoteException {
-
+            AutoConnectMgr.getInstance().send(data);
         }
     }
 }

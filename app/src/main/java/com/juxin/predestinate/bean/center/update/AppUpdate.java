@@ -21,9 +21,9 @@ public class AppUpdate extends BaseData {
         JSONObject jsonObject = getJsonObject(s);
         this.setTitle(jsonObject.optString("title"));
         this.setSummary(jsonObject.optString("summary"));
-        this.setPackage_name(jsonObject.optString("package_name"));
+        this.setPackage_name(jsonObject.optString("newpackname"));
         this.setUrl(jsonObject.optString("url"));
-        this.setVersion(jsonObject.optInt("version"));
+        this.setVersion(jsonObject.optInt("ver"));
         this.setForce(jsonObject.optInt("force"));
     }
 

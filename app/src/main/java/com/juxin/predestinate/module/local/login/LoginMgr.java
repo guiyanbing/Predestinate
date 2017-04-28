@@ -25,7 +25,6 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
-import com.juxin.predestinate.module.logic.request.HTCallBack;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
@@ -182,16 +181,16 @@ public class LoginMgr implements ModuleBase {
      */
     public void onRegister(final Activity context, UrlParam urlParam, String nickname, int age, int gender) {
         HashMap<String, Object> postParams = new HashMap<>();
-        postParams.put("flag", Constant.regFlag);
-        postParams.put("user_client_type", Constant.clientType);
+        postParams.put("flag", Constant.REG_FLAG);
+        postParams.put("user_client_type", Constant.PLATFORM_TYPE);
         postParams.put("s_uid", ModuleMgr.getAppMgr().getMainChannelID());
         postParams.put("s_sid", ModuleMgr.getAppMgr().getSubChannelID());
         postParams.put("ie", ModuleMgr.getAppMgr().getIMEI());
         postParams.put("is", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
         postParams.put("mc", ModuleMgr.getAppMgr().getMAC());
         postParams.put("simoperator", ModuleMgr.getAppMgr().getSimOperator());
-        postParams.put("ms", Constant.msType);
-        postParams.put("ver", Constant.VERSION);
+        postParams.put("ms", Constant.MS_TYPE);
+        postParams.put("ver", Constant.SUB_VERSION);
         postParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
         postParams.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
         postParams.put("age", age);
@@ -231,8 +230,8 @@ public class LoginMgr implements ModuleBase {
         userAccount.put("username", uid);
 //        userAccount.put("pwd", EncryptUtil.md5(pwd));
         userAccount.put("password", pwd);
-        userAccount.put("ms", Constant.msType);
-        userAccount.put("ver", Constant.VERSION);
+        userAccount.put("ms", Constant.MS_TYPE);
+        userAccount.put("ver", Constant.SUB_VERSION);
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
         ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount,
                 RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
@@ -266,7 +265,7 @@ public class LoginMgr implements ModuleBase {
      * @param requestCallback
      */
     public void modifyUserData(HashMap<String, Object> post_param, RequestComplete requestCallback) {
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.modifyUserData,null,null, post_param, RequestParam.CacheType.CT_Cache_No,false,false, requestCallback);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.modifyUserData, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
     }
 
     /**
@@ -335,6 +334,13 @@ public class LoginMgr implements ModuleBase {
         clearCookie();//在setLoginInfo方法之前执行
         setLoginInfo(0, true);
 //        App.appState = App.AppState.AS_Service; //TODO
+    }
+
+    /**
+     * 添加登录用户
+     */
+    public void addLoginUser(long uid, String pwd) {
+        putUserInfo(uid, pwd);
     }
 
     // **************************内部调用**************************
