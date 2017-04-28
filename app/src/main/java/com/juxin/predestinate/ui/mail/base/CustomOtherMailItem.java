@@ -39,6 +39,11 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     }
 
     @Override
+    public void showGap() {
+        super.showGap();
+    }
+
+    @Override
     public void showData(BaseMessage msgData) {
         if (!TextUtils.isEmpty(msgData.getAvatar())) {
       //      ModuleMgr.httpMgr.reqBigUserHeadImage(item_headpic, msgData.getAvatar());

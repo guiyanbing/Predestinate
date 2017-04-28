@@ -326,6 +326,70 @@
     <string name="pay_errcode_cancel">支付取消</string>
     <string name="pay_errcode_deny">支付被拒绝</string>
     <string name="pay_errcode_unknown">支付出错</string>
+    <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <color name="homeUserSay">#ff333333</color>
 
+
+    <!--红包记录-->
+    <string name="head_title">可提现金额</string>
+    <string name="head_unit">元</string>
+    <string name="head_draw_bt">立即提现</string>
+    <string name="head_draw_record">提现记录</string>
+    <string name="diamond_explain_one">1、钻石可用于赠送虚拟礼物</string>
+    <string name="diamond_explain_two">2、等价钻石礼物直接纳入我的个人钱包</string>
+    <string name="diamond_explain_three">3、礼物总价，按50%的分成比例</string>
+    <string name="diamond_explain_four">4、活动最终解释权归本APP所有</string>
+    <string name="usable_diamond">可用钻石：</string>
+    <string name="withdrawal_instructions_one">收入详情需24小时后解冻才能放入零钱提现</string>
+    <string name="withdrawal_instructions_two">其他红包需24小时后解冻才能放入零钱提现</string>
+    <string name="withdrawal_instructions_three">提现需填写真实姓名、银行卡号、开户银行等信息，填写错误信息将会导致提现失败</string>
+    <string name="withdrawal_instructions_four">提现时间为72小时到账</string>
+    <string name="red_packet_tree">摇钱树红包</string>
+    <string name="red_packet_other">其他红包</string>
+    <string name="withdrawal_record">提现记录</string>
+    <string name="service_QQ">客服QQ:131333</string>
+    <string name="withdrawal_page">提现页面</string>
+    <string name="name_cannot_be_empty">真实姓名不能为空</string>
+    <string name="bank_cannot_be_empty">开户银行不能为空</string>
+    <string name="branch_cannot_be_empty">开户支行不能为空</string>
+    <string name="bank_card_cannot_be_empty">银行卡号不能为空</string>
+    <string name="money_cannot_be_empty">提现金额不能为空</string>
+    <string name="withdraw_tips">提现金额需要大于</string>
+    <string name="not_beyond">提现不能超出您的金额</string>
+    <string name="delay_contact_qq">若有延迟，请联系客服QQ：</string>
+    <string name="submit_succeed">提交成功</string>
+    <string name="submit_failure">提交失败</string>
+    <string name="one_hour_onece">每小时只能发送一次请求</string>
+    <string name="want_to_say">请输入想说的话</string>
+    <string name="error_retry">消息发送失败，请检查后重试！</string>
+    <string name="withdraw_tip"><![CDATA[<font color=\'#d6d6d6\'>按国家法律规定,提现需收取</font><font color=\'#fd698c\'>20%</font><font color=\'#d6d6d6\'>的个人所得税</font>]]></string>
+    <string name="my_diamonds_explain">我的钻石</string>
+    <string name="explain">说明</string>
+    <string name="my_red">我的钱包</string>
+    <string name="income_details">收入详情</string>
+    <string name="withdraw_record">提现记录</string>
+    <string name="phone_verify">手机号验证</string>
+    <string name="toast_code_succeed">验证成功</string>
+    <string name="please_send_verification_code">请先发送验证码</string>
+    <string name="net_error_retry">网络异常，请重试</string>
+    <string name="please_try_again_later">请稍候再试</string>
+    <string name="resend">重新发送(</string>
+    <string name="seconds">)秒</string>
+    <string name="untreated">未处理</string>
+    <string name="processed">已处理</string>
+    <string name="click_on_the_modify">点击修改</string>
+    <string name="withdraw_succeed">提现成功</string>
+    <string name="imburse">放入钱袋</string>
+    <string name="net_error_check_your_net">网络异常,请检查您的网络</string>
+    <!-- 个人中心-我的礼品 -->
+    <string name="my_gift_title">我的礼物</string>
+    <string name="my_gift_send">送出的礼物</string>
+    <string name="my_gift_get">收到的礼物</string>
+    <string name="my_gift_get_count">当前收到礼物数:</string>
+    <string name="my_gift_send_count">当前送出礼物数:</string>
+    <string name="redbag_wantmessage">输入想对帅哥说的话，女生主动些，撒个娇、卖个萌，男生会忍不住想要和你聊天，聊天有红包哦！</string>
+    <string name="redbag_wantgift">说点动听的话打动帅哥吧，女生主动些，撒个娇、卖个萌，男生会忍不住想要给你送礼物哦！</string>
+    <string name="upgrade_vip">升级VIP会员，查看更多来访</string>
+    <string name="lately_visit">最近7天有12个用户来看你。</string>
+    <string name="say_hello">hi，傻子</string>
 </resources>

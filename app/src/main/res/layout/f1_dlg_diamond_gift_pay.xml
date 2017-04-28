@@ -1,0 +1,645 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/xinxin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/f1_dlg_diamond_xingxing" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/xinxin"
+            android:background="@drawable/f1_dlg_diamond_hudu" />
+
+        <LinearLayout
+            android:layout_width="@dimen/px212_dp"
+            android:layout_height="@dimen/px190_dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/f1_dlg_diamond_head_bg"
+            android:gravity="center">
+
+            <com.juxin.library.view.CircleImageView
+                android:id="@+id/dlg_diamond_head"
+                android:layout_width="@dimen/px190_dp"
+                android:layout_height="@dimen/px190_dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_FFECB9"
+        android:paddingTop="@dimen/px30_dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="@dimen/px75_dp"
+                android:layout_height="@dimen/px75_dp"
+                android:layout_gravity="right" />
+            <ImageView
+                android:layout_width="@dimen/px75_dp"
+                android:layout_height="@dimen/px75_dp"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/dlg_diamond_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="天使爱美丽"
+                android:textColor="@color/red"
+                android:textSize="@dimen/px42_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="向你索要礼物"
+                android:textColor="@color/black"
+                android:textSize="@dimen/px42_sp" />
+            <ImageView
+                android:layout_width="@dimen/px75_dp"
+                android:layout_height="@dimen/px75_dp"
+                android:layout_weight="1" />
+            <ImageView
+                android:id="@+id/iv_dlg_close"
+                android:layout_width="@dimen/px75_dp"
+                android:layout_height="@dimen/px75_dp"
+                android:layout_gravity="right"
+                android:background="@drawable/f1_dlg_close_small"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/dlg_diamond_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/px30_dp"
+            android:layout_marginLeft="@dimen/px120_dp"
+            android:textSize="@dimen/px36_sp"
+            android:layout_marginRight="@dimen/px120_dp"
+            android:layout_marginTop="@dimen/px30_dp"
+            android:background="@drawable/f1_dlg_diamond_task"
+            android:padding="@dimen/px30_dp"
+            android:text="帅哥"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_FFECB9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/px60_dp"
+            android:paddingRight="@dimen/px60_dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:background="@drawable/f1_view_yellow_stroke"
+                android:orientation="vertical">
+
+                <android.support.v4.view.ViewPager
+                    android:layout_margin="@dimen/px9_dp"
+                    android:id="@+id/vp_gift_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px420_dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="-3dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/px15_dp">
+
+                        <ImageView
+                            android:layout_width="@dimen/px45_dp"
+                            android:layout_height="@dimen/px45_dp"
+                            android:background="@drawable/f1_ic_my_diamonds" />
+
+                        <TextView
+                            android:paddingBottom="@dimen/px3_dp"
+                            android:id="@+id/dlg_diamond_money"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="当前钻石：0"
+                            android:textSize="@dimen/px30_dp"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_gift_main_mid"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_gift_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/px30_dp"
+                    android:gravity="center|left"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/px12_dp"
+                        android:text="余额不足"
+                        android:textColor="@color/color_FF4582"
+                        android:textSize="@dimen/px36_sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="本次送礼还差"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/px36_sp" />
+
+                    <TextView
+                        android:id="@+id/dlg_diamond_tv_decdiamod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10钻石"
+                        android:textColor="@color/color_FF4582"
+                        android:textSize="@dimen/px36_sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=",快去充值吧"
+                        android:textColor="@color/color_FF4582"
+                        android:textSize="@dimen/px36_sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/px30_dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/px18_dp"
+                        android:layout_weight="1">
+
+
+                        <LinearLayout
+                            android:id="@+id/dlg_diamond_ll_diamond10"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:background="@drawable/f1_btn_rectangle_select"
+                            android:gravity="center|left"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/px30_dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/px60_dp"
+                                android:layout_height="@dimen/px60_dp"
+                                android:background="@drawable/f1_ic_my_diamonds" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/px15_dp"
+                                android:text="100"
+                                android:textColor="@color/color_333333"
+                                android:textSize="@dimen/px42_sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10元"
+                                android:textColor="@color/color_01AAFF"
+                                android:textSize="@dimen/px42_sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/dlg_diamond_img_select10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/dlg_diamond_ll_diamond10"
+                            android:layout_alignTop="@+id/dlg_diamond_ll_diamond10"
+                            android:src="@drawable/f1_btn_select" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/px18_dp"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/dlg_diamond_ll_diamond60"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:gravity="center|left"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/px30_dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/px60_dp"
+                                android:layout_height="@dimen/px60_dp"
+                                android:background="@drawable/f1_ic_my_diamonds" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/px15_dp"
+                                android:text="600"
+                                android:textColor="@color/color_333333"
+                                android:textSize="@dimen/px42_sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="60元"
+                                android:textColor="@color/color_01AAFF"
+                                android:textSize="@dimen/px42_sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/dlg_diamond_img_select60"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/dlg_diamond_ll_diamond60"
+                            android:layout_alignTop="@+id/dlg_diamond_ll_diamond60"
+                            android:src="@drawable/f1_btn_unselect" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/px30_dp"
+                    android:paddingTop="@dimen/px30_dp"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/px18_dp"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/dlg_diamond_ll_diamond100"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:gravity="center|left"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/px30_dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/px60_dp"
+                                android:layout_height="@dimen/px60_dp"
+                                android:background="@drawable/f1_ic_my_diamonds" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/px15_dp"
+                                android:text="1000"
+                                android:textColor="@color/color_333333"
+                                android:textSize="@dimen/px42_sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100元"
+                                android:textColor="@color/color_01AAFF"
+                                android:textSize="@dimen/px42_sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/dlg_diamond_img_select100"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/dlg_diamond_ll_diamond100"
+                            android:layout_alignTop="@+id/dlg_diamond_ll_diamond100"
+                            android:src="@drawable/f1_btn_unselect" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/px18_dp"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/dlg_diamond_ll_diamond300"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:gravity="center|left"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/px30_dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/px60_dp"
+                                android:layout_height="@dimen/px60_dp"
+                                android:background="@drawable/f1_ic_my_diamonds" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/px15_dp"
+                                android:text="3000"
+                                android:textColor="@color/color_333333"
+                                android:textSize="@dimen/px42_sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="300元"
+                                android:textColor="@color/color_01AAFF"
+                                android:textSize="@dimen/px42_sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/dlg_diamond_img_select300"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/dlg_diamond_ll_diamond300"
+                            android:layout_alignTop="@+id/dlg_diamond_ll_diamond300"
+                            android:src="@drawable/f1_btn_unselect" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/px18_dp"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/dlg_diamond_ll_diamond500"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:gravity="center|left"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/px30_dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/px60_dp"
+                                android:layout_height="@dimen/px60_dp"
+                                android:background="@drawable/f1_ic_my_diamonds" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/px15_dp"
+                                android:text="5000"
+                                android:textColor="@color/color_333333"
+                                android:textSize="@dimen/px42_sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="500元"
+                                android:textColor="@color/color_01AAFF"
+                                android:textSize="@dimen/px42_sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/dlg_diamond_img_select500"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/dlg_diamond_ll_diamond500"
+                            android:layout_alignTop="@+id/dlg_diamond_ll_diamond500"
+                            android:src="@drawable/f1_btn_unselect" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/px18_dp"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/dlg_diamond_ll_diamond1000"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:gravity="center|left"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/px30_dp">
+
+                            <ImageView
+                                android:layout_width="@dimen/px60_dp"
+                                android:layout_height="@dimen/px60_dp"
+                                android:background="@drawable/f1_ic_my_diamonds" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/px15_dp"
+                                android:text="10000"
+                                android:textColor="@color/color_333333"
+                                android:textSize="@dimen/px42_sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1000元"
+                                android:textColor="@color/color_01AAFF"
+                                android:textSize="@dimen/px42_sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/dlg_diamond_img_select1000"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/dlg_diamond_ll_diamond1000"
+                            android:layout_alignTop="@+id/dlg_diamond_ll_diamond1000"
+                            android:src="@drawable/f1_btn_unselect" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/px30_dp">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Button
+                            android:id="@+id/btn_wx_pay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:padding="@dimen/px30_dp"
+                            android:text="微信支付"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/px45_sp" />
+
+                        <ImageView
+                            android:id="@+id/img_wx_select"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/btn_wx_pay"
+                            android:layout_alignTop="@+id/btn_wx_pay"
+                            android:src="@drawable/f1_btn_unselect" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Button
+                            android:id="@+id/btn_ali_pay"
+                            android:layout_width="@dimen/px420_dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_select"
+                            android:padding="@dimen/px30_dp"
+                            android:text="支付宝"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/px45_sp" />
+
+                        <ImageView
+                            android:id="@+id/img_ali_select"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/btn_ali_pay"
+                            android:layout_alignTop="@+id/btn_ali_pay"
+                            android:src="@drawable/f1_btn_select" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Button
+                            android:id="@+id/btn_other_pay"
+                            android:layout_width="@dimen/px420_dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/f1_btn_rectangle_std"
+                            android:padding="@dimen/px30_dp"
+                            android:text="其它支付"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/px45_sp" />
+
+                        <ImageView
+                            android:id="@+id/img_other_select"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/btn_other_pay"
+                            android:layout_alignTop="@+id/btn_other_pay"
+                            android:src="@drawable/f1_btn_unselect" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px60_dp"
+                android:layout_marginTop="@dimen/px60_dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/btn_diamond_ok"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px96_dp"
+                    android:background="@drawable/f1_view_yellow_corners"
+                    android:gravity="center"
+                    android:text="打赏礼物"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px42_sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -40,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import eposp.wtf_library.core.WtfPlugin;
 
 /**
@@ -146,7 +145,7 @@ public class PayWeixinUtils {
             api.sendReq(req);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort("订单数据出错，请重新请求");
+            MMToast.showShort(R.string.pay_order_error);
         }
     }
 
@@ -268,7 +267,7 @@ public class PayWeixinUtils {
     private void To_Pay_WeiXin_Wft_Wap(String payData) {
         try {
             if (TextUtils.isEmpty(payData)) {
-                MMToast.showShort("订单数据出错，请重新请求");
+                MMToast.showShort(R.string.pay_order_error);
                 return;
             }
 
@@ -293,14 +292,14 @@ public class PayWeixinUtils {
             new WtfPlugin().getOrderForPay((Activity) context, data);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort("订单数据出错，请重新请求");
+            MMToast.showShort(R.string.pay_order_error);
         }
     }
 
     private void To_Pay_WeiXin_Wft_App(String payData) {
         try {
             if (TextUtils.isEmpty(payData)) {
-                MMToast.showShort("订单数据出错，请重新请求");
+                MMToast.showShort(R.string.pay_order_error);
                 return;
             }
 
@@ -316,7 +315,7 @@ public class PayWeixinUtils {
             PayPlugin.unifiedAppPay((Activity) context, msg);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort("订单数据出错，请重新请求");
+            MMToast.showShort(R.string.pay_order_error);
         }
     }
 }

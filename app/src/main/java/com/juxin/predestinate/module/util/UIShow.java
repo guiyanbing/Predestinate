@@ -66,6 +66,13 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
+import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxPhoneVerifyAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxRecordAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawApplyAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawExplainAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawSuccessAct;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -610,4 +617,73 @@ public class UIShow {
     }
 
 
+
+    // -----------------------我的提示跳转 start----------------------------
+    /**
+     * 打开我的钻石页面
+     *
+     * @param context
+     */
+    public static void showMyDiamondsAct(Context context) {
+        context.startActivity(new Intent(context, MyDiamondsAct.class));
+    }
+
+    /**
+     * 打开钻石说明页面
+     *
+     * @param context
+     */
+    public static void showMyDiamondsExplainAct(Context context) {
+        context.startActivity(new Intent(context, MyDiamondsExplainAct.class));
+    }
+
+    /**
+     * 打开我的钱包页面
+     *
+     * @param context
+     */
+    public static void showRedBoxRecordAct(Context context) {
+        context.startActivity(new Intent(context, RedBoxRecordAct.class));
+    }
+
+    /**
+     * 打开提现页面
+     *
+     * @param context
+     */
+    public static void showWithDrawApplyAct(int id,double money,boolean fromEdit,Context context) {
+        Intent intent = new Intent(context, WithDrawApplyAct.class);
+        intent.putExtra("id",id);
+        intent.putExtra("money",money);
+        intent.putExtra("fromEdit",fromEdit);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 打开提现说明页面
+     *
+     * @param context
+     */
+    public static void showWithDrawExplainAct(Context context) {
+        context.startActivity(new Intent(context, WithDrawExplainAct.class));
+    }
+
+    /**
+     * 打开提现申请成功页面
+     *
+     * @param context
+     */
+    public static void showWithDrawSuccessAct(Context context) {
+        context.startActivity(new Intent(context, WithDrawSuccessAct.class));
+    }
+
+    /**
+     * 打开手机验证页面
+     *
+     * @param context
+     */
+    public static void showRedBoxPhoneVerifyAct(Context context) {
+        context.startActivity(new Intent(context, RedBoxPhoneVerifyAct.class));
+    }
+    // -----------------------我的提示跳转 end----------------------------
 }

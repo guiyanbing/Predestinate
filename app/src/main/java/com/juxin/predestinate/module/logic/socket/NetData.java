@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.module.util.ByteUtil;
 
@@ -63,7 +64,7 @@ public class NetData implements Parcelable {
             this.length = 0;
             this.content = content;
         } else {
-//            this.content = JniUtil.GetEncryptString(content);
+            this.content = JniUtil.GetEncryptString(content);
             try {
                 this.length = this.content.getBytes("UTF-8").length;
             } catch (UnsupportedEncodingException e) {
@@ -186,9 +187,11 @@ public class NetData implements Parcelable {
 
         //解析数据头信息
         int dataLength = ByteUtil.toInt(Arrays.copyOfRange(buffer,0,READ_DATA_HEAD_LENGTH_SIZE));
-        long dataUid = ByteUtil.toUnsignedInt(Arrays.copyOfRange(buffer,READ_DATA_HEAD_LENGTH_SIZE,READ_DATA_HEAD_UID_SIZE));
-        int dataMsgType = ByteUtil.toUnsignedShort(Arrays.copyOfRange(buffer,READ_DATA_HEAD_LENGTH_SIZE + READ_DATA_HEAD_UID_SIZE,READ_DATA_HEAD_MSG_TYPE_SIZE));
+        long dataUid = ByteUtil.toUnsignedInt(Arrays.copyOfRange(buffer,READ_DATA_HEAD_LENGTH_SIZE,READ_DATA_HEAD_LENGTH_SIZE + READ_DATA_HEAD_UID_SIZE));
+        int dataMsgType = ByteUtil.toUnsignedShort(Arrays.copyOfRange(buffer,READ_DATA_HEAD_LENGTH_SIZE + READ_DATA_HEAD_UID_SIZE,READ_DATA_HEAD_LENGTH_SIZE + READ_DATA_HEAD_UID_SIZE + READ_DATA_HEAD_MSG_TYPE_SIZE));
         String dataContent = "";
+
+        PLogger.d("Socket read packet thread packet head , length:" + dataLength + ",uid:" + dataUid + ",msgType:" + dataMsgType);
 
         //考虑到以后可能只有数据头的情况，此处加入数据长度为0时候的判断
         if(dataLength != 0) {
@@ -217,6 +220,7 @@ public class NetData implements Parcelable {
                 bufferOutput.close();
             }
         }
+        PLogger.d("Socket read packet thread packet content:" + dataContent);
 
         netData = new NetData(dataLength, dataUid, dataMsgType, dataContent);
         return netData;

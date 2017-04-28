@@ -13,7 +13,19 @@
         <item>为您的亲密好友添加分组</item>
         <item>为您的亲密好友添加分组</item>
     </string-array>
-
+    <string-array name="red_path">
+        <item>水果游戏红包</item>
+        <item>打擂奖励</item>
+        <item>聊天红包</item>
+        <item>聊天排名奖励</item>
+        <item>礼物折现</item>
+        <item>摇钱树红包</item>
+        <item>好友邀请</item>
+        <item>好友邀请</item>
+        <item>语聊</item>
+        <item>视频通话</item>
+        <item>语音通话</item>
+    </string-array>
     <!-- ================个人中心条目配置start================== -->
     <!-- 个人中心条目配置 -->
     <string-array name="user_authority_name">
