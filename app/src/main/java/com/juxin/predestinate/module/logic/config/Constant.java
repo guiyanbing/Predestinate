@@ -85,6 +85,8 @@ public class Constant {
     public static final int PAY_VOICE_OK = 0x18; // 银联语音支付
     public static final int PAY_VOICE_DETAIL = 0x19; // 银联语音支付
     public static final int PAY_VOICEACT = 0x20;// 银联语音支付
+    public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
+    public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
 
     /*注册参数*/
     public static int msType = 7;  //消息版本号(MS) Y币版本：5，缘分吧红包版：7，红包来了：9，消息排队版，自动回复 + 升级关系（测试版）：10，视频通话 + 表情：11

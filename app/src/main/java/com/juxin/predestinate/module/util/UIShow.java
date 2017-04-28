@@ -33,6 +33,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
+import com.juxin.predestinate.ui.pay.PayWebAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
@@ -583,4 +584,12 @@ public class UIShow {
         }
         context.startActivityForResult(intent, resultCode);
     }
+
+    public static void showPayWebAct(FragmentActivity activity, PayGood payGood) {
+        Intent intent_web = new Intent(activity, PayWebAct.class);
+        intent_web.putExtra("payGood", payGood);
+        activity.startActivityForResult(intent_web, Constant.PAYMENTACT_TO);
+    }
+
+
 }

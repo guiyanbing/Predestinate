@@ -187,7 +187,9 @@
             android:name=".ui.pay.cupvoice.PayCupVoiceOkAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.pay.PayWebAct"
+            android:screenOrientation="portrait" />
 
         <!-- ============= 相机相册模块start ============= -->
         <activity
