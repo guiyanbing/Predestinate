@@ -295,6 +295,8 @@ public class KeepAliveSocket {
             if (endWithException == true && !instantShutdown) {
                 disconnectByError();
             }
+
+            PLogger.d("Socket send packet thread shutdown done ,instant:" + instantShutdown + ", with exception:" + endWithException);
         }
 
         public boolean isEndWithException() {
@@ -314,9 +316,9 @@ public class KeepAliveSocket {
             writerThread.interrupt();
             try {
                 if (shutDownDone == false)
-                    PLogger.d("Socket send packet thread shutdown wait for done");
+                    PLogger.d("Socket send packet thread shutdown wait for done start");
                 shutDownCondition.await();
-                PLogger.d("Socket send packet thread shutdown wait for done");
+                PLogger.d("Socket send packet thread shutdown wait for done end");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -361,8 +363,12 @@ public class KeepAliveSocket {
                 while (!done()) {
                     PLogger.d("Socket read packet thread start read");
                     NetData data = NetData.parseNetData(input);
-                    PLogger.d("Socket read packet dispatch packet:" + data.toString());
-                    dispatchPacket(data);
+                    if (data != null) {
+                        PLogger.d("Socket read packet dispatch packet:" + data.toString());
+                        dispatchPacket(data);
+                    } else {
+                        PLogger.d("Socket read packet dispatch packet null");
+                    }
                 }
             } catch (IOException e) {
                 shutDownTime = System.currentTimeMillis();
@@ -378,6 +384,8 @@ public class KeepAliveSocket {
             if (endWithException == true && !instantShutdown) {
                 disconnectByError();
             }
+
+            PLogger.d("Socket read packet thread shutdown done ,instant:" + instantShutdown + ", with exception:" + endWithException);
         }
 
         public boolean isEndWithException() {
@@ -385,7 +393,7 @@ public class KeepAliveSocket {
         }
 
         private boolean done() {
-            return shutDownTime == null;
+            return shutDownTime != null;
         }
 
         private void shutdown(boolean instant) {
