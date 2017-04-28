@@ -1,8 +1,6 @@
-package com.juxin.predestinate.module.logic.socket.v2;
+package com.juxin.predestinate.module.logic.socket;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.predestinate.module.logic.socket.NetData;
-import com.juxin.predestinate.module.logic.socket.TCPConstant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +18,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.net.SocketFactory;
 
 /**
+ * socket通信内核
  * Created by sks on 2017/4/20.
  */
 public class KeepAliveSocket {
+
     private final int SOCKET_PACKET_QUEUE_SIZE = 500;
     private Socket socket;
     private Lock socketStateLock = new ReentrantLock();
@@ -39,18 +39,18 @@ public class KeepAliveSocket {
 
     private SocketConnectionListener listener;
 
-    public KeepAliveSocket(String host, int port){
+    public KeepAliveSocket(String host, int port) {
         address = new InetSocketAddress(host, port);
         socketConnectCondition = socketStateLock.newCondition();
     }
 
-    public void setSocketStateListener(SocketConnectionListener listener){
+    public void setSocketStateListener(SocketConnectionListener listener) {
         this.listener = listener;
     }
 
-    public void connect(){
+    public void connect() {
         checkAndWaitForConnect();
-        if(state == SocketState.CONNECTED_SUCCESS){
+        if (state == SocketState.CONNECTED_SUCCESS) {
             PLogger.d("Socket already connected");
             return;
         }
@@ -58,44 +58,44 @@ public class KeepAliveSocket {
             socketStateLock.lock();
             PLogger.d("Socket start connect");
             state = SocketState.CONNECTING;
-            if(listener != null){
+            if (listener != null) {
                 listener.onSocketConnecting();
             }
             socket = SocketFactory.getDefault().createSocket();
             socket.connect(address, TCPConstant.SOCKET_CONNECT_TIMEOUT);
             input = socket.getInputStream();
             output = socket.getOutputStream();
-            if(packerReader == null || packetWriter == null){
+            if (packerReader == null || packetWriter == null) {
                 packetWriter = new PacketWriter();
                 packerReader = new PackerReader();
             }
             packetWriter.init();
             packerReader.init();
-
-            if(listener == null){
+            state = SocketState.CONNECTED_SUCCESS;
+            PLogger.d("Socket connect success");
+            if (listener != null) {
                 listener.onSocketConnected();
             }
-            PLogger.d("Socket connect success");
         } catch (IOException e) {
             e.printStackTrace();
             state = SocketState.CONNECTED_FAILED;
 
-            if(listener != null){
+            PLogger.e("Socket connect failed: " + e.getMessage());
+            if (listener != null) {
                 listener.onSocketConnectError();
             }
-            PLogger.e("Socket connect failed: " +e.getMessage());
-        }finally {
+        } finally {
             socketConnectCondition.signalAll();
             socketStateLock.unlock();
         }
     }
 
-    private void checkAndWaitForConnect(){
+    private void checkAndWaitForConnect() {
         socketStateLock.lock();
         while (true) {
             if (state != SocketState.CONNECTING) {
                 break;
-            }else{
+            } else {
                 try {
                     PLogger.d("Socket Connect Wait for Connecting start");
                     socketConnectCondition.await();
@@ -107,10 +107,10 @@ public class KeepAliveSocket {
         socketStateLock.unlock();
     }
 
-    private boolean checkIfCanSendPacket(){
+    private boolean checkIfCanSendPacket() {
         boolean result = false;
         socketStateLock.lock();
-        if(state == SocketState.CONNECTED_SUCCESS){
+        if (state == SocketState.CONNECTED_SUCCESS) {
             result = true;
         }
         socketStateLock.unlock();
@@ -118,31 +118,31 @@ public class KeepAliveSocket {
     }
 
 
-    public void sendPacket(NetData data){
-        if(checkIfCanSendPacket()) {
+    public void sendPacket(NetData data) {
+        if (checkIfCanSendPacket()) {
             if (packetWriter != null) {
                 packetWriter.sendPacket(data);
             }
-        }else {
+        } else {
             PLogger.d("Socket send packet error - sate:" + state.name() + ", Data:" + data.toString());
-            if(listener != null){
+            if (listener != null) {
                 listener.onSendPacketError(state, data);
             }
         }
     }
 
-    public void disconnect(boolean instant){
+    public void disconnect(boolean instant) {
         socketStateLock.lock();
-        if(state != SocketState.CONNECTED_SUCCESS) {
+        if (state != SocketState.CONNECTED_SUCCESS) {
             socketStateLock.unlock();
             return;
         }
         PLogger.d("Socket disconnect by instant " + instant + " start");
-        if(packetWriter != null){
+        if (packetWriter != null) {
             packetWriter.shutdown(instant);
         }
 
-        if(packerReader != null){
+        if (packerReader != null) {
             packerReader.shutdown(instant);
         }
 
@@ -150,16 +150,16 @@ public class KeepAliveSocket {
             socket.close();
         } catch (IOException e) {
         }
-        if(packetWriter.isEndWithException() || packerReader.isEndWithException()){
+        if (packetWriter.isEndWithException() || packerReader.isEndWithException()) {
             state = SocketState.DISCONNECT_ERROR;
             PLogger.d("Socket disconnect with error");
-            if(listener != null){
+            if (listener != null) {
                 listener.onSocketDisconnectByError();
             }
-        }else{
+        } else {
             state = SocketState.DISCONNECT_NORMAL;
             PLogger.d("Socket disconnect normally");
-            if(listener != null){
+            if (listener != null) {
                 listener.onSocketDisconnectNormally();
             }
         }
@@ -168,18 +168,18 @@ public class KeepAliveSocket {
 
     }
 
-    private void disconnectByError(){
+    private void disconnectByError() {
         socketStateLock.lock();
-        if(state != SocketState.CONNECTED_SUCCESS) {
+        if (state != SocketState.CONNECTED_SUCCESS) {
             socketStateLock.unlock();
             return;
         }
         PLogger.d("Socket disconnect by error start");
-        if(packetWriter != null){
+        if (packetWriter != null) {
             packetWriter.shutdown(true);
         }
 
-        if(packerReader != null){
+        if (packerReader != null) {
             packerReader.shutdown(true);
         }
 
@@ -187,16 +187,16 @@ public class KeepAliveSocket {
             socket.close();
         } catch (IOException e) {
         }
-        if(listener != null && state != SocketState.DISCONNECT_ERROR){
+        PLogger.d("Socket disconnect by error end");
+        if (listener != null && state != SocketState.DISCONNECT_ERROR) {
             state = SocketState.DISCONNECT_ERROR;
             listener.onSocketDisconnectByError();
         }
-        PLogger.d("Socket disconnect by error end");
         socketStateLock.unlock();
     }
 
-    private class PacketWriter{
-        private final ArrayBlockingQueue<NetData> queue = new ArrayBlockingQueue(SOCKET_PACKET_QUEUE_SIZE,true);
+    private class PacketWriter {
+        private final ArrayBlockingQueue<NetData> queue = new ArrayBlockingQueue(SOCKET_PACKET_QUEUE_SIZE, true);
         private volatile Long shutDownTime = null;
         private volatile boolean shutDownDone = false;
         private volatile boolean instantShutdown = false;
@@ -205,11 +205,12 @@ public class KeepAliveSocket {
         private Condition shutDownCondition;
 
         private Thread writerThread;
-        public PacketWriter(){
+
+        public PacketWriter() {
             shutDownCondition = shutDownLock.newCondition();
         }
 
-        public void init(){
+        public void init() {
             shutDownTime = null;
             instantShutdown = false;
             shutDownDone = false;
@@ -228,8 +229,8 @@ public class KeepAliveSocket {
         protected void sendPacket(final NetData data) {
             try {
                 queue.put(data);
-            }catch (Exception e){
-                if(listener != null){
+            } catch (Exception e) {
+                if (listener != null) {
                     singleSendErrorExecutor.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -241,10 +242,10 @@ public class KeepAliveSocket {
             }
         }
 
-        private void writePacket(){
+        private void writePacket() {
             NetData packet = null;
             try {
-                while(!done()){
+                while (!done()) {
                     try {
                         packet = queue.take();
                         PLogger.d("Socket send packet :" + packet.toString());
@@ -261,8 +262,8 @@ public class KeepAliveSocket {
 
                 PLogger.d("Socket send packet thread ready to end ,instant:" + instantShutdown);
                 //如果不立即中断则发送完剩下的消息
-                if(!instantShutdown){
-                    while( (packet = queue.poll()) != null){
+                if (!instantShutdown) {
+                    while ((packet = queue.poll()) != null) {
                         PLogger.d("Socket send left packet :" + packet.toString());
                         byte[] datas = packet.getBytes();
 
@@ -274,8 +275,8 @@ public class KeepAliveSocket {
             } catch (IOException e) {
                 shutDownTime = System.currentTimeMillis();
                 final NetData errorPacket = packet;
-                PLogger.d("Socket send packet error:" + e.getMessage() + ", packet:" + packet!= null?packet.toString():"none");
-                if(listener != null && errorPacket != null){
+                PLogger.d("Socket send packet error:" + e.getMessage() + ", packet:" + packet != null ? packet.toString() : "none");
+                if (listener != null && errorPacket != null) {
                     singleSendErrorExecutor.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -291,31 +292,33 @@ public class KeepAliveSocket {
             shutDownCondition.signalAll();
             shutDownLock.unlock();
 
-            if(endWithException == true && !instantShutdown){
+            if (endWithException == true && !instantShutdown) {
                 disconnectByError();
             }
+
+            PLogger.d("Socket send packet thread shutdown done ,instant:" + instantShutdown + ", with exception:" + endWithException);
         }
 
-        public boolean isEndWithException(){
+        public boolean isEndWithException() {
             return endWithException;
         }
 
-        private boolean done(){
+        private boolean done() {
             return shutDownTime != null;
         }
 
-        private void shutdown(boolean instant){
-            if(shutDownDone == true) return;
+        private void shutdown(boolean instant) {
+            if (shutDownDone == true) return;
             PLogger.d("Socket send packet thread shutdown instant:" + instant + " start");
             shutDownLock.lock();
             instantShutdown = instant;
             shutDownTime = System.currentTimeMillis();
             writerThread.interrupt();
             try {
-                if(shutDownDone == false)
-                    PLogger.d("Socket send packet thread shutdown wait for done");
-                    shutDownCondition.await();
-                    PLogger.d("Socket send packet thread shutdown wait for done");
+                if (shutDownDone == false)
+                    PLogger.d("Socket send packet thread shutdown wait for done start");
+                shutDownCondition.await();
+                PLogger.d("Socket send packet thread shutdown wait for done end");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -324,8 +327,8 @@ public class KeepAliveSocket {
         }
     }
 
-    private class PackerReader{
-        private final ArrayBlockingQueue<NetData> queue = new ArrayBlockingQueue(SOCKET_PACKET_QUEUE_SIZE,true);
+    private class PackerReader {
+        private final ArrayBlockingQueue<NetData> queue = new ArrayBlockingQueue(SOCKET_PACKET_QUEUE_SIZE, true);
         private volatile Long shutDownTime = null;
         private volatile boolean shutDownDone = false;
         private volatile boolean instantShutdown = false;
@@ -333,12 +336,13 @@ public class KeepAliveSocket {
         private Lock shutDownLock = new ReentrantLock();
         private Condition shutDownCondition;
 
-        private Thread readThread  = new Thread();
-        public PackerReader(){
+        private Thread readThread = new Thread();
+
+        public PackerReader() {
             shutDownCondition = shutDownLock.newCondition();
         }
 
-        protected void init(){
+        protected void init() {
             shutDownTime = null;
             instantShutdown = false;
             shutDownDone = false;
@@ -354,15 +358,19 @@ public class KeepAliveSocket {
             PLogger.d("Socket read packet thread init and start");
         }
 
-        private void readPacket(){
-            try{
-                while (!done()){
+        private void readPacket() {
+            try {
+                while (!done()) {
                     PLogger.d("Socket read packet thread start read");
                     NetData data = NetData.parseNetData(input);
-                    PLogger.d("Socket read packet dispatch packet:" + data.toString());
-                    dispatchPacket(data);
+                    if (data != null) {
+                        PLogger.d("Socket read packet dispatch packet:" + data.toString());
+                        dispatchPacket(data);
+                    } else {
+                        PLogger.d("Socket read packet dispatch packet null");
+                    }
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 shutDownTime = System.currentTimeMillis();
                 endWithException = true;
                 PLogger.d("Socket read packet error:" + e.getMessage());
@@ -373,33 +381,35 @@ public class KeepAliveSocket {
             shutDownCondition.signalAll();
             shutDownLock.unlock();
 
-            if(endWithException == true && !instantShutdown){
+            if (endWithException == true && !instantShutdown) {
                 disconnectByError();
             }
+
+            PLogger.d("Socket read packet thread shutdown done ,instant:" + instantShutdown + ", with exception:" + endWithException);
         }
 
-        public boolean isEndWithException(){
+        public boolean isEndWithException() {
             return endWithException;
         }
 
-        private boolean done(){
-            return shutDownTime == null;
+        private boolean done() {
+            return shutDownTime != null;
         }
 
-        private void shutdown(boolean instant){
-            if(shutDownDone == true) return;
+        private void shutdown(boolean instant) {
+            if (shutDownDone == true) return;
             PLogger.d("Socket read packet thread shutdown instant:" + instant + " start");
             shutDownLock.lock();
             shutDownTime = System.currentTimeMillis();
             instantShutdown = instant;
-            if(instantShutdown) {
+            if (instantShutdown) {
                 readThread.interrupt();
             }
             try {
-                if(shutDownDone == false)
+                if (shutDownDone == false)
                     PLogger.d("Socket read packet thread shutdown wait for done start");
-                    shutDownCondition.await();
-                    PLogger.d("Socket read packet thread shutdown wait for done end");
+                shutDownCondition.await();
+                PLogger.d("Socket read packet thread shutdown wait for done end");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -408,8 +418,8 @@ public class KeepAliveSocket {
         }
     }
 
-    private void dispatchPacket(final NetData data){
-        if(listener != null){
+    private void dispatchPacket(final NetData data) {
+        if (listener != null) {
             singleDispatchExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -419,11 +429,11 @@ public class KeepAliveSocket {
         }
     }
 
-    public SocketState getSocketState(){
+    public SocketState getSocketState() {
         return state;
     }
 
-    public enum SocketState{
+    public enum SocketState {
         CONNECTING,
         CONNECTED_SUCCESS,
         CONNECTED_FAILED,
@@ -433,11 +443,17 @@ public class KeepAliveSocket {
 
     public interface SocketConnectionListener {
         void onSocketConnected();
+
         void onSocketConnecting();
+
         void onSocketConnectError();
+
         void onSendPacketError(SocketState state, NetData failedData);
+
         void onSocketDisconnectByError();
+
         void onReceivePacket(NetData data);
+
         void onSocketDisconnectNormally();
     }
 

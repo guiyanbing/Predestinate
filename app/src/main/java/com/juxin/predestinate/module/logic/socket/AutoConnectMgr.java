@@ -9,8 +9,8 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
-import com.juxin.predestinate.module.logic.socket.v2.KeepAliveSocket;
 import com.juxin.predestinate.module.util.TimerUtil;
 
 import org.json.JSONException;
@@ -71,7 +71,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     private long uid = 0;//用户ID
     private String token;//用户token
 
-    private AutoConnectMgr(){
+    private AutoConnectMgr() {
         socket = new KeepAliveSocket(TCPConstant.HOST, TCPConstant.PORT);
         socket.setSocketStateListener(this);
     }
@@ -121,12 +121,16 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loopHeartbeatStatus();
         heartbeatSend = 0;
         heartbeatResend = 0;
-
-        socket.disconnect(false);
+        connectionExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                socket.disconnect(false);
+            }
+        });
         this.token = null;
     }
 
-    public void send(final NetData packet){
+    public void send(final NetData packet) {
         sendExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -202,8 +206,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 onStatusChange(TCPConstant.SOCKET_STATUS_Disconnect, "心跳回送失败，socket重新进行连接");
                 connect();
             } else {
-                //socket.sendPacket(getRevertHeartbeat());
-                socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_Heartbeat));
+                socket.sendPacket(getRevertHeartbeat());//心跳时发送的是回送类型的心跳消息
             }
         }
     }
@@ -258,7 +261,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("mt", curTime);
         loginMap.put("md", md);
         loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
-        loginMap.put("ms", TCPConstant.MSG_MS);
+        loginMap.put("ms", Constant.MS_TYPE);
 
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
@@ -273,8 +276,8 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      */
     private NetData getLoopbackData(int msgType, long msgId) {
         Map<String, Object> loopbackMap = new HashMap<>();
-        loopbackMap.put("status", 0);
-        loopbackMap.put("mid", msgId);
+        loopbackMap.put("s", 0);
+        loopbackMap.put("d", msgId);
         return new NetData(uid, msgType, gson.toJson(loopbackMap));
     }
 
@@ -331,7 +334,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     /**
      * 将即时通讯中收到消息通过ICSCallback抛出。
      */
-    private void onMessage(NetData data,long msgId) {
+    private void onMessage(NetData data, long msgId) {
         PLogger.d("onMessage:---->msgId:" + msgId + ",sender:" + data.getUid() + ",content:" + data.getContent());
         try {
             if (iCSCallback != null) {
@@ -368,9 +371,9 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
 
     @Override
     public void onSocketConnected() {
-        socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_BeforeLogin));
-        socket.sendPacket(getLoginData());
         onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
+        socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_Heartbeat));//登录时发送的是普通心跳消息
+        socket.sendPacket(getLoginData());
     }
 
     @Override
@@ -416,20 +419,16 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         if (data.getMsgType() == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
             heartbeatResend++;
         }
-        //不处理心跳包
-        if(data.getMsgType() == TCPConstant.MSG_ID_Heartbeat){
-            return;
-        }
 
         if (!TextUtils.isEmpty(content)) {
             try {
                 JSONObject contentObject = new JSONObject(content);
-                if (contentObject.has("tm")) {
-                    ServerTime.setServerTime(contentObject.optLong("tm"));//保存服务器时间戳
+                if (contentObject.has("mt")) {
+                    ServerTime.setServerTime(contentObject.optLong("mt"));//保存服务器时间戳
                 }
                 //socket登录处理
-                if (contentObject.has("status")) {
-                    int status = contentObject.optInt("status");//登录状态，0表示成功，其他见下面详情
+                if (contentObject.has("s")) {
+                    int status = contentObject.optInt("s");//登录状态，0表示成功，其他见下面详情
                     if (status == 0) {//登录成功
                         heartBeating = true;
                         loopHeartbeatStatus();
@@ -465,14 +464,14 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 }
 
                 //消息重要字段解析
-                long msgId = contentObject.optLong("mid", -1);//消息id
+                long msgId = contentObject.optLong("d", -1);//消息id
                 long sender = contentObject.optLong("fid", -1);//发送者id
 
                 //消息接收反馈
                 socket.sendPacket(getLoopbackData(data.getMsgType(), msgId));
 
                 //抛出消息
-                onMessage(data,msgId);
+                onMessage(data, msgId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

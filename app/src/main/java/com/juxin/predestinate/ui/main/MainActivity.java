@@ -17,7 +17,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.MailFragment;
-import com.juxin.predestinate.ui.plaza.PlazaFragment;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
@@ -27,8 +26,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fragmentManager;
     private MailFragment mailFragment;
     private XiaoyouFragment xiaoyouFragment;
-    private PlazaFragment plazaFragment;
-    private WebFragment webFragment;
+    private WebFragment rankFragment, webFragment;
     private UserFragment userFragment;
 
     private BaseFragment current;  // 当前的fragment
@@ -54,8 +52,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragmentManager = getSupportFragmentManager();
         mailFragment = new MailFragment();
         xiaoyouFragment = new XiaoyouFragment();
-        plazaFragment = new PlazaFragment();
-        webFragment = new WebFragment();
+        rankFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
+                ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
+        webFragment = new WebFragment(getResources().getString(R.string.main_btn_web),
+                ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
         userFragment = new UserFragment();
 
         switchContent(mailFragment);
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
         } else if (fragment == xiaoyouFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.xiaoyou_layout);
-        } else if (fragment == plazaFragment) {
+        } else if (fragment == rankFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.plaza_layout);
         } else if (fragment == webFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.web_layout);
@@ -135,7 +135,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 switchContent(xiaoyouFragment);
                 break;
             case R.id.plaza_layout:
-                switchContent(plazaFragment);
+                switchContent(rankFragment);
                 break;
             case R.id.web_layout:
                 switchContent(webFragment);
@@ -174,8 +174,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(xiaoyouFragment);
         } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab
-            switchContent(plazaFragment);
-        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到书城tab
+            switchContent(rankFragment);
+        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到广场tab
             switchContent(webFragment);
         } else if (FinalKey.MAIN_TAB_5 == tab_type) {//跳转到我的tab
             switchContent(userFragment);
