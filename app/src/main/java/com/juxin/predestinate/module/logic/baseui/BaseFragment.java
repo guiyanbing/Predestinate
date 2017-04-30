@@ -111,6 +111,17 @@ public class BaseFragment extends Fragment {
     }
 
     /**
+     * 添加title中标题中间的填充view
+     *
+     * @param container 填充的view
+     */
+    public void setTitleCenterContainer(View container) {
+        LinearLayout title_center_container = (LinearLayout) this.findViewById(R.id.base_title_center_container);
+        title_center_container.removeAllViews();
+        title_center_container.addView(container);
+    }
+
+    /**
      * 设置标题右侧文字
      *
      * @param txt      标题右侧显示文字

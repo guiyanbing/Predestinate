@@ -13,6 +13,10 @@
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
 
+    <!-- 排行榜 -->
+    <string name="rank_this_week">本周</string>
+    <string name="rank_last_week">上周</string>
+
     <!--设置-->
     <string name="switch_stealth">一键隐身</string>
     <string name="switch_shaker">震动提醒</string>
@@ -239,10 +243,6 @@
     <string name="choose_pic">选择</string>
     <string name="choose_no_pick">你还没有选择任何图片</string>
 
-    <!--广场-->
-    <string name="plaza_title">广场</string>
-    <!--end 广场-->
-
     <!-- EditText输入规范 -->
     <string name="phone_digits">1234567890</string>
     <string name="user_modify_pwd_input_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
@@ -270,7 +270,6 @@
     <string name="title_set">设置</string>
     <string name="title_about">关于</string>
     <string name="title_pwd_set">密码设置</string>
-
 
     <!-- xList 后期可能删掉，不要用-->
     <string name="xlistview_header_last_time">上次更新时间：</string>
@@ -328,7 +327,6 @@
     <string name="pay_errcode_unknown">支付出错</string>
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <color name="homeUserSay">#ff333333</color>
-
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>

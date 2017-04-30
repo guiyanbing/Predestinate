@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
+import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 
@@ -26,7 +27,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentManager fragmentManager;
     private MailFragment mailFragment;
     private XiaoyouFragment xiaoyouFragment;
-    private WebFragment rankFragment, webFragment;
+    private RankFragment rankFragment;
+    private WebFragment webFragment;
     private UserFragment userFragment;
 
     private BaseFragment current;  // 当前的fragment
@@ -52,8 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragmentManager = getSupportFragmentManager();
         mailFragment = new MailFragment();
         xiaoyouFragment = new XiaoyouFragment();
-        rankFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
-                ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
+        rankFragment = new RankFragment();
         webFragment = new WebFragment(getResources().getString(R.string.main_btn_web),
                 ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
         userFragment = new UserFragment();
