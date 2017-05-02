@@ -63,28 +63,27 @@ public enum UrlParam {
     //客户端获得用户红包列表
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
-    reqAddredTotal("fruit/addredtotalnew",false),
+    reqAddredTotal("fruit/addredtotalnew", false),
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
-    reqAddredonekey("fruit/addredonekey", RedOneKeyList.class,true),
+    reqAddredonekey("fruit/addredonekey", RedOneKeyList.class, true),
     // 客户端请求用户提现列表
-    reqWithdrawlist("fruit/withdrawlist",true),
+    reqWithdrawlist("fruit/withdrawlist", true),
     // 红包记录--提现申请
-    reqWithdraw("fruit/withdraw",true),
+    reqWithdraw("fruit/withdraw", true),
     // 红包记录--提现申请获取地址
-    reqWithdrawAddress("fruit/withdrawaddress",true),
+    reqWithdrawAddress("fruit/withdrawaddress", true),
     // 红包记录--提现申请修改地址
-    reqWithdrawModify("fruit/withdrawmodify",true),
+    reqWithdrawModify("fruit/withdrawmodify", true),
     // 获取礼物列表
-    getGiftLists("gift/getGifts",true),
+    getGiftLists("gift/getGifts", true),
     // 获取钻石余额
-    getMyDiamand("gift/getMyDiamand",false),
+    getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
-    begGift("gift/begGift",true),
+    begGift("gift/begGift", true),
     // 手机验证
-    sendSMS("public/sendSMS",true),
+    sendSMS("public/sendSMS", true),
     // 手机验证
-    bindCellPhone("user/bindCellPhone",true),
-
+    bindCellPhone("user/bindCellPhone", true),
 
 
     //好友标签分组成员
@@ -112,6 +111,13 @@ public enum UrlParam {
     //送礼物
     givePresent("s/present/GivePresent", null, true),
 
+    //================= 发现 ===========
+    //举报
+    complainBlack("xs/userrelation/ComplainBlack", true),
+    //获取发现列表
+    getMainPage("xs/discovery/MainPage", UserInfoLightweightList.class, true),
+    //获取附近的人列表
+    getNearUsers2("xs/discovery/NearUsers2", UserInfoLightweightList.class, true),
     //============ 支付 =============
     reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
 

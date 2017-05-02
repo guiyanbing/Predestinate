@@ -408,4 +408,15 @@
     <string name="upgrade_vip">升级VIP会员，查看更多来访</string>
     <string name="lately_visit">最近7天有12个用户来看你。</string>
     <string name="say_hello">hi，傻子</string>
+
+
+    <!--发现start-->
+    <string name="discover_title">发现</string>
+
+    <string name="defriend_title">举报</string>
+    <string name="defriend_title_right">提交</string>
+    <string name="defriend_edt_hint">详细描述被举报人的恶意行为</string>
+
+    <!--发现end-->
+
 </resources>

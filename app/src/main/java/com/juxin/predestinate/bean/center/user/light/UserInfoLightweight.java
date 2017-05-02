@@ -22,6 +22,12 @@ public class UserInfoLightweight extends UserBasic {
     private boolean isAuth;     // 是否认证
     private String signname;    // 签名
 
+    private String distance; //距离
+    private boolean video_available = false;
+    private boolean audio_available = false;
+    private boolean video_busy = false;
+    private boolean isSayHello = false;
+
     public UserInfoLightweight() {
     }
 
@@ -48,6 +54,12 @@ public class UserInfoLightweight extends UserBasic {
         this.setVip(jsonObject.optBoolean("is_vip"));
         this.setAuth(jsonObject.optBoolean("is_auth"));
         this.setSignname(jsonObject.optString("signname"));
+        this.setDistance(jsonObject.optString("distance"));
+        this.setVideo_busy(jsonObject.optInt("video_busy") == 1 ? true : false);
+        this.setVideo_available(jsonObject.optInt("video_available") == 1 ? true : false);
+        this.setAudio_available(jsonObject.optInt("audio_available") == 1 ? true : false);
+        this.setSayHello(jsonObject.optBoolean("isSayHello"));
+
     }
 
     public long getTime() {
@@ -96,6 +108,46 @@ public class UserInfoLightweight extends UserBasic {
 
     public void setSignname(String signname) {
         this.signname = signname;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public boolean isVideo_available() {
+        return video_available;
+    }
+
+    public void setVideo_available(boolean video_available) {
+        this.video_available = video_available;
+    }
+
+    public boolean isAudio_available() {
+        return audio_available;
+    }
+
+    public void setAudio_available(boolean audio_available) {
+        this.audio_available = audio_available;
+    }
+
+    public boolean isVideo_busy() {
+        return video_busy;
+    }
+
+    public void setVideo_busy(boolean video_busy) {
+        this.video_busy = video_busy;
+    }
+
+    public boolean isSayHello() {
+        return isSayHello;
+    }
+
+    public void setSayHello(boolean sayHello) {
+        isSayHello = sayHello;
     }
 
     @Override
@@ -147,4 +199,5 @@ public class UserInfoLightweight extends UserBasic {
                 ", signname='" + signname + '\'' +
                 '}';
     }
+
 }

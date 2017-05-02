@@ -16,16 +16,16 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.discover.DiscoverFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
-import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
-    private XiaoyouFragment discoveryFragment;
+    private DiscoverFragment discoverFragment;
     private MailFragment mailFragment;
     private RankFragment rankFragment;
     private WebFragment plazaFragment;
@@ -52,14 +52,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initFragment() {
         fragmentManager = getSupportFragmentManager();
+        discoverFragment = new DiscoverFragment();
         mailFragment = new MailFragment();
-        discoveryFragment = new XiaoyouFragment();
         rankFragment = new RankFragment();
         plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
                 ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
         userFragment = new UserFragment();
 
-        switchContent(discoveryFragment);
+        switchContent(discoverFragment);
     }
 
     private void initViews() {
@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        if (fragment == discoveryFragment) {
+        if (fragment == discoverFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.discovery_layout);
         } else if (fragment == mailFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.discovery_layout:
-                switchContent(discoveryFragment);
+                switchContent(discoverFragment);
                 break;
             case R.id.mail_layout:
                 switchContent(mailFragment);
@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void changeTab(int tab_type, Intent intent) {
         PLogger.d("---changeTab--->tab_type：" + tab_type);
         if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到发现tab
-            switchContent(discoveryFragment);
+            switchContent(discoverFragment);
         } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(mailFragment);
         } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab

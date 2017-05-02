@@ -11,6 +11,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -244,6 +245,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     //============================== 小友模块相关接口 =============================
+
     /**
      * 请求礼物列表
      */
@@ -262,7 +264,7 @@ public class CommonMgr implements ModuleBase {
      * @return 获取礼品信息
      */
     public GiftsList getGiftLists() {
-        if (giftLists == null){
+        if (giftLists == null) {
             giftLists = new GiftsList();
         }
         return giftLists;
@@ -274,7 +276,7 @@ public class CommonMgr implements ModuleBase {
      * @param phoneNum 手机号
      * @param complete 请求完成后回调
      */
-    public void bindCellPhone(String code,String phoneNum,RequestComplete complete) {
+    public void bindCellPhone(String code, String phoneNum, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("cellPhone", phoneNum);
         getParams.put("verifyCode", code);
@@ -287,7 +289,7 @@ public class CommonMgr implements ModuleBase {
      * @param phoneNum 手机号
      * @param complete 请求完成后回调
      */
-    public void sendSMS(String phoneNum,RequestComplete complete) {
+    public void sendSMS(String phoneNum, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("cellPhone", phoneNum);
         getParams.put("type", "1");
@@ -297,10 +299,10 @@ public class CommonMgr implements ModuleBase {
     /**
      * 获取钻石余额
      *
-     * @param content 内容
+     * @param content  内容
      * @param complete 请求完成后回调
      */
-    public void begGift(String content,RequestComplete complete) {
+    public void begGift(String content, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("content", content);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.begGift, getParams, complete);
@@ -326,13 +328,14 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 客户端用户红包入袋
-     * @param uid 用户Id
-     * @param money 红包金额(分)
+     *
+     * @param uid      用户Id
+     * @param money    红包金额(分)
      * @param redbagid 红包ID
-     * @param type 红包类型 1,2或为空为水果红包和水果排行红包 3为聊天红包 4聊天排名红包 5礼物红包
+     * @param type     红包类型 1,2或为空为水果红包和水果排行红包 3为聊天红包 4聊天排名红包 5礼物红包
      * @param complete 请求完成后回调
      */
-    public void reqAddredTotal(long uid,double money,long redbagid,int type,RequestComplete complete) {
+    public void reqAddredTotal(long uid, double money, long redbagid, int type, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", uid);
         postParams.put("money", money);
@@ -343,10 +346,11 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 红包记录--红包入袋 -- 一键入袋(24不能提现)
-     * @param uid 用户Id
+     *
+     * @param uid      用户Id
      * @param complete 请求完成后回调
      */
-    public void reqAddredonekey(long uid,RequestComplete complete) {
+    public void reqAddredonekey(long uid, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", uid);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddredonekey, postParams, complete);
@@ -363,14 +367,15 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 红包记录--提现申请
-     * @param money 提现金额(分)
+     *
+     * @param money       提现金额(分)
      * @param accountname 帐户姓名
-     * @param accountnum 银行卡号/支付宝账号
-     * @param bank 开户行/支付类型
-     * @param subbank 开户支行
-     * @param complete 请求完成后回调
+     * @param accountnum  银行卡号/支付宝账号
+     * @param bank        开户行/支付类型
+     * @param subbank     开户支行
+     * @param complete    请求完成后回调
      */
-    public void reqWithdraw(String money,String accountname,String accountnum,String bank,String subbank,RequestComplete complete) {
+    public void reqWithdraw(String money, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
         postParams.put("money", (Float.parseFloat(money) * 100) + "");
@@ -394,13 +399,14 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 红包记录--提现申请修改地址
+     *
      * @param accountname 请求完成后回调
-     * @param accountnum 请求完成后回调
-     * @param bank 请求完成后回调
-     * @param subbank 请求完成后回调
-     * @param complete 请求完成后回调
+     * @param accountnum  请求完成后回调
+     * @param bank        请求完成后回调
+     * @param subbank     请求完成后回调
+     * @param complete    请求完成后回调
      */
-    public void reqWithdrawModify(int id,String accountname ,String accountnum,String bank,String subbank,RequestComplete complete) {
+    public void reqWithdrawModify(int id, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
         postParams.put("id", id);
@@ -446,6 +452,7 @@ public class CommonMgr implements ModuleBase {
         postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
         postParams.put("tag_name", names);// 标签名字
         postParams.put("uid_list", list);// 标签成员
+//        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroup, postParams, complete);
     }
 
@@ -701,8 +708,67 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqAnglePayQuery, getParms, complete);
     }
 
+    //================ 发现 start =========================\\
+
+    /**
+     * 举报
+     *
+     * @param tuid     被举报人uid
+     * @param content
+     * @param detail
+     * @param complete
+     */
+    public void complainBlack(long tuid, String content, String detail, RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("tuid", tuid);
+        parms.put("content", content);
+        parms.put("detail", detail);
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.complainBlack, parms, complete);
+    }
+
+    /**
+     * "page":1,
+     * "limit":10,
+     * "reload":1,  //是否刷新缓存 1为刷新缓存 0为向下翻页
+     * "x":104.55,  //[opt] 用户位置
+     * "y":40.11	//[opt] 用户位置
+     * "ver":5		//[opt]大版本号
+     * "isnear":1	//[opt]是否搜索附近的人
+     *
+     * @param page
+     * @param reload
+     * @param complete
+     */
+    public void getMainPage(int page, int reload, RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("page", page);
+        parms.put("reload", reload);
+        parms.put("limit", 10);
+        parms.put("x", LocationMgr.getInstance().getPointD().longitude);  //经度
+        parms.put("y", LocationMgr.getInstance().getPointD().latitude); //纬度
+        parms.put("ver", Constant.SUB_VERSION);
+        parms.put("isnear", 1);
+
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getMainPage, parms, complete);
+    }
 
 
+    /**
+     * "x":104.55,  //用户位置
+     * "y":40.11	// 用户位置
+     * "ver":5		//[opt]大版本号
+     *
+     * @param complete
+     */
+    public void getNearUsers2(RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("x", LocationMgr.getInstance().getPointD().longitude);  //经度
+        parms.put("y", LocationMgr.getInstance().getPointD().latitude); //纬度
+        parms.put("ver", Constant.SUB_VERSION);
 
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getNearUsers2, parms, complete);
+    }
 
+    //================ 发现 end =========================\\
 }
