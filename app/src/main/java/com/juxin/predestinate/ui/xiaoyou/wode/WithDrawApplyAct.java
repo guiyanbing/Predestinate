@@ -59,7 +59,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
             mEidtMoney =  getIntent().getDoubleExtra("money",0)+"";
             mId = getIntent().getIntExtra("id", 0);
         }else {
-            mEidtMoney = PSP.getInstance().getLong(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
+            mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
         }
         etMoney.setText(mEidtMoney + getString(R.string.head_unit));
         btnNext.setOnClickListener(this);

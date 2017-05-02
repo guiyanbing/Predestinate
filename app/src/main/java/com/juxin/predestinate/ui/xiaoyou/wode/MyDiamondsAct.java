@@ -40,6 +40,7 @@ public class MyDiamondsAct extends BaseActivity{
     }
 
     private void initView(){
+        setBackView(R.id.base_title_back);
         crlList = (CustomRecyclerView) findViewById(R.id.wode_diamond_crl_list);
         rlvList = crlList.getRecyclerView();
         rlvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -58,7 +59,7 @@ public class MyDiamondsAct extends BaseActivity{
 
     private void initData() {
         //逻辑待完善
-        mMyDiamondAdapter = new MyDiamondAdapter();
+        mMyDiamondAdapter = new MyDiamondAdapter(this);
         List<Diamond> dataList = ModuleMgr.getCommonMgr().getCommonConfig().getDiamondList();
         rlvList.setAdapter(mMyDiamondAdapter);
         mMyDiamondAdapter.setList(dataList);

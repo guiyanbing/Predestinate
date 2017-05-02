@@ -5,6 +5,7 @@ import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,15 +19,21 @@ public class GiftsList extends BaseData {
     private List arrlineGifts;
 
     public List getArrCommonGifts() {
-        return arrCommonGifts;
+        List gifts = new ArrayList();
+        gifts.addAll(arrCommonGifts);
+        return gifts;
     }
 
     public List getArrCallGifts() {
-        return arrCallGifts;
+        List gifts = new ArrayList();
+        gifts.addAll(arrCallGifts);
+        return gifts;
     }
 
     public List getArrlineGifts() {
-        return arrlineGifts;
+        List gifts = new ArrayList();
+        gifts.addAll(arrlineGifts);
+        return gifts;
     }
 
     @Override
