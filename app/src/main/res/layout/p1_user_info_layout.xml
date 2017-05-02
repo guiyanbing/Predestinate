@@ -27,7 +27,8 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/tm_bg"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/ll_userinfo_bottom_send"
@@ -128,4 +129,17 @@
     </LinearLayout>
 
     <include layout="@layout/base_title" />
+
+    <!-- 礼物悬框 -->
+    <ImageView
+        android:id="@+id/iv_gift"
+        android:layout_width="@dimen/px135_dp"
+        android:layout_height="@dimen/px135_dp"
+        android:layout_above="@+id/userinfo_bottom"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/px30_dp"
+        android:layout_marginRight="@dimen/px60_dp"
+        android:background="@drawable/f1_user_check_info_gift"
+        android:visibility="gone"/>
+
 </RelativeLayout>

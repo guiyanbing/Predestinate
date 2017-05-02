@@ -73,6 +73,12 @@ public class UserBasic extends BaseData implements Parcelable {
 
     }
 
+    // ------------ 工具方法 --------------
+    public boolean isMan() {
+        return getGender() == 1;
+    }
+
+    // ------------ Getter  Setter --------------
     public String getProvinceName() {
         return provinceName;
     }

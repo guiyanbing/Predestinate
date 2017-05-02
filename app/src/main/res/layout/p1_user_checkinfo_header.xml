@@ -90,13 +90,13 @@
                     android:paddingTop="1dp">
 
                     <ImageView
-                        android:id="@+id/iv_userinfo_sex"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:id="@+id/iv_sex"
+                        android:layout_width="@dimen/px36_dp"
+                        android:layout_height="@dimen/px36_dp"
                         tools:src="@drawable/f1_sex_female_2" />
 
                     <TextView
-                        android:id="@+id/tv_userinfo_age"
+                        android:id="@+id/tv_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -106,7 +106,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_userinfo_height"
+                    android:id="@+id/tv_height"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
@@ -118,6 +118,24 @@
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     tools:text="165cm" />
+
+                <FrameLayout
+                    android:layout_width="@dimen/px114_dp"
+                    android:layout_height="@dimen/px47_dp"
+                    android:layout_marginLeft="@dimen/px15_dp"
+                    android:background="@drawable/f1_user_check_info_rank">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="TOP5"
+                        android:paddingLeft="@dimen/px24_dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px22_sp" />
+
+                </FrameLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -129,7 +147,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_userinfo_distance"
+                    android:id="@+id/tv_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_ciyao_gray"
@@ -145,7 +163,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_userinfo_last_online"
+                    android:id="@+id/tv_last_online"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_ciyao_gray"

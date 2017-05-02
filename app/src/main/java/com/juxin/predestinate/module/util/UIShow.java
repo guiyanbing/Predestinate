@@ -62,6 +62,7 @@ import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
@@ -329,9 +330,31 @@ public class UIShow {
     }
 
     /**
-     * 打开资料查看页
+     * 打开TA人资料查看页
      */
-    public static void showUserCheckInfoAct(Context context) {
+    public static void showCheckOtherInfoAct(final Context context, long uid) {
+        ModuleMgr.getCenterMgr().reqOtherInfo(uid, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                UserProfile userProfile = new UserProfile();
+                userProfile.parseJson(response.getResponseString());
+
+                if ("error".equals(userProfile.getResult())){
+                    PToast.showShort(context.getString(R.string.request_error));
+                    return;
+                }
+                Intent intent = new Intent(context, UserCheckInfoAct.class);
+                intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+                intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * 打开自己资料查看页
+     */
+    public static void showCheckOwnInfoAct(Context context) {
         context.startActivity(new Intent(context, UserCheckInfoAct.class));
     }
 
@@ -378,7 +401,7 @@ public class UIShow {
      */
     public static void showUserOtherSetAct(Context context, UserProfile userProfile) {
         Intent intent = new Intent(context, UserOtherSetAct.class);
-        intent.putExtra("userProfile", userProfile);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
         context.startActivity(intent);
     }
 

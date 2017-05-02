@@ -57,6 +57,8 @@
     <string name="user_info_hi">打招呼</string>
     <string name="user_info_video">发视频</string>
     <string name="user_info_voice">发语音</string>
+    <string name="user_info_age">%d岁</string>
+    <string name="user_info_follow_count">关注 %d</string>
 
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
@@ -225,6 +227,8 @@
     <string name="user_other_set_complain">投诉</string>
     <string name="user_other_label">标签</string>
     <string name="user_other_label_often">常用标签</string>
+    <string name="user_other_info_req_fail">资料请求出错！</string>
+    <string name="user_online">在线</string>
 
     <string name="goods_diamond_title">钻石充值</string>
     <string name="goods_diamond_remain">余额</string>

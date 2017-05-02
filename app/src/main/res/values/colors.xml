@@ -198,6 +198,8 @@
     <color name="trans_gray">#cc9e9e9f</color>
     <!-- 女粉色 -->
     <color name="picker_pink_color">#fd6c8e</color>
+    <!-- 男蓝色 -->
+    <color name="picker_blue_color">#82A0ED</color>
 
     <!-- filter -->
     <color name="filter_tab_color_sel">#ebecec</color>

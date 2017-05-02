@@ -43,7 +43,7 @@ public class UserProfile extends UserBasic {
     private String online_date; //上线时间 2015-05-06
     private String weChatNo;//微信号
     private int FollowCont;//关注数量
-    private String lastOnlineTime;//最后登录时间
+    private long lastOnlineTime;//最后登录时间
     private int mtRedbag;//摇钱树红包数量
     private int gameFlag;//是否玩过游戏：1为玩过游戏，0为没有玩过
     private int hong;//判断软件版本是否为红包来了：1红包来了用户  2 非红包来了用户
@@ -114,7 +114,7 @@ public class UserProfile extends UserBasic {
         this.setOnline_date(jsonObject.optString("online_time"));
         this.setWeChatNo(jsonObject.optString("weChat"));
         this.setFollowCont(jsonObject.optInt("followMeCount"));
-        this.setLastOnlineTime(jsonObject.optString("l_online_time"));
+        this.setLastOnlineTime(jsonObject.optLong("l_online_time"));
         this.setMtRedbag(jsonObject.optInt("mt_redbag"));
         this.setGameFlag(jsonObject.optInt("gameFlag"));
 
@@ -165,11 +165,11 @@ public class UserProfile extends UserBasic {
         this.mtRedbag = mtRedbag;
     }
 
-    public String getLastOnlineTime() {
+    public long getLastOnlineTime() {
         return lastOnlineTime;
     }
 
-    public void setLastOnlineTime(String lastOnlineTime) {
+    public void setLastOnlineTime(long lastOnlineTime) {
         this.lastOnlineTime = lastOnlineTime;
     }
 
@@ -316,8 +316,26 @@ public class UserProfile extends UserBasic {
         this.isFollowed = isFollowed;
     }
 
-    public int getDistance() {
-        return distance;
+    public String getDistance() {
+        String result;
+
+        if (distance < 1000)
+            distance = 3000;
+
+        if (distance >= 5000) {
+            result = "5km以上";
+        } else {
+            result = distance + "";
+            String km = result.substring(0, result.length() - 3);
+            String m = result.substring(result.length() - 3, result.length() - 1);
+            if ("00".contains(m)) {
+                result = km + "km以内";
+            } else {
+                result = km + "." + m + "km";
+            }
+        }
+
+        return result;
     }
 
     public void setDistance(int distance) {
@@ -543,7 +561,7 @@ public class UserProfile extends UserBasic {
         dest.writeString(this.online_date);
         dest.writeString(this.weChatNo);
         dest.writeInt(this.FollowCont);
-        dest.writeString(this.lastOnlineTime);
+        dest.writeLong(this.lastOnlineTime);
         dest.writeInt(this.mtRedbag);
         dest.writeInt(this.gameFlag);
         dest.writeInt(this.hong);
@@ -592,7 +610,7 @@ public class UserProfile extends UserBasic {
         this.online_date = in.readString();
         this.weChatNo = in.readString();
         this.FollowCont = in.readInt();
-        this.lastOnlineTime = in.readString();
+        this.lastOnlineTime = in.readLong();
         this.mtRedbag = in.readInt();
         this.gameFlag = in.readInt();
         this.hong = in.readInt();

@@ -69,8 +69,6 @@ public class SplashActivity extends BaseActivity {
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
             ModuleMgr.getCenterMgr().reqMyInfo();
 
-            ModuleMgr.getCenterMgr().reqOtherInfo(122821207, null);
-
             if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey()) && !checkUserIsUploadAvatar()) {
 //TODO                UIShow.showNoHeadActToMain(this);
 //                finish();
