@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.mail;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
@@ -19,7 +19,6 @@ import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-import com.juxin.predestinate.ui.pay.PayListAct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
-        setTitle("信箱");
+        setTitle(getResources().getString(R.string.main_btn_xiaoyou));
 //        setTitleRight("忽略未读", new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -61,9 +60,6 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 //            }
 //        });
         initView();
-
-        Intent intent = new Intent(getActivity(), PayListAct.class);
-        startActivity(intent);
 
        // addMessageListener(MsgType.User_List_Msg_Change, this);
     //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
@@ -104,10 +100,6 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         listMail.setPullRefreshEnable(false);
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
-
-
-        UIShow.showPayListAct(getActivity(), 56);
-
     }
 
     @Override
