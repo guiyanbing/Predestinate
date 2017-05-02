@@ -93,7 +93,7 @@
             android:paddingLeft="@dimen/px35_dp"
             android:paddingRight="@dimen/px35_dp"
             android:text="@null"
-            android:textColor="@color/text_theme_blue"
+            android:textColor="@color/white"
             android:textSize="@dimen/px48_sp" />
 
         <LinearLayout

@@ -63,7 +63,7 @@ public enum UrlParam {
     //客户端获得用户红包列表
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
-    reqAddredTotal("fruit/addredtotalnew",true),
+    reqAddredTotal("fruit/addredtotalnew",false),
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
     reqAddredonekey("fruit/addredonekey", RedOneKeyList.class,true),
     // 客户端请求用户提现列表

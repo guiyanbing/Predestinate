@@ -47,16 +47,7 @@ import java.util.Map;
 public class Invoker {
 
     // js cmd key
-    public static final String JSCMD_visit_home = "visit_home";         // 返回自己的摇钱树
-    public static final String JSCMD_visit_other = "visit_other";       // 进入他人摇钱树
-    public static final String JSCMD_shake = "shake";                   // 摇动手机
-    public static final String JSCMD_share_success = "share_success";   // QQ/微信客户端分享成功后通知js
-    public static final String JSCMD_update_data = "update_data";       // 通知游戏刷新数据（充值，分享等可能要更新个人信息的操作后调用）
-    public static final String JSCMD_game_guide = "game_guide";         // 游戏引导：event:“rob_other”引导的事件（rob_other为引导抢夺红包）
-    public static final String JSCMD_cancel_dialog = "cancel_dialog";   // 取消cmd型对话框（取消分享，取消充值才发送）
-    public static final String JSCMD_diamondCountChange = "diamondCountChange"; //钻石的数量变更通知js
-
-    public static String JSCMD_cache_uid = "";//缓存的访问uid
+    public static final String JSCMD_ranking_btn_click = "ranking_btn_click";//风云榜按钮点击事件（本周上周切换）
 
     private Gson gson = new Gson();
     private WebAppInterface appInterface = new WebAppInterface(App.context, null);
@@ -196,13 +187,6 @@ public class Invoker {
                 Activity act = appInterface.getAct();
                 if (act != null && act instanceof WebActivity) {
                     ((WebActivity) act).hideLoading();
-                }
-                //缓存最后一条访问别人摇钱树的uid
-                if (!TextUtils.isEmpty(JSCMD_cache_uid)) {
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("target_id", JSCMD_cache_uid);
-                    doInJS(JSCMD_visit_other, params);
-                    JSCMD_cache_uid = "";
                 }
             } catch (Exception e) {
                 e.printStackTrace();

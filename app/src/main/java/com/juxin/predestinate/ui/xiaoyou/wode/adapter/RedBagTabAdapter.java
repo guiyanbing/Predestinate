@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.xiaoyou.wode.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
@@ -62,6 +64,7 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
         vh.tvStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LoadingDialog.show((FragmentActivity)mContext);
                 mPosition = position;
                 ModuleMgr.getCommonMgr().reqAddredTotal(ModuleMgr.getCenterMgr().getMyInfo().getUid(), info.getMoney() * 100f, info.getId(), info.getType(), RedBagTabAdapter.this);
 //                mTabCallBack.addredtotal(position, TextUtils.isEmpty(info.getMoney()) ? "0" : (Float.parseFloat(info.getMoney()) * 100) + "", info.getId(), info.getType());
@@ -76,6 +79,7 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
 
     @Override
     public void onRequestComplete(HttpResponse response) {
+        LoadingDialog.closeLoadingDialog();
         AddredTotalInfo info = new AddredTotalInfo();
         info.parseJson(response.getResponseString());
         if (response.isOk()) {

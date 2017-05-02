@@ -74,12 +74,12 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         setTitleRight(getString(R.string.explain), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //跳转到钻石说明页
+                //跳转到提现说明页
                 UIShow.showWithDrawExplainAct(RedBoxRecordAct.this);
             }
         });
     }
-
+    //添加两个panel
     private void initViewsList() {
         panls.add(new RedBagRecordPanel(this));
         panls.add(new WithDrawRecordPanel(this));
@@ -93,7 +93,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     }
 
     public void refreshView(double money){
-        PSP.getInstance().put(REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),(long)money);
+        PSP.getInstance().put(REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),(long)money);//存储可提现金额
         tvMoney.setText(money+"");
     }
 
@@ -113,12 +113,10 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
                 Intent intent = null;
                 if (isVerify) {
                     intent = new Intent(this, WithDrawApplyAct.class);
-
+                    startActivity(intent);
                 } else {
-                    UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);
-//                    intent = new Intent(this, RedBoxPhoneVerifyAct.class);
+                    UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);//验证手机
                 }
-                startActivity(intent);
                 break;
             default:
                 break;

@@ -13,6 +13,7 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -55,7 +56,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         etCardNum = (EditText) findViewById(R.id.bank_card_et_card_num);
         btnNext = (Button) findViewById(R.id.bank_card_btn_next);
         if(mIsFromEdit) {
-            mEidtMoney =  getIntent().getStringExtra("money");
+            mEidtMoney =  getIntent().getDoubleExtra("money",0)+"";
             mId = getIntent().getIntExtra("id", 0);
         }else {
             mEidtMoney = PSP.getInstance().getLong(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
@@ -67,6 +68,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
     }
 
     private void initDefaultAddress() {
+        LoadingDialog.show(this);
      ModuleMgr.getCommonMgr().reqWithdrawAddress(this);
     }
 
@@ -152,6 +154,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onRequestComplete(HttpResponse response) {
+        LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqWithdrawAddress){//请求默认地址结果返回
             if (response.isOk()){
                 WithdrawAddressInfo info = new WithdrawAddressInfo();

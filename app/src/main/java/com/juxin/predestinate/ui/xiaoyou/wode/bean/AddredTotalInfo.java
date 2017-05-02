@@ -3,10 +3,12 @@ package com.juxin.predestinate.ui.xiaoyou.wode.bean;
 
 import com.juxin.predestinate.bean.net.BaseData;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
- * 标签列表
+ * 提现信息
  * Created by zm on 17/3/20.
  */
 public class AddredTotalInfo extends BaseData {
@@ -16,9 +18,12 @@ public class AddredTotalInfo extends BaseData {
     private double sum;
     @Override
     public void parseJson(String s) {
-        redbagLists = getBaseDataList(getJsonObject(s).optJSONArray("result"), RedbagList.RedbagInfo.class);
-        this.setMsg(getJsonObject(s).optString("msg"));
-        this.setSum(getJsonObject(s).optJSONObject("res").optDouble("sum"));
+        JSONObject jsonObject = getJsonObject(s);
+        redbagLists = getBaseDataList(jsonObject.optJSONArray("result"), RedbagList.RedbagInfo.class);
+        this.setMsg(jsonObject.optString("msg"));
+        if (jsonObject.has("res")){
+            this.setSum(jsonObject.optJSONObject("res").optDouble("sum"));
+        }
     }
 
     public List getRedbagLists() {

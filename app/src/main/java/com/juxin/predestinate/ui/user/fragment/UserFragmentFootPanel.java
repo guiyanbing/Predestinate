@@ -79,7 +79,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_3: // 我的钱包
-                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/FateWeb/pages/identify/identify.html?v=" + System.currentTimeMillis());
+                UIShow.showRedBoxRecordAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_4:// 我要赚红包
