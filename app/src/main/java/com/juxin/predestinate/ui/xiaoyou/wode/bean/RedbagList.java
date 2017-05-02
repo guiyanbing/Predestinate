@@ -42,8 +42,9 @@ public class RedbagList extends BaseData {
 
     @Override
     public void parseJson(String s) {
-        this.setTotal(getJsonObject(s).optDouble("total"));
-        redbagLists = getBaseDataList(getJsonObject(s).optJSONArray("result"), RedbagInfo.class);
+        JSONObject jsonObject = getJsonObject(s);
+        this.setTotal(jsonObject.optDouble("total"));
+        redbagLists = getBaseDataList(jsonObject.optJSONArray("result"), RedbagInfo.class);
     }
 
     public static class RedbagInfo extends BaseData {
@@ -57,13 +58,6 @@ public class RedbagList extends BaseData {
         @Override
         public void parseJson(String s) {
             JSONObject jsonObject = getJsonObject(s);
-            //json串解析
-            //            "id":"2",                            //红包id
-            //                    "money":"300",                      //红包金额(分)
-            //                    "create_time":"2016-11-04 10:14:23",// 获得时间
-            //                    "type":"1",   //红包类型 1水果游戏红包(旧) 2打擂奖励/排行奖励 3聊天红包
-            //                    //4 聊天排名奖励(旧) 5礼物折现  7.8好友邀请,9 视频/语音
-            //                    "rank":0,                            //排名(水果 或 聊天)
             this.setId(jsonObject.optLong("id"));
             this.setMoney(jsonObject.optDouble("money"));
             this.setCreate_time(jsonObject.optString("create_time"));
