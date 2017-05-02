@@ -8,7 +8,7 @@
     tools:showIn="@layout/main_act">
 
     <RelativeLayout
-        android:id="@+id/mail_layout"
+        android:id="@+id/discovery_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -27,7 +27,7 @@
 
             <TextView
                 style="@style/text_tab_main"
-                android:text="@string/main_btn_mail" />
+                android:text="@string/main_btn_discovery" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
@@ -40,7 +40,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/xiaoyou_layout"
+        android:id="@+id/mail_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -59,7 +59,7 @@
 
             <TextView
                 style="@style/text_tab_main"
-                android:text="@string/main_btn_xiaoyou" />
+                android:text="@string/main_btn_mail" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
@@ -72,7 +72,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/plaza_layout"
+        android:id="@+id/rank_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -91,7 +91,7 @@
 
             <TextView
                 style="@style/text_tab_main"
-                android:text="@string/main_btn_plaza" />
+                android:text="@string/main_btn_rank" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
@@ -104,7 +104,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/web_layout"
+        android:id="@+id/plaza_layout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -123,7 +123,7 @@
 
             <TextView
                 style="@style/text_tab_main"
-                android:text="@string/main_btn_web" />
+                android:text="@string/main_btn_plaza" />
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView

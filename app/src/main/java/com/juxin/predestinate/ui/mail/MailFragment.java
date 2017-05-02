@@ -42,7 +42,7 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
-        setTitle(getResources().getString(R.string.main_btn_xiaoyou));
+        setTitle(getResources().getString(R.string.main_btn_mail));
 //        setTitleRight("忽略未读", new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

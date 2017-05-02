@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.invoke;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -452,9 +453,7 @@ public class Invoker {
             PLogger.d("---start_pay--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             Activity act = appInterface.getAct();
-            //TODO
-//            UIHelper.showCMDPaymentAct(act == null ? (Activity) App.getActivity() : act, dataObject.optInt("pay_id"),
-//                    dataObject.optString("desc"), dataObject.optString("money"));//money价格(元)
+            UIShow.showPayListAct((FragmentActivity) (act == null ? App.getActivity() : act), dataObject.optInt("pay_id"));
         }
 
         // 获取认证状态
