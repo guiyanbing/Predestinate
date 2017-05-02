@@ -25,10 +25,10 @@ import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
-    private XiaoyouFragment xiaoyouFragment;
+    private XiaoyouFragment discoveryFragment;
     private MailFragment mailFragment;
     private RankFragment rankFragment;
-    private WebFragment webFragment;
+    private WebFragment plazaFragment;
     private UserFragment userFragment;
 
     private BaseFragment current;  // 当前的fragment
@@ -53,28 +53,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initFragment() {
         fragmentManager = getSupportFragmentManager();
         mailFragment = new MailFragment();
-        xiaoyouFragment = new XiaoyouFragment();
+        discoveryFragment = new XiaoyouFragment();
         rankFragment = new RankFragment();
-        webFragment = new WebFragment(getResources().getString(R.string.main_btn_web),
+        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
                 ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
         userFragment = new UserFragment();
 
-        switchContent(xiaoyouFragment);
+        switchContent(discoveryFragment);
     }
 
     private void initViews() {
+        View discovery_layout = findViewById(R.id.discovery_layout);
         View mail_layout = findViewById(R.id.mail_layout);
-        View xiaoyou_layout = findViewById(R.id.xiaoyou_layout);
+        View rank_layout = findViewById(R.id.rank_layout);
         View plaza_layout = findViewById(R.id.plaza_layout);
-        View web_layout = findViewById(R.id.web_layout);
         View user_layout = findViewById(R.id.user_layout);
 
-        views = new View[]{mail_layout, xiaoyou_layout, plaza_layout, web_layout, user_layout};
+        views = new View[]{discovery_layout, mail_layout, rank_layout, plaza_layout, user_layout};
 
+        discovery_layout.setOnClickListener(this);
         mail_layout.setOnClickListener(this);
-        xiaoyou_layout.setOnClickListener(this);
+        rank_layout.setOnClickListener(this);
         plaza_layout.setOnClickListener(this);
-        web_layout.setOnClickListener(this);
         user_layout.setOnClickListener(this);
     }
 
@@ -104,14 +104,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        if (fragment == xiaoyouFragment) {
-            tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
+        if (fragment == discoveryFragment) {
+            tabSwitchHandler.sendEmptyMessage(R.id.discovery_layout);
         } else if (fragment == mailFragment) {
-            tabSwitchHandler.sendEmptyMessage(R.id.xiaoyou_layout);
+            tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
         } else if (fragment == rankFragment) {
+            tabSwitchHandler.sendEmptyMessage(R.id.rank_layout);
+        } else if (fragment == plazaFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.plaza_layout);
-        } else if (fragment == webFragment) {
-            tabSwitchHandler.sendEmptyMessage(R.id.web_layout);
         } else if (fragment == userFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.user_layout);
         }
@@ -129,17 +129,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.mail_layout:
-                switchContent(xiaoyouFragment);
+            case R.id.discovery_layout:
+                switchContent(discoveryFragment);
                 break;
-            case R.id.xiaoyou_layout:
+            case R.id.mail_layout:
                 switchContent(mailFragment);
                 break;
-            case R.id.plaza_layout:
+            case R.id.rank_layout:
                 switchContent(rankFragment);
                 break;
-            case R.id.web_layout:
-                switchContent(webFragment);
+            case R.id.plaza_layout:
+                switchContent(plazaFragment);
                 break;
             case R.id.user_layout:
                 switchContent(userFragment);
@@ -171,13 +171,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void changeTab(int tab_type, Intent intent) {
         PLogger.d("---changeTab--->tab_type：" + tab_type);
         if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到发现tab
-            switchContent(xiaoyouFragment);
+            switchContent(discoveryFragment);
         } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(mailFragment);
         } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab
             switchContent(rankFragment);
         } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到广场tab
-            switchContent(webFragment);
+            switchContent(plazaFragment);
         } else if (FinalKey.MAIN_TAB_5 == tab_type) {//跳转到我的tab
             switchContent(userFragment);
         }

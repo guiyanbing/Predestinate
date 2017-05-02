@@ -45,7 +45,7 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initTitle() {
-        setTitle(getResources().getString(R.string.main_btn_plaza));
+        setTitle(getResources().getString(R.string.main_btn_rank));
         View rank_title = LayoutInflater.from(getActivity()).inflate(R.layout.f1_main_rank_title, null);
         setTitleCenterContainer(rank_title);
 

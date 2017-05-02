@@ -6,10 +6,10 @@
     <string name="request_error">请求出错!</string>
 
     <!-- 主页Fragment -->
-    <string name="main_btn_mail">发现</string>
-    <string name="main_btn_xiaoyou">消息</string>
-    <string name="main_btn_plaza">风云榜</string>
-    <string name="main_btn_web">广场</string>
+    <string name="main_btn_discovery">发现</string>
+    <string name="main_btn_mail">消息</string>
+    <string name="main_btn_rank">风云榜</string>
+    <string name="main_btn_plaza">广场</string>
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
 
