@@ -17,17 +17,17 @@ import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.MailFragment;
-import com.juxin.predestinate.ui.plaza.PlazaFragment;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
+import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
-    private MailFragment mailFragment;
     private XiaoyouFragment xiaoyouFragment;
-    private PlazaFragment plazaFragment;
+    private MailFragment mailFragment;
+    private RankFragment rankFragment;
     private WebFragment webFragment;
     private UserFragment userFragment;
 
@@ -54,11 +54,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragmentManager = getSupportFragmentManager();
         mailFragment = new MailFragment();
         xiaoyouFragment = new XiaoyouFragment();
-        plazaFragment = new PlazaFragment();
-        webFragment = new WebFragment();
+        rankFragment = new RankFragment();
+        webFragment = new WebFragment(getResources().getString(R.string.main_btn_web),
+                ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
         userFragment = new UserFragment();
 
-        switchContent(mailFragment);
+        switchContent(xiaoyouFragment);
     }
 
     private void initViews() {
@@ -103,11 +104,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        if (fragment == mailFragment) {
+        if (fragment == xiaoyouFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
-        } else if (fragment == xiaoyouFragment) {
+        } else if (fragment == mailFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.xiaoyou_layout);
-        } else if (fragment == plazaFragment) {
+        } else if (fragment == rankFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.plaza_layout);
         } else if (fragment == webFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.web_layout);
@@ -129,13 +130,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mail_layout:
-                switchContent(mailFragment);
-                break;
-            case R.id.xiaoyou_layout:
                 switchContent(xiaoyouFragment);
                 break;
+            case R.id.xiaoyou_layout:
+                switchContent(mailFragment);
+                break;
             case R.id.plaza_layout:
-                switchContent(plazaFragment);
+                switchContent(rankFragment);
                 break;
             case R.id.web_layout:
                 switchContent(webFragment);
@@ -170,12 +171,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void changeTab(int tab_type, Intent intent) {
         PLogger.d("---changeTab--->tab_type：" + tab_type);
         if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到发现tab
-            switchContent(mailFragment);
-        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(xiaoyouFragment);
+        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
+            switchContent(mailFragment);
         } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab
-            switchContent(plazaFragment);
-        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到书城tab
+            switchContent(rankFragment);
+        } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到广场tab
             switchContent(webFragment);
         } else if (FinalKey.MAIN_TAB_5 == tab_type) {//跳转到我的tab
             switchContent(userFragment);

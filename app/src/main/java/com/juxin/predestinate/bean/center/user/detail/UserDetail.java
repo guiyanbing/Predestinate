@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
+import com.juxin.library.log.PSP;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
  * 用户详细信息
  */
 public class UserDetail extends UserInfo {
+
     private List<UserPhoto> userPhotos = new ArrayList<>();
     private UserRequire userRequire = new UserRequire();
 
@@ -51,5 +54,13 @@ public class UserDetail extends UserInfo {
 
     public UserRequire getUserRequire() {
         return userRequire;
+    }
+
+    public int getDiamondsSum() {
+        return PSP.getInstance().getInt("diamondsSum" + uid,0);
+    }
+
+    public void setDiamondsSum(int diamondsSum) {
+        PSP.getInstance().put("diamondsSum" + uid, diamondsSum);
     }
 }

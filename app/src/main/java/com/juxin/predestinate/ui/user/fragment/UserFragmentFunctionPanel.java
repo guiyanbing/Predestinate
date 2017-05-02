@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.user.fragment;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
@@ -16,7 +17,8 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  */
 public class UserFragmentFunctionPanel extends BaseViewPanel {
 
-    private TextView wallet;
+    private ImageView iv_vip_privilege, iv_phone_verify;
+    private TextView tv_vip_status, tv_verify_status;
 
     public UserFragmentFunctionPanel(Context context) {
         super(context);
@@ -26,11 +28,14 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
     }
 
     private void initView() {
-        wallet = (TextView) findViewById(R.id.tv_wallet);
+        iv_vip_privilege = (ImageView) findViewById(R.id.iv_vip_privilege);
+        iv_phone_verify = (ImageView) findViewById(R.id.iv_phone_verify);
+        tv_vip_status = (TextView) findViewById(R.id.tv_vip_status);
+        tv_verify_status = (TextView) findViewById(R.id.tv_verify_status);
 
         refreshBadge();
-        findViewById(R.id.ll_rank).setOnClickListener(clickListener);
-        findViewById(R.id.ll_wallet).setOnClickListener(clickListener);
+        findViewById(R.id.ll_vip_privilege).setOnClickListener(clickListener);
+        findViewById(R.id.ll_phone_verify).setOnClickListener(clickListener);
     }
 
     /**
@@ -44,18 +49,23 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
      */
     public void refreshView(UserDetail userDetail) {
         if (userDetail == null) return;
-        //wallet.setText(String.valueOf(userDetail.getMoney()));
+        tv_vip_status.setText(userDetail.isMonthMail() ?
+                getContext().getResources().getString(R.string.center_vip_left_day) :
+                getContext().getResources().getString(R.string.center_vip_to_open));
+        tv_verify_status.setText(userDetail.isVerifyCellphone() ?
+                getContext().getResources().getString(R.string.center_phone_has_verify) :
+                getContext().getResources().getString(R.string.center_phone_to_verify));
     }
 
     private final NoDoubleClickListener clickListener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.ll_rank://跳转到排行榜
+                case R.id.ll_vip_privilege://开通vip
+                    //TODO 跳转到开通vip页面
                     break;
-                case R.id.ll_wallet://跳转到钱包
-                    //手机绑定
-                    //UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getMobileAuthStatus()==3);
+                case R.id.ll_phone_verify://手机绑定
+                    UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone());
                     break;
             }
         }

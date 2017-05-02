@@ -40,8 +40,8 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         recyclerView.setNestedScrollingEnabled(false); // 嵌套ScrollView滑动惯性消失
         String[] names = resources.getStringArray(R.array.user_authority_name);
         int[] levels = resources.getIntArray(R.array.user_authority_level);
-        int[] icons = new int[]{R.drawable.p1_user_zhuye_ico, R.drawable.p1_user_dongtai_ico, R.drawable.p1_user_renzheng_ico, R.drawable.p1_user_vip_ico, R.drawable.p1_user_zuanshi_ico,
-                R.drawable.p1_user_liwu_ico, R.drawable.p1_user_youxi_ico, R.drawable.p1_user_guanyu_ico, R.drawable.p1_user_set_ico};
+        int[] icons = new int[]{R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_wallet_ico, R.drawable.f1_user_money_ico, R.drawable.f1_user_ycoin_ico,
+                R.drawable.f1_user_diamonds_ico, R.drawable.f1_user_gift_ico, R.drawable.f1_user_xdmail_ico, R.drawable.f1_user_info_ico, R.drawable.f1_user_xiangce_ico, R.drawable.f1_user_set_ico};
 
         for (int i = 0; i < names.length; i++) {
             UserAuth userAuth = new UserAuth(i + 1, icons[i], levels[i], names[i], isShow(i + 1));
@@ -71,37 +71,44 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
     @Override
     public void onItemClick(View convertView, int position) {
         switch (position) {
-            case CenterItemID.i_Center_Homepage_id: // 主页
+            case CenterItemID.i_Center_item_1: // 我的主页
                 UIShow.showUserCheckInfoAct(getContext());
                 break;
 
-            case CenterItemID.i_Center_Dynamic_id: // 动态
+            case CenterItemID.i_Center_item_2: // 谁关注我
                 break;
 
-            case CenterItemID.i_Center_Auth_id: // 认证
-                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/FateWeb/pages/identify/identify.html?v=" + System.currentTimeMillis());
+            case CenterItemID.i_Center_item_3: // 我的钱包
+                UIShow.showRedBoxRecordAct(getContext());
                 break;
 
-            case CenterItemID.i_Center_GoodsVip_id:// VIP充值
+            case CenterItemID.i_Center_item_4:// 我要赚红包
                 UIShow.showGoodsVipAct(getContext());
                 break;
 
-            case CenterItemID.i_Center_GoodsDiamond_id:// 钻石
+            case CenterItemID.i_Center_item_5:// 我的Y币
                 UIShow.showGoodsDiamondAct(getContext());
                 break;
 
-            case CenterItemID.i_Center_Gift_id:// 礼物
+            case CenterItemID.i_Center_item_6:// 我的钻石
+                UIShow.showMyDiamondsAct(getContext());
                 break;
 
-            case CenterItemID.i_Center_Game_id:// 游戏
+            case CenterItemID.i_Center_item_7:// 我的礼物
                 UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/fish_box/?user_id=100014");
                 break;
 
-            case CenterItemID.i_Center_About_id: // 关于
+            case CenterItemID.i_Center_item_8: // 最近来访
                 UIShow.show(getContext(), WebEntranceActivity.class);
                 break;
 
-            case CenterItemID.i_Center_Setting_id:// 设置
+            case CenterItemID.i_Center_item_9:// 个人资料
+                break;
+
+            case CenterItemID.i_Center_item_10:// 我的相册
+                break;
+
+            case CenterItemID.i_Center_item_11:// 设置中心
                 UIShow.showUserSetAct((Activity) getContext(), 100);
                 break;
         }

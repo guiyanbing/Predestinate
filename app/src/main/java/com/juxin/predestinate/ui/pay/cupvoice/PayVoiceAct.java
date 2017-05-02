@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * Created by Kind on 2017/4/26.
  */
-
 public class PayVoiceAct extends BaseActivity {
 
     private PayCupVoiceBankPanel voiceBankPanel;
@@ -47,6 +46,5 @@ public class PayVoiceAct extends BaseActivity {
 
         pager_indicator.setCustomTabView(R.layout.f1_tab_item, R.id.tab_text);
         pager_indicator.setViewPager(view_pager);//在设置SmartTabLayout.setViewPager的时候ViewPager必须先setAdapter
-
     }
 }

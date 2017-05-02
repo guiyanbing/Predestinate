@@ -221,7 +221,7 @@
     <dimen name="divider_page_footing">@dimen/px180_dp</dimen>
 
     <!-- 离标题栏的高度 -->
-    <dimen name="marginTop">@dimen/px35_dp</dimen>
+    <dimen name="marginTop">@dimen/px21_dp</dimen>
     <!-- 底部提示高度 -->
     <dimen name="tip_footer_height">@dimen/px116_dp</dimen>
 

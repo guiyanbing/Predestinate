@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
+    private MailItemType mailItemType = null;
+
     public MailFragmentAdapter(Context context, List<BaseMessage> datas) {
         super(context, datas);
     }
@@ -50,9 +52,9 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.recommend_msg.type));
         baseMessage.setWeight(BaseMessage.Great_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-        baseMessage.setName("最近来访");
-        baseMessage.setAboutme("系统为您匹配到7人");
-        baseMessage.setLocalAvatar(R.drawable.p1_xxicon01);
+        baseMessage.setName("谁关注我");
+        baseMessage.setAboutme("暂时还没有人关注我");
+        baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
         messageLists.add(baseMessage);
 
         baseMessage = new BaseMessage();
@@ -60,9 +62,20 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
       //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
         baseMessage.setWeight(BaseMessage.In_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-        baseMessage.setName("谁关注我");
-        baseMessage.setAboutme("26人查看了我");
-        baseMessage.setLocalAvatar(R.drawable.p1_xxicon02);
+        baseMessage.setName("我的好友");
+        baseMessage.setAboutme("共有97位好友");
+        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
+        messageLists.add(baseMessage);
+
+
+        baseMessage = new BaseMessage();
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
+        //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
+        baseMessage.setWeight(BaseMessage.Small_Weight);
+        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Ordinary.type);
+        baseMessage.setName("我的好友");
+        baseMessage.setAboutme("共有97位好友");
+        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 
 //        if(!b){
@@ -153,6 +166,18 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                     case Mail_Item_Act:
                         vh.customMailItem.showItemAct(msgData);
                         break;
+                }
+
+                if(this.mailItemType != mailItemType){
+                    this.mailItemType = mailItemType;
+                    switch (mailItemType){
+                        case Mail_Item_Ordinary:
+                                vh.customMailItem.showLetterGap();
+                            break;
+                        case Mail_Item_Act:
+                                vh.customMailItem.showActGap();
+                            break;
+                    }
                 }
             }
         }

@@ -20,6 +20,7 @@ import com.juxin.mumu.bean.net.BasicNameValuePair;
 import com.juxin.mumu.bean.net.NameValuePair;
 import com.juxin.mumu.bean.utils.MD5;
 import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -39,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import eposp.wtf_library.core.WtfPlugin;
 
 /**
@@ -85,7 +85,7 @@ public class PayWeixinUtils {
                         onPayment(payGood);
                         return;
                     } else
-                        MMToast.showShort("请求出错，请重新请求");
+                        MMToast.showShort(R.string.request_error);
                 }
 
             }
@@ -145,7 +145,7 @@ public class PayWeixinUtils {
             api.sendReq(req);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort("订单数据出错，请重新请求");
+            MMToast.showShort(R.string.pay_order_error);
         }
     }
 
@@ -177,7 +177,7 @@ public class PayWeixinUtils {
 
     private void To_Pay_WeiXin_Protocol(String payData) {
         if (!payData.startsWith("weixin://")) {
-            MMToast.showShort("请求出错，请重新请求");
+            MMToast.showShort(R.string.request_error);
             return;
         }
         Uri uri = Uri.parse(payData);
@@ -196,7 +196,7 @@ public class PayWeixinUtils {
     private void To_Pay_WeiXin_Http(String payData) {
         if (!payData.startsWith("http://") &&
                 !payData.startsWith("https://")) {
-            MMToast.showShort("请求出错，请重新请求");
+            MMToast.showShort(R.string.request_error);
             return;
         }
         LoadingDialog.show((FragmentActivity) context, "");
@@ -267,7 +267,7 @@ public class PayWeixinUtils {
     private void To_Pay_WeiXin_Wft_Wap(String payData) {
         try {
             if (TextUtils.isEmpty(payData)) {
-                MMToast.showShort("订单数据出错，请重新请求");
+                MMToast.showShort(R.string.pay_order_error);
                 return;
             }
 
@@ -292,14 +292,14 @@ public class PayWeixinUtils {
             new WtfPlugin().getOrderForPay((Activity) context, data);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort("订单数据出错，请重新请求");
+            MMToast.showShort(R.string.pay_order_error);
         }
     }
 
     private void To_Pay_WeiXin_Wft_App(String payData) {
         try {
             if (TextUtils.isEmpty(payData)) {
-                MMToast.showShort("订单数据出错，请重新请求");
+                MMToast.showShort(R.string.pay_order_error);
                 return;
             }
 
@@ -315,7 +315,7 @@ public class PayWeixinUtils {
             PayPlugin.unifiedAppPay((Activity) context, msg);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort("订单数据出错，请重新请求");
+            MMToast.showShort(R.string.pay_order_error);
         }
     }
 }

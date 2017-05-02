@@ -39,3 +39,7 @@
 
 ### 黄秀君
 1. socket模块
+
+
+
+### git地址:http://test.game.xiaoyouapp.cn:20080/user/login

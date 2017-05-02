@@ -6,7 +6,7 @@
     android:cacheColorHint="@color/transparent"
     android:orientation="vertical" >
 
-    <com.xiaoyou.friends.ex.module.baseui.CustomStatusListView
+    <com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView
         android:id="@+id/pay_cupvoice_bank_listview"
         android:layout_width="match_parent"
         android:fadingEdge="none"

@@ -2,13 +2,20 @@
     <string name="app_name">缘份吧</string>
     <string name="app_storage_name">xiaou</string>
 
+    <!-- 全局提示语 -->
+    <string name="request_error">请求出错!</string>
+
     <!-- 主页Fragment -->
     <string name="main_btn_mail">发现</string>
     <string name="main_btn_xiaoyou">消息</string>
     <string name="main_btn_plaza">风云榜</string>
-    <string name="main_btn_web">书城</string>
+    <string name="main_btn_web">广场</string>
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
+
+    <!-- 排行榜 -->
+    <string name="rank_this_week">本周</string>
+    <string name="rank_last_week">上周</string>
 
     <!--设置-->
     <string name="switch_stealth">一键隐身</string>
@@ -36,7 +43,21 @@
     <string name="dal_submit">确定</string>
     <string name="txt_set_topuid_desc">当前账号：</string>
 
+
     <!-- 个人中心 -->
+    <string name="copy">复制</string>
+    <string name="center_my_invite_code">我的邀请码：%s</string>
+    <string name="center_vip_privilege">VIP特权</string>
+    <string name="center_phone_verify">手机认证</string>
+    <string name="center_vip_to_open">立即开通</string>
+    <string name="center_vip_left_day">已开通</string>
+    <string name="center_phone_to_verify">立即认证</string>
+    <string name="center_phone_has_verify">已认证</string>
+    <string name="user_info_send">发信</string>
+    <string name="user_info_hi">打招呼</string>
+    <string name="user_info_video">发视频</string>
+    <string name="user_info_voice">发语音</string>
+
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
     <string name="str_not_filled">未填写</string>
@@ -153,11 +174,12 @@
 
     <!-- 用户资料 -->
     <string name="user_center_fragment">我的</string>
-    <string name="user_center_fragment_rank">排行榜</string>
-    <string name="user_center_fragment_wallet">钱包</string>
     <string name="check_info_sendmsg">发消息</string>
     <string name="check_info_sayhi">打招呼</string>
     <string name="check_info_gift">送礼物</string>
+    <string name="check_info_album">照片</string>
+    <string name="check_info_video">视频</string>
+    <string name="check_info_gift1">礼物</string>
     <string name="check_info_secret_photo">私密相册</string>
     <string name="check_info_secret_video">私密视频</string>
     <string name="check_info_dynamic">动态</string>
@@ -185,6 +207,9 @@
     <string name="user_info_avatar_suc">上传成功</string>
     <string name="user_info_avatar_fail">上传失败</string>
     <string name="user_info_avatar_upload">正在上传头像</string>
+    <string name="check_info_chat_pay">聊天</string>
+    <string name="user_info_chat_video">20钻石/分钟</string>
+    <string name="user_info_chat_voice">10钻石/分钟</string>
     <string name="user_other_info_set">资料设置</string>
     <string name="user_other_remark_name">备注名</string>
     <string name="user_other_set_chat_voice">为TA设置语音接听</string>
@@ -230,10 +255,6 @@
     <string name="choose_pic">选择</string>
     <string name="choose_no_pick">你还没有选择任何图片</string>
 
-    <!--广场-->
-    <string name="plaza_title">广场</string>
-    <!--end 广场-->
-
     <!-- EditText输入规范 -->
     <string name="phone_digits">1234567890</string>
     <string name="user_modify_pwd_input_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
@@ -261,7 +282,6 @@
     <string name="title_set">设置</string>
     <string name="title_about">关于</string>
     <string name="title_pwd_set">密码设置</string>
-
 
     <!-- xList 后期可能删掉，不要用-->
     <string name="xlistview_header_last_time">上次更新时间：</string>
@@ -310,11 +330,76 @@
     <string name="intimate_member">亲密成员</string>
 
 
+    <string name="help_footer_explain"> 1、银行卡充值已经准确的填写了相关信息，还是失败怎么办?\n&#160;&#160; 您选择的银行卡手机支付,失败原因可能有多种：\n1>您的银行卡号,身份证号、 姓名等信息输入有误；\n2>您没有在银行预留网上支付的手机号码；\n3>您的银行卡暂不被支持；如信息正确的情况下，尝试3次依然失败，请更换其他银行卡重试；或购买全国通用的移动、联通、电信充值卡在手机充值卡支付页面上进行充值。\n\n2、银行卡支付时，卡号和身份证需要是同一个人吗？\n&#160;&#160;是的，银行卡充值卡号和身份证姓名必须一致，否则支付不会成功。\n\n3、手机号需要和开户时候预留的手机号码一致吗？\n&#160;&#160;建议最好和银行预留手机号码一致，如果忘记号码，请咨询银行修改。\n\n4、手机号码填写正确，为什么还是不能完成支付？\n&#160;&#160;进行网上支付必须要在银行预留过手机号码才能正常完成支付交易；预留的手机号码是用户进行网上支付，保障账户资金安全使用的；与您银行账户金额变动的短信提醒预留的手机号码不是一回事；但两者可以是同一号码。请您在支付填写手机号码时，确认您填写的是预留手机号码。\n\n5、没有银行卡怎么充值？\n&#160;&#160;您可以选择充值卡充值或者信用卡充值，充值卡需要购买全国通用的移动或者联通充值卡，到支付页面填写卡面上的序列号和密码即可。\n\n6、可以用两张50元的充值卡充值100元的业务吗？\n&#160;&#160;您好，不可以，我们软件不支持合并充值，请您根据服务选择相应面额充值卡进行充值。\n\n7、充值卡充值失败怎么办?\n&#160;&#160;请确认您的充值卡是全国通用的移动、联通或电信充值卡，如果提示您卡密已失效还未获得服务，请联系缘份吧QQ人工客服核查原因。</string>
+    <string name="help_explain">亲爱的用户，您在支付过程中，有任何疑惑或者疑难，欢迎在线咨询，客服妹妹会在第一时间回复并帮助解决您的问题。</string>
     <string name="pay_phonecard_tips_txt">&#160;&#160;1、支持全国神州行充值卡、联通一卡充、电信充值卡。\n&#160;&#160;2、所选择的充值卡面值和充值卡实际面值不一致怎么办？\n&#160;&#160;&#160;&#160;&#160;A. 若您选择的充值卡面值大于实际面值，则充值失败，不会进行扣款，充值卡中的金额将保留在手机充值卡中。\n&#160;&#160;&#160;&#160;&#160;B. 若您选择的充值卡面值小于实际面值，没有用完的余额将保留在手机充值卡中。请妥善保存好您的卡号和密码，可下次充值。\n&#160;&#160;3、充值卡充值，可以分次支付么？\n&#160;&#160;&#160;&#160;&#160;可以的。一张100元的充值卡，用户可以选择先充值50元，剩余的50元日后再使用，但只能是在缘份吧中进行消费，无法充值手机话费！正确的分次支付流程是：一张100元的充值卡，选择购买的商品面值为50元，在填写序列号、密码的界面，充值卡面值的选项处，选择100元，支付成功后，完成支付50元，剩余50元在卡内，下次使用时，依旧填写原序列号密码即可使用！\n&#160;&#160;4、已经使用过的充值卡充值时如何选择面值？\n&#160;&#160;&#160;&#160;&#160;您的充值卡如果已经充值了部分面值，那么在充值时仍然应按充值卡的原有面值进行选择。例如您有一张面值100元的充值卡，已经在其它地方消费了50元，再次使用时仍然应选择100元的面值，而不能选择是50元。</string>
     <string name="pay_errcode_success">支付成功</string>
     <string name="pay_errcode_cancel">支付取消</string>
     <string name="pay_errcode_deny">支付被拒绝</string>
     <string name="pay_errcode_unknown">支付出错</string>
+    <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <color name="homeUserSay">#ff333333</color>
 
+    <!--红包记录-->
+    <string name="head_title">可提现金额</string>
+    <string name="head_unit">元</string>
+    <string name="head_draw_bt">立即提现</string>
+    <string name="head_draw_record">提现记录</string>
+    <string name="diamond_explain_one">1、钻石可用于赠送虚拟礼物</string>
+    <string name="diamond_explain_two">2、等价钻石礼物直接纳入我的个人钱包</string>
+    <string name="diamond_explain_three">3、礼物总价，按50%的分成比例</string>
+    <string name="diamond_explain_four">4、活动最终解释权归本APP所有</string>
+    <string name="usable_diamond">可用钻石：</string>
+    <string name="withdrawal_instructions_one">收入详情需24小时后解冻才能放入零钱提现</string>
+    <string name="withdrawal_instructions_two">其他红包需24小时后解冻才能放入零钱提现</string>
+    <string name="withdrawal_instructions_three">提现需填写真实姓名、银行卡号、开户银行等信息，填写错误信息将会导致提现失败</string>
+    <string name="withdrawal_instructions_four">提现时间为72小时到账</string>
+    <string name="red_packet_tree">摇钱树红包</string>
+    <string name="red_packet_other">其他红包</string>
+    <string name="withdrawal_record">提现记录</string>
+    <string name="service_QQ">客服QQ:131333</string>
+    <string name="withdrawal_page">提现页面</string>
+    <string name="name_cannot_be_empty">真实姓名不能为空</string>
+    <string name="bank_cannot_be_empty">开户银行不能为空</string>
+    <string name="branch_cannot_be_empty">开户支行不能为空</string>
+    <string name="bank_card_cannot_be_empty">银行卡号不能为空</string>
+    <string name="money_cannot_be_empty">提现金额不能为空</string>
+    <string name="withdraw_tips">提现金额需要大于</string>
+    <string name="not_beyond">提现不能超出您的金额</string>
+    <string name="delay_contact_qq">若有延迟，请联系客服QQ：</string>
+    <string name="submit_succeed">提交成功</string>
+    <string name="submit_failure">提交失败</string>
+    <string name="one_hour_onece">每小时只能发送一次请求</string>
+    <string name="want_to_say">请输入想说的话</string>
+    <string name="error_retry">消息发送失败，请检查后重试！</string>
+    <string name="withdraw_tip"><![CDATA[<font color=\'#d6d6d6\'>按国家法律规定,提现需收取</font><font color=\'#fd698c\'>20%</font><font color=\'#d6d6d6\'>的个人所得税</font>]]></string>
+    <string name="my_diamonds_explain">我的钻石</string>
+    <string name="explain">说明</string>
+    <string name="my_red">我的钱包</string>
+    <string name="income_details">收入详情</string>
+    <string name="withdraw_record">提现记录</string>
+    <string name="phone_verify">手机号验证</string>
+    <string name="toast_code_succeed">验证成功</string>
+    <string name="please_send_verification_code">请先发送验证码</string>
+    <string name="net_error_retry">网络异常，请重试</string>
+    <string name="please_try_again_later">请稍候再试</string>
+    <string name="resend">重新发送(</string>
+    <string name="seconds">)秒</string>
+    <string name="untreated">未处理</string>
+    <string name="processed">已处理</string>
+    <string name="click_on_the_modify">点击修改</string>
+    <string name="withdraw_succeed">提现成功</string>
+    <string name="imburse">放入钱袋</string>
+    <string name="net_error_check_your_net">网络异常,请检查您的网络</string>
+    <!-- 个人中心-我的礼品 -->
+    <string name="my_gift_title">我的礼物</string>
+    <string name="my_gift_send">送出的礼物</string>
+    <string name="my_gift_get">收到的礼物</string>
+    <string name="my_gift_get_count">当前收到礼物数:</string>
+    <string name="my_gift_send_count">当前送出礼物数:</string>
+    <string name="redbag_wantmessage">输入想对帅哥说的话，女生主动些，撒个娇、卖个萌，男生会忍不住想要和你聊天，聊天有红包哦！</string>
+    <string name="redbag_wantgift">说点动听的话打动帅哥吧，女生主动些，撒个娇、卖个萌，男生会忍不住想要给你送礼物哦！</string>
+    <string name="upgrade_vip">升级VIP会员，查看更多来访</string>
+    <string name="lately_visit">最近7天有12个用户来看你。</string>
+    <string name="say_hello">hi，傻子</string>
 </resources>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/color_ededed"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/userinfo_header_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px604_dp"
+                    android:background="@color/color_ededed"
+                    android:gravity="bottom|center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="@dimen/px420_dp"
+                        android:layout_height="@dimen/px420_dp"
+                        android:src="@drawable/f1_near_visitor_laifang_big" />
+
+                    <TextView
+                        android:id="@+id/tv_near_visitor_hi1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/px15_dp"
+                        android:text="@string/say_hello"
+                        android:textColor="@color/hei_color"
+                        android:textSize="@dimen/px42_sp" />
+
+                    <TextView
+                        android:id="@+id/tv_near_visitor_hi2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dip"
+                        android:text="@string/lately_visit"
+                        android:textColor="@color/hei_color"
+                        android:textSize="@dimen/px42_sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/px60_dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px1_dp"
+                    android:background="@color/color_DDDEDE" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_ededed"
+                    android:paddingBottom="@dimen/px15_dp"
+                    android:paddingLeft="@dimen/px15_dp"
+                    android:paddingRight="@dimen/px15_dp"
+                    android:paddingTop="@dimen/px15_dp" >
+
+                    <com.xiaochen.android.fate_it.ui.custom.NonScrollGridView
+                        android:id="@+id/gv_near_visitor_header_album"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_ededed"
+                        android:columnWidth="@dimen/px240_dp"
+                        android:horizontalSpacing="@dimen/px12_dp"
+                        android:numColumns="auto_fit"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/px12_dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px120_dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_near_visitor_openvip"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px120_dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/color_FD6C8E"
+            android:drawableLeft="@drawable/f1_near_visitor_vip_3"
+            android:drawablePadding="-62dip"
+            android:paddingLeft="@dimen/px75_dp"
+            android:text="@string/upgrade_vip"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</LinearLayout>

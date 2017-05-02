@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_F0F2F2"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/px18_dp"
+        android:paddingTop="@dimen/px18_dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:lines="1"
+            android:text="日期"
+            android:textColor="@color/color_807F7F"
+            android:textSize="@dimen/px42_sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="途径"
+            android:textColor="@color/color_807F7F"
+            android:textSize="@dimen/px42_sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="金额(元)"
+            android:textColor="@color/color_807F7F"
+            android:textSize="@dimen/px42_sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingRight="@dimen/px30_dp"
+            android:text="操作"
+            android:textColor="@color/color_807F7F"
+            android:textSize="@dimen/px42_sp"  />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/wode_record_panel_tv_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_F7F4EC"
+        android:padding="@dimen/px18_dp"
+        android:text="点击放入钱袋后，可提现金额增加，该条记录自动删除"
+        android:textColor="@color/color_CFC19A"
+        android:textSize="@dimen/px30_sp" />
+
+    <include
+        layout="@layout/f1_wode_withdraw_item"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+
+        <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
+            android:id="@+id/wode_record_panel_crv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_F0F2F2"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent" />
+        <TextView
+            android:id="@+id/withdraw_record_panel_tv_data_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="暂无提现记录"
+            android:clickable="false"
+            android:textColor="#d6d6d6"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_sum_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/px6_dp"
+            android:text=""
+            android:textColor="@color/color_D6D6D6"
+            android:textSize="@dimen/px39_sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/wode_record_panel_btn_one_key"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px114_dp"
+            android:layout_margin="@dimen/px30_dp"
+            android:background="@drawable/f1_btn_phoneverify_selector"
+            android:enabled="false"
+            android:text="一键放入钱袋"
+            android:textColor="@color/white"
+            android:textSize="@dimen/px48_sp" />
+    </LinearLayout>
+</LinearLayout>

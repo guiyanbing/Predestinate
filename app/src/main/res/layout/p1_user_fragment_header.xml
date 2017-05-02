@@ -12,23 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/ll_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.juxin.library.view.CircleImageView
             android:id="@+id/user_head"
             style="@style/avatar_big"
             android:layout_margin="@dimen/px35_dp"
             android:src="@drawable/default_pic" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -47,43 +46,52 @@
                     android:layout_centerVertical="true"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="用户昵称"
+                    android:text="NickName"
                     android:textColor="#333333"
                     android:textSize="@dimen/px42_sp" />
 
-                <ImageView
-                    android:id="@+id/user_vip_status"
-                    android:layout_width="@dimen/px42_dp"
-                    android:layout_height="@dimen/px42_dp"
-                    android:layout_marginLeft="@dimen/px10_dp"
-                    android:src="@drawable/p1_vip_ico" />
+                <TextView
+                    android:id="@+id/user_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/px30_dp"
+                    android:text="ID:89847"
+                    android:textColor="@color/text_ciyao_gray"
+                    android:textSize="@dimen/px39_sp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/user_id"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rl_nick"
-                android:text="ID:89847"
-                android:textColor="@color/text_ciyao_gray"
-                android:textSize="@dimen/px39_sp" />
+                android:layout_marginTop="@dimen/px30_dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/user_vip_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/user_id"
-                android:text="VIP截止到..."
-                android:textColor="@color/text_ciyao_gray"
-                android:textSize="@dimen/px38_sp" />
+                <TextView
+                    android:id="@+id/iv_invite_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/px90_dp"
+                    android:background="@drawable/f1_center_invitecode_bg"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="13dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/center_my_invite_code"
+                    android:textColor="#8ea8ed"
+                    android:textSize="@dimen/px36_sp" />
 
-            <ImageView
-                style="@style/right_go"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="@dimen/px15_dp"
-                android:layout_marginRight="@dimen/px35_dp" />
-
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/iv_code_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/px90_dp"
+                    android:background="@drawable/f1_center_codecopy_bg"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="13dp"
+                    android:text="@string/copy"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px36_sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <View style="@style/divider_line" />

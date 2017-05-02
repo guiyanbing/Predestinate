@@ -52,7 +52,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
         setContentView(R.layout.p1_recommend_act);
         post_param = new HashMap<>();
         setBackView(getResources().getString(R.string.title_recommend));
-        setTitleRight(getResources().getString(R.string.title_right_filter), R.color.title_right_commit, new View.OnClickListener() {
+        setTitleRight(getResources().getString(R.string.title_right_filter), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UIShow.showRecommendFilterAct(RecommendAct.this);
@@ -113,7 +113,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
                     if (lightweightLists.size() == 0) {
                         return;
                     }
-                    adapter.setRecommendList(RecommendAct.this,recommendData);
+                    adapter.setRecommendList(RecommendAct.this, recommendData);
                     adapter.setList(lightweightLists);
                     cv_common.showXrecyclerView();
                 }

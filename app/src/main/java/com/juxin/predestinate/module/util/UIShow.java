@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -33,6 +34,9 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
+import com.juxin.predestinate.ui.pay.PayWebAct;
+import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
+import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
@@ -62,6 +66,13 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
+import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxPhoneVerifyAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxRecordAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawApplyAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawExplainAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawSuccessAct;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -266,17 +277,19 @@ public class UIShow {
     public static void showUserSetAct(final Activity context, final int resultCode) {
         context.startActivityForResult(new Intent(context, SettingAct.class), resultCode);
     }
+
     /**
      * 打开关于页面
      */
     public static void showAboutAct(final Activity context) {
         context.startActivity(new Intent(context, AboutAct.class));
     }
+
     /**
      * 打开修改密码页面
      */
     public static void showModifyAct(final Activity context) {
-        context.startActivityForResult(new Intent(context, UserModifyPwdAct.class),100);
+        context.startActivityForResult(new Intent(context, UserModifyPwdAct.class), 100);
     }
 
     /**
@@ -315,7 +328,7 @@ public class UIShow {
     }
 
     /**
-     * 打开主页
+     * 打开资料查看页
      */
     public static void showUserCheckInfoAct(Context context) {
         context.startActivity(new Intent(context, UserCheckInfoAct.class));
@@ -553,4 +566,124 @@ public class UIShow {
         }
         activity.startActivityForResult(intent, Constant.PAYMENTACT);
     }
+
+    /**
+     * 新的语音支付详细页面
+     */
+    public static void shoPayCupVoiceDetailAct(Activity context, PayGood payGood, String bank_name, int resultCode) {
+        Intent intent = new Intent(context, PayCupVoiceDetailAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("bank_name", bank_name);
+        context.startActivityForResult(intent, resultCode);
+    }
+
+    /**
+     * 新的语音支付详细页面
+     */
+    public static void showPayCupVoiceOkAct(Activity context, PayGood payGood, String phone,
+                                            String nickname, String number, String bank_id, int resultCode) {
+        Intent intent = new Intent(context, PayCupVoiceOkAct.class);
+        intent.putExtra("payGood", payGood);
+        intent.putExtra("phone", phone);
+        intent.putExtra("nickname", nickname);
+        if (number != null) {
+            intent.putExtra("number", number);
+        }
+        if (bank_id != null) {
+            intent.putExtra("bank_id", bank_id);
+        }
+        context.startActivityForResult(intent, resultCode);
+    }
+
+    public static void showPayWebAct(FragmentActivity activity, PayGood payGood) {
+        Intent intent_web = new Intent(activity, PayWebAct.class);
+        intent_web.putExtra("payGood", payGood);
+        activity.startActivityForResult(intent_web, Constant.PAYMENTACT_TO);
+    }
+
+
+    /**
+     * 打开QQ客服
+     *
+     * @param context
+     */
+    public static void showQQServer(Context context) {
+        try {
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + 11;
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (Exception e) {
+            MMToast.showShort("QQ客服忙!请等待");
+        }
+    }
+
+
+
+    // -----------------------我的提示跳转 start----------------------------
+    /**
+     * 打开我的钻石页面
+     *
+     * @param context
+     */
+    public static void showMyDiamondsAct(Context context) {
+        context.startActivity(new Intent(context, MyDiamondsAct.class));
+    }
+
+    /**
+     * 打开钻石说明页面
+     *
+     * @param context
+     */
+    public static void showMyDiamondsExplainAct(Context context) {
+        context.startActivity(new Intent(context, MyDiamondsExplainAct.class));
+    }
+
+    /**
+     * 打开我的钱包页面
+     *
+     * @param context
+     */
+    public static void showRedBoxRecordAct(Context context) {
+        context.startActivity(new Intent(context, RedBoxRecordAct.class));
+    }
+
+    /**
+     * 打开提现页面
+     *
+     * @param context
+     */
+    public static void showWithDrawApplyAct(int id,double money,boolean fromEdit,Context context) {
+        Intent intent = new Intent(context, WithDrawApplyAct.class);
+        intent.putExtra("id",id);
+        intent.putExtra("money",money);
+        intent.putExtra("fromEdit",fromEdit);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 打开提现说明页面
+     *
+     * @param context
+     */
+    public static void showWithDrawExplainAct(Context context) {
+        context.startActivity(new Intent(context, WithDrawExplainAct.class));
+    }
+
+    /**
+     * 打开提现申请成功页面
+     *
+     * @param context
+     */
+    public static void showWithDrawSuccessAct(Context context) {
+        context.startActivity(new Intent(context, WithDrawSuccessAct.class));
+    }
+
+    /**
+     * 打开手机验证页面
+     *
+     * @param context
+     */
+    public static void showRedBoxPhoneVerifyAct(Context context) {
+        context.startActivity(new Intent(context, RedBoxPhoneVerifyAct.class));
+    }
+    // -----------------------我的提示跳转 end----------------------------
 }
