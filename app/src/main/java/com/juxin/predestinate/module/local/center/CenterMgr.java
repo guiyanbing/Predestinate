@@ -296,7 +296,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                         final String avatarUrl = getInterceptUrl(pic);
                         HashMap<String, Object> postParams = new HashMap<>();
                         postParams.put(EditKey.s_key_avatar, avatarUrl);
-                        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
+                        //ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
                     }
                 }
             });

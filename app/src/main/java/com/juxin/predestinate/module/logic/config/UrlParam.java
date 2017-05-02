@@ -49,7 +49,9 @@ public enum UrlParam {
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
-    updateMyInfo("s/uinfo/UpdateUserData"),                   // 修改用户个人信息
+    updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),// 上传头像
+
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
@@ -63,28 +65,27 @@ public enum UrlParam {
     //客户端获得用户红包列表
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
-    reqAddredTotal("fruit/addredtotalnew",false),
+    reqAddredTotal("fruit/addredtotalnew", false),
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
-    reqAddredonekey("fruit/addredonekey", RedOneKeyList.class,true),
+    reqAddredonekey("fruit/addredonekey", RedOneKeyList.class, true),
     // 客户端请求用户提现列表
-    reqWithdrawlist("fruit/withdrawlist",true),
+    reqWithdrawlist("fruit/withdrawlist", true),
     // 红包记录--提现申请
-    reqWithdraw("fruit/withdraw",true),
+    reqWithdraw("fruit/withdraw", true),
     // 红包记录--提现申请获取地址
-    reqWithdrawAddress("fruit/withdrawaddress",true),
+    reqWithdrawAddress("fruit/withdrawaddress", true),
     // 红包记录--提现申请修改地址
-    reqWithdrawModify("fruit/withdrawmodify",true),
+    reqWithdrawModify("fruit/withdrawmodify", true),
     // 获取礼物列表
-    getGiftLists("gift/getGifts",true),
+    getGiftLists("gift/getGifts", true),
     // 获取钻石余额
-    getMyDiamand("gift/getMyDiamand",false),
+    getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
-    begGift("gift/begGift",true),
+    begGift("gift/begGift", true),
     // 手机验证
-    sendSMS("public/sendSMS",true),
+    sendSMS("public/sendSMS", true),
     // 手机验证
-    bindCellPhone("user/bindCellPhone",true),
-
+    bindCellPhone("user/bindCellPhone", true),
 
 
     //好友标签分组成员

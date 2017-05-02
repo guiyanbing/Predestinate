@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.center.user.others.SecretMedia;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -23,17 +21,20 @@ import java.util.List;
  */
 
 public class AlbumHorizontalPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
+    public static final int EX_HORIZONTAL_ALBUM = 1;  // 展示照片
+    public static final int EX_HORIZONTAL_VIDEO = 2;  // 展示视频
+
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
-    private UserDetail userDetail;
 
     private int secretType;
     private SecretMediaAdapter mediaAdapter;
+    private List<Object> data;
 
-    public AlbumHorizontalPanel(Context context, int secretType, UserDetail userDetail) {
+    public AlbumHorizontalPanel(Context context, int secretType, List<Object> data) {
         super(context);
         setContentView(R.layout.p1_album_horizontal_panel);
         this.secretType = secretType;
-        this.userDetail = userDetail;
+        this.data = data;
 
         initview();
     }
