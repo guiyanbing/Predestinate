@@ -30,6 +30,10 @@ import com.tencent.smtt.sdk.WebViewClient;
  */
 public class WebPanel extends BasePanel {
 
+    private static final int FRAME_WEB = 0;     //web页
+    private static final int FRAME_ERROR = 1;   //加载失败页
+    private static final int FRAME_LOADING = 2; //loading页
+
     private String url;
     private boolean isLoadingInnerControl = true;    //是否由内部控制loading的展示逻辑
 
@@ -50,7 +54,7 @@ public class WebPanel extends BasePanel {
         webView = (WebView) findViewById(R.id.webView);
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.webView, R.id.common_net_error, R.id.common_loading});
-        customFrameLayout.showOfIndex(2);
+        customFrameLayout.showOfIndex(FRAME_LOADING);
         findViewById(R.id.error_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +101,7 @@ public class WebPanel extends BasePanel {
             @Override
             public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(webView, errorCode, description, failingUrl);
-                customFrameLayout.showOfIndex(1);
+                customFrameLayout.showOfIndex(FRAME_ERROR);
                 if (webListener != null) webListener.onLoadFinish(WebLoadStatus.ERROR);
             }
 
@@ -111,7 +115,7 @@ public class WebPanel extends BasePanel {
             @Override
             public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
                 super.onPageStarted(webView, url, bitmap);
-                customFrameLayout.showOfIndex(2);
+//                customFrameLayout.showOfIndex(FRAME_LOADING);
             }
 
             @Override
@@ -136,7 +140,7 @@ public class WebPanel extends BasePanel {
      * 隐藏loading并展示WebView
      */
     public void hideLoading() {
-        customFrameLayout.showOfIndex(0);
+        customFrameLayout.showOfIndex(FRAME_WEB);
     }
 
     /**

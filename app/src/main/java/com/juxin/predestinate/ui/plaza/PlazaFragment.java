@@ -34,7 +34,7 @@ public class PlazaFragment extends BaseFragment {
 
 
     private void setTopView() {
-        setTitle(getString(R.string.plaza_title));
+        setTitle(getString(R.string.main_btn_web));
         setTitleRightImg(R.drawable.p1_reg_camera, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
