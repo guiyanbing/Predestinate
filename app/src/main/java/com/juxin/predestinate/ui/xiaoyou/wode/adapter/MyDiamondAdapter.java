@@ -1,5 +1,7 @@
 package com.juxin.predestinate.ui.xiaoyou.wode.adapter;
 
+import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.Diamond;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
@@ -17,6 +20,12 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
  * Created by zm on 2017/4/13.
  */
 public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
+
+    private Context mContext;
+
+    public MyDiamondAdapter(Context mContext){
+        this.mContext = mContext;
+    }
 
     @Override
     public int[] getItemLayouts() {
@@ -40,6 +49,7 @@ public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/4/20 跳转到支付页面的具体逻辑(和position有关)
+                UIShow.showPayListAct((FragmentActivity) mContext, 56);
                 //                ((MyDiamondsAct) mContext).handler.sendEmptyMessage(info.getPid());
             }
         });

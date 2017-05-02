@@ -73,7 +73,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
 
         long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
         if (uid != 0) {
-            setting_account.setText("当前账号：" + uid);
+            setting_account.setText(getResources().getString(R.string.txt_set_topuid_desc) + uid);
             setting_account.setVisibility(View.VISIBLE);
         }
 
@@ -194,7 +194,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         exitLogin();
                     }
-                }, "确定退出登录吗", "退出登录", "取消", "确定", true);
+                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
                 break;
             default:
                 break;

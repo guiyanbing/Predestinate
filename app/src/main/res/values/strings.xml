@@ -37,6 +37,12 @@
     <string name="button_help">帮助</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
+    <string name="dal_exit_content">确定退出登录吗</string>
+    <string name="dal_exit_title">退出登录</string>
+    <string name="dal_cancle">取消</string>
+    <string name="dal_submit">确定</string>
+    <string name="txt_set_topuid_desc">当前账号：</string>
+
 
     <!-- 个人中心 -->
     <string name="copy">复制</string>
@@ -58,8 +64,7 @@
     <string name="txt_phone">手机号</string>
     <string name="txt_verifycode">验证码</string>
     <string name="txt_setpwd">设置密码</string>
-    <string name="txt_verify_tip_up">请输入手机号，获取验证码</string>
-    <string name="txt_verify_tip_down">可以直接用手机号码登录</string>
+    <string name="txt_verify_tip_up">请输入手机号，获取验证码 \n可以直接用手机号码登录</string>
     <string name="txt_sendmsg_tip">您的手机将会收到一条有验证码的短信</string>
     <string name="txt_phoneverify_hit">13574193515</string>
     <string name="txt_verify_complete_desc">您已经验证成功，登录密码为：</string>

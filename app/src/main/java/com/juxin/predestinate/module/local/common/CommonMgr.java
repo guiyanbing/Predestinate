@@ -262,6 +262,9 @@ public class CommonMgr implements ModuleBase {
      * @return 获取礼品信息
      */
     public GiftsList getGiftLists() {
+        if (giftLists == null){
+            giftLists = new GiftsList();
+        }
         return giftLists;
     }
 

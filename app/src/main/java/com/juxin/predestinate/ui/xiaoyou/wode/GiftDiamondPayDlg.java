@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.xiaoyou.wode;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,6 +22,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.JsonUtil;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.xiaoyou.wode.adapter.GiftGridviewSmallAdapter;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 
@@ -428,7 +430,8 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
                 //发送消息
                 dismiss();
             } else {
-                PToast.showShort("支付跳转");
+//                PToast.showShort("支付跳转");
+                UIShow.showPayListAct((FragmentActivity)mContext, 56);
 //                AppCtx.putPreference("fromVip", false);
 //                UIHelper.showPaymentActEx(mContext, pay_id, pay_type, UIHelper.MONTHLYLETTERACT);
                 dismiss();

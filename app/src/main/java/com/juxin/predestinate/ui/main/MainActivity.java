@@ -25,8 +25,8 @@ import com.juxin.predestinate.ui.xiaoyou.XiaoyouFragment;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
-    private MailFragment mailFragment;
     private XiaoyouFragment xiaoyouFragment;
+    private MailFragment mailFragment;
     private RankFragment rankFragment;
     private WebFragment webFragment;
     private UserFragment userFragment;
@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ModuleMgr.getCommonMgr().getCommonConfig().getEntrance_url());
         userFragment = new UserFragment();
 
-        switchContent(mailFragment);
+        switchContent(xiaoyouFragment);
     }
 
     private void initViews() {
@@ -104,9 +104,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        if (fragment == mailFragment) {
+        if (fragment == xiaoyouFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
-        } else if (fragment == xiaoyouFragment) {
+        } else if (fragment == mailFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.xiaoyou_layout);
         } else if (fragment == rankFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.plaza_layout);
@@ -130,10 +130,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mail_layout:
-                switchContent(mailFragment);
+                switchContent(xiaoyouFragment);
                 break;
             case R.id.xiaoyou_layout:
-                switchContent(xiaoyouFragment);
+                switchContent(mailFragment);
                 break;
             case R.id.plaza_layout:
                 switchContent(rankFragment);
@@ -171,9 +171,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void changeTab(int tab_type, Intent intent) {
         PLogger.d("---changeTab--->tab_type：" + tab_type);
         if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到发现tab
-            switchContent(mailFragment);
-        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(xiaoyouFragment);
+        } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
+            switchContent(mailFragment);
         } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab
             switchContent(rankFragment);
         } else if (FinalKey.MAIN_TAB_4 == tab_type) {//跳转到广场tab

@@ -91,6 +91,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_6:// 我的钻石
+                UIShow.showMyDiamondsAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_7:// 我的礼物

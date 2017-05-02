@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.xiaoyou.wode;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -93,8 +92,8 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     }
 
     public void refreshView(double money){
-        PSP.getInstance().put(REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),(long)money);//存储可提现金额
-        tvMoney.setText(money+"");
+        PSP.getInstance().put(REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),(float)money);//存储可提现金额
+        tvMoney.setText(money + "");
     }
 
     @Override
@@ -110,10 +109,11 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
 
                 UserDetail userDetail1 = ModuleMgr.getCenterMgr().getMyInfo();
                 final boolean isVerify = userDetail1.isVerifyCellphone();//是否绑定了手机号
-                Intent intent = null;
+//                Intent intent = null;
                 if (isVerify) {
-                    intent = new Intent(this, WithDrawApplyAct.class);
-                    startActivity(intent);
+                    UIShow.showWithDrawApplyAct(0,0,false,this);
+//                    intent = new Intent(this, WithDrawApplyAct.class);
+//                    startActivity(intent);
                 } else {
                     UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);//验证手机
                 }

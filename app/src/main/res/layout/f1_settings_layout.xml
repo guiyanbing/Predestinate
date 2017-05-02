@@ -178,10 +178,10 @@
             <Button
                 android:id="@+id/setting_logoff"
                 style="@style/button_big"
-                android:layout_marginBottom="@dimen/px30_dp"
+                android:layout_marginBottom="@dimen/px60_dp"
                 android:layout_marginLeft="@dimen/px60_dp"
                 android:layout_marginRight="@dimen/px60_dp"
-                android:layout_marginTop="15dip"
+                android:layout_marginTop="@dimen/px60_dp"
                 android:text="@string/bt_exit" />
         </LinearLayout>
     </ScrollView>

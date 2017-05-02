@@ -5,9 +5,9 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:background="@drawable/f1_rank_title_bg">
+        android:layout_width="@dimen/px560_dp"
+        android:layout_height="@dimen/px105_dp"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/this_week"
