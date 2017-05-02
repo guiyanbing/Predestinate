@@ -1,5 +1,6 @@
 package com.juxin.predestinate.bean.center.user.others;
 
+import android.os.Parcel;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
@@ -508,4 +509,118 @@ public class UserProfile extends UserBasic {
         }
         return result;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(this.cuid);
+        dest.writeInt(this.is_vip);
+        dest.writeString(this.sign);
+        dest.writeInt(this.isOnline);
+        dest.writeString(this.Integrity);
+        dest.writeInt(this.isSayHello);
+        dest.writeString(this.phone);
+        dest.writeString(this.qq);
+        dest.writeInt(this.phoneAuth);
+        dest.writeInt(this.qqNumAuth);
+        dest.writeString(this.wechat);
+        dest.writeInt(this.wechatAuth);
+        dest.writeInt(this.isverifycellphone);
+        dest.writeInt(this.photoNum);
+        dest.writeInt(this.ismonthmail);
+        dest.writeInt(this.isBindRose);
+        dest.writeInt(this.distance);
+        dest.writeInt(this.isFollowed);
+        dest.writeInt(this.kf_id);
+        dest.writeInt(this.isHot);
+        dest.writeString(this.online_address);
+        dest.writeString(this.online_date);
+        dest.writeString(this.weChatNo);
+        dest.writeInt(this.FollowCont);
+        dest.writeString(this.lastOnlineTime);
+        dest.writeInt(this.mtRedbag);
+        dest.writeInt(this.gameFlag);
+        dest.writeInt(this.hong);
+        dest.writeString(this.zytj_address);
+        dest.writeString(this.zytj_age);
+        dest.writeString(this.zytj_edu);
+        dest.writeString(this.zytj_height);
+        dest.writeString(this.zytj_income);
+        dest.writeString(this.purpose);
+        dest.writeString(this.loveIdea);
+        dest.writeString(this.meetHope);
+        dest.writeString(this.datePlace);
+        dest.writeParcelable(this.videoInfo, flags);
+        dest.writeTypedList(this.userPhotoList);
+        dest.writeString(this.result);
+        dest.writeInt(this.status);
+        dest.writeString(this.content);
+    }
+
+    public UserProfile() {
+    }
+
+    protected UserProfile(Parcel in) {
+        super(in);
+        this.cuid = in.readInt();
+        this.is_vip = in.readInt();
+        this.sign = in.readString();
+        this.isOnline = in.readInt();
+        this.Integrity = in.readString();
+        this.isSayHello = in.readInt();
+        this.phone = in.readString();
+        this.qq = in.readString();
+        this.phoneAuth = in.readInt();
+        this.qqNumAuth = in.readInt();
+        this.wechat = in.readString();
+        this.wechatAuth = in.readInt();
+        this.isverifycellphone = in.readInt();
+        this.photoNum = in.readInt();
+        this.ismonthmail = in.readInt();
+        this.isBindRose = in.readInt();
+        this.distance = in.readInt();
+        this.isFollowed = in.readInt();
+        this.kf_id = in.readInt();
+        this.isHot = in.readInt();
+        this.online_address = in.readString();
+        this.online_date = in.readString();
+        this.weChatNo = in.readString();
+        this.FollowCont = in.readInt();
+        this.lastOnlineTime = in.readString();
+        this.mtRedbag = in.readInt();
+        this.gameFlag = in.readInt();
+        this.hong = in.readInt();
+        this.zytj_address = in.readString();
+        this.zytj_age = in.readString();
+        this.zytj_edu = in.readString();
+        this.zytj_height = in.readString();
+        this.zytj_income = in.readString();
+        this.purpose = in.readString();
+        this.loveIdea = in.readString();
+        this.meetHope = in.readString();
+        this.datePlace = in.readString();
+        this.videoInfo = in.readParcelable(UserVideoInfo.class.getClassLoader());
+        this.userPhotoList = in.createTypedArrayList(UserPhoto.CREATOR);
+        this.result = in.readString();
+        this.status = in.readInt();
+        this.content = in.readString();
+    }
+
+    public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
+        @Override
+        public UserProfile createFromParcel(Parcel source) {
+            return new UserProfile(source);
+        }
+
+        @Override
+        public UserProfile[] newArray(int size) {
+            return new UserProfile[size];
+        }
+    };
 }

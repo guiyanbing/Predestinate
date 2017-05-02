@@ -16,6 +16,7 @@ import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.local.pay.PayWX;
@@ -375,8 +376,10 @@ public class UIShow {
     /**
      * 打开他人资料设置页
      */
-    public static void showUserOtherSetAct(Context context) {
-        context.startActivity(new Intent(context, UserOtherSetAct.class));
+    public static void showUserOtherSetAct(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, UserOtherSetAct.class);
+        intent.putExtra("userProfile", userProfile);
+        context.startActivity(intent);
     }
 
     /**
@@ -617,8 +620,8 @@ public class UIShow {
     }
 
 
-
     // -----------------------我的提示跳转 start----------------------------
+
     /**
      * 打开我的钻石页面
      *
@@ -651,11 +654,11 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showWithDrawApplyAct(int id,double money,boolean fromEdit,Context context) {
+    public static void showWithDrawApplyAct(int id, double money, boolean fromEdit, Context context) {
         Intent intent = new Intent(context, WithDrawApplyAct.class);
-        intent.putExtra("id",id);
-        intent.putExtra("money",money);
-        intent.putExtra("fromEdit",fromEdit);
+        intent.putExtra("id", id);
+        intent.putExtra("money", money);
+        intent.putExtra("fromEdit", fromEdit);
         context.startActivity(intent);
     }
 

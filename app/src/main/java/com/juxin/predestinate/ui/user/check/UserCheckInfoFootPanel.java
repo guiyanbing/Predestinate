@@ -8,6 +8,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.edit.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -32,6 +33,8 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
     private void initView() {
         albumLayout = (LinearLayout) findViewById(R.id.album_item);
         videoLayout = (LinearLayout) findViewById(R.id.video_item);
+
+        findViewById(R.id.item_chat).setOnClickListener(listener);
     }
 
     /**
@@ -45,6 +48,11 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
+                case R.id.item_chat:
+
+                    // test
+                    UIShow.showUserOtherSetAct(getContext(), null);
+                    break;
             }
         }
     };

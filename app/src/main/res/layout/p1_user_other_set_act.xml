@@ -64,7 +64,8 @@
                             android:layout_width="@dimen/px42_dp"
                             android:layout_height="@dimen/px42_dp"
                             android:layout_marginLeft="@dimen/px10_dp"
-                            android:src="@drawable/p1_vip_ico" />
+                            android:src="@drawable/p1_vip_ico"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                     <View
@@ -99,6 +100,7 @@
                     android:textSize="@dimen/center_item_txt" />
 
                 <TextView
+                    android:id="@+id/user_remark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -118,7 +120,8 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/px35_dp">
+                android:padding="@dimen/px35_dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="@dimen/px200_dp"
@@ -142,13 +145,15 @@
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
 
-            <include layout="@layout/layout_margintop" />
+            <include layout="@layout/layout_margintop"
+                android:visibility="gone"/>
 
             <!-- 设置语音接听 -->
             <RelativeLayout
                 android:id="@+id/rl_voice"
                 style="@style/center_set_item"
-                android:layout_height="@dimen/center_item_height">
+                android:layout_height="@dimen/center_item_height"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_title_mark"
@@ -182,13 +187,15 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/center_information_line" />
+            <include layout="@layout/center_information_line"
+                android:visibility="gone"/>
 
             <!-- 设置视频接听 -->
             <RelativeLayout
                 android:id="@+id/rl_video"
                 style="@style/center_set_item"
-                android:layout_height="@dimen/center_item_height">
+                android:layout_height="@dimen/center_item_height"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_title_mark1"
@@ -223,10 +230,26 @@
 
             <include layout="@layout/layout_margintop" />
 
+            <!-- 接受对方视频 -->
+            <LinearLayout
+                android:id="@+id/ll_accept_video"
+                style="@style/center_set_item">
+
+                <TextView
+                    style="@style/center_item_text"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/user_other_set_chat_video_accept" />
+
+                <SeekBar
+                    android:id="@+id/sb_accept_video"
+                    style="@style/SeekBar" />
+            </LinearLayout>
+
             <!-- 消息置顶 -->
             <LinearLayout
                 android:id="@+id/ll_msg_stick"
-                style="@style/center_set_item">
+                style="@style/center_set_item"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/center_item_text"
@@ -240,10 +263,26 @@
 
             <include layout="@layout/center_information_line" />
 
+            <!-- 接受对方语音 -->
+            <LinearLayout
+                android:id="@+id/ll_accept_voice"
+                style="@style/center_set_item">
+
+                <TextView
+                    style="@style/center_item_text"
+                    android:layout_marginLeft="@dimen/px5_dp"
+                    android:text="@string/user_other_set_chat_voice_accept" />
+
+                <SeekBar
+                    android:id="@+id/sb_accept_voice"
+                    style="@style/SeekBar" />
+            </LinearLayout>
+
             <!-- 消息免打扰 -->
             <LinearLayout
                 android:id="@+id/ll_msg_disturb"
-                style="@style/center_set_item">
+                style="@style/center_set_item"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/center_item_text"
@@ -290,7 +329,7 @@
                     style="@style/SeekBar" />
             </LinearLayout>
 
-            <include layout="@layout/layout_margintop" />
+            <include layout="@layout/center_information_line" />
 
             <!-- 投诉 -->
             <RelativeLayout

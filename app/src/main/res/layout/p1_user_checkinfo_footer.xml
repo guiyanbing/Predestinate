@@ -106,9 +106,7 @@
         <ImageView style="@style/right_go" />
     </LinearLayout>
 
-    <TextView
-        android:layout_marginLeft="@dimen/px35_dp"
-        style="@style/divider_line" />
+    <include layout="@layout/center_information_line" />
 
     <!-- 视频头 -->
     <LinearLayout
@@ -148,9 +146,7 @@
         <ImageView style="@style/right_go" />
     </LinearLayout>
 
-    <TextView
-        android:layout_marginLeft="@dimen/px35_dp"
-        style="@style/divider_line" />
+    <include layout="@layout/center_information_line" />
 
     <!-- 礼物 -->
     <LinearLayout
