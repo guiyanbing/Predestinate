@@ -30,6 +30,12 @@
     <string name="button_help">帮助</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
+    <string name="dal_exit_content">确定退出登录吗</string>
+    <string name="dal_exit_title">退出登录</string>
+    <string name="dal_cancle">取消</string>
+    <string name="dal_submit">确定</string>
+    <string name="txt_set_topuid_desc">当前账号：</string>
+
     <!-- 个人中心 -->
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>

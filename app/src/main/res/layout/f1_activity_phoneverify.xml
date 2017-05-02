@@ -46,6 +46,7 @@
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
+                android:textSize="@dimen/px39_sp"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_verify_tip_up"
                 android:textColor="@color/hei_color" />
@@ -54,6 +55,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/px39_sp"
                 android:layout_marginTop="5dp"
                 android:text="@string/txt_verify_tip_down"
                 android:textColor="@color/hei_color" />
@@ -79,6 +81,7 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/px39_sp"
             android:layout_marginTop="10dp"
             android:text="@string/txt_phone_desc"
             android:textColor="@color/gray_text" />
@@ -98,6 +101,7 @@
                 android:ems="10"
                 android:hint="@string/ext_phone_hit"
                 android:inputType="phone"
+                android:textSize="@dimen/px39_sp"
                 android:maxLength="11"
                 android:padding="10dp" />
 
@@ -111,7 +115,7 @@
                 android:padding="10dp"
                 android:text="@string/bt_send_code_normal"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="@dimen/px48_sp" />
 
         </LinearLayout>
 
@@ -123,6 +127,7 @@
             android:background="@drawable/f1_edt_phone_selector"
             android:ems="10"
             android:hint="@string/ext_verifycode_hit"
+            android:textSize="@dimen/px39_sp"
             android:lines="1"
             android:padding="10dp"
             android:maxLines="1"
