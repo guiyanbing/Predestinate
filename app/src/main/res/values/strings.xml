@@ -167,6 +167,9 @@
     <string name="check_info_sendmsg">发消息</string>
     <string name="check_info_sayhi">打招呼</string>
     <string name="check_info_gift">送礼物</string>
+    <string name="check_info_album">照片</string>
+    <string name="check_info_video">视频</string>
+    <string name="check_info_gift1">礼物</string>
     <string name="check_info_secret_photo">私密相册</string>
     <string name="check_info_secret_video">私密视频</string>
     <string name="check_info_dynamic">动态</string>
@@ -194,6 +197,9 @@
     <string name="user_info_avatar_suc">上传成功</string>
     <string name="user_info_avatar_fail">上传失败</string>
     <string name="user_info_avatar_upload">正在上传头像</string>
+    <string name="check_info_chat_pay">聊天</string>
+    <string name="user_info_chat_video">20钻石/分钟</string>
+    <string name="user_info_chat_voice">10钻石/分钟</string>
     <string name="user_other_info_set">资料设置</string>
     <string name="user_other_remark_name">备注名</string>
     <string name="user_other_set_chat_voice">为TA设置语音接听</string>
