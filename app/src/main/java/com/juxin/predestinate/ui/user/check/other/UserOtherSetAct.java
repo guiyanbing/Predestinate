@@ -14,7 +14,7 @@ import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
@@ -53,8 +53,11 @@ public class UserOtherSetAct extends BaseActivity {
     }
 
     private void initData() {
-        userProfile = getIntent().getParcelableExtra("userProfile");
-        if (userProfile == null) return;
+        userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        if (userProfile == null) {
+            PToast.showShort(getString(R.string.user_other_info_req_fail));
+            return;
+        }
 
         ImageLoader.loadRoundCorners(this, userProfile.getAvatar(), 8, user_head);
         user_nick.setText(userProfile.getNickname());

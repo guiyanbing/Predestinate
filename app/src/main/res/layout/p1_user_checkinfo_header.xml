@@ -120,8 +120,8 @@
                     tools:text="165cm" />
 
                 <FrameLayout
-                    android:layout_width="@dimen/px114_dp"
-                    android:layout_height="@dimen/px47_dp"
+                    android:layout_width="@dimen/px116_dp"
+                    android:layout_height="@dimen/px49_dp"
                     android:layout_marginLeft="@dimen/px15_dp"
                     android:background="@drawable/f1_user_check_info_rank">
 

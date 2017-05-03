@@ -76,7 +76,7 @@
                         android:id="@+id/user_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ID:89847"
+                        android:text="ID:"
                         android:textColor="@color/text_ciyao_gray"
                         android:textSize="@dimen/px39_sp" />
                 </LinearLayout>
