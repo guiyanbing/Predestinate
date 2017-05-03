@@ -37,23 +37,23 @@ public class FeedBackAct extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_feedback_act);
         setBackView(getResources().getString(R.string.title_feedback));
-        setTitleRight(getResources().getString(R.string.title_right_submit), R.color.title_right_commit, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkSubmitInfo())
-                    ModuleMgr.getCenterMgr().feedBack(contact, suggest, new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            if (response.isOk()) {
-                                PToast.showShort(getResources().getString(R.string.toast_suggest_ok));
-                                back();
-                            } else {
-                                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
-                            }
-                        }
-                    });
-            }
-        });
+//        setTitleRight(getResources().getString(R.string.title_right_submit), R.color.title_right_commit, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (checkSubmitInfo())
+//                    ModuleMgr.getCenterMgr().feedBack(contact, suggest, new RequestComplete() {
+//                        @Override
+//                        public void onRequestComplete(HttpResponse response) {
+//                            if (response.isOk()) {
+//                                PToast.showShort(getResources().getString(R.string.toast_suggest_ok));
+//                                back();
+//                            } else {
+//                                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+//                            }
+//                        }
+//                    });
+//            }
+//        });
         initView();
     }
 

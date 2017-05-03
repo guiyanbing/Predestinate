@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.center;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -148,14 +149,28 @@ public class CenterMgr implements ModuleBase, PObserver {
      *
      * @param contract 联系方式
      * @param content    意见
-     * @param complete
      */
-    public void feedBack(String contract, String content, RequestComplete complete) {
+    public void feedBack(final FragmentActivity activity,String contract, String content) {
         HashMap<String, Object> postparam = new HashMap<>();
         postparam.put("user_client_type", Constant.PLATFORM_TYPE);
         postparam.put("contract", contract);
         postparam.put("content", content);
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.feedBack,null,null, postparam, RequestParam.CacheType.CT_Cache_No,false,false,complete);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.feedBack, null, null, postparam, RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.getResponseString());
+                    if (!"true".equals(jsonObject.optString("item"))) {
+                        PToast.showShort(activity.getResources().getString(R.string.toast_commit_suggest_error));
+                    } else {
+                        PToast.showLong(activity.getResources().getString(R.string.toast_commit_suggest_ok));
+                        activity.finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 

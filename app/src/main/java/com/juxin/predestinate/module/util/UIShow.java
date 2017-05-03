@@ -47,7 +47,7 @@ import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.AboutAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.SettingAct;
-import com.juxin.predestinate.ui.setting.Suggest_Act;
+import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
@@ -235,7 +235,7 @@ public class UIShow {
      * @param activity
      */
     public static void showSuggestAct(FragmentActivity activity) {
-        activity.startActivity(new Intent(activity, Suggest_Act.class));
+        activity.startActivity(new Intent(activity, SuggestAct.class));
     }
 
     //============================== 小友模块相关跳转 =============================

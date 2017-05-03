@@ -100,6 +100,10 @@
     <string name="toast_oldpwd_isnull">请输入您的旧密码</string>
     <string name="toast_pwd_error">请输入6至20位数字或字符的新密码</string>
     <string name="toast_pwd_next_error">两次输入的密码不一致，请检查后重新输入</string>
+    <string name="toast_suggest_isnull">请先填写意见再提交</string>
+    <string name="toast_contactr_isnull">请留下您的联系方式</string>
+    <string name="toast_commit_suggest_error">操作失败，请稍候再试</string>
+    <string name="toast_commit_suggest_ok">提交成功</string>
     <string name="txt_logname">缘份吧</string>
     <string name="txt_vers_def">V1.0.0</string>
     <string name="txt_email">jiaoyoukf@126.com</string>
@@ -135,7 +139,6 @@
     <string name="toast_uid_isnull">请输入您的用户名</string>
     <string name="toast_pwd_isnull">请输入您的密码</string>
     <string name="toast_contact_isnull">请填写您的联系方式</string>
-    <string name="toast_suggest_isnull">请填写您的建议</string>
     <string name="toast_setpwd_isnull">请输入您要设置的密码</string>
     <string name="toast_userdetail_isnull">请完善您的资料</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
@@ -291,6 +294,7 @@
     <string name="title_set">设置</string>
     <string name="title_about">关于</string>
     <string name="title_pwd_set">密码设置</string>
+    <string name="title_suggest">意见反馈</string>
 
     <!-- xList 后期可能删掉，不要用-->
     <string name="xlistview_header_last_time">上次更新时间：</string>

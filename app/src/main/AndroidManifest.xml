@@ -89,7 +89,7 @@
             android:name=".ui.setting.FeedBackAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.setting.Suggest_Act"
+            android:name=".ui.setting.SuggestAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.check.self.UserInfoAct"
