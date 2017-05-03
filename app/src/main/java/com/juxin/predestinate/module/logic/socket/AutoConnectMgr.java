@@ -9,6 +9,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.util.TimerUtil;
@@ -262,6 +263,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("md", md);
         loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
         loginMap.put("ms", Constant.MS_TYPE);
+        loginMap.put("imei", ModuleMgr.getAppMgr().getIMEI());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
 
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
@@ -411,11 +413,6 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         String content = data.getContent();
         PLogger.d("---socket消息头：" + data.getHeaderString() + "\n---socket消息体：" + content);
 
-        if (data.getMsgType() == TCPConstant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
-            accountInvalid(1);
-            return;
-        }
-
         if (data.getMsgType() == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
             heartbeatResend++;
         }
@@ -461,6 +458,16 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                         }
                     }
                     return;//如果含s字段，为登录返回消息，处理完成之后直接return，不抛出消息
+                }
+
+                if (data.getMsgType() == TCPConstant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
+                    String imei = contentObject.optString("imei");
+                    if (!TextUtils.isEmpty(imei) && imei.equals(ModuleMgr.getAppMgr().getIMEI())) {
+                        PLogger.d("---AutoConnectMgr--->本机超时或者其他错误，不出异地提示");
+                    } else {
+                        accountInvalid(1);
+                    }
+                    return;
                 }
 
                 //消息重要字段解析

@@ -1,5 +1,5 @@
 ﻿#APK 签名key文件目录
-storeFile = E:\\apks\\fate_it_new.keystore
+storeFile = ../../../key/fate_it_new.keystore
 
 #APK 签名key密码（第一重密码）
 storePassword = fate123
@@ -18,7 +18,7 @@ VersionCode = 10200103
 VersionName = 3.0.3
 
 #APK输出目录
-ApkPath = E:\\Predestinate/
+ApkPath = ../../K_GEN_APK/Predestinate/
 
 #App名称
 AppName = Fate_It
