@@ -147,7 +147,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 意见反馈
      *
      * @param contract 联系方式
-     * @param content    意见
+     * @param content  意见
      * @param complete
      */
     public void feedBack(String contract, String content, RequestComplete complete) {
@@ -155,7 +155,7 @@ public class CenterMgr implements ModuleBase, PObserver {
         postparam.put("user_client_type", Constant.PLATFORM_TYPE);
         postparam.put("contract", contract);
         postparam.put("content", content);
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.feedBack,null,null, postparam, RequestParam.CacheType.CT_Cache_No,false,false,complete);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.feedBack, null, null, postparam, RequestParam.CacheType.CT_Cache_No, false, false, complete);
     }
 
 
@@ -244,10 +244,11 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 修改个人信息
      */
-    public void updateMyInfo(final HashMap<String, Object> params) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, params, new RequestComplete() {
+    public void updateMyInfo(final HashMap<String, Object> params, final RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncNoJsonHttp(UrlParam.updateMyInfo, params, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
                 if (response.isOk()) {
                     reqMyInfo();
                     return;
@@ -289,6 +290,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     // ------------------------- 他人 ----------------------
+
     /**
      * 获取他人用户详细信息
      */

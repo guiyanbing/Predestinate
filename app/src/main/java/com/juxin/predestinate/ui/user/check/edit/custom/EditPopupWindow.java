@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.edit;
+package com.juxin.predestinate.ui.user.check.edit.custom;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -101,7 +101,7 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
             HashMap<String, Object> postParams = new HashMap<>();
             postParams.put(EditKey.s_key_age, result);
             // 向服务器提交数据
-            ModuleMgr.getCenterMgr().updateMyInfo(postParams);
+            ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
             // 更新本地的数据
             ModuleMgr.getCenterMgr().getMyInfo().setAge(result);
             txt_nickname.setText(result + "岁");
