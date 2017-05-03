@@ -32,7 +32,6 @@ public class WithDrawExplainAct extends BaseActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.wode_with_vip_kf:
                 UIShow.showQQServer(WithDrawExplainAct.this);
-//                QQ_Utils.runQQService(this);
                 break;
 
             default:

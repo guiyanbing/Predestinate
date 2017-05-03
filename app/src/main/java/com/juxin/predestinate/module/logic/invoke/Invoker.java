@@ -528,6 +528,13 @@ public class Invoker {
             UIShow.showGoodsDiamondAct(act == null ? App.context : act);
         }
 
+        // 联系qq客服
+        public void open_qq_service(String data) {
+            PLogger.d("---open_qq_service--->" + data);
+            Activity act = appInterface.getAct();
+            UIShow.showQQServer(act == null ? App.context : act);
+        }
+
         // ------------------------------游戏用cmd---------------------------------
 
         // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid

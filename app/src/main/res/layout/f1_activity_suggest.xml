@@ -52,7 +52,7 @@
             android:ems="10"
             android:hint="@string/ext_feedback_contact_hit"
             android:padding="5dp"
-            android:textSize="@dimen/px39_sp"></EditText>
+            android:textSize="@dimen/px39_sp" />
 
         <Button
             android:id="@+id/btn_suggest_send"

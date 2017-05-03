@@ -14,6 +14,8 @@ public class FinalKey {
 
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";  //保存当前登录过的账号信息
 
+    public static final String CONFIG_SERVICE_QQ = "CONFIG_SERVICE_QQ";//在线客服QQ本地保存key
+
     // 首页tab标记，从左到右依次为1-5
     public static final int MAIN_TAB_1 = 0x01;
     public static final int MAIN_TAB_2 = 0x02;

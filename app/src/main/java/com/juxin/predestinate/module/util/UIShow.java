@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
 import com.juxin.mumu.bean.log.MMLog;
@@ -57,11 +58,11 @@ import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
-import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
-import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
+import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
@@ -230,6 +231,7 @@ public class UIShow {
     public static void showFeedBackAct(FragmentActivity activity) {
         activity.startActivity(new Intent(activity, FeedBackAct.class));
     }
+
     /**
      * 打开意见反馈页面
      *
@@ -357,7 +359,7 @@ public class UIShow {
                 UserProfile userProfile = new UserProfile();
                 userProfile.parseJson(response.getResponseString());
 
-                if ("error".equals(userProfile.getResult())){
+                if ("error".equals(userProfile.getResult())) {
                     PToast.showShort(context.getString(R.string.request_error));
                     return;
                 }
@@ -648,15 +650,20 @@ public class UIShow {
 
     /**
      * 打开QQ客服
-     *
-     * @param context
      */
     public static void showQQServer(Context context) {
         try {
-            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + 11;
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
+                    PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
+            } else {
+                PToast.showShort("QQ未安装");
+            }
         } catch (Exception e) {
-            MMToast.showShort("QQ客服忙!请等待");
+            PToast.showShort("QQ客服出错请使用电话客服");
         }
     }
 

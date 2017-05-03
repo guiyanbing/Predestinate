@@ -263,7 +263,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("md", md);
         loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
         loginMap.put("ms", Constant.MS_TYPE);
-        loginMap.put("imei", ModuleMgr.getAppMgr().getIMEI());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
+        loginMap.put("imei", ModuleMgr.getAppMgr().getDeviceID());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
 
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
@@ -462,7 +462,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
 
                 if (data.getMsgType() == TCPConstant.MSG_ID_KICK_Offline) {//帐号异地登陆消息或切换服务器消息
                     String imei = contentObject.optString("imei");
-                    if (!TextUtils.isEmpty(imei) && imei.equals(ModuleMgr.getAppMgr().getIMEI())) {
+                    if (!TextUtils.isEmpty(imei) && imei.equals(ModuleMgr.getAppMgr().getDeviceID())) {
                         PLogger.d("---AutoConnectMgr--->本机超时或者其他错误，不出异地提示");
                     } else {
                         accountInvalid(1);
