@@ -9,8 +9,8 @@ import android.view.View;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
-import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.start.WebEntranceActivity;
 
@@ -105,6 +105,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_9:// 个人资料
+                UIShow.showUserInfoAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 我的相册
