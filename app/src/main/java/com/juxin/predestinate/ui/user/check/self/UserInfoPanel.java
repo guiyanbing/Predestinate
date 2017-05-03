@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.edit;
+package com.juxin.predestinate.ui.user.check.self;
 
 import android.content.Context;
 import android.graphics.Color;

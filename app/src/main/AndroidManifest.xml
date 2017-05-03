@@ -89,7 +89,7 @@
             android:name=".ui.setting.FeedBackAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.check.edit.UserInfoAct"
+            android:name=".ui.user.check.self.UserInfoAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
