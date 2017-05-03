@@ -14,6 +14,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserInfo;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -286,6 +287,8 @@ public class Invoker {
             responseObject.put("gender", userInfo.getGender());
             responseObject.put("is_vip", userInfo.isVip());
             //responseObject.put("money", userInfo.getMoney());
+            responseObject.put("longitude", LocationMgr.getInstance().getPointD().longitude);
+            responseObject.put("latitude", LocationMgr.getInstance().getPointD().latitude);
 
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
