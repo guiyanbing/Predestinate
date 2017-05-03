@@ -36,7 +36,6 @@
         <item>我的Y币</item>
         <item>我的钻石</item>
         <item>我的礼物</item>
-        <item>最近来访</item>
         <item>个人资料</item>
         <item>我的相册</item>
         <item>设置中心</item>
@@ -44,7 +43,6 @@
     <integer-array name="user_authority_level">
         <item>0</item>
         <item>0</item>
-        <item>1</item>
         <item>1</item>
         <item>1</item>
         <item>1</item>
