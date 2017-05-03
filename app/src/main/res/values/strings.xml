@@ -31,10 +31,12 @@
     <string name="button_exit">退出登录</string>
     <string name="ext_feedback_hit">填写对缘份吧的意见和建议</string>
     <string name="ext_feedback_contact">联系方式</string>
-    <string name="ext_feedback_contact_hit">（手机/微信/邮箱）</string>
+    <string name="ext_feedback_contact_hit">联系方式：（手机/QQ/邮箱）</string>
+    <string name="ext_suggest_hit">写些对缘份吧的意见和建议……</string>
     <string name="toast_feedback_submit">提交成功，感谢您的支持</string>
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
+    <string name="button_send">发送</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
     <string name="dal_exit_content">确定退出登录吗</string>
@@ -42,6 +44,7 @@
     <string name="dal_cancle">取消</string>
     <string name="dal_submit">确定</string>
     <string name="txt_set_topuid_desc">当前账号：</string>
+    <string name="txt_suggest_desc">意见一旦被采纳，我们会有小礼品赠送，请记得留下您的联系方式哦。</string>
 
 
     <!-- 个人中心 -->

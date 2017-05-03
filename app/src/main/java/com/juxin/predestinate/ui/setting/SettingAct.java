@@ -166,7 +166,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 UIShow.showModifyAct(this);
                 break;
             case R.id.setting_feedback:// 意见反馈
-                //TODO
+                UIShow.showSuggestAct(this);
                 break;
             case R.id.setting_update:// 软件更新
                 ModuleMgr.getCommonMgr().checkUpdate(this, true);//检查应用升级

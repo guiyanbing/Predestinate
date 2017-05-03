@@ -29,7 +29,7 @@ public enum UrlParam {
     resetPassword("i/reg/ResetPassword"),//找回密码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
     modifyPassword("user/modifyPassword", null, true),//修改密码
-    feedBack("s/uinfo/FeedBack"),//意见反馈
+    feedBack("user/feedback"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
