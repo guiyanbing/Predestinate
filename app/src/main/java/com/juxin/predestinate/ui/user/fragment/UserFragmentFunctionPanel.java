@@ -10,7 +10,10 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
+
+import java.util.HashMap;
 
 /**
  * 用户中心功能panel
@@ -62,7 +65,11 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_vip_privilege://开通vip
-                    //TODO 跳转到开通vip页面
+                    UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html", new HashMap<String, Object>() {
+                        {
+                            put("type", 2);
+                        }
+                    }));// TODO: 2017/5/3
                     break;
                 case R.id.ll_phone_verify://手机绑定
                     UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone());

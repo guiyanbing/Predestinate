@@ -15,6 +15,7 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.start.WebEntranceActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -89,7 +90,11 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
-                UIShow.showGoodsDiamondAct(getContext());
+                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html", new HashMap<String, Object>() {
+                    {
+                        put("type", 1);
+                    }
+                }));// TODO: 2017/5/3
                 break;
 
             case CenterItemID.i_Center_item_6:// 我的钻石
