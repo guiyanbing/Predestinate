@@ -223,6 +223,17 @@
         <item name="android:layout_width">1px</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+    <!-- 带字体内容的分割区域的样式 (编辑个人资料专用) -->
+    <style name="divider_area_editinfo" parent="divider_area">
+        <item name="android:background">@color/bg_color</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/px35_dp</item>
+        <item name="android:paddingRight">@dimen/px40_dp</item>
+        <item name="android:paddingTop">@dimen/px10_dp</item>
+        <item name="android:paddingBottom">@dimen/px10_dp</item>
+        <item name="android:textColor">@color/color_999999</item>
+        <item name="android:textSize">@dimen/px36_sp</item>
+    </style>
 
     <!-- *****************icon图标****************** -->
 

@@ -110,7 +110,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_9:// 个人资料
-                UIShow.showUserInfoAct(getContext());
+                UIShow.showUserEditInfoAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 我的相册

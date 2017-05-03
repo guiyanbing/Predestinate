@@ -56,6 +56,7 @@ import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
+import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
@@ -328,6 +329,13 @@ public class UIShow {
      */
     public static void showUserInfoAct(Context context) {
         context.startActivity(new Intent(context, UserInfoAct.class));
+    }
+
+    /**
+     * 打开个人信息查看编辑页
+     */
+    public static void showUserEditInfoAct(Context context) {
+        context.startActivity(new Intent(context, UserEditInfoAct.class));
     }
 
     /**

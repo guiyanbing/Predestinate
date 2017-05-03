@@ -94,6 +94,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.user.check.edit.info.UserEditInfoAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.user.check.edit.EditContentAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
