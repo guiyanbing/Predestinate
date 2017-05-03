@@ -147,15 +147,17 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 意见反馈
      *
      * @param contract 联系方式
-     * @param views    意见
+     * @param content    意见
      * @param complete
      */
-    public void feedBack(String contract, String views, RequestComplete complete) {
+    public void feedBack(String contract, String content, RequestComplete complete) {
         HashMap<String, Object> postparam = new HashMap<>();
+        postparam.put("user_client_type", Constant.PLATFORM_TYPE);
         postparam.put("contract", contract);
-        postparam.put("views", views);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.feedBack, postparam, complete);
+        postparam.put("content", content);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.feedBack,null,null, postparam, RequestParam.CacheType.CT_Cache_No,false,false,complete);
     }
+
 
     /**
      * 昵称：个人资料限制昵称最大字数
