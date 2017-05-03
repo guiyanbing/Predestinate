@@ -74,8 +74,32 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     // ------------ 工具方法 --------------
+
+    /**
+     * 判断用户是否为男性
+     *
+     * @return true 男性
+     */
     public boolean isMan() {
         return getGender() == 1;
+    }
+
+    /**
+     * 获取简略省市拼接地址
+     */
+    public String getAddressShow() {
+        String _province = (provinceName == null || "不限".equals(provinceName)) ? "" : provinceName;
+        String _city = (cityName == null || "不限".equals(cityName)) ? "" : " " + cityName;
+        return _province + _city;
+    }
+
+    /**
+     * 获取省市拼接地址
+     */
+    public String getAddress() {
+        String _province = (province == null || "不限".equals(province)) ? "" : province;
+        String _city = (city == null || "不限".equals(city)) ? "" : " " + city;
+        return _province + _city;
     }
 
     // ------------ Getter  Setter --------------

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.library.utils.JniUtil;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -297,15 +298,19 @@ public class HttpMgrImpl implements HttpMgr {
                     return;
                 }
                 String resultString = sb.toString();
-                PLogger.d("response OK，request url：" + url + "\nresponse：" + resultString);
+                if (RequestParam.CacheType.CT_Cache_No != cacheType)
+                    PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
+
+                if (isEncrypt && (!resultString.startsWith("{") || !resultString.endsWith("}"))) {
+                    resultString = new String(JniUtil.GetDecryptString(resultString));
+                }
 
                 result.setServerResponse();
                 result.setOK();//设置成功
                 result.setCache(false);//设置为cache数据
                 result.parseJson(resultString);
 
-                if (RequestParam.CacheType.CT_Cache_No != cacheType)
-                    PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
+                PLogger.d("response OK，request url：" + url + "\nresponse：" + resultString);
 
                 //如果有请求完成的回调实例的话，则进行回调
                 if (requestCallback != null) requestCallback.onRequestComplete(result);

@@ -9,6 +9,7 @@ import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
+import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
@@ -49,7 +50,12 @@ public enum UrlParam {
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
-    updateMyInfo("s/uinfo/UpdateUserData"),                   // 修改用户个人信息
+    updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    // 上传头像
+    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),
+    // 获取他人音视频开关配置
+    reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
+
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),

@@ -10,10 +10,12 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.start.WebEntranceActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -72,7 +74,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
     public void onItemClick(View convertView, int position) {
         switch (position) {
             case CenterItemID.i_Center_item_1: // 我的主页
-                UIShow.showCheckOtherInfoAct(getContext(), 122821207);
+                UIShow.showCheckOtherInfoAct(getContext(), 110871663);
 //                UIShow.showCheckOwnInfoAct(getContext());
                 break;
 
@@ -88,7 +90,11 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
-                UIShow.showGoodsDiamondAct(getContext());
+                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html", new HashMap<String, Object>() {
+                    {
+                        put("type", 1);
+                    }
+                }));// TODO: 2017/5/3
                 break;
 
             case CenterItemID.i_Center_item_6:// 我的钻石
@@ -96,7 +102,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_7:// 我的礼物
-                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/fish_box/?user_id=100014");
+                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));// TODO: 2017/5/3
                 break;
 
             case CenterItemID.i_Center_item_8: // 最近来访
@@ -104,6 +110,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_9:// 个人资料
+                UIShow.showUserInfoAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 我的相册

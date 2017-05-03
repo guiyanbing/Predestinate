@@ -13,7 +13,11 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.config.UrlParam;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -21,12 +25,12 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  * 查看用户资料详情
  * Created by Su on 2016/5/30.
  */
-public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver {
-    private LinearLayout container;
-
+public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, RequestComplete {
     private int channel;  // 查看用户资料区分Tag，默认查看自己个人资料
     private UserDetail userDetail;   // 自己资料
     private UserProfile userProfile; // TA人资料
+
+    private LinearLayout container, videoBottom, voiceBottom;
 
     /**********
      * panel
@@ -51,6 +55,7 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver {
             return;
         }
         userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        ModuleMgr.getCenterMgr().reqVideoChatConfig(userProfile.getUid(), this); // 请求音视频开关配置
     }
 
     private void initView() {
@@ -59,31 +64,33 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver {
         headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail, userProfile);
         container.addView(headPanel.getContentView());
 
-        footPanel = new UserCheckInfoFootPanel(this, channel, userDetail);
+        footPanel = new UserCheckInfoFootPanel(this, channel, userDetail, userProfile);
         footPanel.setSlideIgnoreView(this);
         container.addView(footPanel.getContentView());
         initBottom();
-
     }
 
     private void initTitle() {
         setTitleBackground(R.color.transparent);
         setTitleLeftImg(R.drawable.p1_back_white_btn, listener);
         if (channel == CenterConstant.USER_CHECK_INFO_OTHER)
-            setTitleRightImg(R.drawable.p1_back_white_btn, listener);
+            setTitleRightImg(R.drawable.f1_more_vertical_dot, listener);
     }
 
     // 底部功能按钮展示逻辑
     private void initBottom() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
+        videoBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_video);
+        voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
+
+        videoBottom.setOnClickListener(listener);
+        voiceBottom.setOnClickListener(listener);
         findViewById(R.id.iv_gift).setVisibility(View.VISIBLE);
         findViewById(R.id.iv_gift).setOnClickListener(listener);
         findViewById(R.id.userinfo_bottom).setVisibility(View.VISIBLE);
         findViewById(R.id.ll_userinfo_bottom_send).setOnClickListener(listener);
         findViewById(R.id.ll_userinfo_bottom_hi).setOnClickListener(listener);
-        findViewById(R.id.ll_userinfo_bottom_video).setOnClickListener(listener);
-        findViewById(R.id.ll_userinfo_bottom_voice).setOnClickListener(listener);
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
@@ -130,5 +137,21 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver {
     @Override
     public void finish() {
         super.finish();
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        if (response.getUrlParam() == UrlParam.reqVideoChatConfig) {
+            if (response.isOk()) {
+                VideoConfig config = (VideoConfig) response.getBaseData();
+                if (config.getVideoChat() == 1) {  // 展示发视频
+                    videoBottom.setVisibility(View.VISIBLE);
+                }
+
+                if (config.getVoiceChat() == 1) {
+                    voiceBottom.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 }

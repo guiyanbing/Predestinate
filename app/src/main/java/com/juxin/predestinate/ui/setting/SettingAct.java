@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -175,7 +176,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 PToast.showShort("努力开发中...");
                 break;
             case R.id.setting_action:// 活动相关
-                //TODO
+                UIShow.showWebActivity(this, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
+                // TODO: 2017/5/3
                 break;
             case R.id.setting_about:// 关于
                 UIShow.showAboutAct(SettingAct.this);
@@ -187,7 +189,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 PickerDialogUtil.showSimpleTipDialog(this, new SimpleTipDialog.ConfirmListener() {
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override

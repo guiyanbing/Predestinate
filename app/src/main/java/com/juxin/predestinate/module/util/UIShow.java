@@ -57,7 +57,7 @@ import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
-import com.juxin.predestinate.ui.user.check.edit.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;

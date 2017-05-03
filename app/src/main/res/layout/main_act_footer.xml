@@ -4,7 +4,7 @@
     android:id="@+id/layout_main_bottom"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_footer_height"
-    android:background="@color/white"
+    android:background="#F8F8F8"
     tools:showIn="@layout/main_act">
 
     <RelativeLayout
@@ -23,7 +23,7 @@
 
             <ImageView
                 style="@style/icon_middle_main"
-                android:src="@drawable/tab_msg_btn" />
+                android:src="@drawable/tab_discovery_btn" />
 
             <TextView
                 style="@style/text_tab_main"
@@ -55,7 +55,7 @@
 
             <ImageView
                 style="@style/icon_middle_main"
-                android:src="@drawable/tab_xiaoyou_btn" />
+                android:src="@drawable/tab_mail_btn" />
 
             <TextView
                 style="@style/text_tab_main"
@@ -87,7 +87,7 @@
 
             <ImageView
                 style="@style/icon_middle_main"
-                android:src="@drawable/tab_square_btn" />
+                android:src="@drawable/tab_rank_btn" />
 
             <TextView
                 style="@style/text_tab_main"
@@ -119,7 +119,7 @@
 
             <ImageView
                 style="@style/icon_middle_main"
-                android:src="@drawable/tab_web_btn" />
+                android:src="@drawable/tab_plaza_btn" />
 
             <TextView
                 style="@style/text_tab_main"

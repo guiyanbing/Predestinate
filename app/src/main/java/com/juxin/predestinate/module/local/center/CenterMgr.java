@@ -30,10 +30,9 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.user.edit.EditKey;
-import com.juxin.predestinate.module.util.CommonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,7 +132,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                         long uid = loginMgr.getUid();
                         loginMgr.addLoginUser(uid, newpwd);
 //                        DataCenter.getInstance().update_user_item(AppCtx.getPreference(AppCtx.UserName), newpwd, -1, null);
-                        ((UserModifyPwdAct)context).exitApp();
+                        ((UserModifyPwdAct) context).exitApp();
                     } else {
                         PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
                     }
@@ -217,6 +216,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     public void reqMyInfo() {
         reqMyInfo(null);
     }
+
     /**
      * 获取自己的个人资料
      */
@@ -227,7 +227,7 @@ public class CenterMgr implements ModuleBase, PObserver {
         ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if(complete != null){
+                if (complete != null) {
                     complete.onRequestComplete(response);
                 }
                 String responseStr = response.getResponseString();
@@ -239,26 +239,6 @@ public class CenterMgr implements ModuleBase, PObserver {
                 }
             }
         });
-    }
-
-    /**
-     * 获取他人用户详细信息
-     */
-    public void reqOtherInfo(final long uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", uid);
-        getParams.put("ver", Constant.SUB_VERSION);
-
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
-    }
-
-    /**
-     * 批量获取用户简略信息
-     */
-    public void reqUserSimpleList(final long[] uidList, RequestComplete complete) {
-        HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("uidlist", uidList);
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqUserSimpleList, post_param, complete);
     }
 
     /**
@@ -298,7 +278,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                         final String avatarUrl = getInterceptUrl(pic);
                         HashMap<String, Object> postParams = new HashMap<>();
                         postParams.put(EditKey.s_key_avatar, avatarUrl);
-                        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
+                        //ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
                     }
                 }
             });
@@ -306,6 +286,36 @@ public class CenterMgr implements ModuleBase, PObserver {
             LoadingDialog.closeLoadingDialog();
             MMToast.showShort("图片地址无效");
         }
+    }
+
+    // ------------------------- 他人 ----------------------
+    /**
+     * 获取他人用户详细信息
+     */
+    public void reqOtherInfo(final long uid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        getParams.put("ver", Constant.SUB_VERSION);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
+    }
+
+    /**
+     * 批量获取用户简略信息
+     */
+    public void reqUserSimpleList(final long[] uidList, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("uidlist", uidList);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqUserSimpleList, post_param, complete);
+    }
+
+    /**
+     * 获取他人音视频开关配置
+     */
+    public void reqVideoChatConfig(long uid, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("uid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqVideoChatConfig, post_param, complete);
     }
 
     /**
