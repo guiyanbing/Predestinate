@@ -13,7 +13,6 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
-import com.juxin.library.utils.JniUtil;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.LoginResult;
@@ -204,8 +203,7 @@ public class LoginMgr implements ModuleBase {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 try {
-                    String jsonResult = new String(JniUtil.GetDecryptString(response.getResponseString()));
-                    JSONObject jsonObject = new JSONObject(jsonResult);
+                    JSONObject jsonObject = new JSONObject(response.getResponseString());
                     if (!"success".equals(jsonObject.optString("respCode"))) {
                         PToast.showShort(context.getResources().getString(R.string.toast_reg_error));
                     } else {
