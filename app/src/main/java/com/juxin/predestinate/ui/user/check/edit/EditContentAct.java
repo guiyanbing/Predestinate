@@ -103,7 +103,7 @@ public class EditContentAct extends BaseActivity implements View.OnClickListener
         String contact = editText.getText().toString().trim();
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put(EditKey.s_key_nickName, contact);
-        ModuleMgr.getCenterMgr().updateMyInfo(postParams);
+        ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
         finish();
     }
 

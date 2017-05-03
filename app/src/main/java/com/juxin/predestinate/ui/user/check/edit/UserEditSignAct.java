@@ -126,7 +126,7 @@ public class UserEditSignAct extends BaseActivity implements TextWatcher, OnClic
         String contact = editTxt_sign_content.getText().toString().trim();
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put(EditKey.s_key_sign, contact);
-        ModuleMgr.getCenterMgr().updateMyInfo(postParams);
+        ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
         finish();
     }
 }

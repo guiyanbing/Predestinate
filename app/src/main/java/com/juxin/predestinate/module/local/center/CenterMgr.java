@@ -259,10 +259,11 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 修改个人信息
      */
-    public void updateMyInfo(final HashMap<String, Object> params) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, params, new RequestComplete() {
+    public void updateMyInfo(final HashMap<String, Object> params, final RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncNoJsonHttp(UrlParam.updateMyInfo, params, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
                 if (response.isOk()) {
                     reqMyInfo();
                     return;

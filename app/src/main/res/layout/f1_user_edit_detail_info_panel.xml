@@ -27,7 +27,6 @@
             android:id="@+id/edu"
             style="@style/center_item_text"
             android:gravity="right"
-            android:text="本科"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
@@ -55,7 +54,6 @@
             android:id="@+id/job"
             style="@style/center_item_text"
             android:gravity="right"
-            android:text="农民"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
@@ -83,7 +81,6 @@
             android:id="@+id/birth"
             style="@style/center_item_text"
             android:gravity="right"
-            android:text="1992-08-13"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
@@ -111,7 +108,6 @@
             android:id="@+id/weight"
             style="@style/center_item_text"
             android:gravity="right"
-            android:text="70kg"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
@@ -139,7 +135,6 @@
             android:id="@+id/star"
             style="@style/center_item_text"
             android:gravity="right"
-            android:text="天秤座"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
 
