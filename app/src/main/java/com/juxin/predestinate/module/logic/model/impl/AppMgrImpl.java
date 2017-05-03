@@ -150,7 +150,7 @@ public class AppMgrImpl implements AppMgr {
     @Override
     public boolean isEqualIMEI(String imeiString) {
         if (TextUtils.isEmpty(imeiString) || TextUtils.isEmpty(imei)) return false;
-        return imei.equals(imeiString);
+        return imeiString.equals(imei);
     }
 
     @Override
