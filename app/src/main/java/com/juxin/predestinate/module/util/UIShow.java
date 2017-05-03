@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
@@ -712,4 +713,19 @@ public class UIShow {
         context.startActivity(new Intent(context, RedBoxPhoneVerifyAct.class));
     }
     // -----------------------我的提示跳转 end----------------------------
+
+
+    /**
+     * 打开举报界面
+     *
+     * @param tuid    被举报人的uid
+     * @param context 上下文
+     */
+    public static void showDefriendAct(long tuid, Context context) {
+        Intent intent = new Intent(context, DefriendAct.class);
+        intent.putExtra("tuid", tuid);
+        context.startActivity(intent);
+
+    }
+
 }

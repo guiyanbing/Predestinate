@@ -55,4 +55,32 @@
         <item>3</item>
     </integer-array>
     <!-- ================个人中心条目配置end================== -->
+
+    <!-- ============== 举报 start ============ -->
+    <string-array name="defriend_type_name">
+        <item>发布色情/政治/暴力/违法信息</item>
+        <item>被骗钱</item>
+        <item>骚扰（垃圾信息、谩骂）</item>
+        <item>酒托</item>
+    </string-array>
+    <integer-array name="defriend_type_num">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+    <!-- ============== 举报 end ============ -->
+    <!--============ 发现 筛选 start============== -->
+
+    <string-array name="discover_select_item">
+        <item>查看全部</item>
+        <item>只看附近的人</item>
+    </string-array>
+    <integer-array name="discover_select_position">
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+    <!--============ 发现 筛选 end============== -->
+
+
 </resources>

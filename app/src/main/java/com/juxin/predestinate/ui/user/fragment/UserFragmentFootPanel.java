@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.start.WebEntranceActivity;
@@ -96,7 +97,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_7:// 我的礼物
-                UIShow.showWebActivity(getContext(), "http://test.game.xiaoyaoai.cn:30081/static/fish_box/?user_id=100014");
+                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));// TODO: 2017/5/3
                 break;
 
             case CenterItemID.i_Center_item_8: // 最近来访

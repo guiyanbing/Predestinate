@@ -117,6 +117,13 @@ public enum UrlParam {
     //送礼物
     givePresent("s/present/GivePresent", null, true),
 
+    //================= 发现 ===========
+    //举报
+    complainBlack("xs/userrelation/ComplainBlack", true),
+    //获取发现列表
+    getMainPage("xs/discovery/MainPage", UserInfoLightweightList.class, true),
+    //获取附近的人列表
+    getNearUsers2("xs/discovery/NearUsers2", UserInfoLightweightList.class, true),
     //============ 支付 =============
     reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
 

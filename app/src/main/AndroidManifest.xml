@@ -159,7 +159,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.xiaoyou.IntimacyDetailActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.check.edit.UserSecretAct"
@@ -269,6 +269,11 @@
             </intent-filter>
         </receiver>
 
+        <!--================= 发现 =======================-->
+        <activity
+            android:name=".ui.discover.DefriendAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
         <!-- ============= service =============== -->
         <service
             android:name=".module.logic.socket.CoreService"

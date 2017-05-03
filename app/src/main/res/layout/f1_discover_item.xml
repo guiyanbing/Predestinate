@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/px35_dp">
+
+    <ImageView
+        android:id="@+id/discover_item_avatar"
+        style="@style/avatar_middle"
+        android:layout_centerVertical="true"
+        android:src="@drawable/default_head" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/px35_dp"
+        android:layout_toRightOf="@id/discover_item_avatar">
+
+        <LinearLayout
+            android:id="@+id/discover_item_name_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/discover_item_name"
+                style="@style/txt_item_nickname" />
+
+
+            <LinearLayout
+                android:id="@+id/discover_item_ranking_state"
+                style="@style/icon_middle_center"
+                android:layout_width="@dimen/px190_dp"
+                android:layout_marginLeft="@dimen/px35_dp"
+                android:background="@drawable/f1_ranking_bg_w"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/discover_item_ranking_type"
+                    android:layout_width="@dimen/px50_dp"
+                    android:layout_height="@dimen/px50_dp"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:background="@drawable/f1_round_text_bg"
+                    android:gravity="center"
+                    android:text="魅"
+                    android:textColor="@color/color_ff4d79"
+                    android:textSize="@dimen/px32_sp" />
+
+                <TextView
+                    android:id="@+id/discover_item_ranking_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:singleLine="true"
+                    android:text="TOP01"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/px32_sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/discover_item_vip_state"
+                style="@style/icon_middle"
+                android:src="@drawable/p1_vip_ico"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/discover_item_age_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/discover_item_name_content"
+            android:layout_below="@id/discover_item_name_content"
+            android:layout_marginTop="@dimen/px9_dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/discover_item_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22岁"
+                android:textColor="@color/text_ciyao_gray"
+                android:textSize="@dimen/txt_small" />
+
+            <TextView
+                android:id="@+id/discover_item_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px25_dp"
+                android:text="172cm"
+                android:textColor="@color/text_ciyao_gray"
+                android:textSize="@dimen/txt_small" />
+
+            <TextView
+                android:id="@+id/discover_item_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px35_dp"
+                android:text="5km以内"
+                android:textColor="@color/text_ciyao_gray"
+                android:textSize="@dimen/txt_small" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/discover_item_age_content"
+            android:layout_marginTop="@dimen/px10_dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/discover_item_calling_state"
+                style="@style/icon_small" />
+
+            <ImageView
+                android:id="@+id/discover_item_video"
+                style="@style/icon_small" />
+
+            <ImageView
+                android:id="@+id/discover_item_call"
+                style="@style/icon_small" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/discover_item_sayhi"
+        style="@style/button_middle_list"
+        android:layout_width="@dimen/px200_dp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="right"
+        android:background="@drawable/f1_sayhellow_btn_bg"
+        android:enabled="false" />
+</RelativeLayout>

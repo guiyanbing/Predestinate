@@ -1,6 +1,7 @@
 package com.juxin.library.log;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
 
 /**
@@ -37,4 +38,16 @@ public class PToast {
     public static void showLong(String tip) {
         Toast.makeText(context, tip, Toast.LENGTH_LONG).show();
     }
+
+    /**
+     * 居中显示的toast
+     *
+     * @param tip 提示文字
+     */
+    public static void showCenterShort(String tip) {
+        Toast toast = Toast.makeText(context, tip, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
 }

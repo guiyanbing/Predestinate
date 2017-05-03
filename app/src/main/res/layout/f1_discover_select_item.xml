@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View style="@style/divider_line_horizontal" />
+
+    <TextView
+        android:id="@+id/discover_select_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/list_item_selector"
+        android:gravity="center"
+        android:paddingBottom="@dimen/px35_dp"
+        android:paddingTop="@dimen/px35_dp"
+        android:textColor="@color/text_zhuyao_black"
+        android:textSize="@dimen/px46_sp" />
+</LinearLayout>
