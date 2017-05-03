@@ -43,7 +43,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         String[] names = resources.getStringArray(R.array.user_authority_name);
         int[] levels = resources.getIntArray(R.array.user_authority_level);
         int[] icons = new int[]{R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_wallet_ico, R.drawable.f1_user_money_ico, R.drawable.f1_user_ycoin_ico,
-                R.drawable.f1_user_diamonds_ico, R.drawable.f1_user_gift_ico, R.drawable.f1_user_xdmail_ico, R.drawable.f1_user_info_ico, R.drawable.f1_user_xiangce_ico, R.drawable.f1_user_set_ico};
+                R.drawable.f1_user_diamonds_ico, R.drawable.f1_user_gift_ico, R.drawable.f1_user_info_ico, R.drawable.f1_user_xiangce_ico, R.drawable.f1_user_set_ico};
 
         for (int i = 0; i < names.length; i++) {
             UserAuth userAuth = new UserAuth(i + 1, icons[i], levels[i], names[i], isShow(i + 1));
@@ -105,18 +105,14 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));// TODO: 2017/5/3
                 break;
 
-            case CenterItemID.i_Center_item_8: // 最近来访
-                UIShow.show(getContext(), WebEntranceActivity.class);
+            case CenterItemID.i_Center_item_8:// 个人资料
+                UIShow.showUserEditInfoAct(getContext());
                 break;
 
-            case CenterItemID.i_Center_item_9:// 个人资料
-                UIShow.showUserInfoAct(getContext());
+            case CenterItemID.i_Center_item_9:// 我的相册
                 break;
 
-            case CenterItemID.i_Center_item_10:// 我的相册
-                break;
-
-            case CenterItemID.i_Center_item_11:// 设置中心
+            case CenterItemID.i_Center_item_10:// 设置中心
                 UIShow.showUserSetAct((Activity) getContext(), 100);
                 break;
         }
