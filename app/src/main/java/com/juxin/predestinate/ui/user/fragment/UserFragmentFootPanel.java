@@ -105,13 +105,16 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_8:// 个人资料
-                UIShow.showUserEditInfoAct(getContext());
+//                UIShow.showUserEditInfoAct(getContext());
+
+                // test
+                UIShow.showGoodsDiamondDialog(getContext());
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
 
                 // test
-                UIShow.showGoodsDiamondDialog(getContext());
+                UIShow.showGoodsVipDialog(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心

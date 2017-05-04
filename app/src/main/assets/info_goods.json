@@ -50,5 +50,47 @@
         "price": 1000
       }
     ]
+  },
+
+  "vip_wakan": {
+    "list": [
+      {
+        "cid": 56,
+        "cname": "30天",
+        "cnum": 30,
+        "desc": "恢复灵气50%",
+        "iospayid": "",
+        "price": 50
+      },
+      {
+        "cid": 57,
+        "cname": "90天",
+        "cnum": 90,
+        "desc": "恢复灵气100%",
+        "iospayid": "",
+        "price": 100
+      }
+    ]
+  },
+
+  "vip_power": {
+    "list": [
+      {
+        "cid": 56,
+        "cname": "30天",
+        "cnum": 30,
+        "desc": "赠送100点体力",
+        "iospayid": "",
+        "price": 50
+      },
+      {
+        "cid": 56,
+        "cname": "90天",
+        "cnum": 90,
+        "desc": "赠送200点体力",
+        "iospayid": "",
+        "price": 100
+      }
+    ]
   }
 }

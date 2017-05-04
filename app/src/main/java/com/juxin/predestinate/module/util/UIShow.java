@@ -64,9 +64,11 @@ import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
+import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
+import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
@@ -754,6 +756,17 @@ public class UIShow {
      */
     public static void showGoodsDiamondDialog(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondDialog.class));
+    }
+
+    /**
+     * VIP充值弹框
+     *
+     * @param rechargeType VIP充值类型
+     */
+    public static void showGoodsVipDialog(Context context, int rechargeType) {
+        Intent intent = new Intent(context, GoodsVipDialog.class);
+        intent.putExtra(GoodsConstant.DLG_VIP_TYPE, rechargeType);
+        context.startActivity(intent);
     }
 
     /**

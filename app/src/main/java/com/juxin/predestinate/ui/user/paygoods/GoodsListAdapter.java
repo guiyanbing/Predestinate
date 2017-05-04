@@ -17,10 +17,22 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
 
 public class GoodsListAdapter extends BaseRecyclerViewAdapter {
     private int selectPosition = 0;
+    private int itemType = 0;       // 展示布局
+    private int chargeType = 0;     // 充值种类
+
+    public GoodsListAdapter() {
+    }
+
+    public GoodsListAdapter(int itemType) {
+        this.chargeType = itemType;
+
+        if (itemType > 0)       // 非0状态下都引用第二种布局
+            this.itemType = 1;
+    }
 
     @Override
     public int[] getItemLayouts() {
-        return new int[]{R.layout.p1_goods_list_adapter};
+        return new int[]{R.layout.p1_goods_list_adapter, R.layout.f1_goods_list_item};
     }
 
     @Override
@@ -32,12 +44,10 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
         ImageView img_choose = viewHolder.findViewById(R.id.iv_choose);
         ImageView goods_ico = viewHolder.findViewById(R.id.goods_ico);
         TextView tv_goods = viewHolder.findViewById(R.id.tv_goods);
-        TextView tv_offers = viewHolder.findViewById(R.id.tv_offers);
         TextView tv_money = viewHolder.findViewById(R.id.tv_money);
 
         // 选中状态
-        //payItem.setSelected(selectPosition == position);
-        //img_choose.setVisibility(selectPosition == position ? View.VISIBLE : View.GONE);
+        payItem.setSelected(selectPosition == position);
         payBg.showOfIndex(selectPosition == position ? 1 : 0);
 
         // 设置数据
@@ -52,6 +62,6 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public int getRecycleViewItemType(int position) {
-        return 0;
+        return itemType;
     }
 }

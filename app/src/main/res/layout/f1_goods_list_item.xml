@@ -6,7 +6,7 @@
     <RelativeLayout
         android:id="@+id/pay_item"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px135_dp"
+        android:layout_height="match_parent"
         android:background="@drawable/p1_pay_bg">
 
         <!-- 选择状态 -->
@@ -51,48 +51,45 @@
 
         <!-- 商品信息 -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/px35_dp">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/goods_ico"
                 android:layout_width="@dimen/px60_dp"
                 android:layout_height="@dimen/px60_dp"
-                android:background="@drawable/f1_diamonds_ico" />
+                android:background="@drawable/f1_diamonds_ico"
+                android:visibility="gone" />
 
+            <!-- 商品名称 -->
             <TextView
                 android:id="@+id/tv_goods"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/px10_dp"
+                android:paddingTop="@dimen/px10_dp"
                 android:text="@string/goods_pay_alipay"
-                android:textColor="@color/text_zhuyao_black"
+                android:textColor="@color/txt_color1"
                 android:textSize="@dimen/px43_sp" />
 
-            <!--活动-->
+            <!--商品价格-->
             <TextView
-                android:id="@+id/tv_offers"
+                android:id="@+id/tv_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/goods_pay_alipay"
-                android:textColor="@color/p1_pay_text_color"
-                android:textSize="@dimen/px43_sp"
-                android:visibility="gone" />
+                android:text="￥50"
+                android:textColor="@color/text_zhuyao_black"
+                android:textSize="@dimen/px48_sp" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/px10_dp"
+                android:text="@string/goods_vip_dlg_recoverhalf"
+                android:textColor="#FC615C"
+                android:textSize="@dimen/px39_sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_money"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/px35_dp"
-            android:text="200￥"
-            android:textColor="@color/text_theme_blue"
-            android:textSize="@dimen/px43_sp" />
-
     </RelativeLayout>
 </LinearLayout>
