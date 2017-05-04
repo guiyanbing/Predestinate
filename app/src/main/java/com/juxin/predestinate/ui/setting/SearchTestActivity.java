@@ -22,7 +22,7 @@ import com.juxin.predestinate.module.util.WebUtil;
  */
 public class SearchTestActivity extends BaseActivity {
 
-    private EditText url_edit, uid_edit;
+    private EditText url_edit, uid_edit, db_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,7 @@ public class SearchTestActivity extends BaseActivity {
     private void initView() {
         url_edit = (EditText) findViewById(R.id.url_edit);
         uid_edit = (EditText) findViewById(R.id.uid_edit);
+        db_edit = (EditText) findViewById(R.id.db_edit);
 
         url_edit.setText(PSP.getInstance().getString(FinalKey.TESTING_WEB_STORE, ""));
     }
@@ -79,10 +80,17 @@ public class SearchTestActivity extends BaseActivity {
      * 拷贝数据库
      */
     public void copyDB(View v) {
-        final String DBNAME = "weshot.db";
+        final String DBNAME = db_edit.getText().toString();
+        if (TextUtils.isEmpty(DBNAME)) {
+            PToast.showShort("请输入数据库名称");
+            return;
+        }
         final String path = App.context.getDatabasePath(DBNAME).getPath();
         final String storePath = DirType.getCacheDir() + DBNAME + ".bak";
-        FileUtil.fileCopy(path, storePath);
-        PToast.showLong("请到" + storePath + "查看");
+        if (FileUtil.fileCopy(path, storePath)) {
+            PToast.showLong("请到" + storePath + "查看");
+        } else {
+            PToast.showShort("数据库文件不存在或复制失败");
+        }
     }
 }

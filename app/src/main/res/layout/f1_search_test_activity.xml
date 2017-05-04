@@ -9,37 +9,37 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_margin="20dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/url_edit"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/color_E4E4E4"
             android:gravity="center"
             android:hint="请输入需要测试的网址"
             android:textColor="#333333"
             android:textColorHint="#969696"
-            android:textSize="15sp" />
+            android:textSize="12sp" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/theme_color_red"
             android:gravity="center"
             android:onClick="startWeb"
             android:text="进入"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="horizontal">
@@ -47,7 +47,7 @@
         <EditText
             android:id="@+id/uid_edit"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="4"
             android:background="@color/color_E4E4E4"
             android:gravity="center"
@@ -55,28 +55,47 @@
             android:inputType="number"
             android:textColor="#333333"
             android:textColorHint="#969696"
-            android:textSize="15sp" />
+            android:textSize="12sp" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/theme_color_red"
             android:gravity="center"
             android:onClick="searchUID"
             android:text="搜索"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="20dp"
-        android:background="@color/theme_color_red"
-        android:gravity="center"
-        android:onClick="copyDB"
-        android:text="拷贝数据库"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/db_edit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:background="@color/color_E4E4E4"
+            android:gravity="center"
+            android:hint="请输入需要copy的数据库名称"
+            android:textColor="#333333"
+            android:textColorHint="#969696"
+            android:textSize="12sp" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/theme_color_red"
+            android:gravity="center"
+            android:onClick="copyDB"
+            android:text="复制"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+    </LinearLayout>
 </LinearLayout>
