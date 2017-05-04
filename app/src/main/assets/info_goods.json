@@ -92,5 +92,26 @@
         "price": 100
       }
     ]
+  },
+
+  "ycoin": {
+    "list": [
+      {
+        "cid": 56,
+        "cname": "5000Y币",
+        "cnum": 5000,
+        "desc": "赠送500Y币",
+        "iospayid": "",
+        "price": 50
+      },
+      {
+        "cid": 57,
+        "cname": "11000Y币",
+        "cnum": 11000,
+        "desc": "赠送1100",
+        "iospayid": "",
+        "price": 100
+      }
+    ]
   }
 }

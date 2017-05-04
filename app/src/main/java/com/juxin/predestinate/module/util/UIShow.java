@@ -69,6 +69,7 @@ import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
+import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
@@ -767,6 +768,13 @@ public class UIShow {
         Intent intent = new Intent(context, GoodsVipDialog.class);
         intent.putExtra(GoodsConstant.DLG_VIP_TYPE, rechargeType);
         context.startActivity(intent);
+    }
+
+    /**
+     * Y币充值弹框
+     */
+    public static void showGoodsYCoinDialog(Context context) {
+        context.startActivity(new Intent(context, GoodsYCoinDialog.class));
     }
 
     /**

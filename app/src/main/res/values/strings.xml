@@ -271,6 +271,7 @@
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>
 
     <string name="goods_vip_title">开通VIP</string>
+    <string name="goods_vip_price">(50元月)</string>
     <string name="goods_vip_user">已开通VIP用户：</string>
     <string name="goods_vip_users">人</string>
     <string name="goods_vip_tips">开通VIP可与所有美女聊天</string>
@@ -282,6 +283,13 @@
     <string name="goods_vip_dlg_plus_host">吸收灵气加倍</string>
     <string name="goods_vip_dlg_more_privilege">更多特权</string>
     <string name="goods_vip_dlg_recoverhalf">恢复灵气50%</string>
+
+    <string name="goods_ycoin_title">购买Y币</string>
+    <string name="goods_ycoin_remain">Y币余额：</string>
+    <string name="goods_ycoin_tip_header">（不足购买</string>
+    <string name="goods_ycoin_tip_footer">体力，请充值Y币）</string>
+    <string name="goods_ycoin_phone_cost">并赠送100元话费</string>
+    <string name="goods_ycoin_welfare">开通VIP赠送100体力，并且享受体力加速恢复，\n充值Y币额外赠送10%</string>
 
 
     <!--  相册  -->

@@ -22,4 +22,7 @@ public class GoodsConstant {
     public static final int DLG_VIP_LOW_WAKAN = 3;          // 灵力不足
     public static final int DLG_VIP_GET_DOG = 4;            // 获取斗牛犬
     public static final int DLG_VIP_HEIGH_AREANA = 5;       // 高级擂台
+
+    // Y币
+    public static final int DLG_YCOIN_PRIVEDEG = 1;         // 购买Y币
 }
