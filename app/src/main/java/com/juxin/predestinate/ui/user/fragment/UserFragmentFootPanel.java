@@ -12,7 +12,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.start.WebEntranceActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,6 +109,9 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
+
+                // test
+                UIShow.showGoodsDiamondDialog(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心

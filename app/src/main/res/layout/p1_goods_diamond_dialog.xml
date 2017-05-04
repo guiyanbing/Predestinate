@@ -17,21 +17,47 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_marginBottom="@dimen/px30_dp"
+            android:layout_marginTop="@dimen/px30_dp"
+            android:gravity="center|left"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/px54_dp"
+            android:paddingRight="@dimen/px54_dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/px50_dp"
-                android:text="@string/goods_diamond_lack" />
+                android:layout_margin="4dip"
+                android:text="开通服务"
+                android:textColor="#ff4582"
+                android:textSize="@dimen/px48_sp" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/px35_dp"
-                android:text="@string/goods_pay_to"
-                android:textColor="@color/text_ciyao_gray" />
+                android:text="本次送礼还差"
+                android:textColor="@color/black"
+                android:textSize="@dimen/px39_sp" />
+
+            <TextView
+                android:id="@+id/dlg_diamond_tv_decdiamod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10钻石"
+                android:textColor="#ff4582"
+                android:textSize="@dimen/px39_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=",快去充值吧"
+                android:textColor="@color/black"
+                android:textSize="@dimen/px39_sp" />
         </LinearLayout>
 
         <!-- 商品列表 -->
@@ -39,23 +65,27 @@
             android:id="@+id/pay_type_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:layout_marginBottom="@dimen/px35_dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/px45_dp"
+            android:paddingRight="@dimen/px45_dp" />
 
         <!-- 支付方式-->
-        <include layout="@layout/p1_goods_of_payment" />
+        <include layout="@layout/f1_goods_pay_type" />
 
         <!-- 充值按钮 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/px50_dp">
+            android:paddingLeft="@dimen/px54_dp"
+            android:paddingRight="@dimen/px54_dp"
+            android:paddingTop="@dimen/px60_dp">
 
             <Button
                 android:id="@+id/btn_recharge"
                 style="@style/button_big"
                 android:layout_marginBottom="@dimen/px80_dp"
-                android:layout_marginTop="@dimen/px50_dp"
-                android:text="@string/goods_pay" />
+                android:text="@string/goods_pay_immediately" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

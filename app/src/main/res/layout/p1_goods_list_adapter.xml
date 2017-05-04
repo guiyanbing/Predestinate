@@ -6,29 +6,69 @@
     <RelativeLayout
         android:id="@+id/pay_item"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px160_dp"
-        android:background="@drawable/p1_pay_bg"
-        android:padding="@dimen/px15_dp">
+        android:layout_height="@dimen/px135_dp"
+        android:background="@drawable/p1_pay_bg">
 
+        <!-- 选择状态 -->
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 未选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz1" />
+            </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/f1_recharge_popping_bg3">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz2" />
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
+
+        <!-- 右上角图标 -->
         <ImageView
             android:id="@+id/iv_choose"
             android:layout_width="@dimen/px46_dp"
             android:layout_height="@dimen/px46_dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/p1_choose_btn"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
+        <!-- 商品信息 -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:paddingLeft="@dimen/px35_dp">
+
+            <ImageView
+                android:id="@+id/goods_ico"
+                android:layout_width="@dimen/px60_dp"
+                android:layout_height="@dimen/px60_dp"
+                android:background="@drawable/f1_diamonds_ico" />
 
             <TextView
                 android:id="@+id/tv_goods"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/px10_dp"
                 android:text="@string/goods_pay_alipay"
                 android:textColor="@color/text_zhuyao_black"
                 android:textSize="@dimen/px43_sp" />

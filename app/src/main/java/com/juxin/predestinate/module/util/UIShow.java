@@ -65,6 +65,7 @@ import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -401,20 +402,6 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivity(intent);
-    }
-
-    /**
-     * 打开VIP开通页
-     */
-    public static void showGoodsVipAct(Context context) {
-        context.startActivity(new Intent(context, GoodsVipAct.class));
-    }
-
-    /**
-     * 打开钻石商品页
-     */
-    public static void showGoodsDiamondAct(Context context) {
-        context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
 
     /**
@@ -760,4 +747,26 @@ public class UIShow {
 
     }
 
+    // -----------------------各种充值弹框跳转 start----------------------------
+
+    /**
+     * 钻石充值弹框
+     */
+    public static void showGoodsDiamondDialog(Context context) {
+        context.startActivity(new Intent(context, GoodsDiamondDialog.class));
+    }
+
+    /**
+     * 打开VIP开通页
+     */
+    public static void showGoodsVipAct(Context context) {
+        context.startActivity(new Intent(context, GoodsVipAct.class));
+    }
+
+    /**
+     * 打开钻石商品页
+     */
+    public static void showGoodsDiamondAct(Context context) {
+        context.startActivity(new Intent(context, GoodsDiamondAct.class));
+    }
 }

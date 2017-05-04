@@ -255,14 +255,17 @@
     <string name="user_other_info_req_fail">资料请求出错！</string>
     <string name="user_online">在线</string>
 
+    <string name="goods_price">%d元</string>
     <string name="goods_diamond_title">钻石充值</string>
     <string name="goods_diamond_remain">余额</string>
     <string name="goods_diamond_lack">余额不足</string>
     <string name="goods_diamond_type">请选择购买金额</string>
     <string name="goods_pay_type">支付方式</string>
     <string name="goods_pay_weixin">微信</string>
+    <string name="goods_pay_weixin1">微信支付</string>
     <string name="goods_pay_alipay">支付宝</string>
     <string name="goods_pay_other">其他</string>
+    <string name="goods_pay_other1">其他支付</string>
     <string name="goods_pay">充值</string>
     <string name="goods_pay_immediately">立即充值</string>
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>

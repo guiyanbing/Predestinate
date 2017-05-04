@@ -1,0 +1,54 @@
+{
+  "diamond": {
+    "list": [
+      {
+        "cid": 56,
+        "cname": "100钻石",
+        "cnum": 100,
+        "desc": "",
+        "iospayid": "",
+        "price": 10
+      },
+      {
+        "cid": 57,
+        "cname": "600钻石",
+        "cnum": 600,
+        "desc": "",
+        "iospayid": "",
+        "price": 60
+      },
+      {
+        "cid": 58,
+        "cname": "1000钻石",
+        "cnum": 1000,
+        "desc": "",
+        "iospayid": "",
+        "price": 100
+      },
+      {
+        "cid": 59,
+        "cname": "3000钻石",
+        "cnum": 3000,
+        "desc": "",
+        "iospayid": "",
+        "price": 300
+      },
+      {
+        "cid": 60,
+        "cname": "5000钻石",
+        "cnum": 5000,
+        "desc": "",
+        "iospayid": "",
+        "price": 500
+      },
+      {
+        "cid": 61,
+        "cname": "10000钻石",
+        "cnum": 10000,
+        "desc": "",
+        "iospayid": "",
+        "price": 1000
+      }
+    ]
+  }
+}
