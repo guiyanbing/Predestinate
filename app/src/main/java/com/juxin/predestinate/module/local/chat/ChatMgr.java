@@ -1,22 +1,34 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.app.Application;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
+import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.predestinate.bean.db.AppComponent;
+import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.DBModule;
+import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.BaseUtil;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -25,7 +37,7 @@ import rx.functions.Action1;
  * Created by Kind on 2017/3/28.
  */
 
-public class ChatMgr implements ModuleBase {
+public class ChatMgr implements ModuleBase, PObserver {
 
     private RecMessageMgr messageMgr = new RecMessageMgr();
 
@@ -34,24 +46,8 @@ public class ChatMgr implements ModuleBase {
 
     @Override
     public void init() {
-//        App.getAppComponent().inject(this);
-//        messageMgr.init();
-//
-//        BaseMessage baseMessage = new BaseMessage();
-//        baseMessage.setWhisperID("1");
-//        baseMessage.setSendID(1);
-//        baseMessage.setcMsgID(1);
-//        baseMessage.setContent("xxxx");
-//        baseMessage.setStatus(1);
-//        onReceiving(baseMessage);
-//
-//        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
-//        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-//            @Override
-//            public void call(List<BaseMessage> baseMessages) {
-//
-//            }
-//        });
+        com.juxin.library.observe.MsgMgr.getInstance().attach(this);
+        messageMgr.init();
     }
 
     @Override
@@ -59,15 +55,42 @@ public class ChatMgr implements ModuleBase {
         messageMgr.release();
     }
 
+
+    private void inject(){
+        getAppComponent().inject(this);
+
+        BaseMessage baseMessage = new BaseMessage();
+        baseMessage.setWhisperID("1");
+        baseMessage.setSendID(1);
+        baseMessage.setcMsgID(1);
+        baseMessage.setContent("xxxx");
+        baseMessage.setStatus(1);
+        onReceiving(baseMessage);
+
+        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
+        listObservable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+
+            }
+        });
+    }
+
     /**
      * 文字消息
-     * @param channelID
      * @param whisperID
      * @param content
      */
-    public void sendTextMsg(String channelID, String whisperID, String content) {
-        BaseMessage baseMessage = new BaseMessage();
-        dbCenter.insertFmessage(baseMessage);
+    public void sendTextMsg(String whisperID, String content) {
+        CommonMessage commonMessage = new CommonMessage(whisperID, content);
+        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+        long ret = dbCenter.insertFmessage(commonMessage);
+        if(ret == DBConstant.ERROR){
+            onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
+            return;
+        }
+
+        IMProxy.getInstance().send(new NetData(TypeConvUtil.toLong(whisperID), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()));
     }
 
     /**
@@ -284,4 +307,42 @@ public class ChatMgr implements ModuleBase {
             }
         });
     }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_App_Login:
+                PLogger.d("---MT_App_Login--->" + value);
+                if ((Boolean) value) {//登录成功
+                    initAppComponent();
+                    inject();
+                } else {
+                }
+                break;
+        }
+    }
+
+    /**
+     * AppComponent
+     */
+    private static AppComponent mAppComponent;
+
+    /**
+     * @return 获取dagger2管理的全局实例
+     */
+    public static AppComponent getAppComponent() {
+        return mAppComponent;
+    }
+
+
+    /**
+     * DB初始化
+     */
+    private void initAppComponent() {
+        mAppComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule((Application) App.getContext()))
+                .dBModule(new DBModule(App.uid))
+                .build();
+    }
+
 }

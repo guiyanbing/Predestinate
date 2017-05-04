@@ -99,7 +99,8 @@ public class BaseMessage implements IBaseMessage {
     public final static String StrDefault = "";//字符默认值
 
     //显示权重
-    public static int Great_Weight = 100;//最大权重
+    public static int Max_Weight = 1000;//最大权重
+    public static int Great_Weight = 100;//大权重
     public static int In_Weight = 50;//中等权重
     public static int Small_Weight = 1;//小权重
 
