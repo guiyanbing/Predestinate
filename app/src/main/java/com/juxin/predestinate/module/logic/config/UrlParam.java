@@ -39,6 +39,8 @@ public enum UrlParam {
     checkUpdate("public/checkup", null, true),
     //检查服务器静态配置
     staticConfig("public/getASet", null, false),
+    //请求在线客服QQ
+    serviceQQ("user/serviceQQ", null, false),
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
 

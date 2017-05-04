@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
 import com.juxin.mumu.bean.log.MMLog;
@@ -46,6 +47,7 @@ import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.AboutAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
+import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
@@ -299,6 +301,13 @@ public class UIShow {
      */
     public static void showAboutAct(final Activity context) {
         context.startActivity(new Intent(context, AboutAct.class));
+    }
+
+    /**
+     * 打开用户搜索测试彩蛋页面
+     */
+    public static void showSearchTestActivity(final Activity context) {
+        context.startActivity(new Intent(context, SearchTestActivity.class));
     }
 
     /**
@@ -637,15 +646,20 @@ public class UIShow {
 
     /**
      * 打开QQ客服
-     *
-     * @param context
      */
     public static void showQQServer(Context context) {
         try {
-            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + 11;
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
+                    PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
+            } else {
+                PToast.showShort("QQ未安装");
+            }
         } catch (Exception e) {
-            MMToast.showShort("QQ客服忙!请等待");
+            PToast.showShort("QQ客服出错请使用电话客服");
         }
     }
 

@@ -77,6 +77,9 @@
             android:name=".ui.setting.AboutAct"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.setting.SearchTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.setting.UserModifyPwdAct"
             android:screenOrientation="portrait" />
         <activity
@@ -129,25 +132,25 @@
         <!-- ============= 小友模块start ============= -->
         <activity
             android:name=".ui.xiaoyou.wode.MyDiamondsAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.MyDiamondsExplainAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.RedBoxRecordAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.WithDrawExplainAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.WithDrawApplyAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.WithDrawSuccessAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.RedBoxPhoneVerifyAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.xiaoyou.TabGroupActivity"

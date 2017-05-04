@@ -48,6 +48,7 @@ public class CommonMgr implements ModuleBase {
     @Override
     public void init() {
         requestStaticConfig();
+        requestServerQQ();
     }
 
     @Override
@@ -109,6 +110,19 @@ public class CommonMgr implements ModuleBase {
                         commonConfig.parseJson(response.getResponseString());
                     }
                 });
+    }
+
+    /**
+     * 请求在线QQ配置
+     */
+    private void requestServerQQ() {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.serviceQQ, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                String serviceQQ = response.getResponseJson().optString("content");
+                PSP.getInstance().put(FinalKey.CONFIG_SERVICE_QQ, serviceQQ);
+            }
+        });
     }
 
     /**
