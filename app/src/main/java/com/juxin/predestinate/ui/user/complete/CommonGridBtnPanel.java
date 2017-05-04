@@ -85,7 +85,6 @@ public class CommonGridBtnPanel extends BaseViewPanel{
         IMG("图片", R.drawable.chat_input_grid_img_selector),           //发送图片按钮
         VIDEO("视频聊天", R.drawable.chat_input_grid_video_selector),       //视频聊天
         VOICE("语音聊天", R.drawable.chat_input_grid_voice_selector),    //语音聊天
-        GAME_WITH_FISH("配鱼", R.drawable.chat_input_grid_voice_selector),    //配鱼
         ;
 
         String title;

@@ -16,6 +16,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.msgview.utils.EggUtil;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIUtil;
 
@@ -411,13 +412,13 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 return;
             }
 
-            String channelId = getChatInstance().chatAdapter.getChannelId();
+            String channelID = getChatInstance().chatAdapter.getChannelId();
             String whisperID = getChatInstance().chatAdapter.getWhisperId();
 
 //            if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
 //                return;
 //            }
-//            ModuleMgr.getChatMgr().sendTextMsg(getChatInstance().chatAdapter.getFolder(), channelId, whisperID, context);
+            ModuleMgr.getChatMgr().sendTextMsg(channelID, whisperID, context);
 
             chatTextEdit.setText("");
             sendSystemMsgCancelInput();

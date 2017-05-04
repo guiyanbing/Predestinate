@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgType;
@@ -81,8 +80,20 @@ public class ChatMgr implements ModuleBase, PObserver {
      * @param whisperID
      * @param content
      */
-    public void sendTextMsg(String whisperID, String content) {
-        CommonMessage commonMessage = new CommonMessage(whisperID, content);
+    public void sendTextMsg(String channelID, String whisperID, String content) {
+        CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
+        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+        long ret = dbCenter.insertFmessage(commonMessage);
+        if(ret == DBConstant.ERROR){
+            onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
+            return;
+        }
+
+        IMProxy.getInstance().send(new NetData(TypeConvUtil.toLong(whisperID), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()));
+    }
+
+    public void sendImgMsg(String channelID, String whisperID, String content) {
+        CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
         long ret = dbCenter.insertFmessage(commonMessage);
         if(ret == DBConstant.ERROR){

@@ -790,4 +790,6 @@ public class UIShow {
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
+
+
 }

@@ -30,7 +30,7 @@ import java.util.Map;
  */
 
 public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
-        AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener{
+        AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener {
 
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
@@ -122,16 +122,11 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-//                    case invite_friends_msg: //邀请好友
-//                        break;
-//                    case act_msg: //活动
-//                    //    ModuleMgr.getChatListMgr().markSingleAsRead(item.getLWhisperID());
-//                        break;
-//                    case new_friend_msg: //新朋友
-                    //     ModuleMgr.getChatListMgr().markNewFriendMsgAsRead();
-                    //      break;
-                    case visitors_msg:
-                        //    ModuleMgr.getChatListMgr().updateVisit();
+                    case WhoAttentionMe_Msg:
+
+                        break;
+                    case MyFriend_Msg:
+
                         break;
                 }
             } else {
@@ -153,34 +148,15 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(message.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case recommend_msg://推荐的人
+                    case WhoAttentionMe_Msg://推荐的人
                         UIShow.showRecommendAct(getActivity());
                         break;
-                    //  case invite_friends_msg: //邀请好友
-                    //     UIShow.showInviteFriendAct(getActivity());
-                    //          break;
-                    //       case act_msg: //活动
-                    //      UIShow.showActivityAct(getActivity());
-//                        EnvelopeShowDialog envelopeShowDialog = new EnvelopeShowDialog(getActivity(),null);
-//                        envelopeShowDialog.showDialog((FragmentActivity) getContext());
-                    //             startActivity(new Intent(getActivity(), CeShiXAct.class));
-
-                    // startActivity(new Intent(getActivity(), CeShiFamiliarAct.class));
-                    //           break;
-                    //         case new_friend_msg: //新朋友
-                    //      UIShow.showNewFriendAct(getActivity());
-                    //     startActivity(new Intent(getActivity(), EnvelopeDetailsAct.class));
-
-                    //        startActivity(new Intent(getActivity(), HttpWebServiceActivity.class));
-
-                    //            break;
-                    case visitors_msg: // 最近访问
-                        UIShow.showPrivateChatAct(getActivity(), 1, null);
-                        //  UIShow.showNearVisitorContent(getActivity());
+                    case MyFriend_Msg://我的好友
+                        UIShow.showRecommendAct(getActivity());
                         break;
                 }
             } else {
-                //    UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKf_id());
+                UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKf_id());
             }
         }
     }

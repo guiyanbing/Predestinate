@@ -29,8 +29,8 @@ public class CommonMessage extends BaseMessage{
      * @param whisperID
      * @param content
      */
-    public CommonMessage(String whisperID, String content) {
-        super(null, whisperID);
+    public CommonMessage(String channelID, String whisperID, String content) {
+        super(channelID, whisperID);
         this.setContent(content);
         this.setType(BaseMessageType.common.getMsgType());
     }
