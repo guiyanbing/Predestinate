@@ -47,6 +47,7 @@ import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.AboutAct;
 import com.juxin.predestinate.ui.setting.FeedBackAct;
+import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
@@ -298,6 +299,13 @@ public class UIShow {
      */
     public static void showAboutAct(final Activity context) {
         context.startActivity(new Intent(context, AboutAct.class));
+    }
+
+    /**
+     * 打开用户搜索测试彩蛋页面
+     */
+    public static void showSearchTestActivity(final Activity context) {
+        context.startActivity(new Intent(context, SearchTestActivity.class));
     }
 
     /**

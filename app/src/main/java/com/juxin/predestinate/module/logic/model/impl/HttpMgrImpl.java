@@ -258,10 +258,13 @@ public class HttpMgrImpl implements HttpMgr {
             //获取缓存中的数据,如果不为null,则开始解析数据,并返回数据
             String cacheStr = PCache.getInstance().getCache(cacheUrl);
             if (cacheStr != null) {
-                PLogger.d("response cache，request url：" + url + "\ncache String：" + cacheStr);
+                if (!TextUtils.isEmpty(cacheStr) && isEncrypt && (!cacheStr.startsWith("{") || !cacheStr.endsWith("}"))) {
+                    cacheStr = new String(JniUtil.GetDecryptString(cacheStr));
+                }
                 result.setOK();
                 result.setCache(true);//设置为cache数据
                 result.parseJson(cacheStr);
+                PLogger.d("response cache，request url：" + url + "\ncache String：" + cacheStr);
 
                 //缓存回调
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
@@ -311,7 +314,7 @@ public class HttpMgrImpl implements HttpMgr {
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
                     PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
 
-                if (isEncrypt && (!resultString.startsWith("{") || !resultString.endsWith("}"))) {
+                if (!TextUtils.isEmpty(resultString) && isEncrypt && (!resultString.startsWith("{") || !resultString.endsWith("}"))) {
                     resultString = new String(JniUtil.GetDecryptString(resultString));
                 }
 

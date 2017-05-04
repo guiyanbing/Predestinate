@@ -34,7 +34,6 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-
     /**
      * 右滑返回：添加忽略view，内部维护一个list，可在一个页面添加多个忽略view
      */
