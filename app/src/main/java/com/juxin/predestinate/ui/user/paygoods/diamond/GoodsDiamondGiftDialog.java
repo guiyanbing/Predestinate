@@ -21,10 +21,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * 钻石充值弹框
- * Created by Su on 2017/4/12.
+ * 送礼钻石充值弹框
+ * Created by Su on 2017/5/4.
  */
-public class GoodsDiamondDialog extends BaseActivity implements View.OnClickListener {
+
+public class GoodsDiamondGiftDialog extends BaseActivity implements View.OnClickListener {
 
     private CustomFrameLayout payWeChat, payAli, payOther; // 支付方式
     private int payType = GoodsConstant.PAY_TYPE_WECHAT;  // 默认支付方式为微信支付
@@ -35,7 +36,7 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.p1_goods_diamond_dialog);
+        setContentView(R.layout.f1_goods_diamond_gift_dialog);
 
         initList();
         initView();

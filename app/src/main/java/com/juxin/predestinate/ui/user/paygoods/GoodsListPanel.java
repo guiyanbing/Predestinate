@@ -70,8 +70,8 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
-            outRect.right = space;
-            outRect.left = space;
+            outRect.right = space / 2;
+            outRect.left = space / 2;
             outRect.top = space;
         }
     }

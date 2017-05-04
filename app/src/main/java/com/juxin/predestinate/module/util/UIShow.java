@@ -57,12 +57,14 @@ import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
-import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
-import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
+import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
+import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
+import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondGiftDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -230,6 +232,7 @@ public class UIShow {
     public static void showFeedBackAct(FragmentActivity activity) {
         activity.startActivity(new Intent(activity, FeedBackAct.class));
     }
+
     /**
      * 打开意见反馈页面
      *
@@ -357,7 +360,7 @@ public class UIShow {
                 UserProfile userProfile = new UserProfile();
                 userProfile.parseJson(response.getResponseString());
 
-                if ("error".equals(userProfile.getResult())){
+                if ("error".equals(userProfile.getResult())) {
                     PToast.showShort(context.getString(R.string.request_error));
                     return;
                 }
@@ -391,20 +394,6 @@ public class UIShow {
         Intent intent = new Intent(context, UserEditSignAct.class);
         intent.putExtra("sign", sign);
         context.startActivity(intent);
-    }
-
-    /**
-     * 打开VIP开通页
-     */
-    public static void showGoodsVipAct(Context context) {
-        context.startActivity(new Intent(context, GoodsVipAct.class));
-    }
-
-    /**
-     * 打开钻石商品页
-     */
-    public static void showGoodsDiamondAct(Context context) {
-        context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
 
     /**
@@ -745,4 +734,33 @@ public class UIShow {
 
     }
 
+    // -----------------------各种充值弹框跳转 start----------------------------
+
+    /**
+     * 普通钻石充值弹框
+     */
+    public static void showGoodsDiamondDialog(Context context) {
+        context.startActivity(new Intent(context, GoodsDiamondDialog.class));
+    }
+
+    /**
+     * 送礼钻石充值弹框
+     */
+    public static void showGoodsDiamondGiftDialog(Context context) {
+        context.startActivity(new Intent(context, GoodsDiamondGiftDialog.class));
+    }
+
+    /**
+     * 打开VIP开通页
+     */
+    public static void showGoodsVipAct(Context context) {
+        context.startActivity(new Intent(context, GoodsVipAct.class));
+    }
+
+    /**
+     * 打开钻石商品页
+     */
+    public static void showGoodsDiamondAct(Context context) {
+        context.startActivity(new Intent(context, GoodsDiamondAct.class));
+    }
 }

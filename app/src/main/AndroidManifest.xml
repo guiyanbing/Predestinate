@@ -186,6 +186,12 @@
             android:theme="@style/No_Background" />
 
         <activity
+            android:name=".ui.user.paygoods.diamond.GoodsDiamondGiftDialog"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/No_Background" />
+
+        <activity
             android:name=".ui.user.paygoods.vip.GoodsVipAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px111_dp"
+    android:layout_marginLeft="@dimen/px54_dp"
+    android:layout_marginRight="@dimen/px54_dp"
+    android:layout_marginTop="@dimen/px22_dp"
+    android:background="@drawable/f1_recharge_popping_bg"
+    android:orientation="horizontal"
+    android:padding="@dimen/px1_dp">
+
+    <!--微信-->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_type_wexin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 未选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz1" />
+            </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/f1_recharge_popping_bg3">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz2" />
+
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/goods_pay_weixin1"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px36_sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="@dimen/px1_dp"
+        android:layout_height="match_parent"
+        android:background="@color/color_dddddd" />
+
+    <!--支付宝-->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_type_alipay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 未选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz1" />
+            </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/f1_recharge_popping_bg3">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz2" />
+
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/goods_pay_alipay"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px36_sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="@dimen/px1_dp"
+        android:layout_height="match_parent"
+        android:background="@color/color_dddddd" />
+
+    <!--其他支付-->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/pay_type_other"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 未选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz1" />
+            </RelativeLayout>
+
+            <!-- 选中 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/f1_recharge_popping_bg3">
+
+                <ImageView
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/f1_rechargepop_xz2" />
+            </RelativeLayout>
+        </com.juxin.library.view.CustomFrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/goods_pay_other1"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px36_sp" />
+    </RelativeLayout>
+</LinearLayout>
