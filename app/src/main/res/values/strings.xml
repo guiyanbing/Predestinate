@@ -460,6 +460,10 @@
     <string name="defriend_title_right">提交</string>
     <string name="defriend_edt_hint">详细描述被举报人的恶意行为</string>
 
+    <string name="my_friend_title">我的好友</string>
+    <string name="my_friend_righ_title">黑名单</string>
+    <string name="my_defriend_title">黑名单</string>
+
     <!--发现end-->
 
 </resources>

@@ -18,14 +18,28 @@ public class UserInfoLightweightList extends BaseData {
 
     private ArrayList<UserInfoLightweight> lightweightLists = new ArrayList<>();
 
+    private int totalcnt;
+
     @Override
     public void parseJson(String jsonStr) {
         if (!TextUtils.isEmpty(jsonStr)) {
             PLogger.d("UserInfoLightweightList parseJson ---- jsonStr " + jsonStr);
-            JSONArray jsonArray = getJsonObject(jsonStr).optJSONArray("list");
+            String jsonData = getJsonObject(jsonStr).optString("res");
+            JSONArray jsonArray = getJsonObject(jsonData).optJSONArray("list");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
         }
     }
+
+    public void parseJsonFriends(String jsonStr) {
+        if (!TextUtils.isEmpty(jsonStr)) {
+            PLogger.d("UserInfoLightweightList parseJson ---- jsonStr " + jsonStr);
+            String jsonData = getJsonObject(jsonStr).optString("res");
+            setTotalcnt(getJsonObject(jsonStr).optInt("totalcnt"));
+            JSONArray jsonArray = getJsonObject(jsonData).optJSONArray("friends");
+            this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+        }
+    }
+
 
     public ArrayList<UserInfoLightweight> getUserInfos() {
         Iterator<UserInfoLightweight> infos = lightweightLists.iterator();
@@ -43,5 +57,13 @@ public class UserInfoLightweightList extends BaseData {
 
     public void setLightweightLists(ArrayList<UserInfoLightweight> lightweightLists) {
         this.lightweightLists = lightweightLists;
+    }
+
+    public int getTotalcnt() {
+        return totalcnt;
+    }
+
+    public void setTotalcnt(int totalcnt) {
+        this.totalcnt = totalcnt;
     }
 }

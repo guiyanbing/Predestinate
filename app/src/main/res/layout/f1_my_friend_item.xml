@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myfriend_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        style="@style/divider_line"
+        android:layout_marginLeft="@dimen/px35_dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/px35_dp">
+
+        <ImageView
+            android:id="@+id/myfriend_item_avatar"
+            style="@style/avatar_middle"
+            android:layout_centerVertical="true"
+            android:src="@drawable/default_head" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/px35_dp"
+            android:layout_toRightOf="@id/myfriend_item_avatar">
+
+            <LinearLayout
+                android:id="@+id/myfriend_item_name_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/myfriend_item_name"
+                    style="@style/txt_item_nickname" />
+
+
+                <LinearLayout
+                    android:id="@+id/myfriend_item_ranking_state"
+                    style="@style/icon_middle_center"
+                    android:layout_width="@dimen/px190_dp"
+                    android:layout_marginLeft="@dimen/px35_dp"
+                    android:background="@drawable/f1_ranking_bg_w"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/myfriend_item_ranking_type"
+                        android:layout_width="@dimen/px50_dp"
+                        android:layout_height="@dimen/px50_dp"
+                        android:layout_marginLeft="@dimen/px10_dp"
+                        android:background="@drawable/f1_round_text_bg"
+                        android:gravity="center"
+                        android:text="魅"
+                        android:textColor="@color/color_ff4d79"
+                        android:textSize="@dimen/px32_sp" />
+
+                    <TextView
+                        android:id="@+id/myfriend_item_ranking_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px10_dp"
+                        android:singleLine="true"
+                        android:text="TOP01"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px32_sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/myfriend_item_vip_state"
+                    style="@style/icon_middle"
+                    android:src="@drawable/f1_vip_icon"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/myfriend_item_age_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/myfriend_item_name_content"
+                android:layout_below="@id/myfriend_item_name_content"
+                android:layout_marginTop="@dimen/px15_dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/myfriend_item_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/px25_dp"
+                    android:text="22岁"
+                    android:textColor="@color/filter_text_gray_color"
+                    android:textSize="@dimen/txt_small" />
+
+                <TextView
+                    android:id="@+id/myfriend_item_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="172cm"
+                    android:textColor="@color/filter_text_gray_color"
+                    android:textSize="@dimen/txt_small" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/myfriend_heart_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1205"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/px39_sp" />
+
+            <ImageView
+                style="@style/icon_small"
+                android:layout_marginLeft="@dimen/px15_dp"
+                android:src="@drawable/f1_xingx" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -152,7 +152,7 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
                         UIShow.showRecommendAct(getActivity());
                         break;
                     case MyFriend_Msg://我的好友
-                        UIShow.showRecommendAct(getActivity());
+                        UIShow.showMyFriendsAct(getActivity());
                         break;
                 }
             } else {
