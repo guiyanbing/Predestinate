@@ -66,7 +66,6 @@ import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
-import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondGiftDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -751,17 +750,10 @@ public class UIShow {
     // -----------------------各种充值弹框跳转 start----------------------------
 
     /**
-     * 普通钻石充值弹框
+     * 钻石充值弹框
      */
     public static void showGoodsDiamondDialog(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondDialog.class));
-    }
-
-    /**
-     * 送礼钻石充值弹框
-     */
-    public static void showGoodsDiamondGiftDialog(Context context) {
-        context.startActivity(new Intent(context, GoodsDiamondGiftDialog.class));
     }
 
     /**
