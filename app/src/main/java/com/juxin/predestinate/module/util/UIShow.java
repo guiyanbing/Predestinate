@@ -678,7 +678,7 @@ public class UIShow {
     // -----------------------我的提示跳转 start----------------------------
 
     /**
-     * 打开我要赚红包页面
+     * 打开我的关注页面
      *
      * @param context
      */
@@ -687,7 +687,7 @@ public class UIShow {
     }
 
     /**
-     * 打开我要赚红包页面
+     * 打开我的钻石页面
      *
      * @param context
      */
@@ -704,7 +704,7 @@ public class UIShow {
     }
 
     /**
-     * 打开我的钻石页面
+     * 打开我要赚钱页面
      *
      * @param context
      */

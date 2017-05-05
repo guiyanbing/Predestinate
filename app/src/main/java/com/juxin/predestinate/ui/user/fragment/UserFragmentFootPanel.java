@@ -86,7 +86,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_4:// 我要赚红包
-                UIShow.showMyAttentionAct(getContext());
+                UIShow.showDemandRedPacketAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
