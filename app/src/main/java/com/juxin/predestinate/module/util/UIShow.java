@@ -726,11 +726,10 @@ public class UIShow {
      *
      * @param context
      * @param giftid    要送的礼物id
-     * @param OtherId   统计id
-     * @param ChannelId
+     * @param to_id   统计id
      */
-    public static void showDiamondSendGiftDlg(Context context, int giftid,String OtherId, String ChannelId) {
-        DiamondSendGiftDlg dlg = new DiamondSendGiftDlg(context, giftid,OtherId, ChannelId);
+    public static void showDiamondSendGiftDlg(Context context, int giftid,String to_id) {
+        DiamondSendGiftDlg dlg = new DiamondSendGiftDlg(context, giftid,to_id);
         dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

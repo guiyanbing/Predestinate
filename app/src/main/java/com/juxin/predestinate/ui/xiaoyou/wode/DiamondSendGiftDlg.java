@@ -13,6 +13,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.SendGiftResultInfo;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 
@@ -27,7 +28,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
     private int giftDiamonds;
     private GiftsList.GiftInfo giftBean;
 
-    public DiamondSendGiftDlg(Context context, int giftid,String OtherId, String ChannelId) {
+    public DiamondSendGiftDlg(Context context, int giftid,String OtherId) {
         super(context, R.style.dialog);
         mContext = context;
         giftBean = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid);
@@ -38,7 +39,6 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
         giftPic = giftBean.getPic();
         giftDiamonds = giftBean.getMoney();
         otherId = OtherId;
-        channelId = ChannelId;
         initView(context);
     }
 
@@ -78,7 +78,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
                     //                iGiftSend.onSendToPay(giftBean);
                     //            }
                     //            UIHelper.showDiamondsNormalDlg((Activity) mContext, otherId, channelId, Math.abs(dec));
-                    PToast.showShort("跳转充值弹框");
+                    UIShow.showGoodsDiamondDialog(mContext);
                 }
                 dismiss();
                 break;
