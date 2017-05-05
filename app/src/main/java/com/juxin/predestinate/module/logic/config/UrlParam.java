@@ -92,6 +92,22 @@ public enum UrlParam {
     sendSMS("public/sendSMS", true),
     // 手机验证
     bindCellPhone("user/bindCellPhone", true),
+    // 最近来访
+    viewMeList("user/viewMeList",true),
+    // 索要礼物群发
+    qunFa(Constant.FATE_IT_GO,"xs/discovery/Qunfa",null,true),
+    // 索要礼物群发
+    sendGift("gift/sendGift",true),
+    //女用户群发累计发送的用户数
+    qunCount(Constant.FATE_IT_GO,"xs/discovery/QunCount",null,true),
+    // 我关注的列表
+    getFollowing("MoneyTree/getFollowing",true),
+    // 关注我的列表
+    getFollowers("MoneyTree/getFollowers",true),
+    // 取消关注某某
+    unfollow("follow/unfollow",true),
+    // 关注某某
+    follow("follow/follow",true),
 
 
     //好友标签分组成员

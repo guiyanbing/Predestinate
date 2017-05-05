@@ -39,9 +39,15 @@ public class RedOneKeyList extends BaseData {
 
     @Override
     public void parseJson(String s) {
-        JSONObject jsonObject = getJsonObject(s);
-        this.setSucnum(jsonObject.optInt("sucnum"));
-        this.setSum(jsonObject.optDouble("sum"));
-        redbagFailLists = getBaseDataList(jsonObject.optJSONArray("fail"), RedbagList.RedbagInfo.class);
+        JSONObject jsonObject = getJsonObject(s).optJSONObject("res");
+        if (jsonObject != null){
+            if (jsonObject.has("sucnum")){
+                this.setSucnum(jsonObject.optInt("sucnum"));
+            }
+            if (jsonObject.has("sum")){
+                this.setSum(jsonObject.optDouble("sum"));
+            }
+            redbagFailLists = getBaseDataList(jsonObject.optJSONArray("fail"), RedbagList.RedbagInfo.class);
+        }
     }
 }

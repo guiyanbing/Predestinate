@@ -13,7 +13,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +78,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_2: // 谁关注我
+                UIShow.showMyAttentionAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_3: // 我的钱包
@@ -86,7 +86,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_4:// 我要赚红包
-                UIShow.showGoodsVipAct(getContext());
+                UIShow.showMyAttentionAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币

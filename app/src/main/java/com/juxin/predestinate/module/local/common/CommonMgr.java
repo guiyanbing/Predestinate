@@ -260,18 +260,24 @@ public class CommonMgr implements ModuleBase {
 
     //============================== 小友模块相关接口 =============================
 
+
+
+    public void setGiftLists(GiftsList giftLists) {
+        this.giftLists = giftLists;
+    }
+
     /**
      * 请求礼物列表
      */
-    public void requestgetGifts() {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, new RequestComplete() {
+    public void requestgetGifts(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getGiftLists, null, complete == null?new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
                 giftLists = new GiftsList();
                 giftLists.parseJson(response.getResponseString());
             }
-        });
+        }:complete);
     }
 
     /**
@@ -282,6 +288,48 @@ public class CommonMgr implements ModuleBase {
             giftLists = new GiftsList();
         }
         return giftLists;
+    }
+
+    /**
+     * 我关注的列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getFollowing(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getFollowing, null, complete);
+    }
+
+    /**
+     * 关注我的列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getFollowers(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getFollowers, null, complete);
+    }
+
+    /**
+     * 取消关注
+     *
+     * @param to_uid      关注者id
+     * @param complete 请求完成后回调
+     */
+    public void unfollow(Long to_uid,RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("to_uid", to_uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.unfollow, getParams, complete);
+    }
+
+    /**
+     * 关注
+     *
+     * @param to_uid      关注者id
+     * @param complete 请求完成后回调
+     */
+    public void follow(Long to_uid,RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("to_uid", to_uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.follow, getParams, complete);
     }
 
     /**
@@ -311,7 +359,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 获取钻石余额
+     * 索要礼物
      *
      * @param content  内容
      * @param complete 请求完成后回调
@@ -320,6 +368,35 @@ public class CommonMgr implements ModuleBase {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("content", content);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.begGift, getParams, complete);
+    }
+
+    /**
+     * 送礼物
+     *
+     * @param touid     赠送对象UId
+     * @param giftid    礼物Id
+//     * @param begid     索要Id
+//     * @param giftnum   礼物数量（不填为1）
+//     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
+     * @param complete  请求完成后回调
+     */
+    public void sendGift(String touid,String giftid/*,int begid,int giftnum,int gtype*/,RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("touid",touid);
+        getParams.put("giftid",giftid);
+//        getParams.put("begid", begid);
+//        getParams.put("giftnum", giftnum);
+//        getParams.put("gtype", gtype);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.sendGift, getParams, complete);
+    }
+
+    /**
+     * 最近来访
+     *
+     * @param complete 请求完成后回调
+     */
+    public void viewMeList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.viewMeList, null, complete);
     }
 
     /**

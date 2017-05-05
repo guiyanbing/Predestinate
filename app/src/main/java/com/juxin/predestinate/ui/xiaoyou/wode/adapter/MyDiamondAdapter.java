@@ -48,9 +48,7 @@ public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
         vh.tv_price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/4/20 跳转到支付页面的具体逻辑(和position有关)
-                UIShow.showPayListAct((FragmentActivity) mContext, 56);
-                //                ((MyDiamondsAct) mContext).handler.sendEmptyMessage(info.getPid());
+                UIShow.showPayListAct((FragmentActivity) mContext, info.getPid());
             }
         });
     }
