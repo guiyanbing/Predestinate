@@ -3,51 +3,64 @@
     "list": [
       {
         "cid": 56,
-        "cname": "100钻石",
+        "cname": "100",
         "cnum": 100,
         "desc": "",
-        "iospayid": "",
         "price": 10
       },
       {
         "cid": 57,
-        "cname": "600钻石",
+        "cname": "600",
         "cnum": 600,
         "desc": "",
-        "iospayid": "",
         "price": 60
       },
       {
         "cid": 58,
-        "cname": "1000钻石",
+        "cname": "1000",
         "cnum": 1000,
         "desc": "",
-        "iospayid": "",
         "price": 100
       },
       {
         "cid": 59,
-        "cname": "3000钻石",
+        "cname": "3000",
         "cnum": 3000,
         "desc": "",
-        "iospayid": "",
         "price": 300
       },
       {
         "cid": 60,
-        "cname": "5000钻石",
+        "cname": "5000",
         "cnum": 5000,
         "desc": "",
-        "iospayid": "",
         "price": 500
       },
       {
         "cid": 61,
-        "cname": "10000钻石",
+        "cname": "10000",
         "cnum": 10000,
         "desc": "",
-        "iospayid": "",
         "price": 1000
+      }
+    ]
+  },
+
+  "vip_old": {
+    "list": [
+      {
+        "cid": 70,
+        "cname": "1个季度",
+        "cnum": 90,
+        "desc": "",
+        "price": 100
+      },
+      {
+        "cid": 69,
+        "cname": "30天",
+        "cnum": 30,
+        "desc": "",
+        "price": 50
       }
     ]
   },
@@ -59,7 +72,6 @@
         "cname": "30天",
         "cnum": 30,
         "desc": "恢复灵气50%",
-        "iospayid": "",
         "price": 50
       },
       {
@@ -67,7 +79,6 @@
         "cname": "90天",
         "cnum": 90,
         "desc": "恢复灵气100%",
-        "iospayid": "",
         "price": 100
       }
     ]
@@ -80,7 +91,6 @@
         "cname": "30天",
         "cnum": 30,
         "desc": "赠送100点体力",
-        "iospayid": "",
         "price": 50
       },
       {
@@ -88,8 +98,26 @@
         "cname": "90天",
         "cnum": 90,
         "desc": "赠送200点体力",
-        "iospayid": "",
         "price": 100
+      }
+    ]
+  },
+
+  "ycoin_old": {
+    "list": [
+      {
+        "cid": 68,
+        "cname": "",
+        "cnum": 11000,
+        "desc": "(送100元话费)",
+        "price": 100
+      },
+      {
+        "cid": 67,
+        "cname": "",
+        "cnum": 5000,
+        "desc": "可与MM发消息",
+        "price": 50
       }
     ]
   },
@@ -97,19 +125,17 @@
   "ycoin": {
     "list": [
       {
-        "cid": 56,
+        "cid": 68,
         "cname": "5000Y币",
         "cnum": 5000,
         "desc": "赠送500Y币",
-        "iospayid": "",
         "price": 50
       },
       {
-        "cid": 57,
+        "cid": 67,
         "cname": "11000Y币",
         "cnum": 11000,
         "desc": "赠送1100",
-        "iospayid": "",
         "price": 100
       }
     ]

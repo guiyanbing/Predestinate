@@ -64,8 +64,8 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
             if (TextUtils.isEmpty(json)) return;
             JSONObject jsonObject = new JSONObject(json);
 
-            if (jsonObject.has("vip_power"))
-                payGoods.parseJson(jsonObject.optString("vip_power"));
+            if (jsonObject.has("vip_old"))
+                payGoods.parseJson(jsonObject.optString("vip_old"));
 
             goodsPanel.refresh(payGoods.getCommodityList()); // 刷新列表
         } catch (JSONException e) {

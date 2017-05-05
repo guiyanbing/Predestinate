@@ -64,20 +64,19 @@
                 android:background="@drawable/f1_diamonds_ico" />
 
             <TextView
-                android:id="@+id/tv_goods"
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/px10_dp"
-                android:text="@string/goods_pay_alipay"
                 android:textColor="@color/text_zhuyao_black"
-                android:textSize="@dimen/px43_sp" />
+                android:textSize="@dimen/px43_sp"
+                android:visibility="gone" />
 
             <!--活动-->
             <TextView
-                android:id="@+id/tv_offers"
+                android:id="@+id/tv_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/goods_pay_alipay"
                 android:textColor="@color/p1_pay_text_color"
                 android:textSize="@dimen/px43_sp"
                 android:visibility="gone" />

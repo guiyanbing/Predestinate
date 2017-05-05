@@ -104,10 +104,10 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_8:// 个人资料
-//                UIShow.showUserEditInfoAct(getContext());
+                UIShow.showUserEditInfoAct(getContext());
 
                 // test
-                UIShow.showGoodsDiamondDialog(getContext());
+//                UIShow.showGoodsDiamondDialog(getContext());
 //                UIShow.showGoodsVipDialog(getContext(), GoodsConstant.DLG_VIP_PRIVEDEG);
                 break;
 
@@ -115,12 +115,13 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
 
                 // test
 //                UIShow.showGoodsYCoinDialog(getContext());
-//                UIShow.showGoodsYCoinDlgOld(getContext());
-                UIShow.showGoodsVipDlgOld(getContext());
+                UIShow.showGoodsYCoinDlgOld(getContext());
+//                UIShow.showGoodsVipDlgOld(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心
                 UIShow.showUserSetAct((Activity) getContext(), 100);
+//                UIShow.showGoodsVipDlgOld(getContext());
                 break;
         }
     }

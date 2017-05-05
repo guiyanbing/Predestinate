@@ -7,9 +7,9 @@ package com.juxin.predestinate.ui.user.paygoods;
 public class GoodsConstant {
 
     // ----- 支付渠道 ------
-    public static final int PAY_TYPE_WECHAT = 0;  // 微信支付
+    public static final int PAY_TYPE_WECHAT = 6;  // 微信支付
     public static final int PAY_TYPE_ALIPAY = 1;  // 支付宝支付
-    public static final int PAY_TYPE_OTHER = 2;   // 其他支付
+    public static final int PAY_TYPE_OTHER = -1;   // 其他支付
 
     public static final int PAY_TYPE_OLD = 0;     // 布局类型：老布局样式
     public static final int PAY_TYPE_NEW = 1;     // 布局类型：新布局样式

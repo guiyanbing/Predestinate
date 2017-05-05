@@ -64,8 +64,8 @@ public class GoodsYCoinDlgOld  extends BaseActivity implements View.OnClickListe
             if (TextUtils.isEmpty(json)) return;
             JSONObject jsonObject = new JSONObject(json);
 
-            if (jsonObject.has("ycoin"))
-                payGoods.parseJson(jsonObject.optString("ycoin"));
+            if (jsonObject.has("ycoin_old"))
+                payGoods.parseJson(jsonObject.optString("ycoin_old"));
 
             goodsPanel.refresh(payGoods.getCommodityList()); // 刷新列表
         } catch (JSONException e) {
