@@ -148,9 +148,9 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 意见反馈
      *
      * @param contract 联系方式
-     * @param content    意见
+     * @param content  意见
      */
-    public void feedBack(final FragmentActivity activity,String contract, String content) {
+    public void feedBack(final FragmentActivity activity, String contract, String content) {
         HashMap<String, Object> postparam = new HashMap<>();
         postparam.put("user_client_type", Constant.PLATFORM_TYPE);
         postparam.put("contract", contract);
@@ -172,7 +172,6 @@ public class CenterMgr implements ModuleBase, PObserver {
             }
         });
     }
-
 
     /**
      * 昵称：个人资料限制昵称最大字数
@@ -305,6 +304,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     // ------------------------- 他人 ----------------------
+
     /**
      * 获取他人用户详细信息
      */
@@ -414,5 +414,38 @@ public class CenterMgr implements ModuleBase, PObserver {
     private void putSettingPsp(String resultStr) {
         PSP.getInstance().put(SETTING_SAVE_KEY, resultStr);
     }
+
+    // -------------------------充值页面逻辑 start---------------------------
+
+    private static final String CHARGE_NUM_COIN = "CHARGE_NUM_COIN"; //Y币充值人数随机数存储key
+    private static final String CHARGE_NUM_VIP = "CHARGE_NUM_VIP";   //VIP币充值人数随机数存储key
+
+    /**
+     * 获取进入H5充值页面需要传递的参数map
+     *
+     * @param type Y币：1，VIP：2
+     * @return 拼接完成的参数map
+     */
+    public HashMap<String, Object> getChargeH5Params(int type) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("type", type);
+        params.put("ycoin_person", getActiveUserNum(CHARGE_NUM_COIN));
+        params.put("vip_person", getActiveUserNum(CHARGE_NUM_VIP));
+        return params;
+    }
+
+    /**
+     * 获取充值人数随机数
+     *
+     * @param numKey Y币/VIP key：FinalKey#CHARGE_NUM_COIN/FinalKey#CHARGE_NUM_VIP
+     * @return 根据本地初始化存储的数据累加的随机数
+     */
+    private int getActiveUserNum(String numKey) {
+        int random = PSP.getInstance().getInt(numKey, (int) ((Math.random() * 9 + 1) * 100000))
+                + (int) (Math.random() * 9 + 1);
+        PSP.getInstance().put(numKey, random);
+        return random;
+    }
+    // -------------------------充值页面逻辑 end---------------------------
 
 }
