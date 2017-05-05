@@ -63,8 +63,8 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_vip_privilege://开通vip
-                    UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                            ModuleMgr.getCenterMgr().getChargeH5Params(2)));
+                    UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
+                            ModuleMgr.getCenterMgr().getChargeH5Params()));
                     // TODO: 2017/5/3
                     break;
                 case R.id.ll_phone_verify://手机绑定

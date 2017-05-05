@@ -90,7 +90,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
 
             case CenterItemID.i_Center_item_5:// 我的Y币
                 UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                        ModuleMgr.getCenterMgr().getChargeH5Params(1)));
+                        ModuleMgr.getCenterMgr().getChargeH5Params()));
                 // TODO: 2017/5/3
                 break;
 
