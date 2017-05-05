@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -81,8 +82,12 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
+import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.xiaoyou.wode.MyAttentionAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.xiaoyou.wode.NearVisitorAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxPhoneVerifyAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxRecordAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawApplyAct;
@@ -673,12 +678,38 @@ public class UIShow {
     // -----------------------我的提示跳转 start----------------------------
 
     /**
+     * 打开我的关注页面
+     *
+     * @param context
+     */
+    public static void showMyAttentionAct(Context context) {
+        context.startActivity(new Intent(context, MyAttentionAct.class));
+    }
+
+    /**
      * 打开我的钻石页面
      *
      * @param context
      */
     public static void showMyDiamondsAct(Context context) {
         context.startActivity(new Intent(context, MyDiamondsAct.class));
+    }
+    /**
+     * 打开最近来访页面
+     *
+     * @param context
+     */
+    public static void showNearVisitorAct(Context context) {
+        context.startActivity(new Intent(context, NearVisitorAct.class));
+    }
+
+    /**
+     * 打开我要赚钱页面
+     *
+     * @param context
+     */
+    public static void showDemandRedPacketAct(Context context) {
+        context.startActivity(new Intent(context, DemandRedPacketAct.class));
     }
 
     /**
@@ -688,6 +719,22 @@ public class UIShow {
      */
     public static void showMyDiamondsExplainAct(Context context) {
         context.startActivity(new Intent(context, MyDiamondsExplainAct.class));
+    }
+
+    /**
+     * 对话框送礼物
+     *
+     * @param context
+     * @param giftid    要送的礼物id
+     * @param OtherId   统计id
+     * @param ChannelId
+     */
+    public static void showDiamondSendGiftDlg(Context context, int giftid,String OtherId, String ChannelId) {
+        DiamondSendGiftDlg dlg = new DiamondSendGiftDlg(context, giftid,OtherId, ChannelId);
+        dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        dlg.show();
     }
 
     /**

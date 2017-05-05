@@ -442,6 +442,14 @@
     <string name="withdraw_succeed">提现成功</string>
     <string name="imburse">放入钱袋</string>
     <string name="net_error_check_your_net">网络异常,请检查您的网络</string>
+    <string name="no_add_redbag">没有可加入钱袋的红包</string>
+    <string name="succeed">成功</string>
+    <string name="hour_into_the_bag">条，其余24小时后才能点击入袋</string>
+    <string name="net_error">网络异常</string>
+    <string name="want_bag_tips">施展魅力，索要礼物</string>
+    <string name="askfor_send">发送</string>
+    <string name="dlg_send_ok">立即赠送</string>
+    <string name="dlg_send_gift_je">充值金额</string>
     <!-- 个人中心-我的礼品 -->
     <string name="my_gift_title">我的礼物</string>
     <string name="my_gift_send">送出的礼物</string>
@@ -453,6 +461,7 @@
     <string name="upgrade_vip">升级VIP会员，查看更多来访</string>
     <string name="lately_visit">最近7天有12个用户来看你。</string>
     <string name="say_hello">hi，傻子</string>
+    <string name="txt_dialog_tips">你还没有开通VIP，无法查看最近来访用户。</string>
 
 
     <!--发现start-->
@@ -465,6 +474,8 @@
     <string name="my_friend_title">我的好友</string>
     <string name="my_friend_righ_title">黑名单</string>
     <string name="my_defriend_title">黑名单</string>
+    <string name="send_gift">赠送该礼物需要</string>
+    <string name="my_attention">我的关注</string>
 
     <!--发现end-->
 
