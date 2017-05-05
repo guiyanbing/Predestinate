@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
@@ -19,7 +18,6 @@ import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +41,10 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
         setTitle(getResources().getString(R.string.main_btn_mail));
-//        setTitleRight("忽略未读", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-        //忽略所有未读消息
+        setTitleRight("忽略未读", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //忽略所有未读消息
 //                PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
 //                    @Override
 //                    public void onCancel() {}
@@ -57,8 +55,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 //                        MMToast.showShort("忽略成功!");
 //                    }
 //                }, "忽略未读消息,但消息不会删除.", "忽略消息");
-//            }
-//        });
+            }
+        });
         initView();
 
         // addMessageListener(MsgType.User_List_Msg_Change, this);

@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.support.annotation.Nullable;
+
 import org.json.JSONObject;
 
 /**
@@ -8,6 +10,9 @@ import org.json.JSONObject;
  */
 
 public class CommonMessage extends BaseMessage{
+
+    private String img;
+    private String localImg;
 
     private String voiceUrl;
     private int voiceLen;
@@ -32,6 +37,18 @@ public class CommonMessage extends BaseMessage{
     public CommonMessage(String channelID, String whisperID, String content) {
         super(channelID, whisperID);
         this.setContent(content);
+        this.setType(BaseMessageType.common.getMsgType());
+    }
+
+    /**
+     * 图片消息
+     * @param channelID
+     * @param whisperID
+     * @param img
+     */
+    public CommonMessage(String channelID, String whisperID, String img, String no) {
+        super(channelID, whisperID);
+        this.setImg(localImg);
         this.setType(BaseMessageType.common.getMsgType());
     }
 
@@ -65,6 +82,22 @@ public class CommonMessage extends BaseMessage{
     @Override
     public String getJson(BaseMessage message) {
         return super.getJson(message);
+    }
+
+    public String getLocalImg() {
+        return localImg;
+    }
+
+    public void setLocalImg(String localImg) {
+        this.localImg = localImg;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getVoiceUrl() {

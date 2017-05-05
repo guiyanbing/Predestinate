@@ -468,4 +468,12 @@
 
     <!--发现end-->
 
+
+    <string name="privatechat_title_attention">关注她</string>
+    <string name="privatechat_title_unsubscribe">取消关注</string>
+    <string name="privatechat_title_phone">查看手机</string>
+    <string name="privatechat_title_wx">查看微信</string>
+    <string name="privatechat_title_yb">Y币：0</string>
+
+
 </resources>

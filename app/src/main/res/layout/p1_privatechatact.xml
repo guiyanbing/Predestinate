@@ -7,6 +7,8 @@
 
     <include layout="@layout/base_title" />
 
+    <include layout="@layout/p1_privatechatact_head" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

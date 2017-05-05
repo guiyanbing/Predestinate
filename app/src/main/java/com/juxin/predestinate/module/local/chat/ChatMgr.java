@@ -7,6 +7,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
+import com.juxin.mumu.bean.utils.BitmapUtil;
 import com.juxin.mumu.bean.utils.TypeConvUtil;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
@@ -18,6 +19,10 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
@@ -92,14 +97,40 @@ public class ChatMgr implements ModuleBase, PObserver {
         IMProxy.getInstance().send(new NetData(TypeConvUtil.toLong(whisperID), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()));
     }
 
-    public void sendImgMsg(String channelID, String whisperID, String content) {
-        CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
+//    public void sendImgMsg(String whisperID, String img_url) {
+//        ImgMessage message = new ImgMessage(whisperID, img_url);
+//        message.setLocalImgUrl(BitmapUtil.getSmallBitmapAndSave(img_url));
+//        message.setJsonStr(message.getJson(message));
+//        message.setFolder(ChatListMgr.Folder.whisper.toString());//标注为是否是系统消息
+//        sendMsgIsSave(null, whisperID, message);
+//    }
+
+
+    public void sendImgMsg(String channelID, String whisperID, String img_url) {
+        CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
+        commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url));
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
         long ret = dbCenter.insertFmessage(commonMessage);
         if(ret == DBConstant.ERROR){
             onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
             return;
         }
+
+        ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_CHAT_PIC, img_url, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+//                if (response.isOk()) {
+//                    response.getBaseData();
+//                    UpLoadResult upLoadResult = (UpLoadResult) result.getBaseData();
+//                    message.setImgUrl(upLoadResult.getHttpPathPic());
+//                    message.setJsonStr(message.getJson(message));
+//                    DBCenter.getInstance().updateVoiceMsgJson(message);
+//                } else {
+//                    updateFail(message, null);
+//                }
+            }
+        });
+
 
         IMProxy.getInstance().send(new NetData(TypeConvUtil.toLong(whisperID), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()));
     }
