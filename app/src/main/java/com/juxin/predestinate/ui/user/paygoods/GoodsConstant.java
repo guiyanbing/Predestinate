@@ -11,6 +11,9 @@ public class GoodsConstant {
     public static final int PAY_TYPE_ALIPAY = 1;  // 支付宝支付
     public static final int PAY_TYPE_OTHER = 2;   // 其他支付
 
+    public static final int PAY_TYPE_OLD = 0;     // 布局类型：老布局样式
+    public static final int PAY_TYPE_NEW = 1;     // 布局类型：新布局样式
+
     // ----- 选择状态 ------
     public static final int PAY_STATUS_UNCHOOSE = 0; // 未选中支付
     public static final int PAY_STATUS_CHOOSE = 1;   // 选中支付

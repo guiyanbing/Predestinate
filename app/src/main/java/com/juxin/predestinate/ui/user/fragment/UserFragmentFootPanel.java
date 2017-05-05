@@ -12,6 +12,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,6 +110,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
 
                 // test
                 UIShow.showGoodsDiamondDialog(getContext());
+//                UIShow.showGoodsVipDialog(getContext(), GoodsConstant.DLG_VIP_PRIVEDEG);
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
