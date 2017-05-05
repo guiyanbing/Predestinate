@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.juxin.library.log.PLogger;
@@ -29,6 +30,9 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
 
+    private ImageView img_select_vip;
+    private boolean selectVip = true;    // 默认开通VIP
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,8 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
+        img_select_vip = (ImageView) findViewById(R.id.iv_pay_select_vip);
+        img_select_vip.setOnClickListener(this);
         findViewById(R.id.btn_recharge).setOnClickListener(this);
 
         fillGoodsPanel();
@@ -73,11 +79,39 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
         }
     }
 
+    /**
+     * vip选择状态切换
+     */
+    private void switchSelVip() {
+        if (selectVip) {
+            img_select_vip.setBackgroundResource(R.drawable.ic_radio_nor);
+            selectVip = false;
+        } else {
+            img_select_vip.setBackgroundResource(R.drawable.ic_radio_male_sel);
+            selectVip = true;
+        }
+    }
+
+    /**
+     * 获取支付商品ID
+     */
+    private int getPayid() {
+        if (!selectVip) {
+            return payGoods.getCommodityList().get(goodsPanel.getPosition()).getId();
+        }
+        return payGoods.getCommodityList().get(goodsPanel.getPosition()).getSub_id();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.iv_pay_select_vip: // 开通Vip
+                switchSelVip();
+                break;
+
             case R.id.btn_recharge:  // 充值
-                PToast.showShort("type: " + payTypePanel.getPayType() + "goods: " + payGoods.getCommodityList().get(goodsPanel.getPosition()).getId());
+                PToast.showShort("type: " + payTypePanel.getPayType() + "goods: " + getPayid());
                 break;
         }
     }
