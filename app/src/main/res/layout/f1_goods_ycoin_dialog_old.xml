@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:paddingLeft="@dimen/px30_dp"
+    android:paddingRight="@dimen/px30_dp">
+
+    <RelativeLayout
+        android:id="@+id/recharge_popping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/f1_ycoin_old_bg">
+
+        <TextView
+            android:id="@+id/kaitong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/px50_dp"
+            android:text="@string/goods_ycoin_dredge"
+            android:textColor="@color/color_999999"
+            android:textSize="@dimen/px40_sp" />
+
+        <!-- 商品列表-->
+        <LinearLayout
+            android:id="@+id/goods_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/kaitong"
+            android:layout_marginTop="@dimen/px10_dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/px40_dp"
+            android:layout_marginRight="@dimen/px40_dp" />
+
+        <LinearLayout
+            android:id="@+id/pay_method"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/goods_container"
+            android:layout_marginLeft="@dimen/px50_dp"
+            android:layout_marginRight="@dimen/px50_dp"
+            android:layout_marginTop="@dimen/px30_dp"
+            android:background="@drawable/view_gray_stroke">
+
+            <TextView
+                android:id="@+id/tv_ycoin_ts1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dip"
+                android:paddingBottom="10dip"
+                android:paddingTop="10dip"
+                android:text="对应11000Y币"
+                android:textColor="#999999"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_ycoin_ts2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dip"
+                android:paddingBottom="10dip"
+                android:paddingTop="10dip"
+                android:text="(再赠送100元话费)"
+                android:textColor="@color/red"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- 支付方式-->
+        <LinearLayout
+            android:id="@+id/pay_type_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pay_method"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/px50_dp"
+            android:paddingRight="@dimen/px50_dp" />
+
+        <!-- 充值按钮 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pay_type_container"
+            android:paddingLeft="@dimen/px50_dp"
+            android:paddingRight="@dimen/px50_dp"
+            android:paddingTop="@dimen/px50_dp">
+
+            <Button
+                android:id="@+id/btn_recharge"
+                style="@style/button_big"
+                android:layout_marginBottom="@dimen/px80_dp"
+                android:text="@string/goods_pay_immediately" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

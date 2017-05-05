@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingLeft="@dimen/px10_dp"
-    android:paddingRight="@dimen/px10_dp"
-    android:paddingTop="@dimen/px60_dp">
+    android:paddingTop="@dimen/px30_dp">
 
     <!-- 支付方式 -->
     <LinearLayout

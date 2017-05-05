@@ -289,6 +289,7 @@
     <string name="goods_ycoin_tip_header">（不足购买</string>
     <string name="goods_ycoin_tip_footer">体力，请充值Y币）</string>
     <string name="goods_ycoin_phone_cost">并赠送100元话费</string>
+    <string name="goods_ycoin_dredge">开通服务</string>
     <string name="goods_ycoin_welfare">开通VIP赠送100体力，并且享受体力加速恢复，\n充值Y币额外赠送10%</string>
 
 

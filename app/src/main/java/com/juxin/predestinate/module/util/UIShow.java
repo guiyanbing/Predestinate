@@ -72,6 +72,7 @@ import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
+import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDlgOld;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
@@ -796,6 +797,13 @@ public class UIShow {
      */
     public static void showGoodsYCoinDialog(Context context) {
         context.startActivity(new Intent(context, GoodsYCoinDialog.class));
+    }
+
+    /**
+     * 老：Y币充值弹框
+     */
+    public static void showGoodsYCoinDlgOld(Context context) {
+        context.startActivity(new Intent(context, GoodsYCoinDlgOld.class));
     }
 
     /**
