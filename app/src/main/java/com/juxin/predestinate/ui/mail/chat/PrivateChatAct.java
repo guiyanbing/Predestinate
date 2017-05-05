@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.juxin.library.view.CustomFrameLayout;
@@ -20,18 +21,16 @@ import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Kind on 2017/3/23.
  */
-
 public class PrivateChatAct extends BaseActivity {
 
     private long whisperID = 0;
@@ -87,47 +86,6 @@ public class PrivateChatAct extends BaseActivity {
 //                    @Override
 //                    public void run() {
 //                        ChatMediaRecord.getInstance().requestPermission();
-//                    }
-//                });
-//            }
-//        });
-    }
-
-    private void setRightImg() {
-      //  setTitleRightImg(R.drawable.y1_more, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onpullToBlack();
-//            }
-//        });
-    }
-
-    private void setRightText() {
-//        setTitleRight("加好友", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ModuleMgr.getChatListMgr().queryDMarkAddFriend(whisperID, new ChatMsgInterface.DMarkListener() {
-//                    @Override
-//                    public void onDataListener(boolean ret, boolean isUsed) {
-//                        if (ret) {
-//                            if (isUsed) {
-//                                ModuleMgr.getMsgCommonMgr().addFriendMsg(whisperID, new HttpMgr.IReqComplete() {
-//                                    @Override
-//                                    public void onReqComplete(HttpResult result) {
-//                                        if (result.isOk()) {
-//                                            ModuleMgr.getChatListMgr().insertDMarkAddFriend(whisperID);
-//                                        }
-//                                    }
-//                                });
-//                            } else {
-//                                MsgMgr.getInstance().sendMsgToUI(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        MMToast.showShort("你已经发送了好友申请，正在等待对方确认！");
-//                                    }
-//                                });
-//                            }
-//                        }
 //                    }
 //                });
 //            }
@@ -206,19 +164,11 @@ public class PrivateChatAct extends BaseActivity {
      * 初始化标题
      */
     private void onTitleInit() {
-        setNickName(name);
+        setBackView(R.id.base_title_back);
+        View baseTitleView = LayoutInflater.from(this).inflate(R.layout.f1_privatechatact_titleview, null);
+        setTitleCenterContainer(baseTitleView);
+        TextView base_title_title = (TextView) baseTitleView.findViewById(R.id.cus_top_title);
 
-//        if (MailMsgID.getMailMsgID(whisperID) == null && MailSpecialID.customerService.getSpecialID() != whisperID) {
-//            if (ModuleMgr.getMsgCommonMgr().getFriendsData().isContains(whisperID)) {
-//                setRightImg();
-//            } else {
-//                setRightText();
-//            }
-//        }
-    }
-
-
-    private void setNickName(String nickName) {
         String str = whisperID + "";
         MailMsgID mailMsgID = MailMsgID.getMailMsgID(whisperID);
         if (mailMsgID != null) {
@@ -235,12 +185,30 @@ public class PrivateChatAct extends BaseActivity {
 //                    str = nickName;
 //                }
 //            }
-            if (!TextUtils.isEmpty(nickName)) {
-                str = nickName;
+            if (!TextUtils.isEmpty(name)) {
+                str = name;
             }
         }
-        // setBackView(R.id.back_view, str.length() > 10 ? ("与" + str + "...的私信") : ("与" + str + "的私信"));
-        setBackView(R.id.base_title_back, str);
+        base_title_title.setText("111111");
+       // base_title_title.setText(str.length() > 10 ? ("与" + str + "...的私信") : ("与" + str + "的私信");
+
+
+
+
+        setTitleRightImg(R.drawable.ic_launcher, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIShow.showUserOtherSetAct(PrivateChatAct.this, null);
+            }
+        });
+
+//        if (MailMsgID.getMailMsgID(whisperID) == null && MailSpecialID.customerService.getSpecialID() != whisperID) {
+//            if (ModuleMgr.getMsgCommonMgr().getFriendsData().isContains(whisperID)) {
+//                setRightImg();
+//            } else {
+//                setRightText();
+//            }
+//        }
     }
 
     private void initView() {
@@ -399,7 +367,6 @@ public class PrivateChatAct extends BaseActivity {
     }
 
     private static BaseActivity lastActivity = null;
-
     private void checkSingleState() {
         if (lastActivity != null) {
             try {

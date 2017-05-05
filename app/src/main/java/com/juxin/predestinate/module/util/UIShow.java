@@ -34,6 +34,8 @@ import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.discover.DefriendAct;
+import com.juxin.predestinate.ui.discover.MyDefriendAct;
+import com.juxin.predestinate.ui.discover.MyFriendsAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
@@ -64,9 +66,12 @@ import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
+import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
+import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
+import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
@@ -744,7 +749,26 @@ public class UIShow {
         Intent intent = new Intent(context, DefriendAct.class);
         intent.putExtra("tuid", tuid);
         context.startActivity(intent);
+    }
 
+    /**
+     * 打开我的好友界面
+     *
+     * @param context
+     */
+    public static void showMyFriendsAct(Context context) {
+        Intent intent = new Intent(context, MyFriendsAct.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 打开黑名单界面
+     *
+     * @param context
+     */
+    public static void showMyDefriends(Context context) {
+        Intent intent = new Intent(context, MyDefriendAct.class);
+        context.startActivity(intent);
     }
 
     // -----------------------各种充值弹框跳转 start----------------------------
@@ -754,6 +778,24 @@ public class UIShow {
      */
     public static void showGoodsDiamondDialog(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondDialog.class));
+    }
+
+    /**
+     * VIP充值弹框
+     *
+     * @param rechargeType VIP充值类型
+     */
+    public static void showGoodsVipDialog(Context context, int rechargeType) {
+        Intent intent = new Intent(context, GoodsVipDialog.class);
+        intent.putExtra(GoodsConstant.DLG_VIP_TYPE, rechargeType);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Y币充值弹框
+     */
+    public static void showGoodsYCoinDialog(Context context) {
+        context.startActivity(new Intent(context, GoodsYCoinDialog.class));
     }
 
     /**
@@ -769,4 +811,6 @@ public class UIShow {
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
+
+
 }

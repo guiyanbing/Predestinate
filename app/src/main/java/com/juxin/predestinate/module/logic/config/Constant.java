@@ -7,8 +7,6 @@ package com.juxin.predestinate.module.logic.config;
 public class Constant {
 
     public static final String NO_HOST = "no_host";
-    //    public static final String HOST_URL = "http://api2.app.yuanfenba.net/";
-    public static final String HOST_URL = "http://test.api2.app.yuanfenba.net/";
     public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
 
     // -------------------------正式服地址---------------------------
@@ -23,8 +21,9 @@ public class Constant {
     public static final String FATE_IT_HTTP_PIC = "http://test.upload.img.yuanfenba.net/";  //图片测试正式服地址
     public static final String FATE_IT_PROTOCOL = "http://test.p.app.yuanfenba.net/";       //支付测试服地址
 
+    // ---------------------服务器默认地址配置 end-----------------------
     public static final String FATE_IT_CUP_HTTP = " http://pay.app.mumu123.cn/";        //银联地址
-
+    public static final String HOST_URL = FATE_IT_HTTP;
 
     // -------------------------版本信息常量---------------------------
 

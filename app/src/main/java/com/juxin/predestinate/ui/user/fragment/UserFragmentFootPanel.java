@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -89,11 +89,9 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
-                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html", new HashMap<String, Object>() {
-                    {
-                        put("type", 1);
-                    }
-                }));// TODO: 2017/5/3
+                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
+                        ModuleMgr.getCenterMgr().getChargeH5Params(1)));
+                // TODO: 2017/5/3
                 break;
 
             case CenterItemID.i_Center_item_6:// 我的钻石
@@ -101,17 +99,21 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_7:// 我的礼物
-                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));// TODO: 2017/5/3
+                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));
+                // TODO: 2017/5/3
                 break;
 
             case CenterItemID.i_Center_item_8:// 个人资料
-                UIShow.showUserEditInfoAct(getContext());
+//                UIShow.showUserEditInfoAct(getContext());
+
+                // test
+                UIShow.showGoodsDiamondDialog(getContext());
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
 
                 // test
-                UIShow.showGoodsDiamondDialog(getContext());
+                UIShow.showGoodsYCoinDialog(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心

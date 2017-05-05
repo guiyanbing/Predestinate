@@ -579,7 +579,7 @@ public class Invoker {
         JSONObject bodyObject = JsonUtil.getJsonObject(dataObject.optString("body"));
         String url = dataObject.optString("url");
         ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"),
-                !TextUtils.isEmpty(url) && url.contains(Constant.HOST_URL), url,
+                !TextUtils.isEmpty(url) && url.contains(Constant.FATE_IT_GO), url,
                 ChineseFilter.JSONObjectToMap(bodyObject), new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {

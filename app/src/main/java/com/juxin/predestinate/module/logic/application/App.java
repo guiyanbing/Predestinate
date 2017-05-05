@@ -3,11 +3,7 @@ package com.juxin.predestinate.module.logic.application;
 import android.app.Activity;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
-
 import com.juxin.predestinate.bean.db.AppComponent;
-import com.juxin.predestinate.bean.db.AppModule;
-import com.juxin.predestinate.bean.db.DBModule;
-import com.juxin.predestinate.bean.db.DaggerAppComponent;
 
 /**
  * Application
@@ -43,7 +39,6 @@ public class App extends MultiDexApplication {
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
 
         ModuleMgr.initModule(context);
-//        initAppComponent();
     }
 
     /**
@@ -53,22 +48,7 @@ public class App extends MultiDexApplication {
         return activity == null ? context : activity;
     }
 
-    /**
-     * @return 获取dagger2管理的全局实例
-     */
-    public static AppComponent getAppComponent() {
-        return mAppComponent;
-    }
-
-    // ------------------------- 私有方法 ----------------------------
-
-    /**
-     * DB初始化
-     */
-    private void initAppComponent() {
-        mAppComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .dBModule(new DBModule(App.uid))
-                .build();
+    public static Context getContext() {
+        return context;
     }
 }

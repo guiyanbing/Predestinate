@@ -30,23 +30,23 @@ import java.util.Map;
  */
 
 public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
-        AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener{
+        AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener {
 
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
-  //  private CustomFrameLayout viewGroup;
+    //  private CustomFrameLayout viewGroup;
     private View mViewTop;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
         setTitle(getResources().getString(R.string.main_btn_mail));
 //        setTitleRight("忽略未读", new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-                //忽略所有未读消息
+        //忽略所有未读消息
 //                PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
 //                    @Override
 //                    public void onCancel() {}
@@ -61,20 +61,20 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
 //        });
         initView();
 
-       // addMessageListener(MsgType.User_List_Msg_Change, this);
-    //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
+        // addMessageListener(MsgType.User_List_Msg_Change, this);
+        //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
         return getContentView();
     }
 
     private void initView() {
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
-  //      viewGroup = (CustomFrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.y2_tips_view_group, null);
+        //      viewGroup = (CustomFrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.y2_tips_view_group, null);
         mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
-  //      viewGroup.addView(mViewTop);
+        //      viewGroup.addView(mViewTop);
 
-       // ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
-    //    listMail.addHeaderView(viewGroup);
+        // ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
+        //    listMail.addHeaderView(viewGroup);
         View listview_footer = LayoutInflater.from(getActivity()).inflate(R.layout.common_footer_distance, null);
         listMail.addFooterView(listview_footer);
         listview_footer.setOnClickListener(null);
@@ -122,16 +122,11 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-//                    case invite_friends_msg: //邀请好友
-//                        break;
-//                    case act_msg: //活动
-//                    //    ModuleMgr.getChatListMgr().markSingleAsRead(item.getLWhisperID());
-//                        break;
-//                    case new_friend_msg: //新朋友
-                   //     ModuleMgr.getChatListMgr().markNewFriendMsgAsRead();
-                  //      break;
-                    case visitors_msg:
-                    //    ModuleMgr.getChatListMgr().updateVisit();
+                    case WhoAttentionMe_Msg:
+
+                        break;
+                    case MyFriend_Msg:
+
                         break;
                 }
             } else {
@@ -153,34 +148,15 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(message.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case recommend_msg://推荐的人
+                    case WhoAttentionMe_Msg://推荐的人
                         UIShow.showRecommendAct(getActivity());
                         break;
-                  //  case invite_friends_msg: //邀请好友
-                   //     UIShow.showInviteFriendAct(getActivity());
-              //          break;
-             //       case act_msg: //活动
-                  //      UIShow.showActivityAct(getActivity());
-//                        EnvelopeShowDialog envelopeShowDialog = new EnvelopeShowDialog(getActivity(),null);
-//                        envelopeShowDialog.showDialog((FragmentActivity) getContext());
-                        //             startActivity(new Intent(getActivity(), CeShiXAct.class));
-
-                        // startActivity(new Intent(getActivity(), CeShiFamiliarAct.class));
-             //           break;
-           //         case new_friend_msg: //新朋友
-                  //      UIShow.showNewFriendAct(getActivity());
-                        //     startActivity(new Intent(getActivity(), EnvelopeDetailsAct.class));
-
-                        //        startActivity(new Intent(getActivity(), HttpWebServiceActivity.class));
-
-            //            break;
-                    case visitors_msg: // 最近访问
-                        UIShow.showPrivateChatAct(getActivity(), 1, null);
-                      //  UIShow.showNearVisitorContent(getActivity());
+                    case MyFriend_Msg://我的好友
+                        UIShow.showMyFriendsAct(getActivity());
                         break;
                 }
             } else {
-            //    UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKf_id());
+                UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKf_id());
             }
         }
     }
@@ -215,11 +191,11 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
     }
 
     public void resetTipsState(boolean isHidden) {
-     //   if (viewGroup != null)
-          //  if (isHidden) {
+        //   if (viewGroup != null)
+        //  if (isHidden) {
         //        ModuleMgr.getTipsBarMgr().detach();
-       //     } else {
-      //          ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
-      //      }
+        //     } else {
+        //          ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
+        //      }
     }
 }

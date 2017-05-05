@@ -21,7 +21,6 @@ public class CustomMailItem extends LinearLayout {
 
     private Context context;
     private CustomFrameLayout customFrameLayout;
-    private MailItemType mailItemType = null;
 
     public CustomMailItem(Context context) {
         super(context);

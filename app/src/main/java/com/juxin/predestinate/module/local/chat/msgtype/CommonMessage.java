@@ -20,6 +20,21 @@ public class CommonMessage extends BaseMessage{
     private int videoWidth;
     private int videoHeight;
 
+    public CommonMessage() {
+        super();
+    }
+
+    /**
+     * 文本消息
+     * @param whisperID
+     * @param content
+     */
+    public CommonMessage(String channelID, String whisperID, String content) {
+        super(channelID, whisperID);
+        this.setContent(content);
+        this.setType(BaseMessageType.common.getMsgType());
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
