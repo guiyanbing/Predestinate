@@ -269,6 +269,7 @@
     <string name="goods_pay">充值</string>
     <string name="goods_pay_immediately">立即充值</string>
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>
+    <string name="goods_pay_confirm">确认充值</string>
 
     <string name="goods_vip_title">开通VIP</string>
     <string name="goods_vip_price">(50元月)</string>
