@@ -45,6 +45,7 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
         img_select_vip = (ImageView) findViewById(R.id.iv_pay_select_vip);
         img_select_vip.setOnClickListener(this);
         findViewById(R.id.btn_recharge).setOnClickListener(this);
+        findViewById(R.id.btn_close).setOnClickListener(this);
 
         fillGoodsPanel();
     }
@@ -105,6 +106,10 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+            case R.id.btn_close:
+                finish();
+                break;
 
             case R.id.iv_pay_select_vip: // 开通Vip
                 switchSelVip();

@@ -31,7 +31,7 @@
                 android:textSize="@dimen/px56_sp" />
 
             <ImageView
-                android:id="@+id/iv_dlg_close"
+                android:id="@+id/btn_close"
                 android:layout_width="@dimen/px60_dp"
                 android:layout_height="@dimen/px60_dp"
                 android:layout_alignParentRight="true"
@@ -111,7 +111,8 @@
                     android:gravity="center"
                     android:text="并赠送体力100点"
                     android:textColor="@color/yellow"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    android:textSize="@dimen/px40_sp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -119,7 +120,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/goods_ycoin_phone_cost"
-                    android:textColor="@color/yellow" />
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/px40_sp"/>
             </LinearLayout>
 
             <!-- 更多特权 -->
