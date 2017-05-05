@@ -150,7 +150,7 @@ public class BaseMessage implements IBaseMessage {
     private String channelID;// 频道ID 群ID
     private String whisperID;//私聊ID
     private long sendID;// 发送ID
-    private long msgID;//服务器消息ID
+    private long msgID = -1;//服务器消息ID
     private long cMsgID;//客户端消息ID
     private long time;
     private String content;

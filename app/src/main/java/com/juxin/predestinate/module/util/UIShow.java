@@ -34,6 +34,8 @@ import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.ui.discover.DefriendAct;
+import com.juxin.predestinate.ui.discover.MyDefriendAct;
+import com.juxin.predestinate.ui.discover.MyFriendsAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
@@ -747,7 +749,26 @@ public class UIShow {
         Intent intent = new Intent(context, DefriendAct.class);
         intent.putExtra("tuid", tuid);
         context.startActivity(intent);
+    }
 
+    /**
+     * 打开我的好友界面
+     *
+     * @param context
+     */
+    public static void showMyFriendsAct(Context context) {
+        Intent intent = new Intent(context, MyFriendsAct.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 打开黑名单界面
+     *
+     * @param context
+     */
+    public static void showMyDefriends(Context context) {
+        Intent intent = new Intent(context, MyDefriendAct.class);
+        context.startActivity(intent);
     }
 
     // -----------------------各种充值弹框跳转 start----------------------------
@@ -790,4 +811,6 @@ public class UIShow {
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
+
+
 }

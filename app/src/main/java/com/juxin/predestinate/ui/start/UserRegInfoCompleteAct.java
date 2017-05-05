@@ -15,6 +15,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -27,6 +28,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.edit.EditKey;
 
 import java.util.HashMap;
 
@@ -280,25 +282,25 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     LoadingDialog.closeLoadingDialog();
-                    if (response.isOk()) {
+//                    if (response.isOk()) {
+//                        FileUtil.deleteFile(path[0]);  // 删除裁切文件
 //                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
 //                        String pic = upLoadResult.getHttpPathPic();
-//                        if (!TextUtils.isEmpty(pic)) {
-//                            isCompleteHead = true;
-//                            headPicBitmap = BitmapUtil.getSmallBitmap(path[0]);
-//                            img_header.setImageBitmap(headPicBitmap);
-//                            _photoUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
-//                            resetSubmit();
+//                        if (TextUtils.isEmpty(pic)) {
+//                            return;
 //                        }
-                    } else {
-                        MMToast.showShort("头像上传失败，请重试");
-                    }
+//                        final String avatarUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
+//                        HashMap<String, Object> postParams = new HashMap<>();
+//                        postParams.put(EditKey.s_key_avatar, avatarUrl);
+//                            _photoUrl = avatarUrl;
+//                    } else {
+//                        MMToast.showShort("头像上传失败，请重试");
+//                    }
                     FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
                 }
             });
         } else {
             MMToast.showShort("图片地址无效");
         }
-//        headPicPath
     }
 }

@@ -121,11 +121,16 @@ public enum UrlParam {
 
     //================= 发现 ===========
     //举报
-    complainBlack("xs/userrelation/ComplainBlack", true),
+    complainBlack(Constant.FATE_IT_GO, "xs/userrelation/ComplainBlack", null, true),
     //获取发现列表
-    getMainPage("xs/discovery/MainPage", UserInfoLightweightList.class, true),
+    getMainPage(Constant.FATE_IT_GO, "xs/discovery/MainPage", UserInfoLightweightList.class, true),
     //获取附近的人列表
-    getNearUsers2("xs/discovery/NearUsers2", UserInfoLightweightList.class, true),
+    getNearUsers2(Constant.FATE_IT_GO, "xs/discovery/NearUsers2", UserInfoLightweightList.class, true),
+    //获取我的好友列表
+    getMyFriends(Constant.FATE_IT_GO, "xs/userrelation/GiftFriends", UserInfoLightweightList.class, true),
+    //获取黑名单列表
+    getMyDefriends(Constant.FATE_IT_GO, "xs/userrelation/BlackList", UserInfoLightweightList.class, true),
+
     //============ 支付 =============
     reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
 

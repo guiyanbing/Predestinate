@@ -764,7 +764,7 @@ public class CommonMgr implements ModuleBase {
         parms.put("ver", Constant.SUB_VERSION);
         parms.put("isnear", 1);
 
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getMainPage, parms, complete);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.getMainPage, parms, complete);
     }
 
 
@@ -781,7 +781,29 @@ public class CommonMgr implements ModuleBase {
         parms.put("y", LocationMgr.getInstance().getPointD().latitude); //纬度
         parms.put("ver", Constant.SUB_VERSION);
 
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getNearUsers2, parms, complete);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.getNearUsers2, parms, complete);
+    }
+
+    /**
+     * 获取我的好友列表
+     *
+     * @param page
+     * @param complete
+     */
+    public void getMyFriends(int page, RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("page", page);
+        parms.put("limit", 10);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.getMyFriends, parms, complete);
+    }
+
+    /**
+     * 获取黑名单列表
+     *
+     * @param complete
+     */
+    public void getMyDefriends(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.getMyDefriends, null, complete);
     }
 
     //================ 发现 end =========================\\

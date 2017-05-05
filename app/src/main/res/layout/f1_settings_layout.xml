@@ -123,20 +123,6 @@
                 <ImageView style="@style/set_line" />
 
                 <TextView
-                    android:id="@+id/setting_recommend"
-                    style="@style/set_item"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical"
-                    android:text="@string/txt_app_recommend"
-                    android:textColor="@color/gray_text"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
-
-                <ImageView
-                    style="@style/set_line"
-                    android:visibility="gone" />
-
-                <TextView
                     android:id="@+id/setting_action"
                     style="@style/set_txt_item"
                     android:text="@string/txt_activity_about" />

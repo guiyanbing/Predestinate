@@ -297,6 +297,14 @@
             android:name=".ui.discover.DefriendAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.MyFriendsAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.MyDefriendAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
         <!-- ============= service =============== -->
         <service
             android:name=".module.logic.socket.CoreService"

@@ -49,16 +49,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
 
         BaseMessage baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(MailMsgID.recommend_msg.type));
-        baseMessage.setWeight(BaseMessage.Max_Weight);
-        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Ordinary.type);
-        baseMessage.setName("谁关注我");
-        baseMessage.setAboutme("暂时还没有人关注我");
-        baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
-        messageLists.add(baseMessage);
-
-        baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(MailMsgID.recommend_msg.type));
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.WhoAttentionMe_Msg.type));
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("谁关注我");
@@ -66,36 +57,24 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
         messageLists.add(baseMessage);
 
-
-
-
         baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(MailMsgID.recommend_msg.type));
-        baseMessage.setWeight(BaseMessage.Great_Weight);
-        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
-        baseMessage.setName("谁关注我");
-        baseMessage.setAboutme("暂时还没有人关注我");
-        baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
-        messageLists.add(baseMessage);
-
-        baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
-      //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
-        baseMessage.setWeight(BaseMessage.In_Weight);
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.MyFriend_Msg.type));
+        baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
-        baseMessage.setAboutme("共有97位好友");
-        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
+        baseMessage.setAboutme("我的好友");
+        baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
         messageLists.add(baseMessage);
 
 
+
         baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
+        baseMessage.setWhisperID(String.valueOf(979797));
         //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
         baseMessage.setWeight(BaseMessage.Small_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Ordinary.type);
-        baseMessage.setName("我的好友");
-        baseMessage.setAboutme("共有97位好友");
+        baseMessage.setName("张三");
+        baseMessage.setAboutme("暂未");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 

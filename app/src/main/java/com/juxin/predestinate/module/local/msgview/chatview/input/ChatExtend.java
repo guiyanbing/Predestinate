@@ -20,7 +20,6 @@ public class ChatExtend {
         chatExtendDatas.add(CommonGridBtnPanel.BTN_KEY.IMG);
         chatExtendDatas.add(CommonGridBtnPanel.BTN_KEY.VIDEO);
         chatExtendDatas.add(CommonGridBtnPanel.BTN_KEY.VOICE);
-        chatExtendDatas.add(CommonGridBtnPanel.BTN_KEY.GAME_WITH_FISH);
     }
 
     public void setChatExtendDatas(List<CommonGridBtnPanel.BTN_KEY> chatExtendDatas) {

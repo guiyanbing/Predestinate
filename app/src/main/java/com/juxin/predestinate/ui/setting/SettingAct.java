@@ -57,7 +57,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         findViewById(R.id.setting_voice).setOnClickListener(this);
         findViewById(R.id.setting_feedback).setOnClickListener(this);
         findViewById(R.id.setting_update).setOnClickListener(this);
-        findViewById(R.id.setting_recommend).setOnClickListener(this);
         findViewById(R.id.setting_about).setOnClickListener(this);
         findViewById(R.id.setting_clear_cache).setOnClickListener(this);
         findViewById(R.id.setting_logoff).setOnClickListener(this);
@@ -172,9 +171,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             case R.id.setting_update:// 软件更新
                 ModuleMgr.getCommonMgr().checkUpdate(this, true);//检查应用升级
                 break;
-            case R.id.setting_recommend:// 积分墙
-                PToast.showShort("努力开发中...");
-                break;
+
             case R.id.setting_action:// 活动相关
                 UIShow.showWebActivity(this, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
                 // TODO: 2017/5/3

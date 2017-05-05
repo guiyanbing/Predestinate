@@ -23,7 +23,7 @@ import java.util.Map;
 public class Statistics {
 
     //向大数据发送行为统计
-    private static final String FATE_SEND_PATH_STATISTICS = Constant.HOST_URL + "xs/hdp/Action";
+    private static final String FATE_SEND_PATH_STATISTICS = Constant.FATE_IT_GO + "xs/hdp/Action";
 
     /**
      * 用户行为统计点
