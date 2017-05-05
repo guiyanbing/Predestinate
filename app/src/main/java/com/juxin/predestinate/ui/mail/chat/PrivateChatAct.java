@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -31,13 +33,17 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/23.
  */
-public class PrivateChatAct extends BaseActivity {
+public class PrivateChatAct extends BaseActivity implements View.OnClickListener {
 
     private long whisperID = 0;
     private String name;
     private int kf_id;
     private ChatViewLayout privateChat = null;
     private CustomFrameLayout viewGroup;
+
+    private LinearLayout privatechat_head;
+    private ImageView chat_title_attention_icon;
+    private TextView chat_title_attention_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -195,7 +201,7 @@ public class PrivateChatAct extends BaseActivity {
 
 
 
-        setTitleRightImg(R.drawable.ic_launcher, new View.OnClickListener() {
+        setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UIShow.showUserOtherSetAct(PrivateChatAct.this, null);
@@ -213,6 +219,7 @@ public class PrivateChatAct extends BaseActivity {
 
     private void initView() {
         onTitleInit();
+
        // viewGroup = (CustomFrameLayout) LayoutInflater.from(this).inflate(R.layout.y2_tips_view_group, null);
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
 
@@ -239,6 +246,36 @@ public class PrivateChatAct extends BaseActivity {
 //            }
 //        });
         privateChat.getChatAdapter().setWhisperId(whisperID);
+        initHeadView();
+    }
+
+    private void initHeadView(){
+        privatechat_head = (LinearLayout) findViewById(R.id.privatechat_head);
+        findViewById(R.id.chat_title_attention).setOnClickListener(this);
+        findViewById(R.id.chat_title_phone).setOnClickListener(this);
+        findViewById(R.id.chat_title_wx).setOnClickListener(this);
+        findViewById(R.id.chat_title_yb).setOnClickListener(this);
+
+        chat_title_attention_icon = (ImageView) findViewById(R.id.chat_title_attention_icon);
+        chat_title_attention_name = (TextView) findViewById(R.id.chat_title_attention_name);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.chat_title_attention:{
+                break;
+            }
+            case R.id.chat_title_phone:
+                UIShow.showCheckOtherInfoAct(this, whisperID);
+                break;
+            case R.id.chat_title_wx:
+                UIShow.showCheckOtherInfoAct(this, whisperID);
+                break;
+            case R.id.chat_title_yb:
+                UIShow.showGoodsYCoinDlgOld(this);
+                break;
+        }
     }
 
     @Override
@@ -377,4 +414,6 @@ public class PrivateChatAct extends BaseActivity {
         }
         lastActivity = this;
     }
+
+
 }

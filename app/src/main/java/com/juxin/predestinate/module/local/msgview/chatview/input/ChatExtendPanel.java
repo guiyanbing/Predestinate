@@ -5,14 +5,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
-
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.ViewPagerAdapter;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,19 +77,19 @@ public class ChatExtendPanel extends ChatViewPanel {
                 if (key != null) {
                     switch (key) {
                         case IMG:
-//                            ImgSelectUtil.getInstance().pickPhotoGallery(getContext(), new ImgSelectUtil.OnChooseCompleteListener() {
-//                                @Override
-//                                public void onComplete(String... path) {
-//                                    if (path.length > 0) {
-//                                        ChatAdapter chatAdapter = getChatInstance().chatAdapter;
+                            ImgSelectUtil.getInstance().pickPhotoGallery(getContext(), new ImgSelectUtil.OnChooseCompleteListener() {
+                                @Override
+                                public void onComplete(String... path) {
+                                    if (path.length > 0) {
+                                        ChatAdapter chatAdapter = getChatInstance().chatAdapter;
 //                                        if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
 //                                            return;
 //                                        }
-//                                        //TODO 发送图片
-//                                        ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getWhisperId(), path[0]);
-//                                    }
-//                                }
-//                            });
+                                        //TODO 发送图片
+                                        ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
+                                    }
+                                }
+                            });
                             break;
                         case VIDEO:
 //                            VideoRecordDialog recordDialog = new VideoRecordDialog();
