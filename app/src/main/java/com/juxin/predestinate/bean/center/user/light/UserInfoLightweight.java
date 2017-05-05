@@ -28,6 +28,8 @@ public class UserInfoLightweight extends UserBasic {
     private boolean video_busy = false;
     private boolean isSayHello = false;
 
+    private int heartNum = 0;
+
     public UserInfoLightweight() {
     }
 
@@ -59,6 +61,7 @@ public class UserInfoLightweight extends UserBasic {
         this.setVideo_available(jsonObject.optInt("video_available") == 1 ? true : false);
         this.setAudio_available(jsonObject.optInt("audio_available") == 1 ? true : false);
         this.setSayHello(jsonObject.optBoolean("isSayHello"));
+        this.setHeartNum(jsonObject.optInt("heartnum"));
 
     }
 
@@ -148,6 +151,14 @@ public class UserInfoLightweight extends UserBasic {
 
     public void setSayHello(boolean sayHello) {
         isSayHello = sayHello;
+    }
+
+    public int getHeartNum() {
+        return heartNum;
+    }
+
+    public void setHeartNum(int heartNum) {
+        this.heartNum = heartNum;
     }
 
     @Override

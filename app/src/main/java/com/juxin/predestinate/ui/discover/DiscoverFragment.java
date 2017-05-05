@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void initView() {
         customRecyclerView = (CustomRecyclerView) findViewById(R.id.discover_content);
         xRecyclerView = customRecyclerView.getXRecyclerView();
+        xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         xRecyclerView.setLoadingListener(this);
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingMoreEnabled(true);
@@ -76,10 +78,9 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
 
     @Override
     public void onRefresh() {
+        xRecyclerView.setPullRefreshEnabled(true);
+        xRecyclerView.setLoadingMoreEnabled(true);
         page = 1;
-        if (infos.size() != 0) {
-            infos.clear();
-        }
         ModuleMgr.getCommonMgr().getMainPage(page, 1, this);
     }
 
@@ -121,11 +122,19 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void setMainData(HttpResponse response) {
         if (response.isOk()) {
             if (!response.isCache()) {
-                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
+//                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
+                UserInfoLightweightList lightweightList = new UserInfoLightweightList();
+                lightweightList.parseJson(response.getResponseString());
+
                 if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                    if (page == 1) {
+                        if (infos.size() != 0) {
+                            infos.clear();
+                        }
+                    }
                     infos.addAll(lightweightList.getUserInfos());
-                    adapter.notifyDataSetChanged();
                     customRecyclerView.showXrecyclerView();
+                    adapter.notifyDataSetChanged();
                 } else {
                     if (page == 1) {
                         customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
@@ -146,7 +155,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                 }
             }
         } else {
-            customRecyclerView.showNetError("请求出错请重试", new View.OnClickListener() {
+            customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     onRefresh();
@@ -158,8 +167,13 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void setNearData(HttpResponse response) {
         if (response.isOk()) {
             if (!response.isCache()) {
-                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
+//                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
+                UserInfoLightweightList lightweightList = new UserInfoLightweightList();
+                lightweightList.parseJson(response.getResponseString());
                 if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                    if (infos.size() != 0) {
+                        infos.clear();
+                    }
                     infos.addAll(lightweightList.getUserInfos());
                     adapter.notifyDataSetChanged();
                     customRecyclerView.showXrecyclerView();
@@ -167,14 +181,14 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                     customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            onRefresh();
+                            getNearData();
                         }
                     });
                 }
                 xRecyclerView.refreshComplete();
             }
         } else {
-            customRecyclerView.showNetError("请求出错请重试", new View.OnClickListener() {
+            customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     getNearData();
@@ -184,9 +198,6 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     }
 
     private void getNearData() {
-        if (infos.size() != 0) {
-            infos.clear();
-        }
         ModuleMgr.getCommonMgr().getNearUsers2(this);
     }
 

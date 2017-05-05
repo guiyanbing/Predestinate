@@ -9,8 +9,11 @@ public enum MailItemType {
     /**普通，目前是在私聊中用**/
     Mail_Item_Ordinary(0),
 
-    /**活动，最近访问，新朋友等用**/
-    Mail_Item_Act(1);
+    /**其他**/
+    Mail_Item_Other(1),
+
+    Mail_Item_Gap(2),
+    ;
 
     public int type;
     MailItemType(int type) {

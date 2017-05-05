@@ -99,7 +99,8 @@ public class BaseMessage implements IBaseMessage {
     public final static String StrDefault = "";//字符默认值
 
     //显示权重
-    public static int Great_Weight = 100;//最大权重
+    public static int Max_Weight = 1000;//最大权重
+    public static int Great_Weight = 100;//大权重
     public static int In_Weight = 50;//中等权重
     public static int Small_Weight = 1;//小权重
 
@@ -149,7 +150,7 @@ public class BaseMessage implements IBaseMessage {
     private String channelID;// 频道ID 群ID
     private String whisperID;//私聊ID
     private long sendID;// 发送ID
-    private long msgID;//服务器消息ID
+    private long msgID = -1;//服务器消息ID
     private long cMsgID;//客户端消息ID
     private long time;
     private String content;

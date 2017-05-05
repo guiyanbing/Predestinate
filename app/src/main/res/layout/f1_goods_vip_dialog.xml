@@ -1,0 +1,202 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/px45_dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/f1_goods_vip_top" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <!-- 标题头 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_pay_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dip"
+                android:gravity="center"
+                android:paddingBottom="@dimen/px45_dp"
+                android:text="开通VIP特权"
+                android:textColor="#313131"
+                android:textSize="@dimen/px56_sp" />
+
+            <ImageView
+                android:id="@+id/iv_dlg_close"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/f1_close_small" />
+        </RelativeLayout>
+
+        <!-- 提示文字 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f4ec"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开通VIP会员"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="立即恢复"
+                android:textColor="@color/theme_color_red"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="灵气，尊享"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10大"
+                android:textColor="@color/theme_color_red"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="特权"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/px45_dp"
+            android:paddingLeft="@dimen/px35_dp"
+            android:paddingRight="@dimen/px35_dp"
+            android:paddingTop="15dp">
+
+            <!-- 商品列表 -->
+            <LinearLayout
+                android:id="@+id/pay_type_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px35_dp"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="并赠送体力100点"
+                    android:textColor="@color/yellow" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="并赠送体力200点"
+                    android:textColor="@color/yellow" />
+            </LinearLayout>
+
+            <!-- 更多特权 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/px45_dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/goods_vip_dlg_more_privilege"
+                    android:textColor="#5d5d5d"
+                    android:textSize="@dimen/px48_sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/px10_dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/px69_dp"
+                        android:layout_height="@dimen/px69_dp"
+                        android:background="@drawable/f1_pay_ghost" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/px30_dp"
+                        android:text="@string/goods_vip_dlg_plus_host"
+                        android:textColor="#979797"
+                        android:textSize="@dimen/px40_sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="@dimen/px69_dp"
+                        android:layout_height="@dimen/px69_dp"
+                        android:background="@drawable/f1_pay_ghost2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/px30_dp"
+                        android:text="@string/goods_vip_dlg_low_host"
+                        android:textColor="#979797"
+                        android:textSize="@dimen/px40_sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 支付方式 -->
+            <include layout="@layout/p1_goods_of_payment" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 充值按钮 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_recharge"
+            style="@style/button_big"
+            android:text="@string/goods_pay_immediately" />
+    </LinearLayout>
+</LinearLayout>
+
+
+
+

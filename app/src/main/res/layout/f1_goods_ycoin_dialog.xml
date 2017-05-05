@@ -1,0 +1,200 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/px45_dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/f1_goods_ycoin_top" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <!-- 标题头 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_pay_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dip"
+                android:gravity="center"
+                android:paddingBottom="@dimen/px45_dp"
+                android:text="@string/goods_ycoin_title"
+                android:textColor="#313131"
+                android:textSize="@dimen/px56_sp" />
+
+            <ImageView
+                android:id="@+id/iv_dlg_close"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/f1_close_small" />
+        </RelativeLayout>
+
+        <!-- 提示文字 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f4ec"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/goods_ycoin_remain"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/theme_color_red"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/px35_dp"
+                android:text="@string/goods_ycoin_tip_header"
+                android:textColor="@color/yellow"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/yellow"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/goods_ycoin_tip_footer"
+                android:textColor="@color/yellow"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/px45_dp"
+            android:paddingLeft="@dimen/px35_dp"
+            android:paddingRight="@dimen/px35_dp"
+            android:paddingTop="15dp">
+
+            <!-- 商品列表 -->
+            <LinearLayout
+                android:id="@+id/pay_type_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/px35_dp"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="并赠送体力100点"
+                    android:textColor="@color/yellow"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/goods_ycoin_phone_cost"
+                    android:textColor="@color/yellow" />
+            </LinearLayout>
+
+            <!-- 更多特权 -->
+            <LinearLayout
+                android:id="@+id/ll_pay_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_pay_select_vip"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_radio_male_sel" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/goods_vip_title"
+                            android:textColor="#000000"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:text="@string/goods_vip_price"
+                            android:textColor="#999999"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="@string/goods_ycoin_welfare"
+                        android:textColor="#999999" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 支付方式 -->
+            <include layout="@layout/p1_goods_of_payment" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 充值按钮 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_recharge"
+            style="@style/button_big"
+            android:text="@string/goods_pay_immediately" />
+    </LinearLayout>
+</LinearLayout>
+
+
+
+

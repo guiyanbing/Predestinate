@@ -30,8 +30,7 @@
             <!-- 选中 -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/f1_recharge_popping_bg3">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:layout_width="@dimen/px60_dp"

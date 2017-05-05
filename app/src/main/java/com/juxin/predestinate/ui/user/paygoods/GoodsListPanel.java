@@ -27,10 +27,19 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
     private GoodsListAdapter adapter;
 
     private int position = 0;
+    private int chargeType = 0;  // 充值类型
 
     public GoodsListPanel(Context context) {
         super(context);
         setContentView(R.layout.p1_goods_list_panel);
+
+        initView();
+    }
+
+    public GoodsListPanel(Context context, int chargeType) {
+        super(context);
+        setContentView(R.layout.p1_goods_list_panel);
+        this.chargeType = chargeType;
 
         initView();
     }
@@ -41,7 +50,7 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.addItemDecoration(new ItemSpaces((int) (10 * toDpMutliple)));
 
-        adapter = new GoodsListAdapter();
+        adapter = new GoodsListAdapter(chargeType);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }

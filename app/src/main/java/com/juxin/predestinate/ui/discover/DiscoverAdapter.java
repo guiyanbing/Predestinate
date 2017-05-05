@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.discover;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
@@ -37,18 +39,41 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
         MyViewHolder holder = new MyViewHolder(viewHolder);
-        UserInfoLightweight userInfo = getItem(position);
+        final UserInfoLightweight userInfo = getItem(position);
         ImageLoader.loadRoundCorners(context, userInfo.getAvatar(), 8, holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
         holder.lin_ranking.setVisibility(View.GONE);
 
-        holder.tv_age.setText(userInfo.getAge() + "岁");
+        if (userInfo.getAge() == 0) {
+            holder.tv_age.setVisibility(View.GONE);
+        } else {
+            holder.tv_age.setVisibility(View.VISIBLE);
+            holder.tv_age.setText(userInfo.getAge() + "岁");
+        }
 
-        holder.tv_height.setText(userInfo.getHeight() + "cm");
+        if (userInfo.getHeight() == 0) {
+            holder.tv_height.setVisibility(View.GONE);
+        } else {
+            holder.tv_height.setVisibility(View.VISIBLE);
+            holder.tv_height.setText(userInfo.getHeight() + "cm");
+        }
 
-        holder.tv_distance.setText(userInfo.getDistance());
+        if (TextUtils.isEmpty(userInfo.getDistance())) {
+            holder.tv_distance.setVisibility(View.GONE);
+        } else {
+            holder.tv_distance.setVisibility(View.VISIBLE);
+            holder.tv_distance.setText(userInfo.getDistance());
+        }
+
+
+        if ((userInfo.getAge() != 0 || userInfo.getHeight() != 0) && !TextUtils.isEmpty(userInfo.getDistance())) {
+            holder.point.setVisibility(View.VISIBLE);
+        } else {
+            holder.point.setVisibility(View.GONE);
+        }
+
 
         if (userInfo.isVideo_available() || userInfo.isAudio_available()) {
             if (userInfo.isVideo_busy()) {
@@ -57,13 +82,13 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
                 holder.iv_video.setVisibility(View.GONE);
             } else {
                 holder.iv_calling.setVisibility(View.GONE);
-                holder.iv_call.setVisibility(userInfo.isAudio_available() ? View.VISIBLE : View.GONE);
-                holder.iv_video.setVisibility(userInfo.isVideo_available() ? View.VISIBLE : View.GONE);
+                holder.iv_call.setEnabled(userInfo.isAudio_available());
+                holder.iv_video.setEnabled(userInfo.isVideo_available());
             }
         } else {
             holder.iv_calling.setVisibility(View.GONE);
-            holder.iv_call.setVisibility(View.GONE);
-            holder.iv_video.setVisibility(View.GONE);
+            holder.iv_call.setEnabled(userInfo.isAudio_available());
+            holder.iv_video.setEnabled(userInfo.isVideo_available());
         }
 
         holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
@@ -77,6 +102,13 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
                 }
             });
         }
+
+        holder.lin_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+            }
+        });
     }
 
     @Override
@@ -85,10 +117,12 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
     }
 
     class MyViewHolder {
-        private ImageView iv_avatar, iv_calling, iv_video, iv_call, iv_vip;
+        private ImageView iv_avatar, iv_vip;
+        private Button iv_video, iv_call;
         private TextView tv_name, tv_age, tv_height, tv_distance, tv_ranking_type, tv_ranking_level;
         private Button btn_sayhi;
-        private LinearLayout lin_ranking;
+        private LinearLayout lin_ranking, iv_calling, lin_item;
+        private View point;
 
         public MyViewHolder(BaseRecyclerViewHolder convertView) {
             initView(convertView);
@@ -96,10 +130,11 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
 
         private void initView(BaseRecyclerViewHolder convertView) {
             iv_avatar = (ImageView) convertView.findViewById(R.id.discover_item_avatar);
-            iv_calling = (ImageView) convertView.findViewById(R.id.discover_item_calling_state);
-            iv_video = (ImageView) convertView.findViewById(R.id.discover_item_video);
-            iv_call = (ImageView) convertView.findViewById(R.id.discover_item_call);
             iv_vip = (ImageView) convertView.findViewById(R.id.discover_item_vip_state);
+
+            iv_calling = (LinearLayout) convertView.findViewById(R.id.discover_item_calling_state);
+            iv_video = (Button) convertView.findViewById(R.id.discover_item_video);
+            iv_call = (Button) convertView.findViewById(R.id.discover_item_call);
 
             tv_name = (TextView) convertView.findViewById(R.id.discover_item_name);
             tv_age = (TextView) convertView.findViewById(R.id.discover_item_age);
@@ -112,6 +147,9 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             btn_sayhi = (Button) convertView.findViewById(R.id.discover_item_sayhi);
 
             lin_ranking = (LinearLayout) convertView.findViewById(R.id.discover_item_ranking_state);
+            lin_item = (LinearLayout) convertView.findViewById(R.id.discover_item);
+
+            point = convertView.findViewById(R.id.discover_item_point);
         }
 
     }

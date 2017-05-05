@@ -66,7 +66,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
         MailMsgID mailMsgID = MailMsgID.getMailMsgID(msgData.getLWhisperID());
         if (mailMsgID != null) {
             switch (mailMsgID) {
-                case visitors_msg://最近来访
+                case WhoAttentionMe_Msg://最近来访
                     if (msgData.getNum() > 0) {
                         conStr = "你有" + msgData.getNum() + "个新的来访";
                     } else {

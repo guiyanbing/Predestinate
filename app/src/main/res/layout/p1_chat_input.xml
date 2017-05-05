@@ -102,12 +102,6 @@
                 android:src="@drawable/chat_input_btn_expression"
                 android:visibility="visible" />
 
-            <ImageView
-                style="@style/chat_input_btn"
-                android:layout_marginLeft="@dimen/px28_dp"
-                android:src="@drawable/chat_input_gift_btn_expression"
-                android:visibility="visible" />
-
             <RelativeLayout
                 android:id="@+id/chat_rel"
                 android:layout_width="wrap_content"
