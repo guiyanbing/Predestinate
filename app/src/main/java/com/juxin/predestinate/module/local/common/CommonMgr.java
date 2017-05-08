@@ -24,7 +24,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.mail.sayhi.SayHelloDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 
 import java.io.File;
@@ -229,9 +228,9 @@ public class CommonMgr implements ModuleBase {
      */
     public void showSayHelloDialog(FragmentActivity context) {
 //        if (checkDateAndSave(getSayHelloKey())) {
-        SayHelloDialog sayHelloDialog = new SayHelloDialog();
-        sayHelloDialog.showDialog(context);
-//        }
+//        SayHelloDialog sayHelloDialog = new SayHelloDialog();
+//        sayHelloDialog.showDialog(context);
+////        }
     }
 
     /**

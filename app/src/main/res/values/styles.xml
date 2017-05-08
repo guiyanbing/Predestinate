@@ -420,6 +420,12 @@
         <item name="android:interpolator">@anim/left_in</item>
     </style>
 
+    <style name="AnimDownInDownOutOverShoot" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/down_in</item>
+        <item name="android:windowExitAnimation">@anim/down_out</item>
+        <item name="android:interpolator">@anim/left_in</item>
+    </style>
+
 
     <style name="text_regTip_left" parent="text_big">
         <item name="android:textColor">@color/text_zhuyao_black</item>
