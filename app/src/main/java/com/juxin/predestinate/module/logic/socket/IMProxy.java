@@ -148,6 +148,15 @@ public class IMProxy {
     }
 
     /**
+     * socket发消息
+     *
+     * @param netData 数据包封装
+     * @param callBack 发送消息回调
+     */
+    public void send(NetData netData, SendCallBack callBack) {
+    }
+
+    /**
      * 代理和服务器断开连接（默认不主动断开连接，特殊情况调用）
      */
     public void disconnect() {
@@ -254,6 +263,27 @@ public class IMProxy {
          * @param contents 消息内容，一个json格式的String
          */
         void onMessage(final long msgId, final boolean group, final String groupId, final long sender, final String contents);
+    }
+
+    /**
+     * 监听发送消息回调
+     */
+    public interface SendCallBack {
+        /**
+         * 发送消息后返回的结果回调
+         * @param msgId    消息Id
+         * @param group    是否群聊消息
+         * @param groupId  群聊Id，私聊为null或空
+         * @param sender   消息发送者的uid
+         * @param contents 消息内容，一个json格式的String
+         */
+        void onResult(final long msgId, final boolean group, final String groupId, final long sender, final String contents);
+
+        /**
+         * 当发送消息失败时回调
+         * @param data
+         */
+        void onSendFailed(NetData data);
     }
 
     /**
