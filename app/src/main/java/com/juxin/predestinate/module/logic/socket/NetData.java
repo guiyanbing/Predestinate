@@ -8,6 +8,9 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.module.util.ByteUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,6 +56,18 @@ public class NetData implements Parcelable {
     // 同时为零，表示不用
     private int num1 = 0;
     private int num2 = 0;
+    /**
+     * 消息id
+     * 对应消息体中的"d"字段
+     * 若不存在消息体则不存在消息id则为-1
+     */
+    private long messageId = -1;
+    /**
+     * 消息发送者id
+     * 对应消息体中"fid"字段
+     * 若不存在消息体或不存在fid则为-1
+     */
+    private long fromId = -1;
 
     public NetData(long uid, int msgType, String content) {
         super();
@@ -224,6 +239,38 @@ public class NetData implements Parcelable {
 
         netData = new NetData(dataLength, dataUid, dataMsgType, dataContent);
         return netData;
+    }
+
+    /**
+     * 返回消息体中的消息id，当不存在消息体是返回-1
+     * @return
+     */
+    public Long getMessageId(){
+        if(messageId == -1 && !TextUtils.isEmpty(content)){
+            try {
+                JSONObject contentJ = new JSONObject(content);
+                messageId = contentJ.optLong("d", -1);
+            } catch (JSONException e) {
+            }
+        }
+
+        return messageId;
+    }
+
+    /**
+     * 返回消息体中的发送者id，当不存在消息体或不存在发送者则返回-1
+     * @return
+     */
+    public Long getFromId(){
+        if(fromId == -1 && !TextUtils.isEmpty(content)){
+            try {
+                JSONObject contentJ = new JSONObject(content);
+                fromId = contentJ.optLong("fid", -1);
+            } catch (JSONException e) {
+            }
+        }
+
+        return fromId;
     }
 
 

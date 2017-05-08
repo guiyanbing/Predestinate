@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -23,11 +25,14 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 即时通许代理，负责将接收到的服务器消息通知给上层
  */
 public class IMProxy {
+    private ConcurrentHashMap<Long,SendCallBack> mSendCallBackMap = new ConcurrentHashMap<>();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private static class SingletonHolder {
         static IMProxy instance = new IMProxy();
@@ -154,6 +159,11 @@ public class IMProxy {
      * @param callBack 发送消息回调
      */
     public void send(NetData netData, SendCallBack callBack) {
+        long msgId = netData.getMessageId();
+        if(msgId != -1) {
+            mSendCallBackMap.put(msgId, callBack);
+        }
+        send(netData);
     }
 
     /**
@@ -336,13 +346,42 @@ public class IMProxy {
 
     private class CSCallback extends ICSCallback.Stub {
         @Override
-        public void onMessage(NetData data) throws RemoteException {
-            //IMProxy.this.onMessage(msgId, group, groupId, sender, contents);
+        public void onMessage(final NetData data) throws RemoteException {
+            final long msgId = data.getMessageId();
+            //检查是否有发送回调
+            if(msgId != -1){
+                final SendCallBack callBack = mSendCallBackMap.get(msgId);
+                if(callBack != null){
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callBack.onResult(msgId,false,"",data.getFromId(), data.getContent());
+                        }
+                    });
+                    mSendCallBackMap.remove(msgId);
+                    return;
+                }
+            }
+
+            IMProxy.this.onMessage(data.getMessageId(), false, "", data.getFromId(), data.getContent());
         }
 
         @Override
-        public void onSendMsgError(NetData data) throws RemoteException {
-
+        public void onSendMsgError(final NetData data) throws RemoteException {
+            final long msgId = data.getMessageId();
+            //检查是否有发送回调
+            if(msgId != -1){
+                final SendCallBack callBack = mSendCallBackMap.get(msgId);
+                if(callBack != null){
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callBack.onSendFailed(data);
+                        }
+                    });
+                    mSendCallBackMap.remove(msgId);
+                }
+            }
         }
 
         @Override
