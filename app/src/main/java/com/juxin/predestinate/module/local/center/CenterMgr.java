@@ -16,10 +16,10 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.mumu.bean.utils.FileUtil;
+import com.juxin.mumu.bean.utils.MD5;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
@@ -33,11 +33,11 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
-import com.juxin.predestinate.ui.user.edit.EditKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -280,23 +280,18 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void uploadAvatar(final String url, final RequestComplete complete) {
         if (FileUtil.isExist(url)) {
-//            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, url, new RequestComplete() {
-//                @Override
-//                public void onRequestComplete(HttpResponse response) {
-//                    if (response.isOk()) {
-//                        FileUtil.deleteFile(url);  // 删除裁切文件
-//                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-//                        String pic = upLoadResult.getHttpPathPic();
-//                        if (TextUtils.isEmpty(pic)) {
-//                            return;
-//                        }
-//                        final String avatarUrl = getInterceptUrl(pic);
-//                        HashMap<String, Object> postParams = new HashMap<>();
-//                        postParams.put(EditKey.s_key_avatar, avatarUrl);
-//                        //ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
-//                    }
-//                }
-//            });
+            Map<String, File> fileParams = new HashMap<>();
+            fileParams.put("avatar", new File(url));
+
+            long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
+
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadAvatar, postParams, fileParams, complete);
+
         } else {
             LoadingDialog.closeLoadingDialog();
             MMToast.showShort("图片地址无效");
