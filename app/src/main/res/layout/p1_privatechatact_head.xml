@@ -20,15 +20,15 @@
 
         <ImageView
             android:id="@+id/chat_title_attention_icon"
-            android:layout_width="@dimen/px42_dp"
-            android:layout_height="@dimen/px42_dp"
+            android:layout_width="@dimen/px36_dp"
+            android:layout_height="@dimen/px36_dp"
             android:src="@drawable/f1_chat01" />
 
         <TextView
             android:id="@+id/chat_title_attention_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/px18_dp"
+            android:layout_marginLeft="@dimen/px15_dp"
             android:text="@string/privatechat_title_attention"
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
@@ -48,14 +48,14 @@
         android:paddingTop="@dimen/px24_dp">
 
         <ImageView
-            android:layout_width="@dimen/px42_dp"
-            android:layout_height="@dimen/px42_dp"
+            android:layout_width="@dimen/px36_dp"
+            android:layout_height="@dimen/px36_dp"
             android:src="@drawable/f1_chat02" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/px18_dp"
+            android:layout_marginLeft="@dimen/px15_dp"
             android:text="@string/privatechat_title_phone"
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
@@ -75,14 +75,14 @@
         android:paddingTop="@dimen/px24_dp">
 
         <ImageView
-            android:layout_width="@dimen/px42_dp"
-            android:layout_height="@dimen/px42_dp"
+            android:layout_width="@dimen/px36_dp"
+            android:layout_height="@dimen/px36_dp"
             android:src="@drawable/f1_chat03" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/px18_dp"
+            android:layout_marginLeft="@dimen/px15_dp"
             android:text="@string/privatechat_title_wx"
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
@@ -102,15 +102,15 @@
         android:paddingTop="@dimen/px24_dp">
 
         <ImageView
-            android:layout_width="@dimen/px42_dp"
-            android:layout_height="@dimen/px42_dp"
+            android:layout_width="@dimen/px36_dp"
+            android:layout_height="@dimen/px36_dp"
             android:src="@drawable/f1_chat04" />
 
         <TextView
             android:id="@+id/chat_title_yb_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/px18_dp"
+            android:layout_marginLeft="@dimen/px15_dp"
             android:text="@string/privatechat_title_yb"
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />

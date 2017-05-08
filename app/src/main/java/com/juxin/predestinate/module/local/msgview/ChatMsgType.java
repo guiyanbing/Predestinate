@@ -4,6 +4,7 @@ import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.TypeConvUtil;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
+import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCommon;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomSimple;
 import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBasePanel;
 
@@ -13,7 +14,8 @@ import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBas
 
 public enum ChatMsgType {
     // 基本消息类型
-//    CMT_2(ChatPanelText.class, "文字消息-用普通文字消息模板"),
+
+     CMT_2(ChatPanelCommon.class, "普通消息"),
 //
 //    CMT_3(ChatPanelText.class, "打招呼消息-用普通文字消息模板"),
 //
@@ -38,7 +40,7 @@ public enum ChatMsgType {
 
     // 客户端自定义类型，不经过消息层
   //  CMT_custom_simple(ChatPanelCustomSimple.class, ChatPanelType.CPT_Custome, "客户端自定义类型"),
-    //    CMT_pic_invalid(ChatPanelCustomSimpleTip.class, ChatPanelType.CPT_Custome, "图片审核失败通知"),
+    //CMT_pic_invalid(ChatPanelCustomSimpleTip.class, ChatPanelType.CPT_Custome, "图片审核失败通知"),
 //    CMT_9(ChatPanelCustomHint.class, ChatPanelType.CPT_Custome, "小提示"),
 
     // 非有效类型

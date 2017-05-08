@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemClickListener{
 
-    private HorizontalListView smilepackagesView = null;
+  //  private HorizontalListView smilepackagesView = null;
     private FrameLayout smilePackageLayouts = null;
     private ChatSmileAdapter chatSmileAdapter;
 
@@ -37,12 +37,12 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     }
 
     public void initView() {
-        smilepackagesView = (HorizontalListView) findViewById(R.id.chat_smile_packages);
+ //       smilepackagesView = (HorizontalListView) findViewById(R.id.chat_smile_packages);
         smilePackageLayouts = (FrameLayout) findViewById(R.id.chat_smile_package_layouts);
 
         chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
-        smilepackagesView.setAdapter(chatSmileAdapter);
-        smilepackagesView.setOnItemClickListener(this);
+//        smilepackagesView.setAdapter(chatSmileAdapter);
+//        smilepackagesView.setOnItemClickListener(this);
         chatSmileAdapter.setCheckPosition(0);
 
         addView_Package_Default();
@@ -92,17 +92,19 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         if (smilePackage == null) {
             return;
         }
+
+        addView_Package_Default();
 //
-        if ("smallface".equals(smilePackage.getType())) {
-            addView_Package_Default();
-        } else if ("bigface".equals(smilePackage.getType())) {
-            addView_Package_Big(smilePackage.getItems(), 0);
-        } else if ("minigame".equals(smilePackage.getType())) {
-            addView_Package_Big(smilePackage.getItems(), 1);
-        } else if ("gift".equals(smilePackage.getType())) {
+//        if ("smallface".equals(smilePackage.getType())) {
+//            addView_Package_Default();
+//        } else if ("bigface".equals(smilePackage.getType())) {
+//            addView_Package_Big(smilePackage.getItems(), 0);
+//        } else if ("minigame".equals(smilePackage.getType())) {
+//            addView_Package_Big(smilePackage.getItems(), 1);
+//        } else if ("gift".equals(smilePackage.getType())) {
       //      ModuleMgr.getSmileMgr().reqGiftLevel(getChatInstance().chatAdapter.getLWhisperId(), null);
     //        addView_Package_Gift(ModuleMgr.getSmileMgr().getGiftShop().getItems());
-        }
+      //  }
     }
 
     /**
