@@ -32,7 +32,7 @@ import java.util.HashMap;
  * 关注我的适配器
  * Created by zm on 2017/4/13.
  */
-public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements RequestComplete {
+public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements RequestComplete,BaseRecyclerViewHolder.OnItemClickListener {
 
     private Context mContext;
     private int postion;
@@ -40,6 +40,7 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 
     public AttentionMeAdapter(Context mContext){
         this.mContext = mContext;
+        this.setOnItemClickListener(this);
     }
 
     @Override
@@ -225,6 +226,12 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         }else {
             PToast.showShort("操作失败，请重试！");
         }
+    }
+
+    @Override
+    public void onItemClick(View convertView, int position) {
+        //跳转他人资料页
+        UIShow.showCheckOtherInfoAct(mContext,getItem(position).getUid());
     }
 
     class MyViewHolder {

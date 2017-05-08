@@ -486,6 +486,7 @@
     <string name="privatechat_title_phone">查看手机</string>
     <string name="privatechat_title_wx">查看微信</string>
     <string name="privatechat_title_yb">Y币:0</string>
+    <string name="please_select_a_gift">请选择礼物</string>
 
 
 </resources>

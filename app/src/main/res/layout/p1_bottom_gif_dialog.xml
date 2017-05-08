@@ -93,6 +93,7 @@
 
         <com.juxin.predestinate.third.pagerecyeler.PageIndicatorView
             android:id="@+id/bottom_gif_rlv_gif_indicator"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/px60_dp"
             android:layout_below="@+id/bottom_gif_rlv_gif"/>
@@ -143,7 +144,7 @@
 
             <LinearLayout
                 android:id="@+id/bottom_gif_ll_sendnum"
-                android:layout_width="@dimen/px205_dp"
+                android:layout_width="@dimen/px212_dp"
                 android:layout_height="@dimen/px74_dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/px16_dp"
@@ -162,9 +163,13 @@
                 <EditText
                     android:id="@+id/bottom_gif_txv_sendnum"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0"
+                    android:layout_height="@dimen/px74_dp"
+                    android:inputType="number"
+                    android:numeric="integer"
+                    android:hint="0"
+                    android:height="@dimen/px34_sp"
+                    android:lineSpacingExtra="0dp"
+                    android:background="#00000000"
                     android:textColor="@color/color_999999"
                     android:textSize="@dimen/px34_sp"/>
 

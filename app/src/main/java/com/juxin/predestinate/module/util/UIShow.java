@@ -85,6 +85,7 @@ import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
 import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.xiaoyou.wode.GiftDiamondPayDlg;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyAttentionAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
@@ -748,6 +749,24 @@ public class UIShow {
         BottomGiftDialog dialog = new BottomGiftDialog();
         dialog.setToId(to_id);
         dialog.showDialog((FragmentActivity) context);
+    }
+
+    /**
+     * 消息页面送礼物（兼容第一版送礼物）弹框
+     *
+     * @param context
+     * @param to_id    他人id
+     * @param nickname 昵称
+     * @param avatar   头像地址
+     * @param msg      消息内容
+     */
+    public static void showFristSendGiftDlg(Context context,long to_id,String nickname,String avatar,String msg) {
+        Intent intent = new Intent(context, GiftDiamondPayDlg.class);
+        intent.putExtra("avatar", avatar);
+        intent.putExtra("msg", msg);
+        intent.putExtra("nickname", nickname);
+        intent.putExtra("toUid", to_id);
+        context.startActivity(intent);
     }
 
     /**

@@ -1,10 +1,13 @@
 package com.juxin.predestinate.ui.xiaoyou.wode;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ import com.juxin.predestinate.third.pagerecyeler.PageRecyclerView;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.xiaoyou.wode.adapter.GiftAdapterCallBack;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
+import com.juxin.predestinate.ui.xiaoyou.wode.bean.SendGiftResultInfo;
 import com.juxin.predestinate.ui.xiaoyou.zanshi.view.GiftNumPopup;
 
 import java.util.ArrayList;
@@ -29,9 +33,10 @@ import java.util.List;
  * 送礼物弹框
  * Created by zm on 2017/3/.
  */
-public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,GiftNumPopup.OnSelectNumChangedListener,RequestComplete {
+public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,GiftNumPopup.OnSelectNumChangedListener,RequestComplete,TextWatcher {
 
-    private TextView txvAllStone,txvPay,txvNeedStone,txvSendNum,txvSend,txvLeft,txvRight;
+    private TextView txvAllStone,txvPay,txvNeedStone,txvSend,txvLeft,txvRight;
+    private EditText txvSendNum;
     private LinearLayout  llSendNum;//礼物数量
     private PageRecyclerView rlvGift;//赠送礼物
     private CustomRecyclerView mCustomRecyclerView;
@@ -42,7 +47,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private GiftNumPopup mGiftNumPopup;
     private GiftAdapterCallBack mGiftAdapterCallBack;
     private long uid;//收礼物的uid
-    private int position;
+    private int position = -1;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimScaleInScaleOutOverShoot);
@@ -56,6 +61,10 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.p1_bottom_gif_dialog);
         View contentView = getContentView();
+        initGifts();
+        if (arrGifts.size() <= 0 ){
+            ModuleMgr.getCommonMgr().requestgetGifts(this);
+        }
         initView(contentView);
         return contentView;
     }
@@ -65,16 +74,15 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 //        View contentView = inflater.inflate(R.layout.p1_bottom_gif_dialog, null);
         txvAllStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_allstone);
         txvNeedStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_needstone);
-        txvSendNum = (TextView) contentView.findViewById(R.id.bottom_gif_txv_sendnum);
+        txvSendNum = (EditText) contentView.findViewById(R.id.bottom_gif_txv_sendnum);
         llSendNum = (LinearLayout) contentView.findViewById(R.id.bottom_gif_ll_sendnum);
         txvLeft = (TextView)contentView.findViewById(R.id.bottom_gif_txv_left);
         txvRight = (TextView)contentView.findViewById(R.id.bottom_gif_txv_right);
         mCustomRecyclerView = (CustomRecyclerView) contentView.findViewById(R.id.bottom_gif_rlv_gif);
-        pageIndicatorView = (PageIndicatorView) findViewById(R.id.bottom_gif_rlv_gif_indicator);
+        pageIndicatorView = (PageIndicatorView) contentView.findViewById(R.id.bottom_gif_rlv_gif_indicator);
         findViewById(R.id.bottom_gif_view_blank).setOnClickListener(this);
         contentView.findViewById(R.id.bottom_gif_txv_pay).setOnClickListener(this);
         contentView.findViewById(R.id.bottom_gif_txv_send).setOnClickListener(this);
-        initGifts();
 
         rlvGift = mCustomRecyclerView.getPageRecyclerView();
         rlvGift.setIndicator(pageIndicatorView);
@@ -89,13 +97,14 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
         mGiftAdapterCallBack = new GiftAdapterCallBack(getContext(),this,arrGifts,mGiftAdapter);
         mGiftAdapter = rlvGift.new PageAdapter(arrGifts,mGiftAdapterCallBack);
-        rlvGift.setPageSize(2,4);
+        rlvGift.setPageSize(2, 4);
         rlvGift.setPageMargin(30);
         rlvGift.setAdapter(mGiftAdapter);
         txvLeft.setText("<");
         txvRight.setText(">");
-        txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum()+"");
+        txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()+"");
         mCustomRecyclerView.showPageRecyclerView();
+        txvSendNum.addTextChangedListener(this);
     }
 
     @Override
@@ -109,6 +118,15 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 break;
             case R.id.bottom_gif_txv_send:
                 //// TODO: 2017/3/31  赠送礼物逻辑
+                int needStone = Integer.valueOf(txvNeedStone.getText().toString());
+                if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()){
+                    UIShow.showGoodsDiamondDialog(getContext());
+                    return;
+                }
+                if (position == -1){
+                    PToast.showShort(getContext().getString(R.string.please_select_a_gift));
+                    return;
+                }
                 ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);
                 PToast.showShort("赠送礼物");
                 break;
@@ -137,6 +155,36 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
     @Override
     public void onRequestComplete(HttpResponse response) {
+        SendGiftResultInfo info = new SendGiftResultInfo();
+        info.parseJson(response.getResponseString());
+        PToast.showShort(info.getMsg()+"");
+    }
+    private CharSequence temp;
+    private int selectionStart;
+    private int selectionEnd;
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        temp = charSequence;
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        //int number = limitNum - s.length();
+//        setHasnum(editable.length()); //修改为正计数
+//        Log.e("TTTTTTTTLLLL", editable.toString() + "||" + editable.length());
+//        txvSendNum.setText(editable.length()+"");
+        selectionStart = txvSendNum.getSelectionStart();
+        selectionEnd = txvSendNum.getSelectionEnd();
+        if (temp.length() > 4) {
+            editable.delete(selectionStart - 1, selectionEnd);
+            int tempSelection = selectionEnd;
+            txvSendNum.setText(editable);
+            txvSendNum.setSelection(tempSelection);//设置光标在最后
+        }
     }
 }

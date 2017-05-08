@@ -14,6 +14,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.AttentionUserDetail;
@@ -23,7 +24,7 @@ import com.juxin.predestinate.ui.xiaoyou.wode.bean.AttentionUserDetail;
  * 我的关注适配器
  * Created by zm on 2017/4/13.
  */
-public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements View.OnClickListener,RequestComplete {
+public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements View.OnClickListener,RequestComplete,BaseRecyclerViewHolder.OnItemClickListener {
 
     private Context mContext;
     private int postion;
@@ -138,6 +139,12 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 //            }
 //            this.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onItemClick(View convertView, int position) {
+        //跳转他人资料页
+        UIShow.showCheckOtherInfoAct(mContext, getItem(position).getUid());
     }
 
     class MyViewHolder {
