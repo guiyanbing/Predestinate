@@ -99,36 +99,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //        });
     }
 
-    /**
-     * 黑名单
-     */
-    private void onpullToBlack() {
-//        ModuleMgr.getCenterMgr().pullToBlack(PrivateChatAct.this, whisperID, getTitleView(), new CenterMgr.PullBlackComplete() {
-//
-//            @Override
-//            public void onReqComplete(boolean isOk, String errorStr, PullTitleResult pullTitleResult) {
-//                if (!isOk) {
-//                    if (TextUtils.isEmpty(errorStr)) {
-//                        MMToast.showShort("请求出错!");
-//                    } else {
-//                        MMToast.showShort(errorStr);
-//                    }
-//                } else {
-//                    switch (pullTitleResult.getBigType()) {
-//                        case -1://拉黑
-//                            MMToast.showShort("拉黑成功!");
-//                            break;
-//                        case -2://拉黑并举报
-//                            MMToast.showShort("拉黑并举报成功!");
-//                            break;
-//                        case -3://解除拉黑成功
-//                            MMToast.showShort("解除成功!");
-//                            break;
-//                    }
-//                }
-//            }
-//        });
-    }
+
 
     private boolean onDetectHeart() {
 //        List<MutualHeartUnList.MutualHeartUn> mutualHeartUns = ModuleMgr.getCfgMgr().getMutualHeartUn();
@@ -256,7 +227,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         findViewById(R.id.chat_title_phone).setOnClickListener(this);
         findViewById(R.id.chat_title_wx).setOnClickListener(this);
         findViewById(R.id.chat_title_yb).setOnClickListener(this);
-        findViewById(R.id.privatechat_giftview).setOnClickListener(this);
+      //  findViewById(R.id.privatechat_giftview).setOnClickListener(this);
 
         chat_title_attention_icon = (ImageView) findViewById(R.id.chat_title_attention_icon);
         chat_title_attention_name = (TextView) findViewById(R.id.chat_title_attention_name);
@@ -268,9 +239,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.privatechat_giftview://礼物
-                UIShow.showBottomGiftDlg(this, whisperID);
-                break;
             case R.id.chat_title_attention:{//关注
 
 

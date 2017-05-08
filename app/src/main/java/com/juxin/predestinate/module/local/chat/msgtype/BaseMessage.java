@@ -12,6 +12,8 @@ import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**

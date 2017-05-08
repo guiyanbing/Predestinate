@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.msgview.utils.EggUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 
 /**
@@ -70,6 +71,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         chatBtnExtend = findViewById(R.id.chat_extend);
         chatBtnSend = findViewById(R.id.chat_send);
+
+        findViewById(R.id.input_giftview).setOnClickListener(this);
 
         input_monthly.setOnClickListener(this);
         chatBtnVoice.setOnClickListener(this);
@@ -193,6 +196,9 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 //  UIShow.showGoodsMonthlyLetterAct((Activity) getContext(), UIHelper.PAY_ACT);
                 //    UIShow.showMonthMailAct((Activity) getContext());
 
+                break;
+            case R.id.input_giftview:
+                onClickChatGift();
                 break;
         }
     }
@@ -427,6 +433,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         } catch (Exception e) {
             MMLog.printThrowable(e);
         }
+    }
+
+    /**
+     * 发送礼物
+     */
+    private void onClickChatGift() {
+        closeAllInput();
+        UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
     }
 
     /**
