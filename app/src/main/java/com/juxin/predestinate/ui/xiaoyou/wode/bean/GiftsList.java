@@ -42,7 +42,7 @@ public class GiftsList extends BaseData {
     public GiftInfo getGiftInfo(int id){
         if (arrCommonGifts != null){
             for (int i = 0 ;i< arrCommonGifts.size();i++){
-                GiftInfo gift = (GiftInfo) arrCallGifts.get(i);
+                GiftInfo gift = (GiftInfo) arrCommonGifts.get(i);
                 if (gift.getId() == id) return gift;
             }
         }
@@ -76,6 +76,7 @@ public class GiftsList extends BaseData {
         private int money = 0;
         private int id = 0;
         private String gif = "";
+        private boolean isShow;
 
         @Override
         public void parseJson(String s) {
@@ -134,6 +135,14 @@ public class GiftsList extends BaseData {
 
         public void setGif(String gif) {
             this.gif = gif;
+        }
+
+        public boolean isShow() {
+            return isShow;
+        }
+
+        public void setIsShow(boolean isShow) {
+            this.isShow = isShow;
         }
 
         @Override

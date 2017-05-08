@@ -40,10 +40,10 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilepackagesView = (HorizontalListView) findViewById(R.id.chat_smile_packages);
         smilePackageLayouts = (FrameLayout) findViewById(R.id.chat_smile_package_layouts);
 
-//        chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
-//        smilepackagesView.setAdapter(chatSmileAdapter);
-//        smilepackagesView.setOnItemClickListener(this);
-//        chatSmileAdapter.setCheckPosition(0);
+        chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
+        smilepackagesView.setAdapter(chatSmileAdapter);
+        smilepackagesView.setOnItemClickListener(this);
+        chatSmileAdapter.setCheckPosition(0);
 
         addView_Package_Default();
 
@@ -55,7 +55,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             return;
         }
 
-    //    chatSmileAdapter.setList(ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
+       // chatSmileAdapter.setList(ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
 
 //        if (ChatListMgr.Folder.sys_notice == getChatInstance().chatAdapter.getFolder()) {
 //             chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages(new String[]{"gift"}));

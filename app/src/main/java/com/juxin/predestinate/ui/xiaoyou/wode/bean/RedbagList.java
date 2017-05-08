@@ -1,6 +1,8 @@
 package com.juxin.predestinate.ui.xiaoyou.wode.bean;
 
 
+import android.util.Log;
+
 import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
@@ -43,7 +45,8 @@ public class RedbagList extends BaseData {
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
-        this.setTotal(jsonObject.optDouble("total"));
+        if (jsonObject.has("total"))
+            this.setTotal(jsonObject.optDouble("total"));
         redbagLists = getBaseDataList(jsonObject.optJSONArray("result"), RedbagInfo.class);
     }
 
@@ -57,6 +60,7 @@ public class RedbagList extends BaseData {
 
         @Override
         public void parseJson(String s) {
+            Log.e("TTTTTTTTTGGG",s+"|||");
             JSONObject jsonObject = getJsonObject(s);
             this.setId(jsonObject.optLong("id"));
             this.setMoney(jsonObject.optDouble("money"));

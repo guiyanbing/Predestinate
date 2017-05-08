@@ -29,7 +29,7 @@ import java.util.HashMap;
 
 
 /**
- * 我的关注适配器
+ * 关注我的适配器
  * Created by zm on 2017/4/13.
  */
 public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements RequestComplete {
@@ -98,8 +98,12 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                     if (otherId == null) {
                         return;
                     }
-                    LoadingDialog.show((FragmentActivity)mContext);
-                    ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);
+                    LoadingDialog.show((FragmentActivity) mContext);
+                    if (info.getType() == 0){
+                        ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);
+                        return;
+                    }
+                    ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);
 //                    MyConcernAct_ItemViewObject obj = new MyConcernAct_ItemViewObject((TextView) view, iPos);
 //                    FollowUser followUser = new FollowUser(mContext, otherId, FollowUser.FOLLOWUSER_ADD, obj);
 //                    followUser.setCallBack(MyConcern_BeAct_Adapter.this);
@@ -111,6 +115,8 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
             mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AttentionMeAdapter.this.postion = position;
+                    AttentionMeAdapter.this.vh = mHolder;
                     if (!NetworkUtils.isConnected(mContext)) {
                         PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
                         return;
@@ -122,6 +128,10 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                         return;
                     }
                     LoadingDialog.show((FragmentActivity)mContext);
+                    if (info.getType() == 0){
+                        ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);
+                        return;
+                    }
                     ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);
 //                    MyConcernAct_ItemViewObject obj = new MyConcernAct_ItemViewObject((TextView) view, iPos);
 //                    FollowUser followUser = new FollowUser(mContext, otherId, FollowUser.FOLLOWUSER_DEL, obj);
@@ -205,9 +215,13 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         if (response.isOk()){
             if (getList().get(postion).getType() == 0){
                 vh.tvconcern.setText("取消关注");
+                getList().get(postion).setType(1);
+                this.notifyItemChanged(postion);
                 return;
             }
             vh.tvconcern.setText("关注TA");
+            getList().get(postion).setType(0);
+            this.notifyItemChanged(postion);
         }else {
             PToast.showShort("操作失败，请重试！");
         }

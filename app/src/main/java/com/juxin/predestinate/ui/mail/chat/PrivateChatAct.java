@@ -22,6 +22,7 @@ import com.juxin.mumu.bean.message.MsgType;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
@@ -43,7 +44,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     private LinearLayout privatechat_head;
     private ImageView chat_title_attention_icon;
-    private TextView chat_title_attention_name;
+    private TextView chat_title_attention_name, chat_title_yb_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -255,24 +256,31 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         findViewById(R.id.chat_title_phone).setOnClickListener(this);
         findViewById(R.id.chat_title_wx).setOnClickListener(this);
         findViewById(R.id.chat_title_yb).setOnClickListener(this);
+        findViewById(R.id.privatechat_giftview).setOnClickListener(this);
 
         chat_title_attention_icon = (ImageView) findViewById(R.id.chat_title_attention_icon);
         chat_title_attention_name = (TextView) findViewById(R.id.chat_title_attention_name);
+        chat_title_yb_name = (TextView) findViewById(R.id.chat_title_yb_name);
+
+        chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.chat_title_attention:{
+            case R.id.privatechat_giftview://礼物
+
+                break;
+            case R.id.chat_title_attention:{//关注
                 break;
             }
-            case R.id.chat_title_phone:
+            case R.id.chat_title_phone://手机
                 UIShow.showCheckOtherInfoAct(this, whisperID);
                 break;
-            case R.id.chat_title_wx:
+            case R.id.chat_title_wx://微信
                 UIShow.showCheckOtherInfoAct(this, whisperID);
                 break;
-            case R.id.chat_title_yb:
+            case R.id.chat_title_yb://Y币
                 UIShow.showGoodsYCoinDlgOld(this);
                 break;
         }

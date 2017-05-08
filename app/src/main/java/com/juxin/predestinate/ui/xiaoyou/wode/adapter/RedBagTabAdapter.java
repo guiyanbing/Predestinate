@@ -21,7 +21,7 @@ import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedbagList;
 
 
 /**
- * 礼物列表
+ * 红包列表
  * Created by zm on 2017/4/13.
  */
 public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagInfo> implements RequestComplete{
