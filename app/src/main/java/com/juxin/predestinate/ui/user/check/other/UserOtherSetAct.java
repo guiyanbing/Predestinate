@@ -14,6 +14,7 @@ import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -74,6 +75,7 @@ public class UserOtherSetAct extends BaseActivity {
                     break;
 
                 case R.id.rl_complain:  // 投诉，跳转举报
+                    UIShow.showDefriendAct(userProfile.getUid(), UserOtherSetAct.this);
                     break;
             }
         }

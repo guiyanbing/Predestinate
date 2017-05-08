@@ -53,18 +53,19 @@ public enum UrlParam {
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
-    // 上传头像
-    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),
+
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
-
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
     //获取昵称和头像的最近变更 list
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 
+    // 上传头像
+    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),
     // 上传文件
+    //uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
     uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================
