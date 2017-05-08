@@ -272,7 +272,7 @@
     <string name="goods_pay_confirm">确认充值</string>
 
     <string name="goods_vip_title">开通VIP</string>
-    <string name="goods_vip_price">(50元月)</string>
+    <string name="goods_vip_price">(50元/月)</string>
     <string name="goods_vip_user">已开通VIP用户：</string>
     <string name="goods_vip_users">人</string>
     <string name="goods_vip_tips">开通VIP可与所有美女聊天</string>
@@ -292,6 +292,7 @@
     <string name="goods_ycoin_phone_cost">并赠送100元话费</string>
     <string name="goods_ycoin_dredge">开通服务</string>
     <string name="goods_ycoin_welfare">开通VIP赠送100体力，并且享受体力加速恢复，\n充值Y币额外赠送10%</string>
+    <string name="goods_ycoin_pay">立即支付%d</string>
 
 
     <!--  相册  -->

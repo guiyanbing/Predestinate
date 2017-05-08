@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
@@ -67,8 +68,15 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
         }
 
         if (!TextUtils.isEmpty(data.getDesc())) {
-            tv_desc.setVisibility(View.VISIBLE);
             tv_desc.setText(data.getDesc());
+        }
+
+        // 充值类型区分
+        switch (chargeType) {
+            case GoodsConstant.DLG_YCOIN_NEW:       // 新Y币充值弹框
+                if (ModuleMgr.getCenterMgr().getMyInfo().isVip())
+                    tv_desc.setVisibility(View.GONE);
+                break;
         }
     }
 

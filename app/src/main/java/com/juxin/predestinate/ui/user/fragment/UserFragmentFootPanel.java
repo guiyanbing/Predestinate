@@ -112,7 +112,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
 
                 // test
 //                UIShow.showGoodsVipDialog(getContext(), GoodsConstant.DLG_VIP_PRIVEDEG);
-                UIShow.showGoodsYCoinDialog(getContext());
+                UIShow.showGoodsYCoinDialog(getContext(), 1992, 30);
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心
