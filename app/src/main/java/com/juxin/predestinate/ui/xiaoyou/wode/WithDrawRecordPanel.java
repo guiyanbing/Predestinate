@@ -73,8 +73,8 @@ public class WithDrawRecordPanel extends BaseViewPanel implements RequestComplet
         if (response.isOk()){
             WithdrawList withdrawList = new WithdrawList();
 
-            withdrawList.parseJson(testData());
-//            withdrawList.parseJson(response.getResponseString());
+//            withdrawList.parseJson(testData());
+            withdrawList.parseJson(response.getResponseString());
             mWithdrawInfos = withdrawList.getRedbagLists();
             ((RedBoxRecordAct)context).refreshView(withdrawList.getTotal());
             if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()){

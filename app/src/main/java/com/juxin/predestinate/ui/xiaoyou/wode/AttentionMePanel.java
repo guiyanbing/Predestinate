@@ -72,7 +72,10 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
             if (response.isOk()){
                 mUserDetails.clear();
                 AttentionList lists = new AttentionList();
+//                lists.parseJson(testData());
                 lists.parseJson(response.getResponseString());
+
+
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
                 mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos));
                 if (infos != null && !infos.isEmpty()){
@@ -83,6 +86,7 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
                     }
                     return;
                 }
+                mAttentionMeAdapter.setList(mUserDetails);
                 if (mUserDetails.size()<=0){
                     crvView.showNoData(mContext.getString(R.string.tip_data_empty), mContext.getString(R.string.tip_click_refresh), new View.OnClickListener() {
                         @Override
@@ -136,15 +140,23 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
     }
 
     private String testData(){
-        String str = "{\n" +
+        String str = "/*{\n" +
                 "    \"result\": \"success\",\n" +
                 "    \"item\": [\n" +
                 "        {\n" +
                 "            \"uid\": 333245,\n" +
                 "            \"time\": 1423042627\n" +
+                "        },\n" +
+                "{\n" +
+                "            \"uid\": 122821207,\n" +
+                "            \"time\": 1423042627\n" +
+                "        },\n" +
+                "{\n" +
+                "            \"uid\": 123950396,\n" +
+                "            \"time\": 1423042627\n" +
                 "        }\n" +
                 "    ]\n" +
-                "}";
+                "}*/";
         return str;
     }
 }

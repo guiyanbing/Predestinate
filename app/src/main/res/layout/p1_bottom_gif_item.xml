@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/px10_dp"
     android:paddingRight="@dimen/px10_dp"
@@ -8,10 +8,12 @@
 
     <LinearLayout
         android:id="@+id/bottom_gif_item_ll_top"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/px6_dp"
         android:layout_marginTop="@dimen/px16_dp"
+        android:paddingLeft="@dimen/px70_dp"
+        android:paddingRight="@dimen/px70_dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:background="@drawable/gift_item_bg"
@@ -47,5 +49,6 @@
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/px22_dp"
         android:background="@color/white"
+        android:visibility="gone"
         android:text="亲密度+20"/>
 </RelativeLayout>

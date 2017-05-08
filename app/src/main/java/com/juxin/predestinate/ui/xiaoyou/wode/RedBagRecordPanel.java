@@ -102,11 +102,12 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
             RedbagList redbagList = new RedbagList();
 
 
-            redbagList.parseJson(testData());
-//            redbagList.parseJson(response.getResponseString());
+//            redbagList.parseJson(testData());
+            redbagList.parseJson(response.getResponseString());
             if (response.isOk()){
                 ((RedBoxRecordAct)context).refreshView(redbagList.getTotal());
                 mRedbagInfos = redbagList.getRedbagLists();
+//                Log.e("TTTTTTTTVV",mRedbagInfos.size()+"|||");
                 handleData();
                 return;
             }
@@ -174,21 +175,27 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
 
     private String testData(){
         String str = "/*{\n" +
-                "    \"result\": \"success\",\n" +
-                "    \"item\": [\n" +
-                "        {\n" +
-                "            \"uid\": 333245,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 122821207,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 123950396,\n" +
-                "            \"time\": 1423042627\n" +
-                "        }\n" +
-                "    ]\n" +
+                "  \"status\": \"ok\",\n" +
+                "  \"total\": \"20\",\n" +
+                "  \"result\":[{\n" +
+                "        \"id\":\"2\",\n" +
+                "        \"money\":\"300\",\n" +
+                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "        \"type\":\"1\",\n" +
+                "        \"rank\":0\n" +
+                "  },{\n" +
+                "        \"id\":\"3\",\n" +
+                "        \"money\":\"300\",\n" +
+                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "        \"type\":\"2\",\n" +
+                "        \"rank\":0\n" +
+                "  },{\n" +
+                "        \"id\":\"4\",\n" +
+                "        \"money\":\"300\",\n" +
+                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "        \"type\":\"3\",\n" +
+                "        \"rank\":0\n" +
+                "  }]\n" +
                 "}*/";
         return str;
     }

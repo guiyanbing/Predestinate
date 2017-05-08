@@ -77,6 +77,7 @@ import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDlgOld;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
@@ -734,6 +735,18 @@ public class UIShow {
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         dlg.show();
+    }
+
+    /**
+     * 消息页面送礼物底部弹框
+     *
+     * @param context
+     * @param to_id   他人id
+     */
+    public static void showBottomGiftDlg(Context context,long to_id) {
+        BottomGiftDialog dialog = new BottomGiftDialog();
+        dialog.setToId(to_id);
+        dialog.showDialog((FragmentActivity) context);
     }
 
     /**
