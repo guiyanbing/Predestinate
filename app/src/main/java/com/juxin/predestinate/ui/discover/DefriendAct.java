@@ -108,6 +108,7 @@ public class DefriendAct extends BaseActivity implements DefriendAdapter.OnSelec
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()) {
             MMToast.showShort("举报成功");
+            finish();
         }
     }
 }
