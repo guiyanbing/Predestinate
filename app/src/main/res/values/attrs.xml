@@ -40,4 +40,9 @@
         <attr name="android_choiceMode" format="integer" />
     </declare-styleable>
 
+
+    <declare-styleable name="ImgBlurImageView">
+        <attr name="blur" format="integer"></attr>
+    </declare-styleable>
+
 </resources>

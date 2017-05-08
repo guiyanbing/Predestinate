@@ -85,11 +85,11 @@ public class GiftDiamondPayDlg extends Activity implements View.OnClickListener,
             initViewGrid();
         }
         //当前钻石数
-        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() > 0) {
-            tv_money.setText("当前钻石：" + ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() + "");
-        } else {
-            ModuleMgr.getCommonMgr().getMyDiamand(this);
-        }
+        tv_money.setText("当前钻石：" + ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
+//        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() > 0) {
+//        } else {
+//            ModuleMgr.getCommonMgr().getMyDiamand(this);
+//        }
         selectVipTypeBtn(R.id.dlg_diamond_ll_diamond10);
     }
 
@@ -202,9 +202,9 @@ public class GiftDiamondPayDlg extends Activity implements View.OnClickListener,
         if (selectGift == null){
             return;
         }
-        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() - selectGift.getMoney() < 0) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - selectGift.getMoney() < 0) {
             findViewById(R.id.ll_gift_pay).setVisibility(View.VISIBLE);
-            dlg_diamond_tv_decdiamod.setText((selectGift.getMoney() -ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum()) + "钻石");
+            dlg_diamond_tv_decdiamod.setText((selectGift.getMoney() -ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) + "钻石");
         } else {
             findViewById(R.id.ll_gift_pay).setVisibility(View.GONE);
         }
@@ -369,7 +369,7 @@ public class GiftDiamondPayDlg extends Activity implements View.OnClickListener,
         if (response.getUrlParam() == UrlParam.getMyDiamand){
             if (response.isOk()){
                 int diamonds = JsonUtil.getJsonObject(response.getResponseString()).optInt("diamand", 0);
-                ModuleMgr.getCenterMgr().getMyInfo().setDiamondsSum(diamonds);
+//                ModuleMgr.getCenterMgr().getMyInfo().setDiamondsSum(diamonds);
                 tv_money.setText("当前钻石：" + diamonds);
             }
             return;
@@ -407,7 +407,7 @@ public class GiftDiamondPayDlg extends Activity implements View.OnClickListener,
         if (null == selectGift) {
             PToast.showShort("请选择礼物.");
         } else {
-            if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() >= selectGift.getMoney()) {
+            if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() >= selectGift.getMoney()) {
 //                if (iGiftSend != null)
 //                    iGiftSend.onSend(selectGift);
                 //发送消息

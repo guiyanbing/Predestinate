@@ -10,11 +10,10 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.WindowManager;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -85,6 +84,7 @@ import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
 import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.xiaoyou.wode.GiftDiamondPayDlg;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyAttentionAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
@@ -473,7 +473,7 @@ public class UIShow {
     // -----------------------消息提示跳转 end----------------------------
 
     /**
-     * 调起软件强制升级弹窗
+     * 软件升级逻辑处理
      *
      * @param activity  FragmentActivity上下文
      * @param appUpdate 软件升级信息
@@ -481,32 +481,49 @@ public class UIShow {
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
-        // 如果不同包名且已安装升级包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
         if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                && !ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())
-                && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
-            PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
-                @Override
-                public void onCancel() {
-                }
-
-                @Override
-                public void onSubmit() {
-                    if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                        activity.moveTaskToBack(activity.isTaskRoot());
+                && ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {//相同包名
+            if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
+                createUpdateDialog(activity, appUpdate);
+            } else {
+                if (isShowTip) PToast.showShort("您当前的版本为最新的");
+            }
+        } else {//不同包名
+            if (!TextUtils.isEmpty(appUpdate.getPackage_name())
+                    && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
+                // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
+                PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
+                    @Override
+                    public void onCancel() {
                     }
+
+                    @Override
+                    public void onSubmit() {
+                        if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
+                            activity.moveTaskToBack(activity.isTaskRoot());
+                        }
+                    }
+                }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
+            } else {
+                if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
+                    createUpdateDialog(activity, appUpdate);
+                } else {
+                    if (isShowTip) PToast.showShort("您当前的版本为最新的");
                 }
-            }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
+            }
         }
-        // 如果同包名或者包名返回为空，只要返回的版本号>当前已安装的版本号，就弹窗进行下载更新
-        else if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
-            ModuleMgr.getCommonMgr().updateSaveUP();//更新时先保存用户信息备用
-            UpdateDialog updateDialog = new UpdateDialog();
-            updateDialog.setData(appUpdate);
-            updateDialog.showDialog(activity);
-        } else {
-            if (isShowTip) PToast.showShort("您当前的版本为最新的");
-        }
+    }
+
+    /**
+     * 创建软件升级弹框
+     */
+    private static void createUpdateDialog(FragmentActivity activity, AppUpdate appUpdate) {
+        //更新时先保存用户信息备用
+        ModuleMgr.getCommonMgr().updateSaveUP(appUpdate.getPackage_name(), appUpdate.getVersion());
+
+        UpdateDialog updateDialog = new UpdateDialog();
+        updateDialog.setData(appUpdate);
+        updateDialog.showDialog(activity);
     }
 
     /**
@@ -586,7 +603,7 @@ public class UIShow {
         ModuleMgr.getCommonMgr().reqGenerateOrders(orderID, new RequestComplete() {
             @Override
             public void onRequestComplete(final HttpResponse response) {
-                MMLog.autoDebug("Re===" + response.getResponseString());
+                PLogger.d("Re===" + response.getResponseString());
                 LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
                     @Override
                     public void call() {
@@ -596,13 +613,12 @@ public class UIShow {
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
                         } else {
-                            MMToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                         }
                     }
                 });
             }
         });
-
     }
 
     public static void showPayPhoneCardAct(final FragmentActivity activity, PayGood payGood, String orderID) {
@@ -751,6 +767,24 @@ public class UIShow {
     }
 
     /**
+     * 消息页面送礼物（兼容第一版送礼物）弹框
+     *
+     * @param context
+     * @param to_id    他人id
+     * @param nickname 昵称
+     * @param avatar   头像地址
+     * @param msg      消息内容
+     */
+    public static void showFristSendGiftDlg(Context context, long to_id, String nickname, String avatar, String msg) {
+        Intent intent = new Intent(context, GiftDiamondPayDlg.class);
+        intent.putExtra("avatar", avatar);
+        intent.putExtra("msg", msg);
+        intent.putExtra("nickname", nickname);
+        intent.putExtra("toUid", to_id);
+        context.startActivity(intent);
+    }
+
+    /**
      * 打开我的钱包页面
      *
      * @param context
@@ -893,6 +927,4 @@ public class UIShow {
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
-
-
 }

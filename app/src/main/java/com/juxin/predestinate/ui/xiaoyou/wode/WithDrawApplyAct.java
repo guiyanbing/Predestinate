@@ -26,7 +26,7 @@ import com.juxin.predestinate.ui.xiaoyou.wode.bean.WithdrawAddressInfo;
  */
 public class WithDrawApplyAct extends BaseActivity implements View.OnClickListener,RequestComplete{
 
-    private int mId;
+    private int mId;//提现记录id
     private String mEidtMoney = "0";
     private boolean mIsFromEdit;
 
@@ -165,8 +165,8 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
                 etCardNum.setText(info.getAccountnum());
             }
             return;
-        }
-        if (response.getUrlParam() == UrlParam.reqWithdraw || response.getUrlParam() == UrlParam.reqWithdrawModify){//申请提现结果返回，修改地址结果返回
+        }        if (response.getUrlParam() == UrlParam.reqWithdraw || response.getUrlParam() == UrlParam.reqWithdrawModify){//申请提现结果返回，修改地址结果返回
+
 
             if (response.isOk()){
                 PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? getString(R.string.submit_succeed) : response.getMsg());

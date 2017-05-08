@@ -85,10 +85,10 @@ public class AskforGiftDialog extends Dialog implements OnClickListener, Request
 //            AppCtx.execLstGiftTask(mContext, TASK_TYPE_GETLIST, this);
             ModuleMgr.getCommonMgr().requestgetGifts(this);
         }
-        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() == 0) {//请求钻石数目
-            ModuleMgr.getCommonMgr().getMyDiamand(this);
-//            executeDiamondTask();
-        }
+//        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() == 0) {//请求钻石数目
+//            ModuleMgr.getCommonMgr().getMyDiamand(this);
+////            executeDiamondTask();
+//        }
     }
 
     public AskforGiftDialog(Context context, int theme) {

@@ -29,6 +29,7 @@ public class UserInfo extends UserBasic {
     private boolean isBindRose;     // 是否绑定了红娘
     private int ycoin = 0;          // Y币
     private int diamand;            // 钻石
+    private int redbagsum;          //红包总额
 
 
     // -------2017-1-5红包来了添加字段 -------
@@ -81,6 +82,14 @@ public class UserInfo extends UserBasic {
 
     public void setDiamand(int diamand) {
         this.diamand = diamand;
+    }
+
+    public int getRedbagsum() {
+        return redbagsum;
+    }
+
+    public void setRedbagsum(int redbagsum) {
+        this.redbagsum = redbagsum;
     }
 
     public boolean isSayHello() {

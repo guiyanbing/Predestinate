@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
@@ -56,7 +57,14 @@ public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweig
         }
 
 
-        holder.lin_item.setOnClickListener(new View.OnClickListener() {
+        holder.rel_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+            }
+        });
+
+        holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
@@ -73,7 +81,8 @@ public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweig
     private class MyViewHolder {
         private ImageView iv_avatar, iv_vip;
         private TextView tv_name, tv_age, tv_height, tv_ranking_type, tv_ranking_level;
-        private LinearLayout lin_ranking, lin_item;
+        private LinearLayout lin_ranking;
+        private RelativeLayout rel_item;
 
         public MyViewHolder(BaseRecyclerViewHolder convertView) {
             initView(convertView);
@@ -92,7 +101,7 @@ public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweig
             tv_ranking_level = (TextView) convertView.findViewById(R.id.mydefriend_item_ranking_level);
 
             lin_ranking = (LinearLayout) convertView.findViewById(R.id.mydefriend_item_ranking_state);
-            lin_item = (LinearLayout) convertView.findViewById(R.id.mydefriend_item);
+            rel_item = (RelativeLayout) convertView.findViewById(R.id.mydefriend_item);
         }
 
     }

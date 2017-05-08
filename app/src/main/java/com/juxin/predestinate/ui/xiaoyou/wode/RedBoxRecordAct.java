@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,9 +45,6 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     private List<PagerItem> listViews;//pagerItem集合
     private List<BaseViewPanel> panls = new ArrayList<>(); // Tab页面列表
 
-    //list间隔样式
-//    android:divider="@color/transparent"
-//    android:dividerHeight="1dip"
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +99,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
             case R.id.wode_wallet_tv_draw:
                 String money = tvMoney.getText().toString().trim();
                 int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
-                Log.e("TTTTTTTTTT",ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()+"|||");
+//                Log.e("TTTTTTTTTT",ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()+"|||");
                 if (Float.valueOf(money) <= Float.valueOf(minMoney)) {
                     PToast.showShort(getString(R.string.withdraw_tips) +minMoney + getString(R.string.head_unit));
                     return;

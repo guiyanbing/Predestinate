@@ -52,7 +52,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
         tv_gift_diamonds = (TextView) findViewById(R.id.tv_send_gift_diamonds);
         iv_pic = (ImageView) findViewById(R.id.iv_send_gift_pic);
         tv_gift_diamonds.setText(giftDiamonds + "个钻石");
-        tv_diamonds.setText("钻石余额：" + ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum());
+        tv_diamonds.setText("钻石余额：" + ModuleMgr.getCenterMgr().getMyInfo().getDiamand());
         findViewById(R.id.tv_send_gift_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +67,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_diamond_ok:
-                int dec = ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() - giftBean.getMoney();
+                int dec = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftBean.getMoney();
                 if (dec >= 0) {//赠送礼物
                     //            if (null != iGiftSend) {
                     //                iGiftSend.onSend(giftBean);

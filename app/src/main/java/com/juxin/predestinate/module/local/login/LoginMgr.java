@@ -7,13 +7,13 @@ import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.RegResult;
@@ -196,7 +196,7 @@ public class LoginMgr implements ModuleBase {
         postParams.put("gender", gender);
         postParams.put("nickname", nickname);
         postParams.put("r", new Random().nextLong());
-        MMLog.d("yao", "s_uid=" + postParams.get("s_uid")
+        PLogger.d("s_uid=" + postParams.get("s_uid")
                 + "s_sid=" + postParams.get("s_sid") + "ie=" +
                 postParams.get("ie") + "app_key=" + postParams.get("app_key") + "pkgname=" + postParams.get("pkgname") + "simoperator=" + postParams.get("simoperator") + "mc=" + postParams.get("mc") + "is=" + postParams.get("is"));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, new RequestComplete() {

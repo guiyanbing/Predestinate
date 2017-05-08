@@ -69,11 +69,9 @@ public class DefriendAdapter extends ExBaseAdapter<DefriendType> {
     private void setCheck(int position) {
         if (getItem(position) != null) {
             getItem(position).setCheck(!getItem(position).isCheck());
-            if (!getItem(position).isCheck()) {
-                for (int i = 0; i < getList().size(); i++) {
-                    if (i != position) {
-                        getItem(i).setCheck(false);
-                    }
+            for (int i = 0; i < getList().size(); i++) {
+                if (i != position) {
+                    getItem(i).setCheck(false);
                 }
             }
             notifyDataSetChanged();
