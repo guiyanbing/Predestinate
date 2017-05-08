@@ -33,6 +33,7 @@ public class SplashActivity extends BaseActivity {
 
     private void initData() {
         LocationMgr.getInstance().start();//启动定位
+        ModuleMgr.getCommonMgr().updateUsers();//软件升级U-P读取
     }
 
     private void jumpAnimation() {

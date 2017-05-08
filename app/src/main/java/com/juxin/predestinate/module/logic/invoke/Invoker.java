@@ -511,6 +511,18 @@ public class Invoker {
             UIShow.showQQServer(act == null ? App.context : act);
         }
 
+        // 获取用户绑定手机号
+        public void get_phone_number(String data) {
+            PLogger.d("---get_phone_number--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
+            Map<String, Object> responseObject = new HashMap<>();
+            //字符串 没有绑定 返回值空字符，绑定的返回手机号
+            responseObject.put("num", userInfo.isVerifyCellphone() ? userInfo.getPhone() : "");
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+        }
+
         // ------------------------------游戏用cmd---------------------------------
 
         // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid
