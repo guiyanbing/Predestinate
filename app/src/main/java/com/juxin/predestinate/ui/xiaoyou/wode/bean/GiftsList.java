@@ -20,20 +20,45 @@ public class GiftsList extends BaseData {
 
     public List getArrCommonGifts() {
         List gifts = new ArrayList();
-        gifts.addAll(arrCommonGifts);
+        if (arrCommonGifts != null)
+            gifts.addAll(arrCommonGifts);
         return gifts;
     }
 
     public List getArrCallGifts() {
         List gifts = new ArrayList();
-        gifts.addAll(arrCallGifts);
+        if (arrCallGifts != null)
+            gifts.addAll(arrCallGifts);
         return gifts;
     }
 
     public List getArrlineGifts() {
         List gifts = new ArrayList();
-        gifts.addAll(arrlineGifts);
+        if (arrlineGifts != null)
+            gifts.addAll(arrlineGifts);
         return gifts;
+    }
+
+    public GiftInfo getGiftInfo(int id){
+        if (arrCommonGifts != null){
+            for (int i = 0 ;i< arrCommonGifts.size();i++){
+                GiftInfo gift = (GiftInfo) arrCommonGifts.get(i);
+                if (gift.getId() == id) return gift;
+            }
+        }
+        return null;
+    }
+
+    public void setArrCommonGifts(List arrCommonGifts) {
+        this.arrCommonGifts = arrCommonGifts;
+    }
+
+    public void setArrCallGifts(List arrCallGifts) {
+        this.arrCallGifts = arrCallGifts;
+    }
+
+    public void setArrlineGifts(List arrlineGifts) {
+        this.arrlineGifts = arrlineGifts;
     }
 
     @Override
@@ -51,6 +76,7 @@ public class GiftsList extends BaseData {
         private int money = 0;
         private int id = 0;
         private String gif = "";
+        private boolean isShow;
 
         @Override
         public void parseJson(String s) {
@@ -109,6 +135,14 @@ public class GiftsList extends BaseData {
 
         public void setGif(String gif) {
             this.gif = gif;
+        }
+
+        public boolean isShow() {
+            return isShow;
+        }
+
+        public void setIsShow(boolean isShow) {
+            this.isShow = isShow;
         }
 
         @Override

@@ -131,6 +131,12 @@
 
         <!-- ============= 小友模块start ============= -->
         <activity
+            android:name=".ui.xiaoyou.wode.NearVisitorAct"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.xiaoyou.wode.MyAttentionAct"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.xiaoyou.wode.MyDiamondsAct"
             android:screenOrientation="portrait" />
         <activity
@@ -151,6 +157,10 @@
         <activity
             android:name=".ui.xiaoyou.wode.RedBoxPhoneVerifyAct"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.xiaoyou.wode.DemandRedPacketAct"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.xiaoyou.TabGroupActivity"

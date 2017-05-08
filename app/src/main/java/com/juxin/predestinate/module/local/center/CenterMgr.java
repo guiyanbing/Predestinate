@@ -423,12 +423,10 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 获取进入H5充值页面需要传递的参数map
      *
-     * @param type Y币：1，VIP：2
      * @return 拼接完成的参数map
      */
-    public HashMap<String, Object> getChargeH5Params(int type) {
+    public HashMap<String, Object> getChargeH5Params() {
         HashMap<String, Object> params = new HashMap<>();
-        params.put("type", type);
         params.put("ycoin_person", getActiveUserNum(CHARGE_NUM_COIN));
         params.put("vip_person", getActiveUserNum(CHARGE_NUM_VIP));
         return params;

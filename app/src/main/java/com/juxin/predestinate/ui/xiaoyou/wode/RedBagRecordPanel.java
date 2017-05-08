@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.xiaoyou.wode;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -90,6 +92,7 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
     //请求数据返回
     @Override
     public void onRequestComplete(HttpResponse response) {
+        LoadingDialog.closeLoadingDialog();
         tvNoData.setVisibility(View.GONE);
         crvView.showXrecyclerView();
         rvList.refreshComplete();
@@ -97,10 +100,14 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
         if (response.getUrlParam() == UrlParam.reqRedbagList){
 //            Log.e("TTTTTTTT", response.getResponseString()+"|||"+response.isOk());
             RedbagList redbagList = new RedbagList();
+
+
+//            redbagList.parseJson(testData());
             redbagList.parseJson(response.getResponseString());
             if (response.isOk()){
                 ((RedBoxRecordAct)context).refreshView(redbagList.getTotal());
                 mRedbagInfos = redbagList.getRedbagLists();
+//                Log.e("TTTTTTTTVV",mRedbagInfos.size()+"|||");
                 handleData();
                 return;
             }
@@ -112,6 +119,11 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
                 RedOneKeyList redOneKeyList = (RedOneKeyList) response.getBaseData();
                 ((RedBoxRecordAct)context).refreshView(redOneKeyList.getSum());
                 mRedbagInfos = redOneKeyList.getRedbagFailLists();
+                if(redOneKeyList.getSucnum() == 0) {
+                    PToast.showShort(mContext.getString(R.string.no_add_redbag));
+                }else {
+                    PToast.showShort(mContext.getString(R.string.succeed) + redOneKeyList.getSucnum() + mContext.getString(R.string.hour_into_the_bag));
+                }
                 handleData();
                 return;
             }
@@ -123,8 +135,10 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
     private void handleData(){
         if (mRedbagInfos != null && !mRedbagInfos.isEmpty()){
             mRedBagTabAdapter.setList(mRedbagInfos);
+            butOneKey.setEnabled(true);
             showCollect();
         }else {
+            butOneKey.setEnabled(false);
             showNoData();
         }
     }
@@ -155,6 +169,34 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
 
     @Override
     public void onClick(View v) {//单击事件
+        LoadingDialog.show((FragmentActivity)mContext);
         ModuleMgr.getCommonMgr().reqAddredonekey(ModuleMgr.getCenterMgr().getMyInfo().getUid(),this);
+    }
+
+    private String testData(){
+        String str = "/*{\n" +
+                "  \"status\": \"ok\",\n" +
+                "  \"total\": \"20\",\n" +
+                "  \"result\":[{\n" +
+                "        \"id\":\"2\",\n" +
+                "        \"money\":\"300\",\n" +
+                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "        \"type\":\"1\",\n" +
+                "        \"rank\":0\n" +
+                "  },{\n" +
+                "        \"id\":\"3\",\n" +
+                "        \"money\":\"300\",\n" +
+                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "        \"type\":\"2\",\n" +
+                "        \"rank\":0\n" +
+                "  },{\n" +
+                "        \"id\":\"4\",\n" +
+                "        \"money\":\"300\",\n" +
+                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "        \"type\":\"3\",\n" +
+                "        \"rank\":0\n" +
+                "  }]\n" +
+                "}*/";
+        return str;
     }
 }

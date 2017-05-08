@@ -43,7 +43,8 @@ public class WithdrawList extends BaseData {
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
-        this.setTotal(jsonObject.optDouble("total"));
+        if (jsonObject.has("total"))
+            this.setTotal(jsonObject.optDouble("total"));
         redbagLists = getBaseDataList(jsonObject.optJSONArray("result"), WithdrawInfo.class);
     }
 

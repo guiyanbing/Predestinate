@@ -65,6 +65,14 @@ public class UserInfo extends UserBasic {
         this.setInvite_uid(detailObject.optLong("invite_uid"));
     }
 
+    /**
+     * isVip暂时无用，判断是否是vip用户通过 'isMonthMail' 判断
+     */
+    public boolean isVip() {
+        return isMonthMail;
+        //return isVip;
+    }
+
     public boolean isSayHello() {
         return isSayHello;
     }
@@ -159,10 +167,6 @@ public class UserInfo extends UserBasic {
 
     public void setPhoneAuth(int phoneAuth) {
         this.phoneAuth = phoneAuth;
-    }
-
-    public boolean isVip() {
-        return isVip;
     }
 
     public void setVip(boolean vip) {

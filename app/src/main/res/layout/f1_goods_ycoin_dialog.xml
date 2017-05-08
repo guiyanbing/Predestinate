@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="@dimen/px45_dp">
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
@@ -25,17 +24,16 @@
                 android:id="@+id/tv_pay_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dip"
+                android:layout_margin="@dimen/px12_dp"
                 android:gravity="center"
-                android:paddingBottom="@dimen/px45_dp"
                 android:text="@string/goods_ycoin_title"
                 android:textColor="#313131"
                 android:textSize="@dimen/px56_sp" />
 
             <ImageView
-                android:id="@+id/iv_dlg_close"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:id="@+id/btn_close"
+                android:layout_width="@dimen/px60_dp"
+                android:layout_height="@dimen/px60_dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/f1_close_small" />
         </RelativeLayout>
@@ -47,8 +45,7 @@
             android:background="#f7f4ec"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:padding="@dimen/px20_dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,7 +64,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/px35_dp"
+                android:paddingLeft="@dimen/px10_dp"
                 android:text="@string/goods_ycoin_tip_header"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/px40_sp" />
@@ -91,17 +88,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/px45_dp"
             android:paddingLeft="@dimen/px35_dp"
-            android:paddingRight="@dimen/px35_dp"
-            android:paddingTop="15dp">
+            android:paddingRight="@dimen/px35_dp">
 
             <!-- 商品列表 -->
             <LinearLayout
                 android:id="@+id/goods_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/px35_dp"
+                android:layout_marginBottom="@dimen/px10_dp"
                 android:orientation="horizontal" />
 
             <LinearLayout
@@ -116,7 +111,8 @@
                     android:gravity="center"
                     android:text="并赠送体力100点"
                     android:textColor="@color/yellow"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    android:textSize="@dimen/px40_sp"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -124,7 +120,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/goods_ycoin_phone_cost"
-                    android:textColor="@color/yellow" />
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/px40_sp"/>
             </LinearLayout>
 
             <!-- 更多特权 -->
@@ -133,12 +130,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="10dp">
+                android:paddingTop="@dimen/px20_dp">
 
                 <ImageView
                     android:id="@+id/iv_pay_select_vip"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="@dimen/px60_dp"
+                    android:layout_height="@dimen/px60_dp"
                     android:background="@drawable/ic_radio_male_sel" />
 
                 <LinearLayout
@@ -156,22 +153,22 @@
                             android:layout_height="wrap_content"
                             android:text="@string/goods_vip_title"
                             android:textColor="#000000"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/px48_sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="5dp"
+                            android:paddingLeft="@dimen/px15_dp"
                             android:text="@string/goods_vip_price"
                             android:textColor="#999999"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/px45_dp" />
 
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
+                        android:paddingTop="@dimen/px20_dp"
                         android:text="@string/goods_ycoin_welfare"
                         android:textColor="#999999" />
                 </LinearLayout>

@@ -72,6 +72,8 @@ public class WithDrawRecordPanel extends BaseViewPanel implements RequestComplet
         crvView.showXrecyclerView();
         if (response.isOk()){
             WithdrawList withdrawList = new WithdrawList();
+
+//            withdrawList.parseJson(testData());
             withdrawList.parseJson(response.getResponseString());
             mWithdrawInfos = withdrawList.getRedbagLists();
             ((RedBoxRecordAct)context).refreshView(withdrawList.getTotal());
@@ -105,5 +107,30 @@ public class WithDrawRecordPanel extends BaseViewPanel implements RequestComplet
     @Override
     public void onLoadMore() {//加载更多
 
+    }
+
+    private String testData(){
+        String str = "/*{\n" +
+                "  \"status\": \"ok\",\n" +
+                "  \"total\": \"20\",\n" +
+                "  \"result\":[{\n" +
+                "                    \"id\":\"1\",\n" +
+                "                    \"money\":\"300\",\n" +
+                "                    \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "                    \"status\":\"1\"\n" +
+                "             }\n" +
+                ",{\n" +
+                "                    \"id\":\"2\",\n" +
+                "                    \"money\":\"300\",\n" +
+                "                    \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "                    \"status\":\"2\"\n" +
+                "             },{\n" +
+                "                    \"id\":\"3\",\n" +
+                "                    \"money\":\"300\",\n" +
+                "                    \"create_time\":\"2016-11-04 10:14:23\",\n" +
+                "                    \"status\":\"3\"\n" +
+                "             }]\n" +
+                "}*/";
+        return str;
     }
 }

@@ -1,12 +1,12 @@
 package com.juxin.predestinate.ui.xiaoyou.wode;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -23,13 +23,28 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
+import com.juxin.predestinate.ui.xiaoyou.wode.bean.SendGiftResultInfo;
 import com.juxin.predestinate.ui.xiaoyou.wode.adapter.GiftGridviewSmallAdapter;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, RequestComplete {
+public class GiftDiamondPayDlg extends Activity implements View.OnClickListener, RequestComplete {
+
+    //GIft
+    private GiftViewPagerAdapter gvpAdapter;
+    private List<GridView> mLists;
+    private ViewPager mViewPager;
+    private int index = 0;
+    private List<GiftsList.GiftInfo> mListGift;
+    private LinearLayout llMid;
+    private List<ImageView> lv;
+    private int pageCount;
+    public GiftsList.GiftInfo selectGift;
+    private TextView tv_money;
+
     private Context mContext;
     private View btn_diamond10, btn_diamond60, btn_diamond100, btn_diamond300, btn_diamond500, btn_diamond1000;
     private ImageView img_select_10, img_select_60, img_select_100, img_select_300, img_select_500, img_select_1000;
@@ -44,31 +59,27 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
     private ImageView img_user_head;
     private TextView dlg_diamond_tv_decdiamod;
     private String avatar, msg, nickname;
+    private String toUid;
 
-    //GIft
-    private GiftViewPagerAdapter gvpAdapter;
-    private List<GridView> mLists;
-    private ViewPager mViewPager;
-    private int index = 0;
-    private List<GiftsList.GiftInfo> mListGift;
-    private LinearLayout llMid;
-    private List<ImageView> lv;
-    private int pageCount;
-    public GiftsList.GiftInfo selectGift;
-//    private IGiftSend iGiftSend;
-    private TextView tv_money;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = this;
+        avatar = getIntent().getStringExtra("avatar");
+        msg = getIntent().getStringExtra("msg");
+        nickname = getIntent().getStringExtra("nickname");
+        toUid = getIntent().getStringExtra("toUid");
+        GiftDiamondPayAct(mContext, avatar, msg, nickname);
+    }
 
-    public GiftDiamondPayDlg(Context context, String avatar, String msg, String nickname) {
-        this(context);
+    public void GiftDiamondPayAct(Context context, String avatar, String msg, String nickname) {
         this.avatar = avatar;
         this.msg = msg;
         this.nickname = nickname;
         mContext = context;
         initView(context);
         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() == 0) {
-//            String json = AppCtx.executeLoadMeConcernListTask(mContext, this, TASK_TYPE_GETLIST);
-//            initGiftList(json);
-            ModuleMgr.getCommonMgr().requestgetGifts();
+            ModuleMgr.getCommonMgr().requestgetGifts(this);
         } else {
             mListGift = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
             initViewGrid();
@@ -77,58 +88,43 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() > 0) {
             tv_money.setText("当前钻石：" + ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() + "");
         } else {
-            executeDiamondTask();
+            ModuleMgr.getCommonMgr().getMyDiamand(this);
         }
         selectVipTypeBtn(R.id.dlg_diamond_ll_diamond10);
     }
 
-    public GiftDiamondPayDlg(Context context) {
-        this(context, R.style.dialog);
-    }
-
-    public GiftDiamondPayDlg(Context context, int theme) {
-        super(context, theme);
-    }
-
     private void initView(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.f1_dlg_diamond_gift_pay, null);
-        setContentView(view);
-
+        setContentView(R.layout.f1_dlg_diamond_gift_pay);
         img_user_head = (ImageView) findViewById(R.id.dlg_diamond_head);
-//        PhotoUtils.loadPhotoFitCenter(mContext, avatar, img_user_head);
-        ImageLoader.loadCenterCrop(getContext(), avatar, img_user_head);
-
-
+        ImageLoader.loadAvatar(mContext,avatar,img_user_head);
 
         ((TextView) findViewById(R.id.dlg_diamond_nickname)).setText(nickname);
         ((TextView) findViewById(R.id.dlg_diamond_msg)).setText(msg);
 
         dlg_diamond_tv_decdiamod = (TextView) findViewById(R.id.dlg_diamond_tv_decdiamod);
-        view.findViewById(R.id.btn_diamond_ok).setOnClickListener(this);
+        findViewById(R.id.btn_diamond_ok).setOnClickListener(this);
 
-        btn_diamond10 = view.findViewById(R.id.dlg_diamond_ll_diamond10);
-        btn_diamond60 = view.findViewById(R.id.dlg_diamond_ll_diamond60);
-        btn_diamond100 = view.findViewById(R.id.dlg_diamond_ll_diamond100);
-        btn_diamond300 = view.findViewById(R.id.dlg_diamond_ll_diamond300);
-        btn_diamond500 = view.findViewById(R.id.dlg_diamond_ll_diamond500);
-        btn_diamond1000 = view.findViewById(R.id.dlg_diamond_ll_diamond1000);
+        btn_diamond10 = findViewById(R.id.dlg_diamond_ll_diamond10);
+        btn_diamond60 = findViewById(R.id.dlg_diamond_ll_diamond60);
+        btn_diamond100 = findViewById(R.id.dlg_diamond_ll_diamond100);
+        btn_diamond300 = findViewById(R.id.dlg_diamond_ll_diamond300);
+        btn_diamond500 = findViewById(R.id.dlg_diamond_ll_diamond500);
+        btn_diamond1000 = findViewById(R.id.dlg_diamond_ll_diamond1000);
 
-        btn_wx_pay = view.findViewById(R.id.btn_wx_pay);
-        btn_ali_pay = view.findViewById(R.id.btn_ali_pay);
-        btn_other_pay = view.findViewById(R.id.btn_other_pay);
+        btn_wx_pay = findViewById(R.id.btn_wx_pay);
+        btn_ali_pay = findViewById(R.id.btn_ali_pay);
+        btn_other_pay = findViewById(R.id.btn_other_pay);
 
-        img_select_10 = (ImageView) view.findViewById(R.id.dlg_diamond_img_select10);
-        img_select_60 = (ImageView) view.findViewById(R.id.dlg_diamond_img_select60);
-        img_select_100 = (ImageView) view.findViewById(R.id.dlg_diamond_img_select100);
-        img_select_300 = (ImageView) view.findViewById(R.id.dlg_diamond_img_select300);
-        img_select_500 = (ImageView) view.findViewById(R.id.dlg_diamond_img_select500);
-        img_select_1000 = (ImageView) view.findViewById(R.id.dlg_diamond_img_select1000);
+        img_select_10 = (ImageView) findViewById(R.id.dlg_diamond_img_select10);
+        img_select_60 = (ImageView) findViewById(R.id.dlg_diamond_img_select60);
+        img_select_100 = (ImageView) findViewById(R.id.dlg_diamond_img_select100);
+        img_select_300 = (ImageView) findViewById(R.id.dlg_diamond_img_select300);
+        img_select_500 = (ImageView) findViewById(R.id.dlg_diamond_img_select500);
+        img_select_1000 = (ImageView) findViewById(R.id.dlg_diamond_img_select1000);
 
-
-        img_wx_select = (ImageView) view.findViewById(R.id.img_wx_select);
-        img_ali_select = (ImageView) view.findViewById(R.id.img_ali_select);
-        img_other_select = (ImageView) view.findViewById(R.id.img_other_select);
-
+        img_wx_select = (ImageView) findViewById(R.id.img_wx_select);
+        img_ali_select = (ImageView) findViewById(R.id.img_ali_select);
+        img_other_select = (ImageView) findViewById(R.id.img_other_select);
 
         selectVipTypeBtn(R.id.user_id);
         selectPayTypeBtn(R.id.btn_wx_pay);
@@ -140,12 +136,9 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
         btn_diamond500.setOnClickListener(this);
         btn_diamond1000.setOnClickListener(this);
 
-
         btn_wx_pay.setOnClickListener(this);
         btn_ali_pay.setOnClickListener(this);
         btn_other_pay.setOnClickListener(this);
-
-        setCanceledOnTouchOutside(true);
 
         ///Gift
         mViewPager = (ViewPager) findViewById(R.id.vp_gift_main);
@@ -228,19 +221,19 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
 
         switch (btnId) {
             case R.id.btn_wx_pay:
-                pay_type = 6;
+                pay_type = GoodsConstant.PAY_TYPE_WECHAT;
                 btn_wx_pay.setBackgroundResource(R.drawable.f1_btn_rectangle_select);
                 img_wx_select.setImageResource(R.drawable.f1_btn_select);
                 img_wx_select.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_ali_pay:
-                pay_type = 1;
+                pay_type = GoodsConstant.PAY_TYPE_ALIPAY;
                 btn_ali_pay.setBackgroundResource(R.drawable.f1_btn_rectangle_select);
                 img_ali_select.setImageResource(R.drawable.f1_btn_select);
                 img_ali_select.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_other_pay:
-                pay_type = -1;
+                pay_type = GoodsConstant.PAY_TYPE_OTHER;
                 btn_other_pay.setBackgroundResource(R.drawable.f1_btn_rectangle_select);
                 img_other_select.setImageResource(R.drawable.f1_btn_select);
                 img_other_select.setVisibility(View.VISIBLE);
@@ -317,20 +310,6 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
         mViewPager.setAdapter(gvpAdapter);
     }
 
-    private void executeDiamondTask() {
-        //// TODO: 2017/4/27  获取钻石余额
-        ModuleMgr.getCommonMgr().getMyDiamand(this);
-    }
-
-
-//    public IGiftSend getiGiftSend() {
-//        return iGiftSend;
-//    }
-//
-//    public void setiGiftSend(IGiftSend iGiftSend) {
-//        this.iGiftSend = iGiftSend;
-//    }
-
     private void initGridView() {
         if (null == mListGift) {
             return;
@@ -371,9 +350,8 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
                 initGridView();
                 initDot(0);
                 initSelect();
-//                AppModel.getInstance().lstGift = mListGift;
             } else
-                dismiss();
+                finish();
         }
     }
 
@@ -396,6 +374,12 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
             }
             return;
         }
+        if (response.getUrlParam() == UrlParam.sendGift){
+            SendGiftResultInfo info = new SendGiftResultInfo();
+            info.parseJson(response.getResponseString());
+            PToast.showShort(info.getMsg()+"");
+            return;
+        }
         initGiftList(response.getResponseString());
     }
 
@@ -416,7 +400,6 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
         @Override
         public void onPageScrollStateChanged(int state) {
 
-
         }
     }
 
@@ -428,16 +411,11 @@ public class GiftDiamondPayDlg extends Dialog implements View.OnClickListener, R
 //                if (iGiftSend != null)
 //                    iGiftSend.onSend(selectGift);
                 //发送消息
-                dismiss();
+                ModuleMgr.getCommonMgr().sendGift(toUid,selectGift.getId()+"",this);
+                finish();
             } else {
-//                PToast.showShort("支付跳转");
-                UIShow.showPayListAct((FragmentActivity)mContext, 56);
-//                AppCtx.putPreference("fromVip", false);
-//                UIHelper.showPaymentActEx(mContext, pay_id, pay_type, UIHelper.MONTHLYLETTERACT);
-                dismiss();
-//                if (iGiftSend != null)
-//                    iGiftSend.onSendToPay(selectGift);
-                dismiss();
+                UIShow.showPayListAct((FragmentActivity)mContext, pay_id);
+                finish();
             }
         }
     }

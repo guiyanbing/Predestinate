@@ -78,6 +78,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_2: // 谁关注我
+                UIShow.showMyAttentionAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_3: // 我的钱包
@@ -85,12 +86,12 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_4:// 我要赚红包
-                UIShow.showGoodsVipAct(getContext());
+                UIShow.showDemandRedPacketAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
                 UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                        ModuleMgr.getCenterMgr().getChargeH5Params(1)));
+                        ModuleMgr.getCenterMgr().getChargeH5Params()));
                 // TODO: 2017/5/3
                 break;
 
@@ -105,23 +106,17 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
 
             case CenterItemID.i_Center_item_8:// 个人资料
                 UIShow.showUserEditInfoAct(getContext());
-
-                // test
-//                UIShow.showGoodsDiamondDialog(getContext());
-//                UIShow.showGoodsVipDialog(getContext(), GoodsConstant.DLG_VIP_PRIVEDEG);
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
 
                 // test
-//                UIShow.showGoodsYCoinDialog(getContext());
-                UIShow.showGoodsYCoinDlgOld(getContext());
-//                UIShow.showGoodsVipDlgOld(getContext());
+//                UIShow.showGoodsVipDialog(getContext(), GoodsConstant.DLG_VIP_PRIVEDEG);
+                UIShow.showGoodsYCoinDialog(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心
                 UIShow.showUserSetAct((Activity) getContext(), 100);
-//                UIShow.showGoodsVipDlgOld(getContext());
                 break;
         }
     }
