@@ -27,5 +27,8 @@ public class GoodsConstant {
     public static final int DLG_VIP_HEIGH_AREANA = 5;       // 高级擂台
 
     // Y币
-    public static final int DLG_YCOIN_PRIVEDEG = 1;         // 购买Y币
+    public static final int DLG_YCOIN_NEW = 6;                // 新购买Y币弹框
+    public static final int DLG_YCOIN_PRIVEDEG = 7;           // 购买Y币
+    public static final String DLG_YCOIN_REMAIN = "remain";   // Y币余额
+    public static final String DLG_YCOIN_POWER = "buy_power"; // 购买体力
 }

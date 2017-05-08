@@ -90,8 +90,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/px10_dp"
                 android:textColor="#FC615C"
-                android:textSize="@dimen/px39_sp"
-                android:visibility="gone" />
+                android:textSize="@dimen/px39_sp" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

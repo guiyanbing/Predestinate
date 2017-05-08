@@ -77,12 +77,12 @@ import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDlgOld;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
-import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
+import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
 import com.juxin.predestinate.ui.xiaoyou.wode.MyAttentionAct;
@@ -695,6 +695,7 @@ public class UIShow {
     public static void showMyDiamondsAct(Context context) {
         context.startActivity(new Intent(context, MyDiamondsAct.class));
     }
+
     /**
      * 打开最近来访页面
      *
@@ -726,11 +727,11 @@ public class UIShow {
      * 对话框送礼物
      *
      * @param context
-     * @param giftid    要送的礼物id
+     * @param giftid  要送的礼物id
      * @param to_id   统计id
      */
-    public static void showDiamondSendGiftDlg(Context context, int giftid,String to_id) {
-        DiamondSendGiftDlg dlg = new DiamondSendGiftDlg(context, giftid,to_id);
+    public static void showDiamondSendGiftDlg(Context context, int giftid, String to_id) {
+        DiamondSendGiftDlg dlg = new DiamondSendGiftDlg(context, giftid, to_id);
         dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -743,7 +744,7 @@ public class UIShow {
      * @param context
      * @param to_id   他人id
      */
-    public static void showBottomGiftDlg(Context context,long to_id) {
+    public static void showBottomGiftDlg(Context context, long to_id) {
         BottomGiftDialog dialog = new BottomGiftDialog();
         dialog.setToId(to_id);
         dialog.showDialog((FragmentActivity) context);
@@ -861,9 +862,15 @@ public class UIShow {
 
     /**
      * Y币充值弹框
+     *
+     * @param remain   Y币余额
+     * @param buyPower 需购买体力值
      */
-    public static void showGoodsYCoinDialog(Context context) {
-        context.startActivity(new Intent(context, GoodsYCoinDialog.class));
+    public static void showGoodsYCoinDialog(Context context, int remain, int buyPower) {
+        Intent intent = new Intent(context, GoodsYCoinDialog.class);
+        intent.putExtra(GoodsConstant.DLG_YCOIN_REMAIN, remain);
+        intent.putExtra(GoodsConstant.DLG_YCOIN_POWER, buyPower);
+        context.startActivity(intent);
     }
 
     /**

@@ -116,12 +116,12 @@ public class ChatMgr implements ModuleBase, PObserver {
             return;
         }
 
-        ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_CHAT_PIC, img_url, new RequestComplete() {
+        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, img_url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
 //                if (response.isOk()) {
 //                    response.getBaseData();
-//                    UpLoadResult upLoadResult = (UpLoadResult) result.getBaseData();
+//                    UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
 //                    message.setImgUrl(upLoadResult.getHttpPathPic());
 //                    message.setJsonStr(message.getJson(message));
 //                    DBCenter.getInstance().updateVoiceMsgJson(message);

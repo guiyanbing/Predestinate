@@ -486,7 +486,7 @@ public class Invoker {
             }
             // 图片上传，上传完成之后删除本地存储的缓存文件
             int type = dataObject.optInt("type");
-            ModuleMgr.getMediaMgr().sendHttpMultiFiles(type == 105 ? 104 : type, 0, new MediaMgr.OnMultiFilesUploadComplete() {
+            ModuleMgr.getMediaMgr().sendHttpMultiFiles(Constant.UPLOAD_TYPE_PHOTO, 0, new MediaMgr.OnMultiFilesUploadComplete() {
                 @Override
                 public void onUploadComplete(ArrayList<String> mediaUrls) {
                     Map<String, Object> responseObject = new HashMap<>();

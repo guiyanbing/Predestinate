@@ -98,6 +98,10 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
         this.desc = desc;
     }
 
+    public double getDoublePrice() {
+        return price;
+    }
+
     public String getPrice() {
         //return ChineseFilter.subZeroString(CommonUtil.formatNum(price / 100, 2) + "");
         return ChineseFilter.subZeroString(CommonUtil.formatNum(price, 2) + "");

@@ -35,17 +35,20 @@
                 android:layout_width="@dimen/px60_dp"
                 android:layout_height="@dimen/px60_dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/px35_dp"
                 android:background="@drawable/f1_close_small" />
         </RelativeLayout>
 
         <!-- 提示文字 -->
         <LinearLayout
+            android:id="@+id/ll_header_tips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#f7f4ec"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="@dimen/px20_dp">
+            android:padding="@dimen/px20_dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -55,9 +58,9 @@
                 android:textSize="@dimen/px40_sp" />
 
             <TextView
+                android:id="@+id/tv_remain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10"
                 android:textColor="@color/theme_color_red"
                 android:textSize="@dimen/px40_sp" />
 
@@ -66,21 +69,21 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/px10_dp"
                 android:text="@string/goods_ycoin_tip_header"
-                android:textColor="@color/yellow"
+                android:textColor="@color/color_fe9b05"
                 android:textSize="@dimen/px40_sp" />
 
             <TextView
+                android:id="@+id/tv_buy_power"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10"
-                android:textColor="@color/yellow"
+                android:textColor="@color/color_fe9b05"
                 android:textSize="@dimen/px40_sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/goods_ycoin_tip_footer"
-                android:textColor="@color/yellow"
+                android:textColor="@color/color_fe9b05"
                 android:textSize="@dimen/px40_sp" />
         </LinearLayout>
 
@@ -111,8 +114,8 @@
                     android:gravity="center"
                     android:text="并赠送体力100点"
                     android:textColor="@color/yellow"
-                    android:visibility="invisible"
-                    android:textSize="@dimen/px40_sp"/>
+                    android:textSize="@dimen/px40_sp"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -121,7 +124,7 @@
                     android:gravity="center"
                     android:text="@string/goods_ycoin_phone_cost"
                     android:textColor="@color/yellow"
-                    android:textSize="@dimen/px40_sp"/>
+                    android:textSize="@dimen/px40_sp" />
             </LinearLayout>
 
             <!-- 更多特权 -->
@@ -130,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="@dimen/px20_dp">
+                android:paddingTop="@dimen/px15_dp">
 
                 <ImageView
                     android:id="@+id/iv_pay_select_vip"

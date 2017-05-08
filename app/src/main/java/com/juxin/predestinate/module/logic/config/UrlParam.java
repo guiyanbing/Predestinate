@@ -66,7 +66,7 @@ public enum UrlParam {
     uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),
     // 上传文件
     //uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
-    uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
+    uploadFile(Constant.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================
     //客户端获得用户红包列表

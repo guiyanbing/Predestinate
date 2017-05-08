@@ -75,6 +75,13 @@ public class Constant {
     public static final String SINCE_GROWTHID = "since_growthid"; //消息自增长ID
     public static final long SINCE_GROWTHID_DEFAULT = -1;         // 默认值
 
+    // 老缘分吧上传文件类型
+    public static final String UPLOAD_TYPE_FACE = "face";           // 自定义表情
+    public static final String UPLOAD_TYPE_VOICE = "voice";         // 语音
+    public static final String UPLOAD_TYPE_PHOTO = "photo";         // 图片
+    public static final String UPLOAD_TYPE_VIDEO_CHAT = "videochat";// 头像认证
+    public static final String UPLOAD_TYPE_VIDEO = "video";         // 视频
+
     // 支付类型
     public static final int GOOD_DIAMOND = 1;    //钻石
     public static final int GOOD_VIP = 2;        //VIP服务

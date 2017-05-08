@@ -277,11 +277,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
             return;
         }
         if (FileUtil.isExist(path[0])) {
-            LoadingDialog.show(UserRegInfoCompleteAct.this, "头像上传，请稍侯");
-            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, path[0], new RequestComplete() {
-                @Override
-                public void onRequestComplete(HttpResponse response) {
-                    LoadingDialog.closeLoadingDialog();
+//            LoadingDialog.show(UserRegInfoCompleteAct.this, "头像上传，请稍侯");
+//            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, path[0], new RequestComplete() {
+//                @Override
+//                public void onRequestComplete(HttpResponse response) {
+//                    LoadingDialog.closeLoadingDialog();
 //                    if (response.isOk()) {
 //                        FileUtil.deleteFile(path[0]);  // 删除裁切文件
 //                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
@@ -296,9 +296,9 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 //                    } else {
 //                        MMToast.showShort("头像上传失败，请重试");
 //                    }
-                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
-                }
-            });
+//                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
+//                }
+//            });
         } else {
             MMToast.showShort("图片地址无效");
         }
