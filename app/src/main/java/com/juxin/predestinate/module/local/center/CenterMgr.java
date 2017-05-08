@@ -280,23 +280,23 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void uploadAvatar(final String url, final RequestComplete complete) {
         if (FileUtil.isExist(url)) {
-            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, url, new RequestComplete() {
-                @Override
-                public void onRequestComplete(HttpResponse response) {
-                    if (response.isOk()) {
-                        FileUtil.deleteFile(url);  // 删除裁切文件
-                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                        String pic = upLoadResult.getHttpPathPic();
-                        if (TextUtils.isEmpty(pic)) {
-                            return;
-                        }
-                        final String avatarUrl = getInterceptUrl(pic);
-                        HashMap<String, Object> postParams = new HashMap<>();
-                        postParams.put(EditKey.s_key_avatar, avatarUrl);
-                        //ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
-                    }
-                }
-            });
+//            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, url, new RequestComplete() {
+//                @Override
+//                public void onRequestComplete(HttpResponse response) {
+//                    if (response.isOk()) {
+//                        FileUtil.deleteFile(url);  // 删除裁切文件
+//                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+//                        String pic = upLoadResult.getHttpPathPic();
+//                        if (TextUtils.isEmpty(pic)) {
+//                            return;
+//                        }
+//                        final String avatarUrl = getInterceptUrl(pic);
+//                        HashMap<String, Object> postParams = new HashMap<>();
+//                        postParams.put(EditKey.s_key_avatar, avatarUrl);
+//                        //ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
+//                    }
+//                }
+//            });
         } else {
             LoadingDialog.closeLoadingDialog();
             MMToast.showShort("图片地址无效");
