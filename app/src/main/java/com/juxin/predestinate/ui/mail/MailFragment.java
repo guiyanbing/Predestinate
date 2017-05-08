@@ -146,8 +146,8 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(message.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case WhoAttentionMe_Msg://推荐的人
-                        UIShow.showRecommendAct(getActivity());
+                    case WhoAttentionMe_Msg://谁关注我
+                        UIShow.showMyAttentionAct(getContext());
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());

@@ -269,9 +269,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.privatechat_giftview://礼物
-
+                UIShow.showBottomGiftDlg(this, whisperID);
                 break;
             case R.id.chat_title_attention:{//关注
+
+
+
                 break;
             }
             case R.id.chat_title_phone://手机
