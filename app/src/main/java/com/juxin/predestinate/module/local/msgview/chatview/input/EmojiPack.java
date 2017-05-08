@@ -1,10 +1,19 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
-
+import com.juxin.library.utils.FileUtil;
+import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.baseui.custom.VerticalImageSpan;
+import com.juxin.predestinate.module.util.UIUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,36 +69,36 @@ public class EmojiPack {
      * @return false初始化失败。
      */
     public boolean init() {
-//        String jsonStr = FileUtil.readAssets(App.context, "emoji.json");
-//
-//        if (TextUtils.isEmpty(jsonStr)) {
-//            return false;
-//        }
-//
-//        JSONObject jsonObject = null;
-//        try {
-//            jsonObject = new JSONObject(jsonStr);
-//
-//            name = jsonObject.optString("name");
-//            desc = jsonObject.optString("desc");
-//            prefix = jsonObject.optString("prefix");
-//
-//            key = jsonObject.getString("key");
-//            jsonObject = jsonObject.optJSONObject("files");
-//
-//            emoticons.clear();
-//
-//            Iterator it = jsonObject.keys();
-//
-//            while (it.hasNext()) {
-//                String tempKey = it.next().toString();
-//
-//                emoticons.add(addPattern(tempKey, jsonObject.optString(tempKey)));
-//            }
-//        } catch (JSONException e) {
-//            MMLog.printThrowable(e);
-//            return false;
-//        }
+        String jsonStr = FileUtil.readAssets(App.context, "emoji.json");
+
+        if (TextUtils.isEmpty(jsonStr)) {
+            return false;
+        }
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(jsonStr);
+
+            name = jsonObject.optString("name");
+            desc = jsonObject.optString("desc");
+            prefix = jsonObject.optString("prefix");
+
+            key = jsonObject.getString("key");
+            jsonObject = jsonObject.optJSONObject("files");
+
+            emoticons.clear();
+
+            Iterator it = jsonObject.keys();
+
+            while (it.hasNext()) {
+                String tempKey = it.next().toString();
+
+                emoticons.add(addPattern(tempKey, jsonObject.optString(tempKey)));
+            }
+        } catch (JSONException e) {
+            MMLog.printThrowable(e);
+            return false;
+        }
 
         return true;
     }
@@ -101,14 +110,13 @@ public class EmojiPack {
      * @param smile
      */
     private EmojiItem addPattern(String smile, String desc) {
-//        EmojiItem emojiItem = new EmojiItem();
-//
-//        emojiItem.key = "[" + key + "_" + smile + "]";
-//        emojiItem.desc = desc;
-//        emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-//        emojiItem.resId = UIUtil.getResIdFromDrawable(prefix + smile);
-//        return emojiItem;
-        return null;
+        EmojiItem emojiItem = new EmojiItem();
+
+        emojiItem.key = "[" + key + "_" + smile + "]";
+        emojiItem.desc = desc;
+        emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
+        emojiItem.resId = UIUtil.getResIdFromDrawable(prefix + smile);
+        return emojiItem;
     }
 
     /**
@@ -158,18 +166,18 @@ public class EmojiPack {
                 }
 
                 if (set) {
-//                    hasChanges = true;
-//                    VerticalImageSpan imageSpan;
-//
-//                    if (-1 == size) {
-//                        imageSpan = new VerticalImageSpan(context, emoticon.resId);
-//                    } else {
-//                        Drawable drawable = context.getResources().getDrawable(emoticon.resId);
-//                        drawable.setBounds(0, 0, size, size);
-//                        imageSpan = new VerticalImageSpan(drawable);
-//                    }
-//
-//                    spannable.setSpan(imageSpan, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    hasChanges = true;
+                    VerticalImageSpan imageSpan;
+
+                    if (-1 == size) {
+                        imageSpan = new VerticalImageSpan(context, emoticon.resId);
+                    } else {
+                        Drawable drawable = context.getResources().getDrawable(emoticon.resId);
+                        drawable.setBounds(0, 0, size, size);
+                        imageSpan = new VerticalImageSpan(drawable);
+                    }
+
+                    spannable.setSpan(imageSpan, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
         }
@@ -231,7 +239,7 @@ public class EmojiPack {
 
         emojiItem.key = "[default_common_delete_smile]";
         emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-     //   emojiItem.resId = UIUtil.getResIdFromDrawable("common_delete_smile");
+        emojiItem.resId = UIUtil.getResIdFromDrawable("common_delete_smile");
         return emojiItem;
     }
 

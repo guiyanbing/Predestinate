@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import java.util.List;

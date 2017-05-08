@@ -23,6 +23,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-    </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/privatechat_giftview"
+            android:layout_width="@dimen/px150_dp"
+            android:layout_height="@dimen/px150_dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/px35_dp"
+            android:layout_marginBottom="@dimen/px222_dp"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/f1_fc_gift" />
+
+    </RelativeLayout>
 </LinearLayout>
