@@ -28,6 +28,7 @@ public class UserInfo extends UserBasic {
     private long regTime;           // 注册时间
     private boolean isBindRose;     // 是否绑定了红娘
     private int ycoin = 0;          // Y币
+    private int diamand;            // 钻石
 
 
     // -------2017-1-5红包来了添加字段 -------
@@ -63,6 +64,7 @@ public class UserInfo extends UserBasic {
         this.setYcoin(detailObject.optInt("ycoin"));
         this.setShareCode(detailObject.optString("shareCode"));
         this.setInvite_uid(detailObject.optLong("invite_uid"));
+        this.setDiamand(detailObject.optInt("diamand"));
     }
 
     /**
@@ -71,6 +73,14 @@ public class UserInfo extends UserBasic {
     public boolean isVip() {
         return isMonthMail;
         //return isVip;
+    }
+
+    public int getDiamand() {
+        return diamand;
+    }
+
+    public void setDiamand(int diamand) {
+        this.diamand = diamand;
     }
 
     public boolean isSayHello() {
