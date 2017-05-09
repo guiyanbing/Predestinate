@@ -15,6 +15,7 @@ import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.local.msgview.PhizMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
@@ -25,6 +26,7 @@ import com.juxin.predestinate.module.logic.notify.NotifyMgr;
 import com.juxin.predestinate.module.logic.request.RequestHelper;
 import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
 import com.tencent.smtt.sdk.QbSdk;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +81,7 @@ public final class ModuleMgr {
         RequestHelper.getInstance().init(context);  //初始化网络请求
 
         initTBSX5(context);
+        initUM(context);
 
         getAppMgr();
         getHttpMgr();
@@ -113,6 +116,15 @@ public final class ModuleMgr {
         };
         //x5内核初始化接口
         QbSdk.initX5Environment(context, cb);
+    }
+
+    /**
+     * 初始化友盟统计
+     */
+    private static void initUM(Context context) {
+        MobclickAgent.UMAnalyticsConfig config = new MobclickAgent.UMAnalyticsConfig(context,
+                Constant.UMENG_APPKEY, getAppMgr().getUMChannel());
+        MobclickAgent.startWithConfigure(config);
     }
 
     /**
