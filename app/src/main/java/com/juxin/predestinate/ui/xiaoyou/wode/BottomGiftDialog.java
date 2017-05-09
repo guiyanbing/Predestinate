@@ -63,7 +63,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         View contentView = getContentView();
         initGifts();
         if (arrGifts.size() <= 0 ){
-            ModuleMgr.getCommonMgr().requestgetGifts(this);
+            ModuleMgr.getCommonMgr().requestGiftList(this);
         }
         initView(contentView);
         return contentView;
