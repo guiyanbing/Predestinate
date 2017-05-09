@@ -11,14 +11,19 @@ import org.json.JSONObject;
 
 public class CommonMessage extends BaseMessage{
 
+    //图片
     private String img;
     private String localImg;
 
+    //语音
     private String voiceUrl;
+    private String localVoiceUrl;
     private int voiceLen;
     private long voiceUserid;
 
+    //视频
     private String videoUrl;
+    private String localVideoUrl;
     private int videoLen;
     private long videoSize;
     private String videoThumb;
@@ -108,6 +113,14 @@ public class CommonMessage extends BaseMessage{
         this.voiceUrl = voiceUrl;
     }
 
+    public String getLocalVoiceUrl() {
+        return localVoiceUrl;
+    }
+
+    public void setLocalVoiceUrl(String localVoiceUrl) {
+        this.localVoiceUrl = localVoiceUrl;
+    }
+
     public int getVoiceLen() {
         return voiceLen;
     }
@@ -130,6 +143,14 @@ public class CommonMessage extends BaseMessage{
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public String getLocalVideoUrl() {
+        return localVideoUrl;
+    }
+
+    public void setLocalVideoUrl(String localVideoUrl) {
+        this.localVideoUrl = localVideoUrl;
     }
 
     public int getVideoLen() {

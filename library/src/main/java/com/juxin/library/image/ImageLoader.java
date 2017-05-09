@@ -48,6 +48,11 @@ public class ImageLoader {
         loadFitCenter(context, url, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
+    public static void loadFitCenter(Context context, String url, ImageView view, int resImg) {
+        FitCenter bitmapFitCenter = new FitCenter(context);
+        loadPic(context, url, view, resImg, resImg, bitmapFitCenter);
+    }
+
     public static void loadFitCenter(Context context, String url, ImageView view, int defResImg, int errResImg) {
         FitCenter bitmapFitCenter = new FitCenter(context);
         loadPic(context, url, view, defResImg, errResImg, bitmapFitCenter);
