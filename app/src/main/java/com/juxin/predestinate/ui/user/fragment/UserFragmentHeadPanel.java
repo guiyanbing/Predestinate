@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
@@ -110,7 +109,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
             return;
         }
-        PLogger.d("path=== " + path[0]);
         LoadingDialog.show((FragmentActivity) getContext(), "正在上传头像");
         ModuleMgr.getCenterMgr().uploadAvatar(path[0], new RequestComplete() {
             @Override

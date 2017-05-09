@@ -52,7 +52,7 @@ public class MediaMgr implements ModuleBase {
      * @param url        文件地址
      * @param url2       视频缩略图地址
      */
-    private void sendHttpFile(String uploadType, String url, String url2, RequestComplete complete) {
+    private void sendHttpFile(String uploadType, final String url, String url2, final RequestComplete complete) {
         if (TextUtils.isEmpty(url)) return;
         File file = new File(url);
         if (!file.exists()) return;
@@ -64,7 +64,14 @@ public class MediaMgr implements ModuleBase {
         postParams.put("type", uploadType);
         postParams.put("uid", App.uid);
 
-        ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadFile, postParams, uploadFile, complete);
+        ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadFile, postParams, uploadFile, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null)
+                    complete.onRequestComplete(response);
+                FileUtil.deleteFile(url);
+            }
+        });
     }
 
     /**
