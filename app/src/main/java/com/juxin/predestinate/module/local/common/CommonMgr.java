@@ -51,7 +51,6 @@ public class CommonMgr implements ModuleBase {
 
     @Override
     public void init() {
-        requestStaticConfig();
         requestServerQQ();
     }
 
@@ -100,9 +99,17 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 请求服务器在线配置
+     * 请求一些在线配置信息
      */
     public void requestStaticConfig() {
+        requestConfig();
+        requestGiftList(null);
+    }
+
+    /**
+     * 请求服务器在线配置
+     */
+    private void requestConfig() {
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("ver", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
         ModuleMgr.getHttpMgr().reqGet(UrlParam.staticConfig, null, requestParams,
@@ -114,6 +121,13 @@ public class CommonMgr implements ModuleBase {
                         commonConfig.parseJson(response.getResponseString());
                     }
                 });
+    }
+
+    /**
+     * @return 获取服务器静态配置对象
+     */
+    public CommonConfig getCommonConfig() {
+        return commonConfig == null ? new CommonConfig() : commonConfig;
     }
 
     /**
@@ -129,11 +143,32 @@ public class CommonMgr implements ModuleBase {
         });
     }
 
+    public void setGiftLists(GiftsList giftLists) {
+        this.giftLists = giftLists;
+    }
+
     /**
-     * @return 获取服务器静态配置对象
+     * 请求礼物列表
      */
-    public CommonConfig getCommonConfig() {
-        return commonConfig;
+    public void requestGiftList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                giftLists = new GiftsList();
+                giftLists.parseJson(response.getResponseString());
+            }
+        } : complete);
+    }
+
+    /**
+     * @return 获取礼品信息
+     */
+    public GiftsList getGiftLists() {
+        if (giftLists == null) {
+            giftLists = new GiftsList();
+        }
+        return giftLists;
     }
 
     /**
@@ -296,35 +331,6 @@ public class CommonMgr implements ModuleBase {
     }
 
     //============================== 小友模块相关接口 =============================
-
-
-    public void setGiftLists(GiftsList giftLists) {
-        this.giftLists = giftLists;
-    }
-
-    /**
-     * 请求礼物列表
-     */
-    public void requestgetGifts(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                giftLists = new GiftsList();
-                giftLists.parseJson(response.getResponseString());
-            }
-        } : complete);
-    }
-
-    /**
-     * @return 获取礼品信息
-     */
-    public GiftsList getGiftLists() {
-        if (giftLists == null) {
-            giftLists = new GiftsList();
-        }
-        return giftLists;
-    }
 
     /**
      * 我关注的列表
