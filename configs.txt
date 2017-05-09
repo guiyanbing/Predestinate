@@ -14,8 +14,8 @@ keyPassword = fate123
 PrjProguard = proguard-rules.pro
 
 #版本号
-VersionCode = 10200103
-VersionName = 3.0.3
+VersionCode = 10200108
+VersionName = 3.0.8
 
 #APK输出目录
 ApkPath = ../../K_GEN_APK/Predestinate/
