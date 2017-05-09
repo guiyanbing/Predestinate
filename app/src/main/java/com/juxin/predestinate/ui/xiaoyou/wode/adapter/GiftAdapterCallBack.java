@@ -31,10 +31,13 @@ public class GiftAdapterCallBack implements PageRecyclerView.CallBack{
     private int oldPosition = -1;
     private int sum;
 
-    public GiftAdapterCallBack(Context context,BottomGiftDialog mBottomGiftDialog, List<GiftsList.GiftInfo> listData, PageRecyclerView.PageAdapter pageAdapter) {
+    public GiftAdapterCallBack(Context context,BottomGiftDialog mBottomGiftDialog, List<GiftsList.GiftInfo> listData) {
         mContext = context;
         this.listData = listData;
         this.mBottomGiftDialog = mBottomGiftDialog;
+    }
+
+    public void setPageAdapter(PageRecyclerView.PageAdapter pageAdapter){
         mPageAdapter = pageAdapter;
     }
 
@@ -105,7 +108,7 @@ public class GiftAdapterCallBack implements PageRecyclerView.CallBack{
         private void initView(View convertView) {
             img = (ImageView) convertView.findViewById(R.id.bottom_gif_item_img);
             txvGifName = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvgifname);
-            txvIntimate = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvintimacy);
+//            txvIntimate = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvintimacy);
             txvNeedStone = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvneedstone);
             llTop = (LinearLayout) convertView.findViewById(R.id.bottom_gif_item_ll_top);
         }

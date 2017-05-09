@@ -62,6 +62,9 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         setContentView(R.layout.p1_bottom_gif_dialog);
         View contentView = getContentView();
         initGifts();
+        for (int i = 0;i<arrGifts.size();i++){
+            arrGifts.get(i).setIsShow(false);
+        }
         if (arrGifts.size() <= 0 ){
             ModuleMgr.getCommonMgr().requestGiftList(this);
         }
@@ -86,7 +89,6 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
         rlvGift = mCustomRecyclerView.getPageRecyclerView();
         rlvGift.setIndicator(pageIndicatorView);
-        mCustomRecyclerView.showPageRecyclerView();
 
         //        rlvGift.setLayoutManager(layoutManager);
 
@@ -95,15 +97,17 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 //        mGiftNumPopup.setOutsideTouchable(true);
 
 
-        mGiftAdapterCallBack = new GiftAdapterCallBack(getContext(),this,arrGifts,mGiftAdapter);
+        mGiftAdapterCallBack = new GiftAdapterCallBack(getContext(),this,arrGifts);
         mGiftAdapter = rlvGift.new PageAdapter(arrGifts,mGiftAdapterCallBack);
+        mGiftAdapterCallBack.setPageAdapter(mGiftAdapter);
         rlvGift.setPageSize(2, 4);
         rlvGift.setPageMargin(30);
         rlvGift.setAdapter(mGiftAdapter);
         txvLeft.setText("<");
         txvRight.setText(">");
-        txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()+"");
+        txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
         mCustomRecyclerView.showPageRecyclerView();
+        rlvGift.setAdapter(mGiftAdapter);
         txvSendNum.addTextChangedListener(this);
     }
 
