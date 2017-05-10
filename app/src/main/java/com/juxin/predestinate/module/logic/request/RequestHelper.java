@@ -10,7 +10,7 @@ import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.JsonUtil;
-import com.juxin.predestinate.module.util.Url_Enc;
+import com.juxin.predestinate.module.util.UrlEnc;
 
 import java.io.File;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class RequestHelper {
     public Call<ResponseBody> reqHttpCallUrl(Map<String, String> headerMap, String url,
                                              Map<String, Object> get_param, Map<String, Object> post_param,
                                              Map<String, File> file_params, boolean isEncrypt, boolean isJsonRequest) {
-        url = Url_Enc.appendUrl(url, get_param, post_param, isEncrypt);
+        url = UrlEnc.appendUrl(url, get_param, post_param, isEncrypt);
         if (headerMap == null) headerMap = new HashMap<>();
 
         if (file_params != null && file_params.size() > 0) {//post请求，上传文件

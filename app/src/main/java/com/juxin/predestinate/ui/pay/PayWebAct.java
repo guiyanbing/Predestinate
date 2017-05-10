@@ -27,7 +27,7 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.Url_Enc;
+import com.juxin.predestinate.module.util.UrlEnc;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -129,7 +129,7 @@ public class PayWebAct extends BaseActivity{
             e.printStackTrace();
         }
 
-        String url = Url_Enc.appendUrl(UrlParam.reqAliWapPay.getFinalUrl(), getParams, null ,true);
+        String url = UrlEnc.appendUrl(UrlParam.reqAliWapPay.getFinalUrl(), getParams, null ,true);
         synCookies(url);
         payalipay_web_webview.loadUrl(url);
         payalipay_web_webview.requestFocus();

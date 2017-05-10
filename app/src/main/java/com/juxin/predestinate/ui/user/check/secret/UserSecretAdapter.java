@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.adapter;
+package com.juxin.predestinate.ui.user.check.secret;
 
 import android.view.View;
 import android.widget.ImageView;

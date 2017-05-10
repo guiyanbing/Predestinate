@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.adapter;
+package com.juxin.predestinate.ui.user.util;
 
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,11 +12,11 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 /**
- * 主页水平私密相册/视频展示adapter
- * Created by Su on 2017/3/27.
+ * 媒体文件查看Adapter: 相册、视频
+ * Created by Su on 2017/5/10.
  */
 
-public class SecretMediaAdapter extends BaseRecyclerViewAdapter {
+public class MediaAdapter extends BaseRecyclerViewAdapter {
     public static final int SECRET_VIDEO = 2;  // 私密视频
 
     private int secretType = 1;

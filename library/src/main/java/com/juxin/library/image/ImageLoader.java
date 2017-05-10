@@ -3,6 +3,7 @@ package com.juxin.library.image;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -16,6 +17,9 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.juxin.library.R;
 import com.juxin.library.image.transform.BlurImage;
 import com.juxin.library.image.transform.RoundedCorners;
+import com.juxin.mumu.bean.utils.FileUtil;
+
+import java.io.File;
 
 /**
  * 基于Glide图片请求，处理类
@@ -97,12 +101,17 @@ public class ImageLoader {
      */
     private static void loadPic(Context context, String url, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
         if (TextUtils.isEmpty(url)) return;
+        Uri uri = null;
+        if (!FileUtil.isURL(url)) {
+            uri = Uri.fromFile(new File(url));
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
                 context instanceof Activity && ((Activity) context).isDestroyed()) return;
 
         GlideUrl glideUrl = new GlideUrl(url);
         Glide.with(context)
-                .load(glideUrl)
+                .load(uri == null ? glideUrl : uri )
                 .dontAnimate()
                 .placeholder(defResImg)
                 .error(errResImg)

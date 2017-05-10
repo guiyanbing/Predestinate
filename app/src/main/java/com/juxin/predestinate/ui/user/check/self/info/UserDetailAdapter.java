@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.self;
+package com.juxin.predestinate.ui.user.check.self.info;
 
 import android.content.Context;
 import android.view.View;

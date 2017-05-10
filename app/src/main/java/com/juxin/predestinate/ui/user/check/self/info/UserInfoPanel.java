@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.self;
+package com.juxin.predestinate.ui.user.check.self.info;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,6 +14,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.ui.user.check.bean.UserPersonInfo;
+import com.juxin.predestinate.ui.user.check.self.info.UserDetailAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -36,7 +36,7 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //检查软件升级
-    checkUpdate("public/checkup", null, true),
+    checkUpdate("public/checkupNew", null, true),
     //检查服务器静态配置
     staticConfig("public/getASet", null, false),
     //请求在线客服QQ
@@ -53,6 +53,8 @@ public enum UrlParam {
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
+    reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
 
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
@@ -68,8 +70,10 @@ public enum UrlParam {
     // 上传相册
     uploadPhoto(Constant.FATE_IT_HTTP_PIC, "index/uploadPhoto", null, true),
 
+    // 删除照片
+    deletePhoto("user/deletePic", false),
+
     // 上传文件
-    //uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
     uploadFile(Constant.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================

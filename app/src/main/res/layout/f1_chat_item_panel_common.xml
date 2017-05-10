@@ -14,7 +14,7 @@
         android:textSize="@dimen/px39_sp"
         app:emojiSize="24dp" />
 
-    <com.juxin.predestinate.module.logic.baseui.custom.SelectableRoundedImageView
+    <ImageView
         android:id="@+id/chat_item_img"
         android:layout_width="@dimen/px400_dp"
         android:layout_height="@dimen/px400_dp"
