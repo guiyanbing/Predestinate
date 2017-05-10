@@ -36,7 +36,7 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //检查软件升级
-    checkUpdate("public/checkup", null, true),
+    checkUpdate("public/checkupNew", null, true),
     //检查服务器静态配置
     staticConfig("public/getASet", null, false),
     //请求在线客服QQ

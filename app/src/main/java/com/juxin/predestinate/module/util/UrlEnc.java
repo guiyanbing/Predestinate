@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.util;
 
+import android.text.TextUtils;
+
 import com.juxin.library.utils.EncryptUtil;
 
 import java.util.Arrays;
@@ -12,7 +14,7 @@ import java.util.Map.Entry;
  *
  * @author Kind
  */
-public class Url_Enc {
+public class UrlEnc {
 
     /**
      * 对请求参数进行hash拼接
@@ -68,11 +70,12 @@ public class Url_Enc {
      * @return 加密之后的请求url
      */
     public static String appendUrl(String url, Map<String, Object> getParams, Map<String, Object> postParams, boolean isDes) {
-        if (getParams == null) getParams = new HashMap<>();
+        getParams = getSplitMap(url, getParams);
         getParams.put("ts", TimeUtil.getCurrentTimeMil());
         // 服务器要求用C++代码加密的参数，此处的hash值只对ts进行hash算法  2016/12/19
-        getParams.put("hash", isDes ? Url_Enc.getHashMethod(getParams, null) : Url_Enc.getHashMethod(getParams, postParams));
+        getParams.put("hash", isDes ? UrlEnc.getHashMethod(getParams, null) : UrlEnc.getHashMethod(getParams, postParams));
 
+        url = url.split("\\?")[0];
         StringBuilder builder = new StringBuilder(url);
         builder.append(url.contains("?") ? "&" : "?");
         boolean flag = false;
@@ -84,5 +87,33 @@ public class Url_Enc {
             flag = true;
         }
         return builder.toString();
+    }
+
+    /**
+     * 切割出请求网址中包含的get参数
+     *
+     * @param url       需要切割的url
+     * @param getParams 其他需要拼接的get参数
+     * @return 切割完成的参数map
+     */
+    private static Map<String, Object> getSplitMap(String url, Map<String, Object> getParams) {
+        Map<String, Object> splitMap = new HashMap<>();
+        if (getParams != null && !getParams.isEmpty()) splitMap.putAll(getParams);
+        if (TextUtils.isEmpty(url)) return splitMap;
+
+        try {
+            String[] paramArray = url.split("\\?");
+            if (paramArray.length > 1) {
+                String[] kvArray = paramArray[1].split("&");
+                String[] param = null;
+                for (String kv : kvArray) {
+                    param = kv.split("=");
+                    splitMap.put(param[0], param.length > 1 ? param[1] : "");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return splitMap;
     }
 }
