@@ -16,7 +16,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
-import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -140,9 +139,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
-
-                // test
-                UIShow.showGoodsVipDialog(getContext(), GoodsConstant.DLG_VIP_LOW_POWER);
+                UIShow.showUserPhotoAct(getContext());
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心

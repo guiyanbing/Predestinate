@@ -14,6 +14,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -61,11 +62,12 @@ import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
-import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
-import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
+import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
@@ -76,6 +78,7 @@ import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDlgOld;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+import com.juxin.predestinate.ui.utils.PhotoDisplayAct;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
@@ -96,6 +99,7 @@ import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawExplainAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawSuccessAct;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -365,6 +369,13 @@ public class UIShow {
     }
 
     /**
+     * 打开个人信息页
+     */
+    public static void showUserPhotoAct(Context context) {
+        context.startActivity(new Intent(context, UserPhotoAct.class));
+    }
+
+    /**
      * 打开个人信息查看编辑页
      */
     public static void showUserEditInfoAct(Context context) {
@@ -438,6 +449,61 @@ public class UIShow {
      */
     public static void showUserOtherLabelAct(Context context) {
         context.startActivity(new Intent(context, UserOtherLabelAct.class));
+    }
+
+    /**
+     * 查看大图界面
+     *
+     * @param activity
+     * @param list     Serializable 图片的数据链表对象 （看相册的 传List<UserPhoto>链表 看大图的 传List<String>链表）
+     * @param position 选中的 图片 position
+     * @param type     需要界面显示的类型
+     *                 PhotoDisplayAct.DISPLAY_TYPE_USER; //看自己相册
+     *                 PhotoDisplayAct.DISPLAY_TYPE_OTHER; //看别人相册
+     *                 PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG; //看大图
+     */
+    private static void showPhotoDisplayAct(FragmentActivity activity, Serializable list, int position, int type) {
+        if (list == null || ((List<String>) list).size() == 0) {
+            MMToast.showShort("没有图片数据");
+            return;
+        }
+        Intent intent = new Intent(activity, PhotoDisplayAct.class);
+        intent.putExtra("list", list);
+        intent.putExtra("position", position);
+        intent.putExtra("type", type);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 查看大图界面 看我自己的相册
+     *
+     * @param activity
+     * @param list
+     * @param position
+     */
+    public static void showPhotoOfSelf(FragmentActivity activity, Serializable list, int position) {
+        showPhotoDisplayAct(activity, list, position, PhotoDisplayAct.DISPLAY_TYPE_USER);
+    }
+
+    /**
+     * 查看大图界面 看别人的相册
+     *
+     * @param activity
+     * @param list
+     * @param position
+     */
+    public static void showPhotoOfOther(FragmentActivity activity, Serializable list, int position) {
+        showPhotoDisplayAct(activity, list, position, PhotoDisplayAct.DISPLAY_TYPE_OTHER);
+    }
+
+    /**
+     * 查看大图界面 url
+     *
+     * @param activity
+     * @param list
+     */
+    public static void showPhotoOfBigImg(FragmentActivity activity, Serializable list) {
+        showPhotoDisplayAct(activity, list, 0, PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG);
     }
 
     // -----------------------消息提示跳转 start--------------------------

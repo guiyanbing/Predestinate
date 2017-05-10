@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.edit;
+package com.juxin.predestinate.ui.user.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +11,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.user.check.adapter.SecretMediaAdapter;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements BaseRecyclerV
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
 
     private int secretType;
-    private SecretMediaAdapter mediaAdapter;
+    private MediaAdapter mediaAdapter;
     private List<Object> data;
 
     public AlbumHorizontalPanel(Context context, int secretType, List<Object> data) {
@@ -47,7 +46,7 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements BaseRecyclerV
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new RightItemSpaces((int) (10 * toDpMutliple)));
 
-        mediaAdapter = new SecretMediaAdapter();
+        mediaAdapter = new MediaAdapter();
         recyclerView.setAdapter(mediaAdapter);
         mediaAdapter.setOnItemClickListener(this);
 

@@ -10,7 +10,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
-import com.juxin.predestinate.ui.user.check.edit.AlbumHorizontalPanel;
+import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 

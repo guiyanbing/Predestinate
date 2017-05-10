@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.edit;
+package com.juxin.predestinate.ui.user.check.secret;
 
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIUtil;
-import com.juxin.predestinate.ui.user.check.adapter.UserSecretAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

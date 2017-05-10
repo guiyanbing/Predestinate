@@ -95,7 +95,12 @@
             android:name=".ui.setting.SuggestAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.check.self.UserInfoAct"
+            android:name=".ui.user.check.self.info.UserInfoAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.user.check.self.album.UserPhotoAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
@@ -183,7 +188,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.check.edit.UserSecretAct"
+            android:name=".ui.user.check.secret.UserSecretAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
