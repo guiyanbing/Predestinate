@@ -100,9 +100,9 @@ public interface AppMgr extends ModuleBase {
     String getMAC();
 
     /**
-     * @return 获取手机唯一标识，根据IMEI与MAC进行MD5之后生成
+     * @return 获取手机唯一标识，根据IMEI与MAC进行hash之后生成
      */
-    int getDeviceID();
+    String getDeviceID();
 
     // ================软件状态信息================
 

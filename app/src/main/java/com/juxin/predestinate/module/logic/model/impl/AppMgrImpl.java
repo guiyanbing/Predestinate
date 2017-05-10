@@ -169,8 +169,8 @@ public class AppMgrImpl implements AppMgr {
     }
 
     @Override
-    public int getDeviceID() {
-        return EncryptUtil.getHashCode(mac + imei);
+    public String getDeviceID() {
+        return String.valueOf(EncryptUtil.getHashCode(mac + imei));
     }
 
     // ================软件状态信息================
