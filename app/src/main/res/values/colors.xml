@@ -217,5 +217,6 @@
     <color name="deep_gray_text">#999</color>
     <color name="text_gray">#707070</color>
 
+    <color name="authentication_txt_bg">#43cd67</color>
 </resources>
 

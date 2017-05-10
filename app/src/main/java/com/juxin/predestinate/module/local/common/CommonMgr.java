@@ -9,8 +9,10 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -44,7 +46,7 @@ public class CommonMgr implements ModuleBase {
 
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
-
+    private VideoVerifyBean videoVerify;//视频聊天配置
     @Override
     public void init() {
         requestStaticConfig();
@@ -112,6 +114,49 @@ public class CommonMgr implements ModuleBase {
                 });
     }
 
+
+    /**
+     * 获取自己的音频、视频开关配置
+     */
+    public void requestVideochatConfig(){
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                videoVerify = (VideoVerifyBean) response.getBaseData();
+            }
+        });
+    }
+    /**
+     * 获取自己的音频、视频开关配置
+     */
+    public void requestVideochatConfigSendUI(RequestComplete complete){
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, complete);
+    }
+    /**
+     * 修改自己的音频、视频开关配置
+     */
+    public void setVideochatConfig(){
+        HashMap<String,Object> post_param = new HashMap<>();
+        post_param.put("videochat",videoVerify.getVideochat());
+        post_param.put("audiochat",videoVerify.getAudiochat());
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+            }
+        });
+    }
+
+    /**
+     * 上传视频认证配置
+     */
+    public void addVideoVerify(String imgUrl,String videoUrl,RequestComplete complete){
+        HashMap<String,Object> post_param = new HashMap<>();
+        post_param.put("imgurl", imgUrl);
+        post_param.put("videourl", videoUrl);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, complete);
+    }
+
     /**
      * 请求在线QQ配置
      */
@@ -130,6 +175,14 @@ public class CommonMgr implements ModuleBase {
      */
     public CommonConfig getCommonConfig() {
         return commonConfig;
+    }
+
+    public VideoVerifyBean getVideoVerify() {
+        return videoVerify;
+    }
+
+    public void setVideoVerify(VideoVerifyBean videoVerify) {
+        this.videoVerify = videoVerify;
     }
 
     /**

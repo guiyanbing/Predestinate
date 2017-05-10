@@ -20,6 +20,7 @@ import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.settting.ASetBean;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
@@ -50,7 +51,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     private static final String SETTING_SAVE_KEY = "SETTING_SAVE_KEY"; // 本地化设置key
     private UserDetail userDetail = null;
     private Setting setting = null;
-
+    public static ASetBean ASet;//通用配置
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
@@ -447,5 +448,4 @@ public class CenterMgr implements ModuleBase, PObserver {
         return random;
     }
     // -------------------------充值页面逻辑 end---------------------------
-
 }
