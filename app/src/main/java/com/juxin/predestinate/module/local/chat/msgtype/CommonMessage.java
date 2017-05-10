@@ -97,6 +97,7 @@ public class CommonMessage extends BaseMessage{
     public String getJson(BaseMessage message) {
         JSONObject json = new JSONObject();
         try {
+            json.put("tid", message.getWhisperID());
             json.put("mtp", message.getType());
             json.put("mt", message.getTime());
             json.put("d", message.getMsgID());
