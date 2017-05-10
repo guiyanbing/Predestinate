@@ -105,6 +105,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.utils.PhotoDisplayAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.user.check.edit.info.UserEditInfoAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -137,10 +142,10 @@
         <!-- ============= 小友模块start ============= -->
         <activity
             android:name=".ui.xiaoyou.wode.NearVisitorAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.MyAttentionAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.xiaoyou.wode.MyDiamondsAct"
             android:screenOrientation="portrait" />
@@ -165,7 +170,7 @@
 
         <activity
             android:name=".ui.xiaoyou.wode.DemandRedPacketAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.xiaoyou.TabGroupActivity"

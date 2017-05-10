@@ -125,6 +125,8 @@
 
     <color name="color_ff4d79">#ff4d79</color>
     <color name="color_e6c2aa">#e6c2aa</color>
+    <color name="color_6ba2fd">#6ba2fd</color>
+    <color name="color_ee3434">#ee3434</color>
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
