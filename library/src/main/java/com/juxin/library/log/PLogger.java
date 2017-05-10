@@ -1,6 +1,7 @@
 package com.juxin.library.log;
 
 import android.os.Looper;
+import android.os.Process;
 import android.text.TextUtils;
 
 import com.elvishew.xlog.LogLevel;
@@ -74,6 +75,8 @@ public class PLogger {
         sb.append(Looper.getMainLooper().getThread().getName());
         sb.append("]_CurrentThreadName[");
         sb.append(Thread.currentThread().getName());
+        sb.append("]_CurrentPid[");
+        sb.append(Process.myPid());
         sb.append("]\n%s");
 
         return sb.toString();

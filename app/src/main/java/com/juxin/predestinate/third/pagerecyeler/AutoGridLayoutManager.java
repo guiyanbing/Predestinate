@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.juxin.library.log.PLogger;
+
 /**
  * Created by zhang on 2017/3/24.
  * 重写GridLayoutManager，在{@link RecyclerView#setLayoutManager(RecyclerView.LayoutManager)}使用
@@ -34,13 +36,17 @@ public class AutoGridLayoutManager extends GridLayoutManager {
     @Override
     public void onMeasure(RecyclerView.Recycler recycler,
                           RecyclerView.State state, int widthSpec, int heightSpec) {
-        if (measuredHeight <= 0 && recycler.getScrapList().size() != 0) {
-            View view = recycler.getViewForPosition(0);
-            if (view != null) {
-                measureChild(view, widthSpec, heightSpec);
-                measuredWidth = View.MeasureSpec.getSize(widthSpec);
-                measuredHeight = view.getMeasuredHeight() * getSpanCount();
+        try {
+            if (measuredHeight <= 0) {
+                View view = recycler.getViewForPosition(0);
+                if (view != null) {
+                    measureChild(view, widthSpec, heightSpec);
+                    measuredWidth = View.MeasureSpec.getSize(widthSpec);
+                    measuredHeight = view.getMeasuredHeight() * getSpanCount();
+                }
             }
+        }catch (Exception e){
+            PLogger.e(e.toString());
         }
         setMeasuredDimension(measuredWidth, measuredHeight);
     }

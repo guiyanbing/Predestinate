@@ -226,6 +226,7 @@
 
     <color name="deep_gray_text">#999</color>
     <color name="text_gray">#707070</color>
+    <color name="half_trans_white">#99FFFFFF</color>
 
 </resources>
 

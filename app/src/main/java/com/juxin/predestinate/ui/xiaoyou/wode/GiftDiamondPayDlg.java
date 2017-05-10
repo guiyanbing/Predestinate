@@ -79,7 +79,7 @@ public class GiftDiamondPayDlg extends Activity implements View.OnClickListener,
         mContext = context;
         initView(context);
         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() == 0) {
-            ModuleMgr.getCommonMgr().requestgetGifts(this);
+            ModuleMgr.getCommonMgr().requestGiftList(this);
         } else {
             mListGift = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
             initViewGrid();

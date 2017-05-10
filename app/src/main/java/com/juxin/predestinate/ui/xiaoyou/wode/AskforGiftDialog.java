@@ -83,7 +83,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener, Request
             initViewGrid();
         } else {//配置中未返回就去请求配置
 //            AppCtx.execLstGiftTask(mContext, TASK_TYPE_GETLIST, this);
-            ModuleMgr.getCommonMgr().requestgetGifts(this);
+            ModuleMgr.getCommonMgr().requestGiftList(this);
         }
 //        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() == 0) {//请求钻石数目
 //            ModuleMgr.getCommonMgr().getMyDiamand(this);

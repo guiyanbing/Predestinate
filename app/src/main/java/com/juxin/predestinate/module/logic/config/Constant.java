@@ -33,6 +33,9 @@ public class Constant {
     public static final int SUB_VERSION = 7;        //客户端版本号
     public static final int REG_FLAG = 0;           //0缘分吧，1爱爱，2同城快约，3附近秘约，标记
 
+    // 友盟
+    public static final String UMENG_APPKEY = "549fccadfd98c51fae00019a";
+
     //微信
     public static String WEIXIN_APP_ID = "wxab302910f007a8ed";//聚鑫 //"wxc56bbddc3c2e0c18";//APPID
     public final static String WEIXIN_App_Key = "xCNyzKceB8szwWmUqT4laGqK5SapQn5L";
