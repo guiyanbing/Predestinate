@@ -424,7 +424,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                     ServerTime.setServerTime(contentObject.optLong("mt"));//保存服务器时间戳
                 }
                 //socket登录处理
-                if (contentObject.has("s")) {
+                if (contentObject.has("s") && heartBeating == false) {
                     int status = contentObject.optInt("s");//登录状态，0表示成功，其他见下面详情
                     if (status == 0) {//登录成功
                         heartBeating = true;

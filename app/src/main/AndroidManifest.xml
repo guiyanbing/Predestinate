@@ -105,6 +105,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.utils.PhotoDisplayAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.user.check.edit.info.UserEditInfoAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

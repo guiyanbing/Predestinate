@@ -9,7 +9,6 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.utils.BitmapUtil;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -156,7 +155,7 @@ public class ChatMgr implements ModuleBase, PObserver {
 
 
     private void sendCommonMessage(final CommonMessage commonMessage){
-        IMProxy.getInstance().send(new NetData(commonMessage.getLWhisperID(), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()), new IMProxy.SendCallBack() {
+        IMProxy.getInstance().send(new NetData(ModuleMgr.getCenterMgr().getMyInfo().getUid(), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                 commonMessage.setStatus(DBConstant.OK_STATUS);

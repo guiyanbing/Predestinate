@@ -321,14 +321,7 @@ public class CenterMgr implements ModuleBase, PObserver {
             postParams.put("uid", uid);
             postParams.put("code", MD5.encode(uid + MD5.encode(password)));
 
-            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadPhoto, postParams, fileParams, new RequestComplete() {
-                @Override
-                public void onRequestComplete(HttpResponse response) {
-                    if (complete != null)
-                        complete.onRequestComplete(response);
-                    FileUtil.deleteFile(url);
-                }
-            });
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadPhoto, postParams, fileParams, complete);
 
         } else {
             LoadingDialog.closeLoadingDialog();
