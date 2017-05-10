@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/px10_dp"
@@ -41,14 +41,14 @@
             android:layout_marginBottom="@dimen/px30_dp"
             android:text="泰迪熊"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/bottom_gif_item_txvintimacy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/color_47cfd3"
-        android:layout_centerHorizontal="true"
-        android:textSize="@dimen/px22_dp"
-        android:background="@color/white"
-        android:visibility="gone"
-        android:text="亲密度+20"/>
-</RelativeLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/bottom_gif_item_txvintimacy"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/color_47cfd3"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:textSize="@dimen/px22_dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:visibility="gone"-->
+        <!--android:text="亲密度+20"/>-->
+</LinearLayout>

@@ -5,8 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 横向分页的GridView效果
@@ -40,6 +44,10 @@ public class PageRecyclerView extends RecyclerView {
      * 0: 停止滚动且手指移开; 1: 开始滚动; 2: 手指做了抛的动作（手指离开屏幕前，用力滑了一下）
 	 */
     private int scrollState = 0; // 滚动状态
+    private int itemWidth = 0;
+    private Interpolator mInterpolator;
+
+    private Map<Integer,ViewHolder> mHolderMap = new HashMap<>();
 
     public PageRecyclerView(Context context) {
         this(context, null);
@@ -60,6 +68,7 @@ public class PageRecyclerView extends RecyclerView {
         setLayoutManager(new AutoGridLayoutManager(
                 mContext, spanRow, AutoGridLayoutManager.HORIZONTAL, false));
         setOverScrollMode(OVER_SCROLL_NEVER);
+        mInterpolator = new LinearInterpolator();
     }
 
     /**
@@ -97,8 +106,54 @@ public class PageRecyclerView extends RecyclerView {
     protected void onMeasure(int widthSpec, int heightSpec) {
         super.onMeasure(widthSpec, heightSpec);
         shortestDistance = getMeasuredWidth() / 3;
+        if (itemWidth <= 0) {
+            // 计算Item的宽度
+            itemWidth = (getMeasuredWidth() - pageMargin * 2) / spanColumn;
+        }
+        if (mHolderMap.size()>0 && itemWidth>0){
+            measureMapView();
+        }
     }
 
+    /**
+     * 设置page切换效果（不设置此方法默认为匀速）
+     *
+     * @param mInterpolator
+     */
+    public void setmInterpolator(Interpolator mInterpolator){
+        this.mInterpolator = mInterpolator;
+    }
+
+    private void measureMapView(){
+        for (Integer key:mHolderMap.keySet()){
+            ViewHolder viewHolder = mHolderMap.get(key);
+            measureView(viewHolder,key);
+        }
+        mHolderMap.clear();
+    }
+
+    private void measureView(RecyclerView.ViewHolder holder, int position){
+        if (spanColumn == 1) {
+            // 每个Item距离左右两侧各pageMargin
+            holder.itemView.getLayoutParams().width = itemWidth + pageMargin * 2;
+            holder.itemView.setPadding(pageMargin, 0, pageMargin, 0);
+        } else {
+            int m = position % (spanRow * spanColumn);
+            if (m < spanRow) {
+                // 每页左侧的Item距离左边pageMargin
+                holder.itemView.getLayoutParams().width = itemWidth + pageMargin;
+                holder.itemView.setPadding(pageMargin, 0, 0, 0);
+            } else if (m >= spanRow * spanColumn - spanRow) {
+                // 每页右侧的Item距离右边pageMargin
+                holder.itemView.getLayoutParams().width = itemWidth + pageMargin;
+                holder.itemView.setPadding(0, 0, pageMargin, 0);
+            } else {
+                // 中间的正常显示
+                holder.itemView.getLayoutParams().width = itemWidth;
+                holder.itemView.setPadding(0, 0, 0, 0);
+            }
+        }
+    }
     @Override
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);
@@ -116,7 +171,7 @@ public class PageRecyclerView extends RecyclerView {
             if (temp < totalPage && currentPage == totalPage) {
                 currentPage = temp;
                 // 执行滚动
-                smoothScrollBy(-getWidth(), 0);
+                smoothScrollBy(-getWidth(), 0,mInterpolator);
             }
             mIndicatorView.setSelectedPage(currentPage - 1);
             totalPage = temp;
@@ -154,7 +209,7 @@ public class PageRecyclerView extends RecyclerView {
                     }
                 }
                 // 执行自动滚动
-                smoothScrollBy((int) ((currentPage - 1) * getWidth() - scrollX), 0);
+                smoothScrollBy((int) ((currentPage - 1) * getWidth() - scrollX), 0,mInterpolator);
                 // 修改指示器选中项
                 mIndicatorView.setSelectedPage(currentPage - 1);
                 slideDistance = 0;
@@ -180,7 +235,6 @@ public class PageRecyclerView extends RecyclerView {
 
         private List<?> dataList = null;
         private CallBack mCallBack = null;
-        private int itemWidth = 0;
         private int itemCount = 0;
 
         /**
@@ -192,7 +246,7 @@ public class PageRecyclerView extends RecyclerView {
         public PageAdapter(List<?> data, CallBack callBack) {
             this.dataList = data;
             this.mCallBack = callBack;
-            itemCount = dataList.size() + spanRow * spanColumn;
+            itemCount = dataList.size()+(spanColumn*spanRow);
         }
 
         @Override
@@ -213,36 +267,18 @@ public class PageRecyclerView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (spanColumn == 1) {
-                // 每个Item距离左右两侧各pageMargin
-                holder.itemView.getLayoutParams().width = itemWidth + pageMargin * 2;
-                holder.itemView.setPadding(pageMargin, 0, pageMargin, 0);
-            } else {
-                int m = position % (spanRow * spanColumn);
-                if (m < spanRow) {
-                    // 每页左侧的Item距离左边pageMargin
-                    holder.itemView.getLayoutParams().width = itemWidth + pageMargin;
-                    holder.itemView.setPadding(pageMargin, 0, 0, 0);
-                } else if (m >= spanRow * spanColumn - spanRow) {
-                    // 每页右侧的Item距离右边pageMargin
-                    holder.itemView.getLayoutParams().width = itemWidth + pageMargin;
-                    holder.itemView.setPadding(0, 0, pageMargin, 0);
-                } else {
-                    // 中间的正常显示
-                    holder.itemView.getLayoutParams().width = itemWidth;
-                    holder.itemView.setPadding(0, 0, 0, 0);
-                }
+            if (itemWidth > 0){
+                measureView(holder,position);
+            }else {
+                mHolderMap.put(position,holder);
             }
 
-            countRealPosition(position);
-
-            holder.itemView.setTag(realPosition);
-
             setListener(holder);
+            holder.itemView.setTag(position);
 
-            if (realPosition < dataList.size()) {
+            if (position < dataList.size()) {
                 holder.itemView.setVisibility(View.VISIBLE);
-                mCallBack.onBindViewHolder(holder, realPosition);
+                mCallBack.onBindViewHolder(holder, position);
             } else {
                 holder.itemView.setVisibility(View.INVISIBLE);
             }
@@ -252,32 +288,6 @@ public class PageRecyclerView extends RecyclerView {
         @Override
         public int getItemCount() {
             return itemCount;
-        }
-
-        private void countRealPosition(int position) {
-            // 为了使Item从左到右从上到下排列，需要position的值
-            int m = position % (spanRow * spanColumn);
-            switch (m) {
-                case 1:
-                case 5:
-                    realPosition = position + 2;
-                    break;
-                case 3:
-                case 7:
-                    realPosition = position - 2;
-                    break;
-                case 2:
-                    realPosition = position + 4;
-                    break;
-                case 6:
-                    realPosition = position - 4;
-                    break;
-                case 0:
-                case 4:
-                case 8:
-                    realPosition = position;
-                    break;
-            }
         }
 
         private void setListener(ViewHolder holder) {
