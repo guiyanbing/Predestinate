@@ -537,6 +537,7 @@ public class BaseMessage implements IBaseMessage {
         this.setSendID(App.uid);
         this.setTime(getCurrentTime());
         this.setcMsgID(getCMsgID());
+        this.setMsgID(getCMsgID());
         MMLog.autoDebug("getCMsgID()=" + getcMsgID() + "");
     }
 

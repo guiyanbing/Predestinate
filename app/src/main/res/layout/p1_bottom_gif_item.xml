@@ -28,7 +28,7 @@
             android:id="@+id/bottom_gif_item_txvneedstone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/color_47cfd3"
+            android:textColor="@color/color_FD7194"
             android:textSize="@dimen/px34_sp"
             android:layout_marginTop="@dimen/px10_dp"
             android:text="18钻石"/>
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/px28_sp"
-            android:textColor="@color/color_C3C3C3"
+            android:textColor="@color/color_BEBEBE"
             android:layout_marginBottom="@dimen/px30_dp"
             android:text="泰迪熊"/>
     </LinearLayout>

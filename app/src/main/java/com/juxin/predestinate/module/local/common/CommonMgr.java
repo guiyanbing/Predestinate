@@ -26,7 +26,8 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
+import com.juxin.predestinate.ui.wode.util.AttentionUtil;
+import com.juxin.predestinate.ui.wode.bean.GiftsList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -104,6 +105,7 @@ public class CommonMgr implements ModuleBase {
     public void requestStaticConfig() {
         requestConfig();
         requestGiftList(null);
+        AttentionUtil.initUserDetails();
     }
 
     /**
@@ -154,9 +156,11 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                giftLists = new GiftsList();
-                giftLists.parseJson(response.getResponseString());
+                PLogger.d("---GiftList--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                if (response.isOk() || response.isCache()){
+                    giftLists = new GiftsList();
+                    giftLists.parseJson(response.getResponseString());
+                }
             }
         } : complete);
     }
@@ -410,6 +414,22 @@ public class CommonMgr implements ModuleBase {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("content", content);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.begGift, getParams, complete);
+    }
+
+    /**
+     * 接收礼物
+     *
+     * @param rid      礼物红包ID
+     * @param gname    礼物名称
+     * @param gid      礼物ID
+     * @param complete 请求完成后回调
+     */
+    public void receiveGift(long rid,String gname,int gid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("rid", rid);
+        getParams.put("gname", gname);
+        getParams.put("gid", gid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.receiveGift, getParams, complete);
     }
 
     /**

@@ -34,7 +34,7 @@ public class CommonConfig extends BaseData {
         JSONObject jsonObject = getJsonObject(jsonStr);
         this.setEntrance_url(jsonObject.optString("entrance_url"));
         this.setExtra_url(jsonObject.optString("extra_url"));
-        this.setMinmoney(jsonObject.optInt("minmoney"));
+        this.setMinmoney(jsonObject.optInt("mmoney"));
 
         this.setPush_url(jsonObject.optString("push_url"));
         this.setPushshow(jsonObject.optInt("pushshow"));

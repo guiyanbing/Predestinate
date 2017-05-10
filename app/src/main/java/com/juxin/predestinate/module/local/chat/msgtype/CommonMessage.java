@@ -98,7 +98,8 @@ public class CommonMessage extends BaseMessage{
         JSONObject json = new JSONObject();
         try {
             json.put("mtp", message.getType());
-            json.put("mt", getCurrentTime());
+            json.put("mt", message.getTime());
+            json.put("d", message.getMsgID());
 
             if(!TextUtils.isEmpty(message.getMsgDesc())){
                 json.put("mct", message.getMsgDesc());

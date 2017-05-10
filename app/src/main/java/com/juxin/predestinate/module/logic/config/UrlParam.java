@@ -14,8 +14,8 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedOneKeyList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedbagList;
+import com.juxin.predestinate.ui.wode.bean.RedOneKeyList;
+import com.juxin.predestinate.ui.wode.bean.RedbagList;
 
 import java.util.Map;
 
@@ -97,6 +97,8 @@ public enum UrlParam {
     getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
     begGift("gift/begGift", true),
+    //接收礼物
+    receiveGift("gift/receiveGift", null, true),
     // 手机验证
     sendSMS("public/sendSMS", true),
     // 手机验证
@@ -143,6 +145,7 @@ public enum UrlParam {
     reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
     //送礼物
     givePresent("s/present/GivePresent", null, true),
+
 
     //================= 发现 ===========
     //举报

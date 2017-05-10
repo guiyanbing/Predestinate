@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/bottom_gif_view_blank"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/transparent"
@@ -9,14 +10,8 @@
               android:paddingLeft="@dimen/px25_dp"
               android:paddingRight="@dimen/px25_dp">
 
-    <View
-        android:id="@+id/bottom_gif_view_blank"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/transparent"
-        android:layout_weight="1"/>
-
     <RelativeLayout
+        android:id="@+id/bottom_gif_rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/p1_gift_dialog_bg"
@@ -41,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px36_dp"
                 android:text="送礼更容易搭讪成功"
-                android:textColor="@color/color_zhuyao"
+                android:textColor="@color/color_666666"
                 android:textSize="@dimen/px34_sp"/>
 
             <TextView
@@ -53,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我的钻石："
-                android:textColor="@color/color_B2B2B2"
+                android:textColor="@color/color_C7C7C7"
                 android:textSize="@dimen/px34_sp"/>
 
             <TextView
@@ -73,7 +68,7 @@
                 android:background="@drawable/btn_gif_pay_bg"
                 android:gravity="center"
                 android:text="充值"
-                android:textColor="@color/color_47cfd3"/>
+                android:textColor="@color/color_FD7194"/>
         </LinearLayout>
 
         <TextView
@@ -96,6 +91,7 @@
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/px60_dp"
+            android:layout_marginTop="@dimen/px68_dp"
             android:layout_below="@+id/bottom_gif_rlv_gif"/>
 
         <TextView
@@ -103,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/px1_dp"
             android:layout_below="@+id/bottom_gif_rlv_gif_indicator"
-            android:layout_marginTop="@dimen/px110_dp"
+            android:layout_marginTop="@dimen/px61_dp"
             android:background="@color/bg_color"/>
 
         <LinearLayout
@@ -120,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="共需钻石："
-                android:textColor="@color/color_zhuyao"
+                android:textColor="@color/color_666666"
                 android:textSize="@dimen/px34_sp"/>
 
             <TextView
@@ -140,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="数量："
-                android:textColor="@color/color_zhuyao"/>
+                android:textColor="@color/color_666666"/>
 
             <LinearLayout
                 android:id="@+id/bottom_gif_ll_sendnum"
@@ -170,7 +166,7 @@
                     android:height="@dimen/px34_sp"
                     android:lineSpacingExtra="0dp"
                     android:background="#00000000"
-                    android:textColor="@color/color_999999"
+                    android:textColor="@color/color_B4B4B4"
                     android:textSize="@dimen/px34_sp"/>
 
                 <TextView

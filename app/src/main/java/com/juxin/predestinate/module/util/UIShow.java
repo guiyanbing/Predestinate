@@ -84,19 +84,20 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
-import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
-import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
-import com.juxin.predestinate.ui.xiaoyou.wode.GiftDiamondPayDlg;
-import com.juxin.predestinate.ui.xiaoyou.wode.MyAttentionAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.NearVisitorAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxPhoneVerifyAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxRecordAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawApplyAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawExplainAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawSuccessAct;
+import com.juxin.predestinate.ui.wode.util.AttentionUtil;
+import com.juxin.predestinate.ui.wode.BottomGiftDialog;
+import com.juxin.predestinate.ui.wode.DemandRedPacketAct;
+import com.juxin.predestinate.ui.wode.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.wode.GiftDiamondPayDlg;
+import com.juxin.predestinate.ui.wode.MyAttentionAct;
+import com.juxin.predestinate.ui.wode.MyDiamondsAct;
+import com.juxin.predestinate.ui.wode.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.wode.NearVisitorAct;
+import com.juxin.predestinate.ui.wode.RedBoxPhoneVerifyAct;
+import com.juxin.predestinate.ui.wode.RedBoxRecordAct;
+import com.juxin.predestinate.ui.wode.WithDrawApplyAct;
+import com.juxin.predestinate.ui.wode.WithDrawExplainAct;
+import com.juxin.predestinate.ui.wode.WithDrawSuccessAct;
 
 import java.io.Serializable;
 import java.util.List;
@@ -396,6 +397,9 @@ public class UIShow {
                     PToast.showShort(context.getString(R.string.request_error));
                     return;
                 }
+                //更新缓存
+                AttentionUtil.updateUserDetails(response.getResponseString());
+
                 Intent intent = new Intent(context, UserCheckInfoAct.class);
                 intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
                 intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
