@@ -70,7 +70,7 @@ public class MyAttentionAct extends BaseActivity{
         super.onResume();
         if (panls.size()==2&&panls.get(0)!=null&&panls.get(1)!=null){
             ((AttentionMePanel)panls.get(0)).reFreshUI();
-            ((AttentionMePanel)panls.get(1)).reFreshUI();
+            ((MyAttentionPanel)panls.get(1)).reFreshUI();
         }
     }
 }
