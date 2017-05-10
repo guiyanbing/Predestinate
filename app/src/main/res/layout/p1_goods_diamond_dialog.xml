@@ -60,18 +60,15 @@
                 android:textSize="@dimen/px39_sp" />
         </LinearLayout>
 
-        <!-- 商品列表 -->
+        <!-- 商品列表 / 支付方式容器 -->
         <LinearLayout
             android:id="@+id/pay_type_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/px35_dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/px45_dp"
             android:paddingRight="@dimen/px45_dp" />
-
-        <!-- 支付方式-->
-        <include layout="@layout/f1_goods_pay_type" />
 
         <!-- 充值按钮 -->
         <LinearLayout
@@ -79,7 +76,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/px54_dp"
             android:paddingRight="@dimen/px54_dp"
-            android:paddingTop="@dimen/px60_dp">
+            android:paddingTop="@dimen/px50_dp">
 
             <Button
                 android:id="@+id/btn_recharge"

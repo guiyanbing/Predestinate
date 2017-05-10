@@ -16,8 +16,8 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedOneKeyList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedbagList;
+import com.juxin.predestinate.ui.wode.bean.RedOneKeyList;
+import com.juxin.predestinate.ui.wode.bean.RedbagList;
 
 import java.util.Map;
 
@@ -43,7 +43,7 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //检查软件升级
-    checkUpdate("public/checkup", null, true),
+    checkUpdate("public/checkupNew", null, true),
     //检查服务器静态配置
     staticConfig("public/getASet", null, false),
     //请求在线客服QQ
@@ -61,25 +61,34 @@ public enum UrlParam {
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
-    // 上传头像
-    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),
+    reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
+    reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
+
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
-
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
     //获取昵称和头像的最近变更 list
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 
+    // 上传头像
+    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, false),
+
+    // 上传相册
+    uploadPhoto(Constant.FATE_IT_HTTP_PIC, "index/uploadPhoto", null, true),
+
+    // 删除照片
+    deletePhoto("user/deletePic", false),
+
     // 上传文件
-    uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
+    uploadFile(Constant.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================
     //客户端获得用户红包列表
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
-    reqAddredTotal("fruit/addredtotalnew", false),
+    reqAddredTotal("fruit/addredtotalnew", true),
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
     reqAddredonekey("fruit/addredonekey", RedOneKeyList.class, true),
     // 客户端请求用户提现列表
@@ -96,10 +105,28 @@ public enum UrlParam {
     getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
     begGift("gift/begGift", true),
+    //接收礼物
+    receiveGift("gift/receiveGift", null, true),
     // 手机验证
     sendSMS("public/sendSMS", true),
     // 手机验证
     bindCellPhone("user/bindCellPhone", true),
+    // 最近来访
+    viewMeList("user/viewMeList", true),
+    // 索要礼物群发
+    qunFa(Constant.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
+    // 索要礼物群发
+    sendGift("gift/sendGift", true),
+    //女用户群发累计发送的用户数
+    qunCount(Constant.FATE_IT_GO, "xs/discovery/QunCount", null, true),
+    // 我关注的列表
+    getFollowing("MoneyTree/getFollowing", true),
+    // 关注我的列表
+    getFollowers("MoneyTree/getFollowers", true),
+    // 取消关注某某
+    unfollow("follow/unfollow", true),
+    // 关注某某
+    follow("follow/follow", true),
 
 
     //好友标签分组成员
@@ -126,6 +153,7 @@ public enum UrlParam {
     reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
     //送礼物
     givePresent("s/present/GivePresent", null, true),
+
 
     //================= 发现 ===========
     //举报

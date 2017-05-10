@@ -4,17 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
+import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 
 import org.json.JSONException;
@@ -25,11 +29,14 @@ import org.json.JSONObject;
  * Created by Su on 2017/5/4.
  */
 public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListener {
-    private CustomFrameLayout payWeChat, payAli, payOther; // 支付方式
-    private int payType = GoodsConstant.PAY_TYPE_WECHAT;  // 默认支付方式为微信支付
-
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel;
+    private GoodsPayTypePanel payTypePanel; // 支付方式
+
+    private Button btn_recharge;        // 充值按钮
+    private ImageView img_select_vip;
+    private boolean selectVip = true;   // 默认开通VIP
+    private int rechargeNum;            // 支付金额
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,28 +47,54 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
-        // 支付方式
-        payWeChat = (CustomFrameLayout) findViewById(R.id.pay_type_wexin);
-        payAli = (CustomFrameLayout) findViewById(R.id.pay_type_alipay);
-        payOther = (CustomFrameLayout) findViewById(R.id.pay_type_other);
+        // Y币余额
+        int remain = getIntent().getIntExtra(GoodsConstant.DLG_YCOIN_REMAIN, 0);
+        TextView tv_remain = (TextView) findViewById(R.id.tv_remain);
+        tv_remain.setText(String.valueOf(remain));
 
-        payWeChat.setOnClickListener(this);
-        payAli.setOnClickListener(this);
-        payOther.setOnClickListener(this);
-        findViewById(R.id.btn_recharge).setOnClickListener(this);
+        // 购买体力值
+        int power = getIntent().getIntExtra(GoodsConstant.DLG_YCOIN_POWER, 0);
+        LinearLayout header = (LinearLayout) findViewById(R.id.ll_header_tips);
+        TextView tv_power = (TextView) findViewById(R.id.tv_buy_power);
+        if (power > 0) {
+            header.setVisibility(View.VISIBLE);
+            tv_power.setText(String.valueOf(power));
+        }
 
-        payWeChat.showOfIndex(GoodsConstant.PAY_STATUS_CHOOSE);
-        payAli.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
-        payOther.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
+        // 开通vip面板
+        LinearLayout ll_vip = (LinearLayout) findViewById(R.id.ll_pay_vip);
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            ll_vip.setVisibility(View.GONE);
+            selectVip = false;
+        }
+
+        img_select_vip = (ImageView) findViewById(R.id.iv_pay_select_vip);
+        btn_recharge = (Button) findViewById(R.id.btn_recharge);
+        img_select_vip.setOnClickListener(this);
+        btn_recharge.setOnClickListener(this);
+        findViewById(R.id.btn_close).setOnClickListener(this);
 
         fillGoodsPanel();
     }
 
     private void fillGoodsPanel() {
-        LinearLayout container = (LinearLayout) findViewById(R.id.pay_type_container);
-        goodsPanel = new GoodsListPanel(this, GoodsConstant.DLG_YCOIN_PRIVEDEG);
+        LinearLayout container = (LinearLayout) findViewById(R.id.goods_container);
+        goodsPanel = new GoodsListPanel(this, GoodsConstant.DLG_YCOIN_NEW);
         container.addView(goodsPanel.getContentView());
+        attachPanelListener();
         initList();
+
+        // 支付方式
+        LinearLayout payContainer = (LinearLayout) findViewById(R.id.pay_type_container);
+        payTypePanel = new GoodsPayTypePanel(this, GoodsConstant.PAY_TYPE_NEW);
+        payContainer.addView(payTypePanel.getContentView());
+
+        // 支付按钮
+        if (selectVip) {
+            rechargeNum = 50;
+        }
+        rechargeNum += (int) (payGoods.getCommodityList().get(0).getDoublePrice());
+        btn_recharge.setText(getString(R.string.goods_ycoin_pay, rechargeNum));
     }
 
     private void initList() {
@@ -80,34 +113,65 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
         } catch (JSONException e) {
             PLogger.printThrowable(e);
         }
+
+    }
+
+    /**
+     * 商品选择
+     */
+    private void attachPanelListener() {
+        goodsPanel.setPanelItemClickListener(new GoodsListPanel.ListPanelItemClickListener() {
+            @Override
+            public void OnPanelItemClick(View convertView, int position) {
+                rechargeNum = 0;
+                if (selectVip) {
+                    rechargeNum = 50;
+                }
+                rechargeNum += (int) (payGoods.getCommodityList().get(position).getDoublePrice());
+                btn_recharge.setText(getString(R.string.goods_ycoin_pay, rechargeNum));
+            }
+        });
+    }
+
+    /**
+     * vip选择状态切换
+     */
+    private void switchSelVip() {
+        if (selectVip) {
+            img_select_vip.setBackgroundResource(R.drawable.ic_radio_nor);
+            selectVip = false;
+            rechargeNum -= 50;
+        } else {
+            img_select_vip.setBackgroundResource(R.drawable.ic_radio_male_sel);
+            selectVip = true;
+            rechargeNum += 50;
+        }
+        btn_recharge.setText(getString(R.string.goods_ycoin_pay, rechargeNum));
+    }
+
+    /**
+     * 获取支付商品ID
+     */
+    private int getPayid() {
+        if (!selectVip) {
+            return payGoods.getCommodityList().get(goodsPanel.getPosition()).getId();
+        }
+        return payGoods.getCommodityList().get(goodsPanel.getPosition()).getSub_id();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.pay_type_wexin:
-                payType = GoodsConstant.PAY_TYPE_WECHAT;
-                payWeChat.showOfIndex(GoodsConstant.PAY_STATUS_CHOOSE);
-                payAli.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
-                payOther.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
+            case R.id.btn_close:
+                finish();
                 break;
 
-            case R.id.pay_type_alipay:
-                payType = GoodsConstant.PAY_TYPE_ALIPAY;
-                payAli.showOfIndex(GoodsConstant.PAY_STATUS_CHOOSE);
-                payWeChat.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
-                payOther.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
-                break;
-
-            case R.id.pay_type_other:
-                payType = GoodsConstant.PAY_TYPE_OTHER;
-                payOther.showOfIndex(GoodsConstant.PAY_STATUS_CHOOSE);
-                payAli.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
-                payWeChat.showOfIndex(GoodsConstant.PAY_STATUS_UNCHOOSE);
+            case R.id.iv_pay_select_vip: // 开通Vip
+                switchSelVip();
                 break;
 
             case R.id.btn_recharge:  // 充值
-                PToast.showShort("type: " + payType + "goods: " + payGoods.getCommodityList().get(goodsPanel.getPosition()).getId());
+                PToast.showShort("type: " + payTypePanel.getPayType() + "goods: " + getPayid());
                 break;
         }
     }

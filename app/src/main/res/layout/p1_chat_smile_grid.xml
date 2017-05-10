@@ -15,7 +15,7 @@
         android:fadingEdge="none"
         android:gravity="center"
         android:listSelector="@color/transparent"
-        android:numColumns="7"
+        android:numColumns="8"
         android:overScrollMode="never"
         android:scrollbars="none"
         android:verticalSpacing="@dimen/px60_dp" />

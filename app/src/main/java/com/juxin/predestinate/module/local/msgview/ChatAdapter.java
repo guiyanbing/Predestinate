@@ -483,7 +483,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             MsgMgr.getInstance().attach(MsgType.MT_App_IMStatus, this);
         }
 
-     //   ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
+        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
     }
 
     /**
@@ -791,7 +791,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-   //     ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
     }
 
     @Override

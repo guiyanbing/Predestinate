@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -20,6 +22,7 @@ import com.juxin.mumu.bean.message.MsgType;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
@@ -31,13 +34,17 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/23.
  */
-public class PrivateChatAct extends BaseActivity {
+public class PrivateChatAct extends BaseActivity implements View.OnClickListener {
 
     private long whisperID = 0;
     private String name;
     private int kf_id;
     private ChatViewLayout privateChat = null;
     private CustomFrameLayout viewGroup;
+
+    private LinearLayout privatechat_head;
+    private ImageView chat_title_attention_icon;
+    private TextView chat_title_attention_name, chat_title_yb_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,36 +99,7 @@ public class PrivateChatAct extends BaseActivity {
 //        });
     }
 
-    /**
-     * 黑名单
-     */
-    private void onpullToBlack() {
-//        ModuleMgr.getCenterMgr().pullToBlack(PrivateChatAct.this, whisperID, getTitleView(), new CenterMgr.PullBlackComplete() {
-//
-//            @Override
-//            public void onReqComplete(boolean isOk, String errorStr, PullTitleResult pullTitleResult) {
-//                if (!isOk) {
-//                    if (TextUtils.isEmpty(errorStr)) {
-//                        MMToast.showShort("请求出错!");
-//                    } else {
-//                        MMToast.showShort(errorStr);
-//                    }
-//                } else {
-//                    switch (pullTitleResult.getBigType()) {
-//                        case -1://拉黑
-//                            MMToast.showShort("拉黑成功!");
-//                            break;
-//                        case -2://拉黑并举报
-//                            MMToast.showShort("拉黑并举报成功!");
-//                            break;
-//                        case -3://解除拉黑成功
-//                            MMToast.showShort("解除成功!");
-//                            break;
-//                    }
-//                }
-//            }
-//        });
-    }
+
 
     private boolean onDetectHeart() {
 //        List<MutualHeartUnList.MutualHeartUn> mutualHeartUns = ModuleMgr.getCfgMgr().getMutualHeartUn();
@@ -195,7 +173,7 @@ public class PrivateChatAct extends BaseActivity {
 
 
 
-        setTitleRightImg(R.drawable.ic_launcher, new View.OnClickListener() {
+        setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UIShow.showUserOtherSetAct(PrivateChatAct.this, null);
@@ -213,6 +191,7 @@ public class PrivateChatAct extends BaseActivity {
 
     private void initView() {
         onTitleInit();
+
        // viewGroup = (CustomFrameLayout) LayoutInflater.from(this).inflate(R.layout.y2_tips_view_group, null);
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
 
@@ -239,6 +218,43 @@ public class PrivateChatAct extends BaseActivity {
 //            }
 //        });
         privateChat.getChatAdapter().setWhisperId(whisperID);
+        initHeadView();
+    }
+
+    private void initHeadView(){
+        privatechat_head = (LinearLayout) findViewById(R.id.privatechat_head);
+        findViewById(R.id.chat_title_attention).setOnClickListener(this);
+        findViewById(R.id.chat_title_phone).setOnClickListener(this);
+        findViewById(R.id.chat_title_wx).setOnClickListener(this);
+        findViewById(R.id.chat_title_yb).setOnClickListener(this);
+      //  findViewById(R.id.privatechat_giftview).setOnClickListener(this);
+
+        chat_title_attention_icon = (ImageView) findViewById(R.id.chat_title_attention_icon);
+        chat_title_attention_name = (TextView) findViewById(R.id.chat_title_attention_name);
+        chat_title_yb_name = (TextView) findViewById(R.id.chat_title_yb_name);
+
+        chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.chat_title_attention:{//关注
+
+
+
+                break;
+            }
+            case R.id.chat_title_phone://手机
+                UIShow.showCheckOtherInfoAct(this, whisperID);
+                break;
+            case R.id.chat_title_wx://微信
+                UIShow.showCheckOtherInfoAct(this, whisperID);
+                break;
+            case R.id.chat_title_yb://Y币
+                UIShow.showGoodsYCoinDlgOld(this);
+                break;
+        }
     }
 
     @Override
@@ -377,4 +393,6 @@ public class PrivateChatAct extends BaseActivity {
         }
         lastActivity = this;
     }
+
+
 }

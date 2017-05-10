@@ -106,6 +106,7 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
+                    UIShow.showPrivateChatAct(UserCheckInfoAct.this, userProfile.getUid(), null);
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼

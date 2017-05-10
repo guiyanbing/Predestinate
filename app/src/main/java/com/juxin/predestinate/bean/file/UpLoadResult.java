@@ -10,6 +10,12 @@ import org.json.JSONObject;
  */
 public class UpLoadResult extends BaseData {
 
+	// ---------- 老缘分吧 -----------
+	private String file_s_path;    // 短地址
+	private String file_http_path; // 完整地址
+	private String file_md5;
+
+	// ---------- 小友 -----------
 	/**语音**/
 	private String amr;//amr的存储路径
 	private String mp3;//mp3的存储路径
@@ -25,6 +31,12 @@ public class UpLoadResult extends BaseData {
 	public void parseJson(String jsonStr) {
 		JSONObject jsonObject = getJsonObject(jsonStr);
 
+		// ---------- 老缘分吧 -----------
+		this.setFile_s_path(jsonObject.optString("file_s_path"));
+		this.setFile_http_path(jsonObject.optString("file_http_path"));
+		this.setFile_md5(jsonObject.optString("md5"));
+
+		// ---------- 小友 -----------
 		// 语音
 		if(!jsonObject.isNull("amr")){
 			this.setAmr(jsonObject.optString("amr"));
@@ -45,6 +57,30 @@ public class UpLoadResult extends BaseData {
 		if(!jsonObject.isNull("video")){
 			this.setVideo(jsonObject.optString("video"));
 		}
+	}
+
+	public String getFile_s_path() {
+		return file_s_path;
+	}
+
+	public void setFile_s_path(String file_s_path) {
+		this.file_s_path = file_s_path;
+	}
+
+	public String getFile_http_path() {
+		return file_http_path;
+	}
+
+	public void setFile_http_path(String file_http_path) {
+		this.file_http_path = file_http_path;
+	}
+
+	public String getFile_md5() {
+		return file_md5;
+	}
+
+	public void setFile_md5(String file_md5) {
+		this.file_md5 = file_md5;
 	}
 
 	public String getHttpPathPic() {

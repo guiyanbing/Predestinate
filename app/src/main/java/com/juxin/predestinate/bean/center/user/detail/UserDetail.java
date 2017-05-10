@@ -57,7 +57,7 @@ public class UserDetail extends UserInfo {
     }
 
     public int getDiamondsSum() {
-        return PSP.getInstance().getInt("diamondsSum" + uid,0);
+        return PSP.getInstance().getInt("diamondsSum" + uid, 0);
     }
 
     public void setDiamondsSum(int diamondsSum) {

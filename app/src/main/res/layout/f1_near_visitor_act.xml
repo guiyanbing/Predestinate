@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/color_ededed"
+    android:orientation="vertical" >
+    <include layout="@layout/base_title" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/userinfo_header_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:background="@color/color_ededed"
+                    android:gravity="bottom|center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="140dip"
+                        android:layout_height="140dip"
+                        android:src="@drawable/f1_near_visitor_laifang_big" />
+
+                    <TextView
+                        android:id="@+id/tv_near_visitor_hi1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dip"
+                        android:text="hi，傻子"
+                        android:textColor="@color/hei_color"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_near_visitor_hi2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dip"
+                        android:text="最近7天有12个用户来看你。"
+                        android:textColor="@color/hei_color"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dip" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/filter_tab_bottom_line" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_ededed"
+                    android:paddingBottom="5dip"
+                    android:paddingLeft="5dip"
+                    android:paddingRight="5dip"
+                    android:paddingTop="5dip" >
+
+                    <com.juxin.predestinate.ui.wode.view.NonScrollGridView
+                        android:id="@+id/gv_near_visitor_header_album"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_ededed"
+                        android:columnWidth="80dip"
+                        android:horizontalSpacing="4dip"
+                        android:numColumns="auto_fit"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="4dip" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="40dip"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_near_visitor_openvip"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/color_FD6C8E"
+            android:drawableLeft="@drawable/f1_near_visitor_vip_3"
+            android:drawablePadding="-62dip"
+            android:paddingLeft="25dip"
+            android:text="升级VIP会员，查看更多来访"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</LinearLayout>

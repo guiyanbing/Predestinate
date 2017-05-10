@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
@@ -103,7 +104,14 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             });
         }
 
-        holder.lin_item.setOnClickListener(new View.OnClickListener() {
+        holder.rel_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+            }
+        });
+
+        holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
@@ -121,7 +129,8 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
         private Button iv_video, iv_call;
         private TextView tv_name, tv_age, tv_height, tv_distance, tv_ranking_type, tv_ranking_level;
         private Button btn_sayhi;
-        private LinearLayout lin_ranking, iv_calling, lin_item;
+        private LinearLayout lin_ranking, iv_calling;
+        private RelativeLayout rel_item;
         private View point;
 
         public MyViewHolder(BaseRecyclerViewHolder convertView) {
@@ -147,7 +156,7 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             btn_sayhi = (Button) convertView.findViewById(R.id.discover_item_sayhi);
 
             lin_ranking = (LinearLayout) convertView.findViewById(R.id.discover_item_ranking_state);
-            lin_item = (LinearLayout) convertView.findViewById(R.id.discover_item);
+            rel_item = (RelativeLayout) convertView.findViewById(R.id.discover_item);
 
             point = convertView.findViewById(R.id.discover_item_point);
         }

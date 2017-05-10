@@ -1,11 +1,15 @@
 package com.juxin.predestinate.ui.user.paygoods;
 
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
@@ -43,16 +47,37 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
         CustomFrameLayout payBg = viewHolder.findViewById(R.id.pay_bg);
         ImageView img_choose = viewHolder.findViewById(R.id.iv_choose);
         ImageView goods_ico = viewHolder.findViewById(R.id.goods_ico);
-        TextView tv_goods = viewHolder.findViewById(R.id.tv_goods);
-        TextView tv_money = viewHolder.findViewById(R.id.tv_money);
+        TextView tv_name = viewHolder.findViewById(R.id.tv_name);       // 商品名称
+        TextView tv_money = viewHolder.findViewById(R.id.tv_money);     // 商品价格
+        TextView tv_desc = viewHolder.findViewById(R.id.tv_desc);       // 商品活动
 
         // 选中状态
         payItem.setSelected(selectPosition == position);
         payBg.showOfIndex(selectPosition == position ? 1 : 0);
 
         // 设置数据
-        tv_goods.setText(String.valueOf(data.getNum()));
-        tv_money.setText(data.getPrice() + "元");
+        if (!TextUtils.isEmpty(data.getName())) {
+            tv_name.setVisibility(View.VISIBLE);
+            tv_name.setText(data.getName());
+        }
+
+        if (itemType == 1) {
+            tv_money.setText(Html.fromHtml("&#165;").toString() + data.getPrice());
+        } else {
+            tv_money.setText(data.getPrice() + "元");
+        }
+
+        if (!TextUtils.isEmpty(data.getDesc())) {
+            tv_desc.setText(data.getDesc());
+        }
+
+        // 充值类型区分
+        switch (chargeType) {
+            case GoodsConstant.DLG_YCOIN_NEW:       // 新Y币充值弹框
+                if (ModuleMgr.getCenterMgr().getMyInfo().isVip())
+                    tv_desc.setVisibility(View.GONE);
+                break;
+        }
     }
 
     public void updateData(int positon) {

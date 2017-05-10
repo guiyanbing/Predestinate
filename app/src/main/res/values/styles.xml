@@ -420,6 +420,12 @@
         <item name="android:interpolator">@anim/left_in</item>
     </style>
 
+    <style name="AnimDownInDownOutOverShoot" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/down_in</item>
+        <item name="android:windowExitAnimation">@anim/down_out</item>
+        <item name="android:interpolator">@anim/left_in</item>
+    </style>
+
 
     <style name="text_regTip_left" parent="text_big">
         <item name="android:textColor">@color/text_zhuyao_black</item>
@@ -710,4 +716,27 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 模糊 -->
     </style>
+
+    <style name="chat_item_voice_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="chat_item_voice_img">
+        <item name="android:layout_width">@dimen/px45_dp</item>
+        <item name="android:layout_height">@dimen/px45_dp</item>
+    </style>
+
+    <style name="chat_item_voice_time">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/color_666666</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:textSize">@dimen/px40_sp</item>
+    </style>
+
 </resources>

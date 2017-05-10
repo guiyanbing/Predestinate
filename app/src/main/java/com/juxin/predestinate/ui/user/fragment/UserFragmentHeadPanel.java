@@ -4,15 +4,13 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
-import com.juxin.library.observe.PObserver;
+import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -23,13 +21,16 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ChineseFilter;
+import com.juxin.predestinate.ui.user.check.edit.custom.EditPopupWindow;
+import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
  * 个人中心条目头部
  */
-public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, PObserver, ImgSelectUtil.OnChooseCompleteListener {
+public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
 
-    private ImageView user_head;
+    private CircleImageView user_head, user_head_vip, user_head_status;
     private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
 
@@ -44,7 +45,9 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
     }
 
     private void initView() {
-        user_head = (ImageView) findViewById(R.id.user_head);
+        user_head = (CircleImageView) findViewById(R.id.user_head);
+        user_head_vip = (CircleImageView) findViewById(R.id.user_head_vip);
+        user_head_status = (CircleImageView) findViewById(R.id.user_head_status);
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
@@ -59,8 +62,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
         functionPanel = new UserFragmentFunctionPanel(getContext());
         function_container.addView(functionPanel.getContentView());
-
-        MsgMgr.getInstance().attach(this);
     }
 
     /**
@@ -68,12 +69,36 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
      */
     public void refreshView() {
         myInfo = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadRoundCorners(getContext(), myInfo.getAvatar(), 10, user_head);
+        ImageLoader.loadAvatar(getContext(), myInfo.getAvatar(), user_head);
         user_id.setText("ID:" + myInfo.getUid());
         user_nick.setText(myInfo.getNickname());
         iv_invite_code.setText(String.format(getContext().getResources().
                 getString(R.string.center_my_invite_code), myInfo.getShareCode()));
         functionPanel.refreshView(myInfo);
+
+        refreshHeader();
+    }
+
+    private void refreshHeader() {
+        if (myInfo.isVip()) {
+            user_head_vip.setVisibility(View.VISIBLE);
+        }
+
+        switch (myInfo.getAvatar_status()) {
+            case CenterConstant.USER_AVATAR_CHECKING:  // 审核中
+                user_head_status.setVisibility(View.VISIBLE);
+                user_head_status.setImageResource(R.drawable.f1_user_avatar_checking);
+                break;
+
+            case CenterConstant.USER_AVATAR_NO_PASS:   // 未通过
+                user_head_status.setVisibility(View.VISIBLE);
+                user_head_status.setImageResource(R.drawable.f1_user_avatar_notpass);
+                break;
+
+            default:
+                user_head_status.setVisibility(View.GONE); // 其他状态默认通过
+                break;
+        }
     }
 
     /**
@@ -90,7 +115,8 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
                 ImgSelectUtil.getInstance().pickPhoto(getContext(), this);
                 break;
             case R.id.user_nick://修改昵称
-                //TODO 弹出修改昵称popupWindow
+                EditPopupWindow popupWindow = new EditPopupWindow(getContext(), EditKey.s_key_nickName, user_nick);
+                popupWindow.showPopupWindow();
                 break;
             case R.id.iv_code_copy://复制邀请码
                 ChineseFilter.copyString(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getShareCode());
@@ -110,7 +136,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
             return;
         }
-        PLogger.d("path=== " + path[0]);
         LoadingDialog.show((FragmentActivity) getContext(), "正在上传头像");
         ModuleMgr.getCenterMgr().uploadAvatar(path[0], new RequestComplete() {
             @Override
@@ -121,14 +146,5 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
                 }
             }
         });
-    }
-
-    @Override
-    public void onMessage(String key, Object value) {
-        switch (key) {
-            case MsgType.MT_MyInfo_Change:
-                refreshView();
-                break;
-        }
     }
 }

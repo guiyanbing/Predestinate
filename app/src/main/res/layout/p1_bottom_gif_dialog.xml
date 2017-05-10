@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/bottom_gif_view_blank"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/transparent"
               android:gravity="bottom"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:paddingBottom="@dimen/px25_dp"
               android:paddingLeft="@dimen/px25_dp"
               android:paddingRight="@dimen/px25_dp">
 
     <RelativeLayout
+        android:id="@+id/bottom_gif_rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/p1_gift_dialog_bg"
@@ -34,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/px36_dp"
                 android:text="送礼更容易搭讪成功"
-                android:textColor="@color/color_zhuyao"
+                android:textColor="@color/color_666666"
                 android:textSize="@dimen/px34_sp"/>
 
             <TextView
@@ -46,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我的钻石："
-                android:textColor="@color/color_B2B2B2"
+                android:textColor="@color/color_C7C7C7"
                 android:textSize="@dimen/px34_sp"/>
 
             <TextView
@@ -66,7 +68,7 @@
                 android:background="@drawable/btn_gif_pay_bg"
                 android:gravity="center"
                 android:text="充值"
-                android:textColor="@color/color_47cfd3"/>
+                android:textColor="@color/color_FD7194"/>
         </LinearLayout>
 
         <TextView
@@ -77,19 +79,27 @@
             android:layout_marginTop="@dimen/px62_dp"
             android:background="@color/bg_color"/>
 
-        <android.support.v7.widget.RecyclerView
+        <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
             android:id="@+id/bottom_gif_rlv_gif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bottom_gif_view_line"
             android:layout_marginTop="@dimen/px36_dp"/>
 
+        <com.juxin.predestinate.third.pagerecyeler.PageIndicatorView
+            android:id="@+id/bottom_gif_rlv_gif_indicator"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/px60_dp"
+            android:layout_marginTop="@dimen/px68_dp"
+            android:layout_below="@+id/bottom_gif_rlv_gif"/>
+
         <TextView
             android:id="@+id/bottom_gif_view_line2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/px1_dp"
-            android:layout_below="@+id/bottom_gif_rlv_gif"
-            android:layout_marginTop="@dimen/px110_dp"
+            android:layout_below="@+id/bottom_gif_rlv_gif_indicator"
+            android:layout_marginTop="@dimen/px61_dp"
             android:background="@color/bg_color"/>
 
         <LinearLayout
@@ -106,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="共需钻石："
-                android:textColor="@color/color_zhuyao"
+                android:textColor="@color/color_666666"
                 android:textSize="@dimen/px34_sp"/>
 
             <TextView
@@ -126,11 +136,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="数量："
-                android:textColor="@color/color_zhuyao"/>
+                android:textColor="@color/color_666666"/>
 
             <LinearLayout
                 android:id="@+id/bottom_gif_ll_sendnum"
-                android:layout_width="@dimen/px205_dp"
+                android:layout_width="@dimen/px212_dp"
                 android:layout_height="@dimen/px74_dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/px16_dp"
@@ -146,12 +156,17 @@
                     android:textColor="@color/fengexian_lahei"
                     android:textSize="@dimen/px34_sp"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/bottom_gif_txv_sendnum"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/color_999999"
+                    android:layout_height="@dimen/px74_dp"
+                    android:inputType="number"
+                    android:numeric="integer"
+                    android:hint="0"
+                    android:height="@dimen/px34_sp"
+                    android:lineSpacingExtra="0dp"
+                    android:background="#00000000"
+                    android:textColor="@color/color_B4B4B4"
                     android:textSize="@dimen/px34_sp"/>
 
                 <TextView

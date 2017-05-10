@@ -77,7 +77,6 @@ public class MyDefriendAct extends BaseActivity implements XRecyclerView.Loading
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()) {
             if (!response.isCache()) {
-//                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
                 if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {

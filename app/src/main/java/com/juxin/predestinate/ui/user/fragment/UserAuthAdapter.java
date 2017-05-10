@@ -6,8 +6,11 @@ import android.widget.TextView;
 
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
 
 /**
  * 个人中心布局adapter
@@ -56,6 +59,28 @@ public class UserAuthAdapter extends BaseRecyclerViewAdapter {
         item_view.setVisibility(View.VISIBLE);
         item_icon.setBackgroundResource(userAuth.getRes());
         item_text.setText(userAuth.getName());
+
+        // 各条目展示逻辑
+        if (userAuth.getId() == CenterItemID.i_Center_item_3) {  // 我的钱包
+            String num = String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getRedbagsum() / 100f);
+            item_hint.setVisibility(View.VISIBLE);
+            item_hint.setText(App.context.getString(R.string.user_info_redbag_num, num));
+        }
+
+        if (userAuth.getId() == CenterItemID.i_Center_item_4) {  // 我要赚红包
+            item_hint.setVisibility(View.VISIBLE);
+            item_hint.setText(App.context.getString(R.string.user_info_earn_redbag));
+        }
+
+        if (userAuth.getId() == CenterItemID.i_Center_item_5) {  // 我的Y币
+            item_hint.setVisibility(View.VISIBLE);
+            item_hint.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
+        }
+
+        if (userAuth.getId() == CenterItemID.i_Center_item_6) {  // 我的钻石
+            item_hint.setVisibility(View.VISIBLE);
+            item_hint.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()));
+        }
     }
 
     @Override

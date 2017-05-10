@@ -17,7 +17,8 @@ import java.io.Serializable;
  * Created by Su on 2016/9/18.
  */
 public class PayGood extends BaseData implements Serializable, Parcelable {
-    private int id;//商品ID
+    private int id;     //商品ID
+    private int sub_id; //二级商品ID：目前用于新Y币弹框中勾选开通vip后的商品交易ID
     private String name;//商品名称
     private int num; // vip: 有效天数，钻石: 钻石数
     private String desc;//商品活动, 例如：优惠50%/首冲三个月送100话费
@@ -40,6 +41,12 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
         this.setIcon(jsonObject.optString("curl"));
         this.setType(jsonObject.optInt("ctype"));
         this.setDiscount(jsonObject.optDouble("discount"));
+
+        this.sub_id = jsonObject.optInt("sub_cid");
+    }
+
+    public int getSub_id() {
+        return sub_id;
     }
 
     public int getId() {
@@ -89,6 +96,10 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public double getDoublePrice() {
+        return price;
     }
 
     public String getPrice() {

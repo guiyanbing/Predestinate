@@ -32,7 +32,7 @@ public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnC
     private OnDialogItemClick onDialogItemClick;
 
     public DiscoverSelectDialog() {
-        settWindowAnimations(R.style.AnimScaleInScaleOutOverShoot);
+        settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
         setGravity(Gravity.BOTTOM);
         setDialogSizeRatio(1, 0);
         setCancelable(false);

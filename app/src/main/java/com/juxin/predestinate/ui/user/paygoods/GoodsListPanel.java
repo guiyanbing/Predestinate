@@ -67,6 +67,10 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
     public void onItemClick(View convertView, int position) {
         this.position = position;
         adapter.updateData(position);
+
+        if (listener != null) {
+            listener.OnPanelItemClick(convertView, position);
+        }
     }
 
     private class ItemSpaces extends RecyclerView.ItemDecoration {
@@ -83,5 +87,18 @@ public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHol
             outRect.left = space / 2;
             outRect.top = space;
         }
+    }
+
+    private ListPanelItemClickListener listener;
+
+    public void setPanelItemClickListener(ListPanelItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * 对外提供的Panel列表点击监听
+     */
+    public interface ListPanelItemClickListener {
+        void OnPanelItemClick(View convertView, int position);
     }
 }

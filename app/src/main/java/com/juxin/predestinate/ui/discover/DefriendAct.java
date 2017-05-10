@@ -99,10 +99,8 @@ public class DefriendAct extends BaseActivity implements DefriendAdapter.OnSelec
     public void onSelectChange(DefriendType defriendType) {
         if (defriendType.isCheck()) {
             toTypeName = defriendType.getStr_typeName();
-            MMToast.showShort("选择了 == " + defriendType.getStr_typeName());
         } else {
             toTypeName = "";
-            MMToast.showShort("取消了 == " + defriendType.getStr_typeName());
         }
     }
 
@@ -110,6 +108,7 @@ public class DefriendAct extends BaseActivity implements DefriendAdapter.OnSelec
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()) {
             MMToast.showShort("举报成功");
+            finish();
         }
     }
 }

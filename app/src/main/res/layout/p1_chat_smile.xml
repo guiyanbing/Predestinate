@@ -22,13 +22,15 @@
             android:layout_weight="1"/>
         <View
             style="@style/divider_line"
+            android:visibility="gone"
             android:background="@color/color_dddddd" />
 
-        <com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView
-            android:id="@+id/chat_smile_packages"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/px170_dp">
+        <!--<com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView-->
+            <!--android:id="@+id/chat_smile_packages"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_height="@dimen/px170_dp">-->
 
-        </com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView>
+        <!--</com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView>-->
     </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,8 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.text.TextUtils;
+import com.juxin.mumu.bean.log.MMLog;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -9,11 +12,19 @@ import org.json.JSONObject;
 
 public class CommonMessage extends BaseMessage{
 
+    //图片
+    private String img;
+    private String localImg;
+
+    //语音
     private String voiceUrl;
+    private String localVoiceUrl;
     private int voiceLen;
     private long voiceUserid;
 
+    //视频
     private String videoUrl;
+    private String localVideoUrl;
     private int videoLen;
     private long videoSize;
     private String videoThumb;
@@ -31,7 +42,26 @@ public class CommonMessage extends BaseMessage{
      */
     public CommonMessage(String channelID, String whisperID, String content) {
         super(channelID, whisperID);
-        this.setContent(content);
+        this.setMsgDesc(content);
+        this.setType(BaseMessageType.common.getMsgType());
+    }
+
+    /**
+     * 图片消息
+     * @param channelID
+     * @param whisperID
+     * @param img
+     */
+    public CommonMessage(String channelID, String whisperID, String img, String no) {
+        super(channelID, whisperID);
+        this.setImg(img);
+        this.setType(BaseMessageType.common.getMsgType());
+    }
+
+    public CommonMessage(String channelID, String whisperID, String url, int length) {
+        super(channelID, whisperID);
+        this.setVideoUrl(url);
+        this.setVideoSize(length);
         this.setType(BaseMessageType.common.getMsgType());
     }
 
@@ -43,6 +73,7 @@ public class CommonMessage extends BaseMessage{
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setImg(object.optString("img"));
         if(!object.isNull("voice")){
             JSONObject voiceJSON = object.optJSONObject("voice");
             this.setVoiceUrl(voiceJSON.optString("url"));
@@ -64,7 +95,70 @@ public class CommonMessage extends BaseMessage{
 
     @Override
     public String getJson(BaseMessage message) {
-        return super.getJson(message);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("mtp", message.getType());
+            json.put("mt", message.getTime());
+            json.put("d", message.getMsgID());
+
+            if(!TextUtils.isEmpty(message.getMsgDesc())){
+                json.put("mct", message.getMsgDesc());
+            }
+
+            String img = ((CommonMessage)message).getImg();
+            String localImg = ((CommonMessage)message).getLocalImg();
+            if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){
+                json.put("img", img);
+                json.put("localImgUrl", localImg);
+            }
+
+            //语音
+            String videoUrl = ((CommonMessage)message).getVideoUrl();
+            String localVideoUrl = ((CommonMessage)message).getLocalVideoUrl();
+            if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){
+                JSONObject tmpVideo = new JSONObject();
+                    tmpVideo.put("url", videoUrl);
+                    tmpVideo.put("localUrl", localVideoUrl);
+                    tmpVideo.put("len", ((CommonMessage) message).getVoiceLen());
+                    tmpVideo.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
+                json.put("voice", tmpVideo);
+            }
+
+            //视频
+            String voiceUrl = ((CommonMessage)message).getVoiceUrl();
+            String localVoiceUrl = ((CommonMessage)message).getLocalVoiceUrl();
+            if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){
+                JSONObject tmpVideo = new JSONObject();
+                    tmpVideo.put("url", videoUrl);
+                    tmpVideo.put("localUrl", localVideoUrl);
+                    tmpVideo.put("len", ((CommonMessage) message).getVideoLen());
+                    tmpVideo.put("size", ((CommonMessage) message).getVideoSize());
+                    tmpVideo.put("thumb", ((CommonMessage) message).getVideoThumb());
+                    tmpVideo.put("width", ((CommonMessage) message).getVideoWidth());
+                    tmpVideo.put("height", ((CommonMessage) message).getVideoHeight());
+                json.put("video", tmpVideo);
+            }
+            return json.toString();
+        } catch (JSONException e) {
+            MMLog.printThrowable(e);
+        }
+        return null;
+    }
+
+    public String getLocalImg() {
+        return localImg;
+    }
+
+    public void setLocalImg(String localImg) {
+        this.localImg = localImg;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getVoiceUrl() {
@@ -73,6 +167,14 @@ public class CommonMessage extends BaseMessage{
 
     public void setVoiceUrl(String voiceUrl) {
         this.voiceUrl = voiceUrl;
+    }
+
+    public String getLocalVoiceUrl() {
+        return localVoiceUrl;
+    }
+
+    public void setLocalVoiceUrl(String localVoiceUrl) {
+        this.localVoiceUrl = localVoiceUrl;
     }
 
     public int getVoiceLen() {
@@ -97,6 +199,14 @@ public class CommonMessage extends BaseMessage{
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public String getLocalVideoUrl() {
+        return localVideoUrl;
+    }
+
+    public void setLocalVideoUrl(String localVideoUrl) {
+        this.localVideoUrl = localVideoUrl;
     }
 
     public int getVideoLen() {

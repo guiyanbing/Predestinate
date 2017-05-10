@@ -11,8 +11,7 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
@@ -242,33 +241,21 @@ public class Invoker {
         public void get_user_info(String data) {
             PLogger.d("---get_user_info--->" + data);
             final JSONObject dataObject = JsonUtil.getJsonObject(data);
-            ModuleMgr.getCenterMgr().reqUserSimpleList(new long[]{dataObject.optLong("uid")}, new RequestComplete() {
+            ModuleMgr.getCenterMgr().reqOtherInfo(dataObject.optLong("uid"), new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    if (response.isOk()) {
-                        UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
-                        if (lightweightList != null) {
-                            ArrayList<UserInfoLightweight> lightweightLists = lightweightList.getLightweightLists();
-                            if (lightweightLists != null && !lightweightLists.isEmpty()) {
-                                UserInfoLightweight weight = lightweightLists.get(0);
-                                Map<String, Object> responseObject = new HashMap<>();
-                                responseObject.put("uid", weight.getUid());
-                                responseObject.put("avatar", weight.getAvatar());
-                                responseObject.put("avatar_status", weight.getAvatar_status());
-                                responseObject.put("nickname", weight.getNickname());
-                                responseObject.put("gender", weight.getGender());
-                                responseObject.put("is_vip", weight.isVip());
+                    UserProfile userProfile = new UserProfile();
+                    userProfile.parseJson(response.getResponseString());
 
-                                doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
-                            } else {
-                                doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
-                            }
-                        } else {
-                            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
-                        }
-                    } else {
-                        doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), "{status:\"fail\"}");
-                    }
+                    Map<String, Object> responseObject = new HashMap<>();
+                    responseObject.put("uid", userProfile.getUid());
+                    responseObject.put("avatar", userProfile.getAvatar());
+                    responseObject.put("avatar_status", userProfile.getAvatar_status());
+                    responseObject.put("nickname", userProfile.getNickname());
+                    responseObject.put("gender", userProfile.getGender());
+                    responseObject.put("is_vip", userProfile.isVip());
+
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
                 }
             });
         }
@@ -430,18 +417,7 @@ public class Invoker {
             PLogger.d("---jump_to_userinfo--->" + data);
             final JSONObject dataObject = JsonUtil.getJsonObject(data);
             final Activity act = appInterface.getAct();
-            //TODO
-//            RequestHolder.getInstance().requestLiteUserInfo(dataObject.optString("target_uid"), new RequestHolder.OnRequestListener() {
-//                @Override
-//                public void onResult(String requestUrl, boolean isSuccess, String data) {
-//                    if (isSuccess) {
-//                        JSONObject jsonObject = JsonUtil.getJsonObject(data);
-//                        UIHelper.showUserInfo(act == null ? (Activity) App.getActivity() : act,
-//                                dataObject.optString("target_uid"), jsonObject.optString("nickname"),
-//                                jsonObject.optInt("gender"));
-//                    }
-//                }
-//            });
+            UIShow.showCheckOtherInfoAct(act == null ? App.getActivity() : act, dataObject.optLong("target_uid"));
         }
 
         // 吐司提示
@@ -510,7 +486,7 @@ public class Invoker {
             }
             // 图片上传，上传完成之后删除本地存储的缓存文件
             int type = dataObject.optInt("type");
-            ModuleMgr.getMediaMgr().sendHttpMultiFiles(type == 105 ? 104 : type, 0, new MediaMgr.OnMultiFilesUploadComplete() {
+            ModuleMgr.getMediaMgr().sendHttpMultiFiles(Constant.UPLOAD_TYPE_PHOTO, 0, new MediaMgr.OnMultiFilesUploadComplete() {
                 @Override
                 public void onUploadComplete(ArrayList<String> mediaUrls) {
                     Map<String, Object> responseObject = new HashMap<>();
@@ -533,6 +509,18 @@ public class Invoker {
             PLogger.d("---open_qq_service--->" + data);
             Activity act = appInterface.getAct();
             UIShow.showQQServer(act == null ? App.context : act);
+        }
+
+        // 获取用户绑定手机号
+        public void get_phone_number(String data) {
+            PLogger.d("---get_phone_number--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
+            Map<String, Object> responseObject = new HashMap<>();
+            //字符串 没有绑定 返回值空字符，绑定的返回手机号
+            responseObject.put("num", userInfo.isVerifyCellphone() ? userInfo.getPhone() : "");
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
         // ------------------------------游戏用cmd---------------------------------

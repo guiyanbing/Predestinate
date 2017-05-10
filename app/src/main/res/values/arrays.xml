@@ -85,16 +85,18 @@
 
     <!-- ============== 举报 start ============ -->
     <string-array name="defriend_type_name">
-        <item>发布色情/政治/暴力/违法信息</item>
-        <item>被骗钱</item>
-        <item>骚扰（垃圾信息、谩骂）</item>
-        <item>酒托</item>
+        <item>酒托、饭托</item>
+        <item>骚扰（垃圾信息、广告）</item>
+        <item>诈骗信息</item>
+        <item>色情、暴力信息</item>
+        <item>形象差异极大（性别不符）</item>
     </string-array>
     <integer-array name="defriend_type_num">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
     </integer-array>
     <!-- ============== 举报 end ============ -->
     <!--============ 发现 筛选 start============== -->

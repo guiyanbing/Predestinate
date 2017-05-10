@@ -17,7 +17,10 @@
         android:id="@+id/discover_select_cancle"
         style="@style/common_list_item"
         android:gravity="center"
+        android:paddingBottom="@dimen/px35_dp"
+        android:paddingTop="@dimen/px35_dp"
         android:text="取 消"
-        android:textColor="@color/text_ciyao_gray" />
+        android:textColor="@color/text_ciyao_gray"
+        android:textSize="@dimen/px46_sp" />
 
 </LinearLayout>

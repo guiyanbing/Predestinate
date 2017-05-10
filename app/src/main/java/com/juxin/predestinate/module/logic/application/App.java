@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.logic.application;
 import android.app.Activity;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
-import com.juxin.predestinate.bean.db.AppComponent;
 
 /**
  * Application
@@ -26,11 +25,6 @@ public class App extends MultiDexApplication {
      * 用户是否已经登录。该值暂时无效
      */
     public static boolean isLogin = false;
-
-    /**
-     * AppComponent
-     */
-    private static AppComponent mAppComponent;
 
     @Override
     public void onCreate() {

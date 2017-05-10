@@ -18,8 +18,8 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  */
 public class UserFragmentFunctionPanel extends BaseViewPanel {
 
-    private ImageView iv_vip_privilege, iv_phone_verify;
-    private TextView tv_vip_status, tv_verify_status;
+    private ImageView iv_vip_privilege, iv_phone_verify, iv_video_verify;
+    private TextView tv_vip_title, tv_vip_status, tv_verify_status;
 
     public UserFragmentFunctionPanel(Context context) {
         super(context);
@@ -31,12 +31,15 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
     private void initView() {
         iv_vip_privilege = (ImageView) findViewById(R.id.iv_vip_privilege);
         iv_phone_verify = (ImageView) findViewById(R.id.iv_phone_verify);
+        iv_video_verify = (ImageView) findViewById(R.id.iv_video_verify);
         tv_vip_status = (TextView) findViewById(R.id.tv_vip_status);
+        tv_vip_title = (TextView) findViewById(R.id.tv_vip_title);
         tv_verify_status = (TextView) findViewById(R.id.tv_verify_status);
 
         refreshBadge();
         findViewById(R.id.ll_vip_privilege).setOnClickListener(clickListener);
         findViewById(R.id.ll_phone_verify).setOnClickListener(clickListener);
+        findViewById(R.id.ll_video_verify).setOnClickListener(clickListener);
     }
 
     /**
@@ -50,25 +53,36 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
      */
     public void refreshView(UserDetail userDetail) {
         if (userDetail == null) return;
-        tv_vip_status.setText(userDetail.isMonthMail() ?
+        tv_vip_status.setText(userDetail.isVip() ?
                 getContext().getResources().getString(R.string.center_vip_left_day) :
                 getContext().getResources().getString(R.string.center_vip_to_open));
+        tv_vip_status.setTextColor(userDetail.isVip() ? getContext().getResources().getColor(R.color.color_D4D4D4) :
+                getContext().getResources().getColor(R.color.color_83A0EC));
+        tv_vip_title.setTextColor(userDetail.isVip() ? getContext().getResources().getColor(R.color.color_83A0EC) :
+                getContext().getResources().getColor(R.color.color_D4D4D4));
+        iv_vip_privilege.setEnabled(!userDetail.isVip());
+
         tv_verify_status.setText(userDetail.isVerifyCellphone() ?
                 getContext().getResources().getString(R.string.center_phone_has_verify) :
                 getContext().getResources().getString(R.string.center_phone_to_verify));
+
+
     }
 
     private final NoDoubleClickListener clickListener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.ll_vip_privilege://开通vip
-                    UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                            ModuleMgr.getCenterMgr().getChargeH5Params(2)));
+                case R.id.ll_vip_privilege: // 开通vip
+                    UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
+                            ModuleMgr.getCenterMgr().getChargeH5Params()));
                     // TODO: 2017/5/3
                     break;
-                case R.id.ll_phone_verify://手机绑定
+                case R.id.ll_phone_verify: // 手机绑定
                     UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone());
+                    break;
+
+                case R.id.ll_video_verify: // 真人认证
                     break;
             }
         }

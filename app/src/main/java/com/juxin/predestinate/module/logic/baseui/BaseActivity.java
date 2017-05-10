@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
 import com.juxin.predestinate.module.logic.notify.FloatingMgr;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 应用中所有activity的基类，便于进行数据的统计等
@@ -108,12 +109,14 @@ public class BaseActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         FloatingMgr.getInstance().onResume(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         FloatingMgr.getInstance().onPause(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
     }
 
@@ -304,11 +307,7 @@ public class BaseActivity extends FragmentActivity {
         if (color != -1) textView.setTextColor(getResources().getColor(color));
         textView.setText(txt);
         textView.setOnClickListener(listener);
-        titleRightText = textView;
     }
-
-    private TextView titleLeftText, titleRightText;
-    private ImageView titleRightImg;
 
     /**
      * @return 获取标题栏view对象
@@ -327,7 +326,6 @@ public class BaseActivity extends FragmentActivity {
         view.setOnClickListener(listener);
         ImageView imageView = (ImageView) view.findViewById(R.id.base_title_right_img);
         imageView.setImageResource(resId);
-        titleRightImg = imageView;
     }
 
     /**
@@ -341,7 +339,6 @@ public class BaseActivity extends FragmentActivity {
         textView.setVisibility(View.VISIBLE);
         textView.setText(txt);
         textView.setOnClickListener(listener);
-        titleLeftText = textView;
     }
 
     /**
@@ -357,7 +354,6 @@ public class BaseActivity extends FragmentActivity {
         textView.setTextColor(getResources().getColor(color));
         textView.setText(txt);
         textView.setOnClickListener(listener);
-        titleLeftText = textView;
     }
 
     /**

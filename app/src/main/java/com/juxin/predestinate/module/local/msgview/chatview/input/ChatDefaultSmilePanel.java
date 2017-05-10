@@ -75,7 +75,7 @@ public class ChatDefaultSmilePanel extends ChatBaseSmilePanel implements Adapter
      * 保存表情资源的列表。
      */
     private static List<EmojiPack.EmojiItem> resList = null;
-    private static int pageResNum = 20;
+    private static int pageResNum = 32;
 
     /**
      * 根据最大索引生成对应的资源文件名。

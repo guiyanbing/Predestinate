@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
+import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
+
 import org.json.JSONObject;
 
 /**
@@ -28,6 +30,9 @@ public class UserInfo extends UserBasic {
     private long regTime;           // 注册时间
     private boolean isBindRose;     // 是否绑定了红娘
     private int ycoin = 0;          // Y币
+    private YCoin yCoin;            // 用户Y币信息
+    private int diamand;            // 钻石
+    private double redbagsum;       //红包总额
 
 
     // -------2017-1-5红包来了添加字段 -------
@@ -63,6 +68,39 @@ public class UserInfo extends UserBasic {
         this.setYcoin(detailObject.optInt("ycoin"));
         this.setShareCode(detailObject.optString("shareCode"));
         this.setInvite_uid(detailObject.optLong("invite_uid"));
+        this.setDiamand(detailObject.optInt("diamand"));
+    }
+
+    /**
+     * isVip暂时无用，判断是否是vip用户通过 'isMonthMail' 判断
+     */
+    public boolean isVip() {
+        return isMonthMail;
+        //return isVip;
+    }
+
+    public YCoin getYCoinInfo() {
+        return yCoin;
+    }
+
+    public void setYCoinInfo(YCoin yCoin) {
+        this.yCoin = yCoin;
+    }
+
+    public int getDiamand() {
+        return diamand;
+    }
+
+    public void setDiamand(int diamand) {
+        this.diamand = diamand;
+    }
+
+    public double getRedbagsum() {
+        return redbagsum;
+    }
+
+    public void setRedbagsum(double redbagsum) {
+        this.redbagsum = redbagsum;
     }
 
     public boolean isSayHello() {
@@ -159,10 +197,6 @@ public class UserInfo extends UserBasic {
 
     public void setPhoneAuth(int phoneAuth) {
         this.phoneAuth = phoneAuth;
-    }
-
-    public boolean isVip() {
-        return isVip;
     }
 
     public void setVip(boolean vip) {

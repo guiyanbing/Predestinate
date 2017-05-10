@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
@@ -40,7 +40,8 @@ public class ChatSmileAdapter extends ExBaseAdapter<SmilePackage> {
 
         SmilePackage smileItem = getItem(position);
 
-       // ModuleMgr.getSmileMgr().reqImage(vh.smile_package_ico, smileItem.getIcon());
+        ImageLoader.loadAvatar(getContext(), smileItem.getIcon(), vh.smile_package_ico);
+
         vh.smile_package_name.setText(smileItem.getName());
 
         vh.smile_item.setSelected(position == selectPos ? true : false);

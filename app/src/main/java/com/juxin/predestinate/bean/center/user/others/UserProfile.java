@@ -141,6 +141,11 @@ public class UserProfile extends UserBasic {
         }
     }
 
+    public boolean isVip() {
+//        return is_vip == 1;
+        return ismonthmail == 1;
+    }
+
     public UserVideoInfo getVideoInfo() {
         return videoInfo;
     }
@@ -458,13 +463,6 @@ public class UserProfile extends UserBasic {
 
     public void setSign(String sign) {
         this.sign = sign;
-    }
-
-    public boolean isVip() {
-        if (is_vip == 1) {
-            return true;
-        }
-        return false;
     }
 
     public void setIs_vip(int is_vip) {

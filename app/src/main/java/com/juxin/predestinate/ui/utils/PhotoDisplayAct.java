@@ -11,16 +11,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -146,7 +146,7 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
 
                     @Override
                     public void onSubmit() {
-                        MMLog.d("yao", "photoList.get(currentPosition).getPic()=" + photoList.get(currentPosition).getPic());
+                        PLogger.d("photoList.get(currentPosition).getPic()=" + photoList.get(currentPosition).getPic());
                         LoadingDialog.show(PhotoDisplayAct.this, "正在删除，请稍候...");
 //                        ModuleMgr.getCenterMgr().delPhoto(photoList.get(currentPosition).getAlbumid(), photoList.get(currentPosition).getPic(), new HttpMgr.IReqComplete() {
 //                            @Override

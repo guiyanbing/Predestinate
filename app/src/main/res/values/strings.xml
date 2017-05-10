@@ -52,9 +52,11 @@
     <string name="center_my_invite_code">我的邀请码：%s</string>
     <string name="center_vip_privilege">VIP特权</string>
     <string name="center_phone_verify">手机认证</string>
+    <string name="center_video_verify">真人认证</string>
     <string name="center_vip_to_open">立即开通</string>
     <string name="center_vip_left_day">已开通</string>
     <string name="center_phone_to_verify">立即认证</string>
+    <string name="center_video_to_verify">我的认证</string>
     <string name="center_phone_has_verify">已认证</string>
     <string name="user_info_send">发信</string>
     <string name="user_info_hi">打招呼</string>
@@ -62,6 +64,9 @@
     <string name="user_info_voice">发语音</string>
     <string name="user_info_age">%d岁</string>
     <string name="user_info_follow_count">关注 %d</string>
+    <string name="user_info_earn_redbag">我要赚红包</string>
+    <string name="user_info_redbag_num">%s元</string>
+    <string name="user_info_photo">我的相册</string>
 
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>
@@ -269,27 +274,40 @@
     <string name="goods_pay">充值</string>
     <string name="goods_pay_immediately">立即充值</string>
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>
+    <string name="goods_pay_confirm">确认充值</string>
 
     <string name="goods_vip_title">开通VIP</string>
-    <string name="goods_vip_price">(50元月)</string>
+
+    <string name="goods_vip_price">(50元/月)</string>
     <string name="goods_vip_user">已开通VIP用户：</string>
     <string name="goods_vip_users">人</string>
     <string name="goods_vip_tips">开通VIP可与所有美女聊天</string>
     <string name="goods_vip_dredge">立即开通</string>
     <string name="goods_vip_privilege">VIP特权</string>
+    <string name="goods_vip_privilege_title">开通VIP特权</string>
     <string name="goods_vip_kefu">咨询客服</string>
     <string name="goods_vip_banner_tip">请前往‘我的-设置-活动相关’页面</string>
+    <string name="goods_vip_dlg_low_power">体力不足</string>
+    <string name="goods_vip_dlg_low_power_tips">开通VIP赠送体力，体力恢复速度增加100%，持续时间和VIP有效时间相同</string>
+    <string name="goods_vip_dlg_host">灵气不足</string>
     <string name="goods_vip_dlg_low_host">灵气消耗减半</string>
+    <string name="goods_vip_dlg_low_host_tips">超级红包已经摇摇欲坠，开通VIP获得一次免费摇红包的机会，可将它摇下来。</string>
     <string name="goods_vip_dlg_plus_host">吸收灵气加倍</string>
     <string name="goods_vip_dlg_more_privilege">更多特权</string>
     <string name="goods_vip_dlg_recoverhalf">恢复灵气50%</string>
+    <string name="goods_vip_dlg_high_arean_title">高级擂台需要开通VIP</string>
+    <string name="goods_vip_dlg_high_arean">高级场擂台赛，争夺500元大奖</string>
+    <string name="goods_vip_dlg_get_dog">获取斗牛犬</string>
+    <string name="goods_vip_dlg_get_dog_tips">开通VIP立即送斗牛犬，可以守卫摇钱树并且反抢敌人。</string>
 
     <string name="goods_ycoin_title">购买Y币</string>
-    <string name="goods_ycoin_remain">Y币余额：</string>
-    <string name="goods_ycoin_tip_header">（不足购买</string>
-    <string name="goods_ycoin_tip_footer">体力，请充值Y币）</string>
+    <string name="goods_ycoin_remain">Y币余额:</string>
+    <string name="goods_ycoin_tip_header">(不足购买</string>
+    <string name="goods_ycoin_tip_footer">体力，请充值Y币)</string>
     <string name="goods_ycoin_phone_cost">并赠送100元话费</string>
+    <string name="goods_ycoin_dredge">开通服务</string>
     <string name="goods_ycoin_welfare">开通VIP赠送100体力，并且享受体力加速恢复，\n充值Y币额外赠送10%</string>
+    <string name="goods_ycoin_pay">立即支付%d</string>
 
 
     <!--  相册  -->
@@ -440,6 +458,14 @@
     <string name="withdraw_succeed">提现成功</string>
     <string name="imburse">放入钱袋</string>
     <string name="net_error_check_your_net">网络异常,请检查您的网络</string>
+    <string name="no_add_redbag">没有可加入钱袋的红包</string>
+    <string name="succeed">成功</string>
+    <string name="hour_into_the_bag">条，其余24小时后才能点击入袋</string>
+    <string name="net_error">网络异常</string>
+    <string name="want_bag_tips">施展魅力，索要礼物</string>
+    <string name="askfor_send">发送</string>
+    <string name="dlg_send_ok">立即赠送</string>
+    <string name="dlg_send_gift_je">充值金额</string>
     <!-- 个人中心-我的礼品 -->
     <string name="my_gift_title">我的礼物</string>
     <string name="my_gift_send">送出的礼物</string>
@@ -451,6 +477,7 @@
     <string name="upgrade_vip">升级VIP会员，查看更多来访</string>
     <string name="lately_visit">最近7天有12个用户来看你。</string>
     <string name="say_hello">hi，傻子</string>
+    <string name="txt_dialog_tips">你还没有开通VIP，无法查看最近来访用户。</string>
 
 
     <!--发现start-->
@@ -463,7 +490,18 @@
     <string name="my_friend_title">我的好友</string>
     <string name="my_friend_righ_title">黑名单</string>
     <string name="my_defriend_title">黑名单</string>
+    <string name="send_gift">赠送该礼物需要</string>
+    <string name="my_attention">我的关注</string>
 
     <!--发现end-->
+
+
+    <string name="privatechat_title_attention">关注她</string>
+    <string name="privatechat_title_unsubscribe">取消关注</string>
+    <string name="privatechat_title_phone">查看手机</string>
+    <string name="privatechat_title_wx">查看微信</string>
+    <string name="privatechat_title_yb">Y币:0</string>
+    <string name="please_select_a_gift">请选择礼物</string>
+
 
 </resources>

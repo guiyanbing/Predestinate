@@ -16,11 +16,10 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.mumu.bean.utils.FileUtil;
+import com.juxin.mumu.bean.utils.MD5;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.file.UpLoadResult;
-import com.juxin.predestinate.bean.settting.ASetBean;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
@@ -34,11 +33,12 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +51,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     private static final String SETTING_SAVE_KEY = "SETTING_SAVE_KEY"; // 本地化设置key
     private UserDetail userDetail = null;
     private Setting setting = null;
-    public static ASetBean ASet;//通用配置
+
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
@@ -281,28 +281,104 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void uploadAvatar(final String url, final RequestComplete complete) {
         if (FileUtil.isExist(url)) {
-            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, url, new RequestComplete() {
+            Map<String, File> fileParams = new HashMap<>();
+            fileParams.put("avatar", new File(url));
+
+            long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
+
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadAvatar, postParams, fileParams, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    if (response.isOk()) {
-                        FileUtil.deleteFile(url);  // 删除裁切文件
-                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                        String pic = upLoadResult.getHttpPathPic();
-                        if (TextUtils.isEmpty(pic)) {
-                            return;
-                        }
-                        final String avatarUrl = getInterceptUrl(pic);
-                        HashMap<String, Object> postParams = new HashMap<>();
-                        postParams.put(EditKey.s_key_avatar, avatarUrl);
-                        //ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateMyInfo, postParams, complete);
-                    }
+                    if (complete != null)
+                        complete.onRequestComplete(response);
+                    FileUtil.deleteFile(url);
                 }
             });
+
         } else {
             LoadingDialog.closeLoadingDialog();
             MMToast.showShort("图片地址无效");
         }
     }
+
+    /**
+     * 上传相册
+     */
+    public void uploadPhoto(final String url, final RequestComplete complete) {
+        if (FileUtil.isExist(url)) {
+            Map<String, File> fileParams = new HashMap<>();
+            fileParams.put("userfile", new File(url));
+
+            long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
+
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadPhoto, postParams, fileParams, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (complete != null)
+                        complete.onRequestComplete(response);
+                    FileUtil.deleteFile(url);
+                }
+            });
+
+        } else {
+            LoadingDialog.closeLoadingDialog();
+            MMToast.showShort("图片地址无效");
+        }
+    }
+
+    /**
+     * 删除相片
+     */
+    public void deletePhoto(int albumId, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("id", albumId);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.deletePhoto, getParams, complete);
+    }
+
+    /**
+     * 获取用户Y币情况: 个人资料里可直接拿用户Y币金额
+     */
+    public void reqYCoinInfo(final RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", App.uid);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqYCoinInfo, getParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
+                YCoin yCoin = new YCoin();
+                getMyInfo().setYCoinInfo(yCoin);
+
+            }
+        });
+    }
+
+    /**
+     * 获取用户红包总额
+     */
+    public void reqRedbagSum(final RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", App.uid);
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRedbagSum, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
+            }
+        });
+    }
+
 
     // ------------------------- 他人 ----------------------
 
@@ -424,12 +500,10 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 获取进入H5充值页面需要传递的参数map
      *
-     * @param type Y币：1，VIP：2
      * @return 拼接完成的参数map
      */
-    public HashMap<String, Object> getChargeH5Params(int type) {
+    public HashMap<String, Object> getChargeH5Params() {
         HashMap<String, Object> params = new HashMap<>();
-        params.put("type", type);
         params.put("ycoin_person", getActiveUserNum(CHARGE_NUM_COIN));
         params.put("vip_person", getActiveUserNum(CHARGE_NUM_VIP));
         return params;
@@ -448,4 +522,5 @@ public class CenterMgr implements ModuleBase, PObserver {
         return random;
     }
     // -------------------------充值页面逻辑 end---------------------------
+
 }

@@ -33,6 +33,8 @@ public class SplashActivity extends BaseActivity {
 
     private void initData() {
         LocationMgr.getInstance().start();//启动定位
+        ModuleMgr.getCommonMgr().updateUsers();//软件升级U-P读取
+        ModuleMgr.getCommonMgr().requestStaticConfig();//请求一些在线配置信息
     }
 
     private void jumpAnimation() {
@@ -67,8 +69,6 @@ public class SplashActivity extends BaseActivity {
     private void skipLogic() {
         Intent intent = null;
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
-            ModuleMgr.getCenterMgr().reqMyInfo();
-
             if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey()) && !checkUserIsUploadAvatar()) {
 //TODO                UIShow.showNoHeadActToMain(this);
 //                finish();
