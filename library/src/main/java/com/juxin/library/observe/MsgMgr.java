@@ -71,10 +71,10 @@ public class MsgMgr {
      */
     public void attach(final PObserver observer) {
         if (observer == null) {
-            PLogger.e("------>PObserver为空");
+            PLogger.e("------>PObserver is null.");
             return;
         }
-        PLogger.d("------>attach");
+        PLogger.d("------>attach[" + observer.toString() + "]");
         rxDisposable.add(RxBus.getInstance().toFlowable(Msg.class)
                 .onBackpressureBuffer().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
