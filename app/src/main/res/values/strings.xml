@@ -54,9 +54,11 @@
     <string name="center_my_invite_code">我的邀请码：%s</string>
     <string name="center_vip_privilege">VIP特权</string>
     <string name="center_phone_verify">手机认证</string>
+    <string name="center_video_verify">真人认证</string>
     <string name="center_vip_to_open">立即开通</string>
     <string name="center_vip_left_day">已开通</string>
     <string name="center_phone_to_verify">立即认证</string>
+    <string name="center_video_to_verify">我的认证</string>
     <string name="center_phone_has_verify">已认证</string>
     <string name="user_info_send">发信</string>
     <string name="user_info_hi">打招呼</string>
@@ -64,6 +66,9 @@
     <string name="user_info_voice">发语音</string>
     <string name="user_info_age">%d岁</string>
     <string name="user_info_follow_count">关注 %d</string>
+    <string name="user_info_earn_redbag">我要赚红包</string>
+    <string name="user_info_redbag_num">%s元</string>
+    <string name="user_info_photo">我的相册</string>
 
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>
@@ -274,18 +279,28 @@
     <string name="goods_pay_confirm">确认充值</string>
 
     <string name="goods_vip_title">开通VIP</string>
+
     <string name="goods_vip_price">(50元/月)</string>
     <string name="goods_vip_user">已开通VIP用户：</string>
     <string name="goods_vip_users">人</string>
     <string name="goods_vip_tips">开通VIP可与所有美女聊天</string>
     <string name="goods_vip_dredge">立即开通</string>
     <string name="goods_vip_privilege">VIP特权</string>
+    <string name="goods_vip_privilege_title">开通VIP特权</string>
     <string name="goods_vip_kefu">咨询客服</string>
     <string name="goods_vip_banner_tip">请前往‘我的-设置-活动相关’页面</string>
+    <string name="goods_vip_dlg_low_power">体力不足</string>
+    <string name="goods_vip_dlg_low_power_tips">开通VIP赠送体力，体力恢复速度增加100%，持续时间和VIP有效时间相同</string>
+    <string name="goods_vip_dlg_host">灵气不足</string>
     <string name="goods_vip_dlg_low_host">灵气消耗减半</string>
+    <string name="goods_vip_dlg_low_host_tips">超级红包已经摇摇欲坠，开通VIP获得一次免费摇红包的机会，可将它摇下来。</string>
     <string name="goods_vip_dlg_plus_host">吸收灵气加倍</string>
     <string name="goods_vip_dlg_more_privilege">更多特权</string>
     <string name="goods_vip_dlg_recoverhalf">恢复灵气50%</string>
+    <string name="goods_vip_dlg_high_arean_title">高级擂台需要开通VIP</string>
+    <string name="goods_vip_dlg_high_arean">高级场擂台赛，争夺500元大奖</string>
+    <string name="goods_vip_dlg_get_dog">获取斗牛犬</string>
+    <string name="goods_vip_dlg_get_dog_tips">开通VIP立即送斗牛犬，可以守卫摇钱树并且反抢敌人。</string>
 
     <string name="goods_ycoin_title">购买Y币</string>
     <string name="goods_ycoin_remain">Y币余额:</string>
@@ -495,6 +510,7 @@
     <string name="privatechat_title_phone">查看手机</string>
     <string name="privatechat_title_wx">查看微信</string>
     <string name="privatechat_title_yb">Y币:0</string>
+    <string name="please_select_a_gift">请选择礼物</string>
 
 
 </resources>

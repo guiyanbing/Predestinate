@@ -11,16 +11,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.TimerUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,13 +77,13 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
         if (displayType == DISPLAY_TYPE_BIG_IMG) {
             imageList = (List<String>) getIntent().getSerializableExtra("list");
             if (imageList == null) {
-                imageList = new ArrayList<String>();
+                imageList = new ArrayList<>();
             }
             displayAdapter = new PhotoDiaplayAdapter(getSupportFragmentManager(), null, imageList);
         } else {
             photoList = (List<UserPhoto>) getIntent().getSerializableExtra("list");
             if (photoList == null) {
-                photoList = new ArrayList<UserPhoto>();
+                photoList = new ArrayList<>();
             }
             displayAdapter = new PhotoDiaplayAdapter(getSupportFragmentManager(), photoList, null);
         }
@@ -146,14 +151,14 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
 
                     @Override
                     public void onSubmit() {
-                        MMLog.d("yao", "photoList.get(currentPosition).getPic()=" + photoList.get(currentPosition).getPic());
+                        PLogger.d("photoList.get(currentPosition).getPic()=" + photoList.get(currentPosition).getPic());
                         LoadingDialog.show(PhotoDisplayAct.this, "正在删除，请稍候...");
-//                        ModuleMgr.getCenterMgr().delPhoto(photoList.get(currentPosition).getAlbumid(), photoList.get(currentPosition).getPic(), new HttpMgr.IReqComplete() {
-//                            @Override
-//                            public void onReqComplete(final HttpResult result) {
-//                                handleDelResult(result);
-//                            }
-//                        });
+                        ModuleMgr.getCenterMgr().deletePhoto((int) photoList.get(currentPosition).getAlbumid(), new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(HttpResponse response) {
+                                handleDelResult(response);
+                            }
+                        });
 
                     }
                 }, "确定删除该张照片吗？", "删除照片");
@@ -211,35 +216,35 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
         finish();
     }
 
-//    private void handleDelResult(final HttpResult result) {
-//        LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-//            @Override
-//            public void call() {
-//                if (result.isOk()) {
-//                    MMToast.showShort("删除成功");
-//                    isDele = true;
-//                    // 删除成功之后
-//                    photoList.remove(currentPosition);
-//                    if (currentPosition <= 0) {
-//                        currentPosition = 0;
-//                    } else {
-//                        currentPosition -= 1;
-//                    }
-//                    displayAdapter = new PhotoDiaplayAdapter(getSupportFragmentManager(), photoList, null);
-//                    displayAdapter.setOnClickEvent(onClickEvent);
-//                    vp_photo_display.setAdapter(displayAdapter);
-//                    vp_photo_display.setCurrentItem(currentPosition);
-//                    btn_photo_display_title.setText("照片  " + (currentPosition + 1) + "/" + photoList.size());
-//
-//                    if (photoList != null && photoList.size() < 1) {
-//                        finishCurrentActivity();
-//                    }
-//                } else {
-//                    MMToast.showShort("删除失败,请稍候再试");
-//                }
-//            }
-//        });
-//    }
+    private void handleDelResult(final HttpResponse response) {
+        LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                if (response.isOk()) {
+                    PToast.showShort("删除成功");
+                    isDele = true;
+                    // 删除成功之后
+                    photoList.remove(currentPosition);
+                    if (currentPosition <= 0) {
+                        currentPosition = 0;
+                    } else {
+                        currentPosition -= 1;
+                    }
+                    displayAdapter = new PhotoDiaplayAdapter(getSupportFragmentManager(), photoList, null);
+                    displayAdapter.setOnClickEvent(onClickEvent);
+                    vp_photo_display.setAdapter(displayAdapter);
+                    vp_photo_display.setCurrentItem(currentPosition);
+                    btn_photo_display_title.setText("照片  " + (currentPosition + 1) + "/" + photoList.size());
+
+                    if (photoList != null && photoList.size() < 1) {
+                        finishCurrentActivity();
+                    }
+                } else {
+                    PToast.showShort("删除失败,请稍候再试");
+                }
+            }
+        });
+    }
 
 
     @Override

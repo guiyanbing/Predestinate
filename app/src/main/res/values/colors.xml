@@ -69,6 +69,8 @@
     <color name="color_f9f9f9">#f9f9f9</color>
     <color name="color_f64051">#f64051</color>
     <color name="color_fffde4">#fffde4</color>
+    <color name="color_777777">#777777</color>
+    <color name="color_040000">#040000</color>
 
     <color name="color_6495ED">#6495ED</color>
     <color name="color_71AFEE">#71AFEE</color>
@@ -116,6 +118,9 @@
     <color name="color_F6F6F6">#F6F6F6</color>
     <color name="color_5F7EE3">#5F7EE3</color>
     <color name="color_F36D8E">#F36D8E</color>
+    <color name="color_FD7194">#FD7194</color>
+    <color name="color_BEBEBE">#BEBEBE</color>
+    <color name="color_B4B4B4">#B4B4B4</color>
     <color name="red">#FF0000</color>
     <color name="color_6dcca3">#6dcca3</color>
     <color name="yellow">#ffcc00</color>
@@ -126,6 +131,8 @@
 
     <color name="color_ff4d79">#ff4d79</color>
     <color name="color_e6c2aa">#e6c2aa</color>
+    <color name="color_6ba2fd">#6ba2fd</color>
+    <color name="color_ee3434">#ee3434</color>
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
@@ -227,9 +234,11 @@
 
     <color name="deep_gray_text">#999</color>
     <color name="text_gray">#707070</color>
+    <color name="half_trans_white">#99FFFFFF</color>
 
     <color name="noheard_info">#ff3a3a</color>
     <color name="noheard_info2">#ff95a9</color>
 
+    <color name="authentication_txt_bg">#43cd67</color>
 </resources>
 

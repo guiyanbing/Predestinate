@@ -2,10 +2,12 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.bean.settting.ASetBean;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
@@ -14,8 +16,8 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedOneKeyList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedbagList;
+import com.juxin.predestinate.ui.wode.bean.RedOneKeyList;
+import com.juxin.predestinate.ui.wode.bean.RedbagList;
 
 import java.util.Map;
 
@@ -23,29 +25,36 @@ import java.util.Map;
  * 管理常用的Url参数信息
  */
 public enum UrlParam {
+
     reqRegister("pubtest/quickReg", null, false),//注册接口
     modifyUserData("user/modifyUserData", null, true),//修改用户资料
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
-    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
-    mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
-    modifyPassword("user/modifyPassword", null, true),//修改密码
-    feedBack("user/feedback"),//意见反馈
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
-    getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
-    updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
-    //检查软件升级
-    checkUpdate("public/checkup", null, true),
-    //检查服务器静态配置
-    staticConfig("public/getASet", null, false),
-    //请求在线客服QQ
-    serviceQQ("user/serviceQQ", null, false),
-
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     //一键打招呼列表
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),
 
+    //============================== 设置页相关接口 =============================
+    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
+    mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
+    modifyPassword("user/modifyPassword", null, true),//修改密码
+    feedBack("user/feedback"),//意见反馈
+    getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
+    updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
+    //检查软件升级
+    checkUpdate("public/checkupNew", null, true),
+    //检查服务器静态配置
+    staticConfig("public/getASet", null, false),
+    //请求在线客服QQ
+    serviceQQ("user/serviceQQ", null, false),
+    //获取自己的音频、视频开关配置
+    reqMyVideochatConfig(Constant.FATE_IT_GO,"xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
+    //音视频开关修改
+    setVideochatConfig(Constant.FATE_IT_GO,"xs/message/SetVideochatConfig", null, true),
+    //上传视频认证配置
+    addVideoVerify(Constant.FATE_IT_GO,"xs/message/AddVideoVerify", null, true),
 
     //============================== 用户资料相关接口 =============================
 
@@ -53,6 +62,8 @@ public enum UrlParam {
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
+    reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
 
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
@@ -63,9 +74,15 @@ public enum UrlParam {
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 
     // 上传头像
-    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, true),
+    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, false),
+
+    // 上传相册
+    uploadPhoto(Constant.FATE_IT_HTTP_PIC, "index/uploadPhoto", null, true),
+
+    // 删除照片
+    deletePhoto("user/deletePic", false),
+
     // 上传文件
-    //uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
     uploadFile(Constant.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================
@@ -89,6 +106,8 @@ public enum UrlParam {
     getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
     begGift("gift/begGift", true),
+    //接收礼物
+    receiveGift("gift/receiveGift", null, true),
     // 手机验证
     sendSMS("public/sendSMS", true),
     // 手机验证
@@ -135,6 +154,7 @@ public enum UrlParam {
     reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
     //送礼物
     givePresent("s/present/GivePresent", null, true),
+
 
     //================= 发现 ===========
     //举报

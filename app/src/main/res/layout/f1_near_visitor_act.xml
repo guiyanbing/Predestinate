@@ -71,7 +71,7 @@
                     android:paddingRight="5dip"
                     android:paddingTop="5dip" >
 
-                    <com.juxin.predestinate.ui.xiaoyou.wode.view.NonScrollGridView
+                    <com.juxin.predestinate.ui.wode.view.NonScrollGridView
                         android:id="@+id/gv_near_visitor_header_album"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

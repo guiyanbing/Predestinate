@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="@dimen/px45_dp">
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
@@ -22,33 +21,34 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_pay_top"
+                android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dip"
+                android:layout_margin="@dimen/px12_dp"
                 android:gravity="center"
-                android:paddingBottom="@dimen/px45_dp"
                 android:text="开通VIP特权"
                 android:textColor="#313131"
                 android:textSize="@dimen/px56_sp" />
 
             <ImageView
-                android:id="@+id/iv_dlg_close"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:id="@+id/btn_close"
+                android:layout_width="@dimen/px60_dp"
+                android:layout_height="@dimen/px60_dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/px35_dp"
                 android:background="@drawable/f1_close_small" />
         </RelativeLayout>
 
-        <!-- 提示文字 -->
+        <!-- 开通VIP特权，提示文字 -->
         <LinearLayout
+            android:id="@+id/ll_vip_privilege"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#f7f4ec"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:padding="@dimen/px20_dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,27 +86,104 @@
                 android:textSize="@dimen/px40_sp" />
         </LinearLayout>
 
+        <!-- 体力不足，提示文字 -->
+        <LinearLayout
+            android:id="@+id/ll_low_power"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f4ec"
+            android:orientation="horizontal"
+            android:padding="@dimen/px20_dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/goods_vip_dlg_low_power_tips"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
+        <!-- 灵力不足，提示文字 -->
+        <LinearLayout
+            android:id="@+id/ll_low_host"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f4ec"
+            android:orientation="horizontal"
+            android:padding="@dimen/px20_dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/goods_vip_dlg_low_host_tips"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
+        <!-- 高级擂台，提示文字 -->
+        <LinearLayout
+            android:id="@+id/ll_high_arean"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f4ec"
+            android:orientation="horizontal"
+            android:padding="@dimen/px20_dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/goods_vip_dlg_high_arean"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
+        <!-- 斗牛犬，提示文字 -->
+        <LinearLayout
+            android:id="@+id/ll_get_dog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f4ec"
+            android:orientation="horizontal"
+            android:padding="@dimen/px20_dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/goods_vip_dlg_get_dog_tips"
+                android:textColor="#CABA90"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/px45_dp"
             android:paddingLeft="@dimen/px35_dp"
-            android:paddingRight="@dimen/px35_dp"
-            android:paddingTop="15dp">
+            android:paddingRight="@dimen/px35_dp">
 
             <!-- 商品列表 -->
             <LinearLayout
                 android:id="@+id/goods_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/px35_dp"
+                android:layout_marginBottom="@dimen/px10_dp"
                 android:orientation="horizontal" />
 
+            <!-- 商品列表活动提示 -->
             <LinearLayout
+                android:id="@+id/ll_goods_preference"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="0dp"
@@ -127,10 +204,12 @@
 
             <!-- 更多特权 -->
             <LinearLayout
+                android:id="@+id/ll_more_privilege"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/px45_dp">
+                android:paddingTop="@dimen/px15_dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

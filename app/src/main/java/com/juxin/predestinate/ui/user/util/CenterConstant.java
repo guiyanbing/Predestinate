@@ -12,4 +12,8 @@ public class CenterConstant {
 
     public static final int USER_CHECK_INFO_OWN = 0x11;    // 查看自己资料
     public static final int USER_CHECK_INFO_OTHER = 0x12;  // 查看TA人资料
+
+    // 头像审核状态码
+    public static final int USER_AVATAR_CHECKING = 0;  // 审核中
+    public static final int USER_AVATAR_NO_PASS = 2;   // 未通过
 }

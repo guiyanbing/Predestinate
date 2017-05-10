@@ -9,9 +9,12 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.library.utils.FileUtil;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -23,10 +26,16 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
+import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
+import com.juxin.predestinate.ui.wode.util.AttentionUtil;
+import com.juxin.predestinate.ui.wode.bean.GiftsList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,10 +54,9 @@ public class CommonMgr implements ModuleBase {
 
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
-
+    private VideoVerifyBean videoVerify;//视频聊天配置
     @Override
     public void init() {
-        requestStaticConfig();
         requestServerQQ();
     }
 
@@ -97,9 +105,18 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 请求服务器在线配置
+     * 请求一些在线配置信息
      */
     public void requestStaticConfig() {
+        requestConfig();
+        requestGiftList(null);
+        AttentionUtil.initUserDetails();
+    }
+
+    /**
+     * 请求服务器在线配置
+     */
+    private void requestConfig() {
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("ver", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
         ModuleMgr.getHttpMgr().reqGet(UrlParam.staticConfig, null, requestParams,
@@ -111,6 +128,56 @@ public class CommonMgr implements ModuleBase {
                         commonConfig.parseJson(response.getResponseString());
                     }
                 });
+    }
+
+    /**
+     * @return 获取服务器静态配置对象
+     */
+    public CommonConfig getCommonConfig() {
+        return commonConfig == null ? new CommonConfig() : commonConfig;
+    }
+
+
+    /**
+     * 获取自己的音频、视频开关配置
+     */
+    public void requestVideochatConfig(){
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                videoVerify = (VideoVerifyBean) response.getBaseData();
+            }
+        });
+    }
+    /**
+     * 获取自己的音频、视频开关配置
+     */
+    public void requestVideochatConfigSendUI(RequestComplete complete){
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, complete);
+    }
+    /**
+     * 修改自己的音频、视频开关配置
+     */
+    public void setVideochatConfig(){
+        HashMap<String,Object> post_param = new HashMap<>();
+        post_param.put("videochat",videoVerify.getVideochat());
+        post_param.put("audiochat",videoVerify.getAudiochat());
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+            }
+        });
+    }
+
+    /**
+     * 上传视频认证配置
+     */
+    public void addVideoVerify(String imgUrl,String videoUrl,RequestComplete complete){
+        HashMap<String,Object> post_param = new HashMap<>();
+        post_param.put("imgurl", imgUrl);
+        post_param.put("videourl", videoUrl);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, complete);
     }
 
     /**
@@ -126,11 +193,42 @@ public class CommonMgr implements ModuleBase {
         });
     }
 
+    public void setGiftLists(GiftsList giftLists) {
+        this.giftLists = giftLists;
+    }
+
     /**
-     * @return 获取服务器静态配置对象
+     * 请求礼物列表
      */
-    public CommonConfig getCommonConfig() {
-        return commonConfig;
+    public void requestGiftList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---GiftList--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                if (response.isOk() || response.isCache()){
+                    giftLists = new GiftsList();
+                    giftLists.parseJson(response.getResponseString());
+                }
+            }
+        } : complete);
+    }
+
+    /**
+     * @return 获取礼品信息
+     */
+    public GiftsList getGiftLists() {
+        if (giftLists == null) {
+            giftLists = new GiftsList();
+        }
+        return giftLists;
+    }
+
+    public VideoVerifyBean getVideoVerify() {
+        return videoVerify;
+    }
+
+    public void setVideoVerify(VideoVerifyBean videoVerify) {
+        this.videoVerify = videoVerify;
     }
 
     /**
@@ -150,6 +248,9 @@ public class CommonMgr implements ModuleBase {
     }
 
     // ---------------------------- 软件升级 start ------------------------------
+
+    /* 软件升级账号密码迁移临时文件路径 */
+    private static final String UPDATE_CACHE_PATH = Environment.getExternalStorageDirectory().getAbsoluteFile() + File.separator + "xiaou" + File.separator;
 
     /**
      * 检查应用升级
@@ -179,27 +280,57 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 将用户信息写入文件，跨软件升级使用
+     *
+     * @param packageName 需要升级到的包名
+     * @param versionCode 需要升级到的软件版本号
      */
-    public void updateSaveUP() {
-        String str_json = PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null);
-        if (!TextUtils.isEmpty(str_json)) {
-            String cacheDir = Environment.getExternalStorageDirectory().getAbsoluteFile() +
-                    File.separator + "xiaou" + File.separator;
-            if (DirType.isFolderExists(cacheDir)) {
-                File file = new File(cacheDir + "user_cache");
-                OutputStreamWriter out = null;
+    public void updateSaveUP(String packageName, int versionCode) {
+        Map<String, Object> upMap = new HashMap<>();
+        upMap.put("packageName", packageName);
+        upMap.put("versionCode", versionCode);
+        upMap.put("user", PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null));
+
+        if (DirType.isFolderExists(UPDATE_CACHE_PATH)) {
+            File file = new File(UPDATE_CACHE_PATH + "user_cache");
+            OutputStreamWriter out = null;
+            try {
+                out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
+                out.write(new Gson().toJson(upMap));//向文件写入内容
+            } catch (Exception e) {
+                PLogger.printThrowable(e);
+            } finally {
                 try {
-                    out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
-                    out.write(str_json);//向文件写入内容
+                    if (out != null) out.close();// 关闭输出流
                 } catch (Exception e) {
                     PLogger.printThrowable(e);
-                } finally {
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取已登录过的所有用户ID和密码
+     */
+    public void updateUsers() {
+        String key = FileUtil.fileRead(UPDATE_CACHE_PATH + "user_cache");
+        if (!TextUtils.isEmpty(key)) {
+            JSONObject cacheObject = JsonUtil.getJsonObject(key);
+            String packageName = cacheObject.optString("packageName");
+            int versionCode = cacheObject.optInt("versionCode");
+            if (ModuleMgr.getAppMgr().getPackageName().equalsIgnoreCase(packageName) &&
+                    ModuleMgr.getAppMgr().getVerCode() == versionCode) {
+                JSONArray jsonArray = cacheObject.optJSONArray("user");
+                for (int i = 0; jsonArray != null && i < jsonArray.length(); i++) {
+                    JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
                     try {
-                        if (out != null) out.close();// 关闭输出流
+                        ModuleMgr.getLoginMgr().addLoginUser(
+                                Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
+                                EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
                     } catch (Exception e) {
                         PLogger.printThrowable(e);
                     }
                 }
+                FileUtil.deleteFile(UPDATE_CACHE_PATH + "user_cache");
             }
         }
     }
@@ -286,35 +417,6 @@ public class CommonMgr implements ModuleBase {
 
     //============================== 小友模块相关接口 =============================
 
-
-    public void setGiftLists(GiftsList giftLists) {
-        this.giftLists = giftLists;
-    }
-
-    /**
-     * 请求礼物列表
-     */
-    public void requestgetGifts(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                giftLists = new GiftsList();
-                giftLists.parseJson(response.getResponseString());
-            }
-        } : complete);
-    }
-
-    /**
-     * @return 获取礼品信息
-     */
-    public GiftsList getGiftLists() {
-        if (giftLists == null) {
-            giftLists = new GiftsList();
-        }
-        return giftLists;
-    }
-
     /**
      * 我关注的列表
      *
@@ -393,6 +495,22 @@ public class CommonMgr implements ModuleBase {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("content", content);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.begGift, getParams, complete);
+    }
+
+    /**
+     * 接收礼物
+     *
+     * @param rid      礼物红包ID
+     * @param gname    礼物名称
+     * @param gid      礼物ID
+     * @param complete 请求完成后回调
+     */
+    public void receiveGift(long rid,String gname,int gid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("rid", rid);
+        getParams.put("gname", gname);
+        getParams.put("gid", gid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.receiveGift, getParams, complete);
     }
 
     /**

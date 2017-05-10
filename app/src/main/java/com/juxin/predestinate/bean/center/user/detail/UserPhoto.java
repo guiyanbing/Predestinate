@@ -25,6 +25,10 @@ public class UserPhoto extends BaseData implements Parcelable {
         this.setStatus(photoObject.optInt("status"));
     }
 
+    public UserPhoto(int status) {
+        this.status = status;
+    }
+
     public long getAlbumid() {
         return albumid;
     }
@@ -68,6 +72,9 @@ public class UserPhoto extends BaseData implements Parcelable {
         dest.writeString(this.pic);
         dest.writeInt(this.status);
         dest.writeString(this.thumb);
+    }
+
+    public UserPhoto() {
     }
 
     protected UserPhoto(Parcel in) {

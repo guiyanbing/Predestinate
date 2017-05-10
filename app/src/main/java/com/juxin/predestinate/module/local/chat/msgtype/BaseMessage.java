@@ -12,6 +12,8 @@ import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -153,8 +155,8 @@ public class BaseMessage implements IBaseMessage {
     private long msgID = -1;//服务器消息ID
     private long cMsgID;//客户端消息ID
     private long time;
-    private String content;
-    private String jsonStr;
+    private String content;//具体内容
+    private String jsonStr;//json串
     private int status;//1.发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过   私聊列表中是最后一条消息的状态
     private int fStatus = 1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
     private int type;//消息类型
@@ -163,7 +165,7 @@ public class BaseMessage implements IBaseMessage {
     private int version = 4;//版本
     private boolean isResending = false;//是否重发中
     private boolean isValid = false;//是否有效当前消息,用于五分钟内重发用
-    private String msgDesc;//消息描述
+    private String msgDesc;//消息描述 mct
 
     private boolean isRead = false;//未读消息（true已经是读过了）//这个字段专门给数据库用的，不是给界面用的
     private boolean isSave;//是否保存
@@ -535,6 +537,7 @@ public class BaseMessage implements IBaseMessage {
         this.setSendID(App.uid);
         this.setTime(getCurrentTime());
         this.setcMsgID(getCMsgID());
+        this.setMsgID(getCMsgID());
         MMLog.autoDebug("getCMsgID()=" + getcMsgID() + "");
     }
 

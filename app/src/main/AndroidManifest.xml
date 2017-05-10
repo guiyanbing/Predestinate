@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.juxin.predestinate"
-    android:versionCode="10200103"
-    android:versionName="3.0.3">
+    android:versionCode="10200108"
+    android:versionName="3.0.8">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -95,7 +95,17 @@
             android:name=".ui.setting.SuggestAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.check.self.UserInfoAct"
+            android:name=".ui.user.check.self.info.UserInfoAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.user.check.self.album.UserPhotoAct"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.utils.PhotoDisplayAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
@@ -131,35 +141,35 @@
 
         <!-- ============= 小友模块start ============= -->
         <activity
-            android:name=".ui.xiaoyou.wode.NearVisitorAct"
+            android:name=".ui.wode.NearVisitorAct"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.xiaoyou.wode.MyAttentionAct"
+            android:name=".ui.wode.MyAttentionAct"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.xiaoyou.wode.MyDiamondsAct"
+            android:name=".ui.wode.MyDiamondsAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.MyDiamondsExplainAct"
+            android:name=".ui.wode.MyDiamondsExplainAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.RedBoxRecordAct"
+            android:name=".ui.wode.RedBoxRecordAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.WithDrawExplainAct"
+            android:name=".ui.wode.WithDrawExplainAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.WithDrawApplyAct"
+            android:name=".ui.wode.WithDrawApplyAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.WithDrawSuccessAct"
+            android:name=".ui.wode.WithDrawSuccessAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.RedBoxPhoneVerifyAct"
+            android:name=".ui.wode.RedBoxPhoneVerifyAct"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.xiaoyou.wode.DemandRedPacketAct"
+            android:name=".ui.wode.DemandRedPacketAct"
             android:screenOrientation="portrait"/>
 
         <activity
@@ -183,7 +193,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.check.edit.UserSecretAct"
+            android:name=".ui.user.check.secret.UserSecretAct"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 

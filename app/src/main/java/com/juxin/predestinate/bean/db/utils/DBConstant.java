@@ -8,6 +8,8 @@ package com.juxin.predestinate.bean.db.utils;
 public class DBConstant {
     public static final int ERROR = -1;
 
+    public static final int NumNo = -1;// 数据库数字不修改
+
     public static final int OK_STATUS = 1;//发送成功
     public static final int FAIL_STATUS = 2;//发送失败
     public static final int SENDING_STATUS = 3;//发送中

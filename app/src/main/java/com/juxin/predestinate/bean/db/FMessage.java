@@ -14,6 +14,7 @@ public class FMessage {
     public static final String COLUMN_SENDID = "sendID";// 发送ID
     public static final String COLUMN_MSGID = "msgID";// 服务器消息ID
     public static final String COLUMN_CMSGID = "cMsgID";// 客户端消息ID
+    public static final String COLUMN_SPECIALMSGID = "specialMsgID";// 对于这条消息来说的特殊ID
     public static final String COLUMN_TYPE = "type";// 消息类型
     public static final String COLUMN_STATUS = "status";// 1.发送成功2.发送失败3.发送中 10.未读11.对方已读//12未审核通过//13本地已读
     public static final String COLUMN_FSTATUS = "fStatus";// 默认1 如果是已读就是0
@@ -28,6 +29,7 @@ public class FMessage {
                 COLUMN_SENDID + " INTEGER NOT NULL," +
                 COLUMN_MSGID + " INTEGER UNIQUE," +
                 COLUMN_CMSGID + " INTEGER UNIQUE," +
+                COLUMN_SPECIALMSGID + " INTEGER UNIQUE," +
                 COLUMN_TYPE + " TEXT," +
                 COLUMN_STATUS + " INTEGER, " +
                 COLUMN_FSTATUS + " INTEGER," +

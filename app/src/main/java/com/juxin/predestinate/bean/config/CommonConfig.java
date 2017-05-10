@@ -22,6 +22,10 @@ public class CommonConfig extends BaseData {
 
     private List<Diamond> diamondList;  //钻石配比列表
 
+    private long plugin_version;
+    private int audiochat_minute_cost;//语音通话每分钟费用
+    private int videochat_minute_cost;//视频通话每分钟费用
+
     /**
      * @return 是否展示活动弹窗
      */
@@ -34,13 +38,40 @@ public class CommonConfig extends BaseData {
         JSONObject jsonObject = getJsonObject(jsonStr);
         this.setEntrance_url(jsonObject.optString("entrance_url"));
         this.setExtra_url(jsonObject.optString("extra_url"));
-        this.setMinmoney(jsonObject.optInt("minmoney"));
+        this.setMinmoney(jsonObject.optInt("mmoney"));
 
         this.setPush_url(jsonObject.optString("push_url"));
         this.setPushshow(jsonObject.optInt("pushshow"));
         this.setPushrate(jsonObject.optDouble("pushrate"));
 
         this.setDiamondList((List<Diamond>) getBaseDataList(getJsonArray(jsonObject.optString("diamand")), Diamond.class));
+        this.plugin_version=jsonObject.optLong("plugin_version");
+        this.audiochat_minute_cost=jsonObject.optInt("audiochat_minute_cost");
+        this.videochat_minute_cost=jsonObject.optInt("videochat_minute_cost");
+    }
+
+    public int getVideochat_minute_cost() {
+        return videochat_minute_cost;
+    }
+
+    public void setVideochat_minute_cost(int videochat_minute_cost) {
+        this.videochat_minute_cost = videochat_minute_cost;
+    }
+
+    public int getAudiochat_minute_cost() {
+        return audiochat_minute_cost;
+    }
+
+    public void setAudiochat_minute_cost(int audiochat_minute_cost) {
+        this.audiochat_minute_cost = audiochat_minute_cost;
+    }
+
+    public long getPlugin_version() {
+        return plugin_version;
+    }
+
+    public void setPlugin_version(long plugin_version) {
+        this.plugin_version = plugin_version;
     }
 
     public String getEntrance_url() {

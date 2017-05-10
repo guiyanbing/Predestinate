@@ -10,10 +10,10 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.WindowManager;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
@@ -62,11 +62,12 @@ import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
-import com.juxin.predestinate.ui.user.check.edit.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
-import com.juxin.predestinate.ui.user.check.self.UserInfoAct;
+import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
+import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
@@ -77,25 +78,29 @@ import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDlgOld;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+import com.juxin.predestinate.ui.utils.PhotoDisplayAct;
 import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
 import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
-import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
-import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
-import com.juxin.predestinate.ui.xiaoyou.wode.MyAttentionAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.NearVisitorAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxPhoneVerifyAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.RedBoxRecordAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawApplyAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawExplainAct;
-import com.juxin.predestinate.ui.xiaoyou.wode.WithDrawSuccessAct;
+import com.juxin.predestinate.ui.wode.util.AttentionUtil;
+import com.juxin.predestinate.ui.wode.BottomGiftDialog;
+import com.juxin.predestinate.ui.wode.DemandRedPacketAct;
+import com.juxin.predestinate.ui.wode.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.wode.GiftDiamondPayDlg;
+import com.juxin.predestinate.ui.wode.MyAttentionAct;
+import com.juxin.predestinate.ui.wode.MyDiamondsAct;
+import com.juxin.predestinate.ui.wode.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.wode.NearVisitorAct;
+import com.juxin.predestinate.ui.wode.RedBoxPhoneVerifyAct;
+import com.juxin.predestinate.ui.wode.RedBoxRecordAct;
+import com.juxin.predestinate.ui.wode.WithDrawApplyAct;
+import com.juxin.predestinate.ui.wode.WithDrawExplainAct;
+import com.juxin.predestinate.ui.wode.WithDrawSuccessAct;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -365,6 +370,13 @@ public class UIShow {
     }
 
     /**
+     * 打开个人信息页
+     */
+    public static void showUserPhotoAct(Context context) {
+        context.startActivity(new Intent(context, UserPhotoAct.class));
+    }
+
+    /**
      * 打开个人信息查看编辑页
      */
     public static void showUserEditInfoAct(Context context) {
@@ -385,6 +397,9 @@ public class UIShow {
                     PToast.showShort(context.getString(R.string.request_error));
                     return;
                 }
+                //更新缓存
+                AttentionUtil.updateUserDetails(response.getResponseString());
+
                 Intent intent = new Intent(context, UserCheckInfoAct.class);
                 intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
                 intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
@@ -440,6 +455,61 @@ public class UIShow {
         context.startActivity(new Intent(context, UserOtherLabelAct.class));
     }
 
+    /**
+     * 查看大图界面
+     *
+     * @param activity
+     * @param list     Serializable 图片的数据链表对象 （看相册的 传List<UserPhoto>链表 看大图的 传List<String>链表）
+     * @param position 选中的 图片 position
+     * @param type     需要界面显示的类型
+     *                 PhotoDisplayAct.DISPLAY_TYPE_USER; //看自己相册
+     *                 PhotoDisplayAct.DISPLAY_TYPE_OTHER; //看别人相册
+     *                 PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG; //看大图
+     */
+    private static void showPhotoDisplayAct(FragmentActivity activity, Serializable list, int position, int type) {
+        if (list == null || ((List<String>) list).size() == 0) {
+            MMToast.showShort("没有图片数据");
+            return;
+        }
+        Intent intent = new Intent(activity, PhotoDisplayAct.class);
+        intent.putExtra("list", list);
+        intent.putExtra("position", position);
+        intent.putExtra("type", type);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 查看大图界面 看我自己的相册
+     *
+     * @param activity
+     * @param list
+     * @param position
+     */
+    public static void showPhotoOfSelf(FragmentActivity activity, Serializable list, int position) {
+        showPhotoDisplayAct(activity, list, position, PhotoDisplayAct.DISPLAY_TYPE_USER);
+    }
+
+    /**
+     * 查看大图界面 看别人的相册
+     *
+     * @param activity
+     * @param list
+     * @param position
+     */
+    public static void showPhotoOfOther(FragmentActivity activity, Serializable list, int position) {
+        showPhotoDisplayAct(activity, list, position, PhotoDisplayAct.DISPLAY_TYPE_OTHER);
+    }
+
+    /**
+     * 查看大图界面 url
+     *
+     * @param activity
+     * @param list
+     */
+    public static void showPhotoOfBigImg(FragmentActivity activity, Serializable list) {
+        showPhotoDisplayAct(activity, list, 0, PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG);
+    }
+
     // -----------------------消息提示跳转 start--------------------------
 
     /**
@@ -473,7 +543,7 @@ public class UIShow {
     // -----------------------消息提示跳转 end----------------------------
 
     /**
-     * 调起软件强制升级弹窗
+     * 软件升级逻辑处理
      *
      * @param activity  FragmentActivity上下文
      * @param appUpdate 软件升级信息
@@ -481,32 +551,49 @@ public class UIShow {
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
-        // 如果不同包名且已安装升级包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
         if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                && !ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())
-                && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
-            PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
-                @Override
-                public void onCancel() {
-                }
-
-                @Override
-                public void onSubmit() {
-                    if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                        activity.moveTaskToBack(activity.isTaskRoot());
+                && ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {//相同包名
+            if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
+                createUpdateDialog(activity, appUpdate);
+            } else {
+                if (isShowTip) PToast.showShort("您当前的版本为最新的");
+            }
+        } else {//不同包名
+            if (!TextUtils.isEmpty(appUpdate.getPackage_name())
+                    && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
+                // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
+                PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
+                    @Override
+                    public void onCancel() {
                     }
+
+                    @Override
+                    public void onSubmit() {
+                        if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
+                            activity.moveTaskToBack(activity.isTaskRoot());
+                        }
+                    }
+                }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
+            } else {
+                if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
+                    createUpdateDialog(activity, appUpdate);
+                } else {
+                    if (isShowTip) PToast.showShort("您当前的版本为最新的");
                 }
-            }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
+            }
         }
-        // 如果同包名或者包名返回为空，只要返回的版本号>当前已安装的版本号，就弹窗进行下载更新
-        else if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
-            ModuleMgr.getCommonMgr().updateSaveUP();//更新时先保存用户信息备用
-            UpdateDialog updateDialog = new UpdateDialog();
-            updateDialog.setData(appUpdate);
-            updateDialog.showDialog(activity);
-        } else {
-            if (isShowTip) PToast.showShort("您当前的版本为最新的");
-        }
+    }
+
+    /**
+     * 创建软件升级弹框
+     */
+    private static void createUpdateDialog(FragmentActivity activity, AppUpdate appUpdate) {
+        //更新时先保存用户信息备用
+        ModuleMgr.getCommonMgr().updateSaveUP(appUpdate.getPackage_name(), appUpdate.getVersion());
+
+        UpdateDialog updateDialog = new UpdateDialog();
+        updateDialog.setData(appUpdate);
+        updateDialog.showDialog(activity);
     }
 
     /**
@@ -586,7 +673,7 @@ public class UIShow {
         ModuleMgr.getCommonMgr().reqGenerateOrders(orderID, new RequestComplete() {
             @Override
             public void onRequestComplete(final HttpResponse response) {
-                MMLog.autoDebug("Re===" + response.getResponseString());
+                PLogger.d("Re===" + response.getResponseString());
                 LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
                     @Override
                     public void call() {
@@ -596,13 +683,12 @@ public class UIShow {
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
                         } else {
-                            MMToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                         }
                     }
                 });
             }
         });
-
     }
 
     public static void showPayPhoneCardAct(final FragmentActivity activity, PayGood payGood, String orderID) {
@@ -751,6 +837,24 @@ public class UIShow {
     }
 
     /**
+     * 消息页面送礼物（兼容第一版送礼物）弹框
+     *
+     * @param context
+     * @param to_id    他人id
+     * @param nickname 昵称
+     * @param avatar   头像地址
+     * @param msg      消息内容
+     */
+    public static void showFristSendGiftDlg(Context context, long to_id, String nickname, String avatar, String msg) {
+        Intent intent = new Intent(context, GiftDiamondPayDlg.class);
+        intent.putExtra("avatar", avatar);
+        intent.putExtra("msg", msg);
+        intent.putExtra("nickname", nickname);
+        intent.putExtra("toUid", to_id);
+        context.startActivity(intent);
+    }
+
+    /**
      * 打开我的钱包页面
      *
      * @param context
@@ -893,6 +997,4 @@ public class UIShow {
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
-
-
 }

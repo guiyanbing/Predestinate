@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -19,7 +22,7 @@ import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
  * Created by Kind on 2017/3/20.
  */
 
-public class UserFragment extends BaseFragment {
+public class UserFragment extends BaseFragment implements PObserver{
     private UserFragmentHeadPanel headPanel;
     private UserFragmentFootPanel footPanel;
     private CheckIntervalTimeUtil checkIntervalTimeUtil;
@@ -43,6 +46,8 @@ public class UserFragment extends BaseFragment {
 
         container.addView(headPanel.getContentView());
         container.addView(footPanel.getContentView());
+
+        MsgMgr.getInstance().attach(this);
     }
 
     @Override
@@ -58,6 +63,17 @@ public class UserFragment extends BaseFragment {
             if (checkIntervalTimeUtil.check(60 * 1000) || (App.uid > 0 && ModuleMgr.getCenterMgr().getMyInfo().getUid() <= 0)) {
                 ModuleMgr.getCenterMgr().reqMyInfo();
             }
+        }
+    }
+
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_MyInfo_Change:
+                headPanel.refreshView();
+                footPanel.refreshView();
+                break;
         }
     }
 }

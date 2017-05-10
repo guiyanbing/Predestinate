@@ -63,17 +63,17 @@
       }
     ]
   },
-  "vip_wakan": {
+  "vip_host": {
     "list": [
       {
-        "cid": 56,
+        "cid": 69,
         "cname": "30天",
         "cnum": 30,
         "desc": "恢复灵气50%",
         "price": 50
       },
       {
-        "cid": 57,
+        "cid": 70,
         "cname": "90天",
         "cnum": 90,
         "desc": "恢复灵气100%",
@@ -84,17 +84,35 @@
   "vip_power": {
     "list": [
       {
-        "cid": 56,
+        "cid": 69,
         "cname": "30天",
         "cnum": 30,
         "desc": "赠送100点体力",
         "price": 50
       },
       {
-        "cid": 56,
+        "cid": 70,
         "cname": "90天",
         "cnum": 90,
         "desc": "赠送200点体力",
+        "price": 100
+      }
+    ]
+  },
+  "vip_dog": {
+    "list": [
+      {
+        "cid": 69,
+        "cname": "30天",
+        "cnum": 30,
+        "desc": "",
+        "price": 50
+      },
+      {
+        "cid": 70,
+        "cname": "90天",
+        "cnum": 90,
+        "desc": "",
         "price": 100
       }
     ]
