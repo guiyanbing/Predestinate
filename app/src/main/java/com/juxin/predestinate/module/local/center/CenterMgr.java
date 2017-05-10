@@ -364,6 +364,21 @@ public class CenterMgr implements ModuleBase, PObserver {
         });
     }
 
+    /**
+     * 获取用户红包总额
+     */
+    public void reqRedbagSum(final RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("uid", App.uid);
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRedbagSum, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
+            }
+        });
+    }
+
 
     // ------------------------- 他人 ----------------------
 

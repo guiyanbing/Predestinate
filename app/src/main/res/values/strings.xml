@@ -64,6 +64,8 @@
     <string name="user_info_voice">发语音</string>
     <string name="user_info_age">%d岁</string>
     <string name="user_info_follow_count">关注 %d</string>
+    <string name="user_info_earn_redbag">我要赚红包</string>
+    <string name="user_info_redbag_num">%s元</string>
 
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>

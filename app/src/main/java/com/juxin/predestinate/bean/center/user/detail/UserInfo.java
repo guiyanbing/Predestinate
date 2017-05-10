@@ -32,7 +32,7 @@ public class UserInfo extends UserBasic {
     private int ycoin = 0;          // Y币
     private YCoin yCoin;            // 用户Y币信息
     private int diamand;            // 钻石
-    private int redbagsum;          //红包总额
+    private double redbagsum;       //红包总额
 
 
     // -------2017-1-5红包来了添加字段 -------
@@ -95,11 +95,11 @@ public class UserInfo extends UserBasic {
         this.diamand = diamand;
     }
 
-    public int getRedbagsum() {
+    public double getRedbagsum() {
         return redbagsum;
     }
 
-    public void setRedbagsum(int redbagsum) {
+    public void setRedbagsum(double redbagsum) {
         this.redbagsum = redbagsum;
     }
 
