@@ -10,8 +10,6 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -24,7 +22,7 @@ import java.util.List;
 /**
  * 个人中心的list布局panel
  */
-public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener, RequestComplete {
+public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private UserAuthAdapter userAuthAdapter;
@@ -34,7 +32,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         setContentView(R.layout.p1_user_fragment_footer);
 
         initData();
-        reqData();
     }
 
     // 初始化条目数据
@@ -59,15 +56,10 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         userAuthAdapter.setOnItemClickListener(this);
     }
 
-    private void reqData() {
-        ModuleMgr.getCenterMgr().reqYCoinInfo(this);   // 获取Y币信息
-        ModuleMgr.getCenterMgr().reqDiamondInfo(this); // 获取钻石信息
-    }
-
     /**
      * 刷新list
      */
-    public void notifyAdapter() {
+    public void refreshView() {
         userAuthAdapter.notifyDataSetChanged();
     }
 
@@ -128,10 +120,5 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 UIShow.showUserSetAct((Activity) getContext(), 100);
                 break;
         }
-    }
-
-    @Override
-    public void onRequestComplete(HttpResponse response) {
-        notifyAdapter();
     }
 }

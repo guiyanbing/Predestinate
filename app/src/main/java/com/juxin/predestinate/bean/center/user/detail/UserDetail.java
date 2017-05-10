@@ -1,7 +1,6 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
 import com.juxin.library.log.PSP;
-import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
 
 import org.json.JSONObject;
 
@@ -58,7 +57,7 @@ public class UserDetail extends UserInfo {
     }
 
     public int getDiamondsSum() {
-        return PSP.getInstance().getInt("diamondsSum" + uid,0);
+        return PSP.getInstance().getInt("diamondsSum" + uid, 0);
     }
 
     public void setDiamondsSum(int diamondsSum) {

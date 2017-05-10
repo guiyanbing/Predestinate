@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
-import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -29,7 +28,7 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 /**
  * 个人中心条目头部
  */
-public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, PObserver, ImgSelectUtil.OnChooseCompleteListener {
+public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
 
     private CircleImageView user_head, user_head_vip, user_head_status;
     private TextView user_nick, user_id, iv_invite_code;
@@ -63,8 +62,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
         functionPanel = new UserFragmentFunctionPanel(getContext());
         function_container.addView(functionPanel.getContentView());
-
-        MsgMgr.getInstance().attach(this);
     }
 
     /**
@@ -149,14 +146,5 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
                 }
             }
         });
-    }
-
-    @Override
-    public void onMessage(String key, Object value) {
-        switch (key) {
-            case MsgType.MT_MyInfo_Change:
-                refreshView();
-                break;
-        }
     }
 }

@@ -54,7 +54,6 @@ public enum UrlParam {
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
     reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
-    reqDiamondInfo("gift/getMyDiamand"),                      // 用户钻石信息
 
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),

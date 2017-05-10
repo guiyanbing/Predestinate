@@ -62,7 +62,7 @@ public class UserAuthAdapter extends BaseRecyclerViewAdapter {
         // 各条目展示逻辑
         if (userAuth.getId() == CenterItemID.i_Center_item_5) {  // 我的Y币
             item_hint.setVisibility(View.VISIBLE);
-            item_hint.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYCoinInfo().getY()));
+            item_hint.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
         }
 
         if (userAuth.getId() == CenterItemID.i_Center_item_6) {

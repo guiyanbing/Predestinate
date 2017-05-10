@@ -347,7 +347,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
-     * 获取用户Y币情况
+     * 获取用户Y币情况: 个人资料里可直接拿用户Y币金额
      */
     public void reqYCoinInfo(final RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
@@ -364,29 +364,6 @@ public class CenterMgr implements ModuleBase, PObserver {
         });
     }
 
-    /**
-     * 获取用户钻石信息
-     */
-    public void reqDiamondInfo(final RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", App.uid);
-
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqDiamondInfo, getParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (complete != null) complete.onRequestComplete(response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response.getResponseString());
-                    String status = jsonObject.optString("status");
-                    if ("ok".equals(status)) {
-                        getMyInfo().setDiamand(jsonObject.optInt("diamand"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     // ------------------------- 他人 ----------------------
 
