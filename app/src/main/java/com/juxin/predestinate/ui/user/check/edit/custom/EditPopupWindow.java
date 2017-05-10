@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.user.check.edit.custom;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,19 +28,25 @@ import java.util.HashMap;
  * 点击直接进行修改的popupWindow，目前仅在个人中心进行使用
  */
 public class EditPopupWindow extends PopupWindow implements OnDismissListener {
-
     private Context context;
     private View mMenuView;
 
     private LinearLayout layout_parent;
-    private EditText nick_edit;
-    private TextView txt_nickname;
+    private EditText user_edit;
+    private TextView txt;
     private UserDetail userDetail;
 
-    public EditPopupWindow(Context context, TextView txt_nickname) {
+    private String editKey;  // 修改字段
+
+    /**
+     * @param editKey 需编辑修改的字段
+     * @param txt     展示TextView
+     */
+    public EditPopupWindow(Context context, String editKey, TextView txt) {
         super(context);
         this.context = context;
-        this.txt_nickname = txt_nickname;
+        this.editKey = editKey;
+        this.txt = txt;
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
         initView();
@@ -51,10 +58,23 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.p1_edit_pop_window, null);
         layout_parent = (LinearLayout) mMenuView.findViewById(R.id.layout_parent);
-        nick_edit = (EditText) mMenuView.findViewById(R.id.edtTxt_user_nickname);
-        nick_edit.setInputType(EditorInfo.TYPE_CLASS_PHONE);
-        nick_edit.setText(String.valueOf(userDetail.getAge()));
-        nick_edit.setSelection(String.valueOf(userDetail.getAge()).length());
+        user_edit = (EditText) mMenuView.findViewById(R.id.user_edit);
+
+        fillEditText();
+    }
+
+    private void fillEditText() {
+        String data = "";
+        if (editKey.equals(EditKey.s_key_age)) {
+            user_edit.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+            data = String.valueOf(userDetail.getAge());
+        }
+
+        if (editKey.equals(EditKey.s_key_nickName)) {
+            data = userDetail.getNickname();
+        }
+        user_edit.setText(data);
+        user_edit.setSelection(data.length());
     }
 
     private void initEvent() {
@@ -81,31 +101,39 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
 
     /**
      * 显示该popupWindow
-     *
-     * @param v parentView
      */
-    public void showPopupWindow(View v) {
-        txt_nickname.setVisibility(View.INVISIBLE);
+    public void showPopupWindow() {
+        txt.setVisibility(View.INVISIBLE);
         int offSet = UIUtil.dp2px(35);
-        this.showAsDropDown(v, 0, -offSet);
+        this.showAsDropDown(txt, 0, -offSet);
     }
 
     @Override
     public void onDismiss() {
-        int result = Integer.parseInt(nick_edit.getText().toString());
+        final String editText = user_edit.getText().toString();
 
-        if (result < 18) result = 18;
-        if (result > 99) result = 99;
+        // 修改年龄
+        if (editKey.equals(EditKey.s_key_age)) {
+            int result = Integer.parseInt(editText);
 
-        if (result != userDetail.getAge()) {
-            HashMap<String, Object> postParams = new HashMap<>();
-            postParams.put(EditKey.s_key_age, result);
-            // 向服务器提交数据
-            ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
-            // 更新本地的数据
-            ModuleMgr.getCenterMgr().getMyInfo().setAge(result);
-            txt_nickname.setText(result + "岁");
+            if (result < 18) result = 18;
+            if (result > 99) result = 99;
+
+            if (result != userDetail.getAge()) {
+                HashMap<String, Object> postParams = new HashMap<>();
+                postParams.put(EditKey.s_key_age, result);
+                ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
+            }
         }
-        txt_nickname.setVisibility(View.VISIBLE);
+
+        // 修改昵称
+        if (editKey.equals(EditKey.s_key_nickName)) {
+            if (!editText.equals(userDetail.getNickname()) && !TextUtils.isEmpty(editText)) {
+                HashMap<String, Object> postParams = new HashMap<>();
+                postParams.put(EditKey.s_key_nickName, editText);
+                ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
+            }
+        }
+        txt.setVisibility(View.VISIBLE);
     }
 }

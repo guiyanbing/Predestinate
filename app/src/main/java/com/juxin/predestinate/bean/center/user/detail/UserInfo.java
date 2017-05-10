@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
+import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
+
 import org.json.JSONObject;
 
 /**
@@ -28,6 +30,7 @@ public class UserInfo extends UserBasic {
     private long regTime;           // 注册时间
     private boolean isBindRose;     // 是否绑定了红娘
     private int ycoin = 0;          // Y币
+    private YCoin yCoin;            // 用户Y币信息
     private int diamand;            // 钻石
     private int redbagsum;          //红包总额
 
@@ -74,6 +77,14 @@ public class UserInfo extends UserBasic {
     public boolean isVip() {
         return isMonthMail;
         //return isVip;
+    }
+
+    public YCoin getYCoinInfo() {
+        return yCoin;
+    }
+
+    public void setYCoinInfo(YCoin yCoin) {
+        this.yCoin = yCoin;
     }
 
     public int getDiamand() {

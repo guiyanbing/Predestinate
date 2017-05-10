@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <!--vip开通-->
     <RelativeLayout
         android:id="@+id/ll_vip_privilege"
         style="@style/center_pieces_item">
@@ -17,14 +18,15 @@
             android:padding="@dimen/px30_dp">
 
             <TextView
+                android:id="@+id/tv_vip_title"
                 style="@style/text_small"
                 android:text="@string/center_vip_privilege"
                 android:textColor="@color/text_ciyao_gray" />
 
             <ImageView
                 android:id="@+id/iv_vip_privilege"
-                android:layout_width="@dimen/px80_dp"
-                android:layout_height="@dimen/px80_dp"
+                android:layout_width="@dimen/px87_dp"
+                android:layout_height="@dimen/px87_dp"
                 android:src="@drawable/f1_user_vip_selector" />
 
             <TextView
@@ -42,9 +44,11 @@
         android:layout_marginTop="@dimen/px18_dp"
         android:background="@color/fengexian_gray" />
 
+    <!--手机认证-->
     <RelativeLayout
         android:id="@+id/ll_phone_verify"
-        style="@style/center_pieces_item">
+        style="@style/center_pieces_item"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,14 +65,46 @@
 
             <ImageView
                 android:id="@+id/iv_phone_verify"
-                android:layout_width="@dimen/px80_dp"
-                android:layout_height="@dimen/px80_dp"
+                android:layout_width="@dimen/px87_dp"
+                android:layout_height="@dimen/px87_dp"
                 android:src="@drawable/f1_user_phone_selector" />
 
             <TextView
                 android:id="@+id/tv_verify_status"
                 style="@style/text_middle"
                 android:text="@string/center_phone_to_verify"
+                android:textColor="@color/color_666666" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!--真人认证-->
+    <RelativeLayout
+        android:id="@+id/ll_video_verify"
+        style="@style/center_pieces_item">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/px30_dp">
+
+            <TextView
+                style="@style/text_small"
+                android:text="@string/center_video_verify"
+                android:textColor="@color/text_ciyao_gray" />
+
+            <ImageView
+                android:id="@+id/iv_video_verify"
+                android:layout_width="@dimen/px87_dp"
+                android:layout_height="@dimen/px87_dp"
+                android:src="@drawable/f1_video_auth_selector" />
+
+            <TextView
+                android:id="@+id/tv_video_status"
+                style="@style/text_middle"
+                android:text="@string/center_video_to_verify"
                 android:textColor="@color/color_666666" />
         </LinearLayout>
     </RelativeLayout>

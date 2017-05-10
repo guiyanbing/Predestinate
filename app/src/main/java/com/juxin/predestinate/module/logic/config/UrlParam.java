@@ -53,6 +53,8 @@ public enum UrlParam {
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
+    reqDiamondInfo("gift/getMyDiamand"),                      // 用户钻石信息
 
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
@@ -68,8 +70,10 @@ public enum UrlParam {
     // 上传相册
     uploadPhoto(Constant.FATE_IT_HTTP_PIC, "index/uploadPhoto", null, true),
 
+    // 删除照片
+    deletePhoto("user/deletePic", false),
+
     // 上传文件
-    //uploadFile(Constant.HOST_FILE_SERVER_URL, "jxfile/Jxupload", UpLoadResult.class, false),
     uploadFile(Constant.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
     //============================== 小友模块相关接口 =============================

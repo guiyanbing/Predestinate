@@ -10,9 +10,12 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import java.util.List;
 /**
  * 个人中心的list布局panel
  */
-public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
+public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener, RequestComplete {
 
     private RecyclerView recyclerView;
     private UserAuthAdapter userAuthAdapter;
@@ -31,6 +34,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         setContentView(R.layout.p1_user_fragment_footer);
 
         initData();
+        reqData();
     }
 
     // 初始化条目数据
@@ -46,13 +50,18 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 R.drawable.f1_user_diamonds_ico, R.drawable.f1_user_gift_ico, R.drawable.f1_user_info_ico, R.drawable.f1_user_xiangce_ico, R.drawable.f1_user_set_ico};
 
         for (int i = 0; i < names.length; i++) {
-            UserAuth userAuth = new UserAuth(i + 1, icons[i], levels[i], names[i], isShow(i + 1));
+            UserAuth userAuth = new UserAuth(i, icons[i], levels[i], names[i], isShow(i));
             userAuthList.add(userAuth);
         }
         userAuthAdapter = new UserAuthAdapter();
         userAuthAdapter.setList(userAuthList);
         recyclerView.setAdapter(userAuthAdapter);
         userAuthAdapter.setOnItemClickListener(this);
+    }
+
+    private void reqData() {
+        ModuleMgr.getCenterMgr().reqYCoinInfo(this);   // 获取Y币信息
+        ModuleMgr.getCenterMgr().reqDiamondInfo(this); // 获取钻石信息
     }
 
     /**
@@ -119,5 +128,10 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 UIShow.showUserSetAct((Activity) getContext(), 100);
                 break;
         }
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        notifyAdapter();
     }
 }

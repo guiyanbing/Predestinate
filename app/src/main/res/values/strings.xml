@@ -52,9 +52,11 @@
     <string name="center_my_invite_code">我的邀请码：%s</string>
     <string name="center_vip_privilege">VIP特权</string>
     <string name="center_phone_verify">手机认证</string>
+    <string name="center_video_verify">真人认证</string>
     <string name="center_vip_to_open">立即开通</string>
     <string name="center_vip_left_day">已开通</string>
     <string name="center_phone_to_verify">立即认证</string>
+    <string name="center_video_to_verify">我的认证</string>
     <string name="center_phone_has_verify">已认证</string>
     <string name="user_info_send">发信</string>
     <string name="user_info_hi">打招呼</string>

@@ -6,8 +6,10 @@ import android.widget.TextView;
 
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
 
 /**
  * 个人中心布局adapter
@@ -56,6 +58,17 @@ public class UserAuthAdapter extends BaseRecyclerViewAdapter {
         item_view.setVisibility(View.VISIBLE);
         item_icon.setBackgroundResource(userAuth.getRes());
         item_text.setText(userAuth.getName());
+
+        // 各条目展示逻辑
+        if (userAuth.getId() == CenterItemID.i_Center_item_5) {  // 我的Y币
+            item_hint.setVisibility(View.VISIBLE);
+            item_hint.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYCoinInfo().getY()));
+        }
+
+        if (userAuth.getId() == CenterItemID.i_Center_item_6) {
+            item_hint.setVisibility(View.VISIBLE);
+            item_hint.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()));
+        }
     }
 
     @Override

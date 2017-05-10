@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.fragment;
+package com.juxin.predestinate.ui.user.fragment.bean;
 
 /**
  * 个人中心界面展示控制实体类

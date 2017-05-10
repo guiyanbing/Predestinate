@@ -1,6 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
 import com.juxin.library.log.PSP;
+import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
 
 import org.json.JSONObject;
 

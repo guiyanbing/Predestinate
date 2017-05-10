@@ -33,6 +33,7 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
+import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -303,6 +304,88 @@ public class CenterMgr implements ModuleBase, PObserver {
             LoadingDialog.closeLoadingDialog();
             MMToast.showShort("图片地址无效");
         }
+    }
+
+    /**
+     * 上传相册
+     */
+    public void uploadPhoto(final String url, final RequestComplete complete) {
+        if (FileUtil.isExist(url)) {
+            Map<String, File> fileParams = new HashMap<>();
+            fileParams.put("userfile", new File(url));
+
+            long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
+
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadPhoto, postParams, fileParams, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (complete != null)
+                        complete.onRequestComplete(response);
+                    FileUtil.deleteFile(url);
+                }
+            });
+
+        } else {
+            LoadingDialog.closeLoadingDialog();
+            MMToast.showShort("图片地址无效");
+        }
+    }
+
+    /**
+     * 删除相片
+     */
+    public void deletePhoto(int albumId, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("id", albumId);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.deletePhoto, getParams, complete);
+    }
+
+    /**
+     * 获取用户Y币情况
+     */
+    public void reqYCoinInfo(final RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", App.uid);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqYCoinInfo, getParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
+                YCoin yCoin = new YCoin();
+                getMyInfo().setYCoinInfo(yCoin);
+
+            }
+        });
+    }
+
+    /**
+     * 获取用户钻石信息
+     */
+    public void reqDiamondInfo(final RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", App.uid);
+
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqDiamondInfo, getParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null) complete.onRequestComplete(response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response.getResponseString());
+                    String status = jsonObject.optString("status");
+                    if ("ok".equals(status)) {
+                        getMyInfo().setDiamand(jsonObject.optInt("diamand"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     // ------------------------- 他人 ----------------------

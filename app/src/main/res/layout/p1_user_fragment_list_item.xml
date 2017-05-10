@@ -51,8 +51,7 @@
             android:gravity="right"
             android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
-            android:text="立即开通"
-            android:textColor="@color/text_ciyao_gray"
+            android:textColor="@color/pink"
             android:textSize="@dimen/px36_sp"
             android:visibility="gone" />
 
