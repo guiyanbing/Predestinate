@@ -266,7 +266,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
         ArrayList<String> pics = new ArrayList<>();
         pics.add(url);
-      //  UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), pics);
+        UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), pics);
     }
 
     private void onVideoClickContent(CommonMessage msg){

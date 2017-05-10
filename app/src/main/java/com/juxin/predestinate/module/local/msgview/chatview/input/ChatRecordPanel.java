@@ -118,11 +118,12 @@ public class ChatRecordPanel extends BaseViewPanel implements ChatMediaRecord.On
                     int length = ChatMediaRecord.getInstance().getVoiceDuration();
                     String voiceFileUri = ChatMediaRecord.getInstance().getVoiceFileName();
                     if (length > 1000) {
-                        if (chatInstance != null) {
+                        ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000);
+                   //     if (chatInstance != null) {
                    //         ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000, null);
-                        } else {
+                    //    } else {
                   //          ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000, null);
-                        }
+                    //    }
                     } else {
                         MMToast.showShort("录音不能小于1秒!");
                         FileUtil.deleteFile(voiceFileUri);//清除无效文件

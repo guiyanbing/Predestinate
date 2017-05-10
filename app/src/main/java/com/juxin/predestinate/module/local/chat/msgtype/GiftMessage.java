@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class GiftMessage extends BaseMessage {
 
-    private long giftID;
+    private int giftID;
     private int giftCount;
     private long giftLogID;
 
@@ -22,12 +22,12 @@ public class GiftMessage extends BaseMessage {
         this.setTime(object.optLong("mt")); //消息时间 int64
 
         if(getType() == 20){
-            this.setGiftID(object.optLong("gift_id"));
+            this.setGiftID(object.optInt("gift_id"));
         }else {
             if(!object.isNull("gift")){
                 JSONObject giftJSON = object.optJSONObject("gift");
                 this.setGiftCount(giftJSON.optInt("count"));
-                this.setGiftID(giftJSON.optLong("gift_id"));
+                this.setGiftID(giftJSON.optInt("gift_id"));
                 this.setGiftLogID(giftJSON.optLong("gift_log_id"));
             }
         }
@@ -48,11 +48,11 @@ public class GiftMessage extends BaseMessage {
         this.giftCount = giftCount;
     }
 
-    public long getGiftID() {
+    public int getGiftID() {
         return giftID;
     }
 
-    public void setGiftID(long giftID) {
+    public void setGiftID(int giftID) {
         this.giftID = giftID;
     }
 
