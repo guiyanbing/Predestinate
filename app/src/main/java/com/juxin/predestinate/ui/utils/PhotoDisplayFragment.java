@@ -1,32 +1,29 @@
 package com.juxin.predestinate.ui.utils;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.juxin.library.image.ImageLoader;
 import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
 
 /**
  * PhotoDisplayAct：查看大图Fragment页面
  */
-public class PhotoDisplayFragment extends BaseFragment implements RequestComplete {
+public class PhotoDisplayFragment extends BaseFragment {
 
     private ProgressBar progress;
     private TouchImageView image;
 
     private String pic;
-
     private TouchImageView.OnClickEvent onClickEvent;
 
     @Override
@@ -56,49 +53,19 @@ public class PhotoDisplayFragment extends BaseFragment implements RequestComplet
     public void loadPic(String pic) {
         if (!TextUtils.isEmpty(pic)) {
             if (FileUtil.isURL(pic)) {
-//                ModuleMgr.getHttpMgr().reqBigImage(pic, /*new HttpMgr.IReqComplete() {
-//                    @Override
-//                    public void onReqComplete(HttpResult result) {
-//                        if (result.isOk()) {
-//                            progress.setVisibility(View.GONE);
-//                            image.setImageBitmap((Bitmap) result.getData());
-//                        }
-//                    }
-//                }*/this);
+                ImageLoader.loadCenterCrop(getContext(), pic, image);
+
+                ImageLoader.localImgWithCallback(getContext(), pic, new ImageLoader.GlideCallback() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        progress.setVisibility(View.GONE);
+                        image.setImageDrawable(resource);
+                    }
+                });
             } else {
-//                ModuleMgr.httpMgr.reqNativeImg(image, pic);
+                ImageLoader.localLocalImg(getContext(), R.drawable.default_pic, image);
                 progress.setVisibility(View.GONE);
             }
-        }
-    }
-
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 10:
-                    progress.setVisibility(View.GONE);
-                    image.setImageBitmap((Bitmap) msg.obj);
-                    break;
-                case 11:
-                    loadPic(pic);
-                    break;
-            }
-        }
-    };
-
-    @Override
-    public void onRequestComplete(HttpResponse response) {
-        if (response.isOk()) {
-            Message message = new Message();
-            message.what = 10;
-            message.obj = response.getBaseData();
-            handler.sendMessage(message);
-        } else {
-//            if (response.getCode() != null && result.getCode().equals("onPrepareLoad"))
-//                handler.sendEmptyMessage(11);
         }
     }
 }
