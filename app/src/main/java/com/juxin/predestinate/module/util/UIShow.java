@@ -81,6 +81,7 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
+import com.juxin.predestinate.ui.xiaoyou.wode.AttentionUtil;
 import com.juxin.predestinate.ui.xiaoyou.wode.BottomGiftDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.DemandRedPacketAct;
 import com.juxin.predestinate.ui.xiaoyou.wode.DiamondSendGiftDlg;
@@ -385,6 +386,9 @@ public class UIShow {
                     PToast.showShort(context.getString(R.string.request_error));
                     return;
                 }
+                //更新缓存
+                AttentionUtil.updateUserDetails(response.getResponseString());
+
                 Intent intent = new Intent(context, UserCheckInfoAct.class);
                 intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
                 intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);

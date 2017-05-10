@@ -98,20 +98,17 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         switch (v.getId()){
             case R.id.wode_wallet_tv_draw:
                 String money = tvMoney.getText().toString().trim();
-                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
+                float minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()/100f;
 //                Log.e("TTTTTTTTTT",ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()+"|||");
-                if (Float.valueOf(money) <= Float.valueOf(minMoney)) {
+                if (Float.valueOf(money) <= minMoney) {
                     PToast.showShort(getString(R.string.withdraw_tips) +minMoney + getString(R.string.head_unit));
                     return;
                 }
 
                 UserDetail userDetail1 = ModuleMgr.getCenterMgr().getMyInfo();
                 final boolean isVerify = userDetail1.isVerifyCellphone();//是否绑定了手机号
-//                Intent intent = null;
                 if (isVerify) {
                     UIShow.showWithDrawApplyAct(0,0,false,this);
-//                    intent = new Intent(this, WithDrawApplyAct.class);
-//                    startActivity(intent);
                 } else {
                     UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);//验证手机
                 }

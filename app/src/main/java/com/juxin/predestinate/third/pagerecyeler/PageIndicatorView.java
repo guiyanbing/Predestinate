@@ -22,6 +22,8 @@ public class PageIndicatorView extends LinearLayout {
     private Context mContext = null;
     private int dotSize = 15; // 指示器的大小（dp）
     private int margins = 4; // 指示器间距（dp）
+    private int unSelectResource = android.R.drawable.presence_invisible;
+    private int selectResource = android.R.drawable.presence_online;
     private List<View> indicatorViews = null; // 存放指示器
 
     public PageIndicatorView(Context context) {
@@ -65,12 +67,12 @@ public class PageIndicatorView extends LinearLayout {
         params.setMargins(margins, margins, margins, margins);
         for (int i = 0; i < count; i++) {
             view = new View(mContext);
-            view.setBackgroundResource(android.R.drawable.presence_invisible);
+            view.setBackgroundResource(unSelectResource);
             addView(view, params);
             indicatorViews.add(view);
         }
         if (indicatorViews.size() > 0) {
-            indicatorViews.get(0).setBackgroundResource(android.R.drawable.presence_online);
+            indicatorViews.get(0).setBackgroundResource(selectResource);
         }
     }
 
@@ -83,9 +85,9 @@ public class PageIndicatorView extends LinearLayout {
         //TODO 页码指示器颜色设置
         for (int i = 0; i < indicatorViews.size(); i++) {
             if (i == selected) {
-                indicatorViews.get(i).setBackgroundResource(android.R.drawable.presence_online);
+                indicatorViews.get(i).setBackgroundResource(selectResource);
             } else {
-                indicatorViews.get(i).setBackgroundResource(android.R.drawable.presence_invisible);
+                indicatorViews.get(i).setBackgroundResource(unSelectResource);
             }
         }
     }

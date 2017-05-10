@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.xiaoyou.wode;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
@@ -12,6 +13,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.xiaoyou.wode.adapter.AttentionMeAdapter;
@@ -112,20 +114,22 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
             return;
         }
         count--;
-        if (response.isOk()){
+        if (JsonUtil.getJsonObject(response.getResponseString()).has("uid")){
             AttentionUserDetail userDetail = new AttentionUserDetail();
             userDetail.parseJson(response.getResponseString());
+            Log.e("TTTTTTTJJJ2222", response.getResponseString());
             mUserDetails.add(userDetail);
             AttentionUtil.addUser(userDetail);
             if (count <= 0){
                 AttentionUtil.saveUserDetails();
+                mAttentionMeAdapter.setList(mUserDetails);
             }
         }
-        //        if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()){
-        //            return;
-        //        }
-        //        crvView.showXrecyclerView();
-        //        PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
+    }
+    //刷新界面
+    public void reFreshUI(){
+        if (mAttentionMeAdapter != null)
+            mAttentionMeAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -153,6 +157,10 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
                 "        },\n" +
                 "{\n" +
                 "            \"uid\": 123950396,\n" +
+                "            \"time\": 1423042627\n" +
+                "        },\n" +
+                "{\n" +
+                "            \"uid\": 110872194,\n" +
                 "            \"time\": 1423042627\n" +
                 "        }\n" +
                 "    ]\n" +

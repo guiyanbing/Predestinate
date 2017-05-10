@@ -106,7 +106,10 @@
             android:layout_alignTop="@id/concern_list_item_head"
             android:layout_marginRight="@dimen/px24_dp"
             android:layout_marginTop="@dimen/px12_dp"
+            android:paddingLeft="@dimen/px30_dp"
+            android:paddingBottom="@dimen/px50_dp"
             android:textColor="@color/filter_text_gray_color"
+            android:text="ceshi"
             android:textSize="@dimen/px42_sp" />
     </RelativeLayout>
 

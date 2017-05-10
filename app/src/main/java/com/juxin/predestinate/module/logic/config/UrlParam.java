@@ -93,6 +93,8 @@ public enum UrlParam {
     getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
     begGift("gift/begGift", true),
+    //接收礼物
+    receiveGift("gift/receiveGift", null, true),
     // 手机验证
     sendSMS("public/sendSMS", true),
     // 手机验证
@@ -139,6 +141,7 @@ public enum UrlParam {
     reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
     //送礼物
     givePresent("s/present/GivePresent", null, true),
+
 
     //================= 发现 ===========
     //举报

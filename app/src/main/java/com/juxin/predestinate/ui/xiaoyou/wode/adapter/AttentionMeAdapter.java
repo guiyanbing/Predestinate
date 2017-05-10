@@ -17,6 +17,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
@@ -65,7 +66,7 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
             mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : "无昵称");
             checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
             mHolder.tvAge.setText(info.getAge() + "岁");
-            checkAndShowCityValue(info.getCity(), mHolder.tvDiqu);
+            checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);
             mHolder.tvpiccount.setText(info.getPhotoNum() + "照片");
         } else {
             mHolder.tvNickname.setText(info.getUid()+"");

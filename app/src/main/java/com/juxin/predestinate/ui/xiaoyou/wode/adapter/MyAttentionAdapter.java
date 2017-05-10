@@ -12,6 +12,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
@@ -55,7 +56,7 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
             mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : "无昵称");
             checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
             mHolder.tvAge.setText(info.getAge() + "岁");
-            mHolder.tvDiqu.setText(info.getCity());
+            mHolder.tvDiqu.setText(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())));
             mHolder.tvpiccount.setText(info.getPhotoNum() + "照片");
         } else {
             mHolder.tvNickname.setText(info.getUid()+"");

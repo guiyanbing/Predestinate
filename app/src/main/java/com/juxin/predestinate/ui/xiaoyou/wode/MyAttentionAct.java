@@ -63,4 +63,13 @@ public class MyAttentionAct extends BaseActivity{
     private void initViewPager() {
         vpViewChange.setAdapter(new ViewGroupPagerAdapter(listViews));
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (panls.size()==2&&panls.get(0)!=null&&panls.get(1)!=null){
+            ((AttentionMePanel)panls.get(0)).reFreshUI();
+            ((AttentionMePanel)panls.get(1)).reFreshUI();
+        }
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -65,16 +66,11 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         for (int i = 0;i<arrGifts.size();i++){
             arrGifts.get(i).setIsShow(false);
         }
-        if (arrGifts.size() <= 0 ){
-            ModuleMgr.getCommonMgr().requestGiftList(this);
-        }
         initView(contentView);
         return contentView;
     }
 
     private void initView(final View contentView) {
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View contentView = inflater.inflate(R.layout.p1_bottom_gif_dialog, null);
         txvAllStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_allstone);
         txvNeedStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_needstone);
         txvSendNum = (EditText) contentView.findViewById(R.id.bottom_gif_txv_sendnum);
@@ -84,18 +80,12 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         mCustomRecyclerView = (CustomRecyclerView) contentView.findViewById(R.id.bottom_gif_rlv_gif);
         pageIndicatorView = (PageIndicatorView) contentView.findViewById(R.id.bottom_gif_rlv_gif_indicator);
         findViewById(R.id.bottom_gif_view_blank).setOnClickListener(this);
+        findViewById(R.id.bottom_gif_rl_top).setOnClickListener(this);
         contentView.findViewById(R.id.bottom_gif_txv_pay).setOnClickListener(this);
         contentView.findViewById(R.id.bottom_gif_txv_send).setOnClickListener(this);
 
         rlvGift = mCustomRecyclerView.getPageRecyclerView();
         rlvGift.setIndicator(pageIndicatorView);
-
-        //        rlvGift.setLayoutManager(layoutManager);
-
-//        mGiftNumPopup = new GiftNumPopup(getContext());
-//        mGiftNumPopup.setOnSelectNumChangedListener(this);
-//        mGiftNumPopup.setOutsideTouchable(true);
-
 
         mGiftAdapterCallBack = new GiftAdapterCallBack(getContext(),this,arrGifts);
         mGiftAdapter = rlvGift.new PageAdapter(arrGifts,mGiftAdapterCallBack);
@@ -132,7 +122,8 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     return;
                 }
                 ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);
-                PToast.showShort("赠送礼物");
+                break;
+            case R.id.bottom_gif_rl_top:
                 break;
         }
     }
@@ -151,9 +142,9 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         txvNeedStone.setText(num+"");
     }
     public void onSelectNumChanged(int num,int sum,int position) {
-//        Log.e("TTTTTTTTTGG", num + "|||");
         this.position = position;
         txvSendNum.setText(num+"");
+        txvSendNum.setSelection(txvSendNum.length());
         txvNeedStone.setText(sum+"");
     }
 
@@ -178,17 +169,21 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
     @Override
     public void afterTextChanged(Editable editable) {
-        //int number = limitNum - s.length();
-//        setHasnum(editable.length()); //修改为正计数
-//        Log.e("TTTTTTTTLLLL", editable.toString() + "||" + editable.length());
-//        txvSendNum.setText(editable.length()+"");
-        selectionStart = txvSendNum.getSelectionStart();
-        selectionEnd = txvSendNum.getSelectionEnd();
-        if (temp.length() > 4) {
-            editable.delete(selectionStart - 1, selectionEnd);
-            int tempSelection = selectionEnd;
-            txvSendNum.setText(editable);
-            txvSendNum.setSelection(tempSelection);//设置光标在最后
+        try {
+            selectionStart = txvSendNum.getSelectionStart();
+            selectionEnd = txvSendNum.getSelectionEnd();
+            if (position > -1){
+                int need = Integer.valueOf(editable.toString());
+                txvNeedStone.setText(need*arrGifts.get(position).getMoney()+"");
+            }
+            if (temp.length() > 4) {
+                editable.delete(selectionStart - 1, selectionEnd);
+                int tempSelection = selectionEnd;
+                txvSendNum.setText(editable);
+                txvSendNum.setSelection(tempSelection);//设置光标在最后
+            }
+        }catch (Exception e){
+            PLogger.e("BottomGiftDialog---------"+e.toString());
         }
     }
 }

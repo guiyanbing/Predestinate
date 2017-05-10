@@ -58,7 +58,6 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
         rvList.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mAttentionMeAdapter = new MyAttentionAdapter(mContext);
-//        rvList.setEmptyView(tvNoData);
         rvList.setAdapter(mAttentionMeAdapter);
         rvList.setLoadingMoreEnabled(false);
         rvList.setLoadingListener(this);
@@ -75,12 +74,11 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
             if (response.isOk()){
                 mUserDetails.clear();
                 AttentionList lists = new AttentionList();
-//                lists.parseJson(response.getResponseString());
-                lists.parseJson(testData());
+                lists.parseJson(response.getResponseString());
+//                lists.parseJson(testData());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
                 mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos));
-//                Log.e("TTTTTTTMMM",infos.size()+"|||");
                 if (infos != null && !infos.isEmpty()){
                     int size = infos.size();
                     count = size;
@@ -124,11 +122,10 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
-//        if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()){
-//            return;
-//        }
-//        crvView.showXrecyclerView();
-//        PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
+    }
+    //刷新界面
+    public void reFreshUI(){
+        mAttentionMeAdapter.notifyDataSetChanged();
     }
 
     @Override
