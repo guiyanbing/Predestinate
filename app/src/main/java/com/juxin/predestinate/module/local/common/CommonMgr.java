@@ -10,6 +10,7 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -24,6 +25,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.discover.SayHelloDialog;
 import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 
 import java.io.File;
@@ -209,7 +211,18 @@ public class CommonMgr implements ModuleBase {
      * @param complete
      */
     public void getSayHiList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqSayHiList, null, complete);
+        String ts = TimeUtil.getCurrentTimeMil();
+        Map<String, Object> postParams = new HashMap<String, Object>();
+        postParams.put("ts", ts);
+        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
+        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
+
+        postParams.put("ver", ModuleMgr.getAppMgr().getVerCode());
+        postParams.put("c_uid", "");
+        postParams.put("c_sid", "");
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSayHiList, postParams, complete);
     }
 
     /**
@@ -226,11 +239,25 @@ public class CommonMgr implements ModuleBase {
      *
      * @param context
      */
-    public void showSayHelloDialog(FragmentActivity context) {
+    public void showSayHelloDialog(final FragmentActivity context) {
 //        if (checkDateAndSave(getSayHelloKey())) {
-//        SayHelloDialog sayHelloDialog = new SayHelloDialog();
-//        sayHelloDialog.showDialog(context);
-////        }
+
+        getSayHiList(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
+                if (response.isOk()) {
+                    UserInfoLightweightList list = new UserInfoLightweightList();
+                    list.parseJsonSayhi(response.getResponseString());
+                    SayHelloDialog sayHelloDialog = new SayHelloDialog();
+                    sayHelloDialog.showDialog(context);
+                    sayHelloDialog.setData(list.getLightweightLists());
+                }
+            }
+        });
+
+
+//        }
     }
 
     /**
@@ -260,7 +287,6 @@ public class CommonMgr implements ModuleBase {
     //============================== 小友模块相关接口 =============================
 
 
-
     public void setGiftLists(GiftsList giftLists) {
         this.giftLists = giftLists;
     }
@@ -269,14 +295,14 @@ public class CommonMgr implements ModuleBase {
      * 请求礼物列表
      */
     public void requestgetGifts(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getGiftLists, null, complete == null?new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
                 giftLists = new GiftsList();
                 giftLists.parseJson(response.getResponseString());
             }
-        }:complete);
+        } : complete);
     }
 
     /**
@@ -310,10 +336,10 @@ public class CommonMgr implements ModuleBase {
     /**
      * 取消关注
      *
-     * @param to_uid      关注者id
+     * @param to_uid   关注者id
      * @param complete 请求完成后回调
      */
-    public void unfollow(Long to_uid,RequestComplete complete) {
+    public void unfollow(Long to_uid, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("to_uid", to_uid);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.unfollow, getParams, complete);
@@ -322,10 +348,10 @@ public class CommonMgr implements ModuleBase {
     /**
      * 关注
      *
-     * @param to_uid      关注者id
+     * @param to_uid   关注者id
      * @param complete 请求完成后回调
      */
-    public void follow(Long to_uid,RequestComplete complete) {
+    public void follow(Long to_uid, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("to_uid", to_uid);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.follow, getParams, complete);
@@ -372,17 +398,17 @@ public class CommonMgr implements ModuleBase {
     /**
      * 送礼物
      *
-     * @param touid     赠送对象UId
-     * @param giftid    礼物Id
-//     * @param begid     索要Id
-//     * @param giftnum   礼物数量（不填为1）
-//     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
-     * @param complete  请求完成后回调
+     * @param touid    赠送对象UId
+     * @param giftid   礼物Id
+     *                 //     * @param begid     索要Id
+     *                 //     * @param giftnum   礼物数量（不填为1）
+     *                 //     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
+     * @param complete 请求完成后回调
      */
-    public void sendGift(String touid,String giftid/*,int begid,int giftnum,int gtype*/,RequestComplete complete) {
+    public void sendGift(String touid, String giftid/*,int begid,int giftnum,int gtype*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
-        getParams.put("touid",touid);
-        getParams.put("giftid",giftid);
+        getParams.put("touid", touid);
+        getParams.put("giftid", giftid);
 //        getParams.put("begid", begid);
 //        getParams.put("giftnum", giftnum);
 //        getParams.put("gtype", gtype);

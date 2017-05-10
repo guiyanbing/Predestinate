@@ -43,8 +43,8 @@ public enum UrlParam {
     serviceQQ("user/serviceQQ", null, false),
 
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
-
-    reqSayHiList("s/reco/DayRecommend", UserInfoLightweightList.class, true),
+    //一键打招呼列表
+    reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),
 
 
     //============================== 用户资料相关接口 =============================
@@ -94,21 +94,21 @@ public enum UrlParam {
     // 手机验证
     bindCellPhone("user/bindCellPhone", true),
     // 最近来访
-    viewMeList("user/viewMeList",true),
+    viewMeList("user/viewMeList", true),
     // 索要礼物群发
-    qunFa(Constant.FATE_IT_GO,"xs/discovery/Qunfa",null,true),
+    qunFa(Constant.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
     // 索要礼物群发
-    sendGift("gift/sendGift",true),
+    sendGift("gift/sendGift", true),
     //女用户群发累计发送的用户数
-    qunCount(Constant.FATE_IT_GO,"xs/discovery/QunCount",null,true),
+    qunCount(Constant.FATE_IT_GO, "xs/discovery/QunCount", null, true),
     // 我关注的列表
-    getFollowing("MoneyTree/getFollowing",true),
+    getFollowing("MoneyTree/getFollowing", true),
     // 关注我的列表
-    getFollowers("MoneyTree/getFollowers",true),
+    getFollowers("MoneyTree/getFollowers", true),
     // 取消关注某某
-    unfollow("follow/unfollow",true),
+    unfollow("follow/unfollow", true),
     // 关注某某
-    follow("follow/follow",true),
+    follow("follow/follow", true),
 
 
     //好友标签分组成员

@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initData() {
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
+        ModuleMgr.getCommonMgr().showSayHelloDialog(this);
     }
 
     private void initFragment() {

@@ -94,4 +94,6 @@ public class Constant {
     public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
     public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
 
+    //
+
 }
