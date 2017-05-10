@@ -6,6 +6,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCommon;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomSimple;
+import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGift;
 import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBasePanel;
 
 /**
@@ -16,6 +17,9 @@ public enum ChatMsgType {
     // 基本消息类型
 
      CMT_2(ChatPanelCommon.class, "普通消息"),
+
+    CMT_20(ChatPanelGift.class, "第二版索要礼物消息"),
+
 //
 //    CMT_3(ChatPanelText.class, "打招呼消息-用普通文字消息模板"),
 //

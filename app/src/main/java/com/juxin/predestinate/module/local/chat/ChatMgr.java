@@ -118,11 +118,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                     }
                     sendCommonMessage(commonMessage);
                 }else {
-                    commonMessage.setStatus(DBConstant.FAIL_STATUS);
-                    commonMessage.setTime(getTime());
-                    commonMessage.setMsgID(DBConstant.NumNo);
-                    long upRet = dbCenter.updateFmessage(commonMessage);
-                    onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), upRet != DBConstant.ERROR, commonMessage);
+                    updateFail(commonMessage);
                 }
             }
         });
@@ -152,11 +148,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                     }
                     sendCommonMessage(commonMessage);
                 }else {
-                    commonMessage.setStatus(DBConstant.FAIL_STATUS);
-                    commonMessage.setTime(getTime());
-                    commonMessage.setMsgID(DBConstant.NumNo);
-                    long upRet = dbCenter.updateFmessage(commonMessage);
-                    onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), upRet != DBConstant.ERROR, commonMessage);
+                    updateFail(commonMessage);
                 }
             }
         });
@@ -176,13 +168,17 @@ public class ChatMgr implements ModuleBase, PObserver {
 
             @Override
             public void onSendFailed(NetData data) {
-                commonMessage.setStatus(DBConstant.FAIL_STATUS);
-                commonMessage.setTime(getTime());
-                commonMessage.setMsgID(DBConstant.NumNo);
-                long upRet = dbCenter.updateFmessage(commonMessage);
-                onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), upRet != DBConstant.ERROR, commonMessage);
+                updateFail(commonMessage);
             }
         });
+    }
+
+    private void updateFail(BaseMessage message) {
+        message.setStatus(DBConstant.FAIL_STATUS);
+        message.setTime(getTime());
+        message.setMsgID(DBConstant.NumNo);
+        long upRet = dbCenter.updateFmessage(message);
+        onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
     }
 
     /**
