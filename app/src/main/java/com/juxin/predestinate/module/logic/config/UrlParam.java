@@ -14,8 +14,8 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedOneKeyList;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.RedbagList;
+import com.juxin.predestinate.ui.wode.bean.RedOneKeyList;
+import com.juxin.predestinate.ui.wode.bean.RedbagList;
 
 import java.util.Map;
 

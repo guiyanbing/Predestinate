@@ -136,35 +136,35 @@
 
         <!-- ============= 小友模块start ============= -->
         <activity
-            android:name=".ui.xiaoyou.wode.NearVisitorAct"
+            android:name=".ui.wode.NearVisitorAct"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.xiaoyou.wode.MyAttentionAct"
+            android:name=".ui.wode.MyAttentionAct"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.xiaoyou.wode.MyDiamondsAct"
+            android:name=".ui.wode.MyDiamondsAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.MyDiamondsExplainAct"
+            android:name=".ui.wode.MyDiamondsExplainAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.RedBoxRecordAct"
+            android:name=".ui.wode.RedBoxRecordAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.WithDrawExplainAct"
+            android:name=".ui.wode.WithDrawExplainAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.WithDrawApplyAct"
+            android:name=".ui.wode.WithDrawApplyAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.WithDrawSuccessAct"
+            android:name=".ui.wode.WithDrawSuccessAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.xiaoyou.wode.RedBoxPhoneVerifyAct"
+            android:name=".ui.wode.RedBoxPhoneVerifyAct"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.xiaoyou.wode.DemandRedPacketAct"
+            android:name=".ui.wode.DemandRedPacketAct"
             android:screenOrientation="portrait"/>
 
         <activity
