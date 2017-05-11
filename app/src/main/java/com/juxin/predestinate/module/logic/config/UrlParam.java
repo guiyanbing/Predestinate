@@ -33,7 +33,8 @@ public enum UrlParam {
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
-    reqSayHiList("s/reco/DayRecommend", UserInfoLightweightList.class, true),
+    //一键打招呼列表
+    reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),
 
     //============================== 设置页相关接口 =============================
     reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码

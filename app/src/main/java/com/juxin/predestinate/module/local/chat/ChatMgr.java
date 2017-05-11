@@ -9,6 +9,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.utils.BitmapUtil;
+import com.juxin.mumu.bean.utils.TypeConvUtil;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -59,7 +60,7 @@ public class ChatMgr implements ModuleBase, PObserver {
     }
 
 
-    private void inject(){
+    public void inject(){
         getAppComponent().inject(this);
 
 //        BaseMessage baseMessage = new BaseMessage();
@@ -87,7 +88,7 @@ public class ChatMgr implements ModuleBase, PObserver {
     public void sendTextMsg(String channelID, String whisperID, String content) {
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-        long ret = dbCenter.insertFmessage(commonMessage);
+        long ret = dbCenter.insertMsg(commonMessage);
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
 
@@ -99,7 +100,7 @@ public class ChatMgr implements ModuleBase, PObserver {
         commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url));
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
 
-        long ret = dbCenter.insertFmessage(commonMessage);
+        long ret = dbCenter.insertMsg(commonMessage);
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
 
@@ -129,7 +130,7 @@ public class ChatMgr implements ModuleBase, PObserver {
         commonMessage.setVoiceUrl(url);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
 
-        long ret = dbCenter.insertFmessage(commonMessage);
+        long ret = dbCenter.insertMsg(commonMessage);
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
 

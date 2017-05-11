@@ -3,6 +3,8 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 import android.text.TextUtils;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.predestinate.bean.db.FLetter;
+import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
@@ -181,7 +183,7 @@ public class BaseMessage implements IBaseMessage {
     private int isMonth;//包月
     private int isVip;
     private int isOnline;//是否在线
-    private int kf_id;//是否是机器人
+    private int kfID;//是否是机器人
     private int num;//私聊列表专用字段
     private int Weight = Small_Weight;//Item的权重
     private int MailItemStyle = MailItemType.Mail_Item_Ordinary.type;//私聊列表样式
@@ -458,8 +460,12 @@ public class BaseMessage implements IBaseMessage {
         this.isOnline = isOnline;
     }
 
-    public int getKf_id() {
-        return kf_id;
+    public int getKfID() {
+        return kfID;
+    }
+
+    public void setKfID(int kfID) {
+        this.kfID = kfID;
     }
 
     /**
@@ -469,10 +475,6 @@ public class BaseMessage implements IBaseMessage {
 //    public boolean isKF_ID() {
 //        return ModuleMgr.getCenterMgr().isRobot(getKf_id());
 //    }
-
-    public void setKf_id(int kf_id) {
-        this.kf_id = kf_id;
-    }
 
     public int getVersion() {
         return version;
@@ -537,7 +539,7 @@ public class BaseMessage implements IBaseMessage {
         this.setSendID(App.uid);
         this.setTime(getCurrentTime());
         this.setcMsgID(getCMsgID());
-        this.setMsgID(getCMsgID());
+        this.setMsgID(getcMsgID());
         MMLog.autoDebug("getCMsgID()=" + getcMsgID() + "");
     }
 
@@ -572,11 +574,24 @@ public class BaseMessage implements IBaseMessage {
     }
 
     //私聊列表
+    public BaseMessage(long id, String userID, String infoJson, int type, int kfID, int status, long time, String content, int num) {
+        this.setId(id);
+        this.setWhisperID(userID);
+        this.setInfoJson(infoJson);
+        this.setType(type);
+        paseInfoJson(this.getInfoJson());
+        this.setKfID(kfID);
+        this.setStatus(status);
+        this.setTime(time);
+        this.setNum(num);
+    }
+
+    //私聊列表
     public BaseMessage(int type, Map<String, Object> map) {
         this.setId(Long.parseLong(map.get("id").toString()));
         this.setWhisperID(map.get("userid") == null ? StrDefault : map.get("userid").toString());
         this.setIsOnline(map.get("isOnline") == null ? NumDefault : TypeConvUtil.toInt(map.get("isOnline").toString()));
-        this.setKf_id(map.get("kf_id") == null ? NumDefault : TypeConvUtil.toInt(map.get("kf_id").toString()));
+        this.setKfID(map.get("kf_id") == null ? NumDefault : TypeConvUtil.toInt(map.get("kf_id").toString()));
         this.setInfoJson(map.get("infoJson") == null ? StrDefault : map.get("infoJson").toString());
         paseInfoJson(this.getInfoJson());
         this.setTime(map.get("time") == null ? NumDefault : TypeConvUtil.toLong(map.get("time").toString()));

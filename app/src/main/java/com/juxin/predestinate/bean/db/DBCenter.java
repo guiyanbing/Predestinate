@@ -1,5 +1,8 @@
 package com.juxin.predestinate.bean.db;
 
+import android.text.TextUtils;
+
+import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import java.util.List;
@@ -12,12 +15,30 @@ import rx.Observable;
 public class DBCenter {
 
     private BriteDatabase mDatabase;
+    private DBCenterFLetter centerFLetter;
     private DBCenterFMessage centerFmessage;
 
     public DBCenter(BriteDatabase database) {
         this.mDatabase = database;
+        centerFLetter = new DBCenterFLetter(database);
         centerFmessage = new DBCenterFMessage(database);
     }
+
+    /******************** FLetter **************************/
+    public Observable<List<BaseMessage>> queryLetterList() {
+        return centerFLetter.queryLetterList();
+    }
+
+    public long insertMsg(BaseMessage baseMessage){
+        if (TextUtils.isEmpty(baseMessage.getWhisperID())) return DBConstant.ERROR;
+
+        long ret = centerFLetter.storageData(baseMessage);
+        if(ret == DBConstant.ERROR) return DBConstant.ERROR;
+
+        return centerFmessage.insertMsg(baseMessage);
+    }
+
+
 
     /******************** FMessage **************************/
 

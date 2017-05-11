@@ -12,6 +12,7 @@ import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
@@ -28,6 +29,8 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.discover.SayHelloDialog;
+import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 import com.juxin.predestinate.ui.wode.bean.GiftsList;
 
@@ -339,7 +342,18 @@ public class CommonMgr implements ModuleBase {
      * @param complete
      */
     public void getSayHiList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqSayHiList, null, complete);
+        String ts = TimeUtil.getCurrentTimeMil();
+        Map<String, Object> postParams = new HashMap<String, Object>();
+        postParams.put("ts", ts);
+        postParams.put("simoperator", TextUtils.isEmpty(ModuleMgr.getAppMgr().getSimOperator()) ? "" : ModuleMgr.getAppMgr().getSimOperator());
+        postParams.put("imsi", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMSI()) ? "" : ModuleMgr.getAppMgr().getIMSI());
+        postParams.put("imei", TextUtils.isEmpty(ModuleMgr.getAppMgr().getIMEI()) ? "" : ModuleMgr.getAppMgr().getIMEI());
+
+        postParams.put("ver", ModuleMgr.getAppMgr().getVerCode());
+        postParams.put("c_uid", "");
+        postParams.put("c_sid", "");
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSayHiList, postParams, complete);
     }
 
     /**
@@ -356,11 +370,25 @@ public class CommonMgr implements ModuleBase {
      *
      * @param context
      */
-    public void showSayHelloDialog(FragmentActivity context) {
+    public void showSayHelloDialog(final FragmentActivity context) {
 //        if (checkDateAndSave(getSayHelloKey())) {
-//        SayHelloDialog sayHelloDialog = new SayHelloDialog();
-//        sayHelloDialog.showDialog(context);
-////        }
+
+        getSayHiList(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
+                if (response.isOk()) {
+                    UserInfoLightweightList list = new UserInfoLightweightList();
+                    list.parseJsonSayhi(response.getResponseString());
+                    SayHelloDialog sayHelloDialog = new SayHelloDialog();
+                    sayHelloDialog.showDialog(context);
+                    sayHelloDialog.setData(list.getLightweightLists());
+                }
+            }
+        });
+
+
+//        }
     }
 
     /**
