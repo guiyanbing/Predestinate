@@ -127,6 +127,7 @@
     <color name="color_a8baea">#a8baea</color>
     <color name="color_afc0ee">#afc0ee</color>
     <color name="color_fe9b05">#fe9b05</color>
+    <color name="color_5b5b5b">#5b5b5b</color>
 
     <color name="color_ff4d79">#ff4d79</color>
     <color name="color_e6c2aa">#e6c2aa</color>
@@ -235,5 +236,9 @@
     <color name="text_gray">#707070</color>
     <color name="half_trans_white">#99FFFFFF</color>
 
+    <color name="noheard_info">#ff3a3a</color>
+    <color name="noheard_info2">#ff95a9</color>
+
+    <color name="authentication_txt_bg">#43cd67</color>
 </resources>
 

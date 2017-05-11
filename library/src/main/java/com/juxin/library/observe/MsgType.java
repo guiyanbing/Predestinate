@@ -106,6 +106,11 @@ public class MsgType {
      */
     public static final String MT_Inner_Suspension_Notice = "MT_Inner_Suspension_Notice";
 
+    /**
+     * 消息列表更新
+     */
+    public static final String MT_User_List_Msg_Change = "MT_User_List_Msg_Change";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**

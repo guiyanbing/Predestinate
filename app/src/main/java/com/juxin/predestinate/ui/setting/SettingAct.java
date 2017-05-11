@@ -13,17 +13,22 @@ import android.widget.ToggleButton;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.ApkUnit;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import java.io.File;
+import java.util.HashMap;
 
 
 /**
@@ -34,12 +39,12 @@ import java.io.File;
 public class SettingAct extends BaseActivity implements OnClickListener {
 
     private TextView setting_clear_cache_tv, setting_account;
-    private ToggleButton setting_message_iv, setting_vibration_iv, setting_voice_iv, setting_quit_message_iv;
+    private ToggleButton setting_message_iv, setting_vibration_iv, setting_voice_iv, setting_quit_message_iv,settingVideoIv,settingAudioIv;
 
     // false是开true是开
-    private Boolean Message_Status, Vibration_Status, Voice_Status, Quit_Message_Status;
+    private Boolean Message_Status, Vibration_Status, Voice_Status, Quit_Message_Status,videoStatus,audioStatus;
 
-
+private VideoVerifyBean videoVerifyBean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +54,14 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         InitPreference();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ModuleMgr.getCommonMgr().requestVideochatConfig();
+    }
 
     private void initView() {
+        videoVerifyBean= ModuleMgr.getCommonMgr().getVideoVerify();
         findViewById(R.id.setting_modifypwd).setOnClickListener(this);
         findViewById(R.id.setting_message).setOnClickListener(this);
         findViewById(R.id.setting_vibration).setOnClickListener(this);
@@ -62,6 +73,9 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         findViewById(R.id.setting_logoff).setOnClickListener(this);
         findViewById(R.id.setting_action).setOnClickListener(this);
         findViewById(R.id.setting_quit_message).setOnClickListener(this);
+        findViewById(R.id.setting_video_switch).setOnClickListener(this);
+        findViewById(R.id.setting_audio_switch).setOnClickListener(this);
+
 
         setting_clear_cache_tv = (TextView) findViewById(R.id.setting_clear_cache_tv);
         setting_account = (TextView) findViewById(R.id.setting_account);
@@ -70,6 +84,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         setting_vibration_iv = (ToggleButton) findViewById(R.id.setting_vibration_iv);
         setting_voice_iv = (ToggleButton) findViewById(R.id.setting_voice_iv);
         setting_quit_message_iv = (ToggleButton) findViewById(R.id.setting_quit_message_iv);
+        settingVideoIv = (ToggleButton) findViewById(R.id.setting_video_switch_iv);
+        settingAudioIv = (ToggleButton) findViewById(R.id.setting_audio_switch_iv);
 
         long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
         if (uid != 0) {
@@ -112,6 +128,22 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         } else {
             Quit_Message_Status = false;
             setting_quit_message_iv.setBackgroundResource(0);
+        }
+
+        if(videoVerifyBean.getBooleanVideochat()){
+            videoStatus = true;
+            settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
+        } else {
+            videoStatus = false;
+            settingVideoIv.setBackgroundResource(0);
+        }
+
+        if(videoVerifyBean.getBooleanAudiochat()){
+            audioStatus = true;
+            settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
+        } else {
+            audioStatus = false;
+            settingAudioIv.setBackgroundResource(0);
         }
     }
 
@@ -194,11 +226,93 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     }
                 }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
                 break;
+            case R.id.setting_video_switch:
+            {
+                if (validChange()){
+                    if(videoStatus){
+                        videoStatus = false;
+                        settingVideoIv.setBackgroundResource(0);
+                        videoVerifyBean.setVideochat(0);
+                    }else{
+                        videoStatus = true;
+                        settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
+                        videoVerifyBean.setVideochat(1);
+                    }
+                    ModuleMgr.getCommonMgr().setVideochatConfig();
+                }
+                break;
+            }
+            case R.id.setting_audio_switch:
+            {
+                if (validChange()){
+                    if(audioStatus){
+                        audioStatus = false;
+                        settingAudioIv.setBackgroundResource(0);
+                        videoVerifyBean.setAudiochat(0);
+                    }else{
+                        audioStatus = true;
+                        settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
+                        videoVerifyBean.setAudiochat(1);
+                    }
+                    ModuleMgr.getCommonMgr().setVideochatConfig();
+                }
+                break;
+            }
             default:
                 break;
         }
     }
 
+    /**
+     * 切换音视频开关配置
+     */
+    public boolean validChange() {
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        //开启音、视频通话时，男性用户判断是否VIP
+        if(userDetail.getGender() == 1
+                && !userDetail.isMonthMail()){
+
+            PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
+                @Override
+                public void onCancel() {
+                }
+
+                @Override
+                public void onSubmit() {
+                   //TODO 开通vip跳转
+                }
+            }, "您非VIP会员，无法开启此功能，请耐心等待", "", "取消", "去开通", true, R.color.text_zhuyao_black);
+            return false;
+        }
+        //开启音、视频通话时，女性用户判断是否视频认证
+        if(userDetail.getGender() == 2){
+            if(videoVerifyBean.getStatus() == 0 || videoVerifyBean.getStatus() == 2){
+                PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onSubmit() {
+//TODO 认证跳转
+                    }
+                },"开启视频、音频功能，需要通过视频认证","","取消","去认证",true,R.color.text_zhuyao_black);
+                return false;
+            }else if(videoVerifyBean.getStatus() == 1){
+                PToast.showShort("审核中，请稍后再试");
+                return false ;
+            }
+        }
+//        chatType = type;
+//        lastOpt = OPT_TOGGLE;
+        if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) == ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
+//            executeVaConfig(context, type);
+        } else {
+//            downloadVideoPlugin(context);
+        }
+        return true;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

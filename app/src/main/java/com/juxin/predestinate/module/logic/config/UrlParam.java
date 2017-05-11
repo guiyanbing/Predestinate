@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
@@ -23,32 +24,37 @@ import java.util.Map;
  * 管理常用的Url参数信息
  */
 public enum UrlParam {
+
     reqRegister("pubtest/quickReg", null, false),//注册接口
     modifyUserData("user/modifyUserData", null, true),//修改用户资料
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
-    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     resetPassword("i/reg/ResetPassword"),//找回密码
+    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
+    sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
+
+    //================================ 配置项 ==================================
+    CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
+    checkUpdate("public/checkupNew", null, true),//检查软件升级
+    staticConfig("public/getASet", null, false),//检查服务器静态配置
+    serviceQQ("user/serviceQQ", null, false),//请求在线客服QQ
+    statistics(Constant.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
+    reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
+
+    //============================== 设置页相关接口 =============================
+    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
     modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("user/feedback"),//意见反馈
-    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
-    sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
-    //检查软件升级
-    checkUpdate("public/checkupNew", null, true),
-    //检查服务器静态配置
-    staticConfig("public/getASet", null, false),
-    //请求在线客服QQ
-    serviceQQ("user/serviceQQ", null, false),
-
-    CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
-
-    reqSayHiList("s/reco/DayRecommend", UserInfoLightweightList.class, true),
-
+    //获取自己的音频、视频开关配置
+    reqMyVideochatConfig(Constant.FATE_IT_GO, "xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
+    //音视频开关修改
+    setVideochatConfig(Constant.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
+    //上传视频认证配置
+    addVideoVerify(Constant.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
 
     //============================== 用户资料相关接口 =============================
-
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
@@ -251,7 +257,7 @@ public enum UrlParam {
      *
      * @param spliceUrl 接口url
      */
-    public void setSpliceUrl(String spliceUrl) {
+    public void resetSpliceUrl(String spliceUrl) {
         this.spliceUrl = spliceUrl;
     }
 

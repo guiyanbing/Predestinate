@@ -45,6 +45,8 @@
     <string name="dal_submit">确定</string>
     <string name="txt_set_topuid_desc">当前账号：</string>
     <string name="txt_suggest_desc">意见一旦被采纳，我们会有小礼品赠送，请记得留下您的联系方式哦。</string>
+    <string name="txt_noheard_ts">温馨提示：请上传清晰美观的个人近照，上传宠物、照片不清晰、裸露的照片不予通过</string>
+    <string name="txt_head_ts">温馨提示：请上传真实、清晰美观的个人近照，上传宠物照、照片不清晰、裸露的照片不予通过</string>
 
 
     <!-- 个人中心 -->
@@ -493,6 +495,13 @@
     <string name="send_gift">赠送该礼物需要</string>
     <string name="my_attention">我的关注</string>
 
+    <string name="re_upload_avatar_right_title">跳过</string>
+    <string name="upload_avatar_title">上传头像</string>
+    <string name="re_upload_avatar_title">重新上传头像</string>
+    <string name="re_upload_avatar_def">未审核通过</string>
+    <string name="re_upload_avatar_fail">上传头像失败，请检查您的网络后再试试</string>
+    <string name="re_upload_avatar_selet_fail">选择图片出错，请稍候再试</string>
+
     <!--发现end-->
 
 
@@ -502,6 +511,8 @@
     <string name="privatechat_title_wx">查看微信</string>
     <string name="privatechat_title_yb">Y币:0</string>
     <string name="please_select_a_gift">请选择礼物</string>
+
+    <string name="say_hello_txt">您好,我对您的眼缘不错！</string>
 
 
 </resources>

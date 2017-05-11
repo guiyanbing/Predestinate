@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.predestinate.bean.db.utils.DBConstant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,14 +9,35 @@ import org.json.JSONObject;
 import java.util.Map;
 
 /**
+ * 文本消息包括打招呼
  * Created by Kind on 2017/3/31.
  */
 
 public class TextMessage extends BaseMessage {
 
+    //打招呼
+    private int kf;
+    private int sayHelloType;
+
     public TextMessage() {
         super();
     }
+
+    /**
+     * 打招呼
+     * @param whisperID
+     * @param content
+     * @param kf
+     * @param sayHelloType
+     */
+    public TextMessage(String whisperID, String content, int kf, int sayHelloType) {
+        super(null, whisperID);
+        this.setMsgDesc(content);
+        this.setType(BaseMessageType.hi.getMsgType());
+        this.setKf(kf);
+        this.setSayHelloType(sayHelloType);
+    }
+
 
     /**
      * 构造文本消息
@@ -62,9 +84,22 @@ public class TextMessage extends BaseMessage {
     public String getJson(BaseMessage message) {
         JSONObject json = new JSONObject();
         try {
+            json.put("tid", message.getWhisperID());
             json.put("mtp", message.getType());
-   //         json.put("mct", message.getMsgDesc());
-  //          json.put("mt", getCurrentTime());
+            json.put("mct", message.getMsgDesc());
+            json.put("mt", getCurrentTime());
+            json.put("d", message.getMsgID());
+
+            int kf = ((TextMessage)message).getKf();
+            int sayHelloType = ((TextMessage)message).getSayHelloType();
+
+            if(kf != -1){
+                json.put("kf", kf);
+            }
+            if(sayHelloType != -1){
+                json.put("j", sayHelloType);
+            }
+
             return json.toString();
         } catch (JSONException e) {
             MMLog.printThrowable(e);
@@ -87,4 +122,21 @@ public class TextMessage extends BaseMessage {
 //        super.convertJSON(map);
 //        this.setMsgDesc(getJsonObject(getJsonStr()).optString("mct"));
 //    }
+
+
+    public int getKf() {
+        return kf;
+    }
+
+    public void setKf(int kf) {
+        this.kf = kf;
+    }
+
+    public int getSayHelloType() {
+        return sayHelloType;
+    }
+
+    public void setSayHelloType(int sayHelloType) {
+        this.sayHelloType = sayHelloType;
+    }
 }

@@ -31,7 +31,7 @@
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
-            android:id="@+id/mail_number"
+            android:id="@+id/mail_num"
             style="@style/badge_num_big"
             android:layout_marginLeft="-10dp"
             android:layout_marginTop="@dimen/px9_dp"
@@ -46,7 +46,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/xiaoyou_ico"
+            android:id="@+id/mail_ico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -63,11 +63,11 @@
         </LinearLayout>
 
         <com.juxin.library.unread.BadgeView
-            android:id="@+id/xiaoyou_number"
+            android:id="@+id/mail_number"
             style="@style/badge_num_big"
             android:layout_marginLeft="-10dp"
             android:layout_marginTop="@dimen/px9_dp"
-            android:layout_toRightOf="@+id/xiaoyou_ico"
+            android:layout_toRightOf="@+id/mail_ico"
             android:text="1" />
     </RelativeLayout>
 

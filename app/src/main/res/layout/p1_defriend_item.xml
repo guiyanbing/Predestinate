@@ -4,6 +4,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/defriend_divider_line"
+        style="@style/divider_line_horizontal"
+        android:layout_marginLeft="@dimen/px35_dp"
+        android:layout_marginRight="@dimen/px35_dp" />
+
     <LinearLayout
         style="@style/center_set_item"
         android:orientation="horizontal">
@@ -11,7 +17,9 @@
         <TextView
             android:id="@+id/defriend_item_name"
             style="@style/center_item_text"
-            android:textColor="@color/text_ciyao_gray" />
+            android:layout_marginLeft="0dp"
+            android:textColor="@color/color_5b5b5b"
+            android:textSize="@dimen/px48_sp" />
 
         <CheckBox
             android:id="@+id/defriend_item_check"
@@ -19,9 +27,4 @@
             android:background="@drawable/p1_defriend_select_bg"
             android:button="@null" />
     </LinearLayout>
-    <View
-        android:id="@+id/defriend_divider_line"
-        style="@style/divider_line_horizontal"
-        android:layout_marginLeft="@dimen/px50_dp"
-        android:layout_marginRight="@dimen/px50_dp"/>
 </LinearLayout>

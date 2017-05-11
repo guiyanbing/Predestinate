@@ -32,10 +32,19 @@ public class UserInfoLightweightList extends BaseData {
 
     public void parseJsonFriends(String jsonStr) {
         if (!TextUtils.isEmpty(jsonStr)) {
-            PLogger.d("UserInfoLightweightList parseJson ---- jsonStr " + jsonStr);
+            PLogger.d("UserInfoLightweightList parseJsonFriends ---- jsonStr " + jsonStr);
             String jsonData = getJsonObject(jsonStr).optString("res");
             setTotalcnt(getJsonObject(jsonStr).optInt("totalcnt"));
             JSONArray jsonArray = getJsonObject(jsonData).optJSONArray("friends");
+            this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+        }
+    }
+
+
+    public void parseJsonSayhi(String jsonStr) {
+        if (!TextUtils.isEmpty(jsonStr)) {
+            PLogger.d("UserInfoLightweightList parseJsonSayhi ---- jsonStr " + jsonStr);
+            JSONArray jsonArray = getJsonObject(jsonStr).optJSONArray("content");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
         }
     }

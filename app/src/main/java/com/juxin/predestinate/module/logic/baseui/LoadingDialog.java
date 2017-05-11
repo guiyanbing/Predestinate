@@ -86,7 +86,7 @@ public class LoadingDialog extends BottomPopup {
      * 关闭loading
      */
     public static void closeLoadingDialog() {
-        if (loadingDialog != null) {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
             loadingDialog.dismiss();
             loadingDialog = null;
         }

@@ -456,7 +456,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                         break;
                 }
 
-                if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
+               // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
                     //显示进度条或发送失败且小于五分钟也显示进度条
 //                    if(msg.isValid() && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())){
 //                        statusProgress.setVisibility(View.VISIBLE);
@@ -467,6 +467,15 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 //                        status.setVisibility(View.GONE);
 //                        statusError.setVisibility(View.VISIBLE);
 //                    }
+
+                if(msg.getStatus() == 3){//发送中,
+                    statusProgress.setVisibility(View.VISIBLE);
+                        status.setVisibility(View.GONE);
+                        statusError.setVisibility(View.GONE);
+                }else if(msg.getStatus() == 2){//发送失败
+                    statusProgress.setVisibility(View.GONE);
+                        status.setVisibility(View.GONE);
+                        statusError.setVisibility(View.VISIBLE);
                 }else {
                     statusProgress.setVisibility(View.GONE);
                     status.setVisibility(View.VISIBLE);

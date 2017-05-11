@@ -73,20 +73,20 @@ public class SearchTestActivity extends BaseActivity {
             PToast.showShort("请输入UID");
             return;
         }
-        // TODO: 2017/5/4 进入他人个人资料
+        UIShow.showCheckOtherInfoAct(this, Long.parseLong(uid));
     }
 
     /**
      * 拷贝数据库
      */
     public void copyDB(View v) {
-        final String DBNAME = db_edit.getText().toString();
-        if (TextUtils.isEmpty(DBNAME)) {
+        final String DB_NAME = db_edit.getText().toString();
+        if (TextUtils.isEmpty(DB_NAME)) {
             PToast.showShort("请输入数据库名称");
             return;
         }
-        final String path = App.context.getDatabasePath(DBNAME).getPath();
-        final String storePath = DirType.getCacheDir() + DBNAME + ".bak";
+        final String path = App.context.getDatabasePath(DB_NAME).getPath();
+        final String storePath = DirType.getCacheDir() + DB_NAME + ".bak";
         if (FileUtil.fileCopy(path, storePath)) {
             PToast.showLong("请到" + storePath + "查看");
         } else {

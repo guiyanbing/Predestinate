@@ -51,8 +51,11 @@ public class LoginResult extends BaseData {
     public void parseJson(String jsonStr) {
         JSONObject jsonFirst = getJsonObject(jsonStr);
         JSONObject jsonNext = jsonFirst.optJSONObject("user_info");
-        this.nickname = jsonNext.optString("nickname");
-        this.uid = jsonNext.optLong("uid");
-        this.miss_info = jsonNext.optInt("miss_info");
+        if (jsonNext != null) {
+            this.nickname = jsonNext.optString("nickname");
+            this.uid = jsonNext.optLong("uid");
+            this.miss_info = jsonNext.optInt("miss_info");
+        }
+
     }
 }
