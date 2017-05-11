@@ -7,12 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
@@ -21,15 +20,13 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 消息
  * Created by Kind on 2017/3/20.
  */
 
-public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
-        AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener {
+public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener, PObserver {
 
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
@@ -60,17 +57,16 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         });
         initView();
 
-        // addMessageListener(MsgType.User_List_Msg_Change, this);
-        //    addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
+        MsgMgr.getInstance().attach(this);
         return getContentView();
     }
 
     private void initView() {
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
-        //      viewGroup = (CustomFrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.y2_tips_view_group, null);
+        //viewGroup = (CustomFrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.y2_tips_view_group, null);
         mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
-        //      viewGroup.addView(mViewTop);
+        //viewGroup.addView(mViewTop);
 
         // ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
         //    listMail.addHeaderView(viewGroup);
@@ -161,29 +157,6 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
     }
 
     @Override
-    public void onMessage(MsgType msgType, Msg msg) {
-        if (mailFragmentAdapter == null) return;
-        switch (msgType) {
-            case User_List_Msg_Change:
-                mailFragmentAdapter.updateAllData();
-                break;
-            case MT_APP_Suspension_Notice:
-                Map<String, Object> parms = (Map<String, Object>) msg.getData();
-//                if (parms.containsKey(TipsBarMgr.TipsMgrIsShow)) {
-//                    String isShow = (String) parms.get(TipsBarMgr.TipsMgrIsShow);
-//                    Log.d("_test", "MailFragment onMessage isshow = " + isShow);
-//                    if (isShow.equals(TipsBarMgr.TipsMgrIsShow_none)) {
-//                        viewGroup.removeAllViews();
-//                        viewGroup.addView(mViewTop);
-//                    }
-//                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         resetTipsState(hidden);
@@ -196,5 +169,15 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
         //     } else {
         //          ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
         //      }
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        if (mailFragmentAdapter == null) return;
+        switch (key) {
+            case MsgType.MT_User_List_Msg_Change:
+                mailFragmentAdapter.updateAllData();
+                break;
+        }
     }
 }
