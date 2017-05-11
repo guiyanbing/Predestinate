@@ -221,7 +221,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     public VideoVerifyBean getVideoVerify() {
-        return videoVerify;
+        return videoVerify!=null?videoVerify:new VideoVerifyBean();
     }
 
     public void setVideoVerify(VideoVerifyBean videoVerify) {
