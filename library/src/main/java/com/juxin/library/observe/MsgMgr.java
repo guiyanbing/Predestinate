@@ -2,6 +2,10 @@ package com.juxin.library.observe;
 
 import com.juxin.library.log.PLogger;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -22,34 +26,55 @@ public class MsgMgr {
     }
 
     /**
-     * 在应用模块初始化的时候初始化ui-thread监听
-     */
-    public void initUiThread() {
-        RxBus.getInstance().toFlowable(Runnable.class)
-                .onBackpressureBuffer()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Runnable>() {
-                    @Override
-                    public void accept(Runnable runnable) throws Exception {
-                        runnable.run();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        PLogger.printThrowable(throwable);
-                    }
-                });
-    }
-
-    /**
-     * 抛出事件到ui线程，与initUiThread配套使用，只有其在初始化之后该方法才起效
+     * 抛出事件到ui线程并执行
      *
      * @param runnable 事件
      */
-    public void runOnUiThread(Runnable runnable) {
-        if (runnable == null) return;
-        RxBus.getInstance().post(runnable);
+    public void runOnUiThread(final Runnable runnable) {
+        Flowable.empty().observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Object>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+            }
+
+            @Override
+            public void onNext(Object o) {
+            }
+
+            @Override
+            public void onError(Throwable t) {
+            }
+
+            @Override
+            public void onComplete() {
+                if (runnable != null) runnable.run();
+            }
+        });
+    }
+
+    /**
+     * 抛出事件到子线程并执行
+     *
+     * @param runnable 事件
+     */
+    public void runOnChildThread(final Runnable runnable) {
+        Flowable.empty().observeOn(Schedulers.io()).subscribe(new Subscriber<Object>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+            }
+
+            @Override
+            public void onNext(Object o) {
+            }
+
+            @Override
+            public void onError(Throwable t) {
+            }
+
+            @Override
+            public void onComplete() {
+                if (runnable != null) runnable.run();
+            }
+        });
     }
 
     /**
@@ -89,20 +114,6 @@ public class MsgMgr {
                         PLogger.printThrowable(throwable);
                     }
                 }));
-    }
-
-    /**
-     * 子线程执行
-     *
-     * @param aClass            监听的消息类型
-     * @param consumer          执行成功回调
-     * @param throwableConsumer 执行失败回调
-     */
-    public <T> void doOnChildThread(Class<T> aClass, Consumer<T> consumer, Consumer<Throwable> throwableConsumer) {
-        RxBus.getInstance().toFlowable(aClass).
-                onBackpressureBuffer().subscribeOn(Schedulers.io()).
-                subscribeOn(Schedulers.newThread()).
-                subscribe(consumer, throwableConsumer);
     }
 
     /**

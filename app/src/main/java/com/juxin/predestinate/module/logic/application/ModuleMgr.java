@@ -7,7 +7,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.local.center.CenterMgr;
 import com.juxin.predestinate.module.local.chat.ChatListMgr;
@@ -77,7 +76,6 @@ public final class ModuleMgr {
     private static void preInit(Context context) {
         PToast.init(context);                       //初始化toast提示
         PSP.getInstance().init(context);            //初始化sharedPreferences存储
-        MsgMgr.getInstance().initUiThread();        //初始化主线程消息监听
         RequestHelper.getInstance().init(context);  //初始化网络请求
 
         initTBSX5(context);
