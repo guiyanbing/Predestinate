@@ -2,6 +2,8 @@ package com.juxin.predestinate.bean.db.utils;
 
 import android.database.Cursor;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by Kind on 2017/3/28.
  */
@@ -9,6 +11,9 @@ import android.database.Cursor;
 public class CursorUtil {
 
     private CursorUtil(){ }
+
+
+
 
     public static String getString(Cursor cursor, String columnName){
         return cursor.getString(cursor.getColumnIndexOrThrow(columnName));
@@ -36,5 +41,14 @@ public class CursorUtil {
 
     public static byte[] getBlob(Cursor cursor, String columnName){
         return cursor.getBlob(cursor.getColumnIndexOrThrow(columnName));
+    }
+
+    public static String getBlobToString(Cursor cursor, String columnName){
+        try {
+            return new String(getBlob(cursor, columnName), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

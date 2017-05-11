@@ -1,23 +1,41 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.app.Application;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
+import com.juxin.predestinate.bean.db.AppComponent;
+import com.juxin.predestinate.bean.db.AppModule;
+import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.DBModule;
+import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by Kind on 2017/4/13.
  */
 
-public class ChatListMgr implements ModuleBase {
+public class ChatListMgr implements ModuleBase, PObserver {
 
+    private int unreadNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
 
 
+    @Inject
+    DBCenter dbCenter;
+
     @Override
     public void init() {
-
+        com.juxin.library.observe.MsgMgr.getInstance().attach(this);
     }
 
     @Override
@@ -32,5 +50,94 @@ public class ChatListMgr implements ModuleBase {
             tempList.addAll(msgList);
             return tempList;
         }
+    }
+
+    public void updateListMsg(List<BaseMessage> messages) {
+            unreadNum = 0;
+            msgList.clear();
+            if (messages != null && messages.size() > 0) {
+                msgList.addAll(messages);
+                for (BaseMessage tmp : messages) {
+                    unreadNum += tmp.getNum();
+                }
+            }
+//            unreadNum += getVisitNum();//最近访客
+//            List<FriendInfo> friendInfos = ModuleMgr.getMsgCommonMgr().getFriendsData().getFriendData();
+//            if (messages != null) {
+//                for (BaseMessage tmp : messages) {
+//                    boolean isB = MailSpecialID.getMailSpecialID(tmp.getLWhisperID());
+//                    if (isB) {
+//                        friendsList.add(tmp);
+//                    } else {
+//                        MMLog.autoDebug("friendInfos=" + friendInfos.size());
+//                        if (ModuleMgr.getMsgCommonMgr().getFriendsData().isContains(tmp.getLWhisperID())) {
+//                            friendsList.add(tmp);
+//                        } else {
+//                            newFriendListUnreadNum += tmp.getNum();
+//                            newFriendList.add(tmp);
+//                        }
+//                    }
+//                }
+//            }
+        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+           // updateBasicUserInfo();
+    }
+
+    public void queryLetterList() {
+        Observable<List<BaseMessage>> listObservable = dbCenter.queryLetterList();
+        listObservable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+                updateListMsg(baseMessages);
+            }
+        });
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_App_Login:
+                PLogger.d("---MT_App_Login--->" + value);
+                if ((Boolean) value) {//登录成功
+                    if (App.uid > 0) {
+                        initAppComponent();
+                        getAppComponent().inject(this);
+                        ModuleMgr.getChatMgr().inject();
+                        queryLetterList();
+                    }
+                } else {
+                    logout();
+                }
+                break;
+        }
+    }
+
+    private void logout(){
+        mAppComponent = null;
+        msgList.clear();
+        unreadNum = 0;
+    }
+
+    /**
+     * AppComponent
+     */
+    private AppComponent mAppComponent;
+
+    /**
+     * @return 获取dagger2管理的全局实例
+     */
+    public AppComponent getAppComponent() {
+        return mAppComponent;
+    }
+
+
+    /**
+     * DB初始化
+     */
+    private void initAppComponent() {
+        mAppComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule((Application) App.getContext()))
+                .dBModule(new DBModule(App.uid))
+                .build();
     }
 }

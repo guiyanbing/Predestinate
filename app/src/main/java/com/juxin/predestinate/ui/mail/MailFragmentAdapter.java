@@ -63,7 +63,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
         baseMessage.setAboutme("我的好友");
-        baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
+        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 
 

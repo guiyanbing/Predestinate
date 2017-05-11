@@ -154,7 +154,7 @@ public class MailFragment extends BaseFragment implements MsgMgr.IObserver,
                         break;
                 }
             } else {
-                UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKf_id());
+                UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKfID());
             }
         }
     }
