@@ -10,7 +10,6 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
@@ -30,9 +29,8 @@ import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
-import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 import com.juxin.predestinate.ui.wode.bean.GiftsList;
+import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,6 +53,7 @@ public class CommonMgr implements ModuleBase {
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
+
     @Override
     public void init() {
         requestServerQQ();
@@ -141,7 +140,7 @@ public class CommonMgr implements ModuleBase {
     /**
      * 获取自己的音频、视频开关配置
      */
-    public void requestVideochatConfig(){
+    public void requestVideochatConfig() {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -149,20 +148,22 @@ public class CommonMgr implements ModuleBase {
             }
         });
     }
+
     /**
      * 获取自己的音频、视频开关配置
      */
-    public void requestVideochatConfigSendUI(RequestComplete complete){
+    public void requestVideochatConfigSendUI(RequestComplete complete) {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, complete);
     }
+
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig(){
-        HashMap<String,Object> post_param = new HashMap<>();
-        post_param.put("videochat",videoVerify.getVideochat());
-        post_param.put("audiochat",videoVerify.getAudiochat());
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, new RequestComplete() {
+    public void setVideochatConfig() {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("videochat", videoVerify.getVideochat());
+        post_param.put("audiochat", videoVerify.getAudiochat());
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
 
@@ -173,11 +174,11 @@ public class CommonMgr implements ModuleBase {
     /**
      * 上传视频认证配置
      */
-    public void addVideoVerify(String imgUrl,String videoUrl,RequestComplete complete){
-        HashMap<String,Object> post_param = new HashMap<>();
+    public void addVideoVerify(String imgUrl, String videoUrl, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, complete);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, complete);
     }
 
     /**
@@ -205,7 +206,7 @@ public class CommonMgr implements ModuleBase {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.d("---GiftList--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                if (response.isOk() || response.isCache()){
+                if (response.isOk() || response.isCache()) {
                     giftLists = new GiftsList();
                     giftLists.parseJson(response.getResponseString());
                 }
@@ -224,7 +225,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     public VideoVerifyBean getVideoVerify() {
-        return videoVerify!=null?videoVerify:new VideoVerifyBean();
+        return videoVerify != null ? videoVerify : new VideoVerifyBean();
     }
 
     public void setVideoVerify(VideoVerifyBean videoVerify) {
@@ -505,7 +506,7 @@ public class CommonMgr implements ModuleBase {
      * @param gid      礼物ID
      * @param complete 请求完成后回调
      */
-    public void receiveGift(long rid,String gname,int gid, RequestComplete complete) {
+    public void receiveGift(long rid, String gname, int gid, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("rid", rid);
         getParams.put("gname", gname);
