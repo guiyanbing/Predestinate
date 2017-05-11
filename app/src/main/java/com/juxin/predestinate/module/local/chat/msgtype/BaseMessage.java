@@ -3,8 +3,6 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 import android.text.TextUtils;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.TypeConvUtil;
-import com.juxin.predestinate.bean.db.FLetter;
-import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
@@ -23,6 +21,7 @@ import java.util.Map;
  */
 
 public class BaseMessage implements IBaseMessage {
+
 
     public enum BaseMessageType {
 

@@ -30,7 +30,6 @@ import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 import com.juxin.predestinate.ui.wode.bean.GiftsList;
 

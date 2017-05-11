@@ -12,6 +12,7 @@ import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.message.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;

@@ -13,9 +13,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -30,7 +28,6 @@ public class DBCenterFLetter {
     public DBCenterFLetter(BriteDatabase database) {
         this.mDatabase = database;
     }
-
 
     public long storageData(BaseMessage message){
        String whisperID = message.getWhisperID();
@@ -103,7 +100,7 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
 
             if (baseMessage.getJsonStr() != null)
-                values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
+                values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
             return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", baseMessage.getWhisperID());
@@ -136,9 +133,9 @@ public class DBCenterFLetter {
      */
     public Observable<List<BaseMessage>> queryLetterList() {
         String sql = "select f._id, f.userid, f.isOnline, f.kf_id, f.infoJson, f.content, f.time," +
-                " f.type, f.status, f.folder, m.whisperID, m.num from "+FLetter.FLETTER_TABLE+" f left join " +
-                "(select whisperID,count(*) num from "+FMessage.FMESSAGE_TABLE+" where status = 10 group by whisperID) m on f.userid = m.whisperID";
-        return queryBySqlFmessage(sql);
+                " f.type, f.status, f.folder, m.whisperID, m.num from " + FLetter.FLETTER_TABLE + " f left join " +
+                "(select whisperID,count(*) num from " + FMessage.FMESSAGE_TABLE + " where status = 10 group by whisperID) m on f.userid = m.whisperID";
+        return queryBySqlFletter(sql);
     }
 
 
@@ -147,7 +144,7 @@ public class DBCenterFLetter {
      * @param sql
      * @return
      */
-    public Observable<List<BaseMessage>> queryBySqlFmessage(String sql) {
+    public Observable<List<BaseMessage>> queryBySqlFletter(String sql) {
         return mDatabase.createQuery(FLetter.FLETTER_TABLE, sql)
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override

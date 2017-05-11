@@ -9,7 +9,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.utils.BitmapUtil;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -33,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
-import rx.Observable;
-import rx.functions.Action1;
 
 /**
  *
@@ -87,17 +86,37 @@ public class ChatMgr implements ModuleBase, PObserver {
      */
     public void sendTextMsg(String channelID, String whisperID, String content) {
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
+        commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
         long ret = dbCenter.insertMsg(commonMessage);
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
 
-        sendCommonMessage(commonMessage);
+        sendMessage(commonMessage);
+    }
+
+    /**
+     * 打招呼
+     * @param whisperID
+     * @param content
+     * @param kf  当前发信用户为机器人  客服id
+     * @param sayHelloType  当前发信用户为机器人 机器人打招呼类型(0为普通,1为向机器人一键打招呼, 3附近的人群打招呼,4为向机器人单点打招呼(包括首页和详细资料页等))
+     */
+    public void sendSayHelloMsg(String whisperID, String content, int kf, int sayHelloType) {
+        TextMessage textMessage = new TextMessage(whisperID,  content, kf, sayHelloType);
+        textMessage.setStatus(DBConstant.SENDING_STATUS);
+        textMessage.setJsonStr(textMessage.getJson(textMessage));
+        long ret = dbCenter.insertMsg(textMessage);
+
+        onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), ret != DBConstant.ERROR, textMessage);
+
+        sendMessage(textMessage);
     }
 
     public void sendImgMsg(String channelID, String whisperID, String img_url) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
         commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url));
+        commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
 
         long ret = dbCenter.insertMsg(commonMessage);
@@ -116,7 +135,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
-                    sendCommonMessage(commonMessage);
+                    sendMessage(commonMessage);
                 }else {
                     updateFail(commonMessage);
                 }
@@ -128,6 +147,7 @@ public class ChatMgr implements ModuleBase, PObserver {
     public void sendVoiceMsg(String channelID, String whisperID, String url, int length) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, url, length);
         commonMessage.setVoiceUrl(url);
+        commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
 
         long ret = dbCenter.insertMsg(commonMessage);
@@ -146,7 +166,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
-                    sendCommonMessage(commonMessage);
+                    sendMessage(commonMessage);
                 }else {
                     updateFail(commonMessage);
                 }
@@ -155,20 +175,20 @@ public class ChatMgr implements ModuleBase, PObserver {
     }
 
 
-    private void sendCommonMessage(final CommonMessage commonMessage){
-        IMProxy.getInstance().send(new NetData(ModuleMgr.getCenterMgr().getMyInfo().getUid(), BaseMessage.BaseMessageType.common.getMsgType(), commonMessage.getJsonStr()), new IMProxy.SendCallBack() {
+    private void sendMessage(final BaseMessage message){
+        IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                commonMessage.setStatus(DBConstant.OK_STATUS);
-                commonMessage.setTime(getTime());
-                commonMessage.setMsgID(msgId);
-                long upRet = dbCenter.updateFmessage(commonMessage);
-                onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), upRet != DBConstant.ERROR, commonMessage);
+                message.setStatus(DBConstant.OK_STATUS);
+                message.setTime(getTime());
+                message.setMsgID(msgId);
+                long upRet = dbCenter.updateFmessage(message);
+                onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
             }
 
             @Override
             public void onSendFailed(NetData data) {
-                updateFail(commonMessage);
+                updateFail(message);
             }
         });
     }
