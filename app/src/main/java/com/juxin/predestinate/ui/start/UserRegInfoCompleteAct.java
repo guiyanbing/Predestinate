@@ -19,20 +19,19 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -42,7 +41,7 @@ import java.util.HashMap;
  * @author:XY
  * @Date:2017-4-19
  */
-public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListener, ImgSelectUtil.OnChooseCompleteListener,PObserver {
+public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListener, ImgSelectUtil.OnChooseCompleteListener, PObserver {
     private final static int TASK_TYPE_HEADUPLOAD = 0;
     private final static int TASK_TYPE_MODIFYDATA = 1;
 
@@ -90,9 +89,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1) {
-            ifUpHead = true;
-        }
+        ifUpHead = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1;
     }
 
     private void initView() {
@@ -213,24 +210,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         }
     }
 
-//    private void handleUploadHeadTaskResult(ResultInfo result) {
-//        if ("success".equals(result.getResult())) {
-//            // 完成头像
-//            AppCfg.getAppCfg().onSava(this, 11);
-//            // 将用户选择的头像显示到页面上
-//            PhotoUtils.loadSmallBitmap(this, headPicPath, img_reg_info_upload_photo, true);
-//            // 将上传成功的头像链接保存到内存当中
-//            AppModel.getInstance().setAvatarToDataBase(result.getContent());
-//        } else {
-//            // 删除保存的头像
-//            SDCardUtil.delFile(headPicPath);
-//        }
-//        String message = "success".equals(result.getResult()) ? "头像上传成功" : "头像上传失败";
-//        ifUpHead = "success".equals(result.getResult());
-//        T.showShort(this, message);
-//    }
-
-
     @Override
     public void onBackPressed() {
         updateDataToLocal();
@@ -288,9 +267,9 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                     if (response.isOk()) {
                         LoadingDialog.closeLoadingDialog();
                         if (response.isOk()) {
-
-
-//                            PhotoUtils.loadSmallBitmap(this, headPicPath, img_reg_info_upload_photo, true);
+                            JSONObject jsonObject = response.getResponseJson();
+                            String file_path = jsonObject.optString("file_path");
+                            ImageLoader.loadAvatar(UserRegInfoCompleteAct.this, file_path, img_reg_info_upload_photo);
                             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                             ifUpHead = true;
                         } else {
@@ -305,12 +284,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     }
 
 
-
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
-                ImageLoader.loadAvatar(this,ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), img_reg_info_upload_photo);
+                ImageLoader.loadAvatar(this, ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), img_reg_info_upload_photo);
                 break;
         }
     }
