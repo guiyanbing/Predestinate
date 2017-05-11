@@ -132,9 +132,9 @@ public class DBCenterFLetter {
      * @return
      */
     public Observable<List<BaseMessage>> queryLetterList() {
-        String sql = "select f._id, f.userid, f.isOnline, f.kf_id, f.infoJson, f.content, f.time," +
-                " f.type, f.status, f.folder, m.whisperID, m.num from " + FLetter.FLETTER_TABLE + " f left join " +
-                "(select whisperID,count(*) num from " + FMessage.FMESSAGE_TABLE + " where status = 10 group by whisperID) m on f.userid = m.whisperID";
+        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.time, f.content, " +
+                "m.whisperID, m.num from " + FLetter.FLETTER_TABLE + " f left join (select whisperID,count(*) " +
+                "num from " + FMessage.FMESSAGE_TABLE + " where status = 10 group by whisperID) m on f.userID = m.whisperID";
         return queryBySqlFletter(sql);
     }
 

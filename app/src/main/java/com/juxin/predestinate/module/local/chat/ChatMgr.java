@@ -4,12 +4,12 @@ import android.app.Application;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.utils.BitmapUtil;
-import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -43,6 +43,7 @@ import javax.inject.Inject;
 public class ChatMgr implements ModuleBase, PObserver {
 
     private RecMessageMgr messageMgr = new RecMessageMgr();
+    private ChatSpecialMgr specialMgr = ChatSpecialMgr.getChatSpecialMgr();
 
     @Inject
     DBCenter dbCenter;
@@ -51,11 +52,13 @@ public class ChatMgr implements ModuleBase, PObserver {
     public void init() {
         com.juxin.library.observe.MsgMgr.getInstance().attach(this);
         messageMgr.init();
+        specialMgr.init();
     }
 
     @Override
     public void release() {
         messageMgr.release();
+        specialMgr.release();
     }
 
 
@@ -137,7 +140,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                     }
                     sendMessage(commonMessage);
                 }else {
-                    updateFail(commonMessage);
+                    updateFail(commonMessage, null);
                 }
             }
         });
@@ -168,7 +171,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                     }
                     sendMessage(commonMessage);
                 }else {
-                    updateFail(commonMessage);
+                    updateFail(commonMessage, null);
                 }
             }
         });
@@ -176,29 +179,51 @@ public class ChatMgr implements ModuleBase, PObserver {
 
 
     private void sendMessage(final BaseMessage message){
+        MMLog.autoDebug("isMsgID=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                message.setStatus(DBConstant.OK_STATUS);
-                message.setTime(getTime());
-                message.setMsgID(msgId);
-                long upRet = dbCenter.updateFmessage(message);
-                onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
+                MessageRet messageRet = new MessageRet();
+                messageRet.parseJson(contents);
+                if(!messageRet.isOk() || !messageRet.isS()){
+                    updateFail(message, messageRet);
+                }else {
+                    updateOk(message, messageRet);
+                }
+
+                MMLog.autoDebug("isMsgOK=" + contents);
             }
 
             @Override
             public void onSendFailed(NetData data) {
-                updateFail(message);
+                updateFail(message, null);
+                MMLog.autoDebug("isMsgError=" + message.getJsonStr());
             }
         });
     }
 
-    private void updateFail(BaseMessage message) {
-        message.setStatus(DBConstant.FAIL_STATUS);
-        message.setTime(getTime());
-        message.setMsgID(DBConstant.NumNo);
+    // 成功后更新数据库
+    private void updateOk(BaseMessage message, MessageRet messageRet) {
+        message.setStatus(DBConstant.OK_STATUS);
+        message.setTime(messageRet.getTm());
+        message.setMsgID(messageRet.getMsgId());
+
         long upRet = dbCenter.updateFmessage(message);
         onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
+    }
+
+    private void updateFail(BaseMessage message, MessageRet messageRet) {
+        if (messageRet != null && messageRet.getMsgId() > 0) {
+            message.setMsgID(messageRet.getMsgId());
+            message.setTime(messageRet.getTm());
+        } else {
+            message.setMsgID(DBConstant.NumNo);
+            message.setTime(getTime());
+        }
+        message.setStatus(DBConstant.FAIL_STATUS);
+        long upRet = dbCenter.updateFmessage(message);
+        onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
+
     }
 
     /**
@@ -206,7 +231,8 @@ public class ChatMgr implements ModuleBase, PObserver {
      * @param message
      */
     public void onReceiving(BaseMessage message) {
-        pushMsg(dbCenter.insertFmessage(message) == DBConstant.ERROR, message);
+        message.setStatus(DBConstant.UNREAD_STATUS);
+        pushMsg(dbCenter.insertMsg(message) != DBConstant.ERROR, message);
     }
 
     /**
@@ -420,26 +446,24 @@ public class ChatMgr implements ModuleBase, PObserver {
                 }
 
                 //纯私聊消息
-//                if (ChatListMgr.Folder.whisper.toString().equals(message.getFolder())) {
-//                    if (!TextUtils.isEmpty(message.getWhisperID())) {
-//                        // 私聊消息//告诉上层可以获取私聊列表了
-//                        specialMgr.onWhisperMsgUpdate(message);
-//
-//                        // 发送的私聊消息
-//                        if (App.uid == message.getSendID()) {
-//                            if (message.getStatus() == OK_STATUS) {//1.发送成功2.发送失败3.发送中
-//                                deleteFailMsg(message);
-//                            } else if (message.getStatus() == FAIL_STATUS) {
-//                                addFailMsg(message);
-//                            }
+                if (!TextUtils.isEmpty(message.getWhisperID())) {
+                    // 私聊消息//告诉上层可以获取私聊列表了
+                    specialMgr.onWhisperMsgUpdate(message);
+
+                    // 发送的私聊消息
+//                    if (App.uid == message.getSendID()) {
+//                        if (message.getStatus() == OK_STATUS) {//1.发送成功2.发送失败3.发送中
+//                            deleteFailMsg(message);
+//                        } else if (message.getStatus() == FAIL_STATUS) {
+//                            addFailMsg(message);
 //                        }
 //                    }
-//
-//                    if (TextUtils.isEmpty(message.getChannelID())) {
-//                        Msg msg = new Msg();
-//                        msg.setData(message);
-//                        MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Whisper, msg);
-//                    }
+                }
+
+//                if (TextUtils.isEmpty(message.getChannelID())) {
+//                    Msg msg = new Msg();
+//                    msg.setData(message);
+//                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Whisper, msg);
 //                }
 
 //                if (App.uid != message.getSendID()) {

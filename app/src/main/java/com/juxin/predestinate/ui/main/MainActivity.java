@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
+import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -22,7 +26,7 @@ import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener {
 
     private FragmentManager fragmentManager;
     private DiscoverFragment discoverFragment;
@@ -34,6 +38,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private BaseFragment current;  // 当前的fragment
     private View[] views;
 
+    private BadgeView mail_num;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         isCanBack(false);
@@ -43,6 +49,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initViews();
         initFragment();
         initData();
+        initListenerAndRequest();
     }
 
     private void initData() {
@@ -50,6 +57,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
         ModuleMgr.getCommonMgr().showSayHelloDialog(this);
+    }
+
+    /**
+     * 初始化监听与请求
+     */
+    private void initListenerAndRequest() {
+        onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
+        ChatSpecialMgr.getChatSpecialMgr().attachWhisperListener(this);
     }
 
     private void initFragment() {
@@ -78,6 +93,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         rank_layout.setOnClickListener(this);
         plaza_layout.setOnClickListener(this);
         user_layout.setOnClickListener(this);
+
+        mail_num = (BadgeView) findViewById(R.id.mail_num);
     }
 
     /**
@@ -200,5 +217,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public void onUpdateWhisper(BaseMessage message) {
+        if (!TextUtils.isEmpty(message.getWhisperID())) {
+            ModuleMgr.getChatListMgr().getWhisperList();
+        }
+    }
+
+    private void onMsgNum(int num) {
+        mail_num.setText(ModuleMgr.getChatListMgr().getUnreadNum(num));
+        mail_num.setVisibility(num > 0 ? View.VISIBLE : View.GONE);
     }
 }

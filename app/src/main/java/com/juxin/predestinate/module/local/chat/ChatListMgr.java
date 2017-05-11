@@ -6,6 +6,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -43,6 +44,19 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     }
 
+    public int getUnreadNumber() {
+        return unreadNum;
+    }
+
+    /**
+     * 转换消息角标个数
+     *
+     * @param unreadNum
+     * @return
+     */
+    public String getUnreadNum(int unreadNum) {
+        return unreadNum <= 99 ? String.valueOf(unreadNum) : "99+";
+    }
 
     public List<BaseMessage> getMsgList() {
         List<BaseMessage> tempList = new ArrayList<>();
@@ -83,7 +97,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
            // updateBasicUserInfo();
     }
 
-    public void queryLetterList() {
+    public void getWhisperList() {
         Observable<List<BaseMessage>> listObservable = dbCenter.queryLetterList();
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
@@ -97,13 +111,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_App_Login:
-                PLogger.d("---MT_App_Login--->" + value);
+                PLogger.d("---ChatList_MT_App_Login--->" + value);
                 if ((Boolean) value) {//登录成功
                     if (App.uid > 0) {
                         initAppComponent();
                         getAppComponent().inject(this);
                         ModuleMgr.getChatMgr().inject();
-                        queryLetterList();
+                        MMLog.autoDebug("uid=======" + App.uid);
+                        getWhisperList();
                     }
                 } else {
                     logout();

@@ -11,6 +11,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = { AppModule.class })
 public interface AppComponent {
+
     void inject(ChatListMgr chatListMgr);
+
     void inject(ChatMgr chatMgr);
 }

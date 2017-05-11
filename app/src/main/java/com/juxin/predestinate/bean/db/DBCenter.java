@@ -1,7 +1,6 @@
 package com.juxin.predestinate.bean.db;
 
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;

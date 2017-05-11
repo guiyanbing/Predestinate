@@ -85,11 +85,13 @@ public final class ModuleMgr {
         getHttpMgr();
         getMediaMgr();
 
+        getChatListMgr();
+        getChatMgr();
+
         getCommonMgr();
         getLoginMgr();
         getCenterMgr();
 
-        getChatMgr();
         getNotifyMgr();
         getTipsBarMgr();
     }
