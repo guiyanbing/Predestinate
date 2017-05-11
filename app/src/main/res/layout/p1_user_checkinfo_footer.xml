@@ -86,25 +86,33 @@
             android:id="@+id/album_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7"
-            android:textSize="@dimen/px40_sp"
-            android:textColor="@color/picker_pink_color"/>
+            android:text="0"
+            android:textColor="@color/picker_pink_color"
+            android:textSize="@dimen/px40_sp" />
 
     </LinearLayout>
 
     <!-- 照片 -->
-    <LinearLayout
-        style="@style/center_set_item">
+    <RelativeLayout style="@style/center_set_item">
+
+        <ImageView
+            android:id="@+id/album_arrow"
+            android:layout_width="@dimen/px50_dp"
+            android:layout_height="@dimen/px50_dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:src="@drawable/y1_right_go" />
 
         <LinearLayout
             android:id="@+id/album_item"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/px35_dp"
+            android:layout_toLeftOf="@+id/album_arrow"
             android:orientation="horizontal"
             android:scrollbars="none" />
-
-        <ImageView style="@style/right_go" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <include layout="@layout/center_information_line" />
 
@@ -126,15 +134,14 @@
             android:id="@+id/video_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7"
-            android:textSize="@dimen/px40_sp"
-            android:textColor="@color/picker_pink_color"/>
+            android:text="0"
+            android:textColor="@color/picker_pink_color"
+            android:textSize="@dimen/px40_sp" />
 
     </LinearLayout>
 
     <!-- 视频 -->
-    <LinearLayout
-        style="@style/center_set_item">
+    <LinearLayout style="@style/center_set_item">
 
         <LinearLayout
             android:id="@+id/video_item"
@@ -166,14 +173,13 @@
             android:id="@+id/gift_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="7"
-            android:textSize="@dimen/px40_sp"
-            android:textColor="@color/picker_pink_color"/>
+            android:text="0"
+            android:textColor="@color/picker_pink_color"
+            android:textSize="@dimen/px40_sp" />
     </LinearLayout>
 
     <!-- 礼物 -->
-    <LinearLayout
-        style="@style/center_set_item">
+    <LinearLayout style="@style/center_set_item">
 
         <LinearLayout
             android:id="@+id/gift_item"

@@ -29,12 +29,12 @@
             <!-- 头像 -->
             <com.juxin.library.view.CircleImageView
                 android:id="@+id/img_header"
-                android:layout_width="@dimen/px240_dp"
-                android:layout_height="@dimen/px240_dp"
+                android:layout_width="@dimen/px360_dp"
+                android:layout_height="@dimen/px360_dp"
                 android:layout_marginTop="@dimen/px100_dp"
-                android:background="@drawable/default_head"
+                android:src="@drawable/default_head"
                 app:border_color="@color/white"
-                app:border_width="4dp"/>
+                app:border_width="@dimen/px6_dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
