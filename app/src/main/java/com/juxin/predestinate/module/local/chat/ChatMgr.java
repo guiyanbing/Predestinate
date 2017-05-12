@@ -92,7 +92,10 @@ public class ChatMgr implements ModuleBase, PObserver {
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+        PLogger.d("Fl=== + sendTextMsg");
+
         long ret = dbCenter.insertMsg(commonMessage);
+        PLogger.d("Fl=== + sendTextMsg2");
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
         sendMessage(commonMessage);
@@ -109,6 +112,7 @@ public class ChatMgr implements ModuleBase, PObserver {
         TextMessage textMessage = new TextMessage(whisperID,  content, kf, sayHelloType);
         textMessage.setStatus(DBConstant.SENDING_STATUS);
         textMessage.setJsonStr(textMessage.getJson(textMessage));
+
         long ret = dbCenter.insertMsg(textMessage);
 
         onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), ret != DBConstant.ERROR, textMessage);
@@ -125,7 +129,7 @@ public class ChatMgr implements ModuleBase, PObserver {
         long ret = dbCenter.insertMsg(commonMessage);
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-
+           //TODO 有问题
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, img_url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {

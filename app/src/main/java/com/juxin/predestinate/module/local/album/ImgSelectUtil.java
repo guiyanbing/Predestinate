@@ -94,7 +94,7 @@ public class ImgSelectUtil {
     /**
      * 调用系统相机拍照
      */
-    public void takePhoto(Activity activity) {
+    public void takePhoto(Activity activity, boolean frontCamera) {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             try {
                 if (!AlbumHelper.getInstance().hasCamera(App.getActivity())) {
@@ -106,6 +106,8 @@ public class ImgSelectUtil {
                 // 准备intent，并 指定 新 照片 的文件名（photoUri）
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, AlbumHelper.getInstance().getPhotoUri());
+                if (frontCamera)
+                    intent.putExtra("camerasensortype", 2); // 调用前置摄像头
                 // 启动拍照的窗体。并注册 回调处理。
                 activity.startActivityForResult(intent, ImgConstant.CODE_FOR_TAKE_PIC);
             } catch (Exception e) {
@@ -118,6 +120,7 @@ public class ImgSelectUtil {
             PToast.showShort("存储卡不可用!");
         }
     }
+
 
     /**
      * 调用TuSDK相机拍照
