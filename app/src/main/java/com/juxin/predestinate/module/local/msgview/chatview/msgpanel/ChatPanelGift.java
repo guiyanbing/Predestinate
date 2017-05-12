@@ -4,9 +4,11 @@ import android.content.Context;
 import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
@@ -14,7 +16,7 @@ import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.wode.bean.GiftsList;
+
 
 /**
  * Created by Kind on 2017/5/10.

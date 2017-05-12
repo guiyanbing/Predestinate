@@ -30,6 +30,7 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
     private Map<String, Object> typeMap = new HashMap<>();
 
     private RadioButton this_week, last_week;
+    private WebPanel webPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
     private void initView() {
         LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
 
-        WebPanel webPanel = new WebPanel(getActivity(),
+        webPanel = new WebPanel(getActivity(),
                 WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/windRanking/windRanking.html"),
                 true);// TODO: 2017/5/3
         web_container.removeAllViews();
@@ -76,6 +77,20 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
                 onChecked(TYPE_LAST_WEEK);
                 break;
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            Invoker.getInstance().setWebView(webPanel == null ? null : webPanel.getWebView());
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (webPanel != null) webPanel.clearReference();
     }
 
     /**

@@ -68,7 +68,7 @@
                     android:textSize="18sp" />
             </RelativeLayout>
 
-            <com.juxin.predestinate.ui.wode.view.LimitedWrodTextview
+            <com.juxin.predestinate.ui.user.my.view.LimitedWrodTextview
                 android:id="@+id/dlg_wangmoney_lwt_main"
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />

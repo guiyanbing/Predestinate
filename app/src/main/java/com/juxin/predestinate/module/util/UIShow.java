@@ -87,20 +87,20 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
-import com.juxin.predestinate.ui.wode.util.AttentionUtil;
-import com.juxin.predestinate.ui.wode.BottomGiftDialog;
-import com.juxin.predestinate.ui.wode.DemandRedPacketAct;
-import com.juxin.predestinate.ui.wode.DiamondSendGiftDlg;
-import com.juxin.predestinate.ui.wode.GiftDiamondPayDlg;
-import com.juxin.predestinate.ui.wode.MyAttentionAct;
-import com.juxin.predestinate.ui.wode.MyDiamondsAct;
-import com.juxin.predestinate.ui.wode.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.wode.NearVisitorAct;
-import com.juxin.predestinate.ui.wode.RedBoxPhoneVerifyAct;
-import com.juxin.predestinate.ui.wode.RedBoxRecordAct;
-import com.juxin.predestinate.ui.wode.WithDrawApplyAct;
-import com.juxin.predestinate.ui.wode.WithDrawExplainAct;
-import com.juxin.predestinate.ui.wode.WithDrawSuccessAct;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
+import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
+import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
+import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
+import com.juxin.predestinate.ui.user.my.MyAttentionAct;
+import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
+import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.user.my.NearVisitorAct;
+import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
+import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
+import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
+import com.juxin.predestinate.ui.user.my.WithDrawExplainAct;
+import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
 
 import java.io.Serializable;
 import java.util.List;
@@ -397,23 +397,29 @@ public class UIShow {
      * 打开TA人资料查看页
      */
     public static void showCheckOtherInfoAct(final Context context, long uid) {
+        LoadingDialog.show((FragmentActivity) context, context.getString(R.string.user_info_require));
         ModuleMgr.getCenterMgr().reqOtherInfo(uid, new RequestComplete() {
             @Override
-            public void onRequestComplete(HttpResponse response) {
-                UserProfile userProfile = new UserProfile();
-                userProfile.parseJson(response.getResponseString());
+            public void onRequestComplete(final HttpResponse response) {
+                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        UserProfile userProfile = new UserProfile();
+                        userProfile.parseJson(response.getResponseString());
 
-                if ("error".equals(userProfile.getResult())) {
-                    PToast.showShort(context.getString(R.string.request_error));
-                    return;
-                }
-                //更新缓存
-                AttentionUtil.updateUserDetails(response.getResponseString());
+                        if ("error".equals(userProfile.getResult())) {
+                            PToast.showShort(context.getString(R.string.request_error));
+                            return;
+                        }
+                        //更新缓存
+                        AttentionUtil.updateUserDetails(response.getResponseString());
 
-                Intent intent = new Intent(context, UserCheckInfoAct.class);
-                intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
-                intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-                context.startActivity(intent);
+                        Intent intent = new Intent(context, UserCheckInfoAct.class);
+                        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+                        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+                        context.startActivity(intent);
+                    }
+                });
             }
         });
     }

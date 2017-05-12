@@ -138,6 +138,18 @@ public class WebPanel extends BasePanel {
     }
 
     /**
+     * 清除webView引用并置空
+     */
+    public void clearReference() {
+        if (webView != null) {
+            webView.removeJavascriptInterface("Android");
+            webView.removeAllViews();
+            webView.destroy();
+            webView = null;
+        }
+    }
+
+    /**
      * 隐藏loading并展示WebView
      */
     public void hideLoading() {
