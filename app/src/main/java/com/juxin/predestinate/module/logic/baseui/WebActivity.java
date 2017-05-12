@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.invoke.Invoker;
 
 /**
  * 通用网页
@@ -54,6 +55,18 @@ public class WebActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Invoker.getInstance().setWebView(webPanel == null ? null : webPanel.getWebView());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (webPanel != null) webPanel.clearReference();
     }
 
     /**

@@ -177,12 +177,13 @@ public class Invoker {
     }
 
     /**
-     * 设置webView，AAMainAct专用，在离开AAMainAct时设置webView为摇钱树webView
+     * 设置webView，每次webView页面可见的时候重设
      *
-     * @param webView
+     * @param webView WebView实例
      */
     public void setWebView(Object webView) {
         this.webView = webView;
+        PLogger.d("------>" + String.valueOf(webView));
     }
 
     //--------------------CMD处理end--------------------
