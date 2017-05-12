@@ -8,10 +8,8 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
@@ -75,16 +73,14 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_vip_privilege: // 开通vip
-                    UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
-                            ModuleMgr.getCenterMgr().getChargeH5Params()));
-                    // TODO: 2017/5/3
+                    UIShow.showOpenVipActivity(getContext());
                     break;
                 case R.id.ll_phone_verify: // 手机绑定
 
                     break;
 
                 case R.id.ll_video_verify: // 真人认证
-                    UIShow.showMyAuthenticationAct((FragmentActivity) getContext(),103);
+                    UIShow.showMyAuthenticationAct((FragmentActivity) getContext(), 103);
                     break;
             }
         }

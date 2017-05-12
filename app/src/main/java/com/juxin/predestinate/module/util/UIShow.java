@@ -233,7 +233,6 @@ public class UIShow {
         activity.startActivity(intent);
     }
 
-
     /**
      * 手机绑定
      *
@@ -799,8 +798,41 @@ public class UIShow {
         }
     }
 
-
     // -----------------------我的提示跳转 start----------------------------
+
+    /**
+     * 跳转到开通vip页面
+     */
+    public static void showOpenVipActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
+                ModuleMgr.getCenterMgr().getChargeH5Params()));
+        // TODO: 2017/5/12
+    }
+
+    /**
+     * 跳转到购买Y币页面
+     */
+    public static void showBuyCoinActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
+                ModuleMgr.getCenterMgr().getChargeH5Params()));
+        // TODO: 2017/5/12
+    }
+
+    /**
+     * 跳转到我的礼物页面
+     */
+    public static void showMyGiftActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));
+        // TODO: 2017/5/12
+    }
+
+    /**
+     * 跳转到活动相关页面
+     */
+    public static void showActionActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
+        // TODO: 2017/5/12
+    }
 
     /**
      * 打开我的关注页面

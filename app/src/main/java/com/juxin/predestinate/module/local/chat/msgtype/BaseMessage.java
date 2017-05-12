@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -624,6 +626,34 @@ public class BaseMessage implements IBaseMessage {
         String jsonStr = map.get("content") == null ? StrDefault : map.get("content").toString();
         if (TextUtils.isEmpty(jsonStr)) return;
         this.setJsonStr(jsonStr);
+    }
+
+
+
+
+    public static List<BaseMessage> conversionListMsg(List<BaseMessage> cMessages) {
+        List<BaseMessage> baseMessages = new ArrayList<BaseMessage>();
+        if (cMessages == null || cMessages.size() <= 0) {
+            return baseMessages;
+        }
+
+        for(BaseMessage tmp : cMessages){
+            BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(tmp.getType());
+            if (messageType == null) {
+                baseMessages.add(tmp);
+               continue;
+            }
+            switch (messageType) {
+                case hi:
+                    baseMessages.add(new TextMessage(tmp));
+                    break;
+                case common:
+                    baseMessages.add(new CommonMessage(tmp));
+                    break;
+
+            }
+        }
+        return baseMessages;
     }
 
 

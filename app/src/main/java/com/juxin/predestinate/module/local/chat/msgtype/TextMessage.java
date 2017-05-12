@@ -139,4 +139,11 @@ public class TextMessage extends BaseMessage {
     public void setSayHelloType(int sayHelloType) {
         this.sayHelloType = sayHelloType;
     }
+
+
+    public TextMessage(BaseMessage message) {
+        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
+                message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
+
+    }
 }
