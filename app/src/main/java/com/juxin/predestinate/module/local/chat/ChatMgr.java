@@ -4,7 +4,6 @@ import android.app.Application;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
@@ -34,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  *
@@ -94,7 +95,6 @@ public class ChatMgr implements ModuleBase, PObserver {
         long ret = dbCenter.insertMsg(commonMessage);
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-
         sendMessage(commonMessage);
     }
 
@@ -242,17 +242,14 @@ public class ChatMgr implements ModuleBase, PObserver {
      * @param whisperID 私聊ID
      * @param page      页码
      */
-    public void getHistoryChat(String channelID, String whisperID, int page) {
-
-//        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
-//        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-//            @Override
-//            public void call(List<BaseMessage> baseMessages) {
-//
-//            }
-//        });
-
-      //  DBCenter.getInstance().queryMsgList(channelID, whisperID, page, 20, true, null);
+    public void getHistoryChat(final String channelID, final String whisperID, int page) {
+        Observable<List<BaseMessage>> observable = dbCenter.queryFmessageList(channelID, whisperID, page, 20);
+        observable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+                onChatMsgHistory(channelID, whisperID, true, baseMessages);
+            }
+        });
     }
 
     /**
@@ -262,9 +259,15 @@ public class ChatMgr implements ModuleBase, PObserver {
      * @param whisperID  私聊ID
      * @param last_msgid 群最后一条消息ID
      */
-    public void getRecentlyChat(String channelID, String whisperID, long last_msgid) {
-        if (!TextUtils.isEmpty(channelID) && TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
-        } else {// 私聊数据库取
+    public void getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
+        if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
+            Observable<List<BaseMessage>> observable = dbCenter.queryFmessageList(channelID, whisperID, 0, 20);
+            observable.subscribe(new Action1<List<BaseMessage>>() {
+                @Override
+                public void call(List<BaseMessage> baseMessages) {
+                    onChatMsgRecently(channelID, whisperID, true,  BaseMessage.conversionListMsg(baseMessages));
+                }
+            });
 //            DBCenter.getInstance().queryMsgListWG(channelID, whisperID, 20);
 //            updateLocalReadStatus(channelID, whisperID, last_msgid);
         }

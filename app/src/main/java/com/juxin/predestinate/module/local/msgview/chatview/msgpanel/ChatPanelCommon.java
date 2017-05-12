@@ -119,21 +119,33 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         if (msgData == null || !(msgData instanceof CommonMessage)) return;
         CommonMessage msg = (CommonMessage) msgData;
 
-        if (msgData.getfStatus() == 1 && msgData.isAutoplay()) {//自动播放
-            MMLog.autoDebug(msg.getImg());
-
-          //  ChatMediaPlayer.getInstance().togglePlayVoice(ModuleMgr.getChatListMgr().spliceStringAmr(msg.getImg()), this);
-
-            palySound = true;
-            msgData.setfStatus(0);
-            this.msgData = msgData;
-
-            if (chatItemHolder != null) {
-                chatItemHolder.statusImg.setVisibility(View.GONE);
-            }
-
-         //   ModuleMgr.getChatMgr().updateLocalReadVoiceStatus(msgData.getChannelID(), msgData.getWhisperID(), msgData.getMsgid());
+        String videoUrl = msg.getVideoUrl();
+        String localVideoUrl = msg.getLocalVideoUrl();
+        String voiceUrl = msg.getVoiceUrl();
+        String localVoiceUrl = msg.getLocalVoiceUrl();
+        String img = msg.getImg();
+        String localImg =msg.getLocalImg();
+        if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){//视频
+        }else if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){//语音
+        }else if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){//图片
+        }else{
         }
+
+//        if (msgData.getfStatus() == 1 && msgData.isAutoplay()) {//自动播放
+//            MMLog.autoDebug(msg.getImg());
+//
+//          //  ChatMediaPlayer.getInstance().togglePlayVoice(ModuleMgr.getChatListMgr().spliceStringAmr(msg.getImg()), this);
+//
+//            palySound = true;
+//            msgData.setfStatus(0);
+//            this.msgData = msgData;
+//
+//            if (chatItemHolder != null) {
+//                chatItemHolder.statusImg.setVisibility(View.GONE);
+//            }
+//
+//         //   ModuleMgr.getChatMgr().updateLocalReadVoiceStatus(msgData.getChannelID(), msgData.getWhisperID(), msgData.getMsgid());
+//        }
     }
 
     @Override
@@ -187,7 +199,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
     private void onTextDisplayContent(CommonMessage msg){
         chat_item_customFrameLayout.show(R.id.chat_item_text);
-        chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()));
+        chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()+""));
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
 
