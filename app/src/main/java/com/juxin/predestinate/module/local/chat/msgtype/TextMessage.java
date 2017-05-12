@@ -1,12 +1,8 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Map;
 
 /**
  * 文本消息包括打招呼
@@ -73,10 +69,10 @@ public class TextMessage extends BaseMessage {
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
 
-//        JSONObject object = getJsonObject(jsonStr);
-//        this.setType(object.optInt("mtp")); //消息类型
-//        this.setMsgDesc(object.optString("mct")); //消息内容
-//        this.setTime(object.optLong("mt")); //消息时间 int64
+        JSONObject object = getJsonObject(jsonStr);
+        this.setType(object.optInt("mtp")); //消息类型
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        this.setTime(object.optLong("mt")); //消息时间 int64
         return this;
     }
 
@@ -144,6 +140,6 @@ public class TextMessage extends BaseMessage {
     public TextMessage(BaseMessage message) {
         super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
                 message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
-
+        parseJson(getJsonStr());
     }
 }

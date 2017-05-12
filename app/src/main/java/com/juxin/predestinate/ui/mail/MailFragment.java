@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
@@ -18,6 +22,8 @@ import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+import com.juxin.predestinate.ui.main.MainActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +32,20 @@ import java.util.List;
  * Created by Kind on 2017/3/20.
  */
 
-public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener, SwipeListView.OnSwipeItemClickedListener, PObserver {
+public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
+        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener {
 
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
+    private View mail_bottom;
+    private Button mail_delete, mail_all_ignore;
+
+    private boolean isGone = false;//是否首面底部，默认是false
+
     //  private CustomFrameLayout viewGroup;
     private View mViewTop;
+
+    private List<BaseMessage> mailDelInfoList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -42,6 +56,19 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         setTitleRight("忽略未读", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!isGone){
+                    editContent();
+                    ((MainActivity)getActivity()).onGoneButtom(isGone);
+                    mail_bottom.setVisibility(View.VISIBLE);
+                    isGone = true;
+                }else {
+                    isGone = false;
+                    cancleEdit();
+                }
+
+
+
+
                 //忽略所有未读消息
 //                PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
 //                    @Override
@@ -68,8 +95,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
         //viewGroup.addView(mViewTop);
 
+        mail_bottom = findViewById(R.id.mail_bottom);
+        mail_delete = (Button) findViewById(R.id.mail_delete);
+        mail_all_ignore = (Button) findViewById(R.id.mail_all_ignore);
+        mail_delete.setOnClickListener(this);
+        mail_all_ignore.setOnClickListener(this);
+
         // ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
-        //    listMail.addHeaderView(viewGroup);
+        //istMail.addHeaderView(viewGroup);
         View listview_footer = LayoutInflater.from(getActivity()).inflate(R.layout.common_footer_distance, null);
         listMail.addFooterView(listview_footer);
         listview_footer.setOnClickListener(null);
@@ -89,6 +122,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 menu.setTitleSize(18);
                 menu.setTitleColor(Color.WHITE);
             }
+
+
         });
 
         listMail.setPullLoadEnable(false);
@@ -107,6 +142,16 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onSwipeChooseChecked(int position, boolean isChecked) {
+        int index = position - mailFragmentAdapter.mailItemOtherSize();
+        if (index < 0 || index >= mailFragmentAdapter.getList().size())
+            return;
+        BaseMessage message = mailFragmentAdapter.getItem(index);
+        if (isChecked) {
+            mailDelInfoList.add(message);
+        } else {
+            mailDelInfoList.remove(message);
+        }
+     //   btnMailDelete.setEnabled(mailDelInfoList.size() > 0);
     }
 
     @Override
@@ -156,20 +201,24 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        resetTipsState(hidden);
+
+    public void cancleEdit() {
+        mailDelInfoList.clear();
+     //   btnMailDelete.setEnabled(false);
+        listMail.smoothCloseChooseView();
     }
 
-    public void resetTipsState(boolean isHidden) {
-        //   if (viewGroup != null)
-        //  if (isHidden) {
-        //        ModuleMgr.getTipsBarMgr().detach();
-        //     } else {
-        //          ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Mail_Page, viewGroup, null);
-        //      }
+    public void editContent() {
+        mailDelInfoList.clear();
+        if (mailFragmentAdapter.mailItemOrdinarySize() > 0) {
+            listMail.smoothOpenChooseView();
+        } else {
+//            mAAMainAct.main_top_left_bt.setVisibility(View.GONE);
+//            mAAMainAct.main_top_left.setVisibility(View.GONE);
+            PToast.showCenterShort("没有可编辑选项");
+        }
     }
+
 
     @Override
     public void onMessage(String key, Object value) {
@@ -177,6 +226,21 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
                 mailFragmentAdapter.updateAllData();
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        mail_bottom.setVisibility(View.GONE);
+        ((MainActivity)getActivity()).onGoneButtom(isGone);
+        isGone = false;
+        switch (view.getId()){
+            case R.id.mail_delete:
+
+                break;
+            case R.id.mail_all_ignore:
+
                 break;
         }
     }

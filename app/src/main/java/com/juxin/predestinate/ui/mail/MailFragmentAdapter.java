@@ -26,6 +26,33 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         super(context, datas);
     }
 
+    public int mailItemOtherSize() {
+        int size = 0;
+        for(BaseMessage tmp : getList()){
+            if(tmp.getMailItemStyle() == MailItemType.Mail_Item_Other.type){
+                size ++;
+            }
+        }
+
+        return size;
+    }
+    public int mailItemOrdinarySize() {
+        int size = 0;
+        for(BaseMessage tmp : getList()){
+            if(tmp.getMailItemStyle() == MailItemType.Mail_Item_Ordinary.type){
+                size ++;
+            }
+        }
+
+        return size;
+    }
+//        if (messages != null && messages.size() > 0) {
+//            msgList.addAll(messages);
+//            for (BaseMessage tmp : messages) {
+//                unreadNum += tmp.getNum();
+//            }
+//        }
+
     public void updateAllData() {
         List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getMsgList();
 //        Boolean b = false;
