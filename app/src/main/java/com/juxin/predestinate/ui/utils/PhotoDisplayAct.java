@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,12 +41,10 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     public final static int DISPLAY_TYPE_INFO_EDIT = 3;
     public final static int DISPLAY_TYPE_BIG_IMG = 4; //看大图
 
-
-    private ImageButton btn_photo_display_title_left;
-    private ImageView btn_photo_display_del;
+    private ImageView btn_photo_display_title_left;
+    private TextView btn_photo_display_del;
     private ViewPager vp_photo_display;
     private TextView btn_photo_display_title, tv_set_bg;
-
 
     private List<String> imageList;
     private List<UserPhoto> photoList;
@@ -58,7 +55,6 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     private boolean isDele; //是否删除成功
 
     private RelativeLayout rl_title, rl_main;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +93,15 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     private TouchImageView.OnClickEvent onClickEvent = new TouchImageView.OnClickEvent() {
         @Override
         public void onClickCallBack(View view) {
-            onBackPressed();
+            //onBackPressed();
         }
     };
 
 
     private void initView() {
-        this.btn_photo_display_title_left = (ImageButton) findViewById(R.id.btn_photo_display_title_left);
+        this.btn_photo_display_title_left = (ImageView) findViewById(R.id.btn_photo_display_title_left);
         tv_set_bg = (TextView) findViewById(R.id.tv_set_bg);
-        this.btn_photo_display_del = (ImageView) findViewById(R.id.btn_photo_display_del);
+        this.btn_photo_display_del = (TextView) findViewById(R.id.btn_photo_display_del);
         this.vp_photo_display = (ViewPager) findViewById(R.id.vp_photo_display);
         this.btn_photo_display_title = (TextView) findViewById(R.id.btn_photo_display_title);
         if (isPhoto()) {
@@ -140,9 +136,9 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.btn_photo_display_title_left:
-//                finishCurrentActivity();
-//                break;
+            case R.id.btn_photo_display_title_left:
+                finishCurrentActivity();
+                break;
             case R.id.btn_photo_display_del:
                 PickerDialogUtil.showSimpleAlertDialog(this, new SimpleTipDialog.ConfirmListener() {
                     @Override
@@ -164,7 +160,7 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
                 }, "确定删除该张照片吗？", "删除照片");
                 break;
             case R.id.tv_set_bg:
-                LoadingDialog.show(PhotoDisplayAct.this, "正在更换背景图，请稍候...");
+//                LoadingDialog.show(PhotoDisplayAct.this, "正在更换背景图，请稍候...");
 //                ModuleMgr.getCenterMgr().updateMyInfo(new HashMap<String, Object>() {
 //                    {
 //                        put(EditKey.s_key_avatarBg, photoList.get(currentPosition).getPic());

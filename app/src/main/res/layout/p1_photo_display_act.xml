@@ -23,15 +23,13 @@
         android:background="@color/transparent"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_photo_display_title_left"
             android:layout_width="40dip"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone" />
+            android:src="@drawable/p1_back_white_btn"/>
 
         <TextView
             android:id="@+id/btn_photo_display_title"
@@ -49,15 +47,26 @@
             android:textColor="@android:color/white"
             android:textSize="17sp" />
 
-        <ImageView
+        <TextView
             android:id="@+id/btn_photo_display_del"
             style="@style/icon_big"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/px10_dp"
+            android:layout_marginRight="@dimen/px35_dp"
             android:gravity="center"
-            android:padding="@dimen/px40_dp"
-            android:src="@drawable/f1_user_photo_delete"/>
+            android:text="删除"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/px42_sp" />
+
+        <!--<ImageView-->
+        <!--android:id="@+id/btn_photo_display_del"-->
+        <!--style="@style/icon_big"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="@dimen/px10_dp"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="@dimen/px40_dp"-->
+        <!--android:src="@drawable/f1_user_photo_delete"/>-->
     </RelativeLayout>
 
 
