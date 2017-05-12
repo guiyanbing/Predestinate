@@ -516,6 +516,7 @@
 
 
     <!--认证-->
+    <string name="txt_cancel">取消</string>
     <string name="txt_record_title">视频录制认证</string>
     <string name="txt_record_desc">请保持正面录制5秒钟</string>
 </resources>

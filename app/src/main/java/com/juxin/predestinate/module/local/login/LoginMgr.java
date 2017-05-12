@@ -178,7 +178,7 @@ public class LoginMgr implements ModuleBase {
     /**
      * 账号注册
      */
-    public void onRegister(final Activity context, UrlParam urlParam, String nickname, int age, int gender) {
+    public void onRegister(final Activity context, UrlParam urlParam, String nickname, int age, final int gender) {
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("flag", Constant.REG_FLAG);
         postParams.put("user_client_type", Constant.PLATFORM_TYPE);
@@ -210,6 +210,7 @@ public class LoginMgr implements ModuleBase {
                         RegResult result = new RegResult();
                         result.parseJson(jsonObject.toString());
                         putAllLoginInfo(Long.parseLong(result.getUsername()), result.getPassword(), false);
+                        ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
                         UIShow.showUserInfoCompleteAct(context);
                     }
                 } catch (JSONException e) {
@@ -245,6 +246,7 @@ public class LoginMgr implements ModuleBase {
                             LoginResult result = (LoginResult) response.getBaseData();
                             ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
                             ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
+                            ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());
                             if (!result.isValidDetailInfo()) {
                                 PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
                                 UIShow.showUserInfoCompleteAct(context);

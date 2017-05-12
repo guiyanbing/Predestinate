@@ -14,6 +14,15 @@ public class LoginResult extends BaseData {
     private long uid;
     private int miss_info;    // 判断是否缺失数据,缺失则继续跳转到用户注册
     private boolean validDetailInfo;
+    private int gender;
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
 
     public String getNickname() {
         return nickname;
@@ -55,6 +64,7 @@ public class LoginResult extends BaseData {
             this.nickname = jsonNext.optString("nickname");
             this.uid = jsonNext.optLong("uid");
             this.miss_info = jsonNext.optInt("miss_info");
+            this.gender= jsonNext.optInt("gender");
         }
 
     }
