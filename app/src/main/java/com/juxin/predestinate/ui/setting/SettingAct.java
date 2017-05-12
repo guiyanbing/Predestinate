@@ -21,14 +21,12 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.ApkUnit;
-import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
 import java.io.File;
-import java.util.HashMap;
 
 
 /**
@@ -206,8 +204,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 break;
 
             case R.id.setting_action:// 活动相关
-                UIShow.showWebActivity(this, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
-                // TODO: 2017/5/3
+                UIShow.showActionActivity(this);
                 break;
             case R.id.setting_about:// 关于
                 UIShow.showAboutAct(SettingAct.this);
@@ -278,7 +275,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
 
                 @Override
                 public void onSubmit() {
-                    UIShow.openVip(SettingAct.this);
+                    UIShow.showOpenVipActivity(SettingAct.this);
                 }
             }, "您非VIP会员，无法开启此功能", "", "取消", "去开通", true, R.color.text_zhuyao_black);
             return false;

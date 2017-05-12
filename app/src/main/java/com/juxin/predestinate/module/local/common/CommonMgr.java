@@ -177,7 +177,7 @@ public class CommonMgr implements ModuleBase {
         HashMap<String,Object> post_param = new HashMap<>();
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify,post_param, complete);
     }
 
     /**

@@ -27,6 +27,7 @@
             android:focusableInTouchMode="true"
             android:paddingLeft="@dimen/px15_dp"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="#999999"
             android:textSize="14sp" />

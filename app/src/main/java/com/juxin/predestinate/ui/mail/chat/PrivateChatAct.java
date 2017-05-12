@@ -176,7 +176,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIShow.showUserOtherSetAct(PrivateChatAct.this, null);
+                UIShow.showUserOtherSetAct(PrivateChatAct.this, whisperID, null);
             }
         });
 

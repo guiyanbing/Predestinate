@@ -2,8 +2,11 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.my.RedOneKeyList;
+import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
@@ -15,8 +18,6 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
-import com.juxin.predestinate.bean.my.RedOneKeyList;
-import com.juxin.predestinate.bean.my.RedbagList;
 
 import java.util.Map;
 
@@ -61,6 +62,8 @@ public enum UrlParam {
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
     reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
     reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
+    reqSetRemarkName(Constant.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名
+    reqGetRemarkName(Constant.FATE_IT_GO, "xs/userrelation/GetRemakName", UserRemark.class, true), // 获取用户备注名
 
     // 获取他人音视频开关配置
     reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
