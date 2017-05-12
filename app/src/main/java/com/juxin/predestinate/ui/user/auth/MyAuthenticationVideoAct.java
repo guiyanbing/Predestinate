@@ -1,7 +1,9 @@
 package com.juxin.predestinate.ui.user.auth;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.album.help.AlbumHelper;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -36,7 +39,7 @@ import java.io.FileInputStream;
  * IQQ
  */
 
-public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener,ImgSelectUtil.OnChooseCompleteListener {
+public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener{
     private Context context;
     private static int PhotoUploadResult = 10001, VideoUploadResult = 10002;
     private View authPic, authVideo;
@@ -160,27 +163,27 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 if (isMakeing)
                     return;
                 isMakeing = true;
-                ImgSelectUtil.getInstance().pickPhotoGallery(MyAuthenticationVideoAct.this, this);
+                ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this, true);
                 break;
             case R.id.iv_pic:
                 if (isMakeing)
                     return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
-                    ImgSelectUtil.getInstance().pickPhotoGallery(MyAuthenticationVideoAct.this, this);
+                    ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this,true);
                 break;
             case R.id.tv_make_video:
                 if (isMakeing)
                     return;
                 isMakeing = true;
-                UIShow.showRecordVideoAct(this,VideoUploadResult);
+                UIShow.showRecordVideoAct(this, VideoUploadResult);
                 break;
             case R.id.iv_video:
                 if (isMakeing)
                     return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
-                    UIShow.showRecordVideoAct(this,VideoUploadResult);
+                    UIShow.showRecordVideoAct(this, VideoUploadResult);
                 break;
             case R.id.iv_auth_video:
                 Video.videoPlay(this);
@@ -201,8 +204,18 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 loadLocalVideoImg();
                 VideoUpload(sVideo);
             }
+        } else {
+            isMakeing = false;
+            String path = AlbumHelper.getInstance().getPhotoUri().getPath();
+            if (path == null  || TextUtils.isEmpty(path)) {
+                return;
+            }
+            if (FileUtil.isExist(path)) {
+                uploadAuthPic(path);
+            }
         }
     }
+
 
     private void checkAndShowSubmit() {
         if (isMakePhotoOK && isMakeVideoOk) {
@@ -229,11 +242,11 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                         checkAndShowSubmit();
                         changePicStatus(0);
                         tvMakePic.setVisibility(View.VISIBLE);
-                    }else{
-                        PToast.showShort( "照片处理失败请重试");
+                    } else {
+                        PToast.showShort("照片处理失败请重试");
                     }
                 } catch (JSONException e) {
-                    PToast.showShort( "照片处理失败请重试");
+                    PToast.showShort("照片处理失败请重试");
                 }
             }
         });
@@ -255,7 +268,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                         changeVideoStatus(0);
                         changeVideoPlay();
                         tvMakeVideo.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         PToast.showShort("视频处理失败请重试");
                     }
                 } catch (JSONException e) {
@@ -286,10 +299,11 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         });
 
     }
+
     // 是否隐藏右上角view
     protected void setHideTopRightView(boolean bool) {
         if (bool) {
-            setTitleRight("",null);
+            setTitleRight("", null);
         } else {
             setTitleRight("提交", new View.OnClickListener() {
                 @Override
@@ -299,6 +313,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
             });
         }
     }
+
     private void getStatus() {
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
@@ -310,15 +325,4 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         });
     }
 
-    @Override
-    public void onComplete(String... path) {
-        isMakeing=false;
-        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
-            return;
-        }
-        if (FileUtil.isExist(path[0])) {
-            uploadAuthPic(path[0]);
-        }
-
-    }
 }

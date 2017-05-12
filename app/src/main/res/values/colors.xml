@@ -241,6 +241,10 @@
     <color name="noheard_info">#ff3a3a</color>
     <color name="noheard_info2">#ff95a9</color>
 
+    <!--认证-->
     <color name="authentication_txt_bg">#43cd67</color>
+    <color name="user_text_gray_top">#bbbbbb</color>
+    <color name="user_text_blue">#83a0ec</color>
+    <color name="user_text_gray_bottom">#d4d4d4</color>
 </resources>
 

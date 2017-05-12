@@ -36,12 +36,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     @Override
     public void init() {
-        com.juxin.library.observe.MsgMgr.getInstance().attach(this);
+        MsgMgr.getInstance().attach(this);
     }
 
     @Override
     public void release() {
-
+        MsgMgr.getInstance().detach();
     }
 
     public int getUnreadNumber() {

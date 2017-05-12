@@ -31,7 +31,7 @@ import com.juxin.predestinate.module.util.UIShow;
 /**
  * 头像上传页面
  *
- * @author:WangXF
+ * @author:zhang
  * @Date:2014-12-8
  */
 public class UserRegHeadUploadAct extends BaseActivity implements ImgSelectUtil.OnChooseCompleteListener, OnClickListener {

@@ -37,6 +37,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private BaseFragment current;  // 当前的fragment
     private View[] views;
+    private View layout_main_bottom;
 
     private BadgeView mail_num;
 
@@ -95,6 +96,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         user_layout.setOnClickListener(this);
 
         mail_num = (BadgeView) findViewById(R.id.mail_num);
+        layout_main_bottom = findViewById(R.id.layout_main_bottom);
     }
 
     /**
@@ -217,6 +219,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return true;
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    public void onGoneButtom(boolean isGone){
+            layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -504,6 +504,9 @@
     <string name="re_upload_avatar_fail">上传头像失败，请检查您的网络后再试试</string>
     <string name="re_upload_avatar_selet_fail">选择图片出错，请稍候再试</string>
 
+    <string name="top_type_man">豪</string>
+    <string name="top_type_woman">魅</string>
+
     <!--发现end-->
 
 
