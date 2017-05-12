@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.user.auth;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +10,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.ui.start.PhoneVerifyAct;
-
-import org.json.JSONObject;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 我的认证
@@ -21,7 +18,6 @@ import org.json.JSONObject;
  */
 
 public class MyAuthenticationAct extends BaseActivity implements View.OnClickListener {
-    private Context context;
     private TextView tv_txt_auth_phone, tv_txt_auth_video;
     private UserDetail userDetail;
     private int authResult = 103, authForVodeo = 104;
@@ -33,7 +29,6 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.f1_authentication_act);
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
-        context = this;
         setBackView("我的认证");
         initView();
     }
@@ -89,12 +84,11 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.ll_auth_phone:
                 if (!userDetail.isVerifyCellphone()) {
-                    Intent intent = new Intent(context, PhoneVerifyAct.class);
-                    startActivityForResult(intent, authResult);
+                    UIShow.showPhoneVerify_Act(MyAuthenticationAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(),authResult);
                 }
                 break;
             case R.id.ll_auth_video:
-//                UIHelper.showMyAuthenticationVideoAct(this, authForVodeo);
+                UIShow.showMyAuthenticationVideoAct(this,authForVodeo);
                 break;
         }
     }
