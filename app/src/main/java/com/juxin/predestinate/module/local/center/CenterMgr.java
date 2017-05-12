@@ -405,6 +405,30 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 设置他人备注名
+     *
+     * @param toUid      对方UID
+     * @param remarkName 备注名称
+     */
+    public void reqSetRemarkName(long toUid, String remarkName, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("hisuid", toUid);
+        post_param.put("remarkname", remarkName);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSetRemarkName, post_param, complete);
+    }
+
+    /**
+     * 获取他人备注名
+     *
+     * @param toUid      对方UID
+     */
+    public void reqGetRemarkName(long toUid, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("hisuid", toUid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqGetRemarkName, post_param, complete);
+    }
+
+    /**
      * 保存个人信息Json串到SP
      */
     private void setMyInfo(String resultStr) {

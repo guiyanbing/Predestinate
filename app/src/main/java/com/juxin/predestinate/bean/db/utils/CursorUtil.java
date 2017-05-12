@@ -12,9 +12,6 @@ public class CursorUtil {
 
     private CursorUtil(){ }
 
-
-
-
     public static String getString(Cursor cursor, String columnName){
         return cursor.getString(cursor.getColumnIndexOrThrow(columnName));
     }

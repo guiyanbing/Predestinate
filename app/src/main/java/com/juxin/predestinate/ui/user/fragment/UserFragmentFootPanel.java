@@ -13,7 +13,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.module.util.WebUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
 
@@ -120,9 +119,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
-                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                        ModuleMgr.getCenterMgr().getChargeH5Params()));
-                // TODO: 2017/5/3
+                UIShow.showBuyCoinActivity(getContext());
                 break;
 
             case CenterItemID.i_Center_item_6:// 我的钻石
@@ -130,8 +127,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
                 break;
 
             case CenterItemID.i_Center_item_7:// 我的礼物
-                UIShow.showWebActivity(getContext(), WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));
-                // TODO: 2017/5/3
+                UIShow.showMyGiftActivity(getContext());
                 break;
 
             case CenterItemID.i_Center_item_8:// 个人资料

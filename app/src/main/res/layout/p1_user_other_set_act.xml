@@ -65,7 +65,7 @@
                             android:layout_height="@dimen/px42_dp"
                             android:layout_marginLeft="@dimen/px10_dp"
                             android:src="@drawable/p1_vip_ico"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <View
@@ -86,12 +86,13 @@
 
             <!-- 备注名 -->
             <RelativeLayout
+                android:id="@+id/rl_remark"
                 style="@style/center_set_item"
                 android:layout_height="@dimen/center_item_height">
 
                 <TextView
                     android:id="@+id/tv_remark"
-                    android:layout_width="@dimen/px200_dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/px5_dp"
@@ -101,11 +102,11 @@
 
                 <TextView
                     android:id="@+id/user_remark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/px35_dp"
                     android:layout_toRightOf="@+id/tv_remark"
-                    android:text="备注"
                     android:textColor="@color/txt_middle"
                     android:textSize="@dimen/center_item_txt" />
             </RelativeLayout>
@@ -145,8 +146,9 @@
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
 
-            <include layout="@layout/layout_margintop"
-                android:visibility="gone"/>
+            <include
+                layout="@layout/layout_margintop"
+                android:visibility="gone" />
 
             <!-- 设置语音接听 -->
             <RelativeLayout
@@ -187,8 +189,9 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/center_information_line"
-                android:visibility="gone"/>
+            <include
+                layout="@layout/center_information_line"
+                android:visibility="gone" />
 
             <!-- 设置视频接听 -->
             <RelativeLayout

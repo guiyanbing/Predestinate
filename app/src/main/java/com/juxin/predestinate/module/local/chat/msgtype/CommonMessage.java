@@ -34,7 +34,6 @@ public class CommonMessage extends BaseMessage{
     public CommonMessage() {
         super();
     }
-
     /**
      * 文本消息
      * @param whisperID
@@ -63,6 +62,16 @@ public class CommonMessage extends BaseMessage{
         this.setVideoUrl(url);
         this.setVideoSize(length);
         this.setType(BaseMessageType.common.getMsgType());
+    }
+
+    /**
+     * 转换类 fmessage
+     * @param message
+     */
+    public CommonMessage(BaseMessage message) {
+     super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
+            message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
+        parseJson(getJsonStr());
     }
 
     @Override

@@ -146,20 +146,21 @@ public class DBCenterFMessage {
             return null;
         }
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
-                .append(" WHERE ")
-                .append(FMessage.COLUMN_CHANNELID + " = ")
-                .append(channelID)
-                .append(" AND ")
-                .append(FMessage.COLUMN_WHISPERID + " = ")
+                .append(" WHERE ");
+                if(!TextUtils.isEmpty(channelID)){
+                    sql.append(FMessage.COLUMN_CHANNELID + " = ")
+                            .append(channelID)
+                            .append(" AND ");
+                }
+
+        sql.append(FMessage.COLUMN_WHISPERID + " = ")
                 .append(whisperID)
                 .append(" ORDER BY ")
                 .append(FMessage._ID)
                 .append(" DESC")
-                .append(" LIMIT ")
-                .append(start + "," + offset);
+                .append(" LIMIT ").append(start).append(",").append(offset);
         return queryBySqlFmessage(sql.toString());
     }
-
 
     /**
      * 查询
@@ -194,7 +195,7 @@ public class DBCenterFMessage {
                         CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
                         CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_TIME),
-                        CursorUtil.getString(cursor, FMessage.COLUMN_CONTENT)
+                        CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)
                 ));
             }
         } catch (Exception e) {
