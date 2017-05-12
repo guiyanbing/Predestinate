@@ -38,6 +38,8 @@ import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.discover.MyDefriendAct;
 import com.juxin.predestinate.ui.discover.MyFriendsAct;
+import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
+import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
@@ -974,6 +976,7 @@ public class UIShow {
     }
     // -----------------------我的提示跳转 end----------------------------
 
+    //============================发现 start =============================\\
 
     /**
      * 打开举报界面
@@ -1006,6 +1009,44 @@ public class UIShow {
         Intent intent = new Intent(context, MyDefriendAct.class);
         context.startActivity(intent);
     }
+
+    public static final int FROM_HEADUPLOAD = 1012;// 上传头像返回
+    public static final int FROM_MYCONCERNACT = 1013;// 上传头像返回
+
+    /**
+     * 打开头像上传页面
+     *
+     * @param context
+     * @param tipText 显示的提示文字
+     */
+    public static void showUserRegHeadUploadAct(Context context, String tipText) {
+        Intent intent = new Intent(context, UserRegHeadUploadAct.class);
+        intent.putExtra("type", 2);
+        if (tipText != null)
+            intent.putExtra("tipText", tipText);
+        ((Activity) context).startActivityForResult(intent, FROM_HEADUPLOAD);
+    }
+
+    /**
+     * 打开头像上传页面
+     *
+     * @param context
+     */
+    public static void showUserRegHeadUploadAct(Context context) {
+        showUserRegHeadUploadAct(context, null);
+    }
+
+    /**
+     * 打开头像更新界面
+     * @param context
+     */
+    public static void showUserNoHeadUploadAct(Context context) {
+        Intent intent = new Intent(context, UserNoHeadUploadAct.class);
+        context.startActivity(intent);
+    }
+
+
+    //============================发现 end =============================\\
 
     // -----------------------各种充值弹框跳转 start----------------------------
 

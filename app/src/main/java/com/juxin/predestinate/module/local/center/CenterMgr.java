@@ -450,6 +450,10 @@ public class CenterMgr implements ModuleBase, PObserver {
         return StringUtils.getAfterWithFlag(picUrl, tag);
     }
 
+    public boolean isRobot(int kf_id) {
+        return kf_id == 0;
+    }
+
     /*设置信息*/
 
     /**

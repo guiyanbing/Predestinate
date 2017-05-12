@@ -26,8 +26,6 @@ public class Constant {
     public static final String HOST_URL = FATE_IT_HTTP;
 
 
-
-
     // -------------------------版本信息常量---------------------------
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
@@ -130,5 +128,26 @@ public class Constant {
     public static String U_IS_VIDEO_AUTH;
     public static String U_IS_VIDEO_IMG_URL;
     public static String U_IS_VIDEO_VIDEO_URL;
+
+
+    //============= 打招呼类型 start =============\\
+    /**
+     * 0为普通
+     */
+    public static final int SAY_HELLO_TYPE_SIMPLE = 0;
+    /**
+     * 1为向机器人一键打招呼
+     */
+    public static final int SAY_HELLO_TYPE_ROBOT = 1;
+    /**
+     * 3附近的人群打招呼
+     */
+    public static final int SAY_HELLO_TYPE_NEAR = 3;
+    /**
+     * 4为向机器人单点打招呼(包括首页和详细资料页等)
+     */
+    public static final int SAY_HELLO_TYPE_ONLY = 4;
+
+    //============= 打招呼类型 end =============\\
 
 }

@@ -30,6 +30,19 @@ public class UserInfoLightweight extends UserBasic {
 
     private int heartNum = 0;
 
+    private int kf_id = 0; //不为0就是机器人
+
+    /**
+     * 排行榜排名
+     */
+    private int top = 0;
+
+    /**
+     * 0 没上榜 1土豪榜 2魅力榜
+     * 暂时 不用该字段 用用户性别进行判断
+     */
+    private int topType = 0;
+
     public UserInfoLightweight() {
     }
 
@@ -62,7 +75,9 @@ public class UserInfoLightweight extends UserBasic {
         this.setAudio_available(jsonObject.optInt("audio_available") == 1 ? true : false);
         this.setSayHello(jsonObject.optBoolean("isSayHello"));
         this.setHeartNum(jsonObject.optInt("heartnum"));
-
+        this.setKf_id(jsonObject.optInt("kf_id"));
+        this.setTop(jsonObject.optInt("top"));
+        this.setTopType(jsonObject.optInt("toptype"));
     }
 
     public long getTime() {
@@ -159,6 +174,35 @@ public class UserInfoLightweight extends UserBasic {
 
     public void setHeartNum(int heartNum) {
         this.heartNum = heartNum;
+    }
+
+    public int getKf_id() {
+        return kf_id;
+    }
+
+    public void setKf_id(int kf_id) {
+        this.kf_id = kf_id;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
+    }
+
+    public int getTopType() {
+        return topType;
+    }
+
+
+    public boolean isToper() {
+        return getTop() != 0;
+    }
+
+    public void setTopType(int topType) {
+        this.topType = topType;
     }
 
     @Override
