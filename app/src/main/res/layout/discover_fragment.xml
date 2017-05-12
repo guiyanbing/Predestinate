@@ -23,6 +23,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/px35_dp"
         android:layout_marginRight="@dimen/px35_dp"
-        android:background="@drawable/f1_qdzh_btn" />
+        android:background="@drawable/f1_qdzh_btn"
+        android:visibility="gone"/>
 
 </RelativeLayout>
