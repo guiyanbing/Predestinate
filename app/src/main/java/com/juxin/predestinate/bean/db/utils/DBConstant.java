@@ -17,4 +17,10 @@ public class DBConstant {
     public static final int READ_STATUS = 11;//对方已读
     public static final int LOCAL_READ_STATUS = 13;//本地已读
 
+
+
+
+
+
+
 }

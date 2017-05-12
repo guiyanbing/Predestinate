@@ -30,8 +30,8 @@ import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
-import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 import com.juxin.predestinate.ui.wode.bean.GiftsList;
+import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -54,6 +54,7 @@ public class CommonMgr implements ModuleBase {
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
+
     @Override
     public void init() {
         requestServerQQ();
@@ -176,7 +177,7 @@ public class CommonMgr implements ModuleBase {
         HashMap<String,Object> post_param = new HashMap<>();
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, true, complete);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, complete);
     }
 
     /**
@@ -204,7 +205,7 @@ public class CommonMgr implements ModuleBase {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.d("---GiftList--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                if (response.isOk() || response.isCache()){
+                if (response.isOk() || response.isCache()) {
                     giftLists = new GiftsList();
                     giftLists.parseJson(response.getResponseString());
                 }
@@ -223,7 +224,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     public VideoVerifyBean getVideoVerify() {
-        return videoVerify!=null?videoVerify:new VideoVerifyBean();
+        return videoVerify != null ? videoVerify : new VideoVerifyBean();
     }
 
     public void setVideoVerify(VideoVerifyBean videoVerify) {

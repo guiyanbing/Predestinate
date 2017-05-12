@@ -8,6 +8,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
@@ -21,9 +22,6 @@ import java.util.Map;
  * Created by ZRP on 2017/4/13.
  */
 public class Statistics {
-
-    //向大数据发送行为统计
-    private static final String FATE_SEND_PATH_STATISTICS = Constant.FATE_IT_GO + "xs/hdp/Action";
 
     /**
      * 用户行为统计点
@@ -191,7 +189,7 @@ public class Statistics {
             final LinkedList<HashMap<String, Object>> tempList = cachedList;
 
             PLogger.d("---Statistics--->" + gson.toJson(batchMap));
-            ModuleMgr.getCommonMgr().CMDRequest("POST", true, FATE_SEND_PATH_STATISTICS, batchMap, new RequestComplete() {
+            ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.statistics, batchMap, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     if (response.isOk()) {

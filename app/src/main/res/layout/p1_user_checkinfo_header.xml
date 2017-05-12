@@ -32,7 +32,7 @@
                 android:layout_width="@dimen/px240_dp"
                 android:layout_height="@dimen/px240_dp"
                 android:layout_marginTop="@dimen/px100_dp"
-                android:background="@drawable/default_head" />
+                android:src="@drawable/default_head" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                         android:id="@+id/iv_sex"
                         android:layout_width="@dimen/px36_dp"
                         android:layout_height="@dimen/px36_dp"
-                        tools:src="@drawable/f1_sex_female_2" />
+                        android:src="@drawable/f1_sex_female_2" />
 
                     <TextView
                         android:id="@+id/tv_age"
@@ -189,14 +189,14 @@
                 android:id="@+id/iv_guanzhu"
                 android:layout_width="@dimen/px45_dp"
                 android:layout_height="@dimen/px45_dp"
-                android:background="@drawable/f1_follow_star"
+                android:src="@drawable/f1_follow_star"
                 android:scaleType="centerInside" />
 
             <TextView
                 android:id="@+id/tv_guanzhu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/px15_dp"
+                android:paddingLeft="@dimen/px10_dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/px42_sp"
                 tools:text="关注 3633" />

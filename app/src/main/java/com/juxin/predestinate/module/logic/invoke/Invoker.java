@@ -17,6 +17,7 @@ import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
@@ -40,6 +41,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * CMD操作统一处理
@@ -122,9 +132,20 @@ public class Invoker {
      * @param responseString 调用传值
      * @param isTranscode    是否进行字符串转码
      */
-    public void doInJS(String callbackName, String callbackID, String responseString, boolean isTranscode) {
-        doInJS("javascript:" + callbackName + "(\'" + callbackID + "\',\'" +
-                (isTranscode ? ChineseFilter.toUnicode(responseString) : responseString) + "\')");
+    public void doInJS(final String callbackName, final String callbackID, final String responseString, final boolean isTranscode) {
+        Flowable.create(new FlowableOnSubscribe<String>() {
+            @Override
+            public void subscribe(@NonNull FlowableEmitter<String> e) throws Exception {
+                e.onNext(isTranscode ? ChineseFilter.toUnicode(responseString) : responseString);
+                e.onComplete();
+            }
+        }, BackpressureStrategy.BUFFER).subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String s) throws Exception {
+                doInJS("javascript:" + callbackName + "(\'" + callbackID + "\',\'" + s + "\')");
+            }
+        });
     }
 
     /**
@@ -168,9 +189,26 @@ public class Invoker {
 
     public class Invoke {
 
+        // 显示加载loading
+        public void show_data_loading(String data) {
+            PLogger.d("show_data_loading: ------>" + data);
+            Activity act = appInterface.getAct();
+            LoadingDialog.show((FragmentActivity) (act == null ? App.getActivity() : act));
+        }
+
+        // 关闭加载loading
+        public void hide_data_loading(String data) {
+            PLogger.d("hide_data_loading: ------>" + data);
+            LoadingDialog.closeLoadingDialog(500);
+        }
+
         // 私聊指令
         public void cmd_open_chat(String data) {
             PLogger.d("cmd_open_chat: ------>" + data);
+            Activity act = appInterface.getAct();
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            UIShow.showPrivateChatAct(act == null ? App.getActivity() : act,
+                    dataObject.optLong("uid"), dataObject.optString("nickname"));
         }
 
         // 打开游戏页面
@@ -189,6 +227,7 @@ public class Invoker {
                 if (act != null && act instanceof WebActivity) {
                     ((WebActivity) act).hideLoading();
                 }
+                LoadingDialog.closeLoadingDialog();
             } catch (Exception e) {
                 e.printStackTrace();
             }

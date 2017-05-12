@@ -98,4 +98,17 @@
             android:textColor="@color/white"
             android:textSize="13sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/switch_server"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/theme_color_red"
+        android:gravity="center"
+        android:onClick="switchServer"
+        android:text="切换服务器："
+        android:textColor="@color/white"
+        android:textSize="13sp" />
 </LinearLayout>

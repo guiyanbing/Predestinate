@@ -91,15 +91,6 @@ public class RecMessageMgr implements IMProxy.IMListener{
 
             if (isSave) {//是否保存
                 ModuleMgr.getChatMgr().onReceiving(message);
-//              if(BaseMessage.BaseMessageType.hint.toString().equals(type)){//灰色消息
-//                  if(((RoseMessage)message).isSave()){//如果是true就存 否则不存储
-//                        ModuleMgr.getChatMgr().onReceiving(message);
-//                  }else {
-//                        ModuleMgr.getChatMgr().onChatMsgUpdate(null, message.getWhisperID(), true, message);
-//                    }
-//                }else{
-//                    ModuleMgr.getChatMgr().onReceiving(message);
-//                }
             } else {
                 ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
             }

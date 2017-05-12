@@ -218,7 +218,7 @@ public class UserProfile extends UserBasic {
         this.purpose = purpose;
     }
 
-    public List<UserPhoto> getUserPhotoList() {
+    public List<UserPhoto> getUserPhotos() {
         return userPhotoList;
     }
 

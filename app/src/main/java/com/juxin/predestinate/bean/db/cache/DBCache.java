@@ -7,9 +7,7 @@ import com.juxin.predestinate.bean.db.DBCenter;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.BuildConfig;
 import com.squareup.sqlbrite.SqlBrite;
-
 import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
