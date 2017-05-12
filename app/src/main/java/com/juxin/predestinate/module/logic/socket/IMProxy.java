@@ -31,7 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 即时通许代理，负责将接收到的服务器消息通知给上层
  */
 public class IMProxy {
-    private ConcurrentHashMap<Long,SendCallBack> mSendCallBackMap = new ConcurrentHashMap<>();
+
+    private ConcurrentHashMap<Long, SendCallBack> mSendCallBackMap = new ConcurrentHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private static class SingletonHolder {
@@ -155,12 +156,12 @@ public class IMProxy {
     /**
      * socket发消息
      *
-     * @param netData 数据包封装
+     * @param netData  数据包封装
      * @param callBack 发送消息回调
      */
     public void send(NetData netData, SendCallBack callBack) {
         long msgId = netData.getMessageId();
-        if(msgId != -1) {
+        if (msgId != -1) {
             mSendCallBackMap.put(msgId, callBack);
         }
         send(netData);
@@ -281,6 +282,7 @@ public class IMProxy {
     public interface SendCallBack {
         /**
          * 发送消息后返回的结果回调
+         *
          * @param msgId    消息Id
          * @param group    是否群聊消息
          * @param groupId  群聊Id，私聊为null或空
@@ -291,6 +293,7 @@ public class IMProxy {
 
         /**
          * 当发送消息失败时回调
+         *
          * @param data
          */
         void onSendFailed(NetData data);
@@ -349,13 +352,13 @@ public class IMProxy {
         public void onMessage(final NetData data) throws RemoteException {
             final long msgId = data.getMessageId();
             //检查是否有发送回调
-            if(msgId != -1){
+            if (msgId != -1) {
                 final SendCallBack callBack = mSendCallBackMap.get(msgId);
-                if(callBack != null){
+                if (callBack != null) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            callBack.onResult(msgId,false,"",data.getFromId(), data.getContent());
+                            callBack.onResult(msgId, false, "", data.getFromId(), data.getContent());
                         }
                     });
                     mSendCallBackMap.remove(msgId);
@@ -370,9 +373,9 @@ public class IMProxy {
         public void onSendMsgError(final NetData data) throws RemoteException {
             final long msgId = data.getMessageId();
             //检查是否有发送回调
-            if(msgId != -1){
+            if (msgId != -1) {
                 final SendCallBack callBack = mSendCallBackMap.get(msgId);
-                if(callBack != null){
+                if (callBack != null) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -449,11 +452,11 @@ public class IMProxy {
      * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
      */
     private void accountInvalid(int reason) {
-//        if (reason == 1) {// 踢下线弹窗
-//            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
-//        } else if (reason == 2) {// 帐号无效
-//            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
-//        }
+        if (reason == 1) {// 踢下线弹窗
+            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
+        } else if (reason == 2) {// 帐号无效
+            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
+        }
     }
 
     /**

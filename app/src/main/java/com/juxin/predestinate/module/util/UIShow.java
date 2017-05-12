@@ -34,6 +34,7 @@ import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.discover.MyDefriendAct;
 import com.juxin.predestinate.ui.discover.MyFriendsAct;
@@ -65,12 +66,25 @@ import com.juxin.predestinate.ui.user.auth.RecordVideoAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
-import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
+import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
 import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
+import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
+import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
+import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
+import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
+import com.juxin.predestinate.ui.user.my.MyAttentionAct;
+import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
+import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
+import com.juxin.predestinate.ui.user.my.NearVisitorAct;
+import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
+import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
+import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
+import com.juxin.predestinate.ui.user.my.WithDrawExplainAct;
+import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
@@ -87,20 +101,6 @@ import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
 import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
 import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
 import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
-import com.juxin.predestinate.module.util.my.AttentionUtil;
-import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
-import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
-import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
-import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
-import com.juxin.predestinate.ui.user.my.MyAttentionAct;
-import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
-import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.user.my.NearVisitorAct;
-import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
-import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
-import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
-import com.juxin.predestinate.ui.user.my.WithDrawExplainAct;
-import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
 
 import java.io.Serializable;
 import java.util.List;
@@ -172,13 +172,6 @@ public class UIShow {
     }
 
     /**
-     * 开通vip
-     */
-    public static void openVip(Context context){
-        UIShow.showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
-                ModuleMgr.getCenterMgr().getChargeH5Params()));
-    }
-    /**
      * 跳转到网页
      *
      * @param url 网页地址
@@ -240,17 +233,16 @@ public class UIShow {
         activity.startActivity(intent);
     }
 
-
     /**
      * 手机绑定
      *
      * @param activity
      * @param isVerify 是否绑定手机
      */
-    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify,int requestCode) {
+    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify, int requestCode) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
         intent.putExtra("isVerify", isVerify);
-        activity.startActivityForResult(intent,requestCode);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -777,8 +769,41 @@ public class UIShow {
         }
     }
 
-
     // -----------------------我的提示跳转 start----------------------------
+
+    /**
+     * 跳转到开通vip页面
+     */
+    public static void showOpenVipActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
+                ModuleMgr.getCenterMgr().getChargeH5Params()));
+        // TODO: 2017/5/12
+    }
+
+    /**
+     * 跳转到购买Y币页面
+     */
+    public static void showBuyCoinActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
+                ModuleMgr.getCenterMgr().getChargeH5Params()));
+        // TODO: 2017/5/12
+    }
+
+    /**
+     * 跳转到我的礼物页面
+     */
+    public static void showMyGiftActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));
+        // TODO: 2017/5/12
+    }
+
+    /**
+     * 跳转到活动相关页面
+     */
+    public static void showActionActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
+        // TODO: 2017/5/12
+    }
 
     /**
      * 打开我的关注页面
@@ -1016,26 +1041,29 @@ public class UIShow {
 
     /**
      * 打开录制视频页
+     *
      * @param context
      * @param requestCode
      */
-    public static void showRecordVideoAct(FragmentActivity context,int requestCode){
-        context.startActivityForResult(new Intent(context, RecordVideoAct.class),requestCode);
+    public static void showRecordVideoAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, RecordVideoAct.class), requestCode);
     }
 
     /**
      * 打开视频认证页
+     *
      * @param context
      */
-    public static void showMyAuthenticationVideoAct(FragmentActivity context,int requestCode){
-        context.startActivityForResult(new Intent(context, MyAuthenticationVideoAct.class),requestCode);
+    public static void showMyAuthenticationVideoAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, MyAuthenticationVideoAct.class), requestCode);
     }
 
     /**
-     *  打开我的认证页面
+     * 打开我的认证页面
+     *
      * @param context
      */
-    public static void showMyAuthenticationAct(FragmentActivity context,int requestCode){
-        context.startActivityForResult(new Intent(context, MyAuthenticationAct.class),requestCode);
+    public static void showMyAuthenticationAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, MyAuthenticationAct.class), requestCode);
     }
 }
