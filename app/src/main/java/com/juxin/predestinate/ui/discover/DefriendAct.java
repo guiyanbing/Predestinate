@@ -56,7 +56,7 @@ public class DefriendAct extends BaseActivity implements DefriendAdapter.OnSelec
     private void initTitle() {
         setBackView(R.id.base_title_back);
         setTitle(getResources().getString(R.string.defriend_title));
-        setTitleRight(getResources().getString(R.string.defriend_title_right), R.color.text_theme_blue, new View.OnClickListener() {
+        setTitleRight(getResources().getString(R.string.defriend_title_right), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(toTypeName)) {

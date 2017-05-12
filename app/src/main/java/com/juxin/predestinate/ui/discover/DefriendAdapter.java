@@ -42,11 +42,11 @@ public class DefriendAdapter extends ExBaseAdapter<DefriendType> {
         holder.tv_name.setText(getItem(position).getStr_typeName());
         holder.is_check.setChecked(getItem(position).isCheck());
 
-        if (position < (getCount() - 1)) {
-            holder.divider_line.setVisibility(View.VISIBLE);
-        } else {
-            holder.divider_line.setVisibility(View.GONE);
-        }
+//        if (position < (getCount() - 1)) {
+//            holder.divider_line.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.divider_line.setVisibility(View.GONE);
+//        }
 
         holder.is_check.setOnClickListener(new View.OnClickListener() {
             @Override

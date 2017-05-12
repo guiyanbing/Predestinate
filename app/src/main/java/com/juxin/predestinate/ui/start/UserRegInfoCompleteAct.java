@@ -10,25 +10,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -38,7 +42,7 @@ import java.util.HashMap;
  * @author:XY
  * @Date:2017-4-19
  */
-public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
+public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListener, ImgSelectUtil.OnChooseCompleteListener, PObserver {
     private final static int TASK_TYPE_HEADUPLOAD = 0;
     private final static int TASK_TYPE_MODIFYDATA = 1;
 
@@ -59,7 +63,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     private String heightValue;
     private String marryValue;
 
-    private String headPicPath;
 
     private HashMap<String, Object> postParams;
 
@@ -84,11 +87,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     }
 
     private void initData() {
+        MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1) {
-            ifUpHead = true;
-        }
+        MMLog.d("yao","gender=="+ ModuleMgr.getCenterMgr().getMyInfo().getGender());
+        ifUpHead = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1;
     }
 
     private void initView() {
@@ -209,24 +212,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         }
     }
 
-//    private void handleUploadHeadTaskResult(ResultInfo result) {
-//        if ("success".equals(result.getResult())) {
-//            // 完成头像
-//            AppCfg.getAppCfg().onSava(this, 11);
-//            // 将用户选择的头像显示到页面上
-//            PhotoUtils.loadSmallBitmap(this, headPicPath, img_reg_info_upload_photo, true);
-//            // 将上传成功的头像链接保存到内存当中
-//            AppModel.getInstance().setAvatarToDataBase(result.getContent());
-//        } else {
-//            // 删除保存的头像
-//            SDCardUtil.delFile(headPicPath);
-//        }
-//        String message = "success".equals(result.getResult()) ? "头像上传成功" : "头像上传失败";
-//        ifUpHead = "success".equals(result.getResult());
-//        T.showShort(this, message);
-//    }
-
-
     @Override
     public void onBackPressed() {
         updateDataToLocal();
@@ -277,30 +262,36 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
             return;
         }
         if (FileUtil.isExist(path[0])) {
-//            LoadingDialog.show(UserRegInfoCompleteAct.this, "头像上传，请稍侯");
-//            ModuleMgr.getMediaMgr().sendHttpFile(Constant.INT_AVATAR, path[0], new RequestComplete() {
-//                @Override
-//                public void onRequestComplete(HttpResponse response) {
-//                    LoadingDialog.closeLoadingDialog();
-//                    if (response.isOk()) {
-//                        FileUtil.deleteFile(path[0]);  // 删除裁切文件
-//                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-//                        String pic = upLoadResult.getHttpPathPic();
-//                        if (TextUtils.isEmpty(pic)) {
-//                            return;
-//                        }
-//                        final String avatarUrl = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
-//                        HashMap<String, Object> postParams = new HashMap<>();
-//                        postParams.put(EditKey.s_key_avatar, avatarUrl);
-//                            _photoUrl = avatarUrl;
-//                    } else {
-//                        MMToast.showShort("头像上传失败，请重试");
-//                    }
-//                    FileUtil.deleteFile(path[0]);   // 上传完成后清除临时裁切文件
-//                }
-//            });
+            LoadingDialog.show(UserRegInfoCompleteAct.this, "正在上传头像");
+            ModuleMgr.getCenterMgr().uploadAvatar(path[0], new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        LoadingDialog.closeLoadingDialog();
+                        if (response.isOk()) {
+                            JSONObject jsonObject = response.getResponseJson();
+                            String file_path = jsonObject.optString("file_path");
+                            ImageLoader.loadAvatar(UserRegInfoCompleteAct.this, file_path, img_reg_info_upload_photo);
+                            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+                            ifUpHead = true;
+                        } else {
+                            MMToast.showShort("头像上传失败，请重试");
+                        }
+                    }
+                }
+            });
         } else {
             MMToast.showShort("图片地址无效");
+        }
+    }
+
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_MyInfo_Change:
+                ImageLoader.loadAvatar(this, ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), img_reg_info_upload_photo);
+                break;
         }
     }
 }

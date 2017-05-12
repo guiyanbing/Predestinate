@@ -83,7 +83,8 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
             case R.id.img_user_login_arrow:
                 if (lv_account.getVisibility() == View.GONE) {
                     startAnimate();
-                    return;
+                }else{
+                    endAnimate();
                 }
                 break;
             case R.id.layout_parent:
@@ -155,7 +156,12 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     }
 
     // =========================== 账户列表显隐动画 =========================================
+
+    private void changeArrowDir(boolean open){
+        iv_arrow.setImageResource(open?R.drawable.f1_filter_up_arrow:R.drawable.filter_down_arrow);
+    }
     private void startAnimate() {
+        changeArrowDir(true);
         lv_account.setVisibility(View.VISIBLE);
         ViewAnimator.animate(lv_account)
                 .slideTop()
@@ -164,6 +170,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     }
 
     private void endAnimate() {
+        changeArrowDir(false);
         ViewAnimator.animate(lv_account)
                 .translationY(0, -300)
                 .alpha(1, 0)

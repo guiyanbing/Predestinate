@@ -66,6 +66,7 @@ public class WebPanel extends BasePanel {
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setAllowFileAccess(false);//设置允许访问文件数据
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不从缓存加载，确保每次进入的时候都是从服务器请求的最新页面
         if (PerformanceHelper.isHighPerformance(getContext())) {
             /*为高内存手机 增加清晰度*/
             webSettings.setJavaScriptCanOpenWindowsAutomatically(true);

@@ -61,10 +61,10 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
     private void initView() {
         initTitle();
         container = (LinearLayout) findViewById(R.id.container);
-        headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail, userProfile);
+        headPanel = new UserCheckInfoHeadPanel(this, channel, userProfile);
         container.addView(headPanel.getContentView());
 
-        footPanel = new UserCheckInfoFootPanel(this, channel, userDetail, userProfile);
+        footPanel = new UserCheckInfoFootPanel(this, channel, userProfile);
         footPanel.setSlideIgnoreView(this);
         container.addView(footPanel.getContentView());
         initBottom();

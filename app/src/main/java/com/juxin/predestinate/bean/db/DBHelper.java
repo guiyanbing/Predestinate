@@ -19,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(FLetter.getCreateTable());
         db.execSQL(FMessage.getCreateTable());
         db.execSQL(FProfile.getCreateTable());
         db.execSQL(FMark.getCreateTable());

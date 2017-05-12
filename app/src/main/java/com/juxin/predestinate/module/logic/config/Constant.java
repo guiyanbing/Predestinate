@@ -25,6 +25,9 @@ public class Constant {
     public static final String FATE_IT_CUP_HTTP = " http://pay.app.mumu123.cn/";        //银联地址
     public static final String HOST_URL = FATE_IT_HTTP;
 
+
+
+
     // -------------------------版本信息常量---------------------------
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
@@ -44,16 +47,22 @@ public class Constant {
 
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
     public static final String SETTING_QUIT_MESSAGE = "setting_quit_message";   //是否进行锁屏弹窗，存储key及默认值
-    public static final Boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
+    public static final boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
     public static final String SETTING_MESSAGE = "setting_message";             //是否进行消息提示，存储key及默认值
-    public static final Boolean SETTING_MESSAGE_DEFAULT = true;
+    public static final boolean SETTING_MESSAGE_DEFAULT = true;
     public static final String SETTING_VIBRATION = "setting_vibration";         //是否进行新消息震动提示，存储key及默认值
-    public static final Boolean SETTING_VIBRATION_DEFAULT = true;
+    public static final boolean SETTING_VIBRATION_DEFAULT = true;
     public static final String SETTING_VOICE = "setting_voice";                 //是否进行新消息声音提示，存储key及默认值
-    public static final Boolean SETTING_VOICE_DEFAULT = true;
+    public static final boolean SETTING_VOICE_DEFAULT = true;
     public static final String SETTING_SLEEP_MESSAGE = "setting_sleep_message"; //是否睡眠免打扰，存储key及默认值
-    public static final Boolean SETTING_SLEEP_MESSAGE_DEFAULT = true;
+    public static final boolean SETTING_SLEEP_MESSAGE_DEFAULT = true;
 
+    public static final String SETTING_VIDEO_CHAT = "setting_video_chat";
+    public static final boolean SETTING_VIDEO_CHAT_DEFAULT = true;
+    public static final String SETTING_AUDIO_CHAT = "setting_audio_chat";
+    public static final boolean SETTING_AUDIO_CHAT_DEFAULT = true;
+
+    public static final String ASET_DATA = "getASet_Flag";
     // 图片
     public static final int INT_AVATAR = 101;       // 头像
     public static final int INT_ALBUM = 102;        // 相册
@@ -96,5 +105,30 @@ public class Constant {
     public static final int PAY_VOICEACT = 0x20;// 银联语音支付
     public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
     public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
+
+    // 摇钱树游戏逻辑接口地址
+    public static final String FATE_GAME_LOGIC_BASE = "http://redbag2game.xiaoyaoai.cn/";
+    // 游戏服务地址
+    public static final String FATE_GAME_DOMAIN = "http://page.xiaoyaoai.cn/";
+    // 切水果音乐资源根路径
+    public static final String FATE_GAME_BASE = FATE_GAME_DOMAIN + "cutfruit/";
+    // 切水果音乐文件配置
+    public static final String FATE_GAME_SOUNDS = FATE_GAME_BASE + "assets/cutfruit/config/sounds.json";
+    // 切水果擂台页
+    public static final String FATE_REDBOX_RANKLIST = FATE_GAME_BASE + "fruit_ranklist.html";
+    // 切水果说明页
+    public static final String FATE_GAME_EXPLAIN = FATE_GAME_BASE + "play_help.html";
+    // 摇钱树游戏页
+    public static final String FATE_GAME_CASHCOW = FATE_GAME_DOMAIN + "cashcow/cashcow.html";
+    // 摇钱树音乐文件配置
+    public static final String FATE_GAME_CASH_COW_SOUNDS = FATE_GAME_DOMAIN + "cashcow/assets/cashcowres/configs/sounds.json";
+    // 摇钱树音乐资源根路径
+    public static final String FATE_GAME_CASH_COW_BASE = FATE_GAME_DOMAIN + "cashcow/";
+    //摇钱树版本：玩家购买，使用的时候须进行拼接AppCfg.ASet.getCashcow_logic_url() + AppCfg.FATE_PLAYERS_SHOPPING
+    public static final String FATE_PLAYERS_SHOPPING = "players/shopping";
+
+    public static String U_IS_VIDEO_AUTH;
+    public static String U_IS_VIDEO_IMG_URL;
+    public static String U_IS_VIDEO_VIDEO_URL;
 
 }

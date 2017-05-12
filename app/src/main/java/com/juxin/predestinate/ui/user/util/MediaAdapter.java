@@ -1,13 +1,15 @@
 package com.juxin.predestinate.ui.user.util;
 
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.others.SecretMedia;
+import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
@@ -17,10 +19,16 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
  */
 
 public class MediaAdapter extends BaseRecyclerViewAdapter {
-    public static final int SECRET_VIDEO = 2;  // 私密视频
+    private int showType = AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM;
+    private int params;
 
-    private int secretType = 1;
-    private int params;    // 展示参数
+    // data
+    private String url;
+
+    public MediaAdapter(int showType, int params) {
+        this.showType = showType;
+        this.params = params;
+    }
 
     @Override
     public int[] getItemLayouts() {
@@ -29,31 +37,26 @@ public class MediaAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-        SecretMedia data = (SecretMedia) getItem(position);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(params, params);
-
         ImageView img_media = viewHolder.findViewById(R.id.img_media);
         ImageView img_shade = viewHolder.findViewById(R.id.img_shade);
         TextView tv_num = viewHolder.findViewById(R.id.tv_num);
-        img_media.setLayoutParams(lp);
-        img_shade.setLayoutParams(lp);
+        img_media.setLayoutParams(new RelativeLayout.LayoutParams(params, params));
+        img_shade.setLayoutParams(new RelativeLayout.LayoutParams(params, params));
 
-        ImageLoader.loadCenterCrop(App.context, data.getCoverUrl(), img_media);
-        if (secretType == SECRET_VIDEO)
+
+        // 展示相册
+        if (showType == AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM) {
+            UserPhoto userPhoto = (UserPhoto) getItem(position);
+            url = userPhoto.getThumb();
+        }
+
+        ImageLoader.loadCenterCrop(App.context, url, img_media);
+        if (showType == AlbumHorizontalPanel.EX_HORIZONTAL_VIDEO)
             img_shade.setImageResource(R.drawable.p1_user_check_video_lock);
-        if (data.getViewTimes() > 0) tv_num.setText("+" + data.getViewTimes());
     }
 
     @Override
     public int getRecycleViewItemType(int position) {
         return 0;
-    }
-
-    public void setSecretType(int secretType) {
-        this.secretType = secretType;
-    }
-
-    public void setParams(int params) {
-        this.params = params;
     }
 }

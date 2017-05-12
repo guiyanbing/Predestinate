@@ -3,15 +3,20 @@ package com.juxin.predestinate.ui.user.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,43 +28,44 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements BaseRecyclerV
     public static final int EX_HORIZONTAL_ALBUM = 1;  // 展示照片
     public static final int EX_HORIZONTAL_VIDEO = 2;  // 展示视频
 
-    private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
-
-    private int secretType;
+    private int showType;
+    private Serializable list;          // 数据列表
     private MediaAdapter mediaAdapter;
-    private List<Object> data;
 
-    public AlbumHorizontalPanel(Context context, int secretType, List<Object> data) {
+    private List<UserPhoto> albumList;
+
+    public AlbumHorizontalPanel(Context context, int showType, Serializable list) {
         super(context);
         setContentView(R.layout.p1_album_horizontal_panel);
-        this.secretType = secretType;
-        this.data = data;
+        this.showType = showType;
+        this.list = list;
 
+        initData();
         initview();
     }
 
+    private void initData() {
+        if (showType == EX_HORIZONTAL_ALBUM) {
+            if (albumList == null) albumList = new ArrayList<>();
+            albumList = (List<UserPhoto>) list;
+        }
+    }
+
     private void initview() {
-        toDpMutliple = UIUtil.toDpMultiple((Activity) getContext());
+        int horizontalSpacing = ModuleMgr.getAppMgr().getScreenWidth() / 50;
+        int columnWidth = (ModuleMgr.getAppMgr().getScreenWidth() - 8 * horizontalSpacing) / 4;
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_album_horizontal);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 设置RecyclerView横向滚动
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new RightItemSpaces((int) (10 * toDpMutliple)));
+//        recyclerView.addItemDecoration(new RightItemSpaces(horizontalSpacing));
 
-        mediaAdapter = new MediaAdapter();
+        mediaAdapter = new MediaAdapter(showType, columnWidth);
         recyclerView.setAdapter(mediaAdapter);
+        mediaAdapter.setList(albumList);
         mediaAdapter.setOnItemClickListener(this);
 
-        setParameter();
         refresh();
-    }
-
-    /**
-     * 设置照片显示参数
-     */
-    private void setParameter() {
-        mediaAdapter.setSecretType(secretType);
-        mediaAdapter.setParams((int) (53.3 * toDpMutliple));
     }
 
     public void refresh() {

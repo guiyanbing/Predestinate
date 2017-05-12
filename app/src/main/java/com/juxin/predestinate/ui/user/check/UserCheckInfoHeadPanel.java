@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.user.check;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,7 +11,11 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.logic.config.UrlParam;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -20,27 +23,20 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 /**
  * 查看用户资料头部panel
  */
-public class UserCheckInfoHeadPanel extends BaseViewPanel {
+public class UserCheckInfoHeadPanel extends BaseViewPanel implements RequestComplete {
     private final int channel;
-    private UserDetail userDetail;   // 个人资料
     private UserProfile userProfile; // TA人资料
-
-    private RelativeLayout rl_header;   // 头部背景
-    private LinearLayout ll_guanzhu;    // 关注
-    private ImageView img_header, img_gender;
-    private TextView user_height, user_id, user_online_time,
-            user_age, user_distance, user_follow;
+    private TextView user_follow;
 
     private String avatarUrl, distance, online;
     private long uid;
     private boolean isMan;
     private int age, height, follow;
 
-    public UserCheckInfoHeadPanel(Context context, int channel, UserDetail userDetail, UserProfile userProfile) {
+    public UserCheckInfoHeadPanel(Context context, int channel, UserProfile userProfile) {
         super(context);
         setContentView(R.layout.p1_user_checkinfo_header);
         this.channel = channel;
-        this.userDetail = userDetail;
         this.userProfile = userProfile;
 
         initData();
@@ -49,7 +45,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
 
     private void initData() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-            if (userDetail == null) return;
+            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             avatarUrl = userDetail.getAvatar();
             uid = userDetail.getUid();
             isMan = userDetail.isMan();
@@ -75,25 +71,24 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
     }
 
     private void initView() {
-        rl_header = (RelativeLayout) findViewById(R.id.check_header);
-        ll_guanzhu = (LinearLayout) findViewById(R.id.ll_guanzhu);
-        img_header = (ImageView) findViewById(R.id.img_header);
-        img_gender = (ImageView) findViewById(R.id.iv_sex);
-        user_id = (TextView) findViewById(R.id.user_id);
-        user_age = (TextView) findViewById(R.id.tv_age);
-        user_height = (TextView) findViewById(R.id.tv_height);
-        user_distance = (TextView) findViewById(R.id.tv_distance);
-        user_online_time = (TextView) findViewById(R.id.tv_last_online);
+        RelativeLayout rl_header = (RelativeLayout) findViewById(R.id.check_header); // 头部背景
+        ImageView img_header = (ImageView) findViewById(R.id.img_header);
+        ImageView img_gender = (ImageView) findViewById(R.id.iv_sex);
+        TextView user_id = (TextView) findViewById(R.id.user_id);
+        TextView user_age = (TextView) findViewById(R.id.tv_age);
+        TextView user_height = (TextView) findViewById(R.id.tv_height);
+        TextView user_distance = (TextView) findViewById(R.id.tv_distance);
+        TextView user_online_time = (TextView) findViewById(R.id.tv_last_online);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
 
         if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
-            ll_guanzhu.setOnClickListener(listener);
+            findViewById(R.id.ll_guanzhu).setOnClickListener(listener);
         }
 
         ImageLoader.loadRoundCorners(getContext(), avatarUrl, 10, img_header);
         if (isMan) {
             rl_header.setBackgroundColor(getContext().getResources().getColor(R.color.picker_blue_color));
-            img_gender.setImageDrawable(getContext().getResources().getDrawable(R.drawable.f1_sex_male_2));
+            img_gender.setImageResource(R.drawable.f1_sex_male_2);
         }
         user_age.setText(getContext().getString(R.string.user_info_age, age));
         user_id.setText("ID:" + uid);
@@ -107,9 +102,28 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.ll_guanzhu:  // 关注星标
+                case R.id.ll_guanzhu:       // 关注星标
+                    if (userProfile.isFollowed()) {  // 已关注
+                        ModuleMgr.getCommonMgr().unfollow(userProfile.getUid(), UserCheckInfoHeadPanel.this);
+                        return;
+                    }
+                    ModuleMgr.getCommonMgr().follow(userProfile.getUid(), UserCheckInfoHeadPanel.this);
                     break;
             }
         }
     };
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        if (response.getUrlParam() == UrlParam.follow) {
+
+            return;
+        }
+
+        if (response.getUrlParam() == UrlParam.unfollow) {
+
+            return;
+        }
+
+    }
 }

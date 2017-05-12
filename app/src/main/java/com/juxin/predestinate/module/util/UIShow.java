@@ -59,6 +59,9 @@ import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
+import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
+import com.juxin.predestinate.ui.user.auth.MyAuthenticationVideoAct;
+import com.juxin.predestinate.ui.user.auth.RecordVideoAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
@@ -237,10 +240,10 @@ public class UIShow {
      * @param activity
      * @param isVerify 是否绑定手机
      */
-    public static void showPhoneVerify_Act(Context activity, boolean isVerify) {
+    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify,int requestCode) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
         intent.putExtra("isVerify", isVerify);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent,requestCode);
     }
 
     /**
@@ -996,5 +999,30 @@ public class UIShow {
      */
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
+    }
+
+    /**
+     * 打开录制视频页
+     * @param context
+     * @param requestCode
+     */
+    public static void showRecordVideoAct(FragmentActivity context,int requestCode){
+        context.startActivityForResult(new Intent(context, RecordVideoAct.class),requestCode);
+    }
+
+    /**
+     * 打开视频认证页
+     * @param context
+     */
+    public static void showMyAuthenticationVideoAct(FragmentActivity context,int requestCode){
+        context.startActivityForResult(new Intent(context, MyAuthenticationVideoAct.class),requestCode);
+    }
+
+    /**
+     *  打开我的认证页面
+     * @param context
+     */
+    public static void showMyAuthenticationAct(FragmentActivity context,int requestCode){
+        context.startActivityForResult(new Intent(context, MyAuthenticationAct.class),requestCode);
     }
 }

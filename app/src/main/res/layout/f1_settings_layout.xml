@@ -36,6 +36,36 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/setting_video_switch"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="开启视频通话" />
+
+                    <ToggleButton
+                        android:id="@+id/setting_video_switch_iv"
+                        style="@style/set_togglebtn" />
+                </LinearLayout>
+
+                <ImageView style="@style/set_line" />
+
+                <LinearLayout
+                    android:id="@+id/setting_audio_switch"
+                    style="@style/set_item">
+
+                    <TextView
+                        style="@style/set_desc"
+                        android:text="开启语音通话" />
+
+                    <ToggleButton
+                        android:id="@+id/setting_audio_switch_iv"
+                        style="@style/set_togglebtn" />
+                </LinearLayout>
+
+                <ImageView style="@style/set_line" />
+
+                <LinearLayout
                     android:id="@+id/setting_message"
                     style="@style/set_item">
 
@@ -75,7 +105,7 @@
 
                     <ToggleButton
                         android:id="@+id/setting_voice_iv"
-                        style="@style/set_togglebtn"/>
+                        style="@style/set_togglebtn" />
                 </LinearLayout>
 
                 <ImageView style="@style/set_line" />
@@ -90,7 +120,7 @@
 
                     <ToggleButton
                         android:id="@+id/setting_quit_message_iv"
-                        style="@style/set_togglebtn"/>
+                        style="@style/set_togglebtn" />
                 </LinearLayout>
             </LinearLayout>
 

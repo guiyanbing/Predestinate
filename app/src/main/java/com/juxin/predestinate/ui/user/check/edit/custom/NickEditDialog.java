@@ -10,6 +10,9 @@ import android.widget.EditText;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 
+/**
+ * 修改昵称弹框
+ */
 public class NickEditDialog extends SimpleTipDialog implements android.view.View.OnClickListener {
     private Context context;
     private EditText editText;
