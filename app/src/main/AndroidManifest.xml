@@ -150,35 +150,38 @@
 
         <!-- ============= 小友模块start ============= -->
         <activity
-            android:name=".ui.wode.NearVisitorAct"
+            android:name=".ui.user.my.GiftDiamondPayDlg"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.wode.MyAttentionAct"
+            android:name=".ui.user.my.NearVisitorAct"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.wode.MyDiamondsAct"
+            android:name=".ui.user.my.MyAttentionAct"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.user.my.MyDiamondsAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.wode.MyDiamondsExplainAct"
+            android:name=".ui.user.my.MyDiamondsExplainAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.wode.RedBoxRecordAct"
+            android:name=".ui.user.my.RedBoxRecordAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.wode.WithDrawExplainAct"
+            android:name=".ui.user.my.WithDrawExplainAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.wode.WithDrawApplyAct"
+            android:name=".ui.user.my.WithDrawApplyAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.wode.WithDrawSuccessAct"
+            android:name=".ui.user.my.WithDrawSuccessAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.wode.RedBoxPhoneVerifyAct"
+            android:name=".ui.user.my.RedBoxPhoneVerifyAct"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.wode.DemandRedPacketAct"
+            android:name=".ui.user.my.DemandRedPacketAct"
             android:screenOrientation="portrait"/>
 
         <activity

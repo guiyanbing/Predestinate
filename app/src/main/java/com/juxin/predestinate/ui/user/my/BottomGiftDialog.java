@@ -1,0 +1,273 @@
+package com.juxin.predestinate.ui.user.my;
+
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
+import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.bean.my.SendGiftResultInfo;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.module.util.my.GiftHelper;
+import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
+import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
+import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
+import com.juxin.predestinate.ui.user.my.view.PageIndicatorView;
+import com.juxin.predestinate.ui.xiaoyou.zanshi.view.GiftNumPopup;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 送礼物弹框
+ * Created by zm on 2017/3/.
+ */
+public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,GiftNumPopup.OnSelectNumChangedListener,RequestComplete,TextWatcher,ViewPager.OnPageChangeListener,GiftHelper.OnRequestGiftListCallback {
+
+    private TextView txvAllStone,txvPay,txvNeedStone,txvSend,txvLeft,txvRight;
+    private EditText txvSendNum;
+    private RelativeLayout llSendNum;//礼物数量
+    private PageIndicatorView pageIndicatorView;
+    private List<GiftsList.GiftInfo> arrGifts = new ArrayList();
+    private long uid;//收礼物的uid
+    private int position = -1;
+    private int pageCount;
+    private List<GridView> mLists;
+    private int curPage = 0;//当前页
+    private CustomViewPager vpViews;
+    private GiftViewPagerAdapter gvpAdapter;
+    private int oldPosition = -1;
+    private int sum = 0;
+    private int onePageCount = 0;
+
+    public BottomGiftDialog() {
+        settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
+        setGravity(Gravity.BOTTOM);
+        setDialogSizeRatio(-2, -2);
+        setCancelable(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        setContentView(R.layout.p1_bottom_gif_dialog);
+        View contentView = getContentView();
+        onePageCount = ((ModuleMgr.getAppMgr().getScreenWidth() - UIUtil.dp2px(17))/UIUtil.dp2px(95))*2;//根据屏幕宽度计算列数
+        initGifts();
+        reSetData();
+        initView(contentView);
+        return contentView;
+    }
+
+    private void initView(final View contentView) {
+        txvAllStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_allstone);
+        txvNeedStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_needstone);
+        txvSendNum = (EditText) contentView.findViewById(R.id.bottom_gif_txv_sendnum);
+        llSendNum = (RelativeLayout) contentView.findViewById(R.id.bottom_gif_ll_sendnum);
+        txvLeft = (TextView)contentView.findViewById(R.id.bottom_gif_txv_left);
+        txvRight = (TextView)contentView.findViewById(R.id.bottom_gif_txv_right);
+        pageIndicatorView = (PageIndicatorView) contentView.findViewById(R.id.bottom_gif_rlv_gif_indicator);
+        vpViews = (CustomViewPager) contentView.findViewById(R.id.bottom_gift_vp_view);
+        vpViews.setRow(2);
+
+        //设置dot的size和背景
+        pageIndicatorView.setSelectDot(12,8,R.drawable.f1_dot_select);
+        pageIndicatorView.setUnselectDot(8,8,R.drawable.f1_dot_unselect);
+
+        findViewById(R.id.bottom_gif_view_blank).setOnClickListener(this);
+        findViewById(R.id.bottom_gif_rl_top).setOnClickListener(this);
+        contentView.findViewById(R.id.bottom_gif_txv_pay).setOnClickListener(this);
+        contentView.findViewById(R.id.bottom_gif_txv_send).setOnClickListener(this);
+        txvLeft.setText("<");
+        txvRight.setText(">");
+        txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
+        txvSendNum.addTextChangedListener(this);
+        initGridView();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bottom_gif_view_blank:
+                dismiss();
+                break;
+            case R.id.bottom_gif_txv_pay:
+                UIShow.showGoodsDiamondDialog(getContext());
+                break;
+            case R.id.bottom_gif_txv_send:
+                int needStone = Integer.valueOf(txvNeedStone.getText().toString());
+                if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()){
+                    UIShow.showGoodsDiamondDialog(getContext());
+                    return;
+                }
+                if (position == -1){
+                    PToast.showShort(getContext().getString(R.string.please_select_a_gift));
+                    return;
+                }
+                ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);
+                break;
+            case R.id.bottom_gif_rl_top:
+                break;
+        }
+    }
+
+    public void setToId(long to_id){
+        this.uid = to_id;
+    }
+
+    private void initGifts(){
+        arrGifts = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
+        if (arrGifts == null){
+            ModuleMgr.getCommonMgr().requestGiftList(this);
+        }
+    }
+
+    private void initData() {
+        //设置ViewPager监听
+        vpViews.addOnPageChangeListener(this);
+        gvpAdapter = new GiftViewPagerAdapter(getContext(), mLists);
+        vpViews.setAdapter(gvpAdapter);
+        pageIndicatorView.initIndicator(pageCount);
+        if (pageCount > 1)
+            pageIndicatorView.setSelectedPage(0);
+    }
+
+    private void initGridView() {
+        pageCount = (int) Math.ceil(arrGifts.size() / (float)onePageCount);
+        mLists = new ArrayList<>();
+        for (int i = 0; i < pageCount; i++) {
+            final GridView gv = new GridView(getContext());
+            final GiftAdapter gvGift = new GiftAdapter(getContext(), arrGifts, i,onePageCount);
+            gv.setAdapter(gvGift);
+            gv.setGravity(Gravity.CENTER);
+            gv.setClickable(true);
+            gv.setFocusable(false);
+            gv.setNumColumns(onePageCount/2);
+            gv.setSelector(R.color.transparent);
+            gv.setFadingEdgeLength(0);
+            gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int select = curPage * onePageCount + position;
+                    if (select < arrGifts.size()) {
+                        reSetData();
+                        arrGifts.get(select).setIsSelect(true);
+                        //// TODO: 2017/5/10  获取选择的礼物信息
+                        if (oldPosition == select) {
+                            sum++;
+                        } else {
+                            sum = 1;
+                        }
+                        oldPosition = select;
+                        onSelectNumChanged(sum, sum * arrGifts.get(select).getMoney(), select);
+                        for (int i = 0; i < mLists.size(); i++) {
+                            ((GiftAdapter) mLists.get(i).getAdapter()).notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
+            mLists.add(gv);
+        }
+        initData();
+    }
+
+    private void reSetData(){
+        for (int j = 0; j < arrGifts.size(); j++) {
+            arrGifts.get(j).setIsSelect(false);
+        }
+    }
+
+    @Override
+    public void onSelectNumChanged(int num) {
+        txvSendNum.setText(num+"");
+        txvNeedStone.setText(num+"");
+    }
+    public void onSelectNumChanged(int num,int sum,int position) {
+        this.position = position;
+        txvSendNum.setText(num+"");
+        txvSendNum.setSelection(txvSendNum.length());
+        txvNeedStone.setText(sum+"");
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        SendGiftResultInfo info = new SendGiftResultInfo();
+        info.parseJson(response.getResponseString());
+        PToast.showShort(info.getMsg()+"");
+    }
+    private CharSequence temp;
+    private int selectionStart;
+    private int selectionEnd;
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        temp = charSequence;
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        try {
+            selectionStart = txvSendNum.getSelectionStart();
+            selectionEnd = txvSendNum.getSelectionEnd();
+            if (position > -1){
+                int need = Integer.valueOf(editable.toString());
+                sum = need;
+                txvNeedStone.setText(need*arrGifts.get(position).getMoney()+"");
+            }
+            if (temp.length() > 4) {
+                editable.delete(selectionStart - 1, selectionEnd);
+                int tempSelection = selectionEnd;
+                txvSendNum.setText(editable);
+                txvSendNum.setSelection(tempSelection);//设置光标在最后
+            }
+        }catch (Exception e){
+            txvNeedStone.setText(0+"");
+            PLogger.e("BottomGiftDialog---------"+e.toString());
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        curPage = position;
+        pageIndicatorView.setSelectedPage(curPage);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onRequestGiftListCallback(boolean isOk) {
+        if (isOk){
+            arrGifts = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
+            initGridView();
+        }
+    }
+}
