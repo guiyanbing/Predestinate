@@ -71,7 +71,7 @@ public class AlbumExhibitionAdapter extends ExBaseAdapter<SingleImageModel> impl
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImgSelectUtil.getInstance().takePhoto(activity);
+                    ImgSelectUtil.getInstance().takePhoto(activity,false);
                 }
             });
             convertView.setLayoutParams(new GridView.LayoutParams(perWidth, perWidth));
