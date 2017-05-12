@@ -167,7 +167,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 str = name;
             }
         }
-        base_title_title.setText("111111");
+        base_title_title.setText(str);
        // base_title_title.setText(str.length() > 10 ? ("与" + str + "...的私信") : ("与" + str + "的私信");
 
 
