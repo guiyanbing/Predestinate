@@ -14,7 +14,7 @@ public class VideoVerifyBean extends BaseData {
     private int audiochat;
     private String imgurl;
     private String videourl;
-private int  status;
+    private int status;
 
     public int getStatus() {
         return status;
@@ -77,7 +77,7 @@ private int  status;
                 JSONObject verifyJob = resJob.optJSONObject("videoverify");
                 this.imgurl = verifyJob.optString("imgurl");
                 this.videourl = verifyJob.optString("videourl");
-                this.status= verifyJob.optInt("status");
+                this.status = verifyJob.optInt("status");
             }
         }
     }

@@ -21,6 +21,15 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
+    <!--录音-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
         android:name=".module.logic.application.App"
         android:allowBackup="false"
@@ -294,6 +303,18 @@
             android:name=".module.local.album.crop.CropImageAct"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".ui.user.auth.RecordVideoAct"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.user.auth.MyAuthenticationVideoAct"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.user.auth.MyAuthenticationAct"
+            android:screenOrientation="portrait"
+            />
 
         <!-- ============= 锁屏弹窗 ============= -->
         <activity

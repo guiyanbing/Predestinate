@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.user.fragment;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -79,10 +80,11 @@ public class UserFragmentFunctionPanel extends BaseViewPanel {
                     // TODO: 2017/5/3
                     break;
                 case R.id.ll_phone_verify: // 手机绑定
-                    UIShow.showPhoneVerify_Act(getContext(), ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone());
+
                     break;
 
                 case R.id.ll_video_verify: // 真人认证
+                    UIShow.showMyAuthenticationAct((FragmentActivity) getContext(),103);
                     break;
             }
         }

@@ -30,7 +30,6 @@ import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
-import com.juxin.predestinate.ui.xiaoyou.wode.bean.GiftsList;
 import com.juxin.predestinate.ui.wode.util.AttentionUtil;
 import com.juxin.predestinate.ui.wode.bean.GiftsList;
 
@@ -177,7 +176,7 @@ public class CommonMgr implements ModuleBase {
         HashMap<String,Object> post_param = new HashMap<>();
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, complete);
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.addVideoVerify, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, true, complete);
     }
 
     /**

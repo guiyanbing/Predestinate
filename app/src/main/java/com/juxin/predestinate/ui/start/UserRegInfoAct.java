@@ -87,6 +87,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
             case R.id.btn_reg_info_submit:
                 if (validInput()) {
                     LoadingDialog.show(this,getResources().getString(R.string.loading_reg));
+                    ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
                     ModuleMgr.getLoginMgr().onRegister(this,urlParam, nickname, age, gender);
                 }
                 break;

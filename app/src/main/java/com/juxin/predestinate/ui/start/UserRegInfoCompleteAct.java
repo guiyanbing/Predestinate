@@ -17,6 +17,7 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -89,6 +90,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
+        MMLog.d("yao","gender=="+ ModuleMgr.getCenterMgr().getMyInfo().getGender());
         ifUpHead = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1;
     }
 

@@ -512,5 +512,9 @@
     <string name="privatechat_title_yb">Y币:0</string>
     <string name="please_select_a_gift">请选择礼物</string>
 
+    <string name="txt_cancel">取消</string>
 
+    <!--认证-->
+    <string name="txt_record_title">视频录制认证</string>
+    <string name="txt_record_desc">请保持正面录制5秒钟</string>
 </resources>

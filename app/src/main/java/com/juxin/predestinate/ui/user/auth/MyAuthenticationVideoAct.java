@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
@@ -20,9 +18,10 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.Video;
 
 import org.json.JSONException;
@@ -30,8 +29,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 视频认证
@@ -55,12 +52,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
         context = this;
         setBackView("视频认证");
-        setTitleRight("提交", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitAuth();
-            }
-        });
+        setHideTopRightView(videoVerifyBean.getStatus() != 0);
         initView();
         getStatus();
     }
@@ -167,27 +159,27 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 if (isMakeing)
                     return;
                 isMakeing = true;
-                ImgSelectUtil.getInstance().pickPhoto(MyAuthenticationVideoAct.this, this);
+                ImgSelectUtil.getInstance().pickPhotoGallery(MyAuthenticationVideoAct.this, this);
                 break;
             case R.id.iv_pic:
                 if (isMakeing)
                     return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
-                    ImgSelectUtil.getInstance().pickPhoto(MyAuthenticationVideoAct.this, this);
+                    ImgSelectUtil.getInstance().pickPhotoGallery(MyAuthenticationVideoAct.this, this);
                 break;
             case R.id.tv_make_video:
                 if (isMakeing)
                     return;
                 isMakeing = true;
-//                startActivityForResult(new Intent(this, RecordVideoAct.class), VideoUploadResult);
+                UIShow.showRecordVideoAct(this,VideoUploadResult);
                 break;
             case R.id.iv_video:
                 if (isMakeing)
                     return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
-//                    startActivityForResult(new Intent(this, RecordVideoAct.class), VideoUploadResult);
+                    UIShow.showRecordVideoAct(this,VideoUploadResult);
                 break;
             case R.id.iv_auth_video:
                 Video.videoPlay(this);
@@ -203,89 +195,71 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
 
         } else if (requestCode == VideoUploadResult) {
             if (resultCode == RESULT_OK) {
-//                String sVideo = data.getStringExtra(RecordVideoAct.EXTRA_RECORD_FILE_PATH);
-//                Video.getVideoThumb(sVideo);
-//                loadLocalVideoImg();
-//                VideoUpload(sVideo);
+                String sVideo = data.getStringExtra(RecordVideoAct.EXTRA_RECORD_FILE_PATH);
+                Video.getVideoThumb(sVideo);
+                loadLocalVideoImg();
+                VideoUpload(sVideo);
             }
-        } else {
-//            mediaSelectUtil.handleActivityResult(requestCode, resultCode, data, false);
         }
     }
 
     private void checkAndShowSubmit() {
         if (isMakePhotoOK && isMakeVideoOk) {
+            setHideTopRightView(false);
             videoVerifyBean.setStatus(0);
         }
     }
 
     private void uploadAuthPic(String sPic) {
-//        BaseUtil.uploadFile(this, true, sPic, "videochat", new OnAsyncCallback() {
-//            @Override
-//            public void requestSuccess(BaseAsyncTask task) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(task.getJsonResult());
-//                    if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
-//                        String spic = jsonObject.optJSONObject("res").optString("file_http_path");
-//                        sPicNoHttp = jsonObject.optJSONObject("res").optString("file_s_path");
-//                        PhotoUtils.loadPhotoCenterCrop(context, spic, ivPic);
-//                        VideoVerifyBean.setImgurl(spic);
-//                        tvMakePic.setVisibility(View.VISIBLE);
-//                        isMakePhotoOK = true;
-//                        checkAndShowSubmit();
-//                        changePicStatus(0);
-//                        tvMakePic.setVisibility(View.VISIBLE);
-//                    }
-//                } catch (JSONException e) {
-//                    T.showShort(context, "照片处理失败请重试");
-//                }
-//            }
-//
-//            @Override
-//            public void requestFail(BaseAsyncTask task, Exception e) {
-//                T.showShort(context, "照片处理失败请重试");
-//            }
-//        });
+        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO_CHAT, sPic, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.getResponseString());
+                    if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
+                        String spic = jsonObject.optJSONObject("res").optString("file_http_path");
+                        sPicNoHttp = jsonObject.optJSONObject("res").optString("file_s_path");
+                        ImageLoader.loadCenterCrop(context, spic, ivPic);
+                        videoVerifyBean.setImgurl(spic);
+                        tvMakePic.setVisibility(View.VISIBLE);
+                        isMakePhotoOK = true;
+                        checkAndShowSubmit();
+                        changePicStatus(0);
+                        tvMakePic.setVisibility(View.VISIBLE);
+                    }else{
+                        PToast.showShort( "照片处理失败请重试");
+                    }
+                } catch (JSONException e) {
+                    PToast.showShort( "照片处理失败请重试");
+                }
+            }
+        });
     }
 
-
-    public void onComplete(String sPath) {
-//        PhotoUtils.getSmallBitmapAndSave(sPath, new PhotoUtils.IReadyCallback() {
-//            @Override
-//            public void onReady(String sJpg) {
-//                uploadAuthPic(sJpg);
-//            }
-//        });
-
-
-    }
 
     public void VideoUpload(String sPath) {
-//        BaseUtil.uploadFile(this, true, sPath, "video", new OnAsyncCallback() {
-//            @Override
-//            public void requestSuccess(BaseAsyncTask task) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(task.getJsonResult());
-//                    if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
-//                        VideoVerifyBean.setVideourl(jsonObject.optJSONObject("res").optString("file_http_path"));
-//                        loadLocalVideoImg();
-//                        tvMakeVideo.setVisibility(View.VISIBLE);
-//                        isMakeVideoOk = true;
-//                        checkAndShowSubmit();
-//                        changeVideoStatus(0);
-//                        changeVideoPlay();
-//                        tvMakeVideo.setVisibility(View.VISIBLE);
-//                    }
-//                } catch (JSONException e) {
-//                    T.showShort(context, "视频处理失败请重试");
-//                }
-//            }
-//
-//            @Override
-//            public void requestFail(BaseAsyncTask task, Exception e) {
-//
-//            }
-//        });
+        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO, sPath, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.getResponseString());
+                    if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
+                        videoVerifyBean.setVideourl(jsonObject.optJSONObject("res").optString("file_http_path"));
+                        loadLocalVideoImg();
+                        tvMakeVideo.setVisibility(View.VISIBLE);
+                        isMakeVideoOk = true;
+                        checkAndShowSubmit();
+                        changeVideoStatus(0);
+                        changeVideoPlay();
+                        tvMakeVideo.setVisibility(View.VISIBLE);
+                    }else {
+                        PToast.showShort("视频处理失败请重试");
+                    }
+                } catch (JSONException e) {
+                    PToast.showShort("视频处理失败请重试");
+                }
+            }
+        });
     }
 
     private void submitAuth() {
@@ -300,6 +274,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 if (response.getResponseString().contains("ok")) {
                     videoVerifyBean.setStatus(1);
                     changeAllStatus(1);
+                    setHideTopRightView(true);
                     PToast.showShort("提交成功，请等待审核");
                 } else {
                     PToast.showShort("提交失败，请稍后重试");
@@ -308,7 +283,19 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         });
 
     }
-
+    // 是否隐藏右上角view
+    protected void setHideTopRightView(boolean bool) {
+        if (bool) {
+            setTitleRight("",null);
+        } else {
+            setTitleRight("提交", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    submitAuth();
+                }
+            });
+        }
+    }
     private void getStatus() {
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
@@ -326,6 +313,8 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
             return;
         }
         if (FileUtil.isExist(path[0])) {
+            uploadAuthPic(path[0]);
         }
+
     }
 }
