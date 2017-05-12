@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -61,6 +63,7 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
         user_edit = (EditText) mMenuView.findViewById(R.id.user_edit);
 
         fillEditText();
+        attachInputListener();
     }
 
     private void fillEditText() {
@@ -73,6 +76,12 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
         if (editKey.equals(EditKey.s_key_nickName)) {
             data = userDetail.getNickname();
         }
+
+        // 备注
+        if (editKey.equals(EditKey.s_key_remark_name)) {
+            data = txt.getText().toString();
+        }
+        if (TextUtils.isEmpty(data)) data = "";
         user_edit.setText(data);
         user_edit.setSelection(data.length());
     }
@@ -97,6 +106,24 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
         this.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         this.setAnimationStyle(R.style.AnimLeft);
         this.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    /**
+     * 软键盘监听
+     */
+    private void attachInputListener() {
+        user_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // 确认键
+                if (actionId == EditorInfo.IME_ACTION_SEND
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    onDismiss();
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -134,6 +161,26 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
                 ModuleMgr.getCenterMgr().updateMyInfo(postParams, null);
             }
         }
+
+        // 设置备注
+        if (editKey.equals(EditKey.s_key_remark_name)) {
+            String remark = txt.getText().toString();
+            if (!editText.equals(remark) && !TextUtils.isEmpty(editText)) {
+                if (listener != null)
+                    listener.editFinish(editText);
+            }
+        }
         txt.setVisibility(View.VISIBLE);
+    }
+
+    // ------------------- 监听 -----------------------
+    private EditPopupWindowListener listener = null;
+
+    public void setEditPopupWindowListener(EditPopupWindowListener listener) {
+        this.listener = listener;
+    }
+
+    public interface EditPopupWindowListener {
+        void editFinish(String text);
     }
 }

@@ -102,7 +102,7 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
                     break;
 
                 case R.id.base_title_right_img_container:// 标题右侧按钮
-                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile);
+                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile.getUid(), userProfile);
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
@@ -119,7 +119,7 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
-                    // 礼物弹框
+                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userProfile.getUid());
                     break;
             }
         }
