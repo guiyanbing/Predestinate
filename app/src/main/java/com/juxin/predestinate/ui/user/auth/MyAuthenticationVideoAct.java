@@ -18,6 +18,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -211,9 +212,11 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     }
 
     private void uploadAuthPic(String sPic) {
+        LoadingDialog.show(MyAuthenticationVideoAct.this, "正在上传照片");
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO_CHAT, sPic, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
                 try {
                     JSONObject jsonObject = new JSONObject(response.getResponseString());
                     if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
@@ -309,6 +312,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
 
     @Override
     public void onComplete(String... path) {
+        isMakeing=false;
         if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
             return;
         }

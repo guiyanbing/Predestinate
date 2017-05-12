@@ -39,12 +39,13 @@ import java.util.HashMap;
 public class SettingAct extends BaseActivity implements OnClickListener {
 
     private TextView setting_clear_cache_tv, setting_account;
-    private ToggleButton setting_message_iv, setting_vibration_iv, setting_voice_iv, setting_quit_message_iv,settingVideoIv,settingAudioIv;
+    private ToggleButton setting_message_iv, setting_vibration_iv, setting_voice_iv, setting_quit_message_iv, settingVideoIv, settingAudioIv;
 
     // false是开true是开
-    private Boolean Message_Status, Vibration_Status, Voice_Status, Quit_Message_Status,videoStatus,audioStatus;
+    private Boolean Message_Status, Vibration_Status, Voice_Status, Quit_Message_Status, videoStatus, audioStatus;
 
-private VideoVerifyBean videoVerifyBean;
+    private VideoVerifyBean videoVerifyBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,7 @@ private VideoVerifyBean videoVerifyBean;
     }
 
     private void initView() {
-        videoVerifyBean= ModuleMgr.getCommonMgr().getVideoVerify();
+        videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
         findViewById(R.id.setting_modifypwd).setOnClickListener(this);
         findViewById(R.id.setting_message).setOnClickListener(this);
         findViewById(R.id.setting_vibration).setOnClickListener(this);
@@ -130,7 +131,7 @@ private VideoVerifyBean videoVerifyBean;
             setting_quit_message_iv.setBackgroundResource(0);
         }
 
-        if(videoVerifyBean.getBooleanVideochat()){
+        if (videoVerifyBean.getBooleanVideochat()) {
             videoStatus = true;
             settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
         } else {
@@ -138,7 +139,7 @@ private VideoVerifyBean videoVerifyBean;
             settingVideoIv.setBackgroundResource(0);
         }
 
-        if(videoVerifyBean.getBooleanAudiochat()){
+        if (videoVerifyBean.getBooleanAudiochat()) {
             audioStatus = true;
             settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
         } else {
@@ -226,14 +227,13 @@ private VideoVerifyBean videoVerifyBean;
                     }
                 }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
                 break;
-            case R.id.setting_video_switch:
-            {
-                if (validChange()){
-                    if(videoStatus){
+            case R.id.setting_video_switch: {
+                if (validChange()) {
+                    if (videoStatus) {
                         videoStatus = false;
                         settingVideoIv.setBackgroundResource(0);
                         videoVerifyBean.setVideochat(0);
-                    }else{
+                    } else {
                         videoStatus = true;
                         settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setVideochat(1);
@@ -242,14 +242,13 @@ private VideoVerifyBean videoVerifyBean;
                 }
                 break;
             }
-            case R.id.setting_audio_switch:
-            {
-                if (validChange()){
-                    if(audioStatus){
+            case R.id.setting_audio_switch: {
+                if (validChange()) {
+                    if (audioStatus) {
                         audioStatus = false;
                         settingAudioIv.setBackgroundResource(0);
                         videoVerifyBean.setAudiochat(0);
-                    }else{
+                    } else {
                         audioStatus = true;
                         settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setAudiochat(1);
@@ -269,8 +268,8 @@ private VideoVerifyBean videoVerifyBean;
     public boolean validChange() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         //开启音、视频通话时，男性用户判断是否VIP
-        if(userDetail.getGender() == 1
-                && !userDetail.isMonthMail()){
+        if (userDetail.getGender() == 1
+                && !userDetail.isMonthMail()) {
 
             PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
                 @Override
@@ -279,14 +278,14 @@ private VideoVerifyBean videoVerifyBean;
 
                 @Override
                 public void onSubmit() {
-                   //TODO 开通vip跳转
+                    UIShow.openVip(SettingAct.this);
                 }
-            }, "您非VIP会员，无法开启此功能，请耐心等待", "", "取消", "去开通", true, R.color.text_zhuyao_black);
+            }, "您非VIP会员，无法开启此功能", "", "取消", "去开通", true, R.color.text_zhuyao_black);
             return false;
         }
         //开启音、视频通话时，女性用户判断是否视频认证
-        if(userDetail.getGender() == 2){
-            if(videoVerifyBean.getStatus() == 0 || videoVerifyBean.getStatus() == 2){
+        if (userDetail.getGender() == 2) {
+            if (videoVerifyBean.getStatus() == 0 || videoVerifyBean.getStatus() == 2) {
                 PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
                     @Override
                     public void onCancel() {
@@ -295,13 +294,13 @@ private VideoVerifyBean videoVerifyBean;
 
                     @Override
                     public void onSubmit() {
-//TODO 认证跳转
+                        UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
                     }
-                },"开启视频、音频功能，需要通过视频认证","","取消","去认证",true,R.color.text_zhuyao_black);
+                }, "开启视频、音频功能，需要通过视频认证", "", "取消", "去认证", true, R.color.text_zhuyao_black);
                 return false;
-            }else if(videoVerifyBean.getStatus() == 1){
+            } else if (videoVerifyBean.getStatus() == 1) {
                 PToast.showShort("审核中，请稍后再试");
-                return false ;
+                return false;
             }
         }
 //        chatType = type;
@@ -313,6 +312,7 @@ private VideoVerifyBean videoVerifyBean;
         }
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

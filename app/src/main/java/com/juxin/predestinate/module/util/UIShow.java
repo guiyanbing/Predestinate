@@ -172,6 +172,13 @@ public class UIShow {
     }
 
     /**
+     * 开通vip
+     */
+    public static void openVip(Context context){
+        UIShow.showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
+                ModuleMgr.getCenterMgr().getChargeH5Params()));
+    }
+    /**
      * 跳转到网页
      *
      * @param url 网页地址
