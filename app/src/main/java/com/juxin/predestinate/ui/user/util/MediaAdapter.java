@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.user.util;
 
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -9,12 +8,13 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 /**
- * 媒体文件查看Adapter: 相册、视频
+ * RecyclerView媒体文件查看Adapter: 相册、视频
+ * <p>
+ * 有问题暂时弃用{水平列表item莫名自动match_parent}
  * Created by Su on 2017/5/10.
  */
 
