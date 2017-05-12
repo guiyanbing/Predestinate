@@ -39,6 +39,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     private SwipeListView listMail;
     private View mail_bottom;
     private Button mail_delete, mail_all_ignore;
+    private TextView mail_title_right_text;
 
     private boolean isGone = false;//是否首面底部，默认是false
 
@@ -53,20 +54,34 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.mail_fragment);
         setTitle(getResources().getString(R.string.main_btn_mail));
-        setTitleRight("忽略未读", new View.OnClickListener() {
+        onTitleRight();
+        initView();
+
+        MsgMgr.getInstance().attach(this);
+        return getContentView();
+    }
+
+    private void onTitleRight(){
+        View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
+        mail_title_right_text = (TextView) title_right.findViewById(R.id.mail_title_right_text);
+        mail_title_right_text.setText("编辑");
+        setTitleRightContainer(title_right);
+        title_right.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if(!isGone){
                     editContent();
                     ((MainActivity)getActivity()).onGoneButtom(isGone);
                     mail_bottom.setVisibility(View.VISIBLE);
+                    onTitleLeft();
+                    mail_title_right_text.setText("取消");
                     isGone = true;
                 }else {
-                    isGone = false;
+                    onTitleLeft();
                     cancleEdit();
+                    mail_title_right_text.setText("编辑");
+                    isGone = false;
                 }
-
-
 
 
                 //忽略所有未读消息
@@ -82,10 +97,21 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 //                }, "忽略未读消息,但消息不会删除.", "忽略消息");
             }
         });
-        initView();
+    }
 
-        MsgMgr.getInstance().attach(this);
-        return getContentView();
+    private void onTitleLeft(){
+        if(!isGone){
+            View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
+            title_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            setTitleLeftContainer(title_left);
+        }else {
+            setTitleLeftContainerRemoveAll();
+        }
     }
 
     private void initView() {
