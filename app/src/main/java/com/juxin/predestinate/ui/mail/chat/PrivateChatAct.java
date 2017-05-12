@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 聊天页
  * Created by Kind on 2017/3/23.
  */
 public class PrivateChatAct extends BaseActivity implements View.OnClickListener {
