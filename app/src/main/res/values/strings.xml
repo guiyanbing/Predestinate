@@ -69,6 +69,7 @@
     <string name="user_info_earn_redbag">我要赚红包</string>
     <string name="user_info_redbag_num">%s元</string>
     <string name="user_info_photo">我的相册</string>
+    <string name="user_info_require">正在获取个人资料...</string>
 
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>

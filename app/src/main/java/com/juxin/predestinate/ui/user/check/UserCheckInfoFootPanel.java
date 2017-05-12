@@ -57,7 +57,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
             PToast.showShort(getContext().getString(R.string.user_other_info_req_fail));
             return;
         }
-        userPhotos = userDetail.getUserPhotos();
+        userPhotos = userProfile.getUserPhotos();
         albumNum = userProfile.getUserPhotos().size();
     }
 

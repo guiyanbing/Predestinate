@@ -390,23 +390,29 @@ public class UIShow {
      * 打开TA人资料查看页
      */
     public static void showCheckOtherInfoAct(final Context context, long uid) {
+        LoadingDialog.show((FragmentActivity) context, context.getString(R.string.user_info_require));
         ModuleMgr.getCenterMgr().reqOtherInfo(uid, new RequestComplete() {
             @Override
-            public void onRequestComplete(HttpResponse response) {
-                UserProfile userProfile = new UserProfile();
-                userProfile.parseJson(response.getResponseString());
+            public void onRequestComplete(final HttpResponse response) {
+                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        UserProfile userProfile = new UserProfile();
+                        userProfile.parseJson(response.getResponseString());
 
-                if ("error".equals(userProfile.getResult())) {
-                    PToast.showShort(context.getString(R.string.request_error));
-                    return;
-                }
-                //更新缓存
-                AttentionUtil.updateUserDetails(response.getResponseString());
+                        if ("error".equals(userProfile.getResult())) {
+                            PToast.showShort(context.getString(R.string.request_error));
+                            return;
+                        }
+                        //更新缓存
+                        AttentionUtil.updateUserDetails(response.getResponseString());
 
-                Intent intent = new Intent(context, UserCheckInfoAct.class);
-                intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
-                intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-                context.startActivity(intent);
+                        Intent intent = new Intent(context, UserCheckInfoAct.class);
+                        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+                        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+                        context.startActivity(intent);
+                    }
+                });
             }
         });
     }
