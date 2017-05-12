@@ -93,26 +93,17 @@
     </LinearLayout>
 
     <!-- 照片 -->
-    <RelativeLayout style="@style/center_set_item">
-
-        <ImageView
-            android:id="@+id/album_arrow"
-            android:layout_width="@dimen/px50_dp"
-            android:layout_height="@dimen/px50_dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:src="@drawable/y1_right_go" />
+    <LinearLayout style="@style/center_media_item">
 
         <LinearLayout
             android:id="@+id/album_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginRight="@dimen/px35_dp"
-            android:layout_toLeftOf="@+id/album_arrow"
+            style="@style/center_item_layout"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:scrollbars="none" />
-    </RelativeLayout>
+
+        <ImageView style="@style/right_go" />
+    </LinearLayout>
 
     <include layout="@layout/center_information_line" />
 
@@ -141,7 +132,7 @@
     </LinearLayout>
 
     <!-- 视频 -->
-    <LinearLayout style="@style/center_set_item">
+    <LinearLayout style="@style/center_media_item">
 
         <LinearLayout
             android:id="@+id/video_item"
@@ -179,7 +170,7 @@
     </LinearLayout>
 
     <!-- 礼物 -->
-    <LinearLayout style="@style/center_set_item">
+    <LinearLayout style="@style/center_media_item">
 
         <LinearLayout
             android:id="@+id/gift_item"

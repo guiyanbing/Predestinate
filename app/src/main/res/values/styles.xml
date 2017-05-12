@@ -307,6 +307,18 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:padding">@dimen/px35_dp</item>
     </style>
+
+    <!-- 个人中心媒体展示item的样式 -->
+    <style name="center_media_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/list_item_selector</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingBottom">@dimen/px35_dp</item>
+        <item name="android:paddingRight">@dimen/px20_dp</item>
+    </style>
+
     <!-- 个人中心中部的样式 -->
     <style name="center_item_layout">
         <item name="android:layout_width">0dp</item>

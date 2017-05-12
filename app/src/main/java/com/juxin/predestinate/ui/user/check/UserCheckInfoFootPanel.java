@@ -57,7 +57,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
             PToast.showShort(getContext().getString(R.string.user_other_info_req_fail));
             return;
         }
-        userPhotos = userDetail.getUserPhotos();
+        userPhotos = userProfile.getUserPhotos();
         albumNum = userProfile.getUserPhotos().size();
     }
 
@@ -68,7 +68,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         giftLayout = (LinearLayout) findViewById(R.id.gift_item);
 
         // 照片列表
-        albumPanel = new AlbumHorizontalPanel(getContext(), AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userPhotos);
+        albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userPhotos);
         albumLayout.addView(albumPanel.getContentView());
 
         tv_album.setText(String.valueOf(albumNum));
