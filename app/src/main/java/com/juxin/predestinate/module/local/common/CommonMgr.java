@@ -26,8 +26,9 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.wode.util.AttentionUtil;
-import com.juxin.predestinate.ui.wode.bean.GiftsList;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
+import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.module.util.my.GiftHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -152,17 +153,20 @@ public class CommonMgr implements ModuleBase {
     /**
      * 请求礼物列表
      */
-    public void requestGiftList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, complete == null ? new RequestComplete() {
+    public void requestGiftList(final GiftHelper.OnRequestGiftListCallback callback) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null,new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.d("---GiftList--->isCache：" + response.isCache() + "，" + response.getResponseString());
                 if (response.isOk() || response.isCache()){
                     giftLists = new GiftsList();
                     giftLists.parseJson(response.getResponseString());
+                    if (callback != null){
+                        callback.onRequestGiftListCallback(response.isOk());
+                    }
                 }
             }
-        } : complete);
+        });
     }
 
     /**

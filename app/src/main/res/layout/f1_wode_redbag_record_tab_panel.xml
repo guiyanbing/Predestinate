@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="暂无提现记录"
+            android:text="暂无更多记录"
             android:clickable="false"
             android:textColor="#d6d6d6"
             android:textSize="14sp"
