@@ -91,6 +91,7 @@
             android:padding="@dimen/px30_dp">
 
             <TextView
+                android:id="@+id/tv_video_title"
                 style="@style/text_small"
                 android:text="@string/center_video_verify"
                 android:textColor="@color/text_ciyao_gray" />
