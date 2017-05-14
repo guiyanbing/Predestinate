@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
@@ -25,7 +25,7 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  * 查看用户资料详情
  * Created by Su on 2016/5/30.
  */
-public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, RequestComplete {
+public class UserCheckInfoAct extends BaseActivity implements PObserver, RequestComplete {
     private int channel;  // 查看用户资料区分Tag，默认查看自己个人资料
     private UserDetail userDetail;   // 自己资料
     private UserProfile userProfile; // TA人资料
@@ -60,6 +60,7 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
 
     private void initView() {
         initTitle();
+        MsgMgr.getInstance().attach(this);
         container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserCheckInfoHeadPanel(this, channel, userProfile);
         container.addView(headPanel.getContentView());
@@ -102,7 +103,7 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
                     break;
 
                 case R.id.base_title_right_img_container:// 标题右侧按钮
-                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile);
+                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile.getUid(), userProfile);
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
@@ -119,16 +120,11 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
-                    // 礼物弹框
+                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userProfile.getUid());
                     break;
             }
         }
     };
-
-    @Override
-    public void onMessage(MsgType msgType, Msg msg) {
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,6 +149,15 @@ public class UserCheckInfoAct extends BaseActivity implements MsgMgr.IObserver, 
                     voiceBottom.setVisibility(View.VISIBLE);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_MyInfo_Change:
+                footPanel.refreshView();
+                break;
         }
     }
 }

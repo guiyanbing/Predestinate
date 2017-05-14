@@ -68,6 +68,7 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements AdapterView.O
     }
 
     public void refresh() {
+        albumAdapter.setList(albumList);
     }
 
     @Override

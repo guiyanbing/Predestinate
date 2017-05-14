@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.mumu.bean.utils.ByteUtil;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -64,6 +66,7 @@ public class DBCenterFLetter {
             return DBConstant.ERROR;
         }
 
+        PLogger.d("Fl=== + insertLetter");
         try {
             final ContentValues values = new ContentValues();
             values.put(FLetter.COLUMN_USERID, baseMessage.getWhisperID());
@@ -90,7 +93,7 @@ public class DBCenterFLetter {
         if(baseMessage == null){
             return DBConstant.ERROR;
         }
-
+        PLogger.d("Fl=== + updateLetter");
         try {
             final ContentValues values = new ContentValues();
             if (baseMessage.getStatus() != -1)

@@ -81,6 +81,10 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         activity.addIgnoredView(giftLayout);
     }
 
+    public void refreshView() {
+        albumPanel.refresh();
+    }
+
     private final NoDoubleClickListener listener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {

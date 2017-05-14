@@ -27,7 +27,7 @@ import com.juxin.predestinate.module.util.SDCardUtil;
 /**
  * 无头像
  * <p>
- * by IQQ
+ * by zhang
  */
 public class UserNoHeadUploadAct extends BaseActivity implements ImgSelectUtil.OnChooseCompleteListener, OnClickListener {
     private Button btn_pick_photo;

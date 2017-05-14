@@ -240,6 +240,7 @@
     <string name="user_info_show_all">已经显示全部</string>
     <string name="user_info_avatar_suc">上传成功</string>
     <string name="user_info_avatar_fail">上传失败</string>
+    <string name="user_info_set_fail">资料设置失败</string>
     <string name="user_info_avatar_upload">正在上传头像</string>
     <string name="check_info_chat_pay">聊天</string>
     <string name="user_info_chat_video">20钻石/分钟</string>
@@ -522,6 +523,9 @@
     <string name="re_upload_avatar_def">未审核通过</string>
     <string name="re_upload_avatar_fail">上传头像失败，请检查您的网络后再试试</string>
     <string name="re_upload_avatar_selet_fail">选择图片出错，请稍候再试</string>
+
+    <string name="top_type_man">豪</string>
+    <string name="top_type_woman">魅</string>
 
     <!--发现end-->
 

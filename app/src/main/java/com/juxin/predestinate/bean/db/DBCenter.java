@@ -9,6 +9,7 @@ import rx.Observable;
 
 /**
  * Created by Kind on 2017/3/28.
+ * TODO 线程问题
  */
 
 public class DBCenter {

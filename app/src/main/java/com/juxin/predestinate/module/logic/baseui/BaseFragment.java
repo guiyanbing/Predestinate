@@ -110,6 +110,19 @@ public class BaseFragment extends Fragment {
         title_left_container.addView(container);
     }
 
+    public void setTitleLeftContainerRemoveAll() {
+        LinearLayout title_left_container = (LinearLayout) contentView.findViewById(R.id.base_title_left_container);
+        title_left_container.setVisibility(View.GONE);
+        title_left_container.removeAllViews();
+    }
+
+    public void setTitleRightContainer(View container) {
+        LinearLayout title_left_container = (LinearLayout) contentView.findViewById(R.id.base_title_right_container);
+        title_left_container.setVisibility(View.VISIBLE);
+        title_left_container.removeAllViews();
+        title_left_container.addView(container);
+    }
+
     /**
      * 添加title中标题中间的填充view
      *
