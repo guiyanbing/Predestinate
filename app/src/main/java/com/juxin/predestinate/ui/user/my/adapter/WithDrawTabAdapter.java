@@ -37,13 +37,13 @@ public class WithDrawTabAdapter extends BaseRecyclerViewAdapter<WithdrawList.Wit
         final WithdrawList.WithdrawInfo info = getList().get(position);
         vh.llSuccess.setVisibility(View.GONE);
         vh.llError.setVisibility(View.GONE);
-        if (info.getStatus() == 1 || info.getStatus() == 2){
+        if (info.getStatus() == 1 || info.getStatus() == 2){//根据提现状态设置展示信息
             vh.llSuccess.setVisibility(View.VISIBLE);
         }else {
             vh.llError.setVisibility(View.VISIBLE);
         }
         String time = info.getCreate_time();
-        if (!TextUtils.isEmpty(time)) {
+        if (!TextUtils.isEmpty(time)) {//时间处理
             String[] tempArr = time.split(" ");
             vh.tvData.setText(tempArr[0].replace("-", ".") + "\n" + tempArr[1].substring(0, 5));
         }

@@ -60,7 +60,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
     private String other, channel;
     public GiftsList.GiftInfo selectGift;
     private TextView tv_pagesize;
-//    private IGiftSend iGiftSend;
     private ImageView btn_input_change;
     private EditText tv_edit;
     private Button btn_voice;
@@ -79,7 +78,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         channel = channelid;
         mContext = context;
         initView();
-        //获取礼物列表 待完善
+        //获取礼物列表
         mListGift = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
         if (mListGift.size() > 0) {//配置中已经返回
             initViewGrid();
@@ -164,8 +163,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                         MMLog.autoDebug("---ChatInputPanel--->点击间隔<500ms，过于频繁");
                     }
 
-
-                    btn_voice.setText("松开结束");
+                    btn_voice.setText(R.string.loosen_the_end);
                     btn_voice.setPressed(true);
                     recordPanel.setVisibility(View.VISIBLE);
 //                    ChatMediaRecord.getInstance().startRecordVoice(onRecordListener);
@@ -181,15 +179,12 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
 //                    chatVoiceRecord.setPressed(false);
 
 
-
 //                    chatRecordPanel.onTouch(action, event.getY(), "", "");//
-
-
 
 
                     timeCount = System.currentTimeMillis();
 
-                    btn_voice.setText("按住说话");
+                    btn_voice.setText(R.string.hold_to_talk);
                     btn_voice.setPressed(false);
 //                    outVoice(PosY);
                     recordPanel.setVisibility(View.GONE);
@@ -200,7 +195,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
 //                    chatVoiceRecord.setPressed(false);
                     recordPanel.onTouch(action, 0f);
 //                    timeCount = System.currentTimeMillis();
-                    btn_voice.setText("按住说话");
+                    btn_voice.setText(R.string.hold_to_talk);
                     btn_voice.setPressed(false);
                     return false;
             }
@@ -234,7 +229,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
 //            }
 //        });
 //    }
-
 
 //    private void switchVoice() {
 //        tv_edit.setVisibility(View.GONE);
@@ -354,12 +348,12 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         switch (v.getId()) {
             case R.id.tv_gift_main_send:
                 if (null == selectGift) {
-                    PToast.showShort("请选择礼物.");
+                    PToast.showShort(mContext.getString(R.string.please_select_a_gift));
                 } else {
                     if (isEdit && TextUtils.isEmpty(tv_edit.getText().toString().trim())) {
-                        PToast.showShort("请输入你想说的话");
+                        PToast.showShort(mContext.getString(R.string.please_input_you_want_to_say));
                     } else if (!isEdit && TextUtils.isEmpty(sVoiceUrl)) {
-                        PToast.showShort("请录入你想说的话");
+                        PToast.showShort(mContext.getString(R.string.please_input_want_to_say));
                     } else
                         onSend();
                 }
@@ -374,7 +368,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                 initGridView();
                 initDot(0);
                 initSelect();
-//                AppModel.getInstance().lstGift = mListGift;
             } else
                 dismiss();
         }
@@ -387,7 +380,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             initGridView();
         }
     }
-
 
     class MyOnPageChanger implements OnPageChangeListener {
 
@@ -426,10 +418,10 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()){
-                    PToast.showShort("发送成功");
+                    PToast.showShort(mContext.getString(R.string.send_suceed));
                     return;
                 }
-                PToast.showShort("发送失败,请稍后重试");
+                PToast.showShort(mContext.getString(R.string.send_error_try_again));
             }
         });
         dismiss();

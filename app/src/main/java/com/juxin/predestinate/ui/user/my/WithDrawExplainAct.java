@@ -23,7 +23,7 @@ public class WithDrawExplainAct extends BaseActivity implements View.OnClickList
 
     private void initView() {
         setBackView(R.id.base_title_back);
-        setTitle("提现说明");
+        setTitle(getString(R.string.withdrawal_instructions));
         findViewById(R.id.wode_with_vip_kf).setOnClickListener(this);
     }
 

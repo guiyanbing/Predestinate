@@ -23,8 +23,8 @@ import java.util.List;
 public class GiftGridviewSmallAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context mContext;
-    private List<GiftsList.GiftInfo> mLists;
-    private static final int pSize = 8;
+    private List<GiftsList.GiftInfo> mLists;//礼物列表
+    private static final int pSize = 8;//一页的礼物数量
 
     public GiftGridviewSmallAdapter(Context fContext, List<GiftsList.GiftInfo> lGift, int page) {
         this.mContext = fContext;
@@ -70,11 +70,10 @@ public class GiftGridviewSmallAdapter extends BaseAdapter {
 
         if (null != vh) {
             GiftsList.GiftInfo item = mLists.get(position);
-//            PhotoUtils.loadPicFitCenter(mContext, item.pic, vh.ivPic, 0, 0);
-            ImageLoader.loadAvatar(mContext, item.getPic(), vh.ivPic);
-            vh.tvName.setText(item.getName());
-            vh.tvMoney.setText(item.getMoney() + "");
-            if(item.isSelect()){
+            ImageLoader.loadAvatar(mContext, item.getPic(), vh.ivPic);//设置礼物图像
+            vh.tvName.setText(item.getName());//设置礼物名称
+            vh.tvMoney.setText(item.getMoney() + "");//设置礼物所需的钻石
+            if(item.isSelect()){//判断是否选中来设置item的背景
                 vh.llItem.setBackgroundResource(R.drawable.f1_view_select_small);
             }else{
                 vh.llItem.setBackgroundResource(R.drawable.f1_view_unselect_small);

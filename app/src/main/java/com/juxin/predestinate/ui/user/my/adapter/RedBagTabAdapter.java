@@ -48,7 +48,7 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
 
         MyViewHolder vh = new MyViewHolder(viewHolder);
         final RedbagList.RedbagInfo info = getItem(position);
-        String time = info.getCreate_time();
+        String time = info.getCreate_time();//获取获得红包的时间
         if (!TextUtils.isEmpty(time)) {
             String[] tempArr = time.split(" ");
             vh.tvData.setText(tempArr[0].replace("-", ".") + "\n" + tempArr[1].substring(0, 5));
@@ -71,7 +71,6 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
                 LoadingDialog.show((FragmentActivity)mContext);
                 mPosition = position;
                 ModuleMgr.getCommonMgr().reqAddredTotal(ModuleMgr.getCenterMgr().getMyInfo().getUid(), info.getMoney() * 100f, info.getId(), info.getType(), RedBagTabAdapter.this);
-//                mTabCallBack.addredtotal(position, TextUtils.isEmpty(info.getMoney()) ? "0" : (Float.parseFloat(info.getMoney()) * 100) + "", info.getId(), info.getType());
             }
         });
     }
@@ -93,7 +92,7 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
             mRedBagRecordPanel.showCollect();
             ((RedBoxRecordAct)mContext).refreshView(info.getSum());
         }
-        PToast.showShort(info.getMsg()+"");
+        PToast.showShort(info.getMsg()+"");//展示提示
     }
 
     class MyViewHolder {

@@ -34,7 +34,7 @@
                     <ImageView
                         android:layout_width="@dimen/px56_dp"
                         android:layout_height="@dimen/px56_dp"
-                        android:background="@drawable/p1_gift_ico"/>
+                        android:background="@drawable/f1_gift_ico"/>
 
                     <TextView
                         android:layout_width="wrap_content"

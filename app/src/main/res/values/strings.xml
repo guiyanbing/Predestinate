@@ -481,6 +481,26 @@
     <string name="lately_visit">最近7天有12个用户来看你。</string>
     <string name="say_hello">hi，傻子</string>
     <string name="txt_dialog_tips">你还没有开通VIP，无法查看最近来访用户。</string>
+    <string name="hold_to_talk">按住说话</string>
+    <string name="loosen_the_end">松开结束</string>
+    <string name="please_input_you_want_to_say">请输入你想说的话</string>
+    <string name="please_input_want_to_say">请录入你想说的话</string>
+    <string name="send_suceed">发送成功</string>
+    <string name="send_error_try_again">发送失败,请稍后重试</string>
+    <string name="diamond_balance">钻石余额：</string>
+    <string name="a_diamond">个钻石</string>
+    <string name="gift_not_find">末找到礼物</string>
+
+    <string name="diamond_show">钻石说明</string>
+
+    <string name="summary">汇总</string>
+    <!--关注start-->
+    <string name="no_nickname">无昵称</string>
+    <string name="age">岁</string>
+    <string name="loading">加载中...</string>
+    <string name="attention_ta">关注TA</string>
+    <string name="open_the_vip_can_be_operation">开通VIP才可以操作!</string>
+    <string name="cancel_the_attention">取消关注</string>
 
 
     <!--发现start-->
@@ -521,4 +541,8 @@
     <string name="txt_cancel">取消</string>
     <string name="txt_record_title">视频录制认证</string>
     <string name="txt_record_desc">请保持正面录制5秒钟</string>
+    <string name="canceling">取消中...</string>
+    <string name="withdrawal_instructions">提现说明</string>
+    <string name="hours_to_the_account">提现将在24小时内到账</string>
+
 </resources>

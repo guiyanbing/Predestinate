@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
@@ -47,100 +48,67 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
-        return viewHolder;
+        return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
 
-        final MyViewHolder mHolder = new MyViewHolder(viewHolder);
+        final MyViewHolder mHolder = new MyViewHolder(viewHolder);//初始化MyViewHolder
         final AttentionUserDetail info = getItem(position);
         if (info != null && info.getNickname() != null && info.getAge() > 0 && info.getAvatar() != null && info.getGender() > 0) {
-            mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
+            mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);//头像
             checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
-            mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : "无昵称");
+            mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : mContext.getString(R.string.no_nickname));//昵称
             checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
-            mHolder.tvAge.setText(info.getAge() + "岁");
-            checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);
-            mHolder.tvpiccount.setText(info.getPhotoNum() + "照片");
+            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));//年龄
+            checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);//地区
+            mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
         } else {
             mHolder.tvNickname.setText(info.getUid() + "");
-            mHolder.tvAge.setText("加载中...");
+            mHolder.tvAge.setText(R.string.loading);
             mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
         }
-        if (info.getType() == 0) {
-            mHolder.tvconcern.setText("关注TA");
-            mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
+        if (info.getType() == 0){
+            mHolder.tvconcern.setText(R.string.attention_ta);
+        }else {
+            mHolder.tvconcern.setText(R.string.cancel_the_attention);
+        }
+        mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View view) {
-                    UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-                    AttentionMeAdapter.this.postion = position;
-                    AttentionMeAdapter.this.vh = mHolder;
-                    if (userDetail != null) {
-                        if (userDetail.getGender() != 2) {
-                            if (!userDetail.isVip()) {
-                                createOpenVipDialog("开通VIP才可以操作!");
-                                return;
-                            }
+            @Override
+            public void onClick(View view) {
+                UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+                AttentionMeAdapter.this.postion = position;
+                AttentionMeAdapter.this.vh = mHolder;
+                if (userDetail != null) {
+                    if (userDetail.getGender() != 2) {//不是女生需要开通vip
+                        if (!userDetail.isVip()) {
+                            createOpenVipDialog(mContext.getString(R.string.open_the_vip_can_be_operation));//提示开通vip
+                            return;
                         }
                     }
-                    if (!NetworkUtils.isConnected(mContext)) {
-                        PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
-                        return;
-                    }
-                    // 执行关注Class
-//                    ((TextView) view).setText("取消关注TA");
-                    String otherId = info.getUid() + "";
-                    if (otherId == null) {
-                        return;
-                    }
-                    LoadingDialog.show((FragmentActivity) mContext);
-                    if (info.getType() == 0) {
-                        ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);
-                        return;
-                    }
-                    ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);
-//                    MyConcernAct_ItemViewObject obj = new MyConcernAct_ItemViewObject((TextView) view, iPos);
-//                    FollowUser followUser = new FollowUser(mContext, otherId, FollowUser.FOLLOWUSER_ADD, obj);
-//                    followUser.setCallBack(MyConcern_BeAct_Adapter.this);
-//                    followUser.onStart();
                 }
-            });
-        } else {
-            mHolder.tvconcern.setText("取消关注");
-            mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AttentionMeAdapter.this.postion = position;
-                    AttentionMeAdapter.this.vh = mHolder;
-                    if (!NetworkUtils.isConnected(mContext)) {
-                        PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
-                        return;
-                    }
-                    // 取消关注
-//                    ((TextView) view).setText("关注TA");
-                    String otherId = info.getUid() + "";
-                    if (otherId == null) {
-                        return;
-                    }
-                    LoadingDialog.show((FragmentActivity) mContext);
-                    if (info.getType() == 0) {
-                        ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);
-                        return;
-                    }
-                    ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);
-//                    MyConcernAct_ItemViewObject obj = new MyConcernAct_ItemViewObject((TextView) view, iPos);
-//                    FollowUser followUser = new FollowUser(mContext, otherId, FollowUser.FOLLOWUSER_DEL, obj);
-//                    followUser.setCallBack(MyConcern_BeAct_Adapter.this);
-//                    followUser.onStart();
+                if (!NetworkUtils.isConnected(mContext)) {//未联网返回
+                    PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
+                    return;
                 }
-            });
-        }
+                // 执行关注Class
+                LoadingDialog.show((FragmentActivity) mContext);
+                if (info.getType() == 0) { //未关注他时
+                    ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);//关注他
+                    return;
+                }
+                ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);//已关注时取消关注
+                //                    MyConcernAct_ItemViewObject obj = new MyConcernAct_ItemViewObject((TextView) view, iPos);
+                //                    FollowUser followUser = new FollowUser(mContext, otherId, FollowUser.FOLLOWUSER_ADD, obj);
+                //                    followUser.setCallBack(MyConcern_BeAct_Adapter.this);
+                //                    followUser.onStart();
+            }
+        });
     }
 
-    private void createOpenVipDialog(String str) {
+    private void createOpenVipDialog(String str) {//vip弹框
         final Dialog dialog = new Dialog(mContext, R.style.dialog);
         View view = LayoutInflater.from(mContext).inflate(R.layout.f1_app_tips_dialog, null);
         TextView txt_update_info = (TextView) view.findViewById(R.id.txt_update_info);
@@ -171,7 +139,6 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 img.setImageResource(R.drawable.f1_otheruserheadpic_shenhezhong);
                 break;
             case 1:// 审核通过
-                //			imageLoader.displayImage(avatar, img, options);
                 ImageLoader.loadAvatar(mContext, avatar, img);
                 break;
             case 2:// 未通过
@@ -210,9 +177,9 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
     public void onRequestComplete(HttpResponse response) {
         LoadingDialog.closeLoadingDialog();
         try {
-            if (response.isOk()) {
+            if (response.isOk()) {//返回成功
                 if (getList().get(postion).getType() == 0) {
-                    vh.tvconcern.setText("取消关注");
+                    vh.tvconcern.setText(mContext.getString(R.string.privatechat_title_unsubscribe));
                     getList().get(postion).setType(1);
                     if (postion != 0) {
                         notifyItemChanged(postion);
@@ -221,7 +188,7 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                     notifyDataSetChanged();
                     return;
                 }
-                vh.tvconcern.setText("关注TA");
+                vh.tvconcern.setText(mContext.getString(R.string.attention_ta));
                 getList().get(postion).setType(0);
                 if (postion != 0) {
                     notifyItemChanged(postion);
@@ -229,10 +196,10 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 }
                 notifyDataSetChanged();
             } else {
-                PToast.showShort("操作失败，请重试！");
+                PToast.showShort(mContext.getString(R.string.toast_commit_suggest_error));
             }
         } catch (Exception e) {
-
+            PLogger.e("AttentionMeAdapter_________"+e.toString());
         }
     }
 

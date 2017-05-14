@@ -40,8 +40,7 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder= super.onCreateViewHolder(parent, viewType);
-        return viewHolder;
+        return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
@@ -52,19 +51,17 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         if (info != null && info.getNickname() != null && info.getAge() > 0 && info.getAvatar() != null && info.getGender() > 0) {
             mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
             checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
-            mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : "无昵称");
+            mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : mContext.getString(R.string.no_nickname));
             checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
-            mHolder.tvAge.setText(info.getAge() + "岁");
+            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));
             mHolder.tvDiqu.setText(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())));
-            mHolder.tvpiccount.setText(info.getPhotoNum() + "照片");
+            mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
         } else {
             mHolder.tvNickname.setText(info.getUid()+"");
-            mHolder.tvAge.setText("加载中...");
+            mHolder.tvAge.setText(mContext.getString(R.string.loading));
             mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
         }
-        mHolder.tvconcern.setText("取消关注");
-//        mHolder.tvconcern.setTag(R.id.tag_first, position);
-//        mHolder.tvconcern.setTag(R.id.tag_second, info.getOther_id());
+        mHolder.tvconcern.setText(mContext.getString(R.string.cancel_the_attention));
         mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +71,7 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 }
                 TextView txtAttention = (TextView) view;
                 // 取消关注
-                txtAttention.setText("取消中...");
+                txtAttention.setText(R.string.canceling);
                 ModuleMgr.getCommonMgr().unfollow(info.getUid(), new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {
@@ -91,6 +88,12 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         });
     }
 
+    /**
+     * 获取信息的准确位置（加锁）
+     *
+     * @param   info 某一条具体的信息
+     * @return  返回 info 在list中的position
+     */
     private synchronized int getPosition(AttentionUserDetail info){
         int size = getListSize();
         for (int i = 0 ;i < size;i++){
