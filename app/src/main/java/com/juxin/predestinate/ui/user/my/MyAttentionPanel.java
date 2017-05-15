@@ -48,7 +48,6 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
     }
     //请求数据
     private void reqData() {
-        crvView.showLoading();
         ModuleMgr.getCommonMgr().getFollowing(this);
     }
 
@@ -60,6 +59,7 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mAttentionMeAdapter = new MyAttentionAdapter(mContext);
         rvList.setAdapter(mAttentionMeAdapter);
+        mAttentionMeAdapter.setOnItemClickListener(mAttentionMeAdapter);
         rvList.setLoadingMoreEnabled(false);
         rvList.setLoadingListener(this);
     }

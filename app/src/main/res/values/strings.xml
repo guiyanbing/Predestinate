@@ -549,5 +549,6 @@
     <string name="canceling">取消中...</string>
     <string name="withdrawal_instructions">提现说明</string>
     <string name="hours_to_the_account">提现将在24小时内到账</string>
+    <string name="the_current_diamond">当前钻石：</string>
 
 </resources>

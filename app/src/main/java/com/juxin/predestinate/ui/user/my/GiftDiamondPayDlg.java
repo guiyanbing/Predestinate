@@ -87,7 +87,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
             reSetGift();
         }
         //当前钻石数
-        tv_money.setText("当前钻石：" + ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
+        tv_money.setText(getString(R.string.the_current_diamond) + ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
 //        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() > 0) {
 //        } else {
 //            ModuleMgr.getCommonMgr().getMyDiamand(this);
@@ -384,7 +384,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         if (response.getUrlParam() == UrlParam.getMyDiamand){
             if (response.isOk()){
                 int diamonds = JsonUtil.getJsonObject(response.getResponseString()).optInt("diamand", 0);
-                tv_money.setText("当前钻石：" + diamonds);
+                tv_money.setText(mContext.getString(R.string.the_current_diamond) + diamonds);
             }
             return;
         }
@@ -429,7 +429,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
 
     public void onSendGift() {
         if (null == selectGift) {
-            PToast.showShort("请选择礼物.");
+            PToast.showShort(mContext.getString(R.string.please_select_a_gift));
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() >= selectGift.getMoney()) {
                 //发送消息

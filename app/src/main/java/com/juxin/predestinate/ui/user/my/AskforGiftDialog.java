@@ -24,16 +24,19 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.local.msgview.ChatAdapter;
-import com.juxin.predestinate.module.local.msgview.chatview.input.ChatRecordPanel;
+import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.user.my.adapter.GiftGridviewAskForAdapter;
-import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
+import com.juxin.predestinate.ui.user.my.view.VoiceView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,9 +48,8 @@ import java.util.Map;
  *
  * @author zm
  */
-public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelper.OnRequestGiftListCallback{
+public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelper.OnRequestGiftListCallback,RecordVoicePanel.OnRecordVoiceCallBack,ChatMediaPlayer.OnPlayListener{
 
-    private ChatAdapter.ChatInstance chatInstance = null;
     private GiftViewPagerAdapter gvpAdapter;
     private List<GridView> mLists;
     private ViewPager mViewPager;
@@ -65,11 +67,11 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
     private Button btn_voice;
     private LinearLayout ll_voice, ll_voice_main;
     private boolean isEdit = true;
-    private ChatRecordPanel recordPanel;
+    private RecordVoicePanel recordPanel;
     private RelativeLayout rMain;
     private int voice_length;
     private String voice_file, sVoiceUrl;
-//    private ChatPanelVoice chatPanelVoice;
+    private VoiceView mVoiceView;
     private long timeCount;
 
     public AskforGiftDialog(Context context, String otheruserid, String channelid) {
@@ -115,19 +117,11 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         ll_voice = (LinearLayout) findViewById(R.id.askfor_voice);
         ll_voice_main = (LinearLayout) findViewById(R.id.askfor_voice_parent);
 
-        if (chatInstance == null) {
-            chatInstance = new ChatAdapter.ChatInstance();
-            chatInstance.context = getContext();
-            chatInstance.chatAdapter = new ChatAdapter();
-            chatInstance.chatAdapter.setChatInstance(chatInstance);
-        }
-
-        recordPanel = new ChatRecordPanel(mContext,chatInstance);
+        recordPanel = new RecordVoicePanel(mContext);
         rMain.addView(recordPanel.getContentView());
         recordPanel.setVisibility(View.GONE);
-        chatInstance.chatContentAdapter = null;
-        chatInstance.chatInputPanel = null;
-        chatInstance.chatExtendPanel = null;
+        recordPanel.setOnRecordVoiceCallBack(this);
+
 
         initEdit();
         btn_input_change.setOnClickListener(new View.OnClickListener() {
@@ -148,15 +142,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
 
-//                    channelId = getChatInstance().chatAdapter.getChannelId();
-//                    whisperId = getChatInstance().chatAdapter.getWhisperId();
-
-//                    chatRecordPanel = getChatInstance().chatRecordPanelUser;
-//
-//                    if (chatRecordPanel == null) {
-//                        chatRecordPanel = getChatInstance().chatRecordPanel;
-//                    }
-
                     if (timeCount == 0 || System.currentTimeMillis() - timeCount > 500) {
                         recordPanel.onTouch(action, 0f);
                     } else {
@@ -175,16 +160,11 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                     break;
 
                 case MotionEvent.ACTION_UP:
-//                    chatVoiceRecord.setText("按下 开始");
-//                    chatVoiceRecord.setPressed(false);
-
-
-//                    chatRecordPanel.onTouch(action, event.getY(), "", "");//
-
 
                     timeCount = System.currentTimeMillis();
 
                     btn_voice.setText(R.string.hold_to_talk);
+                    recordPanel.onTouch(action, event.getY());
                     btn_voice.setPressed(false);
 //                    outVoice(PosY);
                     recordPanel.setVisibility(View.GONE);
@@ -194,7 +174,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
 //                    chatVoiceRecord.setText("按下 开始");
 //                    chatVoiceRecord.setPressed(false);
                     recordPanel.onTouch(action, 0f);
-//                    timeCount = System.currentTimeMillis();
+                    timeCount = System.currentTimeMillis();
                     btn_voice.setText(R.string.hold_to_talk);
                     btn_voice.setPressed(false);
                     return false;
@@ -230,15 +210,17 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
 //        });
 //    }
 
-//    private void switchVoice() {
-//        tv_edit.setVisibility(View.GONE);
-//        btn_voice.setVisibility(View.GONE);
-//        ll_voice_main.setVisibility(View.VISIBLE);
-//        if (chatPanelVoice == null)
-//            chatPanelVoice = new ChatPanelVoice(mContext, ll_voice);
-//        //chatPanelVoice.setParent(ll_voice);
-//        chatPanelVoice.initData(sVoiceUrl, String.valueOf(voice_length), false);
-//    }
+    private void switchVoice() {
+        tv_edit.setVisibility(View.GONE);
+        btn_voice.setVisibility(View.GONE);
+        ll_voice_main.setVisibility(View.VISIBLE);
+        if (mVoiceView == null){
+            mVoiceView = new VoiceView(mContext);
+            ll_voice.addView(mVoiceView);
+        }
+        //chatPanelVoice.setParent(ll_voice);
+        mVoiceView.setData(sVoiceUrl, String.valueOf(voice_length));
+    }
 
     private void initEdit() {
         btn_input_change.setBackgroundResource(R.drawable.f1_btn_voice_speak);
@@ -379,6 +361,41 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             mListGift = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
             initGridView();
         }
+    }
+
+    @Override
+    public void onRecordVoiceCallBack(String url, int length) {
+        sVoiceUrl = url;
+        voice_length = length;
+        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VOICE, url, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                try {
+                    String str = response.getResponseString();
+                    JSONObject jso = new JSONObject(str);
+                    Log.e("TTTTTTTTNNN",response.getResponseString()+"||||");
+                    if ("ok".equals(jso.optString("status")) && jso.optJSONObject("res") != null) {
+                        sVoiceUrl = jso.optJSONObject("res").optString("file_http_path");
+                        switchVoice();
+                    } else {
+                        PToast.showLong("语音发送失败!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Log.e("TTTTTTTTTTTTFFF",url+"|||"+length);
+    }
+
+    @Override
+    public void onStart(String filePath) {
+
+    }
+
+    @Override
+    public void onStop(String filePath) {
+
     }
 
     class MyOnPageChanger implements OnPageChangeListener {

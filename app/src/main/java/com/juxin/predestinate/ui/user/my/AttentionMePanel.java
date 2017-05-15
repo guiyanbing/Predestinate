@@ -60,6 +60,7 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mAttentionMeAdapter = new AttentionMeAdapter(mContext);
         rvList.setAdapter(mAttentionMeAdapter);
+        mAttentionMeAdapter.setOnItemClickListener(mAttentionMeAdapter);
         rvList.setLoadingMoreEnabled(false);//没有加载更多，所有数据一次返回
         rvList.setLoadingListener(this);
     }
