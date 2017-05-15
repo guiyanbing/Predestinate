@@ -13,7 +13,8 @@ public class UserRemark extends BaseData{
 
     @Override
     public void parseJson(String jsonStr) {
-        JSONObject jsonObject = getJsonObject(jsonStr);
+        String jsonData = getJsonObject(jsonStr).optString("res");
+        JSONObject jsonObject = getJsonObject(jsonData);
 
         this.remarkName = jsonObject.optString("remarkname");
     }

@@ -303,6 +303,7 @@
     <string name="goods_vip_dlg_high_arean">高级场擂台赛，争夺500元大奖</string>
     <string name="goods_vip_dlg_get_dog">获取斗牛犬</string>
     <string name="goods_vip_dlg_get_dog_tips">开通VIP立即送斗牛犬，可以守卫摇钱树并且反抢敌人。</string>
+    <string name="goods_vip_check_other_album">您没开通VIP，不可以查看用户相册</string>
 
     <string name="goods_ycoin_title">购买Y币</string>
     <string name="goods_ycoin_remain">Y币余额:</string>

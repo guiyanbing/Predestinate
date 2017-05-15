@@ -103,7 +103,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.base_title_right_img_container:// 标题右侧按钮
-                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile.getUid(), userProfile);
+                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile.getUid(), userProfile, CenterConstant.USER_SET_FROM_CHECK);
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
@@ -156,7 +156,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
-                footPanel.refreshView();
+                userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+                footPanel.refreshView(userDetail);
                 break;
         }
     }
