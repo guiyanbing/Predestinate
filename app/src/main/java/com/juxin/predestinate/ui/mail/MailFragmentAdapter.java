@@ -12,6 +12,8 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,16 +38,22 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
         return size;
     }
+
     public int mailItemOrdinarySize() {
-        int size = 0;
+        return mailItemOrdinary().size();
+    }
+
+    public List<BaseMessage> mailItemOrdinary() {
+        List<BaseMessage> messageList = new ArrayList<>();
         for(BaseMessage tmp : getList()){
             if(tmp.getMailItemStyle() == MailItemType.Mail_Item_Ordinary.type){
-                size ++;
+                messageList.add(tmp);
             }
         }
 
-        return size;
+        return messageList;
     }
+
 //        if (messages != null && messages.size() > 0) {
 //            msgList.addAll(messages);
 //            for (BaseMessage tmp : messages) {

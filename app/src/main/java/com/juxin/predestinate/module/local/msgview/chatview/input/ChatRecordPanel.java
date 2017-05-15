@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.mumu.bean.utils.MMToast;
