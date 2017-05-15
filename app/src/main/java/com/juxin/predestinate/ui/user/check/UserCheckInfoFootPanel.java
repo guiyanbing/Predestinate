@@ -81,8 +81,11 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         activity.addIgnoredView(giftLayout);
     }
 
-    public void refreshView() {
-        albumPanel.refresh();
+    public void refreshView(UserDetail userDetail) {
+        albumNum = userDetail.getUserPhotos().size();
+        tv_album.setText(String.valueOf(albumNum));
+
+        albumPanel.refresh(userDetail);
     }
 
     private final NoDoubleClickListener listener = new NoDoubleClickListener() {
