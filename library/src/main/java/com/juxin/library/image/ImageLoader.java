@@ -105,6 +105,13 @@ public class ImageLoader {
     }
 
     /**
+     * 加载gif图片
+     */
+    public static void loadGif(Context context, int localResImg, ImageView view) {
+        Glide.with(context).load(localResImg).asGif().into(view);
+    }
+
+    /**
      * 加载图片： 回调
      */
     public static void localImgWithCallback(Context context, String url, GlideCallback callback) {
