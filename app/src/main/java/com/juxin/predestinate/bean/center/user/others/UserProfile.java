@@ -112,10 +112,10 @@ public class UserProfile extends UserBasic {
         this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
         this.setIsHot(jsonObject.optBoolean("hot") ? 1 : 0);
         this.setOnline_address(jsonObject.optString("online_address"));
-        this.setOnline_date(jsonObject.optString("online_time"));
         this.setWeChatNo(jsonObject.optString("weChat"));
         this.setFollowCont(jsonObject.optInt("followMeCount"));
         this.setLastOnlineTime(jsonObject.optLong("l_online_time"));
+        this.setOnline_date(jsonObject.optString("online_time"));
         this.setOnline_text(jsonObject.optString("online_text"));
         this.setMtRedbag(jsonObject.optInt("mt_redbag"));
         this.setGameFlag(jsonObject.optInt("gameFlag"));
@@ -537,6 +537,9 @@ public class UserProfile extends UserBasic {
     }
 
 
+    public UserProfile() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -567,6 +570,7 @@ public class UserProfile extends UserBasic {
         dest.writeInt(this.isHot);
         dest.writeString(this.online_address);
         dest.writeString(this.online_date);
+        dest.writeString(this.online_text);
         dest.writeString(this.weChatNo);
         dest.writeInt(this.FollowCont);
         dest.writeLong(this.lastOnlineTime);
@@ -587,9 +591,6 @@ public class UserProfile extends UserBasic {
         dest.writeString(this.result);
         dest.writeInt(this.status);
         dest.writeString(this.content);
-    }
-
-    public UserProfile() {
     }
 
     protected UserProfile(Parcel in) {
@@ -616,6 +617,7 @@ public class UserProfile extends UserBasic {
         this.isHot = in.readInt();
         this.online_address = in.readString();
         this.online_date = in.readString();
+        this.online_text = in.readString();
         this.weChatNo = in.readString();
         this.FollowCont = in.readInt();
         this.lastOnlineTime = in.readLong();
