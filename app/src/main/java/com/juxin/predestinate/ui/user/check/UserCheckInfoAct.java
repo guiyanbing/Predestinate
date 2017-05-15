@@ -1,9 +1,11 @@
 package com.juxin.predestinate.ui.user.check;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -13,6 +15,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -30,7 +33,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private UserDetail userDetail;   // 自己资料
     private UserProfile userProfile; // TA人资料
 
-    private LinearLayout container, videoBottom, voiceBottom;
+    private TextView tv_sayhi;
+    private LinearLayout container, videoBottom, voiceBottom, sayHibottom;
 
     /**********
      * panel
@@ -84,14 +88,21 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
         videoBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_video);
         voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
+        sayHibottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_hi);
+        tv_sayhi = (TextView) findViewById(R.id.tv_sayhello_text);
 
         videoBottom.setOnClickListener(listener);
         voiceBottom.setOnClickListener(listener);
+        sayHibottom.setOnClickListener(listener);
         findViewById(R.id.iv_gift).setVisibility(View.VISIBLE);
         findViewById(R.id.iv_gift).setOnClickListener(listener);
         findViewById(R.id.userinfo_bottom).setVisibility(View.VISIBLE);
         findViewById(R.id.ll_userinfo_bottom_send).setOnClickListener(listener);
-        findViewById(R.id.ll_userinfo_bottom_hi).setOnClickListener(listener);
+
+        if (userProfile == null) return;
+        if (userProfile.isSayHello()){   // 已打招呼
+            handleSayHi();
+        }
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
@@ -111,6 +122,13 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
+                    ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userProfile.getUid()),
+                            getString(R.string.say_hello_txt),
+                            userProfile.getKf_id(),
+                            !ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
+                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE);
+
+                    handleSayHi(); // 成功后处理
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
@@ -125,6 +143,16 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             }
         }
     };
+
+    /**
+     * 底部已打招呼处理
+     */
+    private void handleSayHi() {
+        tv_sayhi.setText(getString(R.string.user_info_has_hi));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            sayHibottom.setAlpha(0.4f);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

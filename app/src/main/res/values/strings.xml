@@ -62,6 +62,7 @@
     <string name="center_phone_has_verify">已认证</string>
     <string name="user_info_send">发信</string>
     <string name="user_info_hi">打招呼</string>
+    <string name="user_info_has_hi">已打招呼</string>
     <string name="user_info_video">发视频</string>
     <string name="user_info_voice">发语音</string>
     <string name="user_info_age">%d岁</string>

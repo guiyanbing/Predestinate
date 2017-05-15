@@ -16,7 +16,8 @@ import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -27,6 +28,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements RequestComp
     private final int channel;
     private UserProfile userProfile; // TA人资料
     private TextView user_follow;
+    private ImageView iv_follow;  // 关注星标
 
     private String avatarUrl, distance, online;
     private long uid;
@@ -66,7 +68,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements RequestComp
         age = userProfile.getAge();
         height = userProfile.getHeight();
         distance = userProfile.getDistance();
-        online = TimeUtil.formatBeforeTimeWeek(userProfile.getLastOnlineTime());
+        online = userProfile.getOnline_text();
         follow = userProfile.getFollowCont();
     }
 
@@ -80,9 +82,14 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements RequestComp
         TextView user_distance = (TextView) findViewById(R.id.tv_distance);
         TextView user_online_time = (TextView) findViewById(R.id.tv_last_online);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
+        iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
 
         if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
             findViewById(R.id.ll_guanzhu).setOnClickListener(listener);
+            if (userProfile != null) {
+                if (userProfile.isFollowed())
+                    iv_follow.setImageResource(R.drawable.f1_followed_star);
+            }
         }
 
         ImageLoader.loadRoundCorners(getContext(), avatarUrl, 10, img_header);
@@ -103,11 +110,14 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements RequestComp
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_guanzhu:       // 关注星标
+                    if (userProfile == null) return;
                     if (userProfile.isFollowed()) {  // 已关注
                         ModuleMgr.getCommonMgr().unfollow(userProfile.getUid(), UserCheckInfoHeadPanel.this);
                         return;
                     }
                     ModuleMgr.getCommonMgr().follow(userProfile.getUid(), UserCheckInfoHeadPanel.this);
+
+//                    ModuleMgr.getChatMgr().sendAttentionMsg();
                     break;
             }
         }
@@ -116,12 +126,33 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements RequestComp
     @Override
     public void onRequestComplete(HttpResponse response) {
         if (response.getUrlParam() == UrlParam.follow) {
+            follow += 1;
+            iv_follow.setImageResource(R.drawable.f1_followed_star);
+            user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
+            if (userProfile != null) {
+                userProfile.setIsFollowed(1);
+            }
+            IMProxy.getInstance().send(null, new IMProxy.SendCallBack() {
+                @Override
+                public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
 
+                }
+
+                @Override
+                public void onSendFailed(NetData data) {
+
+                }
+            });
             return;
         }
 
         if (response.getUrlParam() == UrlParam.unfollow) {
-
+            follow -= 1;
+            iv_follow.setImageResource(R.drawable.f1_follow_star);
+            user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
+            if (userProfile != null) {
+                userProfile.setIsFollowed(0);
+            }
             return;
         }
 
