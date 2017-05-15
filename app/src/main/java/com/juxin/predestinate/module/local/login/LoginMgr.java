@@ -231,6 +231,7 @@ public class LoginMgr implements ModuleBase {
         userAccount.put("password", pwd);
         userAccount.put("ms", Constant.MS_TYPE);
         userAccount.put("ver", Constant.SUB_VERSION);
+        userAccount.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
         ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount,
                 RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
