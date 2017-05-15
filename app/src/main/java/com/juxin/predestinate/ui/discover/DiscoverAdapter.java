@@ -115,7 +115,7 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
                             context.getString(R.string.say_hello_txt),
                             userInfo.getKf_id(),
                             !ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE);
+                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, null);
                     getItem(position).setSayHello(true);
                     notifyDataSetChanged();
                 }

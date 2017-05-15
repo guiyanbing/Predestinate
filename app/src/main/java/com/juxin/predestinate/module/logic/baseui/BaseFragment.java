@@ -123,6 +123,11 @@ public class BaseFragment extends Fragment {
         title_left_container.addView(container);
     }
 
+    public void setTitleRightImgGone() {
+        this.findViewById(R.id.base_title_right_img_container).setVisibility(View.GONE);
+
+    }
+
     /**
      * 添加title中标题中间的填充view
      *

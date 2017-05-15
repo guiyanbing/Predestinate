@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Build;
-import android.renderscript.RSRuntimeException;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
@@ -13,12 +11,10 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.juxin.library.image.transform.blur.FastBlur;
-import com.juxin.library.image.transform.blur.RSBlur;
 
 /**
  * 图片高斯模糊处理
  */
-
 public class BlurImage implements Transformation<Bitmap> {
 
     private static int MAX_RADIUS = 25;
@@ -77,17 +73,7 @@ public class BlurImage implements Transformation<Bitmap> {
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
         canvas.drawBitmap(source, 0, 0, paint);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            try {
-                bitmap = RSBlur.blur(mContext, bitmap, mRadius);
-            } catch (RSRuntimeException e) {
-                bitmap = FastBlur.blur(bitmap, mRadius, true);
-            }
-        } else {
-            bitmap = FastBlur.blur(bitmap, mRadius, true);
-        }
-
-        return BitmapResource.obtain(bitmap, mBitmapPool);
+        return BitmapResource.obtain(FastBlur.blur(bitmap, mRadius, true), mBitmapPool);
     }
 
     @Override

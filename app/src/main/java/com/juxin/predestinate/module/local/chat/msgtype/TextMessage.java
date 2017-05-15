@@ -15,6 +15,9 @@ public class TextMessage extends BaseMessage {
     private int kf;
     private int sayHelloType;
 
+    //关注状态1为关注2为取消关注
+    private int gz;
+
     public TextMessage() {
         super();
     }
@@ -135,7 +138,6 @@ public class TextMessage extends BaseMessage {
     public void setSayHelloType(int sayHelloType) {
         this.sayHelloType = sayHelloType;
     }
-
 
     public TextMessage(BaseMessage message) {
         super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
