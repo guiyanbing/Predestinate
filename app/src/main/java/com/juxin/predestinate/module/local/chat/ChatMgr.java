@@ -100,7 +100,7 @@ public class ChatMgr implements ModuleBase, PObserver {
         PLogger.d("Fl=== + sendTextMsg2");
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-        sendMessage(commonMessage);
+        sendMessage(commonMessage, null);
     }
 
     /**
@@ -110,7 +110,7 @@ public class ChatMgr implements ModuleBase, PObserver {
      * @param kf  当前发信用户为机器人  客服id
      * @param sayHelloType  当前发信用户为机器人 机器人打招呼类型(0为普通,1为向机器人一键打招呼, 3附近的人群打招呼,4为向机器人单点打招呼(包括首页和详细资料页等))
      */
-    public void sendSayHelloMsg(String whisperID, String content, int kf, int sayHelloType) {
+    public void sendSayHelloMsg(String whisperID, String content, int kf, int sayHelloType, IMProxy.SendCallBack sendCallBack) {
         TextMessage textMessage = new TextMessage(whisperID,  content, kf, sayHelloType);
         textMessage.setStatus(DBConstant.SENDING_STATUS);
         textMessage.setJsonStr(textMessage.getJson(textMessage));
@@ -119,7 +119,7 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), ret != DBConstant.ERROR, textMessage);
 
-        sendMessage(textMessage);
+        sendMessage(textMessage, sendCallBack);
     }
 
     /**
@@ -156,7 +156,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
-                    sendMessage(commonMessage);
+                    sendMessage(commonMessage, null);
                 }else {
                     updateFail(commonMessage, null);
                 }
@@ -187,7 +187,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
-                    sendMessage(commonMessage);
+                    sendMessage(commonMessage, null);
                 }else {
                     updateFail(commonMessage, null);
                 }
@@ -196,11 +196,14 @@ public class ChatMgr implements ModuleBase, PObserver {
     }
 
 
-    private void sendMessage(final BaseMessage message){
+    private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack){
         MMLog.autoDebug("isMsgID=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                if(sendCallBack != null){
+                    sendCallBack.onResult(msgId, group, groupId, sender, contents);
+                }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
                 if(!messageRet.isOk() || !messageRet.isS()){
@@ -214,6 +217,9 @@ public class ChatMgr implements ModuleBase, PObserver {
 
             @Override
             public void onSendFailed(NetData data) {
+                if(sendCallBack != null){
+                    sendCallBack.onSendFailed(data);
+                }
                 updateFail(message, null);
                 MMLog.autoDebug("isMsgError=" + message.getJsonStr());
             }

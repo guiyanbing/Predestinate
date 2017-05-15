@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Message;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -33,7 +34,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class IMProxy {
 
     private ConcurrentHashMap<Long, SendCallBack> mSendCallBackMap = new ConcurrentHashMap<>();
-    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private ConcurrentHashMap<Long ,NetData> mSendMap = new ConcurrentHashMap<>();
+    private CallBackHandler mHandler = new CallBackHandler(Looper.getMainLooper());
 
     private static class SingletonHolder {
         static IMProxy instance = new IMProxy();
@@ -160,11 +162,25 @@ public class IMProxy {
      * @param callBack 发送消息回调
      */
     public void send(NetData netData, SendCallBack callBack) {
+        if(callBack == null){
+            send(netData);
+            return;
+        }
+
         long msgId = netData.getMessageId();
         if (msgId != -1) {
             mSendCallBackMap.put(msgId, callBack);
         }
         send(netData);
+
+        /**
+         * 发送消息后发送响应超时消息
+         */
+        mSendMap.put(msgId, netData);
+        Message message = Message.obtain();
+        message.what = CallBackHandler.MESSAGE_TYPE_RESPONDS_TIME_OUT;
+        message.obj = netData;
+        mHandler.sendMessageDelayed(message, TCPConstant.SEND_RESPOND_TIME_OUT);
     }
 
     /**
@@ -353,15 +369,15 @@ public class IMProxy {
             final long msgId = data.getMessageId();
             //检查是否有发送回调
             if (msgId != -1) {
-                final SendCallBack callBack = mSendCallBackMap.get(msgId);
+                final SendCallBack callBack = mSendCallBackMap.remove(msgId);
                 if (callBack != null) {
+                    removeTimoutCallBack(msgId);
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             callBack.onResult(msgId, false, "", data.getFromId(), data.getContent());
                         }
                     });
-                    mSendCallBackMap.remove(msgId);
                     return;
                 }
             }
@@ -374,15 +390,15 @@ public class IMProxy {
             final long msgId = data.getMessageId();
             //检查是否有发送回调
             if (msgId != -1) {
-                final SendCallBack callBack = mSendCallBackMap.get(msgId);
+                final SendCallBack callBack = mSendCallBackMap.remove(msgId);
                 if (callBack != null) {
+                    removeTimoutCallBack(msgId);
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             callBack.onSendFailed(data);
                         }
                     });
-                    mSendCallBackMap.remove(msgId);
                 }
             }
         }
@@ -499,5 +515,39 @@ public class IMProxy {
 
     private void setSocketValidStatus(boolean isSocketValid) {
         this.isSocketValid = isSocketValid;
+    }
+
+    /**
+     * 移除发送消息响应超时消息
+     * @param msgId
+     */
+    private void removeTimoutCallBack(long msgId){
+        NetData sendData = mSendMap.remove(msgId);
+        if(sendData != null) {
+            mHandler.removeMessages(CallBackHandler.MESSAGE_TYPE_RESPONDS_TIME_OUT, sendData);
+        }
+    }
+
+    class CallBackHandler extends Handler{
+        static final int MESSAGE_TYPE_RESPONDS_TIME_OUT = 1;
+        public CallBackHandler(Looper looper){
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.obj == null || !(msg.obj instanceof NetData)) return;
+
+            NetData data = (NetData) msg.obj;
+            long msgId = data.getMessageId();
+            SendCallBack callBack = mSendCallBackMap.remove(msgId);
+            if(callBack == null) return;
+
+            switch (msg.what){
+                case MESSAGE_TYPE_RESPONDS_TIME_OUT:
+                    callBack.onSendFailed(data);
+                    break;
+            }
+        }
     }
 }

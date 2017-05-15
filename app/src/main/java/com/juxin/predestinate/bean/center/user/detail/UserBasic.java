@@ -329,15 +329,4 @@ public class UserBasic extends BaseData implements Parcelable {
         this.sprovince = in.readInt();
     }
 
-    public static final Creator<UserBasic> CREATOR = new Creator<UserBasic>() {
-        @Override
-        public UserBasic createFromParcel(Parcel source) {
-            return new UserBasic(source);
-        }
-
-        @Override
-        public UserBasic[] newArray(int size) {
-            return new UserBasic[size];
-        }
-    };
 }

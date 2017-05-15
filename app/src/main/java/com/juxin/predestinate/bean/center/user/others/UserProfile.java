@@ -36,11 +36,12 @@ public class UserProfile extends UserBasic {
     private int ismonthmail;//是否开通了包月发信
     private int isBindRose;//是否绑定了红娘'微信认证，0为默认，1为已认证，2为拒绝',
     private int distance;// 距离
-    private int isFollowed;//是否关注
+    private int isFollowed;//是否关注 1: 已关注 0：未关注
     private int kf_id;
     private int isHot;
     private String online_address;//上线地区   2015-05-06
     private String online_date; //上线时间 2015-05-06
+    private String online_text; //上线提示信息
     private String weChatNo;//微信号
     private int FollowCont;//关注数量
     private long lastOnlineTime;//最后登录时间
@@ -111,10 +112,11 @@ public class UserProfile extends UserBasic {
         this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
         this.setIsHot(jsonObject.optBoolean("hot") ? 1 : 0);
         this.setOnline_address(jsonObject.optString("online_address"));
-        this.setOnline_date(jsonObject.optString("online_time"));
         this.setWeChatNo(jsonObject.optString("weChat"));
         this.setFollowCont(jsonObject.optInt("followMeCount"));
         this.setLastOnlineTime(jsonObject.optLong("l_online_time"));
+        this.setOnline_date(jsonObject.optString("online_time"));
+        this.setOnline_text(jsonObject.optString("online_text"));
         this.setMtRedbag(jsonObject.optInt("mt_redbag"));
         this.setGameFlag(jsonObject.optInt("gameFlag"));
 
@@ -144,6 +146,14 @@ public class UserProfile extends UserBasic {
     public boolean isVip() {
 //        return is_vip == 1;
         return ismonthmail == 1;
+    }
+
+    public String getOnline_text() {
+        return online_text;
+    }
+
+    public void setOnline_text(String online_text) {
+        this.online_text = online_text;
     }
 
     public UserVideoInfo getVideoInfo() {
@@ -527,6 +537,9 @@ public class UserProfile extends UserBasic {
     }
 
 
+    public UserProfile() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -557,6 +570,7 @@ public class UserProfile extends UserBasic {
         dest.writeInt(this.isHot);
         dest.writeString(this.online_address);
         dest.writeString(this.online_date);
+        dest.writeString(this.online_text);
         dest.writeString(this.weChatNo);
         dest.writeInt(this.FollowCont);
         dest.writeLong(this.lastOnlineTime);
@@ -577,9 +591,6 @@ public class UserProfile extends UserBasic {
         dest.writeString(this.result);
         dest.writeInt(this.status);
         dest.writeString(this.content);
-    }
-
-    public UserProfile() {
     }
 
     protected UserProfile(Parcel in) {
@@ -606,6 +617,7 @@ public class UserProfile extends UserBasic {
         this.isHot = in.readInt();
         this.online_address = in.readString();
         this.online_date = in.readString();
+        this.online_text = in.readString();
         this.weChatNo = in.readString();
         this.FollowCont = in.readInt();
         this.lastOnlineTime = in.readLong();

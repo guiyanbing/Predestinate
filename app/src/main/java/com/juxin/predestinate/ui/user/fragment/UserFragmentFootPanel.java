@@ -47,7 +47,7 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         recyclerView.setNestedScrollingEnabled(false); // 嵌套ScrollView滑动惯性消失
         String[] names = resources.getStringArray(R.array.user_authority_name);
         int[] levels = resources.getIntArray(R.array.user_authority_level);
-        int[] icons = new int[]{R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_wallet_ico, R.drawable.f1_user_money_ico, R.drawable.f1_user_ycoin_ico,
+        int[] icons = new int[]{R.drawable.f1_user_home_ico, R.drawable.f1_user_guanzhu_ico, R.drawable.f1_user_wallet_ico, R.drawable.f1_user_money_ico, R.drawable.f1_user_ycoin_ico,
                 R.drawable.f1_user_diamonds_ico, R.drawable.f1_user_gift_ico, R.drawable.f1_user_info_ico, R.drawable.f1_user_xiangce_ico, R.drawable.f1_user_set_ico};
 
         for (int i = 0; i < names.length; i++) {
