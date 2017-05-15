@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -473,12 +474,12 @@ public class ChatMgr implements ModuleBase, PObserver {
 //                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Whisper, msg);
 //                }
 
-//                if (App.uid != message.getSendID()) {
-//                    //角标消息更改
-//                    if (UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
-//                        specialMgr.updateUnreadMsg(message);
-//                    }
-//                }
+                if (App.uid != message.getSendID()) {
+                    //角标消息更改
+                    if (UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
+                        specialMgr.updateUnreadMsg(message);
+                    }
+                }
             }
         });
     }
