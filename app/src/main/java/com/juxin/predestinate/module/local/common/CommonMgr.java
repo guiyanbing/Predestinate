@@ -16,7 +16,6 @@ import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.location.LocationMgr;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -27,8 +26,6 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
-import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -37,7 +34,6 @@ import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -466,87 +462,6 @@ public class CommonMgr implements ModuleBase {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("to_uid", to_uid);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.follow, getParams, complete);
-    }
-
-    /**
-     * 关注 / 取消关注 长连接发送  关注消息: mtp = 5
-     *
-     * @param type 1: 关注  2：取消关注
-     */
-    public void sendFollowMessage(int to_uid, final int type) {
-        String uid = String.valueOf(App.uid);
-        JSONObject jsonObject = new JSONObject();
-        String ts = String.valueOf(System.currentTimeMillis() / 1000 + ModuleMgr.getAppMgr().getTime());
-//        long msgId = ChatMgr.getInstance().getMsgId();
-        try {
-            jsonObject.put("fid", uid);
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.put(to_uid);
-            jsonObject.put("mtp", 5);
-            jsonObject.put("tid", jsonArray);
-            jsonObject.put("mt", ts);
-            String nickname = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
-            if (!TextUtils.isEmpty(nickname) && !"null".equals(nickname))
-                jsonObject.put("mct", "[" + nickname + "]刚刚关注了你");
-            else
-                jsonObject.put("mct", "刚刚关注了你");
-            jsonObject.put("gz", type);
-//            jsonObject.put("d", msgId);
-            jsonObject.put("mv", 5);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        NetData data = new NetData(uid, 5, jsonObject.toString());
-        IMProxy.getInstance().send(data, new IMProxy.SendCallBack() {
-            @Override
-            public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                try {
-                    JSONObject jsonObject = new JSONObject(contents);
-                    int s = jsonObject.optInt("s");
-//                    if (s == 0) {
-//                        if (type == 1) {
-//                            DataCenter.getInstance().insert_myattention(AppCtx.getPreference(AppCtx.SUid), to_uid,
-//                                    Long.parseLong(TimeUtil.getCurrentTimeMil()));
-//                        } else {
-//                            DataCenter.getInstance().delete_myattention(AppCtx.getPreference(AppCtx.SUid), to_uid);
-//                        }
-//                        if (inf != null) {
-//                            inf.onFollowUserSuccess(type, obj);
-//                        }
-//                    } else if (s == -3 || s == -10) {
-//                        try {
-//                            ChatMgr.getInstance().login(String.valueOf(AppModel.getInstance().getUserDetail().getUid()),
-//                                    MD5.encode(AppModel.getInstance().getUserDetail().getUserps()));
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        if (inf != null) {
-//                            inf.onFollowUserFail(type, obj);
-//                        }
-//                    } else {
-//                        if (inf != null) {
-//                            inf.onFollowUserFail(type, obj);
-//                        }
-//                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-//                    if (inf != null) {
-//                        inf.onFollowUserFail(type, obj);
-//                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-//                    if (inf != null) {
-//                        inf.onFollowUserFail(type, obj);
-//                    }
-                }
-            }
-
-            @Override
-            public void onSendFailed(NetData data) {
-            }
-        });
     }
 
     /**

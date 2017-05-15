@@ -7,18 +7,22 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
+import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -93,15 +97,16 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
         videoBottom.setOnClickListener(listener);
         voiceBottom.setOnClickListener(listener);
-        sayHibottom.setOnClickListener(listener);
         findViewById(R.id.iv_gift).setVisibility(View.VISIBLE);
         findViewById(R.id.iv_gift).setOnClickListener(listener);
         findViewById(R.id.userinfo_bottom).setVisibility(View.VISIBLE);
         findViewById(R.id.ll_userinfo_bottom_send).setOnClickListener(listener);
 
         if (userProfile == null) return;
-        if (userProfile.isSayHello()){   // 已打招呼
-            handleSayHi();
+        if (userProfile.isSayHello()) {   // 已打招呼
+            initSayHi();
+        } else {
+            sayHibottom.setOnClickListener(listener);
         }
     }
 
@@ -122,13 +127,10 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userProfile.getUid()),
-                            getString(R.string.say_hello_txt),
-                            userProfile.getKf_id(),
-                            !ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
-                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE);
-
-                    handleSayHi(); // 成功后处理
+                    if (userProfile.isSayHello()) {
+                        return;
+                    }
+                    handleSayHi();
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
@@ -144,14 +146,41 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         }
     };
 
-    /**
-     * 底部已打招呼处理
-     */
-    private void handleSayHi() {
+    private void initSayHi() {
         tv_sayhi.setText(getString(R.string.user_info_has_hi));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             sayHibottom.setAlpha(0.4f);
         }
+    }
+
+    /**
+     * 底部已打招呼处理
+     */
+    private void handleSayHi() {
+        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userProfile.getUid()),
+                getString(R.string.say_hello_txt),
+                userProfile.getKf_id(),
+                !ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
+                        Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                    @Override
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+
+                        if (messageRet.getS() == 0) { // 成功
+                            sayHibottom.setClickable(false);
+                            PToast.showShort(getString(R.string.user_info_hi_suc));
+                            initSayHi();
+                        } else {
+                            PToast.showShort(getString(R.string.user_info_hi_fail));
+                        }
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+                        PToast.showShort(getString(R.string.user_info_hi_fail));
+                    }
+                });
     }
 
     @Override
