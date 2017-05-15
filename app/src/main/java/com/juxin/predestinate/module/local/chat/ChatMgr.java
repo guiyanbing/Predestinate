@@ -19,7 +19,9 @@ import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -98,7 +100,7 @@ public class ChatMgr implements ModuleBase, PObserver {
         PLogger.d("Fl=== + sendTextMsg2");
 
         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-        sendMessage(commonMessage);
+        sendMessage(commonMessage, null);
     }
 
     /**
@@ -108,7 +110,7 @@ public class ChatMgr implements ModuleBase, PObserver {
      * @param kf  当前发信用户为机器人  客服id
      * @param sayHelloType  当前发信用户为机器人 机器人打招呼类型(0为普通,1为向机器人一键打招呼, 3附近的人群打招呼,4为向机器人单点打招呼(包括首页和详细资料页等))
      */
-    public void sendSayHelloMsg(String whisperID, String content, int kf, int sayHelloType) {
+    public void sendSayHelloMsg(String whisperID, String content, int kf, int sayHelloType, IMProxy.SendCallBack sendCallBack) {
         TextMessage textMessage = new TextMessage(whisperID,  content, kf, sayHelloType);
         textMessage.setStatus(DBConstant.SENDING_STATUS);
         textMessage.setJsonStr(textMessage.getJson(textMessage));
@@ -117,7 +119,19 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), ret != DBConstant.ERROR, textMessage);
 
-        sendMessage(textMessage);
+        sendMessage(textMessage, sendCallBack);
+    }
+
+    /**
+     * 关注
+     * @param userID
+     * @param content
+     * @param kf
+     * @param gz 关注状态1为关注2为取消关注
+     */
+    public void sendAttentionMsg(long userID, String content, int kf, int gz, IMProxy.SendCallBack sendCallBack) {
+        OrdinaryMessage message = new OrdinaryMessage(userID,  content, kf, gz);
+        IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toFllowJson()), sendCallBack);
     }
 
     public void sendImgMsg(String channelID, String whisperID, String img_url) {
@@ -142,7 +156,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
-                    sendMessage(commonMessage);
+                    sendMessage(commonMessage, null);
                 }else {
                     updateFail(commonMessage, null);
                 }
@@ -173,7 +187,7 @@ public class ChatMgr implements ModuleBase, PObserver {
                         onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
-                    sendMessage(commonMessage);
+                    sendMessage(commonMessage, null);
                 }else {
                     updateFail(commonMessage, null);
                 }
@@ -182,11 +196,14 @@ public class ChatMgr implements ModuleBase, PObserver {
     }
 
 
-    private void sendMessage(final BaseMessage message){
+    private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack){
         MMLog.autoDebug("isMsgID=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                if(sendCallBack != null){
+                    sendCallBack.onResult(msgId, group, groupId, sender, contents);
+                }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
                 if(!messageRet.isOk() || !messageRet.isS()){
@@ -200,6 +217,9 @@ public class ChatMgr implements ModuleBase, PObserver {
 
             @Override
             public void onSendFailed(NetData data) {
+                if(sendCallBack != null){
+                    sendCallBack.onSendFailed(data);
+                }
                 updateFail(message, null);
                 MMLog.autoDebug("isMsgError=" + message.getJsonStr());
             }
@@ -473,12 +493,12 @@ public class ChatMgr implements ModuleBase, PObserver {
 //                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Whisper, msg);
 //                }
 
-//                if (App.uid != message.getSendID()) {
-//                    //角标消息更改
-//                    if (UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
-//                        specialMgr.updateUnreadMsg(message);
-//                    }
-//                }
+                if (App.uid != message.getSendID()) {
+                    //角标消息更改
+                    if (UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
+                        specialMgr.updateUnreadMsg(message);
+                    }
+                }
             }
         });
     }

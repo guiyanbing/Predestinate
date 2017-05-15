@@ -14,6 +14,7 @@ import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
+import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
 import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
@@ -64,9 +65,10 @@ public enum UrlParam {
     reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
     reqSetRemarkName(Constant.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名
     reqGetRemarkName(Constant.FATE_IT_GO, "xs/userrelation/GetRemakName", UserRemark.class, true), // 获取用户备注名
+    reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true), // 获取他人音视频开关配置
 
-    // 获取他人音视频开关配置
-    reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true),
+    reqGetOpposingVideoSetting(Constant.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
+    reqSetOpposingVideoSetting(Constant.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),

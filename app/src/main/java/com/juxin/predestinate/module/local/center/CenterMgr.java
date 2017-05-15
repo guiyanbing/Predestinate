@@ -405,6 +405,29 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 获取设置的是否接受他人音视频配置
+     */
+    public void reqGetOpposingVideoSetting(long uid, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("hisuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqGetOpposingVideoSetting, post_param, complete);
+    }
+
+    /**
+     * 设置是否接受他人音视频
+     *
+     * @param acceptvideo  接受对方视频 0：不接受  1：接受
+     * @param acceptvoice  接受对方语音 0：不接受  1：接受
+     */
+    public void reqSetOpposingVideoSetting(long uid, int acceptvideo, int acceptvoice, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("hisuid", uid);
+        post_param.put("acceptvideo", acceptvideo);
+        post_param.put("acceptvoice", acceptvoice);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSetOpposingVideoSetting, post_param, complete);
+    }
+
+    /**
      * 设置他人备注名
      *
      * @param toUid      对方UID
@@ -420,7 +443,7 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 获取他人备注名
      *
-     * @param toUid      对方UID
+     * @param toUid 对方UID
      */
     public void reqGetRemarkName(long toUid, RequestComplete complete) {
         HashMap<String, Object> post_param = new HashMap<>();

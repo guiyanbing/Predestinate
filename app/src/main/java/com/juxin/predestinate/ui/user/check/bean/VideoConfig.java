@@ -16,7 +16,8 @@ public class VideoConfig extends BaseData {
 
     @Override
     public void parseJson(String jsonStr) {
-        JSONObject jsonObject = getJsonObject(jsonStr);
+        String jsonData = getJsonObject(jsonStr).optString("res");
+        JSONObject jsonObject = getJsonObject(jsonData);
 
         this.videoChat = jsonObject.optInt("videochat");
         this.voiceChat = jsonObject.optInt("audiochat");
@@ -33,5 +34,14 @@ public class VideoConfig extends BaseData {
 
     public int getVideoVertify() {
         return videoVertify;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoConfig{" +
+                "videoChat=" + videoChat +
+                ", voiceChat=" + voiceChat +
+                ", videoVertify=" + videoVertify +
+                '}';
     }
 }
