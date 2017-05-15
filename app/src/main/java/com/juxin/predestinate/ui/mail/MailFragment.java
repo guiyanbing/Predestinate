@@ -42,10 +42,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     private TextView mail_title_right_text;
 
     private boolean isGone = false;//是否首面底部，默认是false
-
-    //  private CustomFrameLayout viewGroup;
     private View mViewTop;
-
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
 
     @Nullable
