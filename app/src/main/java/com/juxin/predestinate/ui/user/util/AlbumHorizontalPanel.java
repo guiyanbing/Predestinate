@@ -5,11 +5,15 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import java.io.Serializable;
@@ -61,20 +65,44 @@ public class AlbumHorizontalPanel extends BaseViewPanel implements AdapterView.O
         albumListView = (HorizontalListView) findViewById(R.id.list_horizontal);
         albumListView.setItemMargin(horizontalSpacing);
 
+        // 相册列表
         albumAdapter = new HorizontalAdapter(getContext(), showType, columnWidth, albumList);
         albumListView.setAdapter(albumAdapter);
+        albumAdapter.setList(albumList);
         albumListView.setOnItemClickListener(this);
-        refresh();
     }
 
-    public void refresh() {
-        albumAdapter.setList(albumList);
+    public void refresh(UserDetail userDetail) {
+        if (showType == EX_HORIZONTAL_ALBUM) {
+            albumAdapter.setList(userDetail.getUserPhotos());
+        }
+    }
+
+    /**
+     * 开通Vip提示
+     */
+    private void showVipTips() {
+        PickerDialogUtil.showSimpleTipDialogExt((FragmentActivity) getContext(), new SimpleTipDialog.ConfirmListener() {
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onSubmit() {
+                UIShow.showBuyCoinActivity(getContext());
+            }
+        }, getContext().getString(R.string.goods_vip_check_other_album),"", "取消", "去开通", true, R.color.text_zhuyao_black);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             UIShow.showPhotoOfSelf((FragmentActivity) getContext(), (Serializable) albumList, position);
+            return;
+        }
+
+        if (!ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            showVipTips();
             return;
         }
 

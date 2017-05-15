@@ -26,6 +26,8 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
@@ -177,7 +179,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIShow.showUserOtherSetAct(PrivateChatAct.this, whisperID, null);
+                UIShow.showUserOtherSetAct(PrivateChatAct.this, whisperID, null, CenterConstant.USER_SET_FROM_CHAT);
             }
         });
 

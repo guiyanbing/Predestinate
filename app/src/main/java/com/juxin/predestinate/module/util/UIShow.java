@@ -390,7 +390,26 @@ public class UIShow {
     /**
      * 打开TA人资料查看页
      */
+    public static void showCheckOtherInfoAct(final Context context, UserProfile userProfile) {
+        showCheckOtherInfoAct(context, userProfile.getUid(), userProfile);
+    }
+
+    /**
+     * 打开TA人资料查看页
+     */
     public static void showCheckOtherInfoAct(final Context context, long uid) {
+        showCheckOtherInfoAct(context, uid, null);
+    }
+
+    /**
+     * 打开TA人资料查看页
+     */
+    private static void showCheckOtherInfoAct(final Context context, long uid, UserProfile userProfile) {
+        if (userProfile != null) {
+            skipCheckOtherInfoAct(context, userProfile);
+            return;
+        }
+
         LoadingDialog.show((FragmentActivity) context, context.getString(R.string.user_info_require));
         ModuleMgr.getCenterMgr().reqOtherInfo(uid, new RequestComplete() {
             @Override
@@ -407,15 +426,18 @@ public class UIShow {
                         }
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
-
-                        Intent intent = new Intent(context, UserCheckInfoAct.class);
-                        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
-                        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-                        context.startActivity(intent);
+                        skipCheckOtherInfoAct(context, userProfile);
                     }
                 });
             }
         });
+    }
+
+    private static void skipCheckOtherInfoAct(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, UserCheckInfoAct.class);
+        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        context.startActivity(intent);
     }
 
     /**
@@ -452,13 +474,15 @@ public class UIShow {
     /**
      * 打开他人资料设置页
      *
-     * @param uid         他人用户id，无详细资料UserProfile对象时，传递uid, UserProfile传递null
+     * @param uid     他人用户id，无详细资料UserProfile对象时，传递uid, UserProfile传递null
+     * @param channel 跳转来源渠道{@link CenterConstant}
      */
-    public static void showUserOtherSetAct(final Context context, long uid, UserProfile userProfile) {
+    public static void showUserOtherSetAct(final Context context, long uid, UserProfile userProfile, final int channel) {
         final Intent intent = new Intent(context, UserOtherSetAct.class);
 
         if (userProfile != null) {
             intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+            intent.putExtra(CenterConstant.USER_SET_KEY, channel);
             context.startActivity(intent);
             return;
         }
@@ -480,6 +504,7 @@ public class UIShow {
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
                         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+                        intent.putExtra(CenterConstant.USER_SET_KEY, channel);
                         context.startActivity(intent);
                     }
                 });
@@ -1038,6 +1063,7 @@ public class UIShow {
 
     /**
      * 打开头像更新界面
+     *
      * @param context
      */
     public static void showUserNoHeadUploadAct(Context context) {
