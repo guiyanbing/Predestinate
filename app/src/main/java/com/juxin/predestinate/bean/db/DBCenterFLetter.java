@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.mumu.bean.utils.ByteUtil;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
@@ -13,10 +12,14 @@ import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
+import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -119,7 +122,9 @@ public class DBCenterFLetter {
                 .append(" WHERE ")
                 .append(FLetter.COLUMN_USERID + " = ?");
                // .append(userid);
+        PLogger.printObject("isExist-onStart");
         Cursor cursor = mDatabase.query(sql.toString(), userid);
+        PLogger.printObject("isExist-onEnd");
         if (cursor != null && cursor.moveToFirst()) {
             cursor.close();
             return true;

@@ -41,9 +41,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 通用，新版本
@@ -119,15 +117,14 @@ public class CommonMgr implements ModuleBase {
     private void requestConfig() {
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("ver", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.staticConfig, null, requestParams,
-                RequestParam.CacheType.CT_Cache_Url, true, new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                        commonConfig = new CommonConfig();
-                        commonConfig.parseJson(response.getResponseString());
-                    }
-                });
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.staticConfig, requestParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                commonConfig = new CommonConfig();
+                commonConfig.parseJson(response.getResponseString());
+            }
+        });
     }
 
     /**
@@ -141,7 +138,7 @@ public class CommonMgr implements ModuleBase {
     /**
      * 获取自己的音频、视频开关配置
      */
-    public void requestVideochatConfig(){
+    public void requestVideochatConfig() {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -149,20 +146,22 @@ public class CommonMgr implements ModuleBase {
             }
         });
     }
+
     /**
      * 获取自己的音频、视频开关配置
      */
-    public void requestVideochatConfigSendUI(RequestComplete complete){
+    public void requestVideochatConfigSendUI(RequestComplete complete) {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, complete);
     }
+
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig(){
-        HashMap<String,Object> post_param = new HashMap<>();
-        post_param.put("videochat",videoVerify.getVideochat());
-        post_param.put("audiochat",videoVerify.getAudiochat());
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null,post_param, RequestParam.CacheType.CT_Cache_No,true, false, new RequestComplete() {
+    public void setVideochatConfig() {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("videochat", videoVerify.getVideochat());
+        post_param.put("audiochat", videoVerify.getAudiochat());
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
 
@@ -173,11 +172,11 @@ public class CommonMgr implements ModuleBase {
     /**
      * 上传视频认证配置
      */
-    public void addVideoVerify(String imgUrl,String videoUrl,RequestComplete complete){
-        HashMap<String,Object> post_param = new HashMap<>();
+    public void addVideoVerify(String imgUrl, String videoUrl, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify,post_param, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
     }
 
     /**
@@ -201,14 +200,14 @@ public class CommonMgr implements ModuleBase {
      * 请求礼物列表
      */
     public void requestGiftList(final GiftHelper.OnRequestGiftListCallback callback) {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null,new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getGiftLists, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.d("---GiftList--->isCache：" + response.isCache() + "，" + response.getResponseString());
                 if (response.isOk() || response.isCache()) {
                     giftLists = new GiftsList();
                     giftLists.parseJson(response.getResponseString());
-                    if (callback != null){
+                    if (callback != null) {
                         callback.onRequestGiftListCallback(response.isOk());
                     }
                 }
@@ -508,7 +507,7 @@ public class CommonMgr implements ModuleBase {
      * @param gid      礼物ID
      * @param complete 请求完成后回调
      */
-    public void receiveGift(long rid,String gname,int gid, RequestComplete complete) {
+    public void receiveGift(long rid, String gname, int gid, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("rid", rid);
         getParams.put("gname", gname);
@@ -656,134 +655,6 @@ public class CommonMgr implements ModuleBase {
 
 
     /**
-     * 好友标签分组成员
-     *
-     * @param complete
-     */
-    public void getTagGroupMember(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqTagGroupMember, null, complete);
-    }
-
-    /**
-     * 增加自己的好友的
-     *
-     * @param complete
-     */
-    public void addFriendTag(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddFriendTag, null, complete);
-    }
-
-    /**
-     * 添加标签分组
-     *
-     * @param complete
-     */
-    public void addTagGroup(List<String> tag_name, List<String> uid_list, RequestComplete complete) {
-//        "tag_name": ["新标签2","sssss","aaaa"]	// 标签名字,
-//        "uid_list": [10000,12222,13333]			// opt 标签成员
-//        String names = "[\"新标签2\"]";
-//        String list = "[\"10000\",\"12222\"]";
-        String[] names = tag_name.toArray(new String[tag_name.size()]);
-        String[] list = uid_list.toArray(new String[uid_list.size()]);
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());// 标签名字
-        postParams.put("tag_name", names);// 标签名字
-        postParams.put("uid_list", list);// 标签成员
-//        Log.e("TTTTTTTTTTTTTTTBB",names+"||"+list);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroup, postParams, complete);
-    }
-
-    /**
-     * 添加好友标签分组成员
-     *
-     * @param complete
-     */
-    public void addTagGroupMember(long tag, Set<String> uids, RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        String[] list = uids.toArray(new String[uids.size()]);
-//        Log.e("TTTTTTTTTTTTTTTBB", tag + "||" + list);
-        postParams.put("tag", tag);// 标签id
-        postParams.put("uids", list);// 要删除的uid
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddTagGroupMember, postParams, complete);
-    }
-
-    /**
-     * 删除自己好友的 tag
-     *
-     * @param complete
-     */
-    public void delFriendTag(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelFriendTag, null, complete);
-    }
-
-    /**
-     * 删除标签分组
-     *
-     * @param complete
-     */
-    public void delTagGroup(int tag_id, RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag_id", tag_id);// tag_id
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroup, postParams, complete);
-    }
-
-    /**
-     * 删除好友标签分组成员
-     *
-     * @param complete
-     */
-    public void delTagGroupMember(int tag, List<Long> uids, RequestComplete complete) {
-        Gson gson = new Gson();
-        String list = gson.toJson(uids);
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag", tag);// 标签id
-        postParams.put("uids", list);// 要删除的uid
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqDelTagGroupMember, postParams, complete);
-    }
-
-    /**
-     * 好友列表
-     *
-     * @param complete
-     */
-    public void getFriendList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqFriendList, null, complete);
-    }
-
-    /**
-     * 最近互动好友列表
-     *
-     * @param complete
-     */
-    public void getLatestInteractiveList(int page, int limit, RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("page", page);// 第几页
-        postParams.put("limit", limit);// 每页条数
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqLatestInteractive, postParams, complete);
-    }
-
-    /**
-     * 修改标签分组
-     *
-     * @param complete
-     */
-    public void ModifyTagGroup(long tag_id, String name, RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("tag_id", tag_id);// 标签 ID
-        postParams.put("name", name);// 新的分组名字
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqModifyTagGroup, postParams, complete);
-    }
-
-    /**
-     * 好友标签分组
-     *
-     * @param complete
-     */
-    public void getTagGroupList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqTagGroup, null, complete);
-    }
-
-    /**
      * 批量获取用户简略信息
      *
      * @param complete
@@ -810,19 +681,6 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqCommodityList, postParms, complete);
     }
 
-    /**
-     * 送礼物
-     *
-     * @param complete
-     */
-    public void givePresent(long uid, long tuid, int id, int count, RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", uid);// 收礼物的uid
-        postParams.put("tuid", tuid);// 送礼物的用户id
-        postParams.put("id", id);// 礼物id
-        postParams.put("count", count);// 礼物数量
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.givePresent, postParams, complete);
-    }
 
     /**
      * 生成订单

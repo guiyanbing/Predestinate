@@ -67,7 +67,7 @@
                 android:src="@drawable/f1_userinfo_hi" />
 
             <TextView
-                android:id="@+id/tv_userinfo_sayhello_text"
+                android:id="@+id/tv_sayhello_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user_info_hi"

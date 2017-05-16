@@ -16,7 +16,7 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 
 /**
- * 礼物列表
+ * 钻石列表
  * Created by zm on 2017/4/13.
  */
 public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
@@ -29,13 +29,12 @@ public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
 
     @Override
     public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_wode_my_diamond_item};
+        return new int[]{R.layout.f1_wode_my_diamond_item};//钻石item布局
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder= super.onCreateViewHolder(parent, viewType);
-        return viewHolder;
+        return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
@@ -43,11 +42,11 @@ public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
 
         MyViewHolder vh = new MyViewHolder(viewHolder);
         final Diamond info = getItem(position);
-        vh.tv_num.setText(info.getNum()+"钻石");
-        vh.tv_price.setText("￥" + info.getCost() + "");
+        vh.tv_num.setText(info.getNum()+mContext.getString(R.string.diamond));//产品
+        vh.tv_price.setText("￥" + info.getCost() + "");//价格
         vh.tv_price.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {//跳转支付列表
                 UIShow.showPayListAct((FragmentActivity) mContext, info.getPid());
             }
         });

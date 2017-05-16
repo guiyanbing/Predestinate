@@ -21,7 +21,7 @@ public class MyDiamondsExplainAct extends BaseActivity {
     }
     //初始化
     private void initView(){
-        setBackView(R.id.base_title_back);
-        setTitle("钻石说明");
+        setBackView(R.id.base_title_back);//设置返回按钮
+        setTitle(getString(R.string.diamond_show));//标题
     }
 }

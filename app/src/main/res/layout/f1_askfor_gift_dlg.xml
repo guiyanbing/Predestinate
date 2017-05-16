@@ -108,7 +108,7 @@
 
                     <LinearLayout
                         android:id="@+id/askfor_voice_parent"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/px99_dp"
                         android:layout_marginLeft="@dimen/px30_dp"
                         android:layout_marginRight="@dimen/px30_dp"
@@ -117,11 +117,10 @@
 
                         <LinearLayout
                             android:id="@+id/askfor_voice"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/px99_dp"
                             android:layout_marginLeft="@dimen/px30_dp"
                             android:layout_marginRight="@dimen/px30_dp"
-                            android:layout_weight="1"
                             android:background="@drawable/f1_view_gat_corners_stroke"
                             android:orientation="horizontal" />
 

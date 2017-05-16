@@ -29,9 +29,6 @@ public class MyDiamondsAct extends BaseActivity{
     private RecyclerView rlvList;
     private MyDiamondAdapter mMyDiamondAdapter;
 
-    //list间隔样式
-//    android:divider="@color/transparent"
-//    android:dividerHeight="1dip"
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +55,6 @@ public class MyDiamondsAct extends BaseActivity{
     }
 
     private void initData() {
-        //逻辑待完善
         mMyDiamondAdapter = new MyDiamondAdapter(this);
         List<Diamond> dataList = ModuleMgr.getCommonMgr().getCommonConfig().getDiamondList();
         rlvList.setAdapter(mMyDiamondAdapter);

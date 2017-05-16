@@ -473,8 +473,14 @@ public class CenterMgr implements ModuleBase, PObserver {
         return StringUtils.getAfterWithFlag(picUrl, tag);
     }
 
+    /**
+     * 是否是机器人
+     *
+     * @param kf_id 不为0就是机器人
+     * @return true 是机器人，false不是机器人
+     */
     public boolean isRobot(int kf_id) {
-        return kf_id == 0;
+        return kf_id != 0;
     }
 
     /*设置信息*/

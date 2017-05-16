@@ -32,7 +32,7 @@ public class WithDrawSuccessAct extends BaseActivity implements View.OnClickList
         btnSuccess = (Button) findViewById(R.id.btn_success);
         tvServiceQQ = (TextView) findViewById(R.id.tv_service_qq);
 
-//        UIShow.showQQServer(this);
+//        UIShow.showQQService(this);
 //        if (!TextUtils.isEmpty(QQ_Utils.getServiceQQ())) {
 //            tvServiceQQ.setText(QQ_Utils.getServiceQQ());
 //        }

@@ -8,13 +8,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.discover.DefriendType;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,8 +108,20 @@ public class DefriendAct extends BaseActivity implements DefriendAdapter.OnSelec
     @Override
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()) {
-            MMToast.showShort("举报成功");
-            finish();
+            PickerDialogUtil.showSimpleTipDialogExt(this, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
+
+                        }
+
+                        @Override
+                        public void onSubmit() {
+                            finish();
+                        }
+                    }, getString(R.string.defriend_sure_dialog_content),
+                    getString(R.string.defriend_sure_dialog_title),
+                    "", getString(R.string.defriend_sure_dialog_surebtn), false, R.color.text_ciyao_gray);
+
         }
     }
 }

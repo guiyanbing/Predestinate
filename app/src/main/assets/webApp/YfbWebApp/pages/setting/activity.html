@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>活动相关</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../../css/mui.css">
+    <link rel="stylesheet" type="text/css" href="../../css/app.css"/>
+</head>
+<style>
+    h2 {
+        margin: 30px 15px 30px;
+        font-size: 20px;
+        color: #6d6d72;
+        background-color: white;
+    }
+    .sub-title {
+        margin: 15px 15px 15px;
+        font-size: 14px;
+        color: #6d6d72;
+        background-color: white;
+    }
+</style>
+<body style="background-color: white">
+<div class="mui-content" style="background-color: white">
+<h2>活动详情介绍:</h2>
+<div class="sub-title">1、购买100元/Y币服务可获得100元话费，按10个月领取，每月领10元。注：购买100元Y币 可获得100元话费</div>
+    <div class="sub-title">2、充值30日后，可领取</div>
+    <div class="sub-title">3、本活动最终解释权归本应用所有</div>
+    <div class="sub-title">
+        4、客服电话：0731-89746010
+        <a style="color: #6d6d72" href="javascript:receivePhoneCharge()">话费领取</a>
+    </div>
+</div>
+</body>
+<script src="../../js/mui.min.js"></script>
+<script src="../../lib/jxlib.all.js"></script>
+<script src="../../lib/url-config.js"></script>
+<script type="text/javascript">
+    function receivePhoneCharge() {
+      console.log('receive phone charge', web.pages.GetPhoneChargePage);
+      var url = web.pages.GetPhoneChargePage;
+      mui.toast("receive phone charge" + url);
+      window.platform.openWeb('话费领取', url);
+    }
+</script>
+</html>

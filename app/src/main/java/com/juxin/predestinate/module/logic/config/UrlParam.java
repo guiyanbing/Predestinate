@@ -16,9 +16,6 @@ import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
-import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
-import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
-import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.Map;
 
@@ -39,7 +36,7 @@ public enum UrlParam {
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
     serviceQQ("user/serviceQQ", null, false),//请求在线客服QQ
-    statistics(Constant.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
+    statistics(Hosts.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
 
     //============================== 设置页相关接口 =============================
@@ -50,11 +47,11 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //获取自己的音频、视频开关配置
-    reqMyVideochatConfig(Constant.FATE_IT_GO, "xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
+    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
     //音视频开关修改
-    setVideochatConfig(Constant.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
+    setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
-    addVideoVerify(Constant.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
+    addVideoVerify(Hosts.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
 
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
@@ -63,12 +60,12 @@ public enum UrlParam {
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
     reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
     reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
-    reqSetRemarkName(Constant.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名
-    reqGetRemarkName(Constant.FATE_IT_GO, "xs/userrelation/GetRemakName", UserRemark.class, true), // 获取用户备注名
-    reqVideoChatConfig(Constant.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true), // 获取他人音视频开关配置
+    reqSetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名
+    reqGetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/GetRemakName", UserRemark.class, true), // 获取用户备注名
+    reqVideoChatConfig(Hosts.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true), // 获取他人音视频开关配置
 
-    reqGetOpposingVideoSetting(Constant.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
-    reqSetOpposingVideoSetting(Constant.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
+    reqGetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
+    reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
@@ -76,18 +73,18 @@ public enum UrlParam {
     reqBasicUserInfoMsg("s/uinfo/NickChangedList", UserInfoLightweightList.class, true),
 
     // 上传头像
-    uploadAvatar(Constant.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, false),
+    uploadAvatar(Hosts.FATE_IT_HTTP_PIC, "index/uploadAvatar", null, false),
 
     // 上传相册
-    uploadPhoto(Constant.FATE_IT_HTTP_PIC, "index/uploadPhoto", null, true),
+    uploadPhoto(Hosts.FATE_IT_HTTP_PIC, "index/uploadPhoto", null, true),
 
     // 删除照片
     deletePhoto("user/deletePic", false),
 
     // 上传文件
-    uploadFile(Constant.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
+    uploadFile(Hosts.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
-    //============================== 小友模块相关接口 =============================
+    //============================== 用户资料模块相关接口 =============================
     //客户端获得用户红包列表
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
@@ -117,11 +114,11 @@ public enum UrlParam {
     // 最近来访
     viewMeList("user/viewMeList", true),
     // 索要礼物群发
-    qunFa(Constant.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
+    qunFa(Hosts.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
     // 索要礼物群发
     sendGift("gift/sendGift", true),
     //女用户群发累计发送的用户数
-    qunCount(Constant.FATE_IT_GO, "xs/discovery/QunCount", null, true),
+    qunCount(Hosts.FATE_IT_GO, "xs/discovery/QunCount", null, true),
     // 我关注的列表
     getFollowing("MoneyTree/getFollowing", true),
     // 关注我的列表
@@ -131,67 +128,40 @@ public enum UrlParam {
     // 关注某某
     follow("follow/follow", true),
 
-
-    //好友标签分组成员
-    reqTagGroupMember("s/friend/TagGroupMember", SimpleFriendsList.class, true),
-    //增加自己的好友的 tag
-    reqAddFriendTag("s/friend/AddFriendTag", null, true),
-    //添加标签分组
-    reqAddTagGroup("s/friend/AddTagGroup", LabelsList.class, true),
-    //添加好友标签分组成员
-    reqAddTagGroupMember("s/friend/AddTagGroupMember", SimpleFriendsList.class, true),
-    //删除自己好友的 tag
-    reqDelFriendTag("s/friend/DelFriendTag", SimpleFriendsList.class, true),
-    //删除标签分组
-    reqDelTagGroup("s/friend/DelTagGroup", SimpleFriendsList.class, true),
-    //删除好友标签分组成员
-    reqDelTagGroupMember("s/friend/DelTagGroupMember", SimpleFriendsList.class, true),
-    //好友列表
-    reqFriendList("s/friend/FriendList", SimpleFriendsList.class, true),
-    //最近互动好友列表
-    reqLatestInteractive("s/friend/LatestInteractive", FriendsList.class, true),
-    //修改标签分组
-    reqModifyTagGroup("s/friend/ModifyTagGroup", SimpleFriendsList.class, true),
-    //好友标签分组
-    reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
-    //送礼物
-    givePresent("s/present/GivePresent", null, true),
-
-
     //================= 发现 ===========
     //举报
-    complainBlack(Constant.FATE_IT_GO, "xs/userrelation/ComplainBlack", null, true),
+    complainBlack(Hosts.FATE_IT_GO, "xs/userrelation/ComplainBlack", null, true),
     //获取发现列表
-    getMainPage(Constant.FATE_IT_GO, "xs/discovery/MainPage", UserInfoLightweightList.class, true),
+    getMainPage(Hosts.FATE_IT_GO, "xs/discovery/MainPage", UserInfoLightweightList.class, true),
     //获取附近的人列表
-    getNearUsers2(Constant.FATE_IT_GO, "xs/discovery/NearUsers2", UserInfoLightweightList.class, true),
+    getNearUsers2(Hosts.FATE_IT_GO, "xs/discovery/NearUsers2", UserInfoLightweightList.class, true),
     //获取我的好友列表
-    getMyFriends(Constant.FATE_IT_GO, "xs/userrelation/GiftFriends", UserInfoLightweightList.class, true),
+    getMyFriends(Hosts.FATE_IT_GO, "xs/userrelation/GiftFriends", UserInfoLightweightList.class, true),
     //获取黑名单列表
-    getMyDefriends(Constant.FATE_IT_GO, "xs/userrelation/BlackList", UserInfoLightweightList.class, true),
+    getMyDefriends(Hosts.FATE_IT_GO, "xs/userrelation/BlackList", UserInfoLightweightList.class, true),
 
     //============ 支付 =============
     reqCommodityList("user/payListNode", PayGoods.class),  // 商品列表
 
-    reqWX(Constant.FATE_IT_PROTOCOL, "user/wxAllPay", null, true),  //微信支付
+    reqWX(Hosts.FATE_IT_PROTOCOL, "user/wxAllPay", null, true),  //微信支付
 
-    reqUnionPay(Constant.FATE_IT_CUP_HTTP, "user/unionPay", null, true),  //银联支付
+    reqUnionPay(Hosts.FATE_IT_CUP_HTTP, "user/unionPay", null, true),  //银联支付
 
-    reqAlipay(Constant.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
+    reqAlipay(Hosts.FATE_IT_PROTOCOL, "user/alipay", null, true),  //银联支付
 
-    reqPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/card", null, true),  //手机卡
+    reqPhoneCard(Hosts.FATE_IT_CUP_HTTP, "user/card", null, true),  //手机卡
 
-    reqSearchPhoneCard(Constant.FATE_IT_CUP_HTTP, "user/checkSZPay", null, true),  //手机卡查询
+    reqSearchPhoneCard(Hosts.FATE_IT_CUP_HTTP, "user/checkSZPay", null, true),  //手机卡查询
 
-    reqangelPayF(Constant.FATE_IT_PROTOCOL, "user/angelPayF", null, true),   // 充值记录页面 银联语音 查询之前是否支付过
+    reqangelPayF(Hosts.FATE_IT_PROTOCOL, "user/angelPayF", null, true),   // 充值记录页面 银联语音 查询之前是否支付过
 
-    reqangelPay(Constant.FATE_IT_PROTOCOL, "user/angelPay", null, true),   //充值记录页面 银联语音 没有绑定用户接口
+    reqangelPay(Hosts.FATE_IT_PROTOCOL, "user/angelPay", null, true),   //充值记录页面 银联语音 没有绑定用户接口
 
-    reqangelPayB(Constant.FATE_IT_PROTOCOL, "user/angelPayB", null, true),   //充值记录页面 银联语音 绑定用接口
+    reqangelPayB(Hosts.FATE_IT_PROTOCOL, "user/angelPayB", null, true),   //充值记录页面 银联语音 绑定用接口
 
-    reqAnglePayQuery(Constant.FATE_IT_PROTOCOL, "user/anglePayQuery", null, true),   //充值记录页面 查询
+    reqAnglePayQuery(Hosts.FATE_IT_PROTOCOL, "user/anglePayQuery", null, true),   //充值记录页面 查询
 
-    reqAliWapPay(Constant.FATE_IT_CUP_HTTP, "user/aliWapPay", null, true),   //支付宝wap充值
+    reqAliWapPay(Hosts.FATE_IT_CUP_HTTP, "user/aliWapPay", null, true),   //支付宝wap充值
 
 
     // 最后一个，占位
@@ -199,7 +169,7 @@ public enum UrlParam {
 
     // -------------------------------内部处理逻辑----------------------------------------
 
-    private String host = Constant.HOST_URL;    //请求host
+    private String host = Hosts.HOST_URL;    //请求host
     private String spliceUrl = null;            //接口url，与host拼接得到完整url
     private boolean needLogin = false;          //请求是否需要登录才会发送
     private Class<? extends BaseData> parseClass = null;//请求返回体解析类
@@ -220,7 +190,7 @@ public enum UrlParam {
      * 接口url+解析bean+是否需要登录
      */
     UrlParam(final String spliceUrl, final Class<? extends BaseData> parseClass, final boolean needLogin) {
-        this(Constant.HOST_URL, spliceUrl, parseClass, needLogin);
+        this(Hosts.HOST_URL, spliceUrl, parseClass, needLogin);
     }
 
     /**
@@ -281,7 +251,7 @@ public enum UrlParam {
      * @return url
      */
     public String getFinalUrl() {
-        if (host.equals(Constant.NO_HOST)) {
+        if (host.equals(Hosts.NO_HOST)) {
             return spliceUrl;
         }
         return host + spliceUrl;
@@ -318,7 +288,7 @@ public enum UrlParam {
                 url = url.replaceAll("\\{" + key.toString() + "\\}", val.toString());
             }
         }
-        if (!host.equals(Constant.NO_HOST)) {
+        if (!host.equals(Hosts.NO_HOST)) {
             url = host + url;
         }
         return url;

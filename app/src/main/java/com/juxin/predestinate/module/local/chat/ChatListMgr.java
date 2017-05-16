@@ -12,6 +12,7 @@ import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
+import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -95,6 +96,35 @@ public class ChatListMgr implements ModuleBase, PObserver {
 //            }
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
            // updateBasicUserInfo();
+    }
+
+    /**
+     * 批量删除消息
+     * @param messageList
+     */
+    public void deleteBatchMessage(List<BaseMessage> messageList) {
+        for (BaseMessage temp : messageList){
+            deleteMessage(temp.getLWhisperID());
+        }
+        getWhisperList();
+    }
+
+    public long deleteMessage(long userID) {
+        return dbCenter.deleteMessage(userID);
+    }
+
+    /**
+     * 更新已读
+     */
+    public void updateToReadAll() {
+        long ret = dbCenter.updateToReadAll();
+        if(ret != DBConstant.ERROR){
+            getWhisperList();
+        }
+    }
+
+    public void updateToRead(String channelID, String userID) {
+        dbCenter.updateToRead(channelID, userID);
     }
 
     public void getWhisperList() {

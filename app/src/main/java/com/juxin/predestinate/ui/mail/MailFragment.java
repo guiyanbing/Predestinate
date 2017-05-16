@@ -15,6 +15,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
@@ -42,7 +43,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     private TextView mail_title_right_text;
 
     private boolean isGone = false;//是否首面底部，默认是false
-    private View mViewTop;
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
 
     @Nullable
@@ -94,7 +94,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private void initView() {
         listMail = (SwipeListView) findViewById(R.id.mail_list);
-        mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
+     //   View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
 
         mail_bottom = findViewById(R.id.mail_bottom);
         mail_delete = (Button) findViewById(R.id.mail_delete);
@@ -246,20 +246,21 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.mail_delete:
-
                 mail_delete.setEnabled(false);
+                ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList);
+                mailDelInfoList.clear();
+                listMail.smoothCloseChooseView();
                 break;
             case R.id.mail_all_ignore:
                 //忽略所有未读消息
                 PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
                     @Override
-                    public void onCancel() {
-
-                    }
+                    public void onCancel() {}
 
                     @Override
                     public void onSubmit() {
-                       // ModuleMgr.getChatListMgr().markWhisperAsRead();
+                        ModuleMgr.getChatListMgr().updateToReadAll();
+                        listMail.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
                     }
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");
