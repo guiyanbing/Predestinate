@@ -151,6 +151,8 @@
     <string name="ext_newpwd_hit">支持英文和数字，6至20位</string>
     <string name="txt_replacepwd_desc">确认密码</string>
     <string name="ext_replacepwd_hit">再次填入新密码</string>
+    <string name="qq_not_install">QQ未安装</string>
+    <string name="qq_open_error">QQ客服出错请使用电话客服</string>
 
     <!--注册-->
     <string name="button_reg">立即注册</string>
@@ -518,6 +520,9 @@
     <string name="defriend_title">举报</string>
     <string name="defriend_title_right">提交</string>
     <string name="defriend_edt_hint">详细描述被举报人的恶意行为</string>
+    <string name="defriend_sure_dialog_title">举报成功</string>
+    <string name="defriend_sure_dialog_content">感谢您的举报，我们会认真处理您的举报内容，谢谢您的合作</string>
+    <string name="defriend_sure_dialog_surebtn">知道了</string>
 
     <string name="my_friend_title">我的好友</string>
     <string name="my_friend_righ_title">黑名单</string>
@@ -534,7 +539,6 @@
 
     <string name="top_type_man">豪</string>
     <string name="top_type_woman">魅</string>
-
     <!--发现end-->
 
 

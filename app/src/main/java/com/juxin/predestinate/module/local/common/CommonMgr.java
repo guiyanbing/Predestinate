@@ -117,15 +117,14 @@ public class CommonMgr implements ModuleBase {
     private void requestConfig() {
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("ver", Constant.SUB_VERSION);//静态配置内容的版本本号(整数)
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.staticConfig, null, requestParams,
-                RequestParam.CacheType.CT_Cache_Url, true, new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
-                        commonConfig = new CommonConfig();
-                        commonConfig.parseJson(response.getResponseString());
-                    }
-                });
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.staticConfig, requestParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---StaticConfig--->isCache：" + response.isCache() + "，" + response.getResponseString());
+                commonConfig = new CommonConfig();
+                commonConfig.parseJson(response.getResponseString());
+            }
+        });
     }
 
     /**

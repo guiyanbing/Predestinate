@@ -72,6 +72,20 @@ public class DBCenter {
         return centerFmessage.updateMsg(baseMessage);
     }
 
+    public long updateToReadAll() {
+        return centerFmessage.updateToReadAll();
+    }
+
+    /**
+     * 更新未读
+     * @param channelID
+     * @param userID
+     * @return
+     */
+    public long updateToRead(String channelID, String userID) {
+        return centerFmessage.updateToRead(channelID, userID);
+    }
+
 
     /**
      * 聊天记录

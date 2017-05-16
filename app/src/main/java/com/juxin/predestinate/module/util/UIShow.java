@@ -30,6 +30,7 @@ import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -762,7 +763,7 @@ public class UIShow {
     /**
      * 打开QQ客服
      */
-    public static void showQQServer(Context context) {
+    public static void showQQService(Context context) {
         try {
             String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
                     PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
@@ -771,10 +772,10 @@ public class UIShow {
             if (intent.resolveActivity(context.getPackageManager()) != null) {
                 context.startActivity(intent);
             } else {
-                PToast.showShort("QQ未安装");
+                PToast.showShort(context.getResources().getString(R.string.qq_not_install));
             }
         } catch (Exception e) {
-            PToast.showShort("QQ客服出错请使用电话客服");
+            PToast.showShort(context.getResources().getString(R.string.qq_open_error));
         }
     }
 
@@ -784,34 +785,28 @@ public class UIShow {
      * 跳转到开通vip页面
      */
     public static void showOpenVipActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
-                ModuleMgr.getCenterMgr().getChargeH5Params()));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_VIP, ModuleMgr.getCenterMgr().getChargeH5Params()));
     }
 
     /**
      * 跳转到购买Y币页面
      */
     public static void showBuyCoinActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                ModuleMgr.getCenterMgr().getChargeH5Params()));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_COIN, ModuleMgr.getCenterMgr().getChargeH5Params()));
     }
 
     /**
      * 跳转到我的礼物页面
      */
     public static void showMyGiftActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_GIFT));
     }
 
     /**
      * 跳转到活动相关页面
      */
     public static void showActionActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_ACTION));
     }
 
     /**

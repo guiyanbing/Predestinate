@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../css/mui.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../css/app.css"/>
+    <style>
+        ul,li{list-style: none;}
+        #sliderSegmentedControl .mui-active{color:#FD6B8F;}
+        #sliderProgressBar{background-color:#FD6B8F; }
+
+        .ranking-top{  width: 100%;height:200px;padding-top:10px;background-color: #fff; }
+        #scroll1,#scroll2{top:210px;}
+        @media screen and (max-width:370px){
+            #scroll1,#scroll2{top:190px;}
+            .ranking-top{height:180px;padding-top:10px;}
+            .ranking-top>div>div>li{padding-top: 0 !important;width:100%;height:100%;text-align:center;}
+        }
+        .ranking-top>div{padding: 10px 15px 15px;display:-moz-box;display:-webkit-box;display:box;position:relative !important; }
+        .ranking-top>div>div{-moz-box-flex:1;-webkit-box-flex:1;box-flex:1;}
+        .ranking-top>div>div>li{padding-top:20px;width:100%;height:100%;text-align:center;}
+        .ranking-top>div>div>li>div{text-align: center;position: relative;height:100px;margin-right:0;}
+        .ranking-top>div>div>li>div>.avatar{width:70px !important;height:70px;border-radius:50%;position:absolute;bottom:11px;left:50%;margin-left:-35px;}
+        .ranking-top>div>div>li>div>.avatar-flower{width:87px !important;position:absolute;left:50%;margin-left:-43.5px;bottom:0;}
+        .ranking-top>div>div:nth-child(2) .avatar{width:77px !important;height:77px;border-radius:50%;position:absolute;bottom:12px;left:50%;margin-left:-38.5px;}
+        .ranking-top>div>div:nth-child(2) .avatar-flower{width:117px !important;position:absolute;left:50%;margin-left:-58.5px;bottom:0;}
+        .ranking-top>div>div>li>div>span{display:block;width:100%; position:absolute;bottom:3px;left:50%;transform:translateX(-50%);color:#fff;font-size: 16px;}
+        .ranking-top>div>div:nth-child(2)>li>div>span{display:block;width:100%;position:absolute;bottom:9px;left:50%;transform:translateX(-50%);color:#fff;font-size: 16px;}
+        .ranking-top>div>div>li>p:last-child{text-align: center;margin-bottom:0 !important;}
+        .ranking-list{padding:0 15px;}
+        .ranking-list li{padding: 10px 0;border-bottom:1px solid #eee;}
+        .ranking-list li:last-child{border-bottom:none;}
+        .mui-pull-bottom-wrapper{text-align: center !important;}
+        .mui-title{height:44px;line-height: 44px;}
+        .mui-title a{display:inline-block;font-size:18px;  height:44px;line-height: 44px !important;color:#ccc;}
+        #weekRank .mui-control-item{color:#aaa;}
+        #weekRank .mui-active{color:#000;}
+        .myself-slidebar{width:38%;margin-left:12%;color:#FD6B8F;}
+        .giftLimit{font-size:12px;width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+        .nickLimit{width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+        @media screen and (max-width:370px){
+            .ranking-top>div>div>li>div>.avatar{width:60px !important;height:70px;border-radius:50%;position:absolute;bottom:4px;left:50%;margin-left:-30px;}
+            .ranking-top>div>div>li>div>.avatar-flower{width:77px !important;position:absolute;left:50%;margin-left:-38.5px;bottom:0;}
+            .ranking-top>div>div:nth-child(2) .avatar{width:64px !important;height:68px;border-radius:50%;position:absolute;bottom:9px;left:50%;margin-left:-32px;}
+            .ranking-top>div>div:nth-child(2) .avatar-flower{width:100px !important;position:absolute;left:50%;margin-left:-50px;bottom:0;}
+            .ranking-top>div>div:nth-child(2)>li>div>span{display:block;width:100%;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);color:#fff;font-size: 16px;}
+            .giftLimit{font-size:10px;width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+        }
+        .no-data{width:100%;height:100%;display:none;}
+        .no-data img{width:24% !important;margin:15% auto;display:block;}
+        .no-data p{width:100%;text-align: center;}
+        .listPosBox{top:0 !important;}
+    </style>
+</head>
+<body>
+<div class="mui-content">
+    <div id="slider" class="mui-slider mui-fullscreen">
+        <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="background-color: #ffffff;padding:0 12%;">
+            <a class="mui-control-item mui-active" href="#rankingPlumFlower" style="text-align: center; height:50px;line-height: 50px;font-size: 18px;">
+                魅力榜
+            </a>
+            <a class="mui-control-item" href="#rankingLocalTyrant" style="text-align: center;height:50px;line-height: 50px;font-size: 18px;">
+                土豪榜
+            </a>
+        </div>
+        <div id="sliderProgressBar" class="mui-slider-progress-bar myself-slidebar mui-col-xs-6 mui-col-sm-6" style="z-index:9999;"></div>
+
+        <div class="mui-slider-group">
+            <div id="rankingPlumFlower" class="mui-slider-item mui-control-content mui-active" style="border-top:none;">
+                <div id="image1" class="ranking-top">
+                    <div class="mui-row" style="padding-bottom:0;">
+                        <!--<div class="mui-col-sm-4">
+                            <li class="mui-table-view-cell">
+                                <div>
+                                    <img class="avatar"  src="../../assets/touxiang.jpg"/>
+                                    <img class="avatar-flower"  src="../../assets/one_02.png" alt=""/>
+                                    <span>第2名</span>
+                                </div>
+                                <p style="color:#000;margin-top:5px;font-size:16px;">小</p>
+                                <p class="gift-num">收到:999个礼物</p>
+                            </li>
+                        </div>
+                        <div class="mui-col-sm-4">
+                            <li class="mui-table-view-cell">
+                                <div>
+                                    <img class="avatar"  src="../../assets/touxiang.jpg"/>
+                                    <img class="avatar-flower"  src="../../assets/one_01.png" alt=""/>
+                                    <span>第1名</span>
+                                </div>
+                                <p style="color:#000;margin-top:5px;font-size:16px;">小</p>
+                                <p class="gift-num">收到:999个礼物</p>
+                            </li>
+                        </div>
+                        <div class="mui-col-sm-4">
+                            <li class="mui-table-view-cell">
+                                <div>
+                                    <img class="avatar"  src="../../assets/touxiang.jpg"/>
+                                    <img class="avatar-flower"  src="../../assets/one_03.png" alt=""/>
+                                    <span>第3名</span>
+                                </div>
+                                <p style="color:#000;margin-top:5px;font-size:16px;">小</p>
+                                <p class="gift-num">收到:999个礼物</p>
+                            </li>
+                        </div>-->
+                    </div>
+                </div>
+                <div id="scroll1" class="mui-scroll-wrapper scroll1" style="position:absolute; padding-bottom:44px; background-color: white">
+                    <div class="mui-scroll mui-scroll1">
+                        <ul class="mui-table-view ranking-list">
+                            <!--<li class="mui-table-view-cell">
+                                <span style="display: inline-block;float:left;min-width:20px;line-height: 42px;">4</span>
+                                <div style="position: relative;">
+                                    <img class="mui-media-object mui-pull-left" src="../../assets/touxiang.jpg">
+                                </div>
+                                <div class="mui-media-body" style="line-height: 42px;font-size: 16px;">
+                                    MC-阳阳
+                                    <span style="text-align: center;float:right;color:#ccc;">12345</span>
+                                </div>
+                            </li>-->
+                        </ul>
+                        <div class="no-data">
+                            <!--<img src="../../assets/nodata.png" alt="">
+                            <p>哎呀呀，暂时没有数据哦！</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="rankingLocalTyrant" class="mui-slider-item mui-control-content" style="border-top:none;">
+                <div id="image2" class="ranking-top">
+                    <!-- <div class="mui-row" style="padding-bottom:0;">
+                         <div class="mui-col-sm-4">
+                             <li class="mui-table-view-cell">
+                                 <div>
+                                     <img class="avatar"  src="../../assets/touxiang.jpg"/>
+                                     <img class="avatar-flower"  src="../../assets/one_02.png" alt=""/>
+                                     <span>第2名</span>
+                                 </div>
+                                 <p style="color:#000;margin-top:5px;font-size:16px;">小</p>
+                                 <p>12345</p>
+                             </li>
+                         </div>
+                         <div class="mui-col-sm-4">
+                             <li class="mui-table-view-cell">
+                                 <div>
+                                     <img class="avatar"  src="../../assets/touxiang.jpg"/>
+                                     <img class="avatar-flower"  src="../../assets/one_01.png" alt=""/>
+                                     <span>第1名</span>
+                                 </div>
+                                 <p style="color:#000;margin-top:5px;font-size:16px;">小</p>
+                                 <p>12345</p>
+                             </li>
+                         </div>
+                         <div class="mui-col-sm-4">
+                             <li class="mui-table-view-cell">
+                                 <div>
+                                     <img class="avatar"  src="../../assets/touxiang.jpg"/>
+                                     <img class="avatar-flower"  src="../../assets/one_03.png" alt=""/>
+                                     <span>第3名</span>
+                                 </div>
+                                 <p style="color:#000;margin-top:5px;font-size:16px;">小</p>
+                                 <p>12345</p>
+                             </li>
+                         </div>
+                     </div>-->
+                </div>
+                <div id="scroll2" class="mui-scroll-wrapper scroll1" style="position:absolute;padding-bottom:44px; background-color: white">
+                    <div class="mui-scroll mui-scroll1">
+                        <ul class="mui-table-view ranking-list">
+                            <!--<li class="mui-table-view-cell">
+                                <span style="display: inline-block;float:left;min-width:20px;line-height: 42px;">4</span>
+                                <div style="position: relative;">
+
+                                    <img class="mui-media-object mui-pull-left" src="../../assets/touxiang.jpg">
+                                </div>
+                                <div class="mui-media-body" style="line-height: 42px;font-size: 16px;">
+                                    MC-阳阳
+                                    <span style="text-align: center;float:right;color:#ccc;">12345</span>
+                                </div>
+                            </li>-->
+                        </ul>
+                        <div class="no-data">
+                            <!--<img src="../../assets/nodata.png" alt="">
+                            <p>哎呀呀，暂时没有数据哦！</p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="bottom" class="title-call-qq" style="position:fixed;font-size: 13px;bottom:0;background: #F4F4F4;z-index: 999;">
+    <!--收到:21个礼物-->
+</div>
+
+<script src="../../js/mui.min.js"></script>
+<script src="../../js/mui.pullToRefresh.js"></script>
+<script src="../../js/mui.pullToRefresh.material.js"></script>
+<script src="../../lib/jxlib.all.js"></script>
+<script src="../../lib/url-config.js"></script>
+<script src="../../src/windRanking.js?v=1"></script>
+</body>
+</html>

@@ -160,7 +160,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userProfile.getUid()),
                 getString(R.string.say_hello_txt),
                 userProfile.getKf_id(),
-                !ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
+                ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
                         Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
