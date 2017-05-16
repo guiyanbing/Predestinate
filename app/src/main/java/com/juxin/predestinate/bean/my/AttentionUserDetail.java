@@ -25,6 +25,7 @@ public class AttentionUserDetail extends BaseData {
     private int type; // 有没有被我关注，0 没有，1 双向关注
     private int isRead;//是否已读 0未读 1已读
     private long uid;
+    private int kf_id;
 
     @Override
     public void parseJson(String s) {
@@ -40,8 +41,17 @@ public class AttentionUserDetail extends BaseData {
         this.setIs_vip(jsonObject.optBoolean("is_vip"));
         this.setNickname(jsonObject.optString("nickname"));
         this.setPhotoNum(jsonObject.optInt("photoNum"));
+        this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
 //        UserDetail detail ;
 //        detail.isVip()
+    }
+
+    public int getKf_id() {
+        return kf_id;
+    }
+
+    public void setKf_id(int kf_id) {
+        this.kf_id = kf_id;
     }
 
     public long getUid() {

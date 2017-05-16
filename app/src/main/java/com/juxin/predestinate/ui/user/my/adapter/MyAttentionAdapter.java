@@ -12,10 +12,11 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
+import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -28,6 +29,8 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements BaseRecyclerViewHolder.OnItemClickListener {
 
     private Context mContext;
+    private int followType = 2;   // 关注、取消关注
+    private int follow;
 
     public MyAttentionAdapter(Context mContext){
         this.mContext = mContext;
@@ -72,18 +75,42 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 TextView txtAttention = (TextView) view;
                 // 取消关注
                 txtAttention.setText(R.string.canceling);
-                ModuleMgr.getCommonMgr().unfollow(info.getUid(), new RequestComplete() {
+
+                ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), "", info.getKf_id(), 2, new IMProxy.SendCallBack() {
                     @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        //        Log.e("TTTTTTTTTMM",response.getResponseString()+"||"+ postion);
-                        if (response.isOk()) {
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+
+                        if (messageRet.getS() == 0) {
                             int mPosition = getPosition(info);
                             getList().get(mPosition).setType(0);
                             getList().remove(mPosition);
-                            MyAttentionAdapter.this.notifyItemRemoved(mPosition+1);
+                            MyAttentionAdapter.this.notifyItemRemoved(mPosition + 1);
+                        } else {
+                            handleFollowFail();
                         }
+
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+                        handleFollowFail();
                     }
                 });
+
+//                ModuleMgr.getCommonMgr().unfollow(info.getUid(), new RequestComplete() {
+//                    @Override
+//                    public void onRequestComplete(HttpResponse response) {
+//                        //        Log.e("TTTTTTTTTMM",response.getResponseString()+"||"+ postion);
+//                        if (response.isOk()) {
+//                            int mPosition = getPosition(info);
+//                            getList().get(mPosition).setType(0);
+//                            getList().remove(mPosition);
+//                            MyAttentionAdapter.this.notifyItemRemoved(mPosition+1);
+//                        }
+//                    }
+//                });
             }
         });
     }
@@ -141,6 +168,61 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         //跳转他人资料页
         UIShow.showCheckOtherInfoAct(mContext, getItem(position).getUid());
     }
+
+//    private void handleFollowSuccess() {
+//        switch (followType) {
+//            case 1:
+//                follow += 1;
+//                PToast.showShort(mContext.getResources().getString(R.string.user_info_follow_suc));
+//                iv_follow.setImageResource(R.drawable.f1_followed_star);
+//                user_follow.setText(mContext.getString(R.string.user_info_follow_count, follow));
+//                if (userProfile != null) {
+//                    userProfile.setIsFollowed(1);
+//                }
+//                break;
+//
+//            case 2:
+//                follow -= 1;
+//                PToast.showShort(mContext.getResources().getString(R.string.user_info_unfollow_suc));
+//                iv_follow.setImageResource(R.drawable.f1_follow_star);
+//                user_follow.setText(mContext.getString(R.string.user_info_follow_count, follow));
+//                if (userProfile != null) {
+//                    userProfile.setIsFollowed(0);
+//                }
+//                break;
+//        }
+//    }
+
+    private void handleFollowFail() {
+        String msg = "";
+        switch (followType) {
+            case 1:
+                msg = mContext.getResources().getString(R.string.user_info_follow_fail);
+                break;
+
+            case 2:
+                msg = mContext.getResources().getString(R.string.user_info_unfollow_fail);
+                break;
+        }
+        PToast.showShort(msg);
+    }
+
+//    @Override
+//    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+//        MessageRet messageRet = new MessageRet();
+//        messageRet.parseJson(contents);
+//
+//        if (messageRet.getS() == 0) {
+//            handleFollowSuccess();
+//        } else {
+//            handleFollowFail();
+//        }
+//    }
+//
+//    @Override
+//    public void onSendFailed(NetData data) {
+//        handleFollowFail();
+//    }
 
     class MyViewHolder {
 

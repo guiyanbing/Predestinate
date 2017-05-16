@@ -7,18 +7,18 @@ import android.view.View;
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.AttentionList;
+import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.JsonUtil;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.MyAttentionAdapter;
-import com.juxin.predestinate.bean.my.AttentionList;
-import com.juxin.predestinate.bean.my.AttentionUserDetail;
-import com.juxin.predestinate.module.util.my.AttentionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,4 +162,5 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
                 "}*/";
         return str;
     }
+
 }

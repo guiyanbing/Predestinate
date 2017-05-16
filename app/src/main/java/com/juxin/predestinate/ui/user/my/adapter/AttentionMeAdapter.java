@@ -2,7 +2,6 @@ package com.juxin.predestinate.ui.user.my.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,14 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
+import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -35,6 +37,7 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
     private Context mContext;
     private int postion;
     private MyViewHolder vh;
+    private int followType = 1;   // 关注、取消关注
 
     public AttentionMeAdapter(Context mContext) {
         this.mContext = mContext;
@@ -94,18 +97,75 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                     return;
                 }
                 // 执行关注Class
-                LoadingDialog.show((FragmentActivity) mContext);
-                if (info.getType() == 0) { //未关注他时
-                    ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);//关注他
-                    return;
-                }
-                ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);//已关注时取消关注
-                //                    MyConcernAct_ItemViewObject obj = new MyConcernAct_ItemViewObject((TextView) view, iPos);
-                //                    FollowUser followUser = new FollowUser(mContext, otherId, FollowUser.FOLLOWUSER_ADD, obj);
-                //                    followUser.setCallBack(MyConcern_BeAct_Adapter.this);
-                //                    followUser.onStart();
+//                LoadingDialog.show((FragmentActivity) mContext);
+                followType = info.getType()+1;
+//                if (info.getType() == 0) { //未关注他时
+//                    ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);//关注他
+//                    return;
+//                }
+//                ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);//已关注时取消关注
+                ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), "", info.getKf_id(), followType, new IMProxy.SendCallBack() {
+                    @Override
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+                        if (messageRet.getS() == 0) {
+                            int mPosition = getPosition(info);
+                            if (getList().get(mPosition).getType() ==1){
+                                vh.tvconcern.setText(mContext.getString(R.string.attention_ta));
+                                getList().get(mPosition).setType(0);
+                            }else {
+                                vh.tvconcern.setText(mContext.getString(R.string.privatechat_title_unsubscribe));
+                                getList().get(mPosition).setType(1);
+                            }
+                            if (mPosition != 0) {
+                                notifyItemChanged(mPosition);
+                            }else {
+                                notifyDataSetChanged();
+                            }
+                        } else {
+                            handleFollowFail();
+                        }
+
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+                        handleFollowFail();
+                    }
+                });
             }
         });
+    }
+
+    /**
+     * 获取信息的准确位置（加锁）
+     *
+     * @param   info 某一条具体的信息
+     * @return  返回 info 在list中的position
+     */
+    private synchronized int getPosition(AttentionUserDetail info){
+        int size = getListSize();
+        for (int i = 0 ;i < size;i++){
+            if (info.getUid() == getList().get(i).getUid()){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void handleFollowFail() {
+        String msg = "";
+        switch (followType) {
+            case 1:
+                msg = mContext.getResources().getString(R.string.user_info_follow_fail);
+                break;
+
+            case 2:
+                msg = mContext.getResources().getString(R.string.user_info_unfollow_fail);
+                break;
+        }
+        PToast.showShort(msg);
     }
 
     private void createOpenVipDialog(String str) {//vip弹框
