@@ -6,26 +6,6 @@ package com.juxin.predestinate.module.logic.config;
  */
 public class Constant {
 
-    public static final String NO_HOST = "no_host";
-    public static final String HOST_FILE_SERVER_URL = "http://test.image.xiaoyouapp.cn/"; // 文件上传地址
-
-    // -------------------------正式服地址---------------------------
-//    public static final String FATE_IT_HTTP = "http://api2.app.yuanfenba.net/";         //php正式服地址
-//    public static final String FATE_IT_GO = "http://g.api.yuanfenba.net/";              //go正式服务器地址
-//    public static final String FATE_IT_HTTP_PIC = "http://upload.img.yuanfenba.net/";   //图片上传正式服地址
-//    public static final String FATE_IT_PROTOCOL = "http://p.app.yuanfenba.net/";        //支付正式服地址
-
-    // -------------------------测试服地址---------------------------
-    public static final String FATE_IT_HTTP = "http://test.api2.app.yuanfenba.net/";        //php测试服地址
-    public static final String FATE_IT_GO = "http://123.59.187.33:8681/";                   //go测试服务器地址
-    public static final String FATE_IT_HTTP_PIC = "http://test.upload.img.yuanfenba.net/";  //图片测试正式服地址
-    public static final String FATE_IT_PROTOCOL = "http://test.p.app.yuanfenba.net/";       //支付测试服地址
-
-    // ---------------------服务器默认地址配置 end-----------------------
-    public static final String FATE_IT_CUP_HTTP = " http://pay.app.mumu123.cn/";        //银联地址
-    public static final String HOST_URL = FATE_IT_HTTP;
-
-
     // -------------------------版本信息常量---------------------------
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
@@ -104,31 +84,9 @@ public class Constant {
     public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
     public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
 
-    // 摇钱树游戏逻辑接口地址
-    public static final String FATE_GAME_LOGIC_BASE = "http://redbag2game.xiaoyaoai.cn/";
-    // 游戏服务地址
-    public static final String FATE_GAME_DOMAIN = "http://page.xiaoyaoai.cn/";
-    // 切水果音乐资源根路径
-    public static final String FATE_GAME_BASE = FATE_GAME_DOMAIN + "cutfruit/";
-    // 切水果音乐文件配置
-    public static final String FATE_GAME_SOUNDS = FATE_GAME_BASE + "assets/cutfruit/config/sounds.json";
-    // 切水果擂台页
-    public static final String FATE_REDBOX_RANKLIST = FATE_GAME_BASE + "fruit_ranklist.html";
-    // 切水果说明页
-    public static final String FATE_GAME_EXPLAIN = FATE_GAME_BASE + "play_help.html";
-    // 摇钱树游戏页
-    public static final String FATE_GAME_CASHCOW = FATE_GAME_DOMAIN + "cashcow/cashcow.html";
-    // 摇钱树音乐文件配置
-    public static final String FATE_GAME_CASH_COW_SOUNDS = FATE_GAME_DOMAIN + "cashcow/assets/cashcowres/configs/sounds.json";
-    // 摇钱树音乐资源根路径
-    public static final String FATE_GAME_CASH_COW_BASE = FATE_GAME_DOMAIN + "cashcow/";
-    //摇钱树版本：玩家购买，使用的时候须进行拼接AppCfg.ASet.getCashcow_logic_url() + AppCfg.FATE_PLAYERS_SHOPPING
-    public static final String FATE_PLAYERS_SHOPPING = "players/shopping";
-
     public static String U_IS_VIDEO_AUTH;
     public static String U_IS_VIDEO_IMG_URL;
     public static String U_IS_VIDEO_VIDEO_URL;
-
 
     //============= 打招呼类型 start =============\\
     /**

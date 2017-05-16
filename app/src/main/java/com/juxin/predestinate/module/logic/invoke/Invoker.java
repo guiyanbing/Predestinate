@@ -22,6 +22,7 @@ import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -548,7 +549,7 @@ public class Invoker {
         public void open_qq_service(String data) {
             PLogger.d("---open_qq_service--->" + data);
             Activity act = appInterface.getAct();
-            UIShow.showQQServer(act == null ? App.context : act);
+            UIShow.showQQService(act == null ? App.context : act);
         }
 
         // 获取用户绑定手机号
@@ -607,7 +608,7 @@ public class Invoker {
         JSONObject bodyObject = JsonUtil.getJsonObject(dataObject.optString("body"));
         String url = dataObject.optString("url");
         ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"),
-                !TextUtils.isEmpty(url) && url.contains(Constant.FATE_IT_GO), url,
+                !TextUtils.isEmpty(url) && url.contains(Hosts.FATE_IT_GO), url,
                 ChineseFilter.JSONObjectToMap(bodyObject), new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {
