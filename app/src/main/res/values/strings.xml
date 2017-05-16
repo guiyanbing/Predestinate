@@ -520,6 +520,9 @@
     <string name="defriend_title">举报</string>
     <string name="defriend_title_right">提交</string>
     <string name="defriend_edt_hint">详细描述被举报人的恶意行为</string>
+    <string name="defriend_sure_dialog_title">举报成功</string>
+    <string name="defriend_sure_dialog_content">感谢您的举报，我们会认真处理您的举报内容，谢谢您的合作</string>
+    <string name="defriend_sure_dialog_surebtn">知道了</string>
 
     <string name="my_friend_title">我的好友</string>
     <string name="my_friend_righ_title">黑名单</string>
@@ -536,7 +539,6 @@
 
     <string name="top_type_man">豪</string>
     <string name="top_type_woman">魅</string>
-
     <!--发现end-->
 
 
