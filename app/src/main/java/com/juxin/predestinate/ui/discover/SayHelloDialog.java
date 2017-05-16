@@ -1,6 +1,8 @@
 package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,13 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -21,6 +27,8 @@ import java.util.List;
  */
 
 public class SayHelloDialog extends BaseDialogFragment implements View.OnClickListener {
+
+    private static final int SAY_HELLO_MSG_WHAT = 100;
 
     private List<UserInfoLightweight> data = new ArrayList<>();
 
@@ -83,7 +91,39 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
     private void batchsayhi_all() {
-        dismiss();
+        LoadingDialog.show(getActivity());
+        handler.sendEmptyMessageDelayed(SAY_HELLO_MSG_WHAT, 200);
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SAY_HELLO_MSG_WHAT:
+                    toSayHello();
+                    break;
+            }
+        }
+    };
+
+    private void toSayHello() {
+        if (data.size() != 0) {
+            Iterator<UserInfoLightweight> infos = data.iterator();
+            while (infos.hasNext()) {
+                UserInfoLightweight infoLightweight = infos.next();
+                ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(infoLightweight.getUid()), getString(R.string.say_hello_txt),
+                        infoLightweight.getKf_id(),
+                        ModuleMgr.getCenterMgr().isRobot(infoLightweight.getKf_id()) ?
+                                Constant.SAY_HELLO_TYPE_ROBOT : Constant.SAY_HELLO_TYPE_SIMPLE, null);
+                infos.remove();
+                handler.sendEmptyMessage(SAY_HELLO_MSG_WHAT);
+                break;
+            }
+        } else {
+            LoadingDialog.closeLoadingDialog();
+            dismiss();
+        }
     }
 
     public void setData(List<UserInfoLightweight> data) {
