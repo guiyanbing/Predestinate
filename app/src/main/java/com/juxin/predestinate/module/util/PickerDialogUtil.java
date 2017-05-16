@@ -11,6 +11,8 @@ import com.juxin.predestinate.module.logic.baseui.picker.picker.DatePicker;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.RangePicker;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
+import com.juxin.predestinate.ui.user.check.edit.custom.ContactEditDialog;
+import com.juxin.predestinate.ui.user.check.edit.custom.NickEditDialog;
 
 import java.util.List;
 
@@ -236,4 +238,37 @@ public class PickerDialogUtil {
         tipDialog.show();
     }
 
+    // --------------- 个人资料专用 ------------------
+
+    /**
+     * 修改昵称编辑框
+     */
+    public static void showNickEditDialog(FragmentActivity activity, String defaultValut) {
+        NickEditDialog editDialog = new NickEditDialog(activity, defaultValut);
+        editDialog.setTitleText(activity.getString(R.string.user_edit_info_nick));
+        editDialog.show();
+    }
+
+    /**
+     * 联系方式修改
+     */
+    public static void showContactEditDialog(FragmentActivity activity, String contactDefault, int authDefault, int type) {
+        ContactEditDialog dialog = new ContactEditDialog(activity, contactDefault, authDefault, type);
+        String title;
+        switch (type) {
+            case ContactEditDialog.CONTACT_TYPE_QQ:
+                title = "QQ";
+                break;
+            case ContactEditDialog.CONTACT_TYPE_MOBILE:
+                title = activity.getString(R.string.user_edit_info_contact);
+                break;
+            case ContactEditDialog.CONTACT_TYPE_WECHAT:
+                title = activity.getString(R.string.user_edit_info_wechat);
+                break;
+            default:
+                title = activity.getString(R.string.user_edit_info_contact);
+        }
+        dialog.setTitleText(title);
+        dialog.show();
+    }
 }

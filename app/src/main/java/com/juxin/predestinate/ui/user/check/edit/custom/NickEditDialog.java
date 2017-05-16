@@ -4,20 +4,29 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import com.juxin.library.log.PToast;
+import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.TimerUtil;
+import com.juxin.predestinate.ui.user.edit.EditKey;
+
+import java.util.HashMap;
 
 /**
  * 修改昵称弹框
  */
-public class NickEditDialog extends SimpleTipDialog implements android.view.View.OnClickListener {
+public class NickEditDialog extends SimpleTipDialog {
     private Context context;
     private EditText editText;
     private String defaultVlaue;
-    private OnNickEditSelecterListener onSelecterListener;
 
     public NickEditDialog(FragmentActivity context, String defaultVlaue) {
         super(context);
@@ -28,39 +37,49 @@ public class NickEditDialog extends SimpleTipDialog implements android.view.View
     @NonNull
     @Override
     protected View makeCenterView() {
-
-//		View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit, null);
-//		editText = (EditText) view.findViewById(R.id.edit);
-//		if (defaultVlaue != null) {
-//			editText.setText(defaultVlaue);
-//		}
-//		editText.setSelection(editText.getText().length());
-//		return view;
-        return null;
+        View view = LayoutInflater.from(context).inflate(R.layout.f1_user_info_edit_name_dialog, null);
+        editText = (EditText) view.findViewById(R.id.edit);
+        if (defaultVlaue != null) {
+            editText.setText(defaultVlaue);
+        }
+        editText.setSelection(editText.getText().length());
+        return view;
     }
 
     @Override
-    public void onClick(View v) {
+    protected void onSubmit() {
         String result = editText.getText().toString();
         if (TextUtils.isEmpty(result)) {
-            PToast.showShort("请输入你要修改的昵称");
+            PToast.showShort(context.getString(R.string.user_edit_info_input_nickname));
             return;
         }
         if (result.length() > 7) {
-            PToast.showShort("最多只能输入7个字符");
+            PToast.showShort(context.getString(R.string.user_edit_info_input_nickname_limt));
             return;
         }
-        if (onSelecterListener != null) {
-            onSelecterListener.selected(result);
+
+        if (result.equals(defaultVlaue)) {
+            super.onSubmit();
+            return;
         }
-        dismiss();
-    }
-
-    public interface OnNickEditSelecterListener {
-        public void selected(String value);
-    }
-
-    public void setOnSelecterListener(OnNickEditSelecterListener onSelecterListener) {
-        this.onSelecterListener = onSelecterListener;
+        LoadingDialog.show((FragmentActivity) context, context.getString(R.string.loading_reg_update));
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put(EditKey.s_key_nickName, result);
+        ModuleMgr.getCenterMgr().updateMyInfo(postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(final HttpResponse response) {
+                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        if (response.isOk()) {
+                            PToast.showShort(context.getString(R.string.user_info_edit_suc));
+                        } else {
+                            PToast.showShort(context.getString(R.string.user_info_edit_fail));
+                        }
+                    }
+                });
+            }
+        });
+        super.onSubmit();
     }
 }
