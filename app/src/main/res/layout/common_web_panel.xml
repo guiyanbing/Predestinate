@@ -15,7 +15,7 @@
 
         <include layout="@layout/common_net_error" />
 
-        <include layout="@layout/common_loading" />
+        <include layout="@layout/common_loading_h5" />
     </com.juxin.library.view.CustomFrameLayout>
 
 </RelativeLayout>

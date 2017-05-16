@@ -151,6 +151,8 @@
     <string name="ext_newpwd_hit">支持英文和数字，6至20位</string>
     <string name="txt_replacepwd_desc">确认密码</string>
     <string name="ext_replacepwd_hit">再次填入新密码</string>
+    <string name="qq_not_install">QQ未安装</string>
+    <string name="qq_open_error">QQ客服出错请使用电话客服</string>
 
     <!--注册-->
     <string name="button_reg">立即注册</string>

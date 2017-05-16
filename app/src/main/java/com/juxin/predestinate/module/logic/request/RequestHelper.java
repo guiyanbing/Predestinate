@@ -8,7 +8,7 @@ import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.BuildConfig;
-import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.UrlEnc;
 
@@ -51,7 +51,7 @@ public class RequestHelper {
      */
     public void init(Context context) {
         Requester.initBuilder(context, BuildConfig.DEBUG);
-        requestAPI = Requester.getRequestAPI(Constant.HOST_URL, RequestAPI.class);
+        requestAPI = Requester.getRequestAPI(Hosts.HOST_URL, RequestAPI.class);
     }
 
     /**
