@@ -112,11 +112,8 @@ public class RequestHelper {
             } else {
                 return requestAPI.executePostCall(headerMap, url, post_param);
             }
-        } else if (get_param != null) {//带请求参数的get请求
+        } else {//无请求参数的post/get请求[get请求参数已经在hash的时候拼接，故无需再次拼接]
             PLogger.d("---request--->带参数的get请求：" + url);
-            return requestAPI.executeGetCall(headerMap, url, get_param);
-        } else {//无请求参数的post/get请求
-            PLogger.d("---request--->无参数的get请求：" + url);
             return requestAPI.executeGetCall(headerMap, url);
         }
     }
