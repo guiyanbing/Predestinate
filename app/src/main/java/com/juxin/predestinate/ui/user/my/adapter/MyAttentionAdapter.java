@@ -2,6 +2,8 @@ package com.juxin.predestinate.ui.user.my.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -81,6 +83,7 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();
                         messageRet.parseJson(contents);
+                        Log.e("TTTTTTTTTTTTT11111", contents + "|||");
 
                         if (messageRet.getS() == 0) {
                             int mPosition = getPosition(info);
@@ -129,6 +132,13 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
             }
         }
         return -1;
+    }
+
+    private String getContent(String nickname){
+        if (!TextUtils.isEmpty(nickname) && !"null".equals(nickname))
+             return "[" + nickname + "]刚刚关注了你";
+        else
+            return "刚刚关注了你";
     }
 
     private void checkAndShowAvatarStatus(int status, ImageView img, String avatar) {
