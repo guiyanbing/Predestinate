@@ -112,7 +112,7 @@ public class DBCenterFMessage {
             }
 
 
-            final ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues();
             if (baseMessage.getMsgID() != -1)
                 values.put(FMessage.COLUMN_MSGID, baseMessage.getMsgID());
 
@@ -124,6 +124,41 @@ public class DBCenterFMessage {
 
             if (baseMessage.getJsonStr() != null)
                 values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return DBConstant.ERROR;
+    }
+
+    public long updateToReadAll(){
+        ContentValues values = new ContentValues();
+        values.put(FMessage.COLUMN_STATUS, String.valueOf(DBConstant.READ_STATUS));
+        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(DBConstant.UNREAD_STATUS));
+    }
+    /**
+     * 更新已读消息
+     * @param channelID
+     * @param userID
+     * @return
+     */
+    public long updateToRead(String channelID, String userID){
+        try {
+            String sql;
+            String[] str;
+            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
+                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
+                str = new String[]{channelID, userID, String.valueOf(DBConstant.UNREAD_STATUS)};
+            } else if (!TextUtils.isEmpty(channelID)) {
+                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
+                str = new String[]{channelID, String.valueOf(DBConstant.UNREAD_STATUS)};
+            } else {
+                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
+                str = new String[]{userID, String.valueOf(DBConstant.UNREAD_STATUS)};
+            }
+
+            ContentValues values = new ContentValues();
+            values.put(FMessage.COLUMN_STATUS, String.valueOf(DBConstant.READ_STATUS));
             return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
         } catch (Exception e) {
             e.printStackTrace();

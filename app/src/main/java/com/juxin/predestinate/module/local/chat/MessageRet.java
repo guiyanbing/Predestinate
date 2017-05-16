@@ -5,6 +5,7 @@ import com.juxin.mumu.bean.net.BaseData;
 import org.json.JSONObject;
 
 /**
+ * 消息返回
  * Created by Kind on 2017/5/11.
  */
 

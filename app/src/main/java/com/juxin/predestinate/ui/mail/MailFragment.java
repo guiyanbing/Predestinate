@@ -15,6 +15,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
@@ -259,7 +260,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
                     @Override
                     public void onSubmit() {
-                       // ModuleMgr.getChatListMgr().markWhisperAsRead();
+                        ModuleMgr.getChatListMgr().updateToReadAll();
                         PToast.showShort("忽略成功!");
                     }
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");

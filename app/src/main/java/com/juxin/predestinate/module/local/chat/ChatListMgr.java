@@ -97,6 +97,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
            // updateBasicUserInfo();
     }
 
+    public void updateToReadAll() {
+        dbCenter.updateToReadAll();
+    }
+
+    public void updateToRead(String channelID, String userID) {
+        dbCenter.updateToRead(channelID, userID);
+    }
+
     public void getWhisperList() {
         Observable<List<BaseMessage>> listObservable = dbCenter.queryLetterList();
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
