@@ -90,12 +90,28 @@
     <string name="user_edit_info_marry">婚姻状态</string>
     <string name="user_edit_info_set">请设置</string>
     <string name="user_edit_info_phone">手机</string>
+    <string name="user_edit_info_not_phone">手机号已绑定，无法修改</string>
+    <string name="user_edit_info_not_age">年龄无法修改</string>
+    <string name="user_edit_info_not_gender">性别无法修改</string>
     <string name="user_edit_info_wechat">微信</string>
     <string name="user_edit_info_edu">学历</string>
+    <string name="user_edit_info_title_job">工作情况</string>
     <string name="user_edit_info_job">职业</string>
     <string name="user_edit_info_birthday">生日</string>
     <string name="user_edit_info_weight">体重</string>
     <string name="user_edit_info_star">星座</string>
+    <string name="user_edit_info_open">公开</string>
+    <string name="user_edit_info_just_vip_open">仅对VIP公开</string>
+    <string name="user_edit_info_auth_open">对VIP用户公开</string>
+    <string name="user_edit_info_auth_secret">保密</string>
+    <string name="user_edit_info_input_nickname">请输入你要修改的昵称</string>
+    <string name="user_edit_info_input_nickname_limt">最多只能输入7个字符</string>
+    <string name="user_edit_info_input_qq">请输入您的QQ</string>
+    <string name="user_edit_info_input_mobile">请输入您的联系方式</string>
+    <string name="user_edit_info_input_wechat">请输入您的微信号</string>
+    <string name="user_edit_info_correct_mobile">请输入正确格式的电话号码</string>
+    <string name="user_edit_info_correct_wechat">请输入正确格式的微信号码</string>
+    <string name="user_edit_info_correct_qq">请输入正确格式的QQ号码</string>
 
     <string name="bt_send_code_normal">免费获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
@@ -244,6 +260,7 @@
     <string name="user_info_edit_sign">个性签名</string>
     <string name="user_info_edit_limit">%1$d/%2$d</string>
     <string name="user_info_edit_suc">修改成功</string>
+    <string name="user_info_edit_fail">修改失败，请重试</string>
     <string name="user_info_put_name">请输入昵称</string>
     <string name="user_info_put_sign">请输入个性签名</string>
     <string name="user_info_show_all">已经显示全部</string>

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -21,6 +20,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
+import com.juxin.predestinate.ui.user.check.edit.custom.ContactEditDialog;
 import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -87,23 +87,29 @@ public class UserEditBaseInfoPanel extends BaseViewPanel implements RequestCompl
         qq_info.setText(TextUtils.isEmpty(userDetail.getQqNum())
                 || userDetail.getQqNum() == "null" ? "QQ" : "QQ：" + userDetail.getQqNum());
         mobile_info.setText(TextUtils.isEmpty(userDetail.getPhone())
-                || userDetail.getPhone() == "null" ? "手机" : "手机：" + userDetail.getPhone());
+                || userDetail.getPhone() == "null" ? context.getString(R.string.user_edit_info_phone)
+                : context.getString(R.string.user_edit_info_phone) + "：" + userDetail.getPhone());
         wechat_info.setText(TextUtils.isEmpty(userDetail.getWechatNum())
-                || userDetail.getWechatNum() == "null" ? "微信" : "微信：" + userDetail.getWechatNum());
+                || userDetail.getWechatNum() == "null" ? context.getString(R.string.user_edit_info_wechat)
+                : context.getString(R.string.user_edit_info_wechat) + "：" + userDetail.getWechatNum());
 
         setAuthTip();
     }
 
     // 填充权限
     private void setAuthTip() {
-        qq.setText(contactStatus(!TextUtils.isEmpty(userDetail.getQqNum()), userDetail.getQqNumAuth() != 2));
-        mobile.setText(contactStatus(!TextUtils.isEmpty(userDetail.getPhone()), userDetail.getPhoneAuth() != 2));
-        wechat.setText(contactStatus(!TextUtils.isEmpty(userDetail.getWechatNum()), userDetail.getWechatAuth() != 2));
+        qq.setText(contactStatus(userDetail.getQqNum(), userDetail.getQqNumAuth() != 2));
+        mobile.setText(contactStatus(userDetail.getPhone(), userDetail.getPhoneAuth() != 2));
+        wechat.setText(contactStatus(userDetail.getWechatNum(), userDetail.getWechatAuth() != 2));
     }
 
-    // 权限展示逻辑
-    private String contactStatus(boolean haveContact, boolean showVip) {
-        return haveContact ? (showVip ? (userDetail.isMan() ? "公开" : "仅对VIP开放") : "保密") : "未填写";
+    /**
+     * 权限展示逻辑
+     */
+    private String contactStatus(String contact, boolean showVip) {
+        return TextUtils.isEmpty(contact) || contact == "null" ? getContext().getResources().getString(R.string.str_not_filled)
+                : (showVip ? context.getString(R.string.user_edit_info_just_vip_open)
+                : context.getString(R.string.user_edit_info_auth_secret));
     }
 
     private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
@@ -112,15 +118,15 @@ public class UserEditBaseInfoPanel extends BaseViewPanel implements RequestCompl
             final UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             switch (v.getId()) {
                 case R.id.name_view:
-                    String defaultValut = userDetail.getNickname();
+                    PickerDialogUtil.showNickEditDialog((FragmentActivity) getContext(), userDetail.getNickname());
                     break;
 
                 case R.id.gender_view:
-                    PToast.showShort("性别无法修改");
+                    PToast.showShort(context.getString(R.string.user_edit_info_not_gender));
                     break;
 
                 case R.id.age_view:
-                    PToast.showShort("年龄无法修改");
+                    PToast.showShort(context.getString(R.string.user_edit_info_not_age));
                     break;
 
                 case R.id.home_view:
@@ -129,46 +135,53 @@ public class UserEditBaseInfoPanel extends BaseViewPanel implements RequestCompl
                     PickerDialogUtil.showAddressPickerDialog2((FragmentActivity) getContext(), new AddressPicker.OnAddressPickListener() {
                         @Override
                         public void onAddressPicked(City city) {
-                            if (!province.equals(city.getProvinceName()) || !city.equals(city.getCityName())) {
-                                LoadingDialog.show((FragmentActivity) getContext(), "正在修改，请稍候...");
-                                HashMap<String, Object> postParams = new HashMap<>();
-                                postParams.put(EditKey.s_key_pro, city.getProvinceID());
-                                postParams.put(EditKey.s_key_city, city.getCityID());
-                                ModuleMgr.getCenterMgr().updateMyInfo(postParams, UserEditBaseInfoPanel.this);
-                            }
+                            if (city.getCityID() == userDetail.getScity() && city.getProvinceID() == userDetail.getSprovince())
+                                return;
+
+                            LoadingDialog.show((FragmentActivity) getContext(), context.getString(R.string.loading_reg_update));
+                            HashMap<String, Object> postParams = new HashMap<>();
+                            postParams.put(EditKey.s_key_pro, city.getProvinceID());
+                            postParams.put(EditKey.s_key_city, city.getCityID());
+                            ModuleMgr.getCenterMgr().updateMyInfo(postParams, UserEditBaseInfoPanel.this);
                         }
                     }, province, city);
                     break;
 
                 case R.id.height_view:
                     InfoConfig.SimpleConfig simpleConfig = InfoConfig.getInstance().getHeightN();
-                    showOptionPickerDialog(userDetail.getHeight() + "cm", simpleConfig, EditKey.s_key_height, "身高");
+                    showOptionPickerDialog(userDetail.getHeight() + "cm", simpleConfig, EditKey.s_key_height, context.getString(R.string.user_edit_info_height));
                     break;
 
                 case R.id.income_view:
                     InfoConfig.SimpleConfig incomeConfig = InfoConfig.getInstance().getIncomeN();
-                    showOptionPickerDialog(userDetail.getIncome(), incomeConfig, EditKey.s_key_income, "月收入");
+                    showOptionPickerDialog(userDetail.getIncome(), incomeConfig, EditKey.s_key_income, context.getString(R.string.user_edit_info_income));
                     break;
 
                 case R.id.marry_view:
                     InfoConfig.SimpleConfig marryConfig = InfoConfig.getInstance().getMarry();
-                    showOptionPickerDialog(userDetail.getMarry(), marryConfig, EditKey.s_key_marry, "情感状态");
+                    showOptionPickerDialog(userDetail.getMarry(), marryConfig, EditKey.s_key_marry, context.getString(R.string.user_edit_info_marry));
                     break;
 
                 case R.id.view_qq:
-                    String qqValue = TextUtils.isEmpty(userDetail.getQqNum()) ? "" : userDetail.getQqNum();
+                    String qqValue = TextUtils.isEmpty(userDetail.getQqNum())
+                            || userDetail.getQqNum() == "null" ? "" : userDetail.getQqNum();
+                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), qqValue, userDetail.getQqNumAuth(), ContactEditDialog.CONTACT_TYPE_QQ);
                     break;
 
                 case R.id.view_mobile:
                     if (userDetail.isVerifyCellphone()) {
-                        MMToast.showShort("手机号已绑定，无法修改");
+                        PToast.showShort(context.getString(R.string.user_edit_info_not_phone));
                         break;
                     }
-                    String moblieValue = TextUtils.isEmpty(userDetail.getPhone()) ? "" : userDetail.getPhone();
+                    String moblieValue = TextUtils.isEmpty(userDetail.getPhone())
+                            || userDetail.getPhone() == "null" ? "" : userDetail.getPhone();
+                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), moblieValue, userDetail.getPhoneAuth(), ContactEditDialog.CONTACT_TYPE_MOBILE);
                     break;
 
                 case R.id.view_wechat:
-                    String weChatValue = TextUtils.isEmpty(userDetail.getWechatNum()) ? "" : userDetail.getWechatNum();
+                    String weChatValue = TextUtils.isEmpty(userDetail.getWechatNum())
+                            || userDetail.getWechatNum() == "null" ? "" : userDetail.getWechatNum();
+                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), weChatValue, userDetail.getWechatAuth(), ContactEditDialog.CONTACT_TYPE_WECHAT);
                     break;
             }
         }
@@ -180,7 +193,7 @@ public class UserEditBaseInfoPanel extends BaseViewPanel implements RequestCompl
             @Override
             public void onOptionPicked(String option) {
                 if (value == null || !value.equals(option)) {
-                    LoadingDialog.show((FragmentActivity) getContext(), "正在修改，请稍候...");
+                    LoadingDialog.show((FragmentActivity) getContext(), context.getString(R.string.loading_reg_update));
                     HashMap<String, Object> postParams = new HashMap<>();
                     postParams.put(postKey, config.getSubmitWithShow(option));
                     ModuleMgr.getCenterMgr().updateMyInfo(postParams, UserEditBaseInfoPanel.this);
@@ -195,9 +208,9 @@ public class UserEditBaseInfoPanel extends BaseViewPanel implements RequestCompl
             @Override
             public void call() {
                 if (response.isOk()) {
-                    PToast.showShort("修改成功");
+                    PToast.showShort(context.getString(R.string.user_info_edit_suc));
                 } else {
-                    PToast.showShort("修改失败，请重试");
+                    PToast.showShort(context.getString(R.string.user_info_edit_fail));
                 }
             }
         });

@@ -84,12 +84,12 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
             switch (v.getId()) {
                 case R.id.edu_view:
                     final InfoConfig.SimpleConfig eduConfig = InfoConfig.getInstance().getEduN();
-                    showOptionPickerDialog(userdetail.getEdu(), eduConfig, EditKey.s_key_edu, "学历");
+                    showOptionPickerDialog(userdetail.getEdu(), eduConfig, EditKey.s_key_edu, context.getString(R.string.user_edit_info_edu));
                     break;
 
                 case R.id.job_view:
                     final InfoConfig.SimpleConfig jobConfig = InfoConfig.getInstance().getJob();
-                    showOptionPickerDialog(userdetail.getJob(), jobConfig, EditKey.s_key_job, "工作情况");
+                    showOptionPickerDialog(userdetail.getJob(), jobConfig, EditKey.s_key_job, context.getString(R.string.user_edit_info_title_job));
                     break;
 
                 case R.id.birth_view:
@@ -98,7 +98,7 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
                         @Override
                         public void onDatePicked(String year, String month, String day) {
                             if (!year.equals(dateValues[0]) || !month.equals(dateValues[1]) || !day.equals(dateValues[2])) {
-                                LoadingDialog.show((FragmentActivity)getContext(), "正在修改，请稍候...");
+                                LoadingDialog.show((FragmentActivity)getContext(), context.getString(R.string.loading_reg_update));
                                 String value = year + "-" + month + "-" + day;
                                 HashMap<String, Object> postParams = new HashMap<>();
                                 postParams.put(EditKey.s_key_birth, value);
@@ -114,11 +114,11 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
 
                 case R.id.weight_view:
                     final InfoConfig.SimpleConfig weightConfig = InfoConfig.getInstance().getWeight();
-                    showOptionPickerDialog(userdetail.getWeight(), weightConfig, EditKey.s_key_weight, "体重");
+                    showOptionPickerDialog(userdetail.getWeight(), weightConfig, EditKey.s_key_weight, context.getString(R.string.user_edit_info_weight));
                     break;
 
                 case R.id.star_view:
-                    showOptionPickerDialog(starValue, starConfig, EditKey.s_key_star, "星座");
+                    showOptionPickerDialog(starValue, starConfig, EditKey.s_key_star, context.getString(R.string.user_edit_info_star));
                     break;
             }
         }
@@ -134,8 +134,8 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
             @Override
             public void onOptionPicked(String option) {
                 if (value == null || !value.equals(option)) {
-                    LoadingDialog.show((FragmentActivity) getContext(), "正在修改，请稍候...");
-                    HashMap<String, Object> postParams = new HashMap<String, Object>();
+                    LoadingDialog.show((FragmentActivity) getContext(), context.getString(R.string.loading_reg_update));
+                    HashMap<String, Object> postParams = new HashMap<>();
                     postParams.put(postKey, config.getSubmitWithShow(option));
                     ModuleMgr.getCenterMgr().updateMyInfo(postParams, UserEditDetailInfoPanel.this);
                 }
@@ -151,9 +151,9 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
                 @Override
                 public void call() {
                     if (response.isOk()) {
-                        PToast.showShort("修改成功");
+                        PToast.showShort(context.getString(R.string.user_info_edit_suc));
                     } else {
-                        PToast.showShort("修改失败，请重试");
+                        PToast.showShort(context.getString(R.string.user_info_edit_fail));
                     }
                 }
             });
