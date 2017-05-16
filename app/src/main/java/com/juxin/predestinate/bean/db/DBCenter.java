@@ -6,6 +6,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import java.util.List;
 import rx.Observable;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Kind on 2017/3/28.
@@ -38,6 +39,19 @@ public class DBCenter {
         return centerFmessage.insertMsg(baseMessage);
     }
 
+    /**
+     * 删除消息列表及内容表的消息
+     * @param userID
+     * @return
+     */
+    public int deleteMessage(long userID) {
+        int ret = centerFLetter.delete(userID);
+        if(ret != DBConstant.ERROR){
+            return delete(userID);
+        }
+       return ret;
+    }
+
 
 
     /******************** FMessage **************************/
@@ -60,7 +74,6 @@ public class DBCenter {
     public long insertFmessage(BaseMessage baseMessage){
        return centerFmessage.insertMsg(baseMessage);
     }
-
 
     /**
      * 更新fmessage
@@ -85,7 +98,6 @@ public class DBCenter {
     public long updateToRead(String channelID, String userID) {
         return centerFmessage.updateToRead(channelID, userID);
     }
-
 
     /**
      * 聊天记录

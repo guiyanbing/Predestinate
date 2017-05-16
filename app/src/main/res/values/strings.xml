@@ -40,6 +40,8 @@
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
     <string name="dal_exit_content">确定退出登录吗</string>
+    <string name="dal_vip_content">您非VIP会员，无法开启此功能</string>
+
     <string name="dal_exit_title">退出登录</string>
     <string name="dal_cancle">取消</string>
     <string name="dal_submit">确定</string>
@@ -380,6 +382,7 @@
     <string name="title_about">关于</string>
     <string name="title_pwd_set">密码设置</string>
     <string name="title_suggest">意见反馈</string>
+    <string name="title_auth">我的认证</string>
 
     <!-- xList 后期可能删掉，不要用-->
     <string name="xlistview_header_last_time">上次更新时间：</string>
@@ -579,5 +582,14 @@
     <string name="hours_to_the_account">提现将在24小时内到账</string>
     <string name="the_current_diamond">当前钻石：</string>
     <string name="second">秒</string>
+
+    <string name="toast_camera_isnull">没有前置摄像头</string>
+    <string name="txt_authstatus_authing">审核中</string>
+    <string name="txt_authstatus_authno">未认证</string>
+    <string name="txt_authstatus_authok">已完成</string>
+    <string name="txt_authstatus_autherror">审核未通过</string>
+    <string name="txt_authtype_phone">手机认证</string>
+    <string name="txt_authtype_id">身份认证</string>
+    <string name="txt_authtype_face">自拍认证</string>
 
 </resources>

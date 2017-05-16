@@ -2,10 +2,17 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 聊天面板录音按钮选中样式 -->
-    <item android:drawable="@color/color_dddddd" android:state_focused="true" />
-    <item android:drawable="@color/color_dddddd" android:state_pressed="true" />
-    <item android:drawable="@color/color_dddddd" android:state_checked="true" />
-    <item android:drawable="@color/color_dddddd" android:state_selected="true" />
-    <item android:drawable="@color/white" />
+    <!--<item android:drawable="@color/color_dddddd" android:state_focused="true" />-->
+    <!--<item android:drawable="@color/color_dddddd" android:state_pressed="true" />-->
+    <!--<item android:drawable="@color/color_dddddd" android:state_checked="true" />-->
+    <!--<item android:drawable="@color/color_dddddd" android:state_selected="true" />-->
+    <!--<item android:drawable="@color/white" />-->
+
+
+    <item android:drawable="@drawable/bg_chat_edittext_pressed" android:state_focused="true" />
+    <item android:drawable="@drawable/bg_chat_edittext_pressed" android:state_pressed="true" />
+    <item android:drawable="@drawable/bg_chat_edittext_pressed" android:state_checked="true" />
+    <item android:drawable="@drawable/bg_chat_edittext_pressed" android:state_selected="true" />
+    <item android:drawable="@drawable/bg_chat_edittext_normal" />
 
 </selector>

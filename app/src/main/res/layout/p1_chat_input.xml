@@ -89,8 +89,10 @@
                 <TextView
                     android:id="@+id/chat_voice_record"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/title_footer_height"
+                    android:layout_height="@dimen/px114_dp"
                     android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/px18_dp"
+                    android:layout_marginTop="@dimen/px18_dp"
                     android:background="@drawable/btn_chat_record_selector"
                     android:gravity="center"
                     android:text="按住 说话"

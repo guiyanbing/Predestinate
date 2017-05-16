@@ -94,13 +94,13 @@ public class ChatMgr implements ModuleBase, PObserver {
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-        PLogger.d("Fl=== + sendTextMsg");
 
         long ret = dbCenter.insertMsg(commonMessage);
-        PLogger.d("Fl=== + sendTextMsg2");
 
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-        sendMessage(commonMessage, null);
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+
+        if(b) sendMessage(commonMessage, null);
     }
 
     /**
@@ -117,9 +117,14 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         long ret = dbCenter.insertMsg(textMessage);
 
-        onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), ret != DBConstant.ERROR, textMessage);
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), b, textMessage);
 
-        sendMessage(textMessage, sendCallBack);
+        if(b){
+            sendMessage(textMessage, sendCallBack);
+        }else {
+            sendCallBack.onSendFailed(null);
+        }
     }
 
     /**
@@ -142,8 +147,10 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         long ret = dbCenter.insertMsg(commonMessage);
 
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-           //TODO 有问题
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+
+        if(!b) return;
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, img_url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -173,8 +180,10 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         long ret = dbCenter.insertMsg(commonMessage);
 
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
 
+        if(!b) return;
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VOICE, url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
