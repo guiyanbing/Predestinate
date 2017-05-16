@@ -8,7 +8,7 @@ import com.juxin.library.request.FileCallback;
 import com.juxin.library.request.Requester;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.BuildConfig;
-import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.UrlEnc;
 
@@ -51,7 +51,7 @@ public class RequestHelper {
      */
     public void init(Context context) {
         Requester.initBuilder(context, BuildConfig.DEBUG);
-        requestAPI = Requester.getRequestAPI(Constant.HOST_URL, RequestAPI.class);
+        requestAPI = Requester.getRequestAPI(Hosts.HOST_URL, RequestAPI.class);
     }
 
     /**
@@ -112,11 +112,8 @@ public class RequestHelper {
             } else {
                 return requestAPI.executePostCall(headerMap, url, post_param);
             }
-        } else if (get_param != null) {//带请求参数的get请求
+        } else {//无请求参数的post/get请求[get请求参数已经在hash的时候拼接，故无需再次拼接]
             PLogger.d("---request--->带参数的get请求：" + url);
-            return requestAPI.executeGetCall(headerMap, url, get_param);
-        } else {//无请求参数的post/get请求
-            PLogger.d("---request--->无参数的get请求：" + url);
             return requestAPI.executeGetCall(headerMap, url);
         }
     }

@@ -10,10 +10,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -114,8 +117,18 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
                     ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
                             context.getString(R.string.say_hello_txt),
                             userInfo.getKf_id(),
-                            !ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, null);
+                            ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
+                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                                @Override
+                                public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                                    PToast.showShort(context.getString(R.string.user_info_hi_suc));
+                                }
+
+                                @Override
+                                public void onSendFailed(NetData data) {
+                                    PToast.showShort(context.getString(R.string.user_info_hi_fail));
+                                }
+                            });
                     getItem(position).setSayHello(true);
                     notifyDataSetChanged();
                 }

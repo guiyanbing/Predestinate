@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>充值</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../../css/mui.css">
+    <link rel="stylesheet" type="text/css" href="../../css/app.css"/>
+    <style>
+    </style>
+</head>
+<style>
+    ul,li{list-style: none;}
+    #sliderSegmentedControl .mui-active{color:#FD6B8F;}
+    #sliderProgressBar{background-color:#FD6B8F; }
+    .ranking-top{height:190px;}
+    #scroll1,#scroll2,#scroll3{margin-top:210px;}
+    @media screen and (min-width:370px){
+        .ranking-top{height:200px;}
+        #scroll1,#scroll2,#scroll3{margin-top:220px;}
+    }
+    .ranking-top{ margin-top: 10px; margin-bottom: 5px; width: 100%;background-color: #fff; }
+    .ranking-top>div{padding: 10px 15px 15px;display:-moz-box;
+        display:-webkit-box;display:box;position:relative !important; }
+    .ranking-top>div>div{-moz-box-flex:1;-webkit-box-flex:1;box-flex:1;}
+    .ranking-top>div>div>li{padding-top:20px;width:100%;height:100%;text-align:center;}
+    .ranking-top>div>div>li>div{text-align: center;position: relative;height:100px;margin-right:0;}
+    .ranking-top>div>div>li>div>.avatar{width:70px !important;height:70px;border-radius:50%;position:absolute;bottom:11px;left:50%;margin-left:-35px;}
+    .ranking-top>div>div>li>div>.avatar-flower{width:87px !important;position:absolute;left:50%;margin-left:-43.5px;bottom:0;}
+    .ranking-top>div>div:nth-child(2) .avatar{width:82px !important;height:80px;border-radius:50%;position:absolute;bottom:16px;left:50%;margin-left:-41px;}
+    .ranking-top>div>div:nth-child(2) .avatar-flower{width:127px !important;position:absolute;left:50%;margin-left:-63.5px;bottom:0;}
+
+
+
+    .ranking-top>div>div>li>div>span{display:block;width:100%; position:absolute;bottom:3px;left:50%;transform:translateX(-50%);color:#fff;font-size: 16px;}
+    .ranking-top>div>div:nth-child(2)>li>div>span{display:block;width:100%;position:absolute;bottom:9px;left:50%;transform:translateX(-50%);color:#fff;font-size: 16px;}
+    .ranking-top>div>div>li>p:last-child{text-align: center;margin-bottom:0 !important;}
+    .ranking-list{padding:0 15px;}
+    .ranking-list li{padding: 10px 0;border-bottom:1px solid #eee;}
+    .ranking-list li:last-child{border-bottom:none;}
+    .mui-pull-bottom-wrapper{text-align: center !important;}
+    .mui-title{height:44px;line-height: 44px;}
+    .mui-title a{display:inline-block;font-size:18px;  height:44px;line-height: 44px !important;color:#ccc;}
+    #weekRank .mui-control-item{color:#aaa;}
+    #weekRank .mui-active{color:#000;}
+    .myself-slidebar{width:38%;margin-left:12%;color:#fd698c;}
+    @media screen and (max-width:370px){
+        .ranking-top>div>div>li>div>.avatar{width:60px !important;height:70px;border-radius:50%;position:absolute;bottom:4px;left:50%;margin-left:-30px;}
+        .ranking-top>div>div>li>div>.avatar-flower{width:77px !important;position:absolute;left:50%;margin-left:-38.5px;bottom:0;}
+        .ranking-top>div>div:nth-child(2) .avatar{width:64px !important;height:68px;border-radius:50%;position:absolute;bottom:9px;left:50%;margin-left:-32px;}
+        .ranking-top>div>div:nth-child(2) .avatar-flower{width:100px !important;position:absolute;left:50%;margin-left:-50px;bottom:0;}
+        .ranking-top>div>div:nth-child(2)>li>div>span{display:block;width:100%;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);color:#fff;font-size: 16px;}
+    }
+    .buy-people-title {
+        font-size: 16px;
+        line-height: 44px;
+        width: 100%;
+        margin-top: -7px;
+        margin-left: 0px;
+        padding-left: 15px;
+        background-color: #f7f4ec;
+        color: #cabb93;
+    }
+    .pTop {
+        font-size: 20px;
+        margin-top: -15px;
+        margin-bottom: 2px;
+        color: #000000;
+    }
+    .pMiddle {
+        font-size: 16px;
+        color: #9e9e9f;
+        margin: 2px 0px 2px;
+    }
+    .pBottom {
+        font-size: 12px;
+        color: #fd698c;
+        margin: 2px 0px 2px;
+    }
+    .pay-btn {
+        width: 90%;
+        margin-top: 150px;
+        margin-left: 5%;
+        background-color: #fd698c;
+        text-align: center;
+    }
+    .lunbo{
+        position: relative;
+        width: 100%;
+        height: 75px;
+        overflow: hidden;
+        padding:0 15px;
+        box-sizing: border-box;
+        margin-top:10px;
+    }
+    .lunbo ul{
+        position:absolute;
+        left: 15px;
+        top:0;
+        width: 100%;
+        height: auto;
+        margin:0;padding:0;
+    }
+    .lunbo ul li{
+        width: 100%;
+        line-height: 25px;
+        font-size:14px;
+        color:#9e9e9f;
+    }
+    .lunbo ul li span{
+        color:#5FC5F7;margin-right:10px;
+    }
+
+</style>
+<body  style="background-color: white">
+<div class="mui-content">
+    <div id="slider" class="mui-slider mui-fullscreen">
+        <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="background-color: #ffffff;padding:0 12%;">
+            <a id="slierYCoin" class="mui-control-item  mui-active" href="#BuyYCoin" style="text-align: center; height:50px;line-height: 50px;font-size: 18px;">
+                购买Y币
+            </a>
+            <a id="slierVip" class="mui-control-item" href="#BuyVIP" style="text-align: center; height:50px;line-height: 50px;font-size: 18px;">
+                开通VIP
+            </a>
+        </div>
+        <div id="sliderProgressBar" class="mui-slider-progress-bar myself-slidebar mui-col-xs-6 mui-col-sm-6" style="z-index:9999;"></div>
+        <div class="mui-slider-group" style="top: 52px">
+            <div id="BuyYCoin" class="mui-slider-item mui-control-content  mui-active" style="border-top:none;">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <img src="../../assets/y_coin_hd.jpg">
+                        <div class="buy-people-title">
+                            已购买Y币用户：
+                            <span style="color: #ee763a;">587680</span>
+                            人
+                        </div>
+                        <div class="mui-title" style="color: #9e9e9f; font-size: 14px">
+                            只购买Y币可以与1位MM无限制聊天
+                        </div>
+                        <div class="mui-row">
+                            <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
+                                <a id="yCoin50" class="pictureBody" style="border: solid 1px #fd698c;" href="#" onclick="prePaid.yCoinBtnClick(this.id)">
+                                    <img style="width: 22px; height: 22px; margin-top: 5px; margin-left: 110px" src="../../assets/check_ico.png">
+                                    <p class="pTop">5000Y币</p>
+                                    <p class="pMiddle">￥50</p>
+                                    <p class="pBottom">可与MM发消息</p>
+                                </a>
+                            </div>
+                            <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
+                                <a id="yCoin100" class="pictureBody" style="" href="#" onclick="prePaid.yCoinBtnClick(this.id)">
+                                    <img style="width: 22px; height: 22px; margin-top: 5px; margin-left: 115px" src="../../assets/check_ico.png">
+                                    <p class="pTop">11000Y币</p>
+                                    <p class="pMiddle">￥100</p>
+                                    <p class="pBottom">赠送100元话费</p>
+                                </a>
+                            </div>
+                        </div>
+                        <button class="pay-btn" onclick="prePaid.payBtnClick()">
+                            <h5 style="color: white">立即支付</h5>
+                        </button>
+                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">购买Y币用户</p>
+                        <div class="lunbo">
+                            <ul id="buyer-lists1">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="BuyVIP" class="mui-slider-item mui-control-content" style="border-top:none;">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="buy-people-title" style="margin-top: 0px">
+                            已开通VIP用户：
+                            <span style="color: #ee763a;">587680</span>
+                            人
+                        </div>
+                        <div class="mui-title" style="color: #9e9e9f; font-size: 14px">
+                            开通VIP后可以无限制人数与MM聊天
+                        </div>
+                        <div class="mui-row">
+                            <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
+                                <a id="vipMonth" class="pictureBody" style="" href="#" onclick="prePaid.vipBtnClick(this.id)">
+                                    <img style="width: 22px; height: 22px; margin-top: 5px; margin-left: 110px" src="../../assets/check_ico.png">
+                                    <p class="pTop">30天</p>
+                                    <p class="pMiddle">￥50</p>
+                                    <p class="pBottom">(1.6元每天)</p>
+                                </a>
+                            </div>
+                            <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
+                                <a id="vipQuarter" class="pictureBody" style="" href="#" onclick="prePaid.vipBtnClick(this.id)">
+                                    <img style="width: 22px; height: 22px; margin-top: 5px; margin-left: 115px" src="../../assets/check_ico.png">
+                                    <p class="pTop">90天</p>
+                                    <p class="pMiddle">￥100</p>
+                                    <p class="pBottom">(1.1元每天)</p>
+                                </a>
+                            </div>
+                        </div>
+                        <button class="pay-btn" onclick="prePaid.payBtnClick()">
+                            <h5 style="color: white">立即支付</h5>
+                        </button>
+                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">热门特权</p>
+                        <div class="lunbo">
+                            <ul>
+                                <li style="color: #000000"><span style="color: #fd698c">[特权01]</span>可与所有女用户聊天</li>
+                                <li style="color: #000000"><span style="color: #fd698c">[特权02]</span>购买Y币额外增送10%</li>
+                                <li style="color: #000000"><span style="color: #fd698c">[特权03]</span>聊天80Y币/条降至1Y币/条</li>
+                            </ul>
+                        </div>
+                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">已充值vip用户</p>
+                        <div class="lunbo">
+                            <ul id="buyer-lists2">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div onclick="prePaid.ChatBtnClick()" style="width: 127px; height: 57px;position: absolute; bottom: 30px; right: 20px; z-index: 9999">
+    <img src="../../assets/vskf.png" style="width: 127px; height: 57px">
+</div>
+</body>
+<script src="../../js/mui.min.js"></script>
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../lib/jxlib.all.js"></script>
+<script src="../../lib/url-config.js"></script>
+<script src="../../lib/defines.js"></script>
+<script src="../../src/prepaid/prepaid.js?v=5"></script>
+<script type="text/javascript">
+  var prePaid = null;
+  window.onload = function () {
+    prePaid = PrePaid();
+    prePaid.init(0);
+  };
+
+</script>
+</html>

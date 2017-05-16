@@ -85,6 +85,16 @@ public class UserProfile extends UserBasic {
             this.userPhotoList = (List<UserPhoto>) getBaseDataList(jsonObject.optJSONArray("photo"), UserPhoto.class);
         }
 
+        // 用户视频
+        if (!jsonObject.isNull("videolist")) {
+
+        }
+
+        // 礼物列表
+        if (!jsonObject.isNull("giftlist")) {
+
+        }
+
         // 机器人打招呼list
         //if (AppModel.getInstance().ifHaveHelloRobot(this.getUid())) {
         //    this.setIsSayHello(1);
