@@ -36,7 +36,6 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
         this.gifId = giftid;
         initView(context);
         giftBean = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid);
-        giftBean = null;
         if (giftBean == null){
             ModuleMgr.getCommonMgr().requestGiftList(this);
         }

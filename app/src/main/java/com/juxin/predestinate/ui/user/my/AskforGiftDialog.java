@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -219,7 +218,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             ll_voice.addView(mVoiceView);
         }
         //chatPanelVoice.setParent(ll_voice);
-        mVoiceView.setData(sVoiceUrl, String.valueOf(voice_length));
+        mVoiceView.setData(sVoiceUrl, String.valueOf(voice_length) + mContext.getString(R.string.second));
     }
 
     private void initEdit() {
@@ -373,7 +372,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                 try {
                     String str = response.getResponseString();
                     JSONObject jso = new JSONObject(str);
-                    Log.e("TTTTTTTTNNN",response.getResponseString()+"||||");
                     if ("ok".equals(jso.optString("status")) && jso.optJSONObject("res") != null) {
                         sVoiceUrl = jso.optJSONObject("res").optString("file_http_path");
                         switchVoice();
@@ -385,7 +383,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                 }
             }
         });
-        Log.e("TTTTTTTTTTTTFFF",url+"|||"+length);
     }
 
     @Override
@@ -409,7 +406,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         public void onPageSelected(int position) {
             index = position;
             initDot(position);
-            Log.i("aaa", "当前在第" + position + "页");
             ((GiftGridviewAskForAdapter) mLists.get(index).getAdapter()).notifyDataSetChanged();
 
             tv_pagesize.setText(Html.fromHtml("<font color=#fd6c8e>" + (position + 1) + "</font>/" + mLists.size()));

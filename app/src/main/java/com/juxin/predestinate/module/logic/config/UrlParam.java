@@ -16,9 +16,6 @@ import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
-import com.juxin.predestinate.ui.xiaoyou.bean.FriendsList;
-import com.juxin.predestinate.ui.xiaoyou.bean.LabelsList;
-import com.juxin.predestinate.ui.xiaoyou.bean.SimpleFriendsList;
 
 import java.util.Map;
 
@@ -87,7 +84,7 @@ public enum UrlParam {
     // 上传文件
     uploadFile(Hosts.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
-    //============================== 小友模块相关接口 =============================
+    //============================== 用户资料模块相关接口 =============================
     //客户端获得用户红包列表
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
@@ -130,33 +127,6 @@ public enum UrlParam {
     unfollow("follow/unfollow", true),
     // 关注某某
     follow("follow/follow", true),
-
-
-    //好友标签分组成员
-    reqTagGroupMember("s/friend/TagGroupMember", SimpleFriendsList.class, true),
-    //增加自己的好友的 tag
-    reqAddFriendTag("s/friend/AddFriendTag", null, true),
-    //添加标签分组
-    reqAddTagGroup("s/friend/AddTagGroup", LabelsList.class, true),
-    //添加好友标签分组成员
-    reqAddTagGroupMember("s/friend/AddTagGroupMember", SimpleFriendsList.class, true),
-    //删除自己好友的 tag
-    reqDelFriendTag("s/friend/DelFriendTag", SimpleFriendsList.class, true),
-    //删除标签分组
-    reqDelTagGroup("s/friend/DelTagGroup", SimpleFriendsList.class, true),
-    //删除好友标签分组成员
-    reqDelTagGroupMember("s/friend/DelTagGroupMember", SimpleFriendsList.class, true),
-    //好友列表
-    reqFriendList("s/friend/FriendList", SimpleFriendsList.class, true),
-    //最近互动好友列表
-    reqLatestInteractive("s/friend/LatestInteractive", FriendsList.class, true),
-    //修改标签分组
-    reqModifyTagGroup("s/friend/ModifyTagGroup", SimpleFriendsList.class, true),
-    //好友标签分组
-    reqTagGroup("s/friend/TagGroup", LabelsList.class, true),
-    //送礼物
-    givePresent("s/present/GivePresent", null, true),
-
 
     //================= 发现 ===========
     //举报
