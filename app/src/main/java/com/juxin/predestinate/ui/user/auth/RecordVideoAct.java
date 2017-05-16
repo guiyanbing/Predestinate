@@ -108,7 +108,7 @@ public class RecordVideoAct extends FragmentActivity {
     private void openFrontCamera() {
         int camIdx = findFrontCamera();
         if (camIdx == -1) {
-            PToast.showShort("没有前置摄像头");
+            PToast.showShort(getResources().getString(R.string.toast_camera_isnull));
             finish();
             return;
         }

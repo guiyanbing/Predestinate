@@ -293,7 +293,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
                     }
-                }, "开启视频、音频功能，需要通过视频认证", "", "取消", "去认证", true, R.color.text_zhuyao_black);
+                }, "开启视频、音频功能，需要通过自拍认证", "", "取消", "去认证", true, R.color.text_zhuyao_black);
                 return false;
             } else if (videoVerifyBean.getStatus() == 1) {
                 PToast.showShort("审核中，请稍后再试");
