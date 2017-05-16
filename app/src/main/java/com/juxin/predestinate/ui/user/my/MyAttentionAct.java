@@ -41,6 +41,7 @@ public class MyAttentionAct extends BaseActivity{
         AttentionUtil.initUserDetails();
     }
 
+    //初始化数据
     private void initView(){
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.my_attention));
@@ -66,7 +67,7 @@ public class MyAttentionAct extends BaseActivity{
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume() {//重新刷新界面
         super.onResume();
         if (panls.size()==2&&panls.get(0)!=null&&panls.get(1)!=null){
             ((AttentionMePanel)panls.get(0)).reFreshUI();

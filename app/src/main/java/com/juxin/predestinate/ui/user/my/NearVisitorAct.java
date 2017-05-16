@@ -12,7 +12,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 /**
- * 我的钱包页面
+ * 我的钱包页面（暂时废弃）
  * Created by zm on 2017/4/20
  */
 public class NearVisitorAct extends BaseActivity implements View.OnClickListener,RequestComplete{

@@ -76,6 +76,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         return contentView;
     }
 
+    //初始化UI
     private void initView(final View contentView) {
         txvAllStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_allstone);
         txvNeedStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_needstone);
@@ -88,8 +89,8 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         vpViews.setRow(2);
 
         //设置dot的size和背景
-        pageIndicatorView.setSelectDot(12,8,R.drawable.f1_dot_select);
-        pageIndicatorView.setUnselectDot(8,8,R.drawable.f1_dot_unselect);
+        pageIndicatorView.setSelectDot(12,8,R.drawable.f1_dot_select);//选中
+        pageIndicatorView.setUnselectDot(8,8,R.drawable.f1_dot_unselect);//未选中
 
         findViewById(R.id.bottom_gif_view_blank).setOnClickListener(this);
         findViewById(R.id.bottom_gif_rl_top).setOnClickListener(this);
@@ -105,23 +106,23 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bottom_gif_view_blank:
+            case R.id.bottom_gif_view_blank://点击空白消失
                 dismiss();
                 break;
-            case R.id.bottom_gif_txv_pay:
+            case R.id.bottom_gif_txv_pay://跳转充值页面
                 UIShow.showGoodsDiamondDialog(getContext());
                 break;
-            case R.id.bottom_gif_txv_send:
+            case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
                 int needStone = Integer.valueOf(txvNeedStone.getText().toString());
                 if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()){
                     UIShow.showGoodsDiamondDialog(getContext());
                     return;
                 }
-                if (position == -1){
+                if (position == -1){//为选择礼物
                     PToast.showShort(getContext().getString(R.string.please_select_a_gift));
                     return;
                 }
-                ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);
+                ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);//发送送礼物请求
                 break;
             case R.id.bottom_gif_rl_top:
                 break;
@@ -129,9 +130,12 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     }
 
     public void setToId(long to_id){
-        this.uid = to_id;
+        this.uid = to_id;//设置接收礼物方的uid
     }
 
+    /**
+     * 初始化礼物列表
+     */
     private void initGifts(){
         arrGifts = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
         if (arrGifts == null){
@@ -150,7 +154,8 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     }
 
     private void initGridView() {
-        pageCount = (int) Math.ceil(arrGifts.size() / (float)onePageCount);
+        pageCount = (int) Math.ceil(arrGifts.size() / (float)onePageCount);//计算总页数
+        //分页数据处理
         mLists = new ArrayList<>();
         for (int i = 0; i < pageCount; i++) {
             final GridView gv = new GridView(getContext());
@@ -168,14 +173,13 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     int select = curPage * onePageCount + position;
                     if (select < arrGifts.size()) {
                         reSetData();
-                        arrGifts.get(select).setIsSelect(true);
-                        //// TODO: 2017/5/10  获取选择的礼物信息
+                        arrGifts.get(select).setIsSelect(true);//设置为选中状态
                         if (oldPosition == select) {
                             sum++;
                         } else {
                             sum = 1;
                         }
-                        oldPosition = select;
+                        oldPosition = select;//记录前一个position的位置
                         onSelectNumChanged(sum, sum * arrGifts.get(select).getMoney(), select);
                         for (int i = 0; i < mLists.size(); i++) {
                             ((GiftAdapter) mLists.get(i).getAdapter()).notifyDataSetChanged();
@@ -188,6 +192,9 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         initData();
     }
 
+    /**
+     * 将礼物的选择状态置为false
+     */
     private void reSetData(){
         for (int j = 0; j < arrGifts.size(); j++) {
             arrGifts.get(j).setIsSelect(false);
@@ -199,6 +206,14 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         txvSendNum.setText(num+"");
         txvNeedStone.setText(num+"");
     }
+
+    /**
+     * 选择礼物时用于更新界面的方法
+     *
+     * @param num       礼物数量
+     * @param sum       礼物所需的钻石数量
+     * @param position  被选中礼物的位置
+     */
     public void onSelectNumChanged(int num,int sum,int position) {
         this.position = position;
         txvSendNum.setText(num+"");

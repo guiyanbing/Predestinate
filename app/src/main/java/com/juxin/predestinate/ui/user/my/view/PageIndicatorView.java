@@ -118,7 +118,7 @@ public class PageIndicatorView extends LinearLayout {
     }
 
     /**
-     * 设置间隔（单位dp）
+     * 设置间隔（单位dp）默认间隔为6dp
      */
     public void setMargin(int margin){
         this.margin = margin;
