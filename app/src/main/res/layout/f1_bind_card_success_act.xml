@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/px60_dp"
-        android:text="提现成功"
+        android:text="@string/withdraw_succeed"
         android:textSize="@dimen/px42_sp"
         android:textColor="@color/color_838383"/>
 
@@ -28,7 +28,7 @@
         android:layout_marginLeft="@dimen/px45_dp"
         android:layout_marginRight="@dimen/px45_dp"
         android:background="@drawable/f1_btn_phoneverify_selector"
-        android:text="完成"
+        android:text="@string/bt_complete"
         android:textColor="@color/white"
         android:textSize="@dimen/px48_sp"/>
 
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/px60_dp"
-        android:text="提现将在24小时内到账"
+        android:text="@string/hours_to_the_account"
         android:textSize="@dimen/px42_sp"
         android:textColor="@color/color_D6D6D6"/>
 
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/px30_dp"
-            android:text=""
+            android:text="2931837672"
             android:textSize="@dimen/px42_sp"
             android:textColor="@color/color_D6D6D6"/>
     </LinearLayout>

@@ -55,7 +55,7 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
     }
     //请求数据
     private void reqData() {
-        ModuleMgr.getCommonMgr().getRedbagList(this);
+        ModuleMgr.getCommonMgr().getRedbagList(this);//请求收入详情列表
     }
 
     private void initView(){
@@ -82,7 +82,7 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
 
     //用于计算总钱数
     private String getSumMoney() {
-        double money = 0;
+        double money = 0;//收入总数
         for (int i = 0; i < mRedbagInfos.size(); i++) {
             money += mRedbagInfos.get(i).getMoney();
         }
@@ -149,7 +149,7 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
     //汇总ui显示设置
     public void showCollect(){
         llSummary.setVisibility(View.VISIBLE);
-        tvData.setText("汇总");
+        tvData.setText(R.string.summary);
         tvPath.setText("--");
         tvMoney.setText(getSumMoney()+"");
         tvStatus.setText("--");
@@ -169,7 +169,7 @@ public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,
     @Override
     public void onClick(View v) {//单击事件
         LoadingDialog.show((FragmentActivity)mContext);
-        ModuleMgr.getCommonMgr().reqAddredonekey(ModuleMgr.getCenterMgr().getMyInfo().getUid(),this);
+        ModuleMgr.getCommonMgr().reqAddredonekey(ModuleMgr.getCenterMgr().getMyInfo().getUid(),this);//一键入袋
     }
 
     private String testData(){

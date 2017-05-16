@@ -72,7 +72,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.paylist_qq:{
-                UIShow.showQQServer(this);
+                UIShow.showQQService(this);
             }
             case R.id.paylist_help:{
                 if (help_txt) {

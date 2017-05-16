@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>话费领取</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../css/app.css" />
+    <style>
+        body{
+            background: white;
+        }
+        #clibtn,#Idbtn{
+            /*margin-left: 40px !important;*/
+            /*float: none !important;*/
+            padding: 10px 3px !important;
+            width: auto;
+            position: absolute;
+            right: 10px;
+        }
+        a{
+            color: black;
+        }
+        .mui-title{
+            margin: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav" style="font-size: 14px;background: yellow;line-height: 44px">
+    <a class="  mui-pull-right" href="javascript:tollCollection.buyNow()" style="color: #fd698c;font-size: 14px;">立即购买</a>
+    <label>注:购买100元Y币 可获得100元话费！</label>
+</header>
+<div class="mui-content" style="">
+    <div class="" style="margin-top: 10px;padding-bottom: 30px">
+        <div class="mui-input-row" style="position: relative">
+            <input id="phoneNum" type="text" class="" onchange="tollCollection.checkPhoneNum()" maxlength="11" placeholder="请输入手机号" style="width:60%;margin-left:10px;border: 1px solid blue">
+            <input style="width: 65px" readonly="readonly" id="clibtn" onclick="tollCollection.getPhoneCash()" class="mui-btn mui-btn-danger" value="立即领取">
+        </div>
+        <div id="IdCode" class="mui-input-row" style="position: relative;display: none">
+            <input id="msCode" type="text"   maxlength="4" placeholder="请输入验证码" style="width:60%;margin-left:10px;border: 1px solid blue">
+            <button id="Idbtn" onclick="tollCollection.checkMobile()" class="mui-btn mui-btn-danger" >立即验证</button>
+        </div>
+
+        <a class="mui-pull-left" style="margin-left: 10px;">话费申领记录</a>
+        <a class="mui-pull-right" style="margin-right: 10px;color: #fd698c">客服qq：<span id="qqService"></span></a>
+    </div>
+    <div id="pullrefresh" class="mui-scroll-wrapper" style="top: 190px; bottom: 60px">
+        <div class="mui-scroll">
+            <h1 id="noneList" class="mui-title" style="padding-top:30px;display: none ">
+                <img src="../../assets/near_visitor_laifang_big.png" alt="">
+                <p style="margin-top: -40px">暂无话费领取记录</p>
+            </h1>
+            <ul class="mui-table-view" style="text-align: center;">
+                <!--<li class="mui-table-view-cell mui-row">-->
+                    <!--<span class="mui-col-xs-4 mui-col-sm-4">十元话费</span>-->
+                    <!--<span class="mui-col-xs-4 mui-col-sm-4">2017.5.10</span>-->
+                    <!--<span class="mui-col-xs-4 mui-col-sm-4">已领取</span>-->
+                <!--</li>-->
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../js/mui.min.js"></script>
+<script src="../../lib/jxlib.all.js"></script>
+<script src="../../lib/url-config.js"></script>
+<script src="../../src/tollCollection.js"></script>
+</html>

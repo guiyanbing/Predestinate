@@ -25,14 +25,15 @@ public class GiftAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Context mContext;
-    private List<GiftsList.GiftInfo> mLists;
-    private int pSize = 6;
+    private List<GiftsList.GiftInfo> mLists;//礼物列表
+    private int pSize = 6;//每页的item个数
 
     public GiftAdapter(Context fContext, List<GiftsList.GiftInfo> lGift, int page,int pSize) {
         this.pSize = pSize;
         this.mContext = fContext;
         this.inflater = LayoutInflater.from(fContext);
         mLists = new ArrayList<>();
+        //计算本页礼物列表
         int start = page * pSize;
         int end = start + pSize;
         while ((start < lGift.size()) && (start < end)) {
@@ -73,15 +74,10 @@ public class GiftAdapter extends BaseAdapter {
             //        vh.txvIntimate.setText("亲密度+"+info.getIntimacy());
             vh.txvNeedStone.setText(info.getMoney() + mContext.getString(R.string.diamond));
             ImageLoader.loadAvatar(mContext, info.getPic(), vh.img);
-            //            Log.e("TTTTTTTTHHHH",vh.txvGifName+"|||");
             if (!info.isSelect()){
-                //            vh.llTop.setVisibility(View.INVISIBLE);
-                vh.llTop.setBackgroundResource(R.color.white);
-                //            vh.txvIntimate.setVisibility(View.INVISIBLE);
+                vh.llTop.setBackgroundResource(R.color.white);//设置为父控件的背景色（未选中）
             }else {
-                //            vh.llTop.setVisibility(View.VISIBLE);
-                vh.llTop.setBackgroundResource(R.drawable.gift_item_bg);
-                //            vh.txvIntimate.setVisibility(View.VISIBLE);
+                vh.llTop.setBackgroundResource(R.drawable.gift_item_bg);//设置选中背景色
             }
         }
         return convertView;
@@ -89,9 +85,9 @@ public class GiftAdapter extends BaseAdapter {
 
     class MyViewHolder{
 
-        ImageView img;
-        TextView txvGifName, txvIntimate, txvNeedStone;
-        LinearLayout llTop;
+        ImageView img;//礼物图像
+        TextView txvGifName, txvNeedStone;//礼物名称，需要的钻石
+        LinearLayout llTop;//用于控制选中或未选中的背景
 
 
         public MyViewHolder(View convertView) {
@@ -101,7 +97,6 @@ public class GiftAdapter extends BaseAdapter {
         private void initView(View convertView) {
             img = (ImageView) convertView.findViewById(R.id.bottom_gif_item_img);
             txvGifName = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvgifname);
-            //            txvIntimate = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvintimacy);
             txvNeedStone = (TextView) convertView.findViewById(R.id.bottom_gif_item_txvneedstone);
             llTop = (LinearLayout) convertView.findViewById(R.id.bottom_gif_item_ll_top);
         }

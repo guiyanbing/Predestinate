@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.WebPanel;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
 import com.juxin.predestinate.module.util.WebUtil;
 
@@ -60,9 +61,7 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
     private void initView() {
         LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
 
-        webPanel = new WebPanel(getActivity(),
-                WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/windRanking/windRanking.html"),
-                true);// TODO: 2017/5/3
+        webPanel = new WebPanel(getActivity(), WebUtil.jointUrl(Hosts.H5_RANKING), true);
         web_container.removeAllViews();
         web_container.addView(webPanel.getContentView());
     }

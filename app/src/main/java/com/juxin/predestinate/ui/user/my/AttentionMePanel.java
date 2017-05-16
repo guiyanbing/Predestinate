@@ -47,11 +47,11 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
         reqData();
         crvView.showLoading();
     }
-    //请求数据
+    //请求数据（关注我的列表）
     private void reqData() {
         ModuleMgr.getCommonMgr().getFollowers(this);
     }
-
+    //初始化ui
     private void initView(){
         crvView = (CustomRecyclerView) findViewById(R.id.my_attention_panel_crlv_list);
         rvList = crvView.getXRecyclerView();
@@ -60,7 +60,8 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
                 DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         mAttentionMeAdapter = new AttentionMeAdapter(mContext);
         rvList.setAdapter(mAttentionMeAdapter);
-        rvList.setLoadingMoreEnabled(false);
+        mAttentionMeAdapter.setOnItemClickListener(mAttentionMeAdapter);
+        rvList.setLoadingMoreEnabled(false);//没有加载更多，所有数据一次返回
         rvList.setLoadingListener(this);
     }
 
@@ -78,12 +79,12 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
                 lists.parseJson(response.getResponseString());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
-                mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos,AttentionUtil.ATTENTIONME));
-                if (infos != null && !infos.isEmpty()){
+                mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos,AttentionUtil.ATTENTIONME));//先从缓存中获取数据
+                if (infos != null && !infos.isEmpty()){//缓存中处理完毕后，还有消息记录，则该记录没有获取过，去服务器请求用户详细信息
                     int size = infos.size();
                     count = size;
                     for (int i = 0 ;i < size;i++){
-                        ModuleMgr.getCenterMgr().reqOtherInfo(infos.get(i).getUid(),this);
+                        ModuleMgr.getCenterMgr().reqOtherInfo(infos.get(i).getUid(),this);//请求用户详细信息
                     }
                     return;
                 }
@@ -113,14 +114,13 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
             return;
         }
         count--;
-        if (JsonUtil.getJsonObject(response.getResponseString()).has("uid")){
+        if (JsonUtil.getJsonObject(response.getResponseString()).has("uid")){//用户信息请求返回成功
             AttentionUserDetail userDetail = new AttentionUserDetail();
             userDetail.parseJson(response.getResponseString());
-//            Log.e("TTTTTTTJJJ2222", response.getResponseString());
-            mUserDetails.add(userDetail);
-            AttentionUtil.addUser(userDetail);
+            mUserDetails.add(userDetail);//添加到数据列表
+            AttentionUtil.addUser(userDetail);//添加到缓存列表
             if (count <= 0){
-                AttentionUtil.saveUserDetails();
+                AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
@@ -141,6 +141,7 @@ public class AttentionMePanel extends BaseViewPanel implements RequestComplete,X
 
     }
 
+    //此方法只用于测试使用
     private String testData(){
         String str = "/*{\n" +
                 "    \"result\": \"success\",\n" +

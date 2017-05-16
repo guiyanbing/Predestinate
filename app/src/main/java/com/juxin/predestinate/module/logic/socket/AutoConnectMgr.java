@@ -475,7 +475,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 long sender = contentObject.optLong("fid", -1);//发送者id
 
                 //消息接收反馈
-                socket.sendPacket(getLoopbackData(data.getMsgType(), msgId));
+                //socket.sendPacket(getLoopbackData(data.getMsgType(), msgId));
 
                 //抛出消息
                 onMessage(data, msgId);
