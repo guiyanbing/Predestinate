@@ -13,6 +13,7 @@ import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -66,6 +67,7 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         albumLayout = (LinearLayout) findViewById(R.id.album_item);
         videoLayout = (LinearLayout) findViewById(R.id.video_item);
         giftLayout = (LinearLayout) findViewById(R.id.gift_item);
+        findViewById(R.id.ll_video).setOnClickListener(listener);
 
         // 照片列表
         albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userPhotos);
@@ -92,6 +94,9 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
+                case R.id.ll_video:
+                    UIShow.showUserSecretAct(getContext(), userProfile);
+                    break;
             }
         }
     };
