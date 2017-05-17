@@ -88,9 +88,13 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
     }
 
     public void refreshView(UserDetail userDetail) {
-        albumNum = userDetail.getUserPhotos().size();
-        tv_album.setText(String.valueOf(albumNum));
-        albumPanel.refresh(userDetail);
+        if (userDetail == null) return;
+
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+            albumNum = userDetail.getUserPhotos().size();
+            tv_album.setText(String.valueOf(albumNum));
+            albumPanel.refresh(userDetail);
+        }
     }
 
     /**
