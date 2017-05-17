@@ -15,14 +15,13 @@
  */
 package com.juxin.library.unread;
 
-import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 
@@ -36,18 +35,13 @@ import java.util.Map;
  */
 public class UnreadMgr {
 
-    private static UnreadPreferences preferences;
     private volatile static UnreadMgr instance = null;
 
-    private UnreadMgr(Context context) {
-        preferences = new UnreadPreferences(context);
-    }
-
-    public static UnreadMgr getInstance(Context context) {
+    public static UnreadMgr getInstance() {
         if (instance == null) {
             synchronized (UnreadMgr.class) {
                 if (instance == null) {
-                    instance = new UnreadMgr(context);
+                    instance = new UnreadMgr();
                 }
             }
         }
@@ -64,8 +58,6 @@ public class UnreadMgr {
 
     private Gson gson = new Gson();
 
-    /* 消息存储的SP-key，用以区分不同的用户 */
-    private String storeTag;
     /* 未读消息的级联关系，每次添加新的层级角标之后在此进行配置 */
     private Map<String, String[]> parentMap = new HashMap<String, String[]>();
 
@@ -75,44 +67,31 @@ public class UnreadMgr {
     /**
      * 初始化角标系统
      *
-     * @param storeTag  用户标签。如果切换用户，需要重新调用该方法进行初始化
-     * @param parentMap 子级和父级的级联关系。只关心最小元素的子级，如：消息tab中有一个最近消息栏目，最近消息中又包括好友和陌生人，
-     *                  这时候好友和陌生人就是最小的元素，由这两个最小元素的添加引起了最近消息和消息总数的添加。<p>
-     *                  Map<String, String[]> parentMap = new HashMap<String, String[]>();<br>
-     *                  parentMap.put("friends",new String[]{"message","recentMessage"});<br>
-     *                  parentMap.put("strangers",new String[]{"message","recentMessage"});<p>
-     *                  以上演示了一个三级标示消息的结构，二级的结构如下：<br>
-     *                  parentMap.put("friends",new String[]{"message","lookedMe"});<p>
-     *                  只有一级的标示消息无需添加父级层联关系的map。
+     * @param storeString 存储的角标信息json字符串，可由外部调用选择存储至数据库或SP等
+     * @param parentMap   子级和父级的级联关系。只关心最小元素的子级，如：消息tab中有一个最近消息栏目，最近消息中又包括好友和陌生人，
+     *                    这时候好友和陌生人就是最小的元素，由这两个最小元素的添加引起了最近消息和消息总数的添加。<p>
+     *                    Map<String, String[]> parentMap = new HashMap<String, String[]>();<br>
+     *                    parentMap.put("friends",new String[]{"message","recentMessage"});<br>
+     *                    parentMap.put("strangers",new String[]{"message","recentMessage"});<p>
+     *                    以上演示了一个三级标示消息的结构，二级的结构如下：<br>
+     *                    parentMap.put("friends",new String[]{"message","lookedMe"});<p>
+     *                    只有一级的标示消息无需添加父级层联关系的map。
      */
-    public void init(String storeTag, Map<String, String[]> parentMap) {
-        this.storeTag = storeTag;
+    public void init(String storeString, Map<String, String[]> parentMap) {
         this.parentMap = (parentMap == null ? new HashMap<String, String[]>() : parentMap);
-
         unreadMap.clear();//应用未杀死时切换用户，清除上个用户的信息
 
-        String storage_string = preferences.getString(getStoredTag(), "");
-        Log.d(TAG, "getUnreadMessage: --------->stored tag：" + getStoredTag() + "，stored string：" + storage_string);
-        if (TextUtils.isEmpty(storage_string)) return;
+        PLogger.d("getUnreadMessage: --------->stored string：" + storeString);
+        if (TextUtils.isEmpty(storeString)) return;
 
         try {
-            unreadMap = gson.fromJson(preferences.getString(getStoredTag(), ""),
-                    new TypeToken<Map<String, Unread>>() {
-                    }.getType());
+            unreadMap = gson.fromJson(storeString, new TypeToken<Map<String, Unread>>() {
+            }.getType());
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         } finally {
             if (unreadMap == null) unreadMap = new HashMap<String, Unread>();
         }
-    }
-
-    /**
-     * 获取在SharedPreferences中存储的key，以uid进行存储，便于用户切换帐号处理
-     *
-     * @return 获取最终存储用户角标信息的标签
-     */
-    private String getStoredTag() {
-        return "unread_" + (TextUtils.isEmpty(storeTag) ? "default" : storeTag);
     }
 
     // =================================== 外部调用 ===================================
@@ -146,7 +125,7 @@ public class UnreadMgr {
         if (TextUtils.isEmpty(key)) return;
 
         Unread unread = unreadMap.get(key);
-        Log.d(TAG, "registerView：key：" + key + "，isPoint：" + isPoint + "，unread：" + unread);
+        PLogger.d("registerView：key：" + key + "，isPoint：" + isPoint + "，unread：" + unread);
 
         if (unread == null) {
             badge.setVisibility(View.GONE);
@@ -180,9 +159,8 @@ public class UnreadMgr {
         unreadMap.put(unread.getKey(), unread);
 
         addParent(unread.getKey());
-        Log.d(TAG, "addUnread: --------->unread：" + unread.toString() + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("addUnread: --------->unread：" + unread.toString() + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(unread.getKey(), true);
     }
 
@@ -201,9 +179,8 @@ public class UnreadMgr {
         unreadMap.put(key, unread);//存储子角标
 
         addParent(key);
-        Log.d(TAG, "addNumUnread: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("addNumUnread: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(key, true);
     }
 
@@ -231,9 +208,8 @@ public class UnreadMgr {
         unreadMap.put(key, unread);//存储子角标
 
         addParent(key);
-        Log.d(TAG, "addNumUnread: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("addNumUnread: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(key, true);
     }
 
@@ -254,9 +230,8 @@ public class UnreadMgr {
         unread.setShow(show);
         unreadMap.put(key, unread);//存储子角标
 
-        Log.d(TAG, "addStringUnread: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("addStringUnread: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(key, true);
     }
 
@@ -283,9 +258,8 @@ public class UnreadMgr {
         } else {//文字角标
             unreadMap.remove(key);
         }
-        Log.d(TAG, "reduceUnreadByKey: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("reduceUnreadByKey: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(key, false);
     }
 
@@ -301,7 +275,7 @@ public class UnreadMgr {
 
         List<String> indicates = unread.getIndicates();
         if (indicates.isEmpty() || (!TextUtils.isEmpty(indicate) && !indicates.contains(indicate))) {
-            Log.d(TAG, "reduceUnreadIndicate: --------->" + key + "类型角标不含" + indicate + "标识");
+            PLogger.d("reduceUnreadIndicate: --------->" + key + "类型角标不含" + indicate + "标识");
             return;//如果该子级角标中不存在该标识的角标，就不进行角标消除
         }
 
@@ -321,9 +295,8 @@ public class UnreadMgr {
         } else {//文字角标
             unreadMap.remove(key);
         }
-        Log.d(TAG, "reduceUnreadIndicate: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("reduceUnreadIndicate: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(key, false);
     }
 
@@ -337,9 +310,8 @@ public class UnreadMgr {
 
         clearChildInParent(key);//先移除父级再移除子级，因为父级的计算要依赖于子级
         unreadMap.remove(key);
-        Log.d(TAG, "resetUnreadByKey: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
+        PLogger.d("resetUnreadByKey: --------->key：" + key + "，unreadMap：" + unreadMap.toString());
 
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
         castUnreadMsg(key, false);
     }
 
@@ -348,8 +320,7 @@ public class UnreadMgr {
      */
     public void resetAllUnread() {
         unreadMap.clear();
-        Log.d(TAG, "resetAllUnread: --------->" + unreadMap.toString());
-        preferences.put(getStoredTag(), gson.toJson(unreadMap));
+        PLogger.d("resetAllUnread: --------->" + unreadMap.toString());
         castUnreadMsg(null, false);
     }
 
@@ -365,10 +336,11 @@ public class UnreadMgr {
         /**
          * 角标变动
          *
-         * @param key   角标类型的key值
-         * @param isAdd 是否为角标添加消息：true[添加]，false[减少]
+         * @param key         角标类型的key值
+         * @param isAdd       是否为角标添加消息：true[添加]，false[减少]
+         * @param storeString 需要存储的角标信息json字符串，可由外部调用选择存储至数据库或SP等
          */
-        void onUnreadChange(String key, boolean isAdd);
+        void onUnreadChange(String key, boolean isAdd, String storeString);
     }
 
     /**
@@ -378,7 +350,8 @@ public class UnreadMgr {
      * @param isAdd 是否为角标添加消息：true[添加]，false[减少]
      */
     private void castUnreadMsg(String key, boolean isAdd) {
-        if (unreadListener != null) unreadListener.onUnreadChange(key, isAdd);
+        if (unreadListener != null)
+            unreadListener.onUnreadChange(key, isAdd, gson.toJson(unreadMap));
 
         Map<String, Object> msgMap = new HashMap<String, Object>();
         msgMap.put(Msg_Name_Key, key);
