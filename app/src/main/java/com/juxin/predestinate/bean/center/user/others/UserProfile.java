@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
+import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
 
 import org.json.JSONObject;
 

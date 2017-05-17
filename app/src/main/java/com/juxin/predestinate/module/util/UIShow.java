@@ -59,6 +59,7 @@ import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
+import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
@@ -1144,8 +1145,10 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context) {
-        context.startActivity(new Intent(context, SecretGiftDlg.class));
+    public static void showSecretGiftDlg(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, SecretGiftDlg.class);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        context.startActivity(intent);
     }
 
     /**
@@ -1189,5 +1192,13 @@ public class UIShow {
      */
     public static void showMyAuthenticationAct(FragmentActivity context, int requestCode) {
         context.startActivityForResult(new Intent(context, MyAuthenticationAct.class), requestCode);
+    }
+
+    /**
+     * 打开重置密码
+     * @param context
+     */
+    public static void showFindPwdAct(FragmentActivity context){
+        context.startActivity(new Intent(context, FindPwdAct.class));
     }
 }

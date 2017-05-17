@@ -9,6 +9,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
@@ -64,6 +65,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
         findViewById(R.id.layout_parent).setOnClickListener(this);
         findViewById(R.id.btn_user_login_submit).setOnClickListener(this);
         findViewById(R.id.txt_user_login_toReg).setOnClickListener(this);
+        findViewById(R.id.txt_user_reset_pw).setOnClickListener(this);
         iv_arrow.setOnClickListener(this);
         lv_account.setOnItemClickListener(this);
         et_uid.setOnClickListener(this);
@@ -77,13 +79,13 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_user_login_submit:
+            case R.id.btn_user_login_submit://登录
                 if (validInput()) loginMgr.onLogin(this, chosenUID, chosenPwd);
                 break;
             case R.id.img_user_login_arrow:
                 if (lv_account.getVisibility() == View.GONE) {
                     startAnimate();
-                }else{
+                } else {
                     endAnimate();
                 }
                 break;
@@ -91,9 +93,12 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
             case R.id.et_uid:
                 endAnimate();
                 break;
-            case R.id.txt_user_login_toReg:
+            case R.id.txt_user_login_toReg://免费注册
                 UIShow.showUserRegInfoAct(this);
                 finish();
+                break;
+            case R.id.txt_user_reset_pw://重置密码
+                UIShow.showFindPwdAct(this);
                 break;
         }
     }
@@ -157,9 +162,10 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
 
     // =========================== 账户列表显隐动画 =========================================
 
-    private void changeArrowDir(boolean open){
-        iv_arrow.setImageResource(open?R.drawable.f1_filter_up_arrow:R.drawable.filter_down_arrow);
+    private void changeArrowDir(boolean open) {
+        iv_arrow.setImageResource(open ? R.drawable.f1_filter_up_arrow : R.drawable.filter_down_arrow);
     }
+
     private void startAnimate() {
         changeArrowDir(true);
         lv_account.setVisibility(View.VISIBLE);

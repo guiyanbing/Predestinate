@@ -10,6 +10,7 @@
 
     <ScrollView
         style="@style/NoMultipoint"
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/act_space"
