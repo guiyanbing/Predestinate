@@ -298,6 +298,9 @@
     <string name="user_other_label_often">常用标签</string>
     <string name="user_other_info_req_fail">资料请求出错！</string>
     <string name="user_online">在线</string>
+    <string name="user_secret_media_unlock">正在解锁</string>
+    <string name="user_secret_media_lock_suc">解锁成功</string>
+    <string name="user_secret_media_lock_fail">解锁失败</string>
 
     <string name="goods_price">%d元</string>
     <string name="goods_diamond_title">钻石充值</string>
@@ -316,7 +319,6 @@
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>
     <string name="goods_pay_confirm">确认充值</string>
     <string name="goods_pay_gift_fail">赠送礼物失败，你的账户钻石不足！</string>
-
     <string name="goods_vip_title">开通VIP</string>
 
     <string name="goods_vip_price">(50元/月)</string>

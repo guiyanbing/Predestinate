@@ -4,11 +4,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+import com.juxin.predestinate.ui.user.check.secret.bean.VideoPreviewBean;
 
 /**
  * 私密相册/视频页adapter
@@ -30,8 +30,7 @@ public class UserSecretAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-//        SecretMedia data = (SecretMedia) getItem(position);
-        final String data = (String) getItem(position);
+        VideoPreviewBean data = (VideoPreviewBean) getItem(position);
 
         ImageView img_preview = viewHolder.findViewById(R.id.iv_video_preview);
         TextView tv_hot = viewHolder.findViewById(R.id.tv_hot_value);
