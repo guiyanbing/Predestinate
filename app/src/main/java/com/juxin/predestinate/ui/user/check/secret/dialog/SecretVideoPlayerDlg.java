@@ -1,20 +1,15 @@
 package com.juxin.predestinate.ui.user.check.secret.dialog;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.net.NetInterface;
+import com.juxin.library.view.DownloadProgressView;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.custom.CircleLoadingView;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
 import com.juxin.predestinate.module.util.TimerUtil;
 
@@ -23,10 +18,10 @@ import com.juxin.predestinate.module.util.TimerUtil;
  * Created by Su on 2017/5/17.
  */
 
-public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickListener{
+public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickListener {
     private TextureVideoView tvv_player;
     private ImageView iv_pic, iv_start;
-    private CircleLoadingView progress_bar;
+    private DownloadProgressView progress_bar;
     private String mp4Path = "";
     private String picPath = "";
 
@@ -43,7 +38,7 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         iv_pic = (ImageView) findViewById(R.id.iv_photo_video_pic);
         iv_start = (ImageView) findViewById(R.id.iv_photo_video_start);
         tvv_player = (TextureVideoView) findViewById(R.id.tvv_photo_video_player);
-        progress_bar = (CircleLoadingView) findViewById(R.id.progress_bar_photo_view);
+        progress_bar = (DownloadProgressView) findViewById(R.id.progress_bar_photo_view);
         iv_pic.setVisibility(View.VISIBLE);
 
         iv_start.setOnClickListener(this);
