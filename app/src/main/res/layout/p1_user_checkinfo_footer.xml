@@ -132,7 +132,9 @@
     </LinearLayout>
 
     <!-- 视频 -->
-    <LinearLayout style="@style/center_media_item">
+    <LinearLayout
+        android:id="@+id/ll_video"
+        style="@style/center_media_item">
 
         <LinearLayout
             android:id="@+id/video_item"

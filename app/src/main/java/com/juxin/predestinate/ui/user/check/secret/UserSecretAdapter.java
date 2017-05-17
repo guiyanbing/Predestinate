@@ -1,11 +1,12 @@
 package com.juxin.predestinate.ui.user.check.secret;
 
-import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.juxin.library.log.PToast;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
@@ -15,8 +16,12 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
  */
 
 public class UserSecretAdapter extends BaseRecyclerViewAdapter {
+    private int params;   // item宽高
 
-    private boolean isDele;
+    public UserSecretAdapter() {
+        int horizontalSpacing = ModuleMgr.getAppMgr().getScreenWidth() / 50;
+        params = (ModuleMgr.getAppMgr().getScreenWidth() - 8 * horizontalSpacing) / 3;
+    }
 
     @Override
     public int[] getItemLayouts() {
@@ -28,27 +33,16 @@ public class UserSecretAdapter extends BaseRecyclerViewAdapter {
 //        SecretMedia data = (SecretMedia) getItem(position);
         final String data = (String) getItem(position);
 
-        ImageView img_media = viewHolder.findViewById(R.id.img_secret);
-        TextView tv_publishTime = viewHolder.findViewById(R.id.publish_time);
-        ImageView btn_delete = viewHolder.findViewById(R.id.btn_delete);
+        ImageView img_preview = viewHolder.findViewById(R.id.iv_video_preview);
+        TextView tv_hot = viewHolder.findViewById(R.id.tv_hot_value);
+        TextView tv_time = viewHolder.findViewById(R.id.tv_video_time);
+        img_preview.setLayoutParams(new RelativeLayout.LayoutParams(params, params));
 
-        btn_delete.setVisibility(isDele ? View.VISIBLE : View.GONE);
 //        ImageLoader.loadCenterCrop(App.context, data.getCoverUrl(), img_media);
-
-        btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PToast.showShort(data);
-            }
-        });
     }
 
     @Override
     public int getRecycleViewItemType(int position) {
         return 0;
-    }
-
-    public void setDele(boolean isDele) {
-        this.isDele = isDele;
     }
 }
