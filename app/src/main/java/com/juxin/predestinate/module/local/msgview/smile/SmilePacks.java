@@ -1,5 +1,12 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
+import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +23,43 @@ public class SmilePacks {
     private List<SmilePackage> packages = null;
     private Map<Integer, SmileItem> allSmiles = null;
 
+    public SmilePacks() {
+        reqCustomFace();
+    }
 
     /**
-     *
+     *  自定义表情
      */
-    public SmilePacks() {
+    private void reqCustomFace(){
+        if(packages == null){
+            packages = new ArrayList<>();
+        }
+
+        SmilePackage smilePackage = new SmilePackage();
+        smilePackage.setName("默认");
+        smilePackage.setType("smallface");
+        packages.add(smilePackage);
+
+        ModuleMgr.getCommonMgr().reqCustomFace(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                SmilePackage smilePackage = new SmilePackage();
+                smilePackage.setName("自定义");
+                smilePackage.setType("customface");
+                if(response.isOk()){
+                    try {
+                        smilePackage.parseJsonSmileItem(response.getResponseString());
+                        MMLog.autoDebug("xxxxxxxxxx---------");
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                packages.add(smilePackage);
+                MMLog.autoDebug(response.getResponseJson());
+             //   {"res":{"list":null},"status":"ok","tm":1494927495}
+            }
+        });
     }
 
     /**

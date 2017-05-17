@@ -26,9 +26,10 @@ import java.util.Map;
 public enum UrlParam {
 
     reqRegister("pubtest/quickReg", null, false),//注册接口
-    modifyUserData("user/modifyUserData", null, true),//修改用户资料
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
-    resetPassword("i/reg/ResetPassword"),//找回密码
+    forgotPassword("Public/forgotPassword"),//找回密码
+    reqForgotsms("Public/forgotsms", PhoneVerifyResult.class, false),//找回密码发送验证码
+
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
 
@@ -173,6 +174,11 @@ public enum UrlParam {
 
     reqAliWapPay(Hosts.FATE_IT_CUP_HTTP, "user/aliWapPay", null, true),   //支付宝wap充值
 
+    reqCustomFace(Hosts.FATE_IT_GO, "xs/message/GetCustomFace", null, true),   //获取自定义表情列表
+
+    delCustomFace(Hosts.FATE_IT_GO, "xs/message/DelCustomFace", null, true),   //删除自定义表情
+
+    AddCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
 
     // 最后一个，占位
     LastUrlParam("");

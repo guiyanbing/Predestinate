@@ -13,6 +13,24 @@
     <string name="main_btn_user">我的</string>
     <string name="base_title_back">返回</string>
 
+    <!--activity标题-->
+    <string name="title_right_submit">提交</string>
+    <string name="title_right_filter">筛选</string>
+    <string name="title_loginact">用户登录</string>
+    <string name="title_reg">用户注册</string>
+    <string name="title_findpwdact">重置密码</string>
+    <string name="title_recommend_filter">筛选</string>
+    <string name="title_recommend">推荐的人</string>
+    <string name="title_phone_certification">手机认证</string>
+    <string name="title_feedback">意见反馈</string>
+    <string name="title_reginfo_complete">完善资料</string>
+    <string name="title_set">设置</string>
+    <string name="title_about">关于</string>
+    <string name="title_pwd_set">密码设置</string>
+    <string name="title_suggest">意见反馈</string>
+    <string name="title_auth">我的认证</string>
+    <string name="title_videoauth">自拍认证</string>
+
     <!-- 排行榜 -->
     <string name="rank_this_week">本周</string>
     <string name="rank_last_week">上周</string>
@@ -34,6 +52,7 @@
     <string name="ext_feedback_contact_hit">联系方式：（手机/QQ/邮箱）</string>
     <string name="ext_suggest_hit">写些对缘份吧的意见和建议……</string>
     <string name="toast_feedback_submit">提交成功，感谢您的支持</string>
+    <string name="toast_under_review">审核中，请稍后再试</string>
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
     <string name="button_send">发送</string>
@@ -41,10 +60,12 @@
     <string name="toast_update_ok">修改成功</string>
     <string name="dal_exit_content">确定退出登录吗</string>
     <string name="dal_vip_content">您非VIP会员，无法开启此功能</string>
-
+    <string name="dal_auth_content">开启视频、音频功能，需要通过自拍认证</string>
     <string name="dal_exit_title">退出登录</string>
     <string name="dal_cancle">取消</string>
     <string name="dal_submit">确定</string>
+    <string name="dal_vip_open">去开通</string>
+    <string name="dal_auth_open">去认证</string>
     <string name="txt_set_topuid_desc">当前账号：</string>
     <string name="txt_suggest_desc">意见一旦被采纳，我们会有小礼品赠送，请记得留下您的联系方式哦。</string>
     <string name="txt_noheard_ts">温馨提示：请上传清晰美观的个人近照，上传宠物、照片不清晰、裸露的照片不予通过</string>
@@ -122,12 +143,12 @@
     <string name="user_edit_info_correct_wechat">请输入正确格式的微信号码</string>
     <string name="user_edit_info_correct_qq">请输入正确格式的QQ号码</string>
 
-    <string name="bt_send_code_normal">免费获取验证码</string>
+    <string name="bt_send_code_normal">获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
     <string name="str_not_filled">未填写</string>
     <string name="txt_phone">手机号</string>
-    <string name="txt_verifycode">验证码</string>
-    <string name="txt_setpwd">设置密码</string>
+    <string name="txt_verifycode">请输入验证码</string>
+    <string name="txt_setpwd">新密码</string>
     <string name="txt_verify_tip_up">请输入手机号，获取验证码 \n可以直接用手机号码登录</string>
     <string name="txt_sendmsg_tip">您的手机将会收到一条有验证码的短信</string>
     <string name="txt_phoneverify_hit">13574193515</string>
@@ -184,7 +205,8 @@
     <string name="bt_login">登录</string>
     <string name="bt_reg">注册</string>
     <string name="bt_complete">完成</string>
-    <string name="ext_setpwd_hit">设置登录密码</string>
+    <string name="bt_ok">确定</string>
+    <string name="ext_setpwd_hit">(请设置4~16位密码)</string>
     <string name="ext_nickname_hit">请输入您的昵称</string>
     <string name="ext_age_hit">请选择您的年龄</string>
     <string name="ext_account_number_hit">手机/账户</string>
@@ -195,7 +217,7 @@
     <string name="toast_age_isnull">请选择您的年龄</string>
     <string name="toast_avatar_isnull">请上传头像</string>
     <string name="toast_phone_isnull">手机号码不能为空</string>
-    <string name="toast_phone_iserror">您输入的手机号码不正确</string>
+    <string name="toast_phone_iserror">手机号格式不正确</string>
     <string name="toast_code_isnull">验证码不能为空</string>
     <string name="toast_uid_isnull">请输入您的用户名</string>
     <string name="toast_pwd_isnull">请输入您的密码</string>
@@ -204,7 +226,7 @@
     <string name="toast_userdetail_isnull">请完善您的资料</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
     <string name="toast_mobile_authok">手机认证成功</string>
-    <string name="toast_resetpwd_ok">请填写您的联系方式</string>
+    <string name="toast_resetpwd_ok">密码修改成功</string>
     <string name="toast_suggest_ok">提交成功，感谢您的支持</string>
     <string name="toast_job_isnull">请选择您的职业</string>
     <string name="toast_edu_isnull">请选择您的学历</string>
@@ -227,7 +249,7 @@
     <string name="txt_reg_marry_desc">婚姻</string>
     <string name="txt_reg_job_default">企业职工</string>
     <string name="txt_reg_edu_default">大专</string>
-    <string name="txt_reg_marry_default">未婚</string>
+    <string name="txt_reg_marry_default">单身</string>
     <string name="txt_reg_income_default">2000-5000</string>
     <string name="daltitle_job">工作情况</string>
     <string name="daltitle_edu">学历</string>
@@ -378,22 +400,6 @@
     <string name="tip_is_loading">正在努力加载中...</string>
     <string name="tip_quit">再按一次退出缘份吧</string>
 
-    <!--activity标题-->
-    <string name="title_right_submit">提交</string>
-    <string name="title_right_filter">筛选</string>
-    <string name="title_loginact">用户登录</string>
-    <string name="title_reg">用户注册</string>
-    <string name="title_findpwdact">找回密码</string>
-    <string name="title_recommend_filter">筛选</string>
-    <string name="title_recommend">推荐的人</string>
-    <string name="title_phone_certification">手机认证</string>
-    <string name="title_feedback">意见反馈</string>
-    <string name="title_reginfo_complete">完善资料</string>
-    <string name="title_set">设置</string>
-    <string name="title_about">关于</string>
-    <string name="title_pwd_set">密码设置</string>
-    <string name="title_suggest">意见反馈</string>
-    <string name="title_auth">我的认证</string>
 
     <!-- xList 后期可能删掉，不要用-->
     <string name="xlistview_header_last_time">上次更新时间：</string>
