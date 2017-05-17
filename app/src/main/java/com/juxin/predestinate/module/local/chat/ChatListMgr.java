@@ -114,6 +114,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 删除聊天记录
+     * @param userID
+     * @return
+     */
+    public long deleteFmessage(long userID) {
+        long ret =dbCenter.deleteFmessage(userID);
+        if(ret != DBConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
+    }
+
+
+    /**
      * 更新已读
      */
     public void updateToReadAll() {

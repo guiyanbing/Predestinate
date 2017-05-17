@@ -1,6 +1,9 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
 import com.juxin.mumu.bean.net.BaseData;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +13,7 @@ import java.util.List;
  */
 public class SmilePackage extends BaseData {
     private int id = 0;
-    private String type = null;//表情类型 smallface bigface minigame gift 暂时有四种 smallface的列表需要从资源中另外填充
+    private String type = null;//表情类型 smallface customface minigame gift 暂时有四种 smallface的列表需要从资源中另外填充
     private String name = null;
     private String icon = null;
     private String pic = null;
@@ -168,5 +171,24 @@ public class SmilePackage extends BaseData {
         }
 
         return temp;
+    }
+    //{"res":{"list":null},"status":"ok","tm":1494927495}
+
+    public void parseJsonSmileItem(String s)throws JSONException {
+        JSONObject json = getJsonObject(s);
+        JSONObject jsonObject = json.optJSONObject("res");
+        if (!jsonObject.isNull("list")) {
+            if(items == null){
+                items = new ArrayList<>();
+            }
+            JSONArray jsonArray = jsonObject.optJSONArray("list");
+            if (null != jsonArray) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    SmileItem smileItem = new SmileItem();
+                    smileItem.setPic(jsonArray.getString(i));
+                    items.add(smileItem);
+                }
+            }
+        }
     }
 }

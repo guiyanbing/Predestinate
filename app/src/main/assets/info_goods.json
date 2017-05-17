@@ -45,6 +45,24 @@
       }
     ]
   },
+  "secret_diamond": {
+    "list": [
+      {
+        "cid": 58,
+        "cname": "",
+        "cnum": 1000,
+        "desc": "1000钻石",
+        "price": 100
+      },
+      {
+        "cid": 56,
+        "cname": "",
+        "cnum": 100,
+        "desc": "100钻石",
+        "price": 10
+      }
+    ]
+  },
   "vip_old": {
     "list": [
       {

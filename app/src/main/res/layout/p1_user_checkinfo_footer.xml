@@ -25,9 +25,11 @@
 
         <!-- 聊天价格布局 -->
         <LinearLayout
+            android:id="@+id/ll_chat_price"
             style="@style/center_item_layout"
             android:gravity="center_vertical|end"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/px45_dp"
@@ -35,10 +37,10 @@
                 android:background="@drawable/f1_user_chat_video" />
 
             <TextView
+                android:id="@+id/tv_video_price"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/px45_dp"
                 android:paddingLeft="@dimen/px20_dp"
-                android:text="@string/user_info_chat_video"
                 android:textColor="@color/text_ciyao_gray"
                 android:textSize="@dimen/px36_sp" />
 
@@ -55,15 +57,13 @@
                 android:background="@drawable/f1_user_chat_voice" />
 
             <TextView
+                android:id="@+id/tv_audio_price"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/px45_dp"
                 android:layout_marginLeft="@dimen/px20_dp"
-                android:text="@string/user_info_chat_voice"
                 android:textColor="@color/text_ciyao_gray"
                 android:textSize="@dimen/px36_sp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
     <include layout="@layout/layout_margintop" />
@@ -132,7 +132,9 @@
     </LinearLayout>
 
     <!-- 视频 -->
-    <LinearLayout style="@style/center_media_item">
+    <LinearLayout
+        android:id="@+id/ll_video"
+        style="@style/center_media_item">
 
         <LinearLayout
             android:id="@+id/video_item"

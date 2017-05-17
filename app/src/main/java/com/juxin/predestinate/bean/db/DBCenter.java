@@ -47,7 +47,7 @@ public class DBCenter {
     public int deleteMessage(long userID) {
         int ret = centerFLetter.delete(userID);
         if(ret != DBConstant.ERROR){
-            return delete(userID);
+            return deleteFmessage(userID);
         }
        return ret;
     }
@@ -119,7 +119,7 @@ public class DBCenter {
      * @param whisperID 私聊ID
      * @return
      */
-    public int delete(long whisperID) {
+    public int deleteFmessage(long whisperID) {
         return centerFmessage.delete(whisperID);
     }
 

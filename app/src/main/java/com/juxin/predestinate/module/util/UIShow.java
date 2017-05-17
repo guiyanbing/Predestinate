@@ -75,6 +75,9 @@ import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerDlg;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
 import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
@@ -421,9 +424,17 @@ public class UIShow {
 
     /**
      * 打开私密相册/视频
+     *
+     * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context) {
-        context.startActivity(new Intent(context, UserSecretAct.class));
+    public static void showUserSecretAct(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, UserSecretAct.class);
+        if (userProfile != null) {
+            intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+        }
+
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        context.startActivity(intent);
     }
 
     /**
@@ -856,6 +867,7 @@ public class UIShow {
     }
 
     private static DiamondSendGiftDlg dlg;
+
     /**
      * 对话框送礼物
      *
@@ -865,7 +877,7 @@ public class UIShow {
      */
     public static void showDiamondSendGiftDlg(final Context context, final int giftid, final String to_id) {
         dlg = null;
-        if (ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid) != null){
+        if (ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid) != null) {
             dlg = new DiamondSendGiftDlg(context, giftid, to_id);
             dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
             dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
@@ -894,6 +906,7 @@ public class UIShow {
     }
 
     private static BottomGiftDialog dialog = null;
+
     /**
      * 消息页面送礼物底部弹框
      *
@@ -902,23 +915,23 @@ public class UIShow {
      */
     public static void showBottomGiftDlg(final Context context, final long to_id) {
         dialog = null;
-        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size()>0){
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
             dialog = new BottomGiftDialog();
             dialog.setToId(to_id);
             dialog.showDialog((FragmentActivity) context);
-        }else {
+        } else {
             LoadingDialog.show((FragmentActivity) context);
             ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
                 @Override
                 public void onRequestGiftListCallback(boolean isOk) {
                     LoadingDialog.closeLoadingDialog();
-                    if (isOk){
-                       if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null){
-                           dialog = new BottomGiftDialog();
-                           dialog.setToId(to_id);
-                           dialog.showDialog((FragmentActivity) context);
-                       }
-                    }else {
+                    if (isOk) {
+                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null) {
+                            dialog = new BottomGiftDialog();
+                            dialog.setToId(to_id);
+                            dialog.showDialog((FragmentActivity) context);
+                        }
+                    } else {
                         PToast.showShort(context.getString(R.string.net_error_retry));
                     }
                 }
@@ -1126,6 +1139,29 @@ public class UIShow {
      */
     public static void showGoodsDiamondAct(Context context) {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
+    }
+
+
+    /**
+     * 查看视频：送礼弹框
+     */
+    public static void showSecretGiftDlg(Context context) {
+        context.startActivity(new Intent(context, SecretGiftDlg.class));
+    }
+
+    /**
+     * 查看视频：钻石充值弹框
+     */
+    public static void showSecretDiamondDlg(FragmentActivity context) {
+        context.startActivity(new Intent(context, SecretDiamondDlg.class));
+        context.finish();
+    }
+
+    /**
+     * 查看视频：视频播放页
+     */
+    public static void showSecretVideoPlayerDlg(FragmentActivity context) {
+        context.startActivity(new Intent(context, SecretVideoPlayerDlg.class));
     }
 
     /**

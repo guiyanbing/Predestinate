@@ -63,6 +63,8 @@ public enum UrlParam {
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
     reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
     reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
+    reqAddBlack(Hosts.FATE_IT_GO, "xs/userrelation/AddBlack", null, true),          // 拉黑某用户
+    reqRemoveBlack(Hosts.FATE_IT_GO, "xs/userrelation/RemoveBlack", null, true),    // 拉黑列表移除某用户
     reqSetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名
     reqGetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/GetRemakName", UserRemark.class, true), // 获取用户备注名
     reqVideoChatConfig(Hosts.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true), // 获取他人音视频开关配置
@@ -166,6 +168,11 @@ public enum UrlParam {
 
     reqAliWapPay(Hosts.FATE_IT_CUP_HTTP, "user/aliWapPay", null, true),   //支付宝wap充值
 
+    reqCustomFace(Hosts.FATE_IT_GO, "xs/message/GetCustomFace", null, true),   //获取自定义表情列表
+
+    delCustomFace(Hosts.FATE_IT_GO, "xs/message/DelCustomFace", null, true),   //删除自定义表情
+
+    AddCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
 
     // 最后一个，占位
     LastUrlParam("");
