@@ -40,6 +40,8 @@
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
     <string name="dal_exit_content">确定退出登录吗</string>
+    <string name="dal_vip_content">您非VIP会员，无法开启此功能</string>
+
     <string name="dal_exit_title">退出登录</string>
     <string name="dal_cancle">取消</string>
     <string name="dal_submit">确定</string>
@@ -72,11 +74,18 @@
     <string name="user_info_earn_redbag">我要赚红包</string>
     <string name="user_info_redbag_num">%s元</string>
     <string name="user_info_photo">我的相册</string>
+    <string name="user_info_own_video">我的视频</string>
+    <string name="user_info_other_video">%s的视频</string>
+    <string name="user_info_check_video_send">立即送她</string>
+    <string name="user_info_check_video_pay">查看该视频需要：</string>
+    <string name="user_info_check_video_price">%d朵玫瑰：</string>
     <string name="user_info_require">正在获取个人资料...</string>
     <string name="user_info_follow_suc">关注成功</string>
     <string name="user_info_follow_fail">关注失败</string>
     <string name="user_info_unfollow_suc">取消关注成功</string>
     <string name="user_info_unfollow_fail">取消关注失败</string>
+
+    <string name="user_info_last_week_video_hot">最近1周私密视频总人气：</string>
 
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>
@@ -269,8 +278,8 @@
     <string name="user_info_set_fail">资料设置失败</string>
     <string name="user_info_avatar_upload">正在上传头像</string>
     <string name="check_info_chat_pay">聊天</string>
-    <string name="user_info_chat_video">20钻石/分钟</string>
-    <string name="user_info_chat_voice">10钻石/分钟</string>
+    <string name="user_info_chat_video">%d钻石/分钟</string>
+    <string name="user_info_chat_voice">%d钻石/分钟</string>
     <string name="user_other_info_set">资料设置</string>
     <string name="user_other_remark_name">备注名</string>
     <string name="user_other_set_chat_voice">为TA设置语音接听</string>
@@ -296,6 +305,7 @@
     <string name="goods_diamond_lack">余额不足</string>
     <string name="goods_diamond_type">请选择购买金额</string>
     <string name="goods_pay_type">支付方式</string>
+    <string name="goods_pay_price">充值金额</string>
     <string name="goods_pay_weixin">微信</string>
     <string name="goods_pay_weixin1">微信支付</string>
     <string name="goods_pay_alipay">支付宝</string>
@@ -305,6 +315,7 @@
     <string name="goods_pay_immediately">立即充值</string>
     <string name="goods_pay_to">立即充值，送礼给心动的TA</string>
     <string name="goods_pay_confirm">确认充值</string>
+    <string name="goods_pay_gift_fail">赠送礼物失败，你的账户钻石不足！</string>
 
     <string name="goods_vip_title">开通VIP</string>
 
@@ -380,6 +391,7 @@
     <string name="title_about">关于</string>
     <string name="title_pwd_set">密码设置</string>
     <string name="title_suggest">意见反馈</string>
+    <string name="title_auth">我的认证</string>
 
     <!-- xList 后期可能删掉，不要用-->
     <string name="xlistview_header_last_time">上次更新时间：</string>
@@ -579,5 +591,14 @@
     <string name="hours_to_the_account">提现将在24小时内到账</string>
     <string name="the_current_diamond">当前钻石：</string>
     <string name="second">秒</string>
+
+    <string name="toast_camera_isnull">没有前置摄像头</string>
+    <string name="txt_authstatus_authing">审核中</string>
+    <string name="txt_authstatus_authno">未认证</string>
+    <string name="txt_authstatus_authok">已完成</string>
+    <string name="txt_authstatus_autherror">审核未通过</string>
+    <string name="txt_authtype_phone">手机认证</string>
+    <string name="txt_authtype_id">身份认证</string>
+    <string name="txt_authtype_face">自拍认证</string>
 
 </resources>

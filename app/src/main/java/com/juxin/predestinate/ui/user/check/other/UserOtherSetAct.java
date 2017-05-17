@@ -199,6 +199,9 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         }
     }
 
+    /**
+     * 配置是否接受音视频
+     */
     private void reqSetVideoSetting() {
         int videoSet = videoBarStatus ? 1 : 0;
         int voiceSet = voiceBarStatus ? 1 : 0;
@@ -207,6 +210,17 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                 && videoSetting.getAcceptvoice() == voiceSet)
             return;
         ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userProfile.getUid(), videoSet, voiceSet, this);
+    }
+
+    /**
+     * 拉黑、取消拉黑
+     */
+    private void reqAddOrRemoveBlack() {
+        if (shieldBarStatus) {
+            ModuleMgr.getCenterMgr().reqAddBlack(userProfile.getUid(), this);
+            return;
+        }
+        ModuleMgr.getCenterMgr().reqRemoveBlack(userProfile.getUid(), this);
     }
 
     /**
@@ -260,6 +274,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
     @Override
     protected void onDestroy() {
         reqSetVideoSetting();
+        reqAddOrRemoveBlack();
         super.onDestroy();
     }
 }

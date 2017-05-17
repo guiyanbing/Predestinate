@@ -13,6 +13,8 @@ import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -28,8 +30,8 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
     private UserDetail userDetail;  // 个人资料
     private UserProfile userProfile;// TA人资料
 
-    private LinearLayout albumLayout, videoLayout, giftLayout;
-    private TextView tv_album;
+    private LinearLayout albumLayout, videoLayout, giftLayout, chatPriceLayout;
+    private TextView tv_album, tv_video_price, tv_audio_price;
     private AlbumHorizontalPanel albumPanel, videoPanel, giftPanel;
 
     private int albumNum;
@@ -63,9 +65,13 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
 
     private void initView() {
         tv_album = (TextView) findViewById(R.id.album_num);
+        chatPriceLayout = (LinearLayout) findViewById(R.id.ll_chat_price);
+        tv_video_price = (TextView) findViewById(R.id.tv_video_price);
+        tv_audio_price = (TextView) findViewById(R.id.tv_audio_price);
         albumLayout = (LinearLayout) findViewById(R.id.album_item);
         videoLayout = (LinearLayout) findViewById(R.id.video_item);
         giftLayout = (LinearLayout) findViewById(R.id.gift_item);
+        findViewById(R.id.ll_video).setOnClickListener(listener);
 
         // 照片列表
         albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userPhotos);
@@ -82,16 +88,32 @@ public class UserCheckInfoFootPanel extends BaseViewPanel {
     }
 
     public void refreshView(UserDetail userDetail) {
-        albumNum = userDetail.getUserPhotos().size();
-        tv_album.setText(String.valueOf(albumNum));
+        if (userDetail == null) return;
 
-        albumPanel.refresh(userDetail);
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+            albumNum = userDetail.getUserPhotos().size();
+            tv_album.setText(String.valueOf(albumNum));
+            albumPanel.refresh(userDetail);
+        }
+    }
+
+    /**
+     * 刷新聊天价格
+     */
+    public void refreshChatPrice(VideoConfig config) {
+        if (config == null) return;
+        chatPriceLayout.setVisibility(View.VISIBLE);
+        tv_video_price.setText(getContext().getString(R.string.user_info_chat_video, config.getVideoPrice()));
+        tv_audio_price.setText(getContext().getString(R.string.user_info_chat_voice, config.getAudioPrice()));
     }
 
     private final NoDoubleClickListener listener = new NoDoubleClickListener() {
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
+                case R.id.ll_video:
+                    UIShow.showUserSecretAct(getContext(), userProfile);
+                    break;
             }
         }
     };

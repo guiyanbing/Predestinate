@@ -7,6 +7,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.unread.UnreadMgr;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.local.center.CenterMgr;
 import com.juxin.predestinate.module.local.chat.ChatListMgr;
@@ -18,6 +19,7 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
@@ -85,6 +87,7 @@ public final class ModuleMgr {
         getHttpMgr();
         getMediaMgr();
 
+        getUnreadMgr();
         getChatListMgr();
         getChatMgr();
 
@@ -257,6 +260,19 @@ public final class ModuleMgr {
             addModule(notifyMgr);
         }
         return notifyMgr;
+    }
+
+    /**
+     * 未读角标管理
+     */
+    private static UnreadMgrImpl unreadImpl = null;
+
+    public static UnreadMgr getUnreadMgr() {
+        if (unreadImpl == null) {
+            unreadImpl = new UnreadMgrImpl();
+            addModule(unreadImpl);
+        }
+        return unreadImpl.getUnreadMgr();
     }
 
     /**

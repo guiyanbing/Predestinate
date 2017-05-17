@@ -452,6 +452,24 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 拉黑用户
+     */
+    public void reqAddBlack(long uid, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddBlack, postParams, complete);
+    }
+
+    /**
+     * 移除拉黑用户
+     */
+    public void reqRemoveBlack(long uid, RequestComplete complete){
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRemoveBlack, postParams, complete);
+    }
+
+    /**
      * 保存个人信息Json串到SP
      */
     private void setMyInfo(String resultStr) {
