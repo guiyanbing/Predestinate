@@ -278,8 +278,8 @@
     <string name="user_info_set_fail">资料设置失败</string>
     <string name="user_info_avatar_upload">正在上传头像</string>
     <string name="check_info_chat_pay">聊天</string>
-    <string name="user_info_chat_video">20钻石/分钟</string>
-    <string name="user_info_chat_voice">10钻石/分钟</string>
+    <string name="user_info_chat_video">%d钻石/分钟</string>
+    <string name="user_info_chat_voice">%d钻石/分钟</string>
     <string name="user_other_info_set">资料设置</string>
     <string name="user_other_remark_name">备注名</string>
     <string name="user_other_set_chat_voice">为TA设置语音接听</string>
