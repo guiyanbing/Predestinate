@@ -69,7 +69,6 @@ public class TipsBarMgr implements ModuleBase, PObserver {
 
     @Override
     public void release() {
-        MsgMgr.getInstance().detach();
     }
 
     public TipsBarData getTipsBarData() {
