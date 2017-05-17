@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -14,7 +13,6 @@ import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
-
 import java.util.List;
 
 /**
@@ -72,10 +70,10 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilePackageLayouts.addView(chatSmilePanel.getContentView());
     }
 
-    private void addView_Package_Big(List<SmileItem> items, int type) {
+    private void addView_Package_Custom(List<SmileItem> items) {
         smilePackageLayouts.removeAllViews();
 
-        ChatBigSmilePanel chatSmilePanel = new ChatBigSmilePanel(getContext(), items, getChatInstance(), type);
+        ChatCustomSmilePanel chatSmilePanel = new ChatCustomSmilePanel(getContext(), items, getChatInstance());
 
         smilePackageLayouts.addView(chatSmilePanel.getContentView());
     }
@@ -96,7 +94,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         if ("smallface".equals(smilePackage.getType())) {
             addView_Package_Default();
         }else if("customface".equals(smilePackage.getType())){
-            addView_Package_Big(smilePackage.getItems(), 0);
+            addView_Package_Custom(smilePackage.getItems());
         }
 
 
