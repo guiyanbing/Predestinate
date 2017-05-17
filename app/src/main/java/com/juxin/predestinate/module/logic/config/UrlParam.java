@@ -27,7 +27,10 @@ public enum UrlParam {
     reqRegister("pubtest/quickReg", null, false),//注册接口
     modifyUserData("user/modifyUserData", null, true),//修改用户资料
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
-    resetPassword("i/reg/ResetPassword"),//找回密码
+
+    forgotPassword("Public/forgotPassword"),//找回密码
+    reqForgotsms("Public/forgotsms", PhoneVerifyResult.class, false),//找回密码发送验证码
+
     sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
     sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
 

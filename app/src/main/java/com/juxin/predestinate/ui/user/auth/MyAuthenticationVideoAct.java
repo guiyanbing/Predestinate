@@ -55,7 +55,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         setContentView(R.layout.f1_authentication_video_act);
         videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
         context = this;
-        setBackView("视频认证");
+        setBackView(getResources().getString(R.string.title_videoauth));
         setHideTopRightView(videoVerifyBean.getStatus() != 0);
         initView();
         getStatus();

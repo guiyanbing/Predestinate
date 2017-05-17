@@ -299,6 +299,10 @@
             android:name=".ui.user.auth.MyAuthenticationAct"
             android:screenOrientation="portrait"
             />
+        <activity
+            android:name=".ui.start.FindPwdAct"
+            android:screenOrientation="portrait"
+            />
 
         <!-- ============= 锁屏弹窗 ============= -->
         <activity

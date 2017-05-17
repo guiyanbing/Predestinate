@@ -260,6 +260,33 @@ public class LoginMgr implements ModuleBase {
     }
 
     /**
+     * 重置密码获取验证码
+     * @param phone
+     * @param complete
+     */
+    public void reqForgotsms(String phone,RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("phone", phone);
+        post_param.put("sign",App.context.getResources().getString(R.string.app_name));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqForgotsms,post_param,complete);
+    }
+
+    /**
+     * 重置密码
+     * @param phone 手机号
+     * @param code 验证码
+     * @param pwd 密码
+     * @param complete
+     */
+    public void forgotPassword(String phone,String code,String pwd,RequestComplete complete){
+        HashMap<String,Object> post_param = new HashMap<>();
+        post_param.put("phone",phone);
+        post_param.put("sign",App.context.getResources().getString(R.string.app_name));
+        post_param.put("code",code);
+        post_param.put("password",pwd);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.forgotPassword,post_param,complete);
+    }
+    /**
      * 修改用户信息
      *
      * @param post_param
