@@ -42,7 +42,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     @Override
     public void release() {
-        MsgMgr.getInstance().detach();
     }
 
     public int getUnreadNumber() {
