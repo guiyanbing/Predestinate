@@ -249,7 +249,7 @@
     <string name="txt_reg_marry_desc">婚姻</string>
     <string name="txt_reg_job_default">企业职工</string>
     <string name="txt_reg_edu_default">大专</string>
-    <string name="txt_reg_marry_default">未婚</string>
+    <string name="txt_reg_marry_default">单身</string>
     <string name="txt_reg_income_default">2000-5000</string>
     <string name="daltitle_job">工作情况</string>
     <string name="daltitle_edu">学历</string>

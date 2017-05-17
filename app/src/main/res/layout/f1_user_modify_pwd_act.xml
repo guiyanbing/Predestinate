@@ -65,7 +65,7 @@
                     android:textColor="#81868c"
                     android:textSize="15sp" />
 
-                <com.juxin.predestinate.ui.xiaoyou.view.ClearEditText
+                <com.juxin.predestinate.ui.setting.ClearEditText
                     android:id="@+id/edtTxt_modify_oldpwd"
                     style="@style/ext_modify_pwd"
                     android:hint="@string/ext_oldpwd_hit" />
@@ -86,7 +86,7 @@
                     android:textColor="#81868c"
                     android:textSize="15sp" />
 
-                <com.juxin.predestinate.ui.xiaoyou.view.ClearEditText
+                <com.juxin.predestinate.ui.setting.ClearEditText
                     android:id="@+id/edtTxt_modify_newpwd"
                     style="@style/ext_modify_pwd"
                     android:hint="@string/ext_newpwd_hit" />
@@ -107,7 +107,7 @@
                     android:textColor="#81868c"
                     android:textSize="15sp" />
 
-                <com.juxin.predestinate.ui.xiaoyou.view.ClearEditText
+                <com.juxin.predestinate.ui.setting.ClearEditText
                     android:id="@+id/edtTxt_modify_renewpwd"
                     style="@style/ext_modify_pwd"
                     android:hint="@string/ext_replacepwd_hit" />

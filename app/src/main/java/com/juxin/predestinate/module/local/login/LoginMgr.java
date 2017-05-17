@@ -286,15 +286,6 @@ public class LoginMgr implements ModuleBase {
         post_param.put("password",pwd);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.forgotPassword,post_param,complete);
     }
-    /**
-     * 修改用户信息
-     *
-     * @param post_param
-     * @param requestCallback
-     */
-    public void modifyUserData(HashMap<String, Object> post_param, RequestComplete requestCallback) {
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.modifyUserData, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
-    }
 
     /**
      * @return 获取cookie + vercode

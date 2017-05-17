@@ -25,9 +25,7 @@ import java.util.Map;
 public enum UrlParam {
 
     reqRegister("pubtest/quickReg", null, false),//注册接口
-    modifyUserData("user/modifyUserData", null, true),//修改用户资料
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
-
     forgotPassword("Public/forgotPassword"),//找回密码
     reqForgotsms("Public/forgotsms", PhoneVerifyResult.class, false),//找回密码发送验证码
 
