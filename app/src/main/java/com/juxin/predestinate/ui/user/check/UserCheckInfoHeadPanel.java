@@ -26,12 +26,12 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements IMProxy.Sen
     private final int channel;
     private UserProfile userProfile; // TA人资料
     private TextView user_follow;
-    private ImageView iv_follow;  // 关注星标
+    private ImageView iv_follow, iv_vip;  // 关注星标
     private int followType = 1;   // 关注、取消关注
 
     private String avatarUrl, distance, online;
     private long uid;
-    private boolean isMan;
+    private boolean isMan, isvip;
     private int age, height, follow;
 
     public UserCheckInfoHeadPanel(Context context, int channel, UserProfile userProfile) {
@@ -54,6 +54,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements IMProxy.Sen
             height = userDetail.getHeight();
             distance = "5km以内";
             online = getContext().getString(R.string.user_online);
+            isvip = userDetail.isVip();
             return;
         }
 
@@ -69,6 +70,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements IMProxy.Sen
         distance = userProfile.getDistance();
         online = userProfile.getOnline_text();
         follow = userProfile.getFollowCont();
+        isvip = userProfile.isVip();
     }
 
     private void initView() {
@@ -82,6 +84,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements IMProxy.Sen
         TextView user_online_time = (TextView) findViewById(R.id.tv_last_online);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
         iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
+        iv_vip = (ImageView) findViewById(R.id.iv_vip);
 
         if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
             findViewById(R.id.ll_guanzhu).setOnClickListener(listener);
@@ -102,6 +105,7 @@ public class UserCheckInfoHeadPanel extends BaseViewPanel implements IMProxy.Sen
         user_distance.setText(distance);
         user_online_time.setText(online);
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
+        iv_vip.setVisibility(isvip ? View.VISIBLE : View.GONE);
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {

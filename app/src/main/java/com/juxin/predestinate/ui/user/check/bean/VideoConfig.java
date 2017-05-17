@@ -31,6 +31,13 @@ public class VideoConfig extends BaseData implements Parcelable{
         this.audioPrice = jsonObject.optInt("audioprice");
     }
 
+    /**
+     * 视频验证是否通过
+     */
+    public boolean isVerifyVideo() {
+        return videoVertify == 3;
+    }
+
     public int getVideoPrice() {
         return videoPrice;
     }
