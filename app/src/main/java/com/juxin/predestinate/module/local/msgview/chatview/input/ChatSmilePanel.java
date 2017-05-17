@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemClickListener{
 
-  //  private HorizontalListView smilepackagesView = null;
+    private HorizontalListView chat_smile_tab;
     private FrameLayout smilePackageLayouts = null;
     private ChatSmileAdapter chatSmileAdapter;
 
@@ -37,12 +37,12 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     }
 
     public void initView() {
- //       smilepackagesView = (HorizontalListView) findViewById(R.id.chat_smile_packages);
+        chat_smile_tab = (HorizontalListView) findViewById(R.id.chat_smile_tab);
         smilePackageLayouts = (FrameLayout) findViewById(R.id.chat_smile_package_layouts);
 
         chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
-//        smilepackagesView.setAdapter(chatSmileAdapter);
-//        smilepackagesView.setOnItemClickListener(this);
+        chat_smile_tab.setAdapter(chatSmileAdapter);
+        chat_smile_tab.setOnItemClickListener(this);
         chatSmileAdapter.setCheckPosition(0);
 
         addView_Package_Default();
@@ -93,7 +93,13 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             return;
         }
 
-        addView_Package_Default();
+        if ("smallface".equals(smilePackage.getType())) {
+            addView_Package_Default();
+        }else if("customface".equals(smilePackage.getType())){
+            addView_Package_Big(smilePackage.getItems(), 0);
+        }
+
+
 //
 //        if ("smallface".equals(smilePackage.getType())) {
 //            addView_Package_Default();

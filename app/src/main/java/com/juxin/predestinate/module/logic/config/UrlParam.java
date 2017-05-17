@@ -163,6 +163,11 @@ public enum UrlParam {
 
     reqAliWapPay(Hosts.FATE_IT_CUP_HTTP, "user/aliWapPay", null, true),   //支付宝wap充值
 
+    reqCustomFace(Hosts.FATE_IT_GO, "xs/message/GetCustomFace", null, true),   //获取自定义表情列表
+
+    delCustomFace(Hosts.FATE_IT_GO, "xs/message/DelCustomFace", null, true),   //删除自定义表情
+
+    AddCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
 
     // 最后一个，占位
     LastUrlParam("");
