@@ -2,7 +2,12 @@ package com.juxin.predestinate.module.local.msgview.smile;
 
 import com.juxin.mumu.bean.net.BaseData;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 /**
  * Created by Kind on 2017/3/31.
  */
@@ -13,6 +18,14 @@ public class SmileItem extends BaseData {
     private String icon = null;
     private String pic = null;
     private int gender = 0; //分组所属性别1男 2女 0通用
+
+
+    public SmileItem() {
+    }
+
+    public SmileItem(String pic) {
+        this.pic = pic;
+    }
 
     @Override
     public void parseJson(String s) {
@@ -65,4 +78,5 @@ public class SmileItem extends BaseData {
     public void setGender(int gender) {
         this.gender = gender;
     }
+
 }

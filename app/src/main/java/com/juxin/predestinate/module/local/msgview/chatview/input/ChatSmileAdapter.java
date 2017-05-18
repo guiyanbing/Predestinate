@@ -3,9 +3,7 @@ package com.juxin.predestinate.module.local.msgview.chatview.input;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
@@ -23,16 +21,12 @@ public class ChatSmileAdapter extends ExBaseAdapter<SmilePackage> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder vh = null;
-
+        ViewHolder vh;
         if (convertView == null) {
             vh = new ViewHolder();
             convertView = inflate(R.layout.p1_chat_smile_item);
 
-            vh.smile_item = convertView.findViewById(R.id.smile_item);
-            vh.smile_package_ico = (ImageView) convertView.findViewById(R.id.smile_package_ico);
             vh.smile_package_name = (TextView) convertView.findViewById(R.id.smile_package_name);
-
             convertView.setTag(vh);
         } else {
             vh = (ViewHolder) convertView.getTag();
@@ -40,11 +34,12 @@ public class ChatSmileAdapter extends ExBaseAdapter<SmilePackage> {
 
         SmilePackage smileItem = getItem(position);
 
-        ImageLoader.loadAvatar(getContext(), smileItem.getIcon(), vh.smile_package_ico);
+      //  ImageLoader.loadAvatar(getContext(), smileItem.getIcon(), vh.smile_package_ico);
 
         vh.smile_package_name.setText(smileItem.getName());
 
-        vh.smile_item.setSelected(position == selectPos ? true : false);
+        vh.smile_package_name.setSelected(position == selectPos);
+        vh.smile_package_name.setTextColor(getResources().getColor(position == selectPos ? R.color.color_E36D87 : R.color.color_zhuyao));
         return convertView;
     }
 
@@ -57,8 +52,6 @@ public class ChatSmileAdapter extends ExBaseAdapter<SmilePackage> {
     }
 
     private class ViewHolder {
-        private View smile_item;
-        public ImageView smile_package_ico;
-        public TextView smile_package_name;
+        TextView smile_package_name;
     }
 }

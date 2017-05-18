@@ -31,4 +31,7 @@ public class GoodsConstant {
     public static final int DLG_YCOIN_PRIVEDEG = 7;           // 购买Y币
     public static final String DLG_YCOIN_REMAIN = "remain";   // Y币余额
     public static final String DLG_YCOIN_POWER = "buy_power"; // 购买体力
+
+    // 送礼钻石弹框
+    public static final int DLG_DIAMOND_GIFT = 8;              // 充值钻石
 }

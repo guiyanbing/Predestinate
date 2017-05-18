@@ -18,9 +18,12 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Created by Kind on 2017/4/13.
@@ -42,7 +45,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     @Override
     public void release() {
-        MsgMgr.getInstance().detach();
     }
 
     public int getUnreadNumber() {
@@ -114,6 +116,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 删除聊天记录
+     * @param userID
+     * @return
+     */
+    public long deleteFmessage(long userID) {
+        long ret =dbCenter.deleteFmessage(userID);
+        if(ret != DBConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
+    }
+
+
+    /**
      * 更新已读
      */
     public void updateToReadAll() {
@@ -149,6 +165,33 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         ModuleMgr.getChatMgr().inject();
                         MMLog.autoDebug("uid=======" + App.uid);
                         getWhisperList();
+
+//                        dbCenter.insertUnRead("1", "11111");
+//                        dbCenter.insertUnRead("2", "11111");
+//                        dbCenter.insertUnRead("3", "11111");
+//                        dbCenter.insertUnRead("4", "11111");
+//                        dbCenter.insertUnRead("5", "11111");
+//                        dbCenter.insertUnRead("6", "11111");
+//                        dbCenter.insertUnRead("7", "11111");
+//
+//                        Observable<String> observable = dbCenter.queryUnRead("key");
+//                        observable.subscribe(new Action1<String>() {
+//
+//                            @Override
+//                            public void call(String str) {
+//                            }
+//                        });
+//
+//
+//                        Observable<Map<String, String>> observable = dbCenter.queryUnReadList();
+//                        observable.subscribe(new Action1<Map<String,String>>() {
+//
+//                            @Override
+//                            public void call(Map<String, String> stringMap) {
+//                                PLogger.printObject("stringMap.size()" + stringMap.size());
+//                            }
+//                        });
+
                     }
                 } else {
                     logout();

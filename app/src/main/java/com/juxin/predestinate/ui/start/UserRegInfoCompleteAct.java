@@ -196,7 +196,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
             case R.id.user_reg_info_complete_submit:
                 if (validInput()) {
                     LoadingDialog.show(this, getResources().getString(R.string.loading_reg_update));
-                    ModuleMgr.getLoginMgr().modifyUserData(postParams, new RequestComplete() {
+                    ModuleMgr.getCenterMgr().updateMyInfo(postParams, new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
                             if (response.isOk()) {

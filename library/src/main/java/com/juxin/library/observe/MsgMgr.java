@@ -99,7 +99,7 @@ public class MsgMgr {
             PLogger.e("------>PObserver is null.");
             return;
         }
-        PLogger.d("------>attach[" + observer.toString() + "]");
+        PLogger.d("------>attach[" + observer.toString() + "], attached-size[" + rxDisposable.size() + "]");
         rxDisposable.add(RxBus.getInstance().toFlowable(Msg.class)
                 .onBackpressureBuffer().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -117,12 +117,12 @@ public class MsgMgr {
     }
 
     /**
-     * 解绑（RxBus取消订阅），在调用对象进行销毁的时候进行解绑，防止内存溢出
+     * 清除所有已经attach的监听，防止内存溢出[谨慎调用]
      */
-    public void detach() {
+    public void clear() {
         if (!rxDisposable.isDisposed()) {
-            PLogger.d("------>detach");
-            rxDisposable.dispose();
+            PLogger.d("------>clear");
+            rxDisposable.clear();
         }
     }
 }

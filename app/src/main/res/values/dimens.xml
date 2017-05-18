@@ -164,6 +164,7 @@
     <dimen name="px420_dp">140dp</dimen>
     <dimen name="px480_dp">160dp</dimen>
     <dimen name="px500_dp">166.5dp</dimen>
+    <dimen name="px540_dp">180dp</dimen>
     <dimen name="px560_dp">186.7dp</dimen>
     <dimen name="px604_dp">201.3dp</dimen>
     <dimen name="px650_dp">217dp</dimen>

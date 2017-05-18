@@ -416,8 +416,8 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 设置是否接受他人音视频
      *
-     * @param acceptvideo  接受对方视频 0：不接受  1：接受
-     * @param acceptvoice  接受对方语音 0：不接受  1：接受
+     * @param acceptvideo 接受对方视频 0：不接受  1：接受
+     * @param acceptvoice 接受对方语音 0：不接受  1：接受
      */
     public void reqSetOpposingVideoSetting(long uid, int acceptvideo, int acceptvoice, RequestComplete complete) {
         HashMap<String, Object> post_param = new HashMap<>();
@@ -450,6 +450,66 @@ public class CenterMgr implements ModuleBase, PObserver {
         post_param.put("hisuid", toUid);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqGetRemarkName, post_param, complete);
     }
+
+    /**
+     * 拉黑用户
+     */
+    public void reqAddBlack(long uid, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddBlack, postParams, complete);
+    }
+
+    /**
+     * 移除拉黑用户
+     */
+    public void reqRemoveBlack(long uid, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRemoveBlack, postParams, complete);
+    }
+
+    /**
+     * 私密视频： 视频列表
+     */
+    public void reqGetVideoList(long uid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqGetVideoList, getParams, complete);
+    }
+
+    /**
+     * 私密视频： 增加人气值
+     */
+    public void reqSetPopnum(long uid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqSetPopnum, getParams, complete);
+    }
+
+    /**
+     * 私密视频： 解锁视频
+     *
+     * @param uid 用户id
+     * @param vid 视频id
+     */
+    public void reqUnlockVideo(long uid, long vid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        getParams.put("vid", vid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqUnlockVideo, getParams, complete);
+    }
+
+    /**
+     * 私密视频： 设置视频观看次数
+     */
+    public void reqSetViewTime(long uid, long vid, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", uid);
+        getParams.put("vid", vid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqSetViewTime, getParams, complete);
+    }
+
 
     /**
      * 保存个人信息Json串到SP

@@ -7,11 +7,64 @@
 
     <include layout="@layout/layout_margintop" />
 
+    <!-- 真人认证 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px150_dp"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/px35_dp"
+        android:paddingRight="@dimen/px35_dp"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/center_video_verify"
+            android:textColor="@color/text_zhuyao_black"
+            android:textSize="@dimen/px40_sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_auth_photo"
+                android:layout_width="@dimen/px90_dp"
+                android:layout_height="@dimen/px90_dp"
+                android:src="@drawable/f1_user_auth_photo"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/iv_auth_phone"
+                android:layout_width="@dimen/px90_dp"
+                android:layout_height="@dimen/px90_dp"
+                android:layout_marginLeft="@dimen/px30_dp"
+                android:src="@drawable/f1_user_auth_phone"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/iv_auth_video"
+                android:layout_width="@dimen/px90_dp"
+                android:layout_height="@dimen/px90_dp"
+                android:layout_marginLeft="@dimen/px30_dp"
+                android:src="@drawable/f1_user_auth_video"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/center_information_line" />
+
     <!-- 聊天 -->
     <LinearLayout
         android:id="@+id/item_chat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/px150_dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/px35_dp">
@@ -25,9 +78,11 @@
 
         <!-- 聊天价格布局 -->
         <LinearLayout
+            android:id="@+id/ll_chat_price"
             style="@style/center_item_layout"
             android:gravity="center_vertical|end"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/px45_dp"
@@ -35,15 +90,15 @@
                 android:background="@drawable/f1_user_chat_video" />
 
             <TextView
+                android:id="@+id/tv_video_price"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/px45_dp"
                 android:paddingLeft="@dimen/px20_dp"
-                android:text="@string/user_info_chat_video"
                 android:textColor="@color/text_ciyao_gray"
                 android:textSize="@dimen/px36_sp" />
 
             <TextView
-                android:layout_width="@dimen/px2_dp"
+                android:layout_width="@dimen/px1_dp"
                 android:layout_height="@dimen/px45_dp"
                 android:layout_marginLeft="@dimen/px45_dp"
                 android:background="@color/color_ciyao" />
@@ -55,15 +110,13 @@
                 android:background="@drawable/f1_user_chat_voice" />
 
             <TextView
+                android:id="@+id/tv_audio_price"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/px45_dp"
                 android:layout_marginLeft="@dimen/px20_dp"
-                android:text="@string/user_info_chat_voice"
                 android:textColor="@color/text_ciyao_gray"
                 android:textSize="@dimen/px36_sp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
     <include layout="@layout/layout_margintop" />
@@ -128,11 +181,12 @@
             android:text="0"
             android:textColor="@color/picker_pink_color"
             android:textSize="@dimen/px40_sp" />
-
     </LinearLayout>
 
     <!-- 视频 -->
-    <LinearLayout style="@style/center_media_item">
+    <LinearLayout
+        android:id="@+id/ll_video"
+        style="@style/center_media_item">
 
         <LinearLayout
             android:id="@+id/video_item"
@@ -145,42 +199,6 @@
     </LinearLayout>
 
     <include layout="@layout/center_information_line" />
-
-    <!-- 礼物 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/px35_dp"
-            android:text="@string/check_info_gift1"
-            android:textColor="@color/text_zhuyao_black"
-            android:textSize="@dimen/px40_sp" />
-
-        <TextView
-            android:id="@+id/gift_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textColor="@color/picker_pink_color"
-            android:textSize="@dimen/px40_sp" />
-    </LinearLayout>
-
-    <!-- 礼物 -->
-    <LinearLayout style="@style/center_media_item">
-
-        <LinearLayout
-            android:id="@+id/gift_item"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:scrollbars="none" />
-
-        <ImageView style="@style/right_go" />
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
