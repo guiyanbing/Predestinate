@@ -1,38 +1,41 @@
-package com.juxin.predestinate.bean.center.user.others;
+package com.juxin.predestinate.ui.user.check.secret.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONException;
+import com.juxin.predestinate.bean.net.BaseData;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * 私密视频列表
  * Created by sks on 2017/3/10.
  */
+public class UserVideoInfo extends BaseData implements Parcelable {
+    private int popNum;  // 人气值
+    private List<VideoPreviewBean> videoList; // 视频列表
 
-public class UserVideoInfo implements Parcelable{
-    /**
-     * 人气值
-     */
-    public int popNum;
+    @Override
+    public void parseJson(String jsonStr) {
+        JSONObject jsonObject = getJsonObject(jsonStr);
+        this.popNum = jsonObject.optInt("popnum");
 
-    public ArrayList<VideoPreviewBean> videoList;
-
-    public static UserVideoInfo parseFromJSon(String jsonString){
-        UserVideoInfo info = new UserVideoInfo();
-        info.videoList = new ArrayList<>();
-        try {
-            JSONObject obj = new JSONObject(jsonString);
-            info.popNum = obj.optInt("popnum");
-            info.videoList.addAll(VideoPreviewBean.parseFromJSonArray(obj.optString("list")));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        // 视频列表
+        if (!jsonObject.isNull("list")) {
+            this.videoList = (List<VideoPreviewBean>) getBaseDataList(jsonObject.optJSONArray("list"), VideoPreviewBean.class);
         }
-        return info;
     }
 
+    public int getPopNum() {
+        return popNum;
+    }
+
+    public List<VideoPreviewBean> getVideoList() {
+        return videoList;
+    }
 
     @Override
     public int describeContents() {
@@ -50,7 +53,7 @@ public class UserVideoInfo implements Parcelable{
 
     protected UserVideoInfo(Parcel in) {
         this.popNum = in.readInt();
-        this.videoList = new ArrayList<VideoPreviewBean>();
+        this.videoList = new ArrayList<>();
         in.readList(this.videoList, VideoPreviewBean.class.getClassLoader());
     }
 

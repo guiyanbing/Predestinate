@@ -73,6 +73,7 @@ import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
+import com.juxin.predestinate.ui.user.check.other.UserBlockAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
@@ -404,6 +405,13 @@ public class UIShow {
      */
     public static void showCheckOwnInfoAct(Context context) {
         context.startActivity(new Intent(context, UserCheckInfoAct.class));
+    }
+
+    /**
+     * 打开用户账号封禁页
+     */
+    public static void showUserBlockAct(Context context) {
+        context.startActivity(new Intent(context, UserBlockAct.class));
     }
 
     /**
@@ -1146,8 +1154,10 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context) {
-        context.startActivity(new Intent(context, SecretGiftDlg.class));
+    public static void showSecretGiftDlg(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, SecretGiftDlg.class);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        context.startActivity(intent);
     }
 
     /**

@@ -40,26 +40,27 @@ public class SmilePacks {
         smilePackage.setType("smallface");
         packages.add(smilePackage);
 
+        smilePackage = new SmilePackage();
+        smilePackage.setName("自定义");
+        smilePackage.setType("customface");
+
+        final SmilePackage finalSmilePackage = smilePackage;
         ModuleMgr.getCommonMgr().reqCustomFace(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                SmilePackage smilePackage = new SmilePackage();
-                smilePackage.setName("自定义");
-                smilePackage.setType("customface");
                 if(response.isOk()){
                     try {
-                        smilePackage.parseJsonSmileItem(response.getResponseString());
+                        finalSmilePackage.parseJsonSmileItem(response.getResponseString());
                         MMLog.autoDebug("xxxxxxxxxx---------");
                     }catch (JSONException e){
                         e.printStackTrace();
                     }
                 }
-
-                packages.add(smilePackage);
                 MMLog.autoDebug(response.getResponseJson());
              //   {"res":{"list":null},"status":"ok","tm":1494927495}
             }
         });
+        packages.add(smilePackage);
     }
 
     /**

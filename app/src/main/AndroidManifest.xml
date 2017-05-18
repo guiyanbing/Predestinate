@@ -74,6 +74,9 @@
             android:name=".ui.user.check.UserCheckInfoAct"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.user.check.other.UserBlockAct"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.start.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity

@@ -1,21 +1,29 @@
 package com.juxin.predestinate.module.logic.model.impl;
 
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.UnreadMgr;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.cache.PCache;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.inject.Inject;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * 未读角标实现类
  * Created by ZRP on 2017/5/17.
  */
-public class UnreadMgrImpl implements ModuleBase, MsgMgr.IObserver {
+public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceiveMsgListener, PObserver {
 
     // =========================未读角标配置（添加新的角标类型后在此进行配置）============================
 
@@ -38,14 +46,20 @@ public class UnreadMgrImpl implements ModuleBase, MsgMgr.IObserver {
         }
     };
 
+    // ====================================未读角标配置 end============================================
+
+    @Inject
+    DBCenter dbCenter;
+
     @Override
     public void init() {
-        MsgMgr.getInstance().attach(MsgType.MT_App_Login, this);//监听登录消息
+        MsgMgr.getInstance().attach(this);//监听登录消息
+        ChatSpecialMgr.getChatSpecialMgr().attachUnreadMsgListener(this);//监听抛出的角标消息
     }
 
     @Override
     public void release() {
-        MsgMgr.getInstance().detach(this);
+        ChatSpecialMgr.getChatSpecialMgr().detachUnreadMsgListener(this);
     }
 
     /**
@@ -56,19 +70,9 @@ public class UnreadMgrImpl implements ModuleBase, MsgMgr.IObserver {
     }
 
     @Override
-    public void onMessage(MsgType msgType, Msg msg) {
-        switch (msgType) {
-            case MT_App_Login:
-                if ((Boolean) msg.getData()) {//如果是登录消息，重新初始化角标map
-                    getUnreadMgr().init(PCache.getInstance().getCache(getStoreTag()), parentMap);
-                    getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
-                        @Override
-                        public void onUnreadChange(String key, boolean isAdd, String storeString) {
-                            PCache.getInstance().cacheString(getStoreTag(), storeString);
-                        }
-                    });
-                }
-                break;
+    public void onUpdateUnread(BaseMessage message) {
+        switch (message.getType()) {//比对抛出的未读类型消息，进行角标的添加
+            //TODO 聊天红包消息
         }
     }
 
@@ -79,5 +83,33 @@ public class UnreadMgrImpl implements ModuleBase, MsgMgr.IObserver {
      */
     private String getStoreTag() {
         return "unread_" + String.valueOf(ModuleMgr.getLoginMgr().getUid());
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_App_Login:
+                if ((Boolean) value) {// 登录成功
+                    // 注入dagger组件
+                    ModuleMgr.getChatListMgr().getAppComponent().inject(this);
+
+                    // 初始化角标数据
+                    Observable<String> observable = dbCenter.queryUnRead(getStoreTag());
+                    observable.subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String storeString) {
+                            getUnreadMgr().init(storeString, parentMap);
+                        }
+                    });
+                    // 角标变更监听，每次变更之后更新数据库
+                    getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
+                        @Override
+                        public void onUnreadChange(String key, boolean isAdd, String storeString) {
+                            dbCenter.insertUnRead(getStoreTag(), storeString);
+                        }
+                    });
+                }
+                break;
+        }
     }
 }

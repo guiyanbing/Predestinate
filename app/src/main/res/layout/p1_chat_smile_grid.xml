@@ -7,7 +7,7 @@
     <GridView
         android:id="@+id/chat_panel_gridview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/px12_dp"
         android:layout_marginTop="@dimen/px12_dp"
         android:layout_marginLeft="@dimen/px30_dp"

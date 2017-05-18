@@ -133,8 +133,14 @@
                         android:paddingLeft="@dimen/px24_dp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/px22_sp" />
-
                 </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/iv_vip"
+                    android:layout_width="@dimen/px116_dp"
+                    android:layout_height="@dimen/px49_dp"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:src="@drawable/f1_vip_icon"/>
 
             </LinearLayout>
 
