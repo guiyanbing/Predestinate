@@ -323,6 +323,10 @@
     <string name="user_secret_media_unlock">正在解锁</string>
     <string name="user_secret_media_lock_suc">解锁成功</string>
     <string name="user_secret_media_lock_fail">解锁失败</string>
+    <string name="user_tip_blocked">该账号已被封禁</string>
+    <string name="user_tip_blocked_title">温馨提示</string>
+    <string name="user_tip_blocked_reason">发送不文明言论、谩骂、低俗、广告、政治内容被举报将被封号。</string>
+    <string name="user_tip_blocked_patrol">网警24小时巡查</string>
 
     <string name="goods_price">%d元</string>
     <string name="goods_diamond_title">钻石充值</string>

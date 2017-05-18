@@ -72,6 +72,7 @@ import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
+import com.juxin.predestinate.ui.user.check.other.UserBlockAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
@@ -403,6 +404,13 @@ public class UIShow {
      */
     public static void showCheckOwnInfoAct(Context context) {
         context.startActivity(new Intent(context, UserCheckInfoAct.class));
+    }
+
+    /**
+     * 打开用户账号封禁页
+     */
+    public static void showUserBlockAct(Context context) {
+        context.startActivity(new Intent(context, UserBlockAct.class));
     }
 
     /**

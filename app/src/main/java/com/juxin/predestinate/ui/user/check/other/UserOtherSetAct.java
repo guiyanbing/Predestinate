@@ -206,8 +206,8 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         int videoSet = videoBarStatus ? 1 : 0;
         int voiceSet = voiceBarStatus ? 1 : 0;
 
-        if (videoSetting.getAcceptvideo() == videoSet
-                && videoSetting.getAcceptvoice() == voiceSet)
+        if (videoSetting == null || (videoSetting.getAcceptvideo() == videoSet
+                && videoSetting.getAcceptvoice() == voiceSet))
             return;
         ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userProfile.getUid(), videoSet, voiceSet, this);
     }
