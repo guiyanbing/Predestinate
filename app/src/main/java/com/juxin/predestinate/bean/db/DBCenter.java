@@ -6,9 +6,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import java.util.List;
 import java.util.Map;
-
 import rx.Observable;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Kind on 2017/3/28.
@@ -80,10 +78,7 @@ public class DBCenter {
        return ret;
     }
 
-
-
     /******************** FMessage **************************/
-
 
     /**
      * 多条消息插入

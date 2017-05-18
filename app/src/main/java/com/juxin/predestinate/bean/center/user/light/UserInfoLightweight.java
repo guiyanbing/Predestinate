@@ -80,6 +80,11 @@ public class UserInfoLightweight extends UserBasic {
         this.setTopType(jsonObject.optInt("toptype"));
     }
 
+
+    public void parseUserInfoLightweight(long userID, String infoJson, long time) {
+
+    }
+
     public long getTime() {
         return time;
     }

@@ -18,12 +18,10 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * Created by Kind on 2017/4/13.
