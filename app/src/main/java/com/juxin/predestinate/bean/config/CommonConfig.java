@@ -22,9 +22,11 @@ public class CommonConfig extends BaseData {
 
     private List<Diamond> diamondList;  //钻石配比列表
 
-    private long plugin_version;
-    private int audiochat_minute_cost;//语音通话每分钟费用
-    private int videochat_minute_cost;//视频通话每分钟费用
+    private long plugin_version;        //插件版本号控制
+    private int audiochat_minute_cost;  //语音通话每分钟费用
+    private int videochat_minute_cost;  //视频通话每分钟费用
+
+    private PayTypeList payTypeList;    //支付方式控制
 
     /**
      * @return 是否展示活动弹窗
@@ -45,33 +47,13 @@ public class CommonConfig extends BaseData {
         this.setPushrate(jsonObject.optDouble("pushrate"));
 
         this.setDiamondList((List<Diamond>) getBaseDataList(getJsonArray(jsonObject.optString("diamand")), Diamond.class));
-        this.plugin_version=jsonObject.optLong("plugin_version");
-        this.audiochat_minute_cost=jsonObject.optInt("audiochat_minute_cost");
-        this.videochat_minute_cost=jsonObject.optInt("videochat_minute_cost");
-    }
 
-    public int getVideochat_minute_cost() {
-        return videochat_minute_cost;
-    }
+        this.setPlugin_version(jsonObject.optLong("plugin_version"));
+        this.setAudiochat_minute_cost(jsonObject.optInt("audiochat_minute_cost"));
+        this.setVideochat_minute_cost(jsonObject.optInt("videochat_minute_cost"));
 
-    public void setVideochat_minute_cost(int videochat_minute_cost) {
-        this.videochat_minute_cost = videochat_minute_cost;
-    }
-
-    public int getAudiochat_minute_cost() {
-        return audiochat_minute_cost;
-    }
-
-    public void setAudiochat_minute_cost(int audiochat_minute_cost) {
-        this.audiochat_minute_cost = audiochat_minute_cost;
-    }
-
-    public long getPlugin_version() {
-        return plugin_version;
-    }
-
-    public void setPlugin_version(long plugin_version) {
-        this.plugin_version = plugin_version;
+        payTypeList = new PayTypeList();
+        payTypeList.parseJson(jsonObject.optString("paytype"));
     }
 
     public String getEntrance_url() {
@@ -130,6 +112,38 @@ public class CommonConfig extends BaseData {
         this.diamondList = diamondList;
     }
 
+    public long getPlugin_version() {
+        return plugin_version;
+    }
+
+    public void setPlugin_version(long plugin_version) {
+        this.plugin_version = plugin_version;
+    }
+
+    public int getAudiochat_minute_cost() {
+        return audiochat_minute_cost;
+    }
+
+    public void setAudiochat_minute_cost(int audiochat_minute_cost) {
+        this.audiochat_minute_cost = audiochat_minute_cost;
+    }
+
+    public int getVideochat_minute_cost() {
+        return videochat_minute_cost;
+    }
+
+    public void setVideochat_minute_cost(int videochat_minute_cost) {
+        this.videochat_minute_cost = videochat_minute_cost;
+    }
+
+    public PayTypeList getPayTypeList() {
+        return payTypeList;
+    }
+
+    public void setPayTypeList(PayTypeList payTypeList) {
+        this.payTypeList = payTypeList;
+    }
+
     @Override
     public String toString() {
         return "CommonConfig{" +
@@ -140,6 +154,10 @@ public class CommonConfig extends BaseData {
                 ", pushshow=" + pushshow +
                 ", pushrate=" + pushrate +
                 ", diamondList=" + diamondList +
+                ", plugin_version=" + plugin_version +
+                ", audiochat_minute_cost=" + audiochat_minute_cost +
+                ", videochat_minute_cost=" + videochat_minute_cost +
+                ", payTypeList=" + payTypeList +
                 '}';
     }
 }
