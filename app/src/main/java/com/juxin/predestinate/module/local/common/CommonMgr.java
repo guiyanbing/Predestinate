@@ -904,7 +904,7 @@ public class CommonMgr implements ModuleBase {
      */
     public void addCustomFace(String url, RequestComplete complete) {
         HashMap<String, Object> postParms = new HashMap<>();
-        postParms.put("URL", url);
+        postParms.put("url", url);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
     }
 }

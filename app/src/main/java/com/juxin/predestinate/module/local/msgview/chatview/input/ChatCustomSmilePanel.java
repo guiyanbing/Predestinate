@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -29,6 +28,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     private ViewPager vp = null;
     private ViewPagerAdapter viewPagerAdapter;
     private List<SmileItem> items = null;
+
+    ChatCustomSmileAdapter customSmileAdapter;
 
     public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance) {
         super(context, chatInstance);
@@ -71,7 +72,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         gv.setNumColumns(pageResNum / 2);
         gv.setVerticalSpacing(UIUtil.dp2px(5));
 
-        final ChatCustomSmileAdapter customSmileAdapter = new ChatCustomSmileAdapter(getContext(), listTemp);
+        customSmileAdapter = new ChatCustomSmileAdapter(getContext(), listTemp);
         gv.setAdapter(customSmileAdapter);
         gv.setOnItemClickListener(this);
 
@@ -149,8 +150,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                 }
 
                 items.add(new SmileItem(url));
-                viewPagerAdapter.notifyDataSetChanged();
-                initPointsView(vp, viewPagerAdapter.getCount());
+                customSmileAdapter.notifyDataSetChanged();
             }
         });
 

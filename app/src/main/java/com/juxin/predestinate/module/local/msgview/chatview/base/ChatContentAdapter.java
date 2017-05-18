@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -21,7 +20,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +157,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 //            notifyDataSetChanged();
 //        }
 //    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
@@ -401,11 +398,11 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     name.setVisibility(View.VISIBLE);
                 }
 
-          //      ModuleMgr.getChatMgr().reqUserHeadImage(head, infoLightweight.getAvatar());
+                //      ModuleMgr.getChatMgr().reqUserHeadImage(head, infoLightweight.getAvatar());
             } else {
                 name.setVisibility(View.GONE);
                 head.setTag("" + msg.getSendID());
-          //      head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
+                //      head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
             }
         }
 
@@ -456,8 +453,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                         break;
                 }
 
-               // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
-                    //显示进度条或发送失败且小于五分钟也显示进度条
+                // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
+                //显示进度条或发送失败且小于五分钟也显示进度条
 //                    if(msg.isValid() && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())){
 //                        statusProgress.setVisibility(View.VISIBLE);
 //                        status.setVisibility(View.GONE);
@@ -468,15 +465,15 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 //                        statusError.setVisibility(View.VISIBLE);
 //                    }
 
-                if(msg.getStatus() == 3){//发送中,
+                if (msg.getStatus() == 3 && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())) {//发送中,
                     statusProgress.setVisibility(View.VISIBLE);
-                        status.setVisibility(View.GONE);
-                        statusError.setVisibility(View.GONE);
-                }else if(msg.getStatus() == 2){//发送失败
+                    status.setVisibility(View.GONE);
+                    statusError.setVisibility(View.GONE);
+                } else if (msg.getStatus() == 2) {//发送失败
                     statusProgress.setVisibility(View.GONE);
-                        status.setVisibility(View.GONE);
-                        statusError.setVisibility(View.VISIBLE);
-                }else {
+                    status.setVisibility(View.GONE);
+                    statusError.setVisibility(View.VISIBLE);
+                } else {
                     statusProgress.setVisibility(View.GONE);
                     status.setVisibility(View.VISIBLE);
                     statusError.setVisibility(View.GONE);

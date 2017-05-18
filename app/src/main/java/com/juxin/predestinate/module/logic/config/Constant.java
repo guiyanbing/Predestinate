@@ -55,6 +55,7 @@ public class Constant {
     // 视频
     public static final int INT_CHAT_VIDEO = 301;   // 聊天小视频
 
+    public static final long CHAT_RESEND_TIME = 5 * 60 * 1000;              //5分钟内重发消息
     public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
     public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
 

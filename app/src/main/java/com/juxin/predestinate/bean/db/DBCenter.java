@@ -5,6 +5,8 @@ import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
 import java.util.List;
+import java.util.Map;
+
 import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
@@ -18,11 +20,37 @@ public class DBCenter {
     private BriteDatabase mDatabase;
     private DBCenterFLetter centerFLetter;
     private DBCenterFMessage centerFmessage;
+    private DBCenterFUnRead centerFUnRead;
 
     public DBCenter(BriteDatabase database) {
         this.mDatabase = database;
         centerFLetter = new DBCenterFLetter(database);
         centerFmessage = new DBCenterFMessage(database);
+        centerFUnRead = new DBCenterFUnRead(database);
+    }
+
+    /******************** FUnRead **************************/
+
+    public long insertUnRead(String key, String content){
+        if (TextUtils.isEmpty(key)) return DBConstant.ERROR;
+        return centerFUnRead.storageData(key, content);
+    }
+
+    /**
+     * 单个查询
+     * @param key
+     * @return
+     */
+    public Observable<String> queryUnRead(String key) {
+        return centerFUnRead.queryUnRead(key);
+    }
+
+    public Observable<Map<String, String>> queryUnReadList() {
+        return centerFUnRead.queryUnReadList();
+    }
+
+    public long deleteUnRead(String key){
+        return centerFUnRead.delete(key);
     }
 
     /******************** FLetter **************************/
