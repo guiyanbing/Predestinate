@@ -87,7 +87,15 @@
                 android:layout_marginTop="@dimen/px60_dp"
                 android:text="@string/bt_login"
                 android:textStyle="bold" />
-
+            <TextView
+                android:id="@+id/txt_user_reset_pw"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:layout_marginTop="10dip"
+                android:gravity="center"
+                android:text="@string/txt_forget_password"
+                android:textColor="@color/text_ciyao_gray"
+                android:textSize="@dimen/px36_sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

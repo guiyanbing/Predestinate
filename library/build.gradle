@@ -30,10 +30,11 @@ dependencies {
     compile "com.android.support:appcompat-v7:$rootProject.versions.supportLib"
     compile "com.android.support:recyclerview-v7:$rootProject.versions.supportLib"
     compile "com.android.support:design:$rootProject.versions.supportLib"
+    //dex分包support库
     compile 'com.android.support:multidex:1.0.1'
 
     //recyclerView工具库:[https://github.com/CymChad/BaseRecyclerViewAdapterHelper]
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.6.5'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.16'
     //Glide:[https://github.com/bumptech/glide]
     compile "com.github.bumptech.glide:glide:$rootProject.versions.libGlide"
 
@@ -50,8 +51,6 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.versions.libRxAndroid"
 
-    //可多进程调用并进行效率优化的SP库[https://github.com/grandcentrix/tray]
-    compile 'net.grandcentrix.tray:tray:0.11.1'
     //日志打印库:[https://github.com/elvishew/XLog]
     compile "com.elvishew:xlog:$rootProject.versions.libXLog"
     //图片缩放查看控件:[https://github.com/chrisbanes/PhotoView]

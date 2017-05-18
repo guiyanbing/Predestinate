@@ -25,8 +25,7 @@ import java.util.Set;
 
 public class PhizMgr implements ModuleBase {
 
-    private SmilePacks smilePacks_man = new SmilePacks();
-    private SmilePacks smilePacks_woman = new SmilePacks();
+    private SmilePacks smilePacks = new SmilePacks();
 
     private Map<Long, Integer> giftLevel = new HashMap<Long, Integer>();
 
@@ -40,17 +39,8 @@ public class PhizMgr implements ModuleBase {
 
     }
 
-    /**
-     * 根据男女调整。
-     *
-     * @return
-     */
     public SmilePacks getSmilePacks() {
-        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            return smilePacks_man;
-        }
-
-        return smilePacks_woman;
+        return smilePacks;
     }
 
     /**

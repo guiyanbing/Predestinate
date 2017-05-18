@@ -35,7 +35,7 @@ tasks.withType(JavaCompile) {
 ext {
     versions = [compileSDK  : 25,
                 buildTools  : "25.0.2",
-                minSDK      : 15,
+                minSDK      : 11,
                 targetSDK   : 19,
                 supportLib  : "25.3.1",
                 libGlide    : "3.7.0",

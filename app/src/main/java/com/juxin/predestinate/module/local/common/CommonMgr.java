@@ -888,4 +888,23 @@ public class CommonMgr implements ModuleBase {
     }
 
     //================ 发现 end =========================\\
+
+    /**
+     * 获取自定义表情列表
+     * @param complete
+     */
+    public void reqCustomFace(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqCustomFace, null, complete);
+    }
+
+    /**
+     * add自定义表情
+     * @param url
+     * @param complete
+     */
+    public void addCustomFace(String url, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("url", url);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
+    }
 }

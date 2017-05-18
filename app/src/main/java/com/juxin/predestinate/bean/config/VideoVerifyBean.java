@@ -14,7 +14,11 @@ public class VideoVerifyBean extends BaseData {
     private int audiochat;
     private String imgurl;
     private String videourl;
-    private int status;
+    private int status;      // 0:未认证 ,1:审核中， 2：审核未通过，3：审核通过
+
+    public boolean isVerifyVideo() {
+        return status == 3;
+    }
 
     public int getStatus() {
         return status;

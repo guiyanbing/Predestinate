@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -14,7 +13,6 @@ import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
-
 import java.util.List;
 
 /**
@@ -23,7 +21,7 @@ import java.util.List;
 
 public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemClickListener{
 
-  //  private HorizontalListView smilepackagesView = null;
+    private HorizontalListView chat_smile_tab;
     private FrameLayout smilePackageLayouts = null;
     private ChatSmileAdapter chatSmileAdapter;
 
@@ -37,12 +35,12 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     }
 
     public void initView() {
- //       smilepackagesView = (HorizontalListView) findViewById(R.id.chat_smile_packages);
+        chat_smile_tab = (HorizontalListView) findViewById(R.id.chat_smile_tab);
         smilePackageLayouts = (FrameLayout) findViewById(R.id.chat_smile_package_layouts);
 
         chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
-//        smilepackagesView.setAdapter(chatSmileAdapter);
-//        smilepackagesView.setOnItemClickListener(this);
+        chat_smile_tab.setAdapter(chatSmileAdapter);
+        chat_smile_tab.setOnItemClickListener(this);
         chatSmileAdapter.setCheckPosition(0);
 
         addView_Package_Default();
@@ -72,10 +70,10 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilePackageLayouts.addView(chatSmilePanel.getContentView());
     }
 
-    private void addView_Package_Big(List<SmileItem> items, int type) {
+    private void addView_Package_Custom(List<SmileItem> items) {
         smilePackageLayouts.removeAllViews();
 
-        ChatBigSmilePanel chatSmilePanel = new ChatBigSmilePanel(getContext(), items, getChatInstance(), type);
+        ChatCustomSmilePanel chatSmilePanel = new ChatCustomSmilePanel(getContext(), items, getChatInstance());
 
         smilePackageLayouts.addView(chatSmilePanel.getContentView());
     }
@@ -93,7 +91,13 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             return;
         }
 
-        addView_Package_Default();
+        if ("smallface".equals(smilePackage.getType())) {
+            addView_Package_Default();
+        }else if("customface".equals(smilePackage.getType())){
+            addView_Package_Custom(smilePackage.getItems());
+        }
+
+
 //
 //        if ("smallface".equals(smilePackage.getType())) {
 //            addView_Package_Default();

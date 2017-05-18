@@ -664,6 +664,30 @@ public class BaseMessage implements IBaseMessage {
      * @return
      */
     public static String getContent(BaseMessage msg) {
-        return "";
+        String str = "";
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
+        if (messageType == null) {
+            return str;
+        }
+        switch (messageType) {
+            case hi:
+                String content = msg.getMsgDesc();
+                if (TextUtils.isEmpty(content)) {
+                    str = "[打招呼]";
+                } else {
+                    str = content;
+                }
+                break;
+            case common:
+                str = msg.getMsgDesc();
+                break;
+            //case hint:
+            case html://html消息
+                str = msg.getMsgDesc();
+                break;
+            default:
+                break;
+        }
+        return str;
     }
 }

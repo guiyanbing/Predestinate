@@ -23,6 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(FMessage.getCreateTable());
         db.execSQL(FProfile.getCreateTable());
         db.execSQL(FMark.getCreateTable());
+        db.execSQL(FUnRead.getCreateTable());
     }
 
     @Override
