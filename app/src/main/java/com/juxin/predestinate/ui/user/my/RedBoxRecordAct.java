@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -15,12 +16,12 @@ import com.juxin.library.controls.smarttablayout.SmartTabLayout;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
+import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationSucceedAct;
 import com.juxin.predestinate.ui.user.my.adapter.ViewGroupPagerAdapter;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.List;
 public class RedBoxRecordAct extends BaseActivity implements View.OnClickListener{
 
     public static String REDBOXMONEY = "REDBOXMONEY";//键
+    private int authResult = 103, authForVodeo = 104,authIDCard = 105;
 
     private CustomRecyclerView crlList;
     private RecyclerView rlvList;
@@ -106,16 +108,32 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
                     return;
                 }
 
-                UserDetail userDetail1 = ModuleMgr.getCenterMgr().getMyInfo();
-                final boolean isVerify = userDetail1.isVerifyCellphone();//是否绑定了手机号
-                if (isVerify) {
+                if (!ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()){//是否绑定了手机号
+                    UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);
+                    //                    UIShow.showPhoneVerify_Act(RedBoxRecordAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(), authResult);//验证手机
+                } else if (!ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getIsVerifyIdCard()){//是否进行了身份认证
+                    UIShow.showIDCardAuthenticationAct(this,authIDCard);
+                }else {
                     UIShow.showWithDrawApplyAct(0,0,false,this);
-                } else {
-                    UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);//验证手机
                 }
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == authResult) {//手机号认证
+
+        } else if (requestCode == authIDCard) {//身份认证
+            if (data != null){
+                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
+                if (back == 2){
+                    this.finish();
+                }
+            }
         }
     }
 }

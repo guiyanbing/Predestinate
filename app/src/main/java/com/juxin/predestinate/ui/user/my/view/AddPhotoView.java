@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.user.my.view;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -11,8 +12,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.JsonUtil;
+
+import org.json.JSONObject;
 
 
 /**
@@ -78,41 +87,26 @@ public class AddPhotoView extends LinearLayout implements View.OnClickListener, 
         if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
             return;
         }
-        strPath = path[0];
         ImageLoader.loadRoundCorners(getContext(), path[0], 8, imgPhoto);
 
         //上传图片
-//        if (FileUtil.isExist(path[0])) {
-//            LoadingDialog.show((FragmentActivity)getContext(), "正在上传照片");
-//            ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO_CHAT, sPic, new RequestComplete() {
-//                @Override
-//                public void onRequestComplete(HttpResponse response) {
-//                    LoadingDialog.closeLoadingDialog();
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(response.getResponseString());
-//                        if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
-//                            String spic = jsonObject.optJSONObject("res").optString("file_http_path");
-//                            sPicNoHttp = jsonObject.optJSONObject("res").optString("file_s_path");
-//                            ImageLoader.loadCenterCrop(context, spic, ivPic);
-//                            videoVerifyBean.setImgurl(spic);
-//                            tvMakePic.setVisibility(View.VISIBLE);
-//                            isMakePhotoOK = true;
-//                            checkAndShowSubmit();
-//                            changePicStatus(0);
-//                            tvMakePic.setVisibility(View.VISIBLE);
-//                        } else {
-//                            PToast.showShort("照片处理失败请重试");
-//                        }
-//                    } catch (JSONException e) {
-//                        PToast.showShort("照片处理失败请重试");
-//                    }
-//                }
-//            });
-//        }
-
-        if (!TextUtils.isEmpty(path[0])){
-            tvTip.setVisibility(View.INVISIBLE);
-            this.setBackgroundResource(R.color.transparent);
-        }
+        LoadingDialog.show((FragmentActivity) getContext(), "正在上传图片");
+        ModuleMgr.getCommonMgr().uploadIdCard(path[0], new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+//                Log.e("TTTTTTTTTTTTTGGG", response.getResponseString() + "|||");
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk()) {
+                    //                    MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+                    tvTip.setVisibility(View.INVISIBLE);
+                    AddPhotoView.this.setBackgroundResource(R.color.transparent);
+                    JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString());
+                    ImageLoader.loadRoundCorners(getContext(), jsonObject.optString("file_path"), 8, imgPhoto);
+                    strPath = jsonObject.optString("big_path");
+                }else {
+                    PToast.showShort(response.getMsg()+"");
+                }
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.user.auth;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -84,6 +85,8 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             llOpenBank.setVisibility(View.VISIBLE);
             tvBankCardId.setText(getString(R.string.bank_id));
             eitOpenBank.setText(mIdCardVerifyStatusInfo.getBank());
+            eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
+            eitBankCardId.setHint(R.string.input_your_bank_card_id);
             paytype = 1;
         }
         initData();
@@ -104,9 +107,9 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
 
     private void initTitle() {
         setBackView(R.id.base_title_back);
-        setTitle("身份认证");
+        setTitle(getString(R.string.txt_authtype_id));
         if (mIdCardVerifyStatusInfo.getStatus() != 1 && mIdCardVerifyStatusInfo.getStatus() != 2){
-            setTitleRight("提交", new View.OnClickListener() {
+            setTitleRight(getString(R.string.title_right_submit), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     cardName = eitName.getText().toString();
@@ -140,12 +143,16 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 rbYin.setChecked(false);
                 llOpenBank.setVisibility(View.GONE);
                 tvBankCardId.setText(R.string.zhi_fu_id);
+                eitBankCardId.setInputType(InputType.TYPE_CLASS_TEXT);
+                eitBankCardId.setHint(R.string.input_your_zhifubao_id);
                 paytype = 2;
                 break;
             case R.id.id_card_rb_yin:
                 rbZhi.setChecked(false);
                 llOpenBank.setVisibility(View.VISIBLE);
                 tvBankCardId.setText(getString(R.string.bank_id));
+                eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
+                eitBankCardId.setHint(R.string.input_your_bank_card_id);
                 paytype = 1;
                 break;
             default:
@@ -166,6 +173,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()){
             UIShow.showIDCardAuthenticationSucceedAct(this);
+            finish();
         }
 //        Log.e("TTTTTTTTTTTTTTTMMM",response.getResponseString()+"|||");
         PToast.showShort(response.getMsg()+"");

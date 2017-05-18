@@ -157,6 +157,13 @@ public class IdCardVerifyStatusInfo extends BaseData {
         this.subbank = subbank;
     }
 
+    public boolean getIsVerifyIdCard(){
+        if (status == 2)
+            return true;
+        else
+            return false;
+    }
+
     @Override
     public String toString() {
         return "RankList{" +

@@ -26,7 +26,6 @@ import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
  */
 public class WithDrawApplyAct extends BaseActivity implements View.OnClickListener,RequestComplete{
 
-    private int mId;//提现记录id
     private String mEidtMoney = "0";
     private boolean mIsFromEdit;
 
@@ -36,6 +35,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
     private EditText etCardLocalBranch;
     private EditText etCardNum;
     private Button btnNext;
+    private WithdrawAddressInfo info;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,12 +55,11 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         etCardLocalBranch = (EditText) findViewById(R.id.bank_card_et_card_local_branch);
         etCardNum = (EditText) findViewById(R.id.bank_card_et_card_num);
         btnNext = (Button) findViewById(R.id.bank_card_btn_next);
-        if(mIsFromEdit) {
-            mEidtMoney =  getIntent().getDoubleExtra("money",0)+"";
-            mId = getIntent().getIntExtra("id", 0);
-        }else {
-            mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
-        }
+        mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
+//        if(mIsFromEdit) {
+//            mEidtMoney =  getIntent().getDoubleExtra("money",0)+"";
+//        }else {
+//        }
         etMoney.setText(mEidtMoney + getString(R.string.head_unit));
         btnNext.setOnClickListener(this);
         initDefaultAddress();
@@ -80,71 +79,34 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         }
         switch (v.getId()) {
             case R.id.bank_card_btn_next:
-                String cardName = etCardName.getText().toString().trim();
-                String cardLocal = etCardLocal.getText().toString().trim();
-                String cardLocalBranch = etCardLocalBranch.getText().toString().trim();
-                String cardNum = etCardNum.getText().toString().trim();
-                if(mIsFromEdit) {
-                    if(TextUtils.isEmpty(cardName)) {
-                        PToast.showShort(getString(R.string.name_cannot_be_empty));
-                        return;
-                    }
-                    if(TextUtils.isEmpty(cardLocal)) {
-                        PToast.showShort(getString(R.string.bank_cannot_be_empty));
-                        return;
-                    }
-
-                    if(TextUtils.isEmpty(cardLocalBranch)) {
-                        PToast.showShort(getString(R.string.branch_cannot_be_empty));
-                        return;
-                    }
-
-                    if(TextUtils.isEmpty(cardNum)) {
-                        PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
-                        return;
-                    }
-                    // 修改地址
-                    ModuleMgr.getCommonMgr().reqWithdrawModify(mId,cardName,cardNum,cardLocal,cardLocalBranch,this);
-                    break;
-                }
+//                String cardName = etCardName.getText().toString().trim();
+//                String cardLocal = etCardLocal.getText().toString().trim();
+//                String cardLocalBranch = etCardLocalBranch.getText().toString().trim();
+//                String cardNum = etCardNum.getText().toString().trim();
+//                if(mIsFromEdit) {
+//                    if(TextUtils.isEmpty(cardName)) {
+//                        PToast.showShort(getString(R.string.name_cannot_be_empty));
+//                        return;
+//                    }
+//                    if(TextUtils.isEmpty(cardLocal)) {
+//                        PToast.showShort(getString(R.string.bank_cannot_be_empty));
+//                        return;
+//                    }
+//
+//                    if(TextUtils.isEmpty(cardNum)) {
+//                        PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
+//                        return;
+//                    }
+//                    // 修改地址
+//                    ModuleMgr.getCommonMgr().reqWithdrawModify(mEidtMoney,info.getPaytype(),cardName,cardNum,cardLocal,info.getSubbank(),this);
+//                    break;
+//                }
                 //获取自己可提现金额
-                String myMoney = PSP.getInstance().getLong(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
-                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
+//                String myMoney = PSP.getInstance().getLong(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
+//                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
 
-                if(TextUtils.isEmpty(mEidtMoney)) {
-                    PToast.showShort(getString(R.string.money_cannot_be_empty));
-                    return;
-                }
-
-                if(Float.parseFloat(mEidtMoney) > Float.parseFloat(myMoney)) {
-                    PToast.showShort(getString(R.string.not_beyond));
-                    return;
-                }
-
-                if(Float.valueOf(mEidtMoney) <= minMoney) {
-                    PToast.showShort(getString(R.string.withdraw_tips) + minMoney + getString(R.string.head_unit));
-                    return;
-                }
-                if(TextUtils.isEmpty(cardName)) {
-                    PToast.showShort(getString(R.string.name_cannot_be_empty));
-                    return;
-                }
-                if(TextUtils.isEmpty(cardLocal)) {
-                    PToast.showShort(getString(R.string.bank_cannot_be_empty));
-                    return;
-                }
-
-                if(TextUtils.isEmpty(cardLocalBranch)) {
-                    PToast.showShort(getString(R.string.branch_cannot_be_empty));
-                    return;
-                }
-
-                if(TextUtils.isEmpty(cardNum)) {
-                    PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
-                    return;
-                }
                 // 提现请求
-                ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney, cardName, cardNum, cardLocal, cardLocalBranch, this);
+                ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney,info.getPaytype(),info.getAccountname(),info.getAccountnum(), info.getBank(), info.getSubbank(), this);
                 break;
 
             default:
@@ -157,15 +119,15 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqWithdrawAddress){//请求默认地址结果返回
             if (response.isOk()){
-                WithdrawAddressInfo info = new WithdrawAddressInfo();
+                info = new WithdrawAddressInfo();
                 info.parseJson(response.getResponseString());
                 etCardName.setText(info.getAccountname());
                 etCardLocal.setText(info.getBank());
-                etCardLocalBranch.setText(info.getSubbank());
                 etCardNum.setText(info.getAccountnum());
             }
             return;
-        }        if (response.getUrlParam() == UrlParam.reqWithdraw || response.getUrlParam() == UrlParam.reqWithdrawModify){//申请提现结果返回，修改地址结果返回
+        }
+        if (response.getUrlParam() == UrlParam.reqWithdraw || response.getUrlParam() == UrlParam.reqWithdrawModify){//申请提现结果返回，修改地址结果返回
 
 
             if (response.isOk()){

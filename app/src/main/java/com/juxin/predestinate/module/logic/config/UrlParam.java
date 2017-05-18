@@ -107,13 +107,13 @@ public enum UrlParam {
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
     reqAddredonekey("fruit/addredonekey", RedOneKeyList.class, true),
     // 客户端请求用户提现列表
-    reqWithdrawlist("fruit/withdrawlist", true),
+    reqWithdrawlist("fruit/withdrawlistNew", true),
     // 红包记录--提现申请
-    reqWithdraw("fruit/withdraw", true),
+    reqWithdraw("fruit/withdrawNew", true),
     // 红包记录--提现申请获取地址
-    reqWithdrawAddress("fruit/withdrawaddress", true),
+    reqWithdrawAddress("fruit/withdrawaddressNew", true),
     // 红包记录--提现申请修改地址
-    reqWithdrawModify("fruit/withdrawmodify", true),
+    reqWithdrawModify("fruit/withdrawmodifyNew", true),
     // 获取礼物列表
     getGiftLists("gift/getGifts", true),
     // 获取钻石余额
@@ -142,6 +142,8 @@ public enum UrlParam {
     unfollow("follow/unfollow", true),
     // 关注某某
     follow("follow/follow", true),
+    // 上传身份证照片
+    uploadIdCard("User/uploadIdCard", true),
 
     //================= 发现 ===========
     //举报

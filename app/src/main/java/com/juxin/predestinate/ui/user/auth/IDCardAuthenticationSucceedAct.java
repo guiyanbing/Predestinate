@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
 
 /**
@@ -14,6 +16,7 @@ import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
  */
 public class IDCardAuthenticationSucceedAct extends BaseActivity implements View.OnClickListener{
 
+    public static final String IDCARDBACK = "idcardback";//1跳转我的钱包，2跳转首页
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +32,26 @@ public class IDCardAuthenticationSucceedAct extends BaseActivity implements View
 
     private void initTitle() {
         setBackView(R.id.base_title_back);
-        setTitle("身份认证");
+        setTitle(getString(R.string.txt_authtype_id));
     }
 
     @Override
     public void onClick(View view) {
+        Intent data = new Intent();
         switch (view.getId()){
             case R.id.id_card_succeed_btn_red:
                 //返回钱包
+                data.putExtra(IDCARDBACK, 1);
+                setResult(RESULT_OK, data);
                 finish();
-                UIShow.showActivityClearTask(this, RedBoxRecordAct.class);
+                UIShow.show(this, RedBoxRecordAct.class,Intent.FLAG_ACTIVITY_NEW_TASK);
                 break;
             case R.id.id_card_succeed_btn_main:
                 //返回首页
+                data.putExtra(IDCARDBACK, 2);
+                setResult(RESULT_OK, data);
                 finish();
+                UIShow.show(this, MyAttentionAct.class,Intent.FLAG_ACTIVITY_NEW_TASK);
                 break;
             default:
                 break;

@@ -76,7 +76,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 2:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authok));
-                ContextCompat.getColor(this,R.color.authentication_txt_bg);
+                ContextCompat.getColor(this, R.color.authentication_txt_bg);
                 break;
             case 3:
             case 4:
@@ -86,7 +86,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
     }
 
     private void initIdCardAuth() {
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this,R.color.gray_text));
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 
         switch (videoVerifyBean.getStatus()) {
             case 0:
@@ -141,6 +141,17 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         } else if (requestCode == authForVodeo) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             initVideoAuth();
+        }else if (requestCode == authIDCard) {
+            if (data != null){
+                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
+//                Log.e("TTTTTTTTTTTTTPPP000","zhixing"+back);
+                if (back == 1){
+//                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
+                    this.finish();
+                }
+            }
+//            userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+//            initVideoAuth();
         }
     }
 
