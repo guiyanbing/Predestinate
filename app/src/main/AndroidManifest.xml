@@ -74,6 +74,9 @@
             android:name=".ui.user.check.UserCheckInfoAct"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.user.check.other.UserBlockAct"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.start.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity
@@ -184,25 +187,6 @@
             android:name=".ui.user.my.DemandRedPacketAct"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".ui.xiaoyou.TabGroupActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".ui.xiaoyou.CloseFriendsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".ui.xiaoyou.SelectContactActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".ui.xiaoyou.NewTabActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".ui.xiaoyou.IntimacyDetailActivity"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.check.secret.UserSecretAct"
@@ -240,6 +224,24 @@
 
         <activity
             android:name=".ui.user.paygoods.vip.GoodsVipDlgOld"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/No_Background" />
+
+        <activity
+            android:name=".ui.user.check.secret.dialog.SecretGiftDlg"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/No_Background" />
+
+        <activity
+            android:name=".ui.user.check.secret.dialog.SecretDiamondDlg"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/No_Background" />
+
+        <activity
+            android:name=".ui.user.check.secret.dialog.SecretVideoPlayerDlg"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/No_Background" />
@@ -316,6 +318,10 @@
             />
         <activity
             android:name=".ui.user.auth.MyAuthenticationAct"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".ui.start.FindPwdAct"
             android:screenOrientation="portrait"
             />
 

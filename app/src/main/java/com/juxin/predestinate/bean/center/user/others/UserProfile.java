@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
+import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
 
 import org.json.JSONObject;
 
@@ -31,7 +32,7 @@ public class UserProfile extends UserBasic {
     private int qqNumAuth;// 1为公开，2为保密
     private String wechat;//微信号
     private int wechatAuth;// 1为公开，2为保密
-    private int isverifycellphone;//是否绑定了手机
+    private int isverifycellphone;//是否绑定了手机 1 通过
     private int photoNum;//相片数量
     private int ismonthmail;//是否开通了包月发信
     private int isBindRose;//是否绑定了红娘'微信认证，0为默认，1为已认证，2为拒绝',
@@ -83,6 +84,16 @@ public class UserProfile extends UserBasic {
         // 用户相册
         if (!jsonObject.isNull("photo")) {
             this.userPhotoList = (List<UserPhoto>) getBaseDataList(jsonObject.optJSONArray("photo"), UserPhoto.class);
+        }
+
+        // 用户视频
+        if (!jsonObject.isNull("videolist")) {
+
+        }
+
+        // 礼物列表
+        if (!jsonObject.isNull("giftlist")) {
+
         }
 
         // 机器人打招呼list
@@ -146,6 +157,10 @@ public class UserProfile extends UserBasic {
     public boolean isVip() {
 //        return is_vip == 1;
         return ismonthmail == 1;
+    }
+
+    public boolean isVerifyCellphone(){
+        return isverifycellphone == 1;
     }
 
     public String getOnline_text() {

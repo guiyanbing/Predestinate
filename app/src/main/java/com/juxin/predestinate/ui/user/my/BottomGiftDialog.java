@@ -30,7 +30,6 @@ import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
 import com.juxin.predestinate.ui.user.my.view.PageIndicatorView;
-import com.juxin.predestinate.ui.xiaoyou.zanshi.view.GiftNumPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ import java.util.List;
  * 送礼物弹框
  * Created by zm on 2017/3/.
  */
-public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,GiftNumPopup.OnSelectNumChangedListener,RequestComplete,TextWatcher,ViewPager.OnPageChangeListener,GiftHelper.OnRequestGiftListCallback {
+public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,RequestComplete,TextWatcher,ViewPager.OnPageChangeListener,GiftHelper.OnRequestGiftListCallback {
 
     private TextView txvAllStone,txvPay,txvNeedStone,txvSend,txvLeft,txvRight;
     private EditText txvSendNum;
@@ -138,7 +137,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
      */
     private void initGifts(){
         arrGifts = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
-        if (arrGifts == null){
+        if (arrGifts.size() <= 0){
             ModuleMgr.getCommonMgr().requestGiftList(this);
         }
     }
@@ -199,12 +198,6 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         for (int j = 0; j < arrGifts.size(); j++) {
             arrGifts.get(j).setIsSelect(false);
         }
-    }
-
-    @Override
-    public void onSelectNumChanged(int num) {
-        txvSendNum.setText(num+"");
-        txvNeedStone.setText(num+"");
     }
 
     /**

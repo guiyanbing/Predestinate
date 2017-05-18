@@ -58,15 +58,15 @@ public class EditKey {
     /** 体重 **/
     public static final String s_key_weight = "weight";
 
-    /** 头像 **/
-    public static final String s_key_avatar = "avatar";
-
 
     // ============= 他人设置字段 ====================
     /** 用户备注 **/
     public static final String s_key_remark_name = "remarkname";
 
     // ============= 以下暂时无用 ====================
+
+    /** 头像 **/
+    public static final String s_key_avatar = "avatar";
 
     /** 年龄 **/
     public static final String s_key_age = "age";

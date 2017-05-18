@@ -1,0 +1,183 @@
+/*
+ *这是单独为hello mui准备的个性化css，可以覆盖标准mui的css定义；
+ * 在实际项目开发时，建议为App单独写一个css文件，从而实现项目的自定义皮肤功能；
+ * 
+ * */
+
+.pictureBody {
+    width: 150px;
+    height: 100px;
+    /*background-image:url(../assets/shuijiao.jpg) ;*/
+    display: inline-block;
+    background-size: cover;
+    position: absolute;
+    border-radius: 5px;
+    top: 50%;
+    left: 50%;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    transform: translate(-50%, 0) ;
+    border: solid 1px #e8e8e8;
+    vertical-align: top;
+    list-style: none;
+    text-align: center;
+}
+
+.btnWithImage {
+    width: 90%;
+    height: 60px;
+    /*background-image:url(../assets/shuijiao.jpg) ;*/
+    display: inline-block;
+    background-size: 100% 100%;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-bottom: 10px;
+    vertical-align: top;
+    padding-left: 0;
+    list-style: none;
+    text-align: center;
+    border: solid 1px #e8e8e8;
+    border-radius: 8px;
+}
+
+.img-percent-30 {
+	width: 30%;
+	height: 30%;
+}
+
+.img-qq-percent-30 {
+	width: 20px;
+	height: 22px;
+	vertical-align: text-bottom;
+}
+
+/*我的钱包_类型筛选框 交易明细*/
+.transaction{padding:11px 22px;background-color: #fff;}
+.transaction a{display:inline-block;width:10%;position:absolute;top:15px;right:11px;z-index: 99;}
+.transaction a img{display:block;width:100%;}
+.mui-table-view:before{height:0;}
+.mui-table-view:after{height:0;}
+.mui-media-body{font-size: 15px;color:#333; height: 100%; line-height: 100%}
+.mui-media-body p{font-size: 14px;color:#b0b0b0;}
+.mui-table-view li:after{height:0 !important;}
+.select-type-box{background: #fff !important;width:96% !important;margin:2% !important;border-radius:5px;}
+.select-type-box p{text-align:center;color:#000;font-size: 17px;padding:12px 0;margin-bottom:0 !important;}
+.select-type{margin:0 !important;background-color:#fff !important;padding-bottom:2.5%;}
+.select-type li{width:30%;margin-left:2.5%;margin-top:2.5%;border-radius:3px !important;overflow:hidden; float:left;background-color:#EDEDED;color:#ABABAB;}
+.select-type li a{display:block;border-radius:0 !important;font-size: 13px;}
+.select-type li.current{width:30%;margin-left:2.5%;margin-top:2.5%;border-radius:3px !important;overflow:hidden; float:left;background-color:#48CFD3;color:#fff;}
+.select-type li.current a{display:block;border-radius:0 !important;font-size: 13px;}
+.type-box{margin-top:15px;}
+.type-box li{box-sizing: content-box;padding-bottom:0;}
+.type-box li a{margin:0 !important;border-bottom:1px solid #eee;padding:0 !important;padding-bottom:15px !important;}
+
+@media screen and (min-height: 481px) {
+    .title-call-qq {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 44px;
+    position: absolute;
+    display: block;
+    width: 100%;
+    padding: 0;
+    bottom: 10px;
+    text-align: center;
+    white-space: nowrap;
+    color: #6d6d72;
+    z-index:9999;
+    }
+}
+
+@media screen and (max-height: 480px)  {
+    .title-call-qq {
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 44px;
+        display: block;
+        width: 100%;
+        padding: 0;
+        text-align: center;
+        white-space: nowrap;
+        color: #6d6d72;
+        margin-top: 10px;
+    }
+}
+
+.auto-call-qq-title {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 44px;
+    display: block;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    white-space: nowrap;
+    color: #6d6d72;
+    margin-top: 10px;
+}
+
+.title-details {
+	margin: 5px 8px 5px;
+  color: #000;
+  font-size: 18px;
+}
+.title-details-sub {
+	margin-top: 5px;
+	color: #6D6D72;
+	font-size: 15px;
+}
+
+.title-name-azure {
+	color: #48CFD3;
+    font-size: 15px;
+}
+
+.title-gray {
+    color: #8f8f94;
+    font-size: 15px;
+}
+
+.about-box{background-color: #fff;padding:0;padding-top:10px;}
+.about-box li{padding:5px 15px 10px 15px;}
+.about-box li h4{font-size: 17px;color:#333;font-weight: 600;}
+.about-box li p{line-height: 24px;margin-bottom:0 !important;}
+
+.border-bottom {  border-bottom: 1px solid #eeeeee !important;  }
+.border-bottom li{border-bottom:1px solid #eee !important;width:97%;margin-left:15px;padding-left:0 !important;}
+.border-bottom li:last-child{border-bottom:none !important;}
+.border-bottom li>a{margin-left:0 !important;}
+
+.receive-btn{padding:15px;}
+.receive-btn a{display:block;width:100%;text-align: center;font-size: 13px;color:rgba(255,255,255,0.7);line-height: 40px;border-radius:5px;
+    background: -moz-linear-gradient(left, #48CFD3  0%,#41C6D9 50%, #29A6E6 100%);
+    background: -webkit-gradient(linear, left, right, color-sleft(0%,#48CFD3 ),color-sleft(50%,#41C6D9 ), color-sleft(100%,#29A6E6));
+    background: -webkit-linear-gradient(left, #48CFD3  0%,#41C6D9 50%,#29A6E6 100%);
+    background: -o-linear-gradient(left, #48CFD3  0%,#41C6D9 50%,#29A6E6 100%);
+    background: -ms-linear-gradient(left, #48CFD3  0%,#41C6D9 50%,#29A6E6 100%);
+    background: linear-gradient(to right, #48CFD3  0%,#41C6D9 50%,#29A6E6 100%);
+}
+
+.mui-icon-left-nav {
+    color: #48CFD3;
+}
+
+
+.detail-table-view-cell {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 11px 0px;
+
+    -webkit-touch-callout: none;
+}
+.customHead {
+    text-align: center;
+    padding: 11px 15px 11px;
+}
+.mui-bar {
+   background-color: #ffffff;
+}
+.mui-bar-nav a.mui-pull-left{padding-right:20px !important;}
+

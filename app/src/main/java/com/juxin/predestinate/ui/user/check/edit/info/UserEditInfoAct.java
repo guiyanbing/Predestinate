@@ -17,7 +17,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
  * Created by Su on 2017/5/3.
  */
 
-public class UserEditInfoAct extends BaseActivity implements PObserver{
+public class UserEditInfoAct extends BaseActivity implements PObserver {
     private UserEditInfoHeadPanel headPanel;
     private UserEditBaseInfoPanel basePanel;
     private UserEditDetailInfoPanel detailPanel;
@@ -34,6 +34,10 @@ public class UserEditInfoAct extends BaseActivity implements PObserver{
     private void initTitle() {
         findViewById(R.id.cut_line).setVisibility(View.GONE);
         setBackView(ModuleMgr.getCenterMgr().getMyInfo().getNickname());
+
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            setTitleBackground(R.color.picker_blue_color);
+        }
     }
 
     private void initPanel() {
@@ -54,6 +58,7 @@ public class UserEditInfoAct extends BaseActivity implements PObserver{
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
+                headPanel.refreshView();
                 basePanel.refreshView();
                 detailPanel.refreshView();
                 break;

@@ -307,7 +307,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到语音输入模式。0
      */
     private void onClickChatVoice() {
-        chatBtnExpression.setVisibility(View.GONE);
+      //  chatBtnExpression.setVisibility(View.GONE);
 
         chatBtnVoice.setVisibility(View.INVISIBLE);
         chatTextEdit.setVisibility(View.GONE);
@@ -316,7 +316,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         chatVoiceRecord.setVisibility(View.VISIBLE);
 
-        chat_rel.setVisibility(View.GONE);
+      //  chat_rel.setVisibility(View.GONE);
 
         showSendBtn(false);
         closeAllInput();
@@ -326,14 +326,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到文本输入模式。
      */
     private void onClickChatText() {
-        chatBtnExpression.setVisibility(View.VISIBLE);
+     //   chatBtnExpression.setVisibility(View.VISIBLE);
 
         chatBtnVoice.setVisibility(View.VISIBLE);
         chatTextEdit.setVisibility(View.VISIBLE);
 
         chatBtnText.setVisibility(View.INVISIBLE);
         chatVoiceRecord.setVisibility(View.INVISIBLE);
-        chat_rel.setVisibility(View.VISIBLE);
+     //   chat_rel.setVisibility(View.VISIBLE);
 
         showSendBtn();
     }

@@ -291,47 +291,58 @@ public class HttpMgrImpl implements HttpMgr {
                     ModuleMgr.getLoginMgr().setCookie(StringUtils.getBeforeNoFlag(cookie, ";"));
                 }
                 StringBuilder sb = new StringBuilder();
-                try {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
-                    String line;
-                    try {
-                        while ((line = reader.readLine()) != null) {
-                            sb.append(line);
-                        }
-                    } catch (IOException e) {
-                        PLogger.printThrowable(e);
-                    }
-                } catch (Exception e) {
-                    PLogger.d("response fail，request url：" + url);
-                    PLogger.printThrowable(e);
+
+                // 处理服务器返回异常，抛出error
+                if (!response.isSuccessful()) {
+                    PLogger.d("response fail, response code " + response.code() + ", request url: " + url);
                     result.setServerResponse();
                     result.setError();//设置失败
                     result.setCache(false);
                     if (requestCallback != null) requestCallback.onRequestComplete(result);
                     return;
                 }
+
+                // 处理返回body，如果body为null，不做读取
+                if (response.body() != null) {
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
+                        String line;
+                        try {
+                            while ((line = reader.readLine()) != null) {
+                                sb.append(line);
+                            }
+                        } catch (IOException e) {
+                            PLogger.printThrowable(e);
+                        }
+                    } catch (Exception e) {
+                        PLogger.d("response fail, request url: " + url);
+                        PLogger.printThrowable(e);
+                        result.setServerResponse();
+                        result.setError();//设置失败
+                        result.setCache(false);
+                        if (requestCallback != null) requestCallback.onRequestComplete(result);
+                        return;
+                    }
+                }
                 String resultString = sb.toString();
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
                     PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
 
+                // 如果是加密数据，对其进行解密并抛出
                 if (!TextUtils.isEmpty(resultString) && isEncrypt && (!resultString.startsWith("{") || !resultString.endsWith("}"))) {
                     resultString = new String(JniUtil.GetDecryptString(resultString));
                 }
-
+                PLogger.d("response OK, request url: " + url + "\nresponse: " + resultString);
                 result.setServerResponse();
                 result.setOK();//设置成功
-                result.setCache(false);//设置为cache数据
+                result.setCache(false);
                 result.parseJson(resultString);
-
-                PLogger.d("response OK，request url：" + url + "\nresponse：" + resultString);
-
-                //如果有请求完成的回调实例的话，则进行回调
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                PLogger.d("response fail，request url：" + url);
+                PLogger.d("response fail, request url: " + url);
                 PLogger.printThrowable(t);
                 result.setError();//设置失败
                 result.setCache(false);

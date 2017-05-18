@@ -30,11 +30,13 @@ import com.juxin.predestinate.module.logic.baseui.WebActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
+import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.discover.MyDefriendAct;
 import com.juxin.predestinate.ui.discover.MyFriendsAct;
@@ -57,6 +59,7 @@ import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
+import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
@@ -69,9 +72,13 @@ import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
+import com.juxin.predestinate.ui.user.check.other.UserBlockAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerDlg;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
 import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
@@ -98,11 +105,6 @@ import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDlgOld;
 import com.juxin.predestinate.ui.user.update.UpdateDialog;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.PhotoDisplayAct;
-import com.juxin.predestinate.ui.xiaoyou.CloseFriendsActivity;
-import com.juxin.predestinate.ui.xiaoyou.IntimacyDetailActivity;
-import com.juxin.predestinate.ui.xiaoyou.NewTabActivity;
-import com.juxin.predestinate.ui.xiaoyou.SelectContactActivity;
-import com.juxin.predestinate.ui.xiaoyou.TabGroupActivity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -268,49 +270,6 @@ public class UIShow {
     //============================== 小友模块相关跳转 =============================
 
     /**
-     * 打开标签分组页面
-     */
-    public static void showTabGroupAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, TabGroupActivity.class);
-        activity.startActivity(intent);
-    }
-
-    /**
-     * 打开亲密好友页面
-     */
-    public static void showCloseFriendsAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, CloseFriendsActivity.class);
-        activity.startActivity(intent);
-    }
-
-    /**
-     * 打开添加联系人页面
-     */
-    public static void showSelectContactAct(long tab, FragmentActivity activity) {
-        Intent intent = new Intent(activity, SelectContactActivity.class);
-        intent.putExtra("tab", tab);
-        activity.startActivityForResult(intent, 0);
-    }
-
-    /**
-     * 打开添加标签页面
-     */
-    public static void showNewTabAct(FragmentActivity activity, long tab) {
-        Intent intent = new Intent(activity, NewTabActivity.class);
-        intent.putExtra("tab", tab);
-        activity.startActivity(intent);
-    }
-
-    /**
-     * 打开添加亲密好友页面
-     */
-    public static void showIntimacyDetailAct(FragmentActivity activity, int tab) {
-        Intent intent = new Intent(activity, IntimacyDetailActivity.class);
-        intent.putExtra("tab", tab);
-        activity.startActivity(intent);
-    }
-
-    /**
      * 打开设置页
      */
     public static void showUserSetAct(final Activity context, final int resultCode) {
@@ -448,6 +407,13 @@ public class UIShow {
     }
 
     /**
+     * 打开用户账号封禁页
+     */
+    public static void showUserBlockAct(Context context) {
+        context.startActivity(new Intent(context, UserBlockAct.class));
+    }
+
+    /**
      * 打开编辑昵称页
      */
     public static void showEditContentAct(FragmentActivity context) {
@@ -466,9 +432,17 @@ public class UIShow {
 
     /**
      * 打开私密相册/视频
+     *
+     * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context) {
-        context.startActivity(new Intent(context, UserSecretAct.class));
+    public static void showUserSecretAct(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, UserSecretAct.class);
+        if (userProfile != null) {
+            intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+        }
+
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        context.startActivity(intent);
     }
 
     /**
@@ -809,7 +783,7 @@ public class UIShow {
     /**
      * 打开QQ客服
      */
-    public static void showQQServer(Context context) {
+    public static void showQQService(Context context) {
         try {
             String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
                     PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
@@ -818,10 +792,10 @@ public class UIShow {
             if (intent.resolveActivity(context.getPackageManager()) != null) {
                 context.startActivity(intent);
             } else {
-                PToast.showShort("QQ未安装");
+                PToast.showShort(context.getResources().getString(R.string.qq_not_install));
             }
         } catch (Exception e) {
-            PToast.showShort("QQ客服出错请使用电话客服");
+            PToast.showShort(context.getResources().getString(R.string.qq_open_error));
         }
     }
 
@@ -831,34 +805,28 @@ public class UIShow {
      * 跳转到开通vip页面
      */
     public static void showOpenVipActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid-vip.html",
-                ModuleMgr.getCenterMgr().getChargeH5Params()));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_VIP, ModuleMgr.getCenterMgr().getChargeH5Params()));
     }
 
     /**
      * 跳转到购买Y币页面
      */
     public static void showBuyCoinActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
-                ModuleMgr.getCenterMgr().getChargeH5Params()));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_COIN, ModuleMgr.getCenterMgr().getChargeH5Params()));
     }
 
     /**
      * 跳转到我的礼物页面
      */
     public static void showMyGiftActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/myGift/myGift.html"));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_GIFT));
     }
 
     /**
      * 跳转到活动相关页面
      */
     public static void showActionActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl("http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/activity.html"));
-        // TODO: 2017/5/12
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_ACTION));
     }
 
     /**
@@ -906,6 +874,8 @@ public class UIShow {
         context.startActivity(new Intent(context, MyDiamondsExplainAct.class));
     }
 
+    private static DiamondSendGiftDlg dlg;
+
     /**
      * 对话框送礼物
      *
@@ -913,13 +883,37 @@ public class UIShow {
      * @param giftid  要送的礼物id
      * @param to_id   统计id
      */
-    public static void showDiamondSendGiftDlg(Context context, int giftid, String to_id) {
-        DiamondSendGiftDlg dlg = new DiamondSendGiftDlg(context, giftid, to_id);
-        dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        dlg.show();
+    public static void showDiamondSendGiftDlg(final Context context, final int giftid, final String to_id) {
+        dlg = null;
+        if (ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid) != null) {
+            dlg = new DiamondSendGiftDlg(context, giftid, to_id);
+            dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            dlg.show();
+            return;
+        }
+        ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
+            @Override
+            public void onRequestGiftListCallback(boolean isOk) {
+                if (isOk) {
+                    if (ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid) != null) {
+                        dlg = new DiamondSendGiftDlg(context, giftid, to_id);
+                        dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        dlg.show();
+                        return;
+                    }
+                    PToast.showShort(context.getString(R.string.gift_not_find));
+                } else {
+                    PToast.showShort(context.getString(R.string.net_error_retry));
+                }
+            }
+        });
     }
+
+    private static BottomGiftDialog dialog = null;
 
     /**
      * 消息页面送礼物底部弹框
@@ -927,10 +921,30 @@ public class UIShow {
      * @param context
      * @param to_id   他人id
      */
-    public static void showBottomGiftDlg(Context context, long to_id) {
-        BottomGiftDialog dialog = new BottomGiftDialog();
-        dialog.setToId(to_id);
-        dialog.showDialog((FragmentActivity) context);
+    public static void showBottomGiftDlg(final Context context, final long to_id) {
+        dialog = null;
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
+            dialog = new BottomGiftDialog();
+            dialog.setToId(to_id);
+            dialog.showDialog((FragmentActivity) context);
+        } else {
+            LoadingDialog.show((FragmentActivity) context);
+            ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
+                @Override
+                public void onRequestGiftListCallback(boolean isOk) {
+                    LoadingDialog.closeLoadingDialog();
+                    if (isOk) {
+                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null) {
+                            dialog = new BottomGiftDialog();
+                            dialog.setToId(to_id);
+                            dialog.showDialog((FragmentActivity) context);
+                        }
+                    } else {
+                        PToast.showShort(context.getString(R.string.net_error_retry));
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -1135,6 +1149,31 @@ public class UIShow {
         context.startActivity(new Intent(context, GoodsDiamondAct.class));
     }
 
+
+    /**
+     * 查看视频：送礼弹框
+     */
+    public static void showSecretGiftDlg(Context context, UserProfile userProfile) {
+        Intent intent = new Intent(context, SecretGiftDlg.class);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 查看视频：钻石充值弹框
+     */
+    public static void showSecretDiamondDlg(FragmentActivity context) {
+        context.startActivity(new Intent(context, SecretDiamondDlg.class));
+        context.finish();
+    }
+
+    /**
+     * 查看视频：视频播放页
+     */
+    public static void showSecretVideoPlayerDlg(FragmentActivity context) {
+        context.startActivity(new Intent(context, SecretVideoPlayerDlg.class));
+    }
+
     /**
      * 打开录制视频页
      *
@@ -1161,5 +1200,13 @@ public class UIShow {
      */
     public static void showMyAuthenticationAct(FragmentActivity context, int requestCode) {
         context.startActivityForResult(new Intent(context, MyAuthenticationAct.class), requestCode);
+    }
+
+    /**
+     * 打开重置密码
+     * @param context
+     */
+    public static void showFindPwdAct(FragmentActivity context){
+        context.startActivity(new Intent(context, FindPwdAct.class));
     }
 }

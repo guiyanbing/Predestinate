@@ -119,23 +119,23 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     protected void setUnreadnum(BaseMessage msgData) {
-//        item_unreadnum.setVisibility(View.GONE);
-//        if (msgData.getNum() > 0) {
-//            item_unreadnum.setVisibility(View.VISIBLE);
-//            item_unreadnum.setText(ModuleMgr.getChatListMgr().getUnreadNum(msgData.getNum()));
-//        }
+        item_unreadnum.setVisibility(View.GONE);
+        if (msgData.getNum() > 0) {
+            item_unreadnum.setVisibility(View.VISIBLE);
+            item_unreadnum.setText(ModuleMgr.getChatListMgr().getUnreadNum(msgData.getNum()));
+        }
     }
 
     protected void setStatus(BaseMessage msgData) {
-//        if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType()) {
-//            item_last_status.setVisibility(View.GONE);
-//            return;
-//        }
-//        item_last_status.setVisibility(View.GONE);
-//        if (msgData.getStatus() == 0) {
-//            item_last_status.setText("已读");
-//            item_last_status.setVisibility(View.VISIBLE);
-//        }
+        if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType()) {
+            item_last_status.setVisibility(View.GONE);
+            return;
+        }
+        item_last_status.setVisibility(View.GONE);
+        if (msgData.getStatus() == 0) {
+            item_last_status.setText("已读");
+            item_last_status.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.juxin.predestinate.ui.mail.base;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 私聊类型
@@ -37,7 +39,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
         switch (v.getId()){
             case R.id.mail_item_headpic:
                 if(msgData != null && MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()){
-                   // UIShow.showUserInfo((FragmentActivity) getContext(),msgData.getLWhisperID());
+                    UIShow.showCheckOtherInfoAct(getContext(),msgData.getLWhisperID());
                 }
                 break;
         }

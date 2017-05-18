@@ -277,7 +277,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 public void onSubmit() {
                     UIShow.showOpenVipActivity(SettingAct.this);
                 }
-            }, "您非VIP会员，无法开启此功能", "", "取消", "去开通", true, R.color.text_zhuyao_black);
+            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
             return false;
         }
         //开启音、视频通话时，女性用户判断是否视频认证
@@ -293,10 +293,10 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
                     }
-                }, "开启视频、音频功能，需要通过视频认证", "", "取消", "去认证", true, R.color.text_zhuyao_black);
+                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
                 return false;
             } else if (videoVerifyBean.getStatus() == 1) {
-                PToast.showShort("审核中，请稍后再试");
+                PToast.showShort(getResources().getString(R.string.toast_under_review));
                 return false;
             }
         }

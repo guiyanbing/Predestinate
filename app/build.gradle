@@ -29,9 +29,6 @@ android {
         ndk { abiFilters "armeabi", "armeabi-v7a", "x86", "mips" }//让64位的操作系统可以兼容32位的库文件
         // 65535限制
         multiDexEnabled true
-        // tray contentProvider鉴权
-        // add this to set a unique tray authority based on your applicationId
-        resValue "string", "tray__authority", "${applicationId}.tray"
     }
 
     dexOptions {

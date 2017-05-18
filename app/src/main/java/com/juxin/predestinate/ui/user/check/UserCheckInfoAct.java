@@ -63,7 +63,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             return;
         }
         userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
-        ModuleMgr.getCenterMgr().reqVideoChatConfig(userProfile.getUid(), this); // 请求音视频开关配置
     }
 
     private void initView() {
@@ -90,6 +89,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private void initBottom() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
+        ModuleMgr.getCenterMgr().reqVideoChatConfig(userProfile.getUid(), this); // 请求音视频开关配置
         videoBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_video);
         voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
         sayHibottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_hi);
@@ -160,7 +160,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userProfile.getUid()),
                 getString(R.string.say_hello_txt),
                 userProfile.getKf_id(),
-                !ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
+                ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
                         Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -198,6 +198,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         if (response.getUrlParam() == UrlParam.reqVideoChatConfig) {
             if (response.isOk()) {
                 VideoConfig config = (VideoConfig) response.getBaseData();
+                footPanel.refreshChatPrice(config);
                 if (config.getVideoChat() == 1) {  // 展示发视频
                     videoBottom.setVisibility(View.VISIBLE);
                 }

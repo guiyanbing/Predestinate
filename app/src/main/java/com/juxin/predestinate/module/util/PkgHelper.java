@@ -11,8 +11,11 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * Created by siow on 2016/3/25.
+ */
+
 public final class PkgHelper {
-    private static final String UTF_8 = "UTF-8";
     private static final int SHORT_LENGTH = 2;
     private static final byte[] MAGIC = new byte[]{0x21, 0x4a, 0x58, 0x64, 0x21}; //!JXd!
     private static String sMarket;
@@ -46,10 +49,8 @@ public final class PkgHelper {
             sMainChannel = "";
             sSubChannel = "";
             try {
-                sMarket = readZipComment(new File(getSourceDir(context)));
-                Log.i("aaa", sMarket);
-
-                sMarket = new String(RC4.CryptRc4(sMarket, new String(MAGIC, "ISO8859-1")), UTF_8);
+                byte[] arySrc = readZipComment(new File(getSourceDir(context)));
+                sMarket = RC4.CryptRc4(arySrc, MAGIC);
                 Log.i("aaa", sMarket);
 
                 int iL = sMarket.split("_").length;
@@ -58,7 +59,7 @@ public final class PkgHelper {
                     sSubChannel = sMarket.split("_")[iL - 1];
                 }
             } catch (Exception e) {
-             //   e.printStackTrace();
+//                e.printStackTrace();
             }
         }
     }
@@ -93,7 +94,7 @@ public final class PkgHelper {
         return bb.getShort(0);
     }
 
-    private static String readZipComment(File file) throws IOException {
+    private static byte[] readZipComment(File file) throws IOException {
         RandomAccessFile raf = null;
         try {
             raf = new RandomAccessFile(file, "r");
@@ -117,7 +118,7 @@ public final class PkgHelper {
                     byte[] bytesComment = new byte[length];
                     raf.readFully(bytesComment);
 
-                    return new String(bytesComment, "ISO8859-1");//ISO8859-1
+                    return bytesComment;
                 } else {
                     throw new IOException("zip comment content not found");
                 }

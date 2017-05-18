@@ -56,7 +56,7 @@ public class ChatDefaultSmilePanel extends ChatBaseSmilePanel implements Adapter
 
         View view = View.inflate(getContext(), R.layout.p1_chat_smile_grid, null);
         GridView gv = (GridView) view.findViewById(R.id.chat_panel_gridview);
-        gv.setPadding(0, UIUtil.dp2px(15), 0, 0);
+        gv.setPadding(0, UIUtil.dp2px(9), 0, 0);
 
         List<EmojiPack.EmojiItem> list = new ArrayList<EmojiPack.EmojiItem>();
         list.addAll(listTemp);

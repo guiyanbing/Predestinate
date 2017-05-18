@@ -1,19 +1,11 @@
 package com.juxin.predestinate.module.local.chat;
 
-import android.app.Application;
 import android.text.TextUtils;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.library.observe.MsgType;
-import com.juxin.library.observe.PObserver;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
 import com.juxin.mumu.bean.utils.BitmapUtil;
-import com.juxin.predestinate.bean.db.AppComponent;
-import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
-import com.juxin.predestinate.bean.db.DBModule;
-import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
@@ -43,7 +35,7 @@ import rx.functions.Action1;
  * Created by Kind on 2017/3/28.
  */
 
-public class ChatMgr implements ModuleBase, PObserver {
+public class ChatMgr implements ModuleBase {
 
     private RecMessageMgr messageMgr = new RecMessageMgr();
     private ChatSpecialMgr specialMgr = ChatSpecialMgr.getChatSpecialMgr();
@@ -53,7 +45,6 @@ public class ChatMgr implements ModuleBase, PObserver {
 
     @Override
     public void init() {
-        com.juxin.library.observe.MsgMgr.getInstance().attach(this);
         messageMgr.init();
         specialMgr.init();
     }
@@ -66,23 +57,7 @@ public class ChatMgr implements ModuleBase, PObserver {
 
 
     public void inject(){
-        getAppComponent().inject(this);
-
-//        BaseMessage baseMessage = new BaseMessage();
-//        baseMessage.setWhisperID("1");
-//        baseMessage.setSendID(1);
-//        baseMessage.setcMsgID(1);
-//        baseMessage.setContent("xxxx");
-//        baseMessage.setStatus(1);
-//        onReceiving(baseMessage);
-//
-//        Observable<List<BaseMessage>> listObservable = dbCenter.queryFmessageList("1","1", 1,1);
-//        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-//            @Override
-//            public void call(List<BaseMessage> baseMessages) {
-//
-//            }
-//        });
+        ModuleMgr.getChatListMgr().getAppComponent().inject(this);
     }
 
     /**
@@ -94,13 +69,13 @@ public class ChatMgr implements ModuleBase, PObserver {
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-        PLogger.d("Fl=== + sendTextMsg");
 
         long ret = dbCenter.insertMsg(commonMessage);
-        PLogger.d("Fl=== + sendTextMsg2");
 
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-        sendMessage(commonMessage, null);
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+
+        if(b) sendMessage(commonMessage, null);
     }
 
     /**
@@ -117,9 +92,14 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         long ret = dbCenter.insertMsg(textMessage);
 
-        onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), ret != DBConstant.ERROR, textMessage);
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), b, textMessage);
 
-        sendMessage(textMessage, sendCallBack);
+        if(b){
+            sendMessage(textMessage, sendCallBack);
+        }else {
+            sendCallBack.onSendFailed(null);
+        }
     }
 
     /**
@@ -142,8 +122,10 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         long ret = dbCenter.insertMsg(commonMessage);
 
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
-           //TODO 有问题
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+
+        if(!b) return;
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, img_url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -173,8 +155,10 @@ public class ChatMgr implements ModuleBase, PObserver {
 
         long ret = dbCenter.insertMsg(commonMessage);
 
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), ret != DBConstant.ERROR, commonMessage);
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
 
+        if(!b) return;
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VOICE, url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -501,43 +485,6 @@ public class ChatMgr implements ModuleBase, PObserver {
                 }
             }
         });
-    }
-
-    @Override
-    public void onMessage(String key, Object value) {
-        switch (key) {
-            case MsgType.MT_App_Login:
-                PLogger.d("---MT_App_Login--->" + value);
-                if ((Boolean) value) {//登录成功
-                    initAppComponent();
-                    inject();
-                } else {
-                }
-                break;
-        }
-    }
-
-    /**
-     * AppComponent
-     */
-    private static AppComponent mAppComponent;
-
-    /**
-     * @return 获取dagger2管理的全局实例
-     */
-    public static AppComponent getAppComponent() {
-        return mAppComponent;
-    }
-
-
-    /**
-     * DB初始化
-     */
-    private void initAppComponent() {
-        mAppComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule((Application) App.getContext()))
-                .dBModule(new DBModule(App.uid))
-                .build();
     }
 
     private long getTime() {
