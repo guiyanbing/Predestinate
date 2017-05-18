@@ -40,7 +40,20 @@ public class MyFriendsAdapter extends BaseRecyclerViewAdapter<UserInfoLightweigh
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
-        holder.lin_ranking.setVisibility(View.GONE);
+        if (userInfo.isToper()) {
+            holder.lin_ranking.setVisibility(View.VISIBLE);
+            if (userInfo.isMan()) {
+                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
+                holder.tv_ranking_type.setText(context.getString(R.string.top_type_man));
+                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+            } else {
+                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
+                holder.tv_ranking_type.setText(context.getString(R.string.top_type_woman));
+                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+            }
+        } else {
+            holder.lin_ranking.setVisibility(View.GONE);
+        }
 
         if (userInfo.getAge() == 0) {
             holder.tv_age.setVisibility(View.GONE);
