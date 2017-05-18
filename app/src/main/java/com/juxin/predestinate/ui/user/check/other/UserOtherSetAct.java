@@ -14,6 +14,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
+import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -242,7 +243,12 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
             @Override
             public void onSubmit() {
-                PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
+                long ret = ModuleMgr.getChatListMgr().deleteFmessage(userProfile.getUid());
+                if (ret != DBConstant.ERROR) {
+                    PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
+                    return;
+                }
+                PToast.showShort(getString(R.string.user_other_set_chat_del_fail));
             }
         }, getString(R.string.user_other_set_chat_del), R.color.text_zhuyao_black, "");
     }
