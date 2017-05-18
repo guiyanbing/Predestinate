@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.common;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
@@ -15,6 +16,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -52,6 +54,7 @@ public class CommonMgr implements ModuleBase {
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
+    private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
 
     @Override
     public void init() {
@@ -108,6 +111,7 @@ public class CommonMgr implements ModuleBase {
     public void requestStaticConfig() {
         requestConfig();
         requestGiftList(null);
+        getVerifyStatus(null);
         AttentionUtil.initUserDetails();
     }
 
@@ -225,6 +229,15 @@ public class CommonMgr implements ModuleBase {
         return giftLists;
     }
 
+    /**
+     * @return 返回认证消息对象
+     */
+    public IdCardVerifyStatusInfo getIdCardVerifyStatusInfo() {
+        if (mIdCardVerifyStatusInfo == null)
+            mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+        return mIdCardVerifyStatusInfo;
+    }
+
     public VideoVerifyBean getVideoVerify() {
         return videoVerify != null ? videoVerify : new VideoVerifyBean();
     }
@@ -272,7 +285,8 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkUpdate, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (isShowTip) LoadingDialog.closeLoadingDialog(300);
+                if (isShowTip)
+                    LoadingDialog.closeLoadingDialog(300);
                 AppUpdate appUpdate = new AppUpdate();
                 appUpdate.parseJson(response.getResponseString());
                 UIShow.showUpdateDialog(activity, appUpdate, isShowTip);
@@ -472,6 +486,56 @@ public class CommonMgr implements ModuleBase {
         getParams.put("cellPhone", phoneNum);
         getParams.put("verifyCode", code);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.bindCellPhone, getParams, complete);
+    }
+
+    /**
+     * 用户身份认证提交
+     *
+     * @param id_num         身份证号码
+     * @param accountname    真实姓名
+     * @param accountnum     银行账号/支付宝账户
+     * @param bank           银行
+     * @param subbank        支行
+     * @param id_front_img   身份证正面照URL
+     * @param id_back_img    身份证背面照URL
+     * @param face_img       手持身份证照URL
+     * @param paytype        支付类型 1银行 2支付宝 (默认支付宝)
+     * @param complete       请求完成后回调
+     */
+    public void userVerify(String id_num,String accountname,String accountnum,String bank,String subbank,String id_front_img,
+                           String id_back_img,String face_img,int paytype, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("id_num", id_num);
+        getParams.put("accountname", accountname);
+        getParams.put("accountnum", accountnum);
+        getParams.put("bank", bank);
+        getParams.put("subbank", subbank);
+        getParams.put("id_front_img", id_front_img);
+        getParams.put("id_back_img", id_back_img);
+        getParams.put("face_img", face_img);
+        getParams.put("paytype", paytype);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.userVerify, getParams, complete);
+    }
+
+    /**
+     * 获取用户验证信息(密)
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getVerifyStatus(final RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getVerifyStatus, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                Log.e("TTTTTTTTTTTTTEEE",response.getResponseString()+"|||");
+                if (response.isOk()){
+                    videoVerify = (VideoVerifyBean) response.getBaseData();
+                     mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+                     mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
+                }
+                if (complete != null)
+                    complete.onRequestComplete(response);
+            }
+        });
     }
 
     /**

@@ -757,5 +757,8 @@
         <item name="android:textColor">@color/color_666666</item>
         <item name="android:textSize">@dimen/px39_sp</item>
     </style>
+    <style name="id_card_content">
+        <item name="android:layout_marginLeft">@dimen/px55_dp</item>
+    </style>
 
 </resources>

@@ -60,6 +60,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         vpViewChange = (ViewPager) findViewById(R.id.wode_wallet_vp_view_change);
         tvTips = (TextView) findViewById(R.id.wode_wallet_tv_tips);
         tvTips.setText(Html.fromHtml(getString(R.string.withdraw_tip)));
+        tvTips.setVisibility(View.GONE);
         tvWithdraw.setOnClickListener(this);
         initViewsList();
         initViewPager();

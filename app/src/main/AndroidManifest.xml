@@ -179,6 +179,12 @@
         <activity
             android:name=".ui.user.my.RedBoxPhoneVerifyAct"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.auth.IDCardAuthenticationAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.auth.IDCardAuthenticationSucceedAct"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.my.DemandRedPacketAct"

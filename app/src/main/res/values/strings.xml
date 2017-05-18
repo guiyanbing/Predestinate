@@ -465,6 +465,8 @@
     <string name="branch_cannot_be_empty">开户支行不能为空</string>
     <string name="bank_card_cannot_be_empty">银行卡号不能为空</string>
     <string name="money_cannot_be_empty">提现金额不能为空</string>
+    <string name="please_complete_the_information">请完整填写信息</string>
+    <string name="please_upload_the_relevant_pictures">请上传相关照片</string>
     <string name="withdraw_tips">提现金额需要大于</string>
     <string name="not_beyond">提现不能超出您的金额</string>
     <string name="delay_contact_qq">若有延迟，请联系客服QQ：</string>
@@ -591,5 +593,7 @@
     <string name="txt_authtype_phone">手机认证</string>
     <string name="txt_authtype_id">身份认证</string>
     <string name="txt_authtype_face">自拍认证</string>
+    <string name="bank_id">银行卡号</string>
+    <string name="zhi_fu_id">支付宝账号</string>
 
 </resources>

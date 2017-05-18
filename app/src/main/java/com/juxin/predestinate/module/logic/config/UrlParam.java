@@ -52,6 +52,10 @@ public enum UrlParam {
     setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
     addVideoVerify(Hosts.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
+    // 用户身份认证提交
+    userVerify("User/Verify", true),
+    // 获取用户验证信息(密)
+    getVerifyStatus("User/getVerifyStatus", true),
 
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
