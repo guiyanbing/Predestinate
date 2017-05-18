@@ -192,8 +192,8 @@
     <color name="color_ffe1e0">#ffe1e0</color>
     <color name="color_dddddd">#dddddd</color>
     <color name="btn_getcode_stroke">#6DB5FF</color>
-    <color name="btn_getcode_solid_normal">#F3FFFF</color>
-    <color name="btn_getcode_solid_press">#CBE3E3</color>
+    <color name="btn_getcode_solid_normal">#FFFFFF</color>
+    <color name="btn_getcode_solid_press">#F0F0F0</color>
 
     <color name="usersnickname">#353535</color>
     <color name="bg_reghead_end">#00D3D2</color>

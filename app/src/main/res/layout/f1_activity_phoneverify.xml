@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/bg_color"
     android:orientation="vertical">
 
     <include layout="@layout/base_title" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pink1"
+        android:layout_marginTop="@dimen/px70_dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:paddingBottom="10dp"
         android:paddingEnd="5dp"
         android:paddingLeft="0dp"
@@ -18,144 +20,130 @@
         android:paddingStart="0dp"
         android:paddingTop="5dp">
 
-        <ImageView
-            android:id="@+id/iv_phoneverify_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/img_verify_girl_des"
-            android:src="@drawable/f1_near_visitor_laifang_big" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px240_dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:contentDescription="@string/img_verify_girl_des"
+                android:src="@drawable/f1_bronding_ico" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4" />
+        </LinearLayout>
+
 
         <TextView
-            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/f1_help_explain"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:lineSpacingExtra="@dimen/px15_dp"
-            android:paddingBottom="15dp"
-            android:paddingEnd="10dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="10dp"
-            android:paddingStart="5dp"
-            android:paddingTop="15dp"
             android:text="@string/txt_verify_tip_up"
-            android:textColor="@color/hei_color"
+            android:textColor="@color/text_ciyao_gray"
             android:textSize="@dimen/px39_sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/filter_tab_bottom_line" />
 
     <LinearLayout
-        android:id="@+id/lly_phoneverify_first"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="visible">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/txt_phone_desc"
-            android:textColor="@color/gray_text"
-            android:textSize="@dimen/px39_sp" />
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/px45_dp"
+                android:paddingRight="@dimen/px45_dp"
+                android:text="+86" />
+
+            <View
+                android:layout_width="@dimen/px3_dp"
+                android:layout_height="@dimen/px20_dp"
+                android:background="@color/bg_color" />
 
             <EditText
                 android:id="@+id/edt_phoneverify_phone"
+                style="@style/editText_input"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@drawable/f1_edt_phone_selector"
+                android:background="@null"
                 android:ems="10"
                 android:hint="@string/ext_phone_hit"
                 android:inputType="phone"
                 android:maxLength="11"
-                android:padding="10dp"
+                android:textSize="@dimen/px39_sp" />
+
+
+        </LinearLayout>
+
+        <View style="@style/divider_line_gapLeft40px" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/px45_dp">
+
+
+            <EditText
+                android:id="@+id/edt_phoneverify_note"
+                style="@style/editText_input"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:hint="@string/ext_verifycode_hit"
+                android:inputType="phone"
+                android:maxLength="8"
                 android:textSize="@dimen/px39_sp" />
 
             <Button
                 android:id="@+id/btn_phoneverify_begin"
-                style="@style/button_big"
-                android:layout_width="wrap_content"
+                style="@style/button_middle"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
+                android:background="@drawable/r1_btn_getcode_bg"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="@string/bt_send_code_normal" />
+                android:text="@string/bt_send_code_normal"
+                android:textColor="@color/btn_getcode_stroke" />
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/edt_phoneverify_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/f1_edt_phone_selector"
-            android:ems="10"
-            android:hint="@string/ext_verifycode_hit"
-            android:lines="1"
-            android:maxLines="1"
-            android:padding="10dp"
-            android:textSize="@dimen/px39_sp"
-            android:visibility="visible" />
 
-        <Button
-            android:id="@+id/btn_phoneverify_ok"
-            style="@style/button_big"
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:text="@string/bt_verify" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/lly_phoneverify_next"
+    <Button
+        android:id="@+id/btn_phoneverify_ok"
+        style="@style/button_big"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/txt_phoneverify_desc1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/txt_sendmsg_tip"
-            android:textColor="@color/gray_text" />
-
-        <TextView
-            android:id="@+id/txt_phoneverify_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/txt_phoneverify_hit"
-            android:textColor="@color/main_bottom_text_color_sel"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/bt_verify" />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.start;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,8 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
@@ -33,12 +36,9 @@ import java.lang.ref.WeakReference;
  */
 public class PhoneVerifyAct extends BaseActivity implements OnClickListener, RequestComplete {
 
-    private LinearLayout llyfirst,llynext;
     private EditText edtPhone,et_code;
     private Button bt_send_code,btnok;
-    private TextView txtPhone,txtDesc;
 
-    private boolean isok = false;
 
     // byIQQ phone fare
     private String phone, code;
@@ -92,38 +92,15 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     }
 
     private void initView() {
-        llyfirst = (LinearLayout) this.findViewById(R.id.lly_phoneverify_first);
-        llynext = (LinearLayout) this.findViewById(R.id.lly_phoneverify_next);
         edtPhone = (EditText) this.findViewById(R.id.edt_phoneverify_phone);
         et_code = (EditText) this.findViewById(R.id.edt_phoneverify_note);
         bt_send_code = (Button) this.findViewById(R.id.btn_phoneverify_begin);
         btnok = (Button) this.findViewById(R.id.btn_phoneverify_ok);
-        txtPhone = (TextView) this.findViewById(R.id.txt_phoneverify_phone);
-        txtDesc = (TextView) this.findViewById(R.id.txt_phoneverify_desc1);
-        llynext.setVisibility(View.GONE);
         bt_send_code.setOnClickListener(this);
         btnok.setOnClickListener(this);
-        isok = this.getIntent().getBooleanExtra("isVerify", false);
-        if (!isok) {
-            llyfirst.setVisibility(View.VISIBLE);
-            llynext.setVisibility(View.GONE);
-            btnok.setEnabled(false);
-        } else {
-            llyfirst.setVisibility(View.GONE);
-            llynext.setVisibility(View.VISIBLE);
-            setFinishedState();
-        }
-        btnok.setText(getResources().getString(R.string.bt_verify));
+
     }
 
-    private void setFinishedState() {
-        txtDesc.setText(getResources().getString(R.string.txt_verify_complete_desc));
-        UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
-        if (user != null) {
-            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw();
-            txtPhone.setText(password);
-        }
-    }
 
     public void onClick(View v) {
         switch (v.getId()) {
@@ -134,14 +111,10 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 }
                 break;
             case R.id.btn_phoneverify_ok:
-                if (isok) {
-                    this.finish();
-                } else {
                     if (validInput()) {
                         ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
                         LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                     }
-                }
                 break;
         }
 
@@ -204,14 +177,20 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 PToast.showLong(getResources().getString(R.string.toast_code_error));
             } else {
                 PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
-//                ModuleMgr.getCenterMgr().getMyInfo().setMobileAuthStatus(3);
-//                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
-                isok = true;
-                this.setResult(102);
-                llyfirst.setVisibility(View.GONE);
-                llynext.setVisibility(View.VISIBLE);
-                setFinishedState();
+                ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
+                ModuleMgr.getCenterMgr().getMyInfo().setPhone(phone);
+                UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE){
+            setResult(resultCode);
+            finish();
+        }
+    }
+
 }
