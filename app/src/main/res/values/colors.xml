@@ -135,6 +135,8 @@
     <color name="color_e6c2aa">#e6c2aa</color>
     <color name="color_6ba2fd">#6ba2fd</color>
     <color name="color_ee3434">#ee3434</color>
+    <color name="color_ffaa24">#FFAA24</color>
+    <color name="color_f2f2f2">#F2F2F2</color>
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
@@ -192,8 +194,8 @@
     <color name="color_ffe1e0">#ffe1e0</color>
     <color name="color_dddddd">#dddddd</color>
     <color name="btn_getcode_stroke">#6DB5FF</color>
-    <color name="btn_getcode_solid_normal">#F3FFFF</color>
-    <color name="btn_getcode_solid_press">#CBE3E3</color>
+    <color name="btn_getcode_solid_normal">#FFFFFF</color>
+    <color name="btn_getcode_solid_press">#F0F0F0</color>
 
     <color name="usersnickname">#353535</color>
     <color name="bg_reghead_end">#00D3D2</color>

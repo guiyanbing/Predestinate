@@ -62,6 +62,7 @@ import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
+import com.juxin.predestinate.ui.start.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
@@ -72,6 +73,7 @@ import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
 import com.juxin.predestinate.ui.user.check.edit.UserEditSignAct;
 import com.juxin.predestinate.ui.user.check.edit.info.UserEditInfoAct;
+import com.juxin.predestinate.ui.user.check.other.UserBlockAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherLabelAct;
 import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
@@ -242,7 +244,7 @@ public class UIShow {
      * @param activity
      * @param isVerify 是否绑定手机
      */
-    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify, int requestCode) {
+    public static void showPhoneVerifyAct(FragmentActivity activity, boolean isVerify, int requestCode) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
         intent.putExtra("isVerify", isVerify);
         activity.startActivityForResult(intent, requestCode);
@@ -403,6 +405,13 @@ public class UIShow {
      */
     public static void showCheckOwnInfoAct(Context context) {
         context.startActivity(new Intent(context, UserCheckInfoAct.class));
+    }
+
+    /**
+     * 打开用户账号封禁页
+     */
+    public static void showUserBlockAct(Context context) {
+        context.startActivity(new Intent(context, UserBlockAct.class));
     }
 
     /**
@@ -1200,5 +1209,14 @@ public class UIShow {
      */
     public static void showFindPwdAct(FragmentActivity context){
         context.startActivity(new Intent(context, FindPwdAct.class));
+    }
+
+    /**
+     * 打开手机认证完成页面
+     * @param context
+     * @param requestCode
+     */
+    public static void showPhoneVerifyCompleteAct(FragmentActivity context,int requestCode){
+        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class),requestCode);
     }
 }

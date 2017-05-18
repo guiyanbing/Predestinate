@@ -79,6 +79,7 @@
             <EditText
                 android:id="@+id/et_pwd"
                 style="@style/editText_input_pwd"
+                android:maxLength="20"
                 android:hint="@string/ext_setpwd_hit" />
         </LinearLayout>
 

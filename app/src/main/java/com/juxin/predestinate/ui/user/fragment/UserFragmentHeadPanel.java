@@ -145,7 +145,7 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
 
     public void initVideoAuthView() {
         int authStatus = ModuleMgr.getCommonMgr().getVideoVerify().getStatus();
-        if (authStatus == 3) {
+        if (authStatus == 3&&ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//TODO
             showVerify();
         } else {
             showUnVerify();
