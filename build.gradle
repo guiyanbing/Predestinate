@@ -90,7 +90,7 @@ def initConfigs() {
 
     cApkPath = props['ApkPath']
 
-    if (props['AppName'] == null || ''.equals(props['AppName']))
+    if (props['AppName'] == null || '' == props['AppName'])
         cAppName = getPrjNameFromManifest()
     else
         cAppName = props['AppName']
