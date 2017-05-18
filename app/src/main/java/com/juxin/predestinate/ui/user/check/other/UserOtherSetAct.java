@@ -62,13 +62,13 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         user_remark = (TextView) findViewById(R.id.user_remark);
+        if (userProfile == null) return;
 
         user_remark.setOnClickListener(listener);
         findViewById(R.id.rl_clear).setOnClickListener(listener);
         findViewById(R.id.rl_complain).setOnClickListener(listener);
         findViewById(R.id.ll_edit).setOnClickListener(listener);
 
-        if (userProfile == null) return;
         ImageLoader.loadRoundCorners(this, userProfile.getAvatar(), 8, user_head);
         user_nick.setText(userProfile.getNickname());
         user_id.setText("ID: " + userProfile.getUid());
@@ -206,8 +206,15 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         int videoSet = videoBarStatus ? 1 : 0;
         int voiceSet = voiceBarStatus ? 1 : 0;
 
-        if (videoSetting == null || (videoSetting.getAcceptvideo() == videoSet
-                && videoSetting.getAcceptvoice() == voiceSet))
+        if (userProfile == null) return;
+
+        if (videoSetting == null) {
+            ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userProfile.getUid(), videoSet, voiceSet, this);
+            return;
+        }
+
+        if (videoSetting.getAcceptvideo() == videoSet
+                && videoSetting.getAcceptvoice() == voiceSet)
             return;
         ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userProfile.getUid(), videoSet, voiceSet, this);
     }
@@ -216,6 +223,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
      * 拉黑、取消拉黑
      */
     private void reqAddOrRemoveBlack() {
+        if (userProfile == null) return;
         if (shieldBarStatus) {
             ModuleMgr.getCenterMgr().reqAddBlack(userProfile.getUid(), this);
             return;
