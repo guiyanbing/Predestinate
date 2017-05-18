@@ -6,6 +6,7 @@
 
 
     <include layout="@layout/base_title" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/px25_dp"
@@ -14,75 +15,86 @@
     <include layout="@layout/center_information_line" />
 
     <LinearLayout
-        android:id="@+id/ll_auth_phone"
-        style="@style/set_item">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <TextView
-            style="@style/set_desc"
-            android:text="@string/txt_authtype_phone" />
+        <LinearLayout
+            android:id="@+id/ll_auth_phone"
+            style="@style/set_item">
 
-        <TextView
-            android:id="@+id/txt_auth_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="@dimen/px60_dp"
-            android:text="@string/txt_authstatus_authno"
-            android:textColor="@color/gray_text"
-            android:textSize="14sp" />
+            <TextView
+                style="@style/set_desc"
+                android:text="@string/txt_authtype_phone" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_user_go" />
+            <TextView
+                android:id="@+id/txt_auth_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/px60_dp"
+                android:text="@string/txt_authstatus_authno"
+                android:textColor="@color/gray_text"
+                android:textSize="14sp" />
 
-    </LinearLayout>
-    <include layout="@layout/center_information_line" />
-    <LinearLayout
-        android:id="@+id/ll_auth_id"
-        style="@style/set_item">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_user_go" />
 
-        <TextView
-            style="@style/set_desc"
-            android:text="@string/txt_authtype_id" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_auth_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="@dimen/px60_dp"
-            android:text="@string/txt_authstatus_authno"
-            android:textColor="@color/gray_text"
-            android:textSize="14sp" />
+        <include layout="@layout/center_information_line" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_user_go" />
+        <LinearLayout
+            android:id="@+id/ll_auth_id"
+            style="@style/set_item">
 
-    </LinearLayout>
-    <include layout="@layout/center_information_line" />
-    <LinearLayout
-        android:id="@+id/ll_auth_video"
-        style="@style/set_item">
+            <TextView
+                style="@style/set_desc"
+                android:text="@string/txt_authtype_id" />
 
-        <TextView
-            style="@style/set_desc"
-            android:text="@string/txt_authtype_face" />
+            <TextView
+                android:id="@+id/txt_auth_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/px60_dp"
+                android:text="@string/txt_authstatus_authno"
+                android:textColor="@color/gray_text"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/txt_auth_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="@dimen/px60_dp"
-            android:text="@string/txt_authstatus_authno"
-            android:textColor="@color/gray_text"
-            android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_user_go" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_user_go" />
+        </LinearLayout>
 
+        <include layout="@layout/center_information_line" />
+
+        <LinearLayout
+            android:id="@+id/ll_auth_video"
+            style="@style/set_item">
+
+            <TextView
+                style="@style/set_desc"
+                android:text="@string/txt_authtype_face" />
+
+            <TextView
+                android:id="@+id/txt_auth_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/px60_dp"
+                android:text="@string/txt_authstatus_authno"
+                android:textColor="@color/gray_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_user_go" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <View

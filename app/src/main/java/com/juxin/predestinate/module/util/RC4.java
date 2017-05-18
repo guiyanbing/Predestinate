@@ -3,51 +3,57 @@ package com.juxin.predestinate.module.util;
 /**
  * Created by siow on 2016/3/25.
  */
+
 public class RC4 {
-    public static byte[] CryptRc4(String aInput, String aKey)
-    {
-        int[] iS = new int[256];
-        byte[] iK = new byte[256];
 
-        for (int i=0;i<256;i++)
-            iS[i]=i;
+    private static void swap(byte[] ary, int idx1, int idx2) {
+        byte temp = ary[idx1];
+        ary[idx1] = ary[idx2];
+        ary[idx2] = temp;
+    }
 
-        int j = 1;
+    private static byte[] initKeyBox(byte[] aryKey) {
+        byte[] keyBox = new byte[256];
 
-        for (short i= 0;i<256;i++)
-        {
-            iK[i]=(byte)aKey.charAt((i % aKey.length()));
+        for (int i = 0; i < 256; i++)
+            keyBox[i] = (byte) i;
+
+        int j = 0;
+
+        for (int i = 0; i < 256; i++) {
+            j = (j + (keyBox[i] & 0xFF) + (aryKey[i % aryKey.length] & 0xFF)) & 0xFF;
+            swap(keyBox, i, j);
         }
+        return keyBox;
+    }
 
-        j=0;
+    public static String CryptRc4(byte[] aryInput, byte[] aryKey, String charsetName) {
+        try {
+            byte[] keyBox = initKeyBox(aryKey);
 
-        for (int i=0;i<255;i++)
-        {
-            j=(j+iS[i]+iK[i]) % 256;
-            int temp = iS[i];
-            iS[i]=iS[j];
-            iS[j]=temp;
+            int i = 0;
+            int j = 0;
+
+            byte[] aryBts = new byte[aryInput.length];
+
+            for (int k = 0; k < aryInput.length; k++) {
+                i = (i + 1) & 0xFF;
+                j = (j + (keyBox[i] & 0xFF)) & 0xFF;
+
+                swap(keyBox, i, j);
+
+                int t = ((keyBox[i] & 0xFF) + (keyBox[j] & 0xFF)) & 0xFF;
+                aryBts[k] = (byte) (aryInput[k] ^ keyBox[t]);
+            }
+
+            return new String(aryBts, charsetName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
+    }
 
-
-        int i=0;
-        j=0;
-        char[] iInputChar = aInput.toCharArray();
-        byte[] iOutputChar = new byte[iInputChar.length];
-        for(short x = 0;x<iInputChar.length;x++)
-        {
-            i = (i+1) % 256;
-            j = (j+iS[i]) % 256;
-            int temp = iS[i];
-            iS[i]=iS[j];
-            iS[j]=temp;
-            int t = (iS[i]+(iS[j] % 256)) % 256;
-            int iY = iS[t];
-            char iCY = (char)iY;
-            iOutputChar[x] =(byte)( iInputChar[x] ^ iCY) ;
-        }
-
-        //return new String(iOutputChar);
-        return iOutputChar;
+    public static String CryptRc4(byte[] aryInput, byte[] aryKey) {
+        return CryptRc4(aryInput, aryKey, "UTF-8");
     }
 }

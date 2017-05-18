@@ -154,13 +154,13 @@
         <!-- ============= 小友模块start ============= -->
         <activity
             android:name=".ui.user.my.GiftDiamondPayDlg"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.my.NearVisitorAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.my.MyAttentionAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.my.MyDiamondsAct"
             android:screenOrientation="portrait" />
@@ -185,7 +185,7 @@
 
         <activity
             android:name=".ui.user.my.DemandRedPacketAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
 
         <activity
@@ -310,20 +310,19 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.user.auth.RecordVideoAct"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.auth.MyAuthenticationVideoAct"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.auth.MyAuthenticationAct"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.start.FindPwdAct"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.start.PhoneVerifyCompleteAct"
+            android:screenOrientation="portrait" />
 
         <!-- ============= 锁屏弹窗 ============= -->
         <activity
