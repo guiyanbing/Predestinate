@@ -101,9 +101,9 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         eitBankCardId.setText(mIdCardVerifyStatusInfo.getAccountnum());
         if (!TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_front_img()) && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_back_img())
                 && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getFace_img())){
-            apvFrontPhoto.setImg(mIdCardVerifyStatusInfo.getId_front_img());
-            apvTailPhoto.setImg(mIdCardVerifyStatusInfo.getId_back_img());
-            apvHandPhoto.setImg(mIdCardVerifyStatusInfo.getFace_img());
+            apvFrontPhoto.setImg(mIdCardVerifyStatusInfo.getId_front_img_small());
+            apvTailPhoto.setImg(mIdCardVerifyStatusInfo.getId_back_img_small());
+            apvHandPhoto.setImg(mIdCardVerifyStatusInfo.getFace_img_small());
         }
     }
 
