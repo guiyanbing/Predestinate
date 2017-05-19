@@ -110,6 +110,8 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
                     });
                 }
                 break;
+            default:
+                break;
         }
     }
 }

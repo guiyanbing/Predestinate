@@ -115,16 +115,10 @@ public class DirType {
      */
     public static String getFormatCacheSize() {
         long dirSize = DirUtils.getDirSize(new File(getRootDir()));
-        if (dirSize < 1024) return "缓存状态良好";
-        if (dirSize < 1024 * 1024) return "缓存状态良好";
-        if (dirSize < 1024 * 1024 * 1024) {
-            if (((double) dirSize / (1024 * 1024)) < 50) {
-                return "有少量缓存，可以清理";
-            } else {
-                return "有大量缓存，建议清除";
-            }
-        }
-        return "有大量缓存，建议清除";
+        if (dirSize < 1024 * 1024) return App.getResource().getString(R.string.cache_state_good);
+        if (dirSize < 1024 * 1024 * 1024 && ((double) dirSize / (1024 * 1024)) < 50)
+            return App.getResource().getString(R.string.cache_state_little);
+        return App.getResource().getString(R.string.cache_state_huge);
     }
 
     /**

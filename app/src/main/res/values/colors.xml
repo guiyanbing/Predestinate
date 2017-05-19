@@ -88,9 +88,11 @@
     <color name="color_9FA0A0">#9FA0A0</color>
     <color name="color_E36D87">#E36D87</color>
     <color name="color_EA6684">#EA6684</color>
+    <color name="color_DD3A37">#DD3A37</color>
     <color name="color_DDDEDE">#DDDEDE</color>
     <color name="color_FFCB02">#FFCB02</color>
     <color name="color_F25D71">#F25D71</color>
+    <color name="color_F5E37C">#F5E37C</color>
     <color name="color_F64051">#F64051</color>
     <color name="color_FFFDE4">#FFFDE4</color>
     <color name="color_E4E4E4">#E4E4E4</color>
@@ -150,6 +152,7 @@
     <color name="black">#000000</color>
     <color name="black_per30">#4D000000</color>
     <color name="read_near">#ffff4a76</color>
+    <color name="half_trans_black">#99000000</color>
 
     <!-- ============引用色值=========== -->
     <color name="colorPrimary">@color/color_009688</color>

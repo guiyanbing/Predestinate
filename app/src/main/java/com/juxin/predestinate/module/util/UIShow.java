@@ -44,6 +44,7 @@ import com.juxin.predestinate.ui.discover.MyFriendsAct;
 import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
 import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.mail.popup.RandomRedBoxActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.pay.PayWebAct;
@@ -121,6 +122,12 @@ import java.util.Map;
  * Created by ZRP on 2016/12/9.
  */
 public class UIShow {
+
+    // ----------------------------activity跳转码------------------------------
+
+    public static final int FROM_RANDOM_RED_BOX = 1000;//聊天随机红包activity result code
+
+    // ---------------------------应用内弹出及跳转------------------------------
 
     public static void show(Context context, Intent intent) {
         context.startActivity(intent);
@@ -595,36 +602,51 @@ public class UIShow {
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
-        if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                && ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {//相同包名
+
+        // 直接返回服务器没有返回包名的情况
+        if (TextUtils.isEmpty(appUpdate.getPackage_name())) {
+            if (isShowTip)
+                PToast.showShort(App.getResource().getString(R.string.update_server_error));
+            return;
+        }
+
+        // 相同包名
+        if (ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {
             if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
                 createUpdateDialog(activity, appUpdate);
             } else {
-                if (isShowTip) PToast.showShort("您当前的版本为最新的");
+                if (isShowTip)
+                    PToast.showShort(App.getResource().getString(R.string.update_already_new));
             }
-        } else {//不同包名
-            if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                    && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
-                // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
-                PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
-                    @Override
-                    public void onCancel() {
-                    }
+            return;
+        }
 
-                    @Override
-                    public void onSubmit() {
-                        if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                            activity.moveTaskToBack(activity.isTaskRoot());
+        // 不同包名
+        if (APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
+            // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
+            PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
                         }
-                    }
-                }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
-            } else {
-                if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
-                    createUpdateDialog(activity, appUpdate);
-                } else {
-                    if (isShowTip) PToast.showShort("您当前的版本为最新的");
-                }
-            }
+
+                        @Override
+                        public void onSubmit() {
+                            if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
+                                activity.moveTaskToBack(activity.isTaskRoot());
+                            }
+                        }
+                    }, App.getResource().getString(R.string.update_has_install),
+                    App.getResource().getString(R.string.tip), "",
+                    App.getResource().getString(R.string.ok),
+                    false, false);
+            return;
+        }
+
+        if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
+            createUpdateDialog(activity, appUpdate);
+        } else {
+            if (isShowTip)
+                PToast.showShort(App.getResource().getString(R.string.update_already_new));
         }
     }
 
@@ -692,6 +714,17 @@ public class UIShow {
             intent.putExtra("replyMsg", replyMsg);
         intent.putExtra("kf_id", kf_id);
         mContext.startActivity(intent);
+    }
+
+    /**
+     * 弹出聊天随机红包弹窗
+     *
+     * @param msg 红包消息mct字段，若无，传null或空字符串即可
+     */
+    public static void showChatRedBoxDialog(Activity context, String msg) {
+        Intent intent = new Intent(context, RandomRedBoxActivity.class);
+        intent.putExtra("msg", msg);
+        context.startActivityForResult(intent, FROM_RANDOM_RED_BOX);
     }
 
     /**
@@ -986,7 +1019,7 @@ public class UIShow {
      * @param context
      */
     public static void showWithDrawApplyAct(final int id, final double money, final boolean fromEdit, final FragmentActivity context) {
-        LoadingDialog.show(context,context.getString(R.string.xlistview_header_hint_loading));
+        LoadingDialog.show(context, context.getString(R.string.xlistview_header_hint_loading));
         ModuleMgr.getCommonMgr().reqWithdrawAddress(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -998,7 +1031,7 @@ public class UIShow {
                     intent.putExtra("id", id);
                     intent.putExtra("money", money);
                     intent.putExtra("fromEdit", fromEdit);
-                    intent.putExtra("info",info);
+                    intent.putExtra("info", info);
                     context.startActivity(intent);
                 } else {
                     PToast.showShort(context.getString(R.string.net_error_retry));
@@ -1039,7 +1072,7 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationAct(FragmentActivity context,int requestCode ) {
+    public static void showIDCardAuthenticationAct(FragmentActivity context, int requestCode) {
         context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
     }
 
