@@ -25,6 +25,10 @@ public class IdCardVerifyStatusInfo extends BaseData {
     private String accountnum;   //234242323423423wer
     private String bank;         //中国银行
     private String subbank;      //长沙支行
+    //缩略图地址
+    private String id_front_img_small;
+    private String id_back_img_small;
+    private String face_img_small;
 
     @Override
     public void parseJson(String s) {
@@ -46,6 +50,9 @@ public class IdCardVerifyStatusInfo extends BaseData {
             this.setAccountnum(jsonObject.optString("accountnum"));
             this.setBank(jsonObject.optString("bank"));
             this.setSubbank(jsonObject.optString("subbank"));
+            this.setId_front_img_small("id_front_img_small");
+            this.setId_back_img_small("id_back_img_small");
+            this.setFace_img_small("face_img_small");
         }
     }
 
@@ -155,6 +162,30 @@ public class IdCardVerifyStatusInfo extends BaseData {
 
     public void setSubbank(String subbank) {
         this.subbank = subbank;
+    }
+
+    public String getId_front_img_small() {
+        return id_front_img_small;
+    }
+
+    public void setId_front_img_small(String id_front_img_small) {
+        this.id_front_img_small = id_front_img_small;
+    }
+
+    public String getId_back_img_small() {
+        return id_back_img_small;
+    }
+
+    public void setId_back_img_small(String id_back_img_small) {
+        this.id_back_img_small = id_back_img_small;
+    }
+
+    public String getFace_img_small() {
+        return face_img_small;
+    }
+
+    public void setFace_img_small(String face_img_small) {
+        this.face_img_small = face_img_small;
     }
 
     public boolean getIsVerifyIdCard(){

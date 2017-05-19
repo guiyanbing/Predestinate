@@ -1048,8 +1048,8 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context) {
-        context.startActivity(new Intent(context, IDCardAuthenticationSucceedAct.class));
+    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context ,int requestCode) {
+        context.startActivityForResult(new Intent(context, IDCardAuthenticationSucceedAct.class),requestCode);
     }
     // -----------------------我的提示跳转 end----------------------------
 

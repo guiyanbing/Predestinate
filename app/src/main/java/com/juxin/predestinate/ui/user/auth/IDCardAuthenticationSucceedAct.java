@@ -8,7 +8,6 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
 
 /**
@@ -51,7 +50,7 @@ public class IDCardAuthenticationSucceedAct extends BaseActivity implements View
                 data.putExtra(IDCARDBACK, 2);
                 setResult(RESULT_OK, data);
                 finish();
-                UIShow.show(this, MyAttentionAct.class,Intent.FLAG_ACTIVITY_NEW_TASK);
+                UIShow.show(this, MyAuthenticationAct.class,Intent.FLAG_ACTIVITY_NEW_TASK);
                 break;
             default:
                 break;

@@ -56,6 +56,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private int sum = 0;
     private int onePageCount = 0;
     private GiftPopView gpvPop;
+    private int num;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -187,6 +188,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                             sum = 1;
                         }
                         oldPosition = select;//记录前一个position的位置
+                        BottomGiftDialog.this.position = oldPosition;
                         onSelectNumChanged(sum, sum * arrGifts.get(select).getMoney(), select);
                         for (int i = 0; i < mLists.size(); i++) {
                             ((GiftAdapter) mLists.get(i).getAdapter()).notifyDataSetChanged();
@@ -217,6 +219,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
      */
     public void onSelectNumChanged(int num,int sum,int position) {
         this.position = position;
+        this.num = num;
         txvSendNum.setText(num + "");
 //        txvSendNum.setSelection(txvSendNum.length());
         txvNeedStone.setText(sum+"");
@@ -225,6 +228,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
     @Override
     public void onNumSelectedChanged(int num) {
+        this.num = num;
         txvSendNum.setText(num+"");
         if (position > -1){
             int sum = num*arrGifts.get(position).getMoney();
@@ -237,6 +241,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     public void onRequestComplete(HttpResponse response) {
         SendGiftResultInfo info = new SendGiftResultInfo();
         info.parseJson(response.getResponseString());
+        ModuleMgr.getChatMgr().sendGiftMsg(null, uid+"",arrGifts.get(position).getId(),num,0);
         PToast.showShort(info.getMsg()+"");
     }
     private CharSequence temp;

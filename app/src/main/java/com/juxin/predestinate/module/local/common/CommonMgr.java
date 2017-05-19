@@ -465,9 +465,9 @@ public class CommonMgr implements ModuleBase {
             long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
             String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
 
-            Map<String, Object> postParams = new HashMap<>();
-            postParams.put("uid", uid);
-            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+//            Map<String, Object> postParams = new HashMap<>();
+//            postParams.put("uid", uid);
+//            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
 
             ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadIdCard, null, fileParams, new RequestComplete() {
                 @Override

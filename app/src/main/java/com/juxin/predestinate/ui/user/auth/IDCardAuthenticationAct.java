@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.auth;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,6 +45,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private String strImgFront,strImgTail,strImgHand;
 
     private int paytype = 2;
+    private int authIDCard = 105;
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
     private LinearLayout llAudit,llCertification;
     @Override
@@ -116,18 +118,18 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                     cardIdCard = eitIdCard.getText().toString();
                     cardLocal = eitOpenBank.getText().toString();
                     cardNum = eitBankCardId.getText().toString();
-                    if(TextUtils.isEmpty(cardNum) || TextUtils.isEmpty(cardIdCard) || TextUtils.isEmpty(cardName)||(paytype == 1 && TextUtils.isEmpty(cardLocal))) {
+                    if (TextUtils.isEmpty(cardNum) || TextUtils.isEmpty(cardIdCard) || TextUtils.isEmpty(cardName) || (paytype == 1 && TextUtils.isEmpty(cardLocal))) {
                         PToast.showShort(getString(R.string.please_complete_the_information));
                         return;
                     }
                     strImgFront = apvFrontPhoto.getImgStrPath();
                     strImgTail = apvTailPhoto.getImgStrPath();
                     strImgHand = apvHandPhoto.getImgStrPath();
-                    if(TextUtils.isEmpty(strImgFront) || TextUtils.isEmpty(strImgTail) || TextUtils.isEmpty(strImgHand)) {
+                    if (TextUtils.isEmpty(strImgFront) || TextUtils.isEmpty(strImgTail) || TextUtils.isEmpty(strImgHand)) {
                         PToast.showShort(getString(R.string.please_upload_the_relevant_pictures));
                         return;
                     }
-                    ModuleMgr.getCommonMgr().userVerify(cardIdCard,cardName,cardNum,cardLocal,cardLocal,strImgFront,strImgTail,strImgHand,paytype,IDCardAuthenticationAct.this);
+                    ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum, cardLocal, cardLocal, strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
                 }
             });
         }
@@ -170,9 +172,24 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == authIDCard) {
+            if (data != null){
+                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
+                //                Log.e("TTTTTTTTTTTTTPPP000","zhixing"+back);
+                if (back == 1){
+                    //                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
+                    this.finish();
+                }
+            }
+        }
+    }
+
+    @Override
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()){
-            UIShow.showIDCardAuthenticationSucceedAct(this);
+            UIShow.showIDCardAuthenticationSucceedAct(this,authIDCard);
             finish();
         }
 //        Log.e("TTTTTTTTTTTTTTTMMM",response.getResponseString()+"|||");
