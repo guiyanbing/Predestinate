@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.application;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
@@ -34,7 +35,7 @@ public class App extends MultiDexApplication {
         super.onCreate();
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
-      //  initAppComponent();
+        //  initAppComponent();
 
         ModuleMgr.initModule(context);
     }
@@ -50,6 +51,14 @@ public class App extends MultiDexApplication {
         return context;
     }
 
+    /**
+     * @return 获取资源读取对象
+     */
+    public static Resources getResource() {
+        return context.getResources();
+    }
+
+    // -----------------------------------------------------
 
 //    private static CacheComponent cacheComponent;
 //

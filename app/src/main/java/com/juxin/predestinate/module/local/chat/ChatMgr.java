@@ -7,7 +7,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.DBCenter;
-import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
@@ -25,17 +24,19 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
 /**
- *
  * Created by Kind on 2017/3/28.
  */
 public class ChatMgr implements ModuleBase {
@@ -63,12 +64,13 @@ public class ChatMgr implements ModuleBase {
     }
 
 
-    public void inject(){
+    public void inject() {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
     }
 
     /**
      * 文字消息
+     *
      * @param whisperID
      * @param content
      */
@@ -80,44 +82,46 @@ public class ChatMgr implements ModuleBase {
         long ret = dbCenter.insertMsg(commonMessage);
 
         boolean b = ret != DBConstant.ERROR;
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
-        if(b) sendMessage(commonMessage, null);
+        if (b) sendMessage(commonMessage, null);
     }
 
     /**
      * 打招呼
+     *
      * @param whisperID
      * @param content
-     * @param kf  当前发信用户为机器人  客服id
-     * @param sayHelloType  当前发信用户为机器人 机器人打招呼类型(0为普通,1为向机器人一键打招呼, 3附近的人群打招呼,4为向机器人单点打招呼(包括首页和详细资料页等))
+     * @param kf           当前发信用户为机器人  客服id
+     * @param sayHelloType 当前发信用户为机器人 机器人打招呼类型(0为普通,1为向机器人一键打招呼, 3附近的人群打招呼,4为向机器人单点打招呼(包括首页和详细资料页等))
      */
     public void sendSayHelloMsg(String whisperID, String content, int kf, int sayHelloType, IMProxy.SendCallBack sendCallBack) {
-        TextMessage textMessage = new TextMessage(whisperID,  content, kf, sayHelloType);
+        TextMessage textMessage = new TextMessage(whisperID, content, kf, sayHelloType);
         textMessage.setStatus(DBConstant.SENDING_STATUS);
         textMessage.setJsonStr(textMessage.getJson(textMessage));
 
         long ret = dbCenter.insertMsg(textMessage);
 
         boolean b = ret != DBConstant.ERROR;
-        onChatMsgUpdate(textMessage.getChannelID(),textMessage.getWhisperID(), b, textMessage);
+        onChatMsgUpdate(textMessage.getChannelID(), textMessage.getWhisperID(), b, textMessage);
 
-        if(b){
+        if (b) {
             sendMessage(textMessage, sendCallBack);
-        }else {
+        } else {
             sendCallBack.onSendFailed(null);
         }
     }
 
     /**
      * 关注
+     *
      * @param userID
      * @param content
      * @param kf
-     * @param gz 关注状态1为关注2为取消关注
+     * @param gz      关注状态1为关注2为取消关注
      */
     public void sendAttentionMsg(long userID, String content, int kf, int gz, IMProxy.SendCallBack sendCallBack) {
-        OrdinaryMessage message = new OrdinaryMessage(userID,  content, kf, gz);
+        OrdinaryMessage message = new OrdinaryMessage(userID, content, kf, gz);
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toFllowJson()), sendCallBack);
     }
 
@@ -130,9 +134,9 @@ public class ChatMgr implements ModuleBase {
         long ret = dbCenter.insertMsg(commonMessage);
 
         boolean b = ret != DBConstant.ERROR;
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
-        if(!b) return;
+        if (!b) return;
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, img_url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -141,17 +145,17 @@ public class ChatMgr implements ModuleBase {
                     commonMessage.setImg(upLoadResult.getHttpPathPic());
                     commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
                     long upRet = dbCenter.updateFmessage(commonMessage);
-                    if(upRet == DBConstant.ERROR){
-                        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
+                    if (upRet == DBConstant.ERROR) {
+                        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
                     sendMessage(commonMessage, null);
-                }else {
+                } else {
                     updateFail(commonMessage, null);
                 }
             }
         });
-     }
+    }
 
     //语音消息
     public void sendVoiceMsg(String channelID, String whisperID, String url, int length) {
@@ -163,9 +167,9 @@ public class ChatMgr implements ModuleBase {
         long ret = dbCenter.insertMsg(commonMessage);
 
         boolean b = ret != DBConstant.ERROR;
-        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), b, commonMessage);
+        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
-        if(!b) return;
+        if (!b) return;
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VOICE, url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -174,12 +178,12 @@ public class ChatMgr implements ModuleBase {
                     commonMessage.setVoiceUrl(upLoadResult.getHttpPathPic());
                     commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
                     long upRet = dbCenter.updateFmessage(commonMessage);
-                    if(upRet == DBConstant.ERROR){
-                        onChatMsgUpdate(commonMessage.getChannelID(),commonMessage.getWhisperID(), false, commonMessage);
+                    if (upRet == DBConstant.ERROR) {
+                        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
                         return;
                     }
                     sendMessage(commonMessage, null);
-                }else {
+                } else {
                     updateFail(commonMessage, null);
                 }
             }
@@ -204,19 +208,19 @@ public class ChatMgr implements ModuleBase {
     }
 
 
-    private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack){
+    private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack) {
         PLogger.d("isMsgID=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                if(sendCallBack != null){
+                if (sendCallBack != null) {
                     sendCallBack.onResult(msgId, group, groupId, sender, contents);
                 }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
-                if(!messageRet.isOk() || !messageRet.isS()){
+                if (!messageRet.isOk() || !messageRet.isS()) {
                     updateFail(message, messageRet);
-                }else {
+                } else {
                     updateOk(message, messageRet);
                 }
 
@@ -225,7 +229,7 @@ public class ChatMgr implements ModuleBase {
 
             @Override
             public void onSendFailed(NetData data) {
-                if(sendCallBack != null){
+                if (sendCallBack != null) {
                     sendCallBack.onSendFailed(data);
                 }
                 updateFail(message, null);
@@ -241,7 +245,7 @@ public class ChatMgr implements ModuleBase {
         message.setMsgID(messageRet.getMsgId());
 
         long upRet = dbCenter.updateFmessage(message);
-        onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
+        onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != DBConstant.ERROR, message);
     }
 
     private void updateFail(BaseMessage message, MessageRet messageRet) {
@@ -254,12 +258,13 @@ public class ChatMgr implements ModuleBase {
         }
         message.setStatus(DBConstant.FAIL_STATUS);
         long upRet = dbCenter.updateFmessage(message);
-        onChatMsgUpdate(message.getChannelID(),message.getWhisperID(), upRet != DBConstant.ERROR, message);
+        onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != DBConstant.ERROR, message);
 
     }
 
     /**
      * 接收消息
+     *
      * @param message
      */
     public void onReceiving(BaseMessage message) {
@@ -297,7 +302,7 @@ public class ChatMgr implements ModuleBase {
             observable.subscribe(new Action1<List<BaseMessage>>() {
                 @Override
                 public void call(List<BaseMessage> baseMessages) {
-                    onChatMsgRecently(channelID, whisperID, true,  BaseMessage.conversionListMsg(baseMessages));
+                    onChatMsgRecently(channelID, whisperID, true, BaseMessage.conversionListMsg(baseMessages));
                 }
             });
 //            DBCenter.getInstance().queryMsgListWG(channelID, whisperID, 20);
@@ -547,6 +552,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 更新个人资料
+     *
      * @param isRemove        是否要重回调map中移除 true是移除
      * @param infoLightweight 个人资料数据
      */

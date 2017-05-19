@@ -83,6 +83,9 @@ public class CenterMgr implements ModuleBase, PObserver {
             case MsgType.MT_Update_MyInfo:
                 reqMyInfo();
                 break;
+
+            default:
+                break;
         }
     }
 

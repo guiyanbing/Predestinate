@@ -69,7 +69,7 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
                     public void onSubmit() {
                         exitLogin();
                     }
-                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
+                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.cancel), getResources().getString(R.string.ok), true);
                 break;
         }
     }

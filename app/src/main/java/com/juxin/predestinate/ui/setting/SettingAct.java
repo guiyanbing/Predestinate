@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.juxin.library.log.PSP;
@@ -231,7 +229,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         exitLogin();
                     }
-                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
+                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.cancel), getResources().getString(R.string.ok), true);
                 break;
             case R.id.setting_video_switch: {//视频通话开关
                 if (validChange()) {
@@ -286,7 +284,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 public void onSubmit() {
                     UIShow.showOpenVipActivity(SettingAct.this);
                 }
-            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
+            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
             return false;
         }
         //开启音、视频通话时，女性用户判断是否视频认证
@@ -302,7 +300,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
                     }
-                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
+                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
                 return false;
             } else if (videoVerifyBean.getStatus() == 1) {
                 PToast.showShort(getResources().getString(R.string.toast_under_review));

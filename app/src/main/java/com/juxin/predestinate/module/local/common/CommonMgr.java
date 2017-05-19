@@ -325,20 +325,23 @@ public class CommonMgr implements ModuleBase {
         upMap.put("versionCode", versionCode);
         upMap.put("user", PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null));
 
-        if (DirType.isFolderExists(UPDATE_CACHE_PATH)) {
-            File file = new File(UPDATE_CACHE_PATH + "user_cache");
-            OutputStreamWriter out = null;
+        // 如果文件夹创建失败，直接跳出
+        if (DirType.isFolderExists(UPDATE_CACHE_PATH)) return;
+
+        // 文件写入
+        File file = new File(UPDATE_CACHE_PATH + "user_cache");
+        OutputStreamWriter out = null;
+        try {
+            out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
+            out.write(new Gson().toJson(upMap));//向文件写入内容
+            out.flush();
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        } finally {
             try {
-                out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
-                out.write(new Gson().toJson(upMap));//向文件写入内容
+                if (out != null) out.close();// 关闭输出流
             } catch (Exception e) {
                 PLogger.printThrowable(e);
-            } finally {
-                try {
-                    if (out != null) out.close();// 关闭输出流
-                } catch (Exception e) {
-                    PLogger.printThrowable(e);
-                }
             }
         }
     }
@@ -352,21 +355,23 @@ public class CommonMgr implements ModuleBase {
             JSONObject cacheObject = JsonUtil.getJsonObject(key);
             String packageName = cacheObject.optString("packageName");
             int versionCode = cacheObject.optInt("versionCode");
-            if (ModuleMgr.getAppMgr().getPackageName().equalsIgnoreCase(packageName) &&
-                    ModuleMgr.getAppMgr().getVerCode() == versionCode) {
-                JSONArray jsonArray = cacheObject.optJSONArray("user");
-                for (int i = 0; jsonArray != null && i < jsonArray.length(); i++) {
-                    JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
-                    try {
-                        ModuleMgr.getLoginMgr().addLoginUser(
-                                Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
-                                EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
-                    } catch (Exception e) {
-                        PLogger.printThrowable(e);
-                    }
+            // 如果当前包名或版本号不等于目标包名或版本号，才进行处理
+            if (!ModuleMgr.getAppMgr().getPackageName().equalsIgnoreCase(packageName) ||
+                    ModuleMgr.getAppMgr().getVerCode() != versionCode) return;
+
+            // 读取旧版本用户数据
+            JSONArray jsonArray = cacheObject.optJSONArray("user");
+            for (int i = 0; jsonArray != null && i < jsonArray.length(); i++) {
+                JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
+                try {
+                    ModuleMgr.getLoginMgr().addLoginUser(
+                            Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
+                            EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
+                } catch (Exception e) {
+                    PLogger.printThrowable(e);
                 }
-                FileUtil.deleteFile(UPDATE_CACHE_PATH + "user_cache");
             }
+            FileUtil.deleteFile(UPDATE_CACHE_PATH + "user_cache");
         }
     }
     // ---------------------------- 软件升级 end ------------------------------
@@ -451,6 +456,7 @@ public class CommonMgr implements ModuleBase {
     }
 
     //============================== 小友模块相关接口 =============================
+
     /**
      * 上传身份证照片
      *
@@ -465,9 +471,9 @@ public class CommonMgr implements ModuleBase {
             long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
             String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
 
-//            Map<String, Object> postParams = new HashMap<>();
-//            postParams.put("uid", uid);
-//            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", EncryptUtil.md5(uid + EncryptUtil.md5(password)));
 
             ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadIdCard, null, fileParams, new RequestComplete() {
                 @Override
@@ -541,19 +547,19 @@ public class CommonMgr implements ModuleBase {
     /**
      * 用户身份认证提交
      *
-     * @param id_num         身份证号码
-     * @param accountname    真实姓名
-     * @param accountnum     银行账号/支付宝账户
-     * @param bank           银行
-     * @param subbank        支行
-     * @param id_front_img   身份证正面照URL
-     * @param id_back_img    身份证背面照URL
-     * @param face_img       手持身份证照URL
-     * @param paytype        支付类型 1银行 2支付宝 (默认支付宝)
-     * @param complete       请求完成后回调
+     * @param id_num       身份证号码
+     * @param accountname  真实姓名
+     * @param accountnum   银行账号/支付宝账户
+     * @param bank         银行
+     * @param subbank      支行
+     * @param id_front_img 身份证正面照URL
+     * @param id_back_img  身份证背面照URL
+     * @param face_img     手持身份证照URL
+     * @param paytype      支付类型 1银行 2支付宝 (默认支付宝)
+     * @param complete     请求完成后回调
      */
-    public void userVerify(String id_num,String accountname,String accountnum,String bank,String subbank,String id_front_img,
-                           String id_back_img,String face_img,int paytype, RequestComplete complete) {
+    public void userVerify(String id_num, String accountname, String accountnum, String bank, String subbank, String id_front_img,
+                           String id_back_img, String face_img, int paytype, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("id_num", id_num);
         getParams.put("accountname", accountname);
@@ -577,10 +583,10 @@ public class CommonMgr implements ModuleBase {
             @Override
             public void onRequestComplete(HttpResponse response) {
 //                Log.e("TTTTTTTTTTTTTEEE",response.getResponseString()+"|||");
-                if (response.isOk()){
+                if (response.isOk()) {
                     videoVerify = (VideoVerifyBean) response.getBaseData();
-                     mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
-                     mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
+                    mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+                    mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
                 }
                 if (complete != null)
                     complete.onRequestComplete(response);
@@ -726,7 +732,7 @@ public class CommonMgr implements ModuleBase {
      * @param subbank     开户支行
      * @param complete    请求完成后回调
      */
-    public void reqWithdraw(String money,int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
+    public void reqWithdraw(String money, int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("money", (Float.parseFloat(money) * 100) + "");
         postParams.put("paytype", paytype);
@@ -759,7 +765,7 @@ public class CommonMgr implements ModuleBase {
      * @param subbank     开户支行
      * @param complete    请求完成后回调
      */
-    public void reqWithdrawModify(String money,int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
+    public void reqWithdrawModify(String money, int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("money", (Float.parseFloat(money) * 100) + "");
         postParams.put("paytype", paytype);
