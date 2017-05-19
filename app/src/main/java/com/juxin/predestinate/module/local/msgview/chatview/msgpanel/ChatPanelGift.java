@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,15 +9,12 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * Created by Kind on 2017/5/10.
@@ -81,7 +77,7 @@ public class ChatPanelGift extends ChatPanel {
         }
         GiftMessage msg = (GiftMessage) msgData;
 
-        UIShow.showDiamondSendGiftDlg(getContext(), msg.getGiftID(), msg.getWhisperID());
+        ModuleMgr.getChatMgr().updateMsgFStatus(msg);
         return true;
     }
 }

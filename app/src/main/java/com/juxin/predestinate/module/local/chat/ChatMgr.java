@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
@@ -54,7 +55,7 @@ public class ChatMgr implements ModuleBase {
     public void init() {
         messageMgr.init();
         specialMgr.init();
-    //    App.getCacheComponent().inject(this);
+        //    App.getCacheComponent().inject(this);
     }
 
     @Override
@@ -192,6 +193,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 发送礼物
+     *
      * @param channelID
      * @param whisperID
      * @param giftID
@@ -207,6 +209,11 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), ret != DBConstant.ERROR, giftMessage);
     }
 
+    public void updateMsgFStatus(BaseMessage baseMessage) {
+        baseMessage.setfStatus(0);
+        long upRet = dbCenter.updateFmessage(baseMessage);
+        onChatMsgUpdate(baseMessage.getChannelID(), baseMessage.getWhisperID(), upRet != DBConstant.ERROR, baseMessage);
+    }
 
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack) {
         PLogger.d("isMsgID=" + message.getcMsgID());

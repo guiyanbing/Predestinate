@@ -15,8 +15,8 @@ import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBas
  * Created by Kind on 2017/3/30.
  */
 public enum ChatMsgType {
-    // 基本消息类型
 
+     // 基本消息类型
      CMT_2(ChatPanelCommon.class, "普通消息"),
 
      CMT_3(ChatPanelText.class, "打招呼消息"),
@@ -25,7 +25,7 @@ public enum ChatMsgType {
 
      CMT_20(ChatPanelGiveMeGift.class, "礼物消息"),
 
-//
+
 //    CMT_3(ChatPanelText.class, "打招呼消息-用普通文字消息模板"),
 //
 //    CMT_8(ChatPanelText.class, "心动消息-用普通文字消息模板"),

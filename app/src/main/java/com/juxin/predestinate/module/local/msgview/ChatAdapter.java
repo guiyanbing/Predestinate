@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -18,6 +17,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatExtendPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatInputPanel;
+import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatRecordPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel;
 import com.juxin.predestinate.module.logic.application.App;
@@ -78,11 +78,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     private ChatInterface.OnUserInfoListener onUserInfoListener = null;
 
     /**
-     * 聊天类型。
-     */
-    //  private ChatListMgr.Folder folder = ChatListMgr.Folder.whisper;
-
-    /**
      * 是否是客服消息。
      * 0不是客服
      */
@@ -108,19 +103,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void setKf_id(int isKF_ID) {
         this.isKF_ID = isKF_ID;
     }
-
-//    public ChatListMgr.Folder getFolder() {
-//        return folder;
-//    }
-//
-//    public void setFolder(ChatListMgr.Folder folder) {
-//        if (folder == null || folder == this.folder) {
-//            return;
-//        }
-//
-//        this.folder = folder;
-//        getChatInstance().chatSmilePanel.resetSmilePackages();
-//    }
 
     /**
      * 判断消息发出者是否是当前用户自己。
@@ -220,7 +202,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             PLogger.printThrowable(e);
         }
     }
-
 
     public ChatInterface.OnClickChatItemListener getOnClickChatItemListener() {
         return onClickChatItemListener;
@@ -490,7 +471,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             }
 
             ModuleMgr.getChatMgr().detachChatListener(this);
-            //    ChatMediaPlayer.getInstance().stopPlayVoice();
+            ChatMediaPlayer.getInstance().stopPlayVoice();
 
             //关闭页面的时候查看是否下在输入中
             if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
@@ -502,7 +483,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onChatRecently(boolean ret, List<BaseMessage> baseMessages) {
         PLogger.printObject(baseMessages);
-
         List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
 
         if (ret) {
@@ -515,7 +495,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
         if (listTemp.size() < 5) {
             long uid = 0;
-
             if (isGroup()) {
                 uid = getCreatorId();
             } else {
@@ -559,20 +538,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PLogger.printObject(message);
         boolean show = false;
         boolean isUpdate = true;
-
-        try {
-            ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
-//            if (ChatMsgType.CMT_give_present == msgType) {
-//                if (ret) {
-//                    if (message.getMsgid() != 0) {
-//                        LoadingDialog.closeLoadingDialog();
-//                    }
-//                } else {
-//                    LoadingDialog.closeLoadingDialog();
-//                }
-//            }
-        } catch (Exception e) {
-        }
 
         if (ret) {
             if (message.getTime() == 0) {

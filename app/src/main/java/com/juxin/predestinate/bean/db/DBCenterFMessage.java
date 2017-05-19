@@ -122,6 +122,9 @@ public class DBCenterFMessage {
             if (baseMessage.getTime() != -1)
                 values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
 
+            if (baseMessage.getfStatus() != -1)
+                values.put(FMessage.COLUMN_FSTATUS, baseMessage.getfStatus());
+
             if (baseMessage.getJsonStr() != null)
                 values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
             return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);

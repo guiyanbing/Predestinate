@@ -34,7 +34,7 @@ public class BaseMessage implements IBaseMessage {
         concern(ConcernMessage.class, 5),//关注
         system(SystemMessage.class, 7),//系统消息
         gift(GiftMessage.class, 10),//礼物消息
-        redEnvelopes(RedEnvelopesMessage.class, 12),//聊天红包
+  //      redEnvelopes(RedEnvelopesMessage.class, 12),//聊天红包
         hint(TextMessage.class, 14),//小提示消息
         wantGift(TextMessage.class, 15),//索要礼物消息
         redEnvelopesBalance(TextMessage.class, 17),//红包余额变动消息
@@ -113,15 +113,9 @@ public class BaseMessage implements IBaseMessage {
     /**
      * 消息类型，进行未读消息比对
      */
-    public static final int look_MsgType = 4;//谁看过我
     public static final int follow_MsgType = 5;//谁关注了我
-    public static final int system_MsgType = 7;//系统消息
-    public static final int heart_MsgType = 8;//心动消息
+    public static final int TalkRed_MsgType = 12;//聊天红包
 
-    public static final int addFriend_MsgType = 14;//加好友消息
-    public static final int game_MsgType = 15;//游戏交互消息
-    public static final int envelopes_MsgType = 16;//红包消息
-    public static final int thumbs_MsgType = 18;//棒棒糖点赞消息
 
 
     @Override
@@ -157,7 +151,7 @@ public class BaseMessage implements IBaseMessage {
     private String whisperID;//私聊ID
     private long sendID;// 发送ID
     private long msgID = -1;//服务器消息ID
-    private long cMsgID;//客户端消息ID
+    private long cMsgID = -1;//客户端消息ID
     private long time;
     private String content;//具体内容
     private String jsonStr;//json串
