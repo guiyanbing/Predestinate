@@ -543,6 +543,75 @@ public class CenterMgr implements ModuleBase, PObserver {
         return kf_id != 0;
     }
 
+
+    /**
+     * 是否可以打招呼
+     * 头像未审核通过不准打招呼
+     *
+     * @param context
+     * @return true可以打招呼 false不可以打招呼
+     */
+    public boolean isCanSayHi(Context context) {
+        if (getMyInfo().getAvatar_status() == 2) {
+            PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * 是否可以进行群打招呼
+     *
+     * @param context
+     * @return
+     */
+    public boolean isCanGroupSayHi(Context context) {
+        //头像状态是否是未通过审核状态
+        if (getMyInfo().getAvatar_status() == 2) {
+            PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
+            return false;
+        }
+        //判断是否达到第二天
+        if (ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey())) {
+            //判断群打招呼次数
+            int num = PSP.getInstance().getInt(getGroupSayHiNumKey(), 0);
+            if (num >= 2) { //如果达到第三次重置 是否达到第二天的状态 并清除打招呼次数
+                ModuleMgr.getCommonMgr().saveDateState(getGroupSayHiDayKey());
+                PSP.getInstance().put(getGroupSayHiNumKey(), 0);
+                PToast.showShort(context.getString(R.string.say_hi_group_num_state));
+                return false;
+            } else { //如果没有达到第三次 则更新群打招呼次数
+                PSP.getInstance().put(getGroupSayHiNumKey(), num + 1);
+                return true;
+            }
+        } else { //群打招呼用完了 第二天的状态已经被重置 直接返回false
+            PToast.showShort(context.getString(R.string.say_hi_group_num_state));
+            return false;
+        }
+    }
+
+    /**
+     * 群打招呼是否达到第二天状态key
+     *
+     * @return
+     */
+    private String getGroupSayHiDayKey() {
+        return "GroupSayHiDayKey" + getMyInfo().getUid();
+    }
+
+    /**
+     * 群打招呼次数key
+     *
+     * @return
+     */
+    private String getGroupSayHiNumKey() {
+        return "GroupSayHiNumKey" + getMyInfo().getUid();
+    }
+
+
+
     /*设置信息*/
 
     /**

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
+import com.juxin.predestinate.ui.user.my.view.GiftPopView;
 import com.juxin.predestinate.ui.user.my.view.PageIndicatorView;
 
 import java.util.ArrayList;
@@ -38,10 +38,10 @@ import java.util.List;
  * 送礼物弹框
  * Created by zm on 2017/3/.
  */
-public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,RequestComplete,TextWatcher,ViewPager.OnPageChangeListener,GiftHelper.OnRequestGiftListCallback {
+public class BottomGiftDialog extends BaseDialogFragment implements View.OnClickListener,RequestComplete,TextWatcher,ViewPager.OnPageChangeListener,GiftHelper.OnRequestGiftListCallback,GiftPopView.OnNumSelectedChangedListener {
 
     private TextView txvAllStone,txvPay,txvNeedStone,txvSend,txvLeft,txvRight;
-    private EditText txvSendNum;
+    private TextView txvSendNum;
     private RelativeLayout llSendNum;//礼物数量
     private PageIndicatorView pageIndicatorView;
     private List<GiftsList.GiftInfo> arrGifts = new ArrayList();
@@ -55,6 +55,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private int oldPosition = -1;
     private int sum = 0;
     private int onePageCount = 0;
+    private GiftPopView gpvPop;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -79,17 +80,18 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private void initView(final View contentView) {
         txvAllStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_allstone);
         txvNeedStone = (TextView) contentView.findViewById(R.id.bottom_gif_txv_needstone);
-        txvSendNum = (EditText) contentView.findViewById(R.id.bottom_gif_txv_sendnum);
+        txvSendNum = (TextView) contentView.findViewById(R.id.bottom_gif_txv_sendnum);
         llSendNum = (RelativeLayout) contentView.findViewById(R.id.bottom_gif_ll_sendnum);
         txvLeft = (TextView)contentView.findViewById(R.id.bottom_gif_txv_left);
         txvRight = (TextView)contentView.findViewById(R.id.bottom_gif_txv_right);
         pageIndicatorView = (PageIndicatorView) contentView.findViewById(R.id.bottom_gif_rlv_gif_indicator);
         vpViews = (CustomViewPager) contentView.findViewById(R.id.bottom_gift_vp_view);
+        gpvPop = (GiftPopView) contentView.findViewById(R.id.bottom_gif_gpv);
         vpViews.setRow(2);
 
         //设置dot的size和背景
         pageIndicatorView.setSelectDot(12,8,R.drawable.f1_dot_select);//选中
-        pageIndicatorView.setUnselectDot(8,8,R.drawable.f1_dot_unselect);//未选中
+        pageIndicatorView.setUnselectDot(8, 8, R.drawable.f1_dot_unselect);//未选中
 
         findViewById(R.id.bottom_gif_view_blank).setOnClickListener(this);
         findViewById(R.id.bottom_gif_rl_top).setOnClickListener(this);
@@ -99,6 +101,8 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         txvRight.setText(">");
         txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
         txvSendNum.addTextChangedListener(this);
+        txvSendNum.setOnClickListener(this);
+        gpvPop.setOnNumSelectedChanged(this);
         initGridView();
     }
 
@@ -123,7 +127,11 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 }
                 ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);//发送送礼物请求
                 break;
+            case R.id.bottom_gif_txv_sendnum:
+                gpvPop.setVisibility(View.VISIBLE);
+                break;
             case R.id.bottom_gif_rl_top:
+                gpvPop.setVisibility(View.GONE);
                 break;
         }
     }
@@ -209,9 +217,20 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
      */
     public void onSelectNumChanged(int num,int sum,int position) {
         this.position = position;
-        txvSendNum.setText(num+"");
-        txvSendNum.setSelection(txvSendNum.length());
+        txvSendNum.setText(num + "");
+//        txvSendNum.setSelection(txvSendNum.length());
         txvNeedStone.setText(sum+"");
+        gpvPop.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onNumSelectedChanged(int num) {
+        txvSendNum.setText(num+"");
+        if (position > -1){
+            int sum = num*arrGifts.get(position).getMoney();
+            txvNeedStone.setText(sum+"");
+        }
+        gpvPop.setVisibility(View.GONE);
     }
 
     @Override
@@ -247,7 +266,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 editable.delete(selectionStart - 1, selectionEnd);
                 int tempSelection = selectionEnd;
                 txvSendNum.setText(editable);
-                txvSendNum.setSelection(tempSelection);//设置光标在最后
+//                txvSendNum.setSelection(tempSelection);//设置光标在最后
             }
         }catch (Exception e){
             txvNeedStone.setText(0+"");

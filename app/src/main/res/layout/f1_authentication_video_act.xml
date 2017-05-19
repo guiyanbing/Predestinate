@@ -26,7 +26,7 @@
             android:layout_gravity="center_vertical"
             android:background="@null"
             android:gravity="center_vertical"
-            android:text="拍摄照片"
+            android:text="@string/txt_getpic"
             android:textColor="@color/gray_text"
             android:textSize="18sp" />
 
@@ -93,7 +93,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="建议在网络良好的状态下上传，注意照片反光" />
+                android:text="@string/txt_getpic_desc" />
         </LinearLayout>
 
     </LinearLayout>
@@ -116,7 +116,7 @@
             android:layout_gravity="center_vertical"
             android:background="@null"
             android:gravity="center_vertical"
-            android:text="视频"
+            android:text="@string/txt_getvideo"
             android:textColor="@color/gray_text"
             android:textSize="18sp" />
 
@@ -183,7 +183,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="保持正面，拍摄5秒" />
+                android:text="@string/txt_getvideo_desc" />
         </LinearLayout>
 
     </LinearLayout>

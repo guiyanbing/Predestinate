@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -66,6 +67,8 @@ import com.juxin.predestinate.ui.start.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
+import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationAct;
+import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationSucceedAct;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationVideoAct;
 import com.juxin.predestinate.ui.user.auth.RecordVideoAct;
@@ -980,12 +983,26 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showWithDrawApplyAct(int id, double money, boolean fromEdit, Context context) {
-        Intent intent = new Intent(context, WithDrawApplyAct.class);
-        intent.putExtra("id", id);
-        intent.putExtra("money", money);
-        intent.putExtra("fromEdit", fromEdit);
-        context.startActivity(intent);
+    public static void showWithDrawApplyAct(final int id, final double money, final boolean fromEdit, final FragmentActivity context) {
+        LoadingDialog.show(context,context.getString(R.string.xlistview_header_hint_loading));
+        ModuleMgr.getCommonMgr().reqWithdrawAddress(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk()) {
+                    WithdrawAddressInfo info = new WithdrawAddressInfo();
+                    info.parseJson(response.getResponseString());
+                    Intent intent = new Intent(context, WithDrawApplyAct.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("money", money);
+                    intent.putExtra("fromEdit", fromEdit);
+                    intent.putExtra("info",info);
+                    context.startActivity(intent);
+                } else {
+                    PToast.showShort(context.getString(R.string.net_error_retry));
+                }
+            }
+        });
     }
 
     /**
@@ -1013,6 +1030,24 @@ public class UIShow {
      */
     public static void showRedBoxPhoneVerifyAct(Context context) {
         context.startActivity(new Intent(context, RedBoxPhoneVerifyAct.class));
+    }
+
+    /**
+     * 打开身份证认证页面
+     *
+     * @param context
+     */
+    public static void showIDCardAuthenticationAct(FragmentActivity context,int requestCode ) {
+        context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+    }
+
+    /**
+     * 打开身份证认证成功页面
+     *
+     * @param context
+     */
+    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context) {
+        context.startActivity(new Intent(context, IDCardAuthenticationSucceedAct.class));
     }
     // -----------------------我的提示跳转 end----------------------------
 
