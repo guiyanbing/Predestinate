@@ -7,11 +7,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
 
-import com.juxin.predestinate.bean.db.cache.CacheComponent;
-import com.juxin.predestinate.bean.db.cache.CacheModule;
-import com.juxin.predestinate.bean.db.cache.DBCache;
-import com.juxin.predestinate.bean.db.cache.DaggerCacheComponent;
-
 /**
  * Application
  * Created by ZRP on 2016/9/8.
@@ -40,7 +35,7 @@ public class App extends MultiDexApplication {
         super.onCreate();
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
-      //  initAppComponent();
+        //  initAppComponent();
 
         ModuleMgr.initModule(context);
     }
