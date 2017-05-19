@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.request.DownloadListener;
+import com.juxin.mumu.bean.net.NetInterface;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
@@ -20,13 +24,17 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.SDCardUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.user.update.DownloadingDialog;
+import com.juxin.predestinate.ui.utils.Common;
 
 import java.io.File;
+import java.util.Date;
 
 
 /**
@@ -43,6 +51,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     private Boolean Message_Status, Vibration_Status, Voice_Status, Quit_Message_Status, videoStatus, audioStatus;
 
     private VideoVerifyBean videoVerifyBean;
+    private DownloadingDialog downLoadDialog = new DownloadingDialog();
+    private boolean isDownloading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -303,11 +313,52 @@ public class SettingAct extends BaseActivity implements OnClickListener {
 //        chatType = type;
 //        lastOpt = OPT_TOGGLE;
         if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) == ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
-//            executeVaConfig(context, type);
+            return true;
         } else {
-//            downloadVideoPlugin(context);
+            downloadVideoPlugin();
         }
         return true;
+    }
+
+
+    /**
+     * 下载视频插件
+     */
+    private void downloadVideoPlugin() {
+        downLoadDialog.show(getSupportFragmentManager(), "download");
+        if (isDownloading) {
+            return;
+        }
+        isDownloading = true;
+        HttpMgr httpMgr = ModuleMgr.getHttpMgr();
+        String apkFile = Common.getCahceDir("apk") + Long.toString(new Date().getTime()) + ".apk";//AppCfg.ASet.getVideo_chat_apk_url()
+        httpMgr.download(ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url(), apkFile, new DownloadListener() {
+            @Override
+            public void onStart(String url, String filePath) {
+
+            }
+
+            @Override
+            public void onProcess(String url, int process, long size) {
+                if (downLoadDialog.isAdded() && downLoadDialog.isVisible())
+                    downLoadDialog.updateProgress(process);
+            }
+
+            @Override
+            public void onSuccess(String url, String filePath) {
+                isDownloading = false;
+                downLoadDialog.dismiss();
+                ApkUnit.ExecApkFile(SettingAct.this, filePath);
+            }
+
+            @Override
+            public void onFail(String url, Throwable throwable) {
+                isDownloading = false;
+                downLoadDialog.dismiss();
+                PToast.showShort("下载失败,请稍后再试");
+
+            }
+        });
     }
 
     @Override

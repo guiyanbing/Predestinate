@@ -25,6 +25,7 @@ public class CommonConfig extends BaseData {
     private long plugin_version;        //插件版本号控制
     private int audiochat_minute_cost;  //语音通话每分钟费用
     private int videochat_minute_cost;  //视频通话每分钟费用
+    private String video_chat_apk_url;//视频插件地址
 
     private PayTypeList payTypeList;    //支付方式控制
 
@@ -51,6 +52,7 @@ public class CommonConfig extends BaseData {
         this.setPlugin_version(jsonObject.optLong("plugin_version"));
         this.setAudiochat_minute_cost(jsonObject.optInt("audiochat_minute_cost"));
         this.setVideochat_minute_cost(jsonObject.optInt("videochat_minute_cost"));
+        this.setVideo_chat_apk_url(jsonObject.optString("videochat_apk_url"));
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
@@ -142,6 +144,14 @@ public class CommonConfig extends BaseData {
 
     public void setPayTypeList(PayTypeList payTypeList) {
         this.payTypeList = payTypeList;
+    }
+
+    public String getVideo_chat_apk_url() {
+        return video_chat_apk_url;
+    }
+
+    public void setVideo_chat_apk_url(String video_chat_apk_url) {
+        this.video_chat_apk_url = video_chat_apk_url;
     }
 
     @Override

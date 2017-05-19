@@ -128,17 +128,17 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 break;
             case 1:
                 iv.setBackgroundResource(R.drawable.f1_auth_ing);
-                tv.setText("审核中");
+                tv.setText(getResources().getString(R.string.txt_authstatus_authing));
                 break;
             case 2:
                 iv.setBackgroundResource(R.drawable.f1_auth_fail);
-                tv.setText("审核未通过");
+                tv.setText(getResources().getString(R.string.txt_authstatus_autherror));
                 tvMakeVideo.setVisibility(View.VISIBLE);
                 tvMakePic.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 iv.setBackgroundResource(R.drawable.f1_auth_ok);
-                tv.setText("审核通过");
+                tv.setText(getResources().getString(R.string.txt_authstatus_auth_success));
                 break;
         }
     }
