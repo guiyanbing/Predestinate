@@ -11,7 +11,7 @@ import dagger.Component;
  * Created by Kind on 2017/3/29.
  */
 @Singleton
-@Component( modules = { AppModule.class })
+@Component( modules = { AppModule.class})
 public interface AppComponent {
 
     void inject(ChatListMgr chatListMgr);

@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -227,6 +229,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 long tmp = TimeUtil.onPad(msgData.getTime());
                 long temp = TimeUtil.onPad(preMsgData.getTime());
+                PLogger.printObject("time==2222==" + tmp);
                 if (tmp - temp > Constant.CHAT_SHOW_TIP_TIME_Interval) {
                     tipTime = TimeUtil.getFormatTimeChatTip(tmp);
                 }
