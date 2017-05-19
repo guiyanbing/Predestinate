@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PToast;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
@@ -77,7 +77,7 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
-                PToast.showShort("type: " + payTypePanel.getPayType() + "goods: " + payGoods.getCommodityList().get(goodsPanel.getPosition()).getId());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 break;
         }
     }

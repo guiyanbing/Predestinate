@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PToast;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
@@ -24,7 +24,7 @@ import org.json.JSONObject;
  * 老：Y币充值弹框
  * Created by Su on 2017/5/5.
  */
-public class GoodsYCoinDlgOld  extends BaseActivity implements View.OnClickListener {
+public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListener {
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
@@ -77,7 +77,7 @@ public class GoodsYCoinDlgOld  extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
-                PToast.showShort("type: " + payTypePanel.getPayType() + "goods: " + payGoods.getCommodityList().get(goodsPanel.getPosition()).getId());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 break;
         }
     }

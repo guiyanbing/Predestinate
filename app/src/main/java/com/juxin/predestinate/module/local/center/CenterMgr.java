@@ -256,6 +256,26 @@ public class CenterMgr implements ModuleBase, PObserver {
                 }
             }
         });
+
+
+//        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
+//            @Override
+//            public void onRequestComplete(HttpResponse response) {
+//
+//                PLogger.d("kjskjkjjj---" + response.getResponseString());
+//
+//                if (complete != null) {
+//                    complete.onRequestComplete(response);
+//                }
+//                String responseStr = response.getResponseString();
+//                if (userDetail == null) userDetail = new UserDetail();
+//                userDetail.parseJson(responseStr);
+//                setMyInfo(responseStr);         // 保存到SP
+//                if (!response.isCache()) {
+//                    MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
+//                }
+//            }
+//        });
     }
 
     /**
@@ -386,6 +406,16 @@ public class CenterMgr implements ModuleBase, PObserver {
         getParams.put("ver", Constant.SUB_VERSION);
 
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
+
+//        Map<String, Object> postParams = new HashMap<>();
+//        postParams.put("hisuid", uid);
+//
+//        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOtherInfo, postParams, new RequestComplete() {
+//            @Override
+//            public void onRequestComplete(HttpResponse response) {
+//                PLogger.d("kjsknxmmakkj----" + response.getResponseString());
+//            }
+//        });
     }
 
     /**

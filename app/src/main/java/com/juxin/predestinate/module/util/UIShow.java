@@ -778,7 +778,7 @@ public class UIShow {
      * @param commodity_Id
      * @param payType
      */
-    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final String payType) {
+    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final int payType) {
         LoadingDialog.show(activity, "生成订单中");
         ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
             @Override
@@ -791,7 +791,7 @@ public class UIShow {
                     return;
                 }
 
-                if (GoodsConstant.PAY_TYPE_WECHAT_NAME.equals(payType)) {//微信支付
+                if (payType == GoodsConstant.PAY_TYPE_WECHAT) {//微信支付
                     LoadingDialog.closeLoadingDialog();
                     new PayWeixinUtils(activity).onPayment(payGood);
                     return;
