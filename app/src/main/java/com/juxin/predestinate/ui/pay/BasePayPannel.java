@@ -70,7 +70,7 @@ public class BasePayPannel extends BasePanel implements View.OnClickListener {
     }
 
 
-    public String getOutTradeNo() {
+    public static  String getOutTradeNo() {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
         String key = format.format(new Date());
         int i = new Random().nextInt(89999) + 10000;
