@@ -50,4 +50,76 @@ public class DirUtils {
         if (!mediaDir.exists()) mediaDir.mkdirs();
         return mediaDir;
     }
+
+    // ----------------------------------------------------------------------------
+
+    /**
+     * 获取目录占用空间大小，必须是目录
+     *
+     * @param dir 目录
+     * @return 单位字节
+     */
+    public static long getDirSize(File dir) {
+        if (dir == null) return 0;
+        if (!dir.isDirectory()) return 0;
+
+        long dirSize = 0;
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    dirSize += file.length();
+                } else if (file.isDirectory()) {
+                    dirSize += file.length();
+                    dirSize += getDirSize(file);
+                }
+            }
+        }
+        return dirSize;
+    }
+
+    /**
+     * 删除目录下的所有文件
+     *
+     * @param path 目录
+     */
+    public static void delAllFile(String path, boolean delEmptyFolder) {
+        File file = new File(path);
+
+        if (!file.exists()) return;
+        if (!file.isDirectory()) return;
+
+        String[] tempList = file.list();
+        File temp = null;
+
+        if (tempList == null) return;
+        for (String aTempList : tempList) {
+            if (path.endsWith(File.separator)) {
+                temp = new File(path + aTempList);
+            } else {
+                temp = new File(path + File.separator + aTempList);
+            }
+            if (temp.isFile()) temp.delete();
+            if (temp.isDirectory()) {
+                delAllFile(path + "/" + aTempList, delEmptyFolder);
+                delFolder(path + "/" + aTempList, delEmptyFolder);
+            }
+        }
+    }
+
+    /**
+     * 删除空目录
+     *
+     * @param folderPath 目录
+     */
+    public static void delFolder(String folderPath, boolean delEmptyFolder) {
+        delAllFile(folderPath, delEmptyFolder);
+
+        if (delEmptyFolder) {
+            String filePath = folderPath;
+            filePath = filePath.toString();
+            java.io.File myFilePath = new java.io.File(filePath);
+            myFilePath.delete();
+        }
+    }
 }

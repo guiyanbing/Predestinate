@@ -3,18 +3,19 @@ package com.juxin.predestinate.ui.user.paygoods;
 import android.content.Context;
 import android.view.View;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.PayTypeList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 /**
  * 支付方式通用panel
  * <p>
  * Created by Su on 2017/5/4.
  */
-public class GoodsPayTypePanel extends BaseViewPanel implements View.OnClickListener {
+public class GoodsPayTypePanel extends BasePanel implements View.OnClickListener {
+
     private int payType = GoodsConstant.PAY_TYPE_WECHAT;  // 充值类型，默认微信充值
 
     private PayTypeList payTypeList;            // 在线配置控制支付类型

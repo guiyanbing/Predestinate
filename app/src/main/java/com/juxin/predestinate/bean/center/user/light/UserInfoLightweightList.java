@@ -1,12 +1,9 @@
 package com.juxin.predestinate.bean.center.user.light;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.net.BaseData;
-
 import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 

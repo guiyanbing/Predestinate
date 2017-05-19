@@ -7,21 +7,17 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CircularCoverView;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.library.view.DownloadProgressView;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -31,14 +27,12 @@ import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.video.VideoPlayDialog;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
-import com.juxin.predestinate.module.logic.baseui.custom.SelectableRoundedImageView;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
+import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
-import com.shuisili.android.library.media.MediaUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +42,7 @@ import java.util.List;
  * Created by Kind on 2017/5/8.
  */
 
-public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlayListener{
+public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlayListener {
 
     private CustomFrameLayout chat_item_customFrameLayout;
 
@@ -124,15 +118,15 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String voiceUrl = msg.getVoiceUrl();
         String localVoiceUrl = msg.getLocalVoiceUrl();
         String img = msg.getImg();
-        String localImg =msg.getLocalImg();
-        if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){//视频
-        }else if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){//语音
-        }else if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){//图片
-        }else{
+        String localImg = msg.getLocalImg();
+        if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
+        } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
+        } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
+        } else {
         }
 
 //        if (msgData.getfStatus() == 1 && msgData.isAutoplay()) {//自动播放
-//            MMLog.autoDebug(msg.getImg());
+//            PLogger.d(msg.getImg());
 //
 //          //  ChatMediaPlayer.getInstance().togglePlayVoice(ModuleMgr.getChatListMgr().spliceStringAmr(msg.getImg()), this);
 //
@@ -161,14 +155,14 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String voiceUrl = msg.getVoiceUrl();
         String localVoiceUrl = msg.getLocalVoiceUrl();
         String img = msg.getImg();
-        String localImg =msg.getLocalImg();
-        if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){//视频
+        String localImg = msg.getLocalImg();
+        if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
             onVideoDisplayContent(msg);
-        }else if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){//语音
+        } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
             onVoiceDisplayContent(msg);
-        }else if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){//图片
+        } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
             onImgDisplayContent(msg);
-        }else{
+        } else {
             onTextDisplayContent(msg);
         }
 
@@ -190,20 +184,20 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         return true;
     }
 
-    private void onVoiceDisplayContent(CommonMessage msg){
+    private void onVoiceDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_panel_voice);
 
         time.setText("" + msg.getVoiceLen() + "''");
         time.setWidth(UIUtil.dp2px((float) (20.f + Math.sqrt(msg.getVoiceLen() - 1) * 20)));
     }
 
-    private void onTextDisplayContent(CommonMessage msg){
+    private void onTextDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_text);
-        chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()+""));
+        chat_item_text.setText(Html.fromHtml(msg.getMsgDesc() + ""));
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
 
-    private void onImgDisplayContent(CommonMessage msg){
+    private void onImgDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_img);
 
         String url = msg.getLocalImg();
@@ -212,8 +206,8 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             url = msg.getImg();
         }
 
-        MMLog.autoDebug("url====" + url);
-        ImageLoader.loadRoundCorners(context, url, 6,chat_item_img);
+        PLogger.d("url====" + url);
+        ImageLoader.loadRoundCorners(getContext(), url, 6, chat_item_img);
 
 //        if (FileUtil.isURL(url)) {
 //            MMLog.e("Img===", url);
@@ -224,13 +218,13 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 //        }
     }
 
-    private void onVideoDisplayContent(CommonMessage msg){
+    private void onVideoDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_panel_video);
         String url = msg.getLocalVideoUrl();
         if (TextUtils.isEmpty(url)) {
             url = msg.getVideoUrl();
 
-            ImageLoader.loadFitCenter(context, url, thumb_img);
+            ImageLoader.loadFitCenter(getContext(), url, thumb_img);
         } else {
             thumb_img.setImageURI(Uri.parse(url));
         }
@@ -250,22 +244,21 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String voiceUrl = msg.getVoiceUrl();
         String localVoiceUrl = msg.getLocalVoiceUrl();
         String img = msg.getImg();
-        String localImg =msg.getLocalImg();
-        if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){//视频
+        String localImg = msg.getLocalImg();
+        if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
             onVideoClickContent(msg);
-        }else if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){//语音
+        } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
 
-        }else if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){//图片
+        } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
             onImgClickContent(msg);
-        }else{
+        } else {
 
         }
-
 
         return true;
     }
 
-    private void onImgClickContent(CommonMessage msg){
+    private void onImgClickContent(CommonMessage msg) {
         String url = msg.getLocalImg();
 
         if (TextUtils.isEmpty(url)) {
@@ -281,10 +274,10 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), pics);
     }
 
-    private void onVideoClickContent(CommonMessage msg){
+    private void onVideoClickContent(CommonMessage msg) {
         String url = msg.getLocalVideoUrl();
         if (TextUtils.isEmpty(url)) url = msg.getVideoUrl();
-        MMLog.autoDebug("video click content url：" + url);
+        PLogger.d("video click content url：" + url);
 
         //视频播放
         preview_play.setVisibility(View.GONE);
@@ -294,12 +287,12 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             resetPlay();
         } else {
             if (FileUtil.isURL(url)) {
-            //    ModuleMgr.getChatMgr().reqVideo(url, this);
+                //    ModuleMgr.getChatMgr().reqVideo(url, this);
             } else {
                 if (new File(url).exists()) {
                     playLocalVideo(url);
                 } else {
-                  //  ModuleMgr.getChatMgr().x(msg.getVideoUrl(), this);
+                    //  ModuleMgr.getChatMgr().x(msg.getVideoUrl(), this);
                 }
             }
         }
@@ -335,7 +328,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         preview_surface.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                MMLog.autoDebug("------> mediaPlayer is error");
+                PLogger.d("------> mediaPlayer is error");
                 resetPlay();
                 return true;
             }
@@ -354,10 +347,10 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
         if (palySound && !TextUtils.isEmpty(filePath)) {
             palySound = false;
-            MediaUtils.playSound(R.raw.play_voice_after);
+            MediaNotifyUtils.playSound(getContext(), R.raw.play_voice_after);
         }
 
-        MMLog.autoDebug(filePath);
+        PLogger.d(filePath);
 
         if (msgData != null) {
             try {

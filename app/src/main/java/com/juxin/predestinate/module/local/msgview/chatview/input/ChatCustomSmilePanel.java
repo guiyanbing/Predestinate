@@ -33,11 +33,12 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
 
     public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance) {
         super(context, chatInstance);
-        this.items = items;
-        if(this.items == null){
-            this.items = new ArrayList<>();
+        if(items == null){
+            items = new ArrayList<>();
         }
-        this.items.add(0, new SmileItem("custom"));
+        items.add(0, new SmileItem("custom"));
+        this.items = items;
+
         setContentView(R.layout.p1_chat_default_smile);
         initView();
     }

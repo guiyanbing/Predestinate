@@ -10,12 +10,12 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
+import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -25,7 +25,8 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  * 编辑页面头部
  * Created by Su on 2017/5/3.
  */
-public class UserEditInfoHeadPanel extends BaseViewPanel implements ImgSelectUtil.OnChooseCompleteListener {
+public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.OnChooseCompleteListener {
+
     private UserDetail userDetail;
 
     private CircleImageView img_header;

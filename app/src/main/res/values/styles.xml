@@ -757,5 +757,31 @@
         <item name="android:textColor">@color/color_666666</item>
         <item name="android:textSize">@dimen/px39_sp</item>
     </style>
+    <style name="id_card_content">
+        <item name="android:layout_marginLeft">@dimen/px55_dp</item>
+    </style>
+    <style name="id_card_tv">
+        <item name="android:layout_width">@dimen/px306_dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_zhuyao</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+        <item name="android:layout_marginLeft">@dimen/px55_dp</item>
+    </style>
+    <style name="id_card_eit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/px55_dp</item>
+        <item name="android:textColorHint">@color/color_CCCCCC</item>
+        <item name="android:textColor">@color/color_zhuyao</item>
+        <item name="android:textSize">@dimen/px45_sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+    <style name="id_card_ll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/px165_dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
 
 </resources>

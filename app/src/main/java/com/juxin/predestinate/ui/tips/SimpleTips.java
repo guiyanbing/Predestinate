@@ -26,6 +26,7 @@ import static com.juxin.library.observe.MsgType.MT_Inner_Suspension_Notice;
  * Created by zhang on 2016/8/30.
  */
 public class SimpleTips extends TipsBarBasePanel implements PObserver {
+
     private String TAG = "SimpleTips";
 
     private TextView tipsTex;
@@ -36,10 +37,13 @@ public class SimpleTips extends TipsBarBasePanel implements PObserver {
 
     private int time = 3;
 
+    public SimpleTips(Context context) {
+        super(context);
+    }
 
     @Override
-    public void init(Context context, JSONObject jsonObject) {
-        super.init(context, jsonObject);
+    public void init(JSONObject jsonObject) {
+        super.init(jsonObject);
         MsgMgr.getInstance().attach(this);
         setContentView(R.layout.y1_simple_tips);
         initView();

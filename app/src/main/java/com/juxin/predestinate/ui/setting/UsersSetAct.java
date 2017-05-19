@@ -16,11 +16,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.utils.DirUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
@@ -94,7 +94,7 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                cache = DirUtils.getFormtCacheSize();
+                cache = DirType.getFormatCacheSize();
                 handler.sendEmptyMessage(1);
             }
         }).start();
@@ -131,7 +131,7 @@ public class UsersSetAct extends BaseActivity implements View.OnClickListener {
                             public void run() {
                                 Message msg = new Message();
                                 try {
-                                    DirUtils.clearCache();
+                                    DirType.clearCache();
                                     msg.what = 2;
                                 } catch (Exception e) {
                                     e.printStackTrace();

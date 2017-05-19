@@ -3,7 +3,7 @@ package com.juxin.predestinate.ui.utils;
 import android.text.InputFilter;
 import android.text.Spanned;
 
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.log.PToast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -113,7 +113,7 @@ public class EmojiFilter implements InputFilter {
                                int dend) {
         // check black-list set
         if (filterSet.contains(source.toString())) {
-            MMToast.showShort("暂时不支持表情输入");
+            PToast.showShort("暂时不支持表情输入");
             return "";
         }
         return source;

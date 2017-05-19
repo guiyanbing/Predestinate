@@ -2,13 +2,14 @@ package com.juxin.predestinate.module.local.msgview.chatview.notifyview;
 
 import android.text.TextUtils;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.library.log.PLogger;
+import com.juxin.predestinate.bean.net.BaseData;
 
 /**
  * 一个简单消息基类。
  */
 public abstract class SimpleMsg extends BaseData {
+
     /**
      * 消息类型。
      */
@@ -33,9 +34,8 @@ public abstract class SimpleMsg extends BaseData {
             msg = msgClass.newInstance();
             msg.parseJson(jsonStr);
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
-
         return msg;
     }
 }

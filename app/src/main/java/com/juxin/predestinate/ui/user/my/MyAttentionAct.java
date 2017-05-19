@@ -8,9 +8,9 @@ import android.widget.LinearLayout;
 
 import com.juxin.library.controls.smarttablayout.PagerItem;
 import com.juxin.library.controls.smarttablayout.SmartTabLayout;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.ui.user.my.adapter.ViewGroupPagerAdapter;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
 
@@ -27,7 +27,7 @@ public class MyAttentionAct extends BaseActivity{
     private ViewPager vpViewChange;
 
     private List<PagerItem> listViews;//pagerItem集合
-    private List<BaseViewPanel> panls = new ArrayList<>(); // Tab页面列表
+    private List<BasePanel> panls = new ArrayList<>(); // Tab页面列表
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

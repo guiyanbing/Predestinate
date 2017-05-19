@@ -1,11 +1,13 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.utils.BitmapUtil;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
@@ -17,6 +19,7 @@ import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -34,7 +37,6 @@ import rx.functions.Action1;
  *
  * Created by Kind on 2017/3/28.
  */
-
 public class ChatMgr implements ModuleBase {
 
     private RecMessageMgr messageMgr = new RecMessageMgr();
@@ -43,10 +45,14 @@ public class ChatMgr implements ModuleBase {
     @Inject
     DBCenter dbCenter;
 
+//    @Inject
+//    DBCacheCenter dbCacheCenter;
+
     @Override
     public void init() {
         messageMgr.init();
         specialMgr.init();
+      //  App.getCacheComponent().inject(this);
     }
 
     @Override
@@ -116,7 +122,7 @@ public class ChatMgr implements ModuleBase {
 
     public void sendImgMsg(String channelID, String whisperID, String img_url) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
-        commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url));
+        commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url, DirType.getImageDir()));
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
 
@@ -181,7 +187,7 @@ public class ChatMgr implements ModuleBase {
 
 
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack){
-        MMLog.autoDebug("isMsgID=" + message.getcMsgID());
+        PLogger.d("isMsgID=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -196,7 +202,7 @@ public class ChatMgr implements ModuleBase {
                     updateOk(message, messageRet);
                 }
 
-                MMLog.autoDebug("isMsgOK=" + contents);
+                PLogger.d("isMsgOK=" + contents);
             }
 
             @Override
@@ -205,7 +211,7 @@ public class ChatMgr implements ModuleBase {
                     sendCallBack.onSendFailed(data);
                 }
                 updateFail(message, null);
-                MMLog.autoDebug("isMsgError=" + message.getJsonStr());
+                PLogger.d("isMsgError=" + message.getJsonStr());
             }
         });
     }
@@ -368,10 +374,10 @@ public class ChatMgr implements ModuleBase {
      * @param messageList
      */
     public void onChatMsgRecently(String msgID0, String msgID1, final boolean ret, final List<BaseMessage> messageList) {
-        MMLog.autoDebug(messageList);
+        PLogger.printObject(messageList);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (listeners != null) {
@@ -400,10 +406,10 @@ public class ChatMgr implements ModuleBase {
      * @param messageList
      */
     public void onChatMsgHistory(String msgID0, String msgID1, final boolean ret, final List<BaseMessage> messageList) {
-        MMLog.autoDebug(messageList);
+        PLogger.printObject(messageList);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (listeners != null) {
@@ -434,10 +440,10 @@ public class ChatMgr implements ModuleBase {
      * @param message
      */
     public void onChatMsgUpdate(String msgID0, String msgID1, final boolean ret, final BaseMessage message) {
-        MMLog.autoDebug(message);
+        PLogger.printObject(message);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (listeners != null) {
@@ -485,6 +491,59 @@ public class ChatMgr implements ModuleBase {
                 }
             }
         });
+    }
+
+    /******************************
+     * 个人资料存储
+     ******************************/
+    private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<Long, ChatMsgInterface.InfoComplete>();
+
+    public void getUserInfoLightweight(long uid, final ChatMsgInterface.InfoComplete infoComplete) {
+//        synchronized (infoMap) {
+//            infoMap.put(uid, infoComplete);
+//            Observable<UserInfoLightweight> observable = dbCacheCenter.queryProfile(uid);
+//            observable.subscribe(new Action1<UserInfoLightweight>() {
+//                @Override
+//                public void call(UserInfoLightweight lightweight) {
+//                    long infoTime = lightweight.getTime();
+//                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+//                        removeInfoComplete(true, lightweight.getUid(), lightweight);
+//                    } else {
+//                        removeInfoComplete(false, lightweight.getUid(), lightweight);
+//                        getProFile(lightweight.getUid());
+//                    }
+//                }
+//            });
+//        }
+    }
+
+    // 获取个人资料
+    private void getProFile(long userID) {
+        ModuleMgr.getCommonMgr().getSimpleDetail(userID, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("res=====2222===" + response.getResponseString());
+            }
+        });
+    }
+
+    /**
+     * 更新个人资料
+     * @param isRemove        是否要重回调map中移除 true是移除
+     * @param infoLightweight 个人资料数据
+     */
+    private void removeInfoComplete(boolean isRemove, long userID, UserInfoLightweight infoLightweight) {
+        MMLog.autoDebug(infoLightweight);
+        for (Object key : infoMap.keySet()) {
+            if (key.equals(userID)) {
+                ChatMsgInterface.InfoComplete infoComplete = infoMap.get(key);
+                infoComplete.onReqComplete(infoLightweight);
+                if (isRemove) {
+                    infoMap.remove(key);
+                }
+                return;
+            }
+        }
     }
 
     private long getTime() {

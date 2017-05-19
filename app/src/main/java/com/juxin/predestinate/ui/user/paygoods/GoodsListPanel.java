@@ -7,8 +7,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
  * 商品列表通用panel
  * Created by Su on 2017/3/31.
  */
+public class GoodsListPanel extends BasePanel implements BaseRecyclerViewHolder.OnItemClickListener {
 
-public class GoodsListPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
 
     private RecyclerView recyclerView;

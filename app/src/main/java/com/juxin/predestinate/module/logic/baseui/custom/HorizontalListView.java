@@ -44,7 +44,8 @@ import android.widget.AdapterView;
 import android.widget.Checkable;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
-import com.juxin.mumu.bean.log.MMLog;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 
 import java.util.ArrayList;
@@ -5243,7 +5244,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> implements
         } else {
             child = mAdapter.getView(position, null, this);
         }
-        MMLog.e("getImportantForAccessibility", " 00000000000000 getImportantForAccessibility =" + child);
+        PLogger.e("getImportantForAccessibility 00000000000000 getImportantForAccessibility =" + child);
         if (ViewCompat.getImportantForAccessibility(child) == ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_AUTO) {
             ViewCompat.setImportantForAccessibility(child, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
         }

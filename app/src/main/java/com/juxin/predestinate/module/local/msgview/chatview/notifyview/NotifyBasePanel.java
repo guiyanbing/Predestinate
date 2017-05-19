@@ -2,9 +2,10 @@ package com.juxin.predestinate.module.local.msgview.chatview.notifyview;
 
 import android.content.Context;
 
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.library.view.BasePanel;
 
-public abstract class NotifyBasePanel extends BaseViewPanel {
+public abstract class NotifyBasePanel extends BasePanel {
+
     public NotifyBasePanel(Context context) {
         super(context);
     }

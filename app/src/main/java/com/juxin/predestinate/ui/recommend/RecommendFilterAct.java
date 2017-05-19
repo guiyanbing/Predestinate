@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.recommend.TagInfo;
@@ -167,7 +167,7 @@ public class RecommendFilterAct extends BaseActivity {
                     } else if (listChosen.get(i).getTagID() == ageTagId) {
                         addAge("update");
                     } else {
-                        MMToast.showShort(getResources().getString(R.string.toast_chosen_repeat));
+                        PToast.showShort(getResources().getString(R.string.toast_chosen_repeat));
                     }
                     return true;
                 }
@@ -207,7 +207,7 @@ public class RecommendFilterAct extends BaseActivity {
                             chosenAdapter.notifyDataSetChanged();
                         }
                     } else {
-                        MMToast.showShort(getResources().getString(R.string.toast_chosen_tagmax));
+                        PToast.showShort(getResources().getString(R.string.toast_chosen_tagmax));
                     }
                 }
             }

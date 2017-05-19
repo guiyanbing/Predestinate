@@ -6,7 +6,6 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -18,12 +17,9 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * Created by Kind on 2017/4/13.
@@ -34,7 +30,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private int unreadNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
 
-
     @Inject
     DBCenter dbCenter;
 
@@ -44,8 +39,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     @Override
-    public void release() {
-    }
+    public void release() {}
 
     public int getUnreadNumber() {
         return unreadNum;
@@ -163,7 +157,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         initAppComponent();
                         getAppComponent().inject(this);
                         ModuleMgr.getChatMgr().inject();
-                        MMLog.autoDebug("uid=======" + App.uid);
+                        PLogger.d("uid=======" + App.uid);
                         getWhisperList();
 
 //                        dbCenter.insertUnRead("1", "11111");

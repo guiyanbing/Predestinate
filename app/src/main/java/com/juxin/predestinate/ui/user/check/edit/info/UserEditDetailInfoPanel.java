@@ -7,13 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
-import com.juxin.library.observe.PObserver;
-import com.juxin.mumu.bean.utils.MMToast;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.DatePicker;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
@@ -34,7 +32,8 @@ import java.util.HashMap;
  * Created by Su on 2017/5/3.
  */
 
-public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestComplete{
+public class UserEditDetailInfoPanel extends BasePanel implements RequestComplete {
+
     private TextView edu, job, birth, weight, star; //详细资料
     private String starValue;                       // 修改星座展示值
     private InfoConfig.SimpleConfig starConfig;
@@ -94,15 +93,15 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
 
                 case R.id.birth_view:
                     final String[] dateValues = TextUtils.isEmpty(userdetail.getBirthday()) ? new String[]{"", "", ""} : userdetail.getBirthday().split("-");
-                    PickerDialogUtil.showDatePickerDialog((FragmentActivity)getContext(), new DatePicker.OnYearMonthDayPickListener() {
+                    PickerDialogUtil.showDatePickerDialog((FragmentActivity) getContext(), new DatePicker.OnYearMonthDayPickListener() {
                         @Override
                         public void onDatePicked(String year, String month, String day) {
                             if (!year.equals(dateValues[0]) || !month.equals(dateValues[1]) || !day.equals(dateValues[2])) {
-                                LoadingDialog.show((FragmentActivity)getContext(), context.getString(R.string.loading_reg_update));
+                                LoadingDialog.show((FragmentActivity) getContext(), context.getString(R.string.loading_reg_update));
                                 String value = year + "-" + month + "-" + day;
                                 HashMap<String, Object> postParams = new HashMap<>();
                                 postParams.put(EditKey.s_key_birth, value);
-                                String starValueTmp = CommonUtil.getStar(TypeConvUtil.toInt(month), TypeConvUtil.toInt(day));
+                                String starValueTmp = CommonUtil.getStar(TypeConvertUtil.toInt(month), TypeConvertUtil.toInt(day));
                                 if (!starValue.equals(starValueTmp) || starValue != starValueTmp) {
                                     postParams.put(EditKey.s_key_star, starConfig.getSubmitWithShow(starValueTmp));
                                 }
@@ -130,7 +129,7 @@ public class UserEditDetailInfoPanel extends BaseViewPanel implements RequestCom
      * 资料修改
      */
     private void showOptionPickerDialog(final String value, final InfoConfig.SimpleConfig config, final String postKey, String title) {
-        PickerDialogUtil.showOptionPickerDialog((FragmentActivity)getContext(), new OptionPicker.OnOptionPickListener() {
+        PickerDialogUtil.showOptionPickerDialog((FragmentActivity) getContext(), new OptionPicker.OnOptionPickListener() {
             @Override
             public void onOptionPicked(String option) {
                 if (value == null || !value.equals(option)) {

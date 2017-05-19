@@ -1,7 +1,7 @@
 package com.juxin.predestinate.module.local.msgview;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCommon;
@@ -13,7 +13,6 @@ import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBas
 /**
  * Created by Kind on 2017/3/30.
  */
-
 public enum ChatMsgType {
     // 基本消息类型
 
@@ -101,7 +100,7 @@ public enum ChatMsgType {
     }
 
     public int toIntegerType() {
-        return TypeConvUtil.toInt(toString().substring(4));
+        return TypeConvertUtil.toInt(toString().substring(4));
     }
 
     public Class<? extends ChatPanel> getPanelClass() {
@@ -131,9 +130,8 @@ public enum ChatMsgType {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             return chatMsgType.panelClass;
         } catch (Exception e) {
-            MMLog.autoDebug(type);
+            PLogger.d("--->" + type);
         }
-
         return null;
     }
 
@@ -148,9 +146,8 @@ public enum ChatMsgType {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             return chatMsgType.panelClass.getSimpleName();
         } catch (Exception e) {
-            MMLog.autoDebug(type);
+            PLogger.d("--->" + type);
         }
-
         return "";
     }
 
@@ -165,9 +162,8 @@ public enum ChatMsgType {
         try {
             return getPanelClassName(type).equals(panel.getClass().getSimpleName());
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.d("--->" + type);
         }
-
         return false;
     }
 
@@ -183,9 +179,8 @@ public enum ChatMsgType {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             return chatMsgType.notifyPanelClass;
         } catch (Exception e) {
-            MMLog.autoDebug(type);
+            PLogger.d("--->" + type);
         }
-
         return null;
     }
 
@@ -200,9 +195,8 @@ public enum ChatMsgType {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             return chatMsgType.notifyPanelClass.getSimpleName();
         } catch (Exception e) {
-            MMLog.autoDebug(type);
+            PLogger.d("--->" + type);
         }
-
         return "";
     }
 
@@ -217,9 +211,8 @@ public enum ChatMsgType {
         try {
             return getNotifyPanelClassName(type).equals(panel.getClass().getSimpleName());
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.d("--->" + type);
         }
-
         return false;
     }
 
@@ -233,9 +226,8 @@ public enum ChatMsgType {
         try {
             return ChatMsgType.valueOf("CMT_" + type);
         } catch (Exception e) {
-            MMLog.autoDebug(type);
+            PLogger.d("--->" + type);
         }
-
         return CMT_Invalid;
     }
 }

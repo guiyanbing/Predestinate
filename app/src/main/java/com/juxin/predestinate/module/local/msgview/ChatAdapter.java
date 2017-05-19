@@ -1,20 +1,18 @@
 package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -26,7 +24,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +33,7 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/30.
  */
-
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, MsgMgr.IObserver {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, PObserver {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
@@ -84,7 +80,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     /**
      * 聊天类型。
      */
-  //  private ChatListMgr.Folder folder = ChatListMgr.Folder.whisper;
+    //  private ChatListMgr.Folder folder = ChatListMgr.Folder.whisper;
 
     /**
      * 是否是客服消息。
@@ -149,7 +145,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     public Long getLWhisperId() {
-        return TypeConvUtil.toLong(whisperId);
+        return TypeConvertUtil.toLong(whisperId);
     }
 
     public long getCreatorId() {
@@ -221,7 +217,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         try {
             setWhisperId(String.valueOf(whisperID));
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -254,7 +250,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 //        try {
 //            getChatInstance().chatContentAdapter.updateData(customMessage);
 //        } catch (Exception e) {
-//            MMLog.printThrowable(e);
+//            PLogger.printThrowable(e);
 //        }
 //    }
 
@@ -277,7 +273,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         try {
             getChatInstance().chatContentAdapter.updateData(msg);
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -339,24 +335,20 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     return infoLightweight;
                 }
             }
-//            ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-//                @Override
-//                public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-//                    if (ret) {
-//                        addUserInfo(infoLightweight);
-//                    }
-//                }
-//            });
+            ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
+                @Override
+                public void onReqComplete(UserInfoLightweight infoLightweight) {
+                    addUserInfo(infoLightweight);
+                }
+            });
         } else {
             if (TextUtils.isEmpty(userInfo.getNickname()) && TextUtils.isEmpty(userInfo.getAvatar())) {
-//                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-//                    @Override
-//                    public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-//                        if (ret) {
-//                            addUserInfo(infoLightweight);
-//                        }
-//                    }
-//                });
+                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
+                    @Override
+                    public void onReqComplete(UserInfoLightweight infoLightweight) {
+                        addUserInfo(infoLightweight);
+                    }
+                });
             }
         }
         return userInfo;
@@ -375,10 +367,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         final UserInfoLightweight temp = userInfos.get(userInfo.getUid());
 
         if (temp == null) {
-            MMLog.autoDebug(userInfo);
+            PLogger.printObject(userInfo);
             userInfos.put(userInfo.getUid(), userInfo);
 
-            MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (msgPanelPair != null) {
@@ -470,7 +462,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 注册到消息管理模块，接收消息的更新。
      */
     private void attach() {
-        MMLog.autoDebug(MMLog.printObjectFields(this));
+        PLogger.printObject(this);
         if (TextUtils.isEmpty(channelId)) {
             ModuleMgr.getChatMgr().attachChatListener(whisperId, this);
         } else {
@@ -480,7 +472,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         attach = true;
 
         if (isGroup()) {
-            MsgMgr.getInstance().attach(MsgType.MT_App_IMStatus, this);
+            MsgMgr.getInstance().attach(this);
         }
 
         ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
@@ -494,11 +486,11 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             attach = false;
 
             if (isGroup()) {
-                MsgMgr.getInstance().detach(this);
+                // MsgMgr.getInstance().detach(this);//暂无消息主动解绑功能
             }
 
             ModuleMgr.getChatMgr().detachChatListener(this);
-        //    ChatMediaPlayer.getInstance().stopPlayVoice();
+            //    ChatMediaPlayer.getInstance().stopPlayVoice();
 
             //关闭页面的时候查看是否下在输入中
             if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
@@ -509,7 +501,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     @Override
     public void onChatRecently(boolean ret, List<BaseMessage> baseMessages) {
-        MMLog.autoDebug(MMLog.printObjectFields(baseMessages));
+        PLogger.printObject(baseMessages);
 
         List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
 
@@ -537,7 +529,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     @Override
     public void onChatHistory(boolean ret, List<BaseMessage> baseMessages) {
-        MMLog.autoDebug(MMLog.printObjectFields(baseMessages));
+        PLogger.printObject(baseMessages);
         chatInstance.chatListView.stopRefresh();
 
         if (ret) {
@@ -564,7 +556,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
-        MMLog.autoDebug(MMLog.printObjectFields(message));
+        PLogger.printObject(message);
         boolean show = false;
         boolean isUpdate = true;
 
@@ -579,7 +571,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 //                    LoadingDialog.closeLoadingDialog();
 //                }
 //            }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         if (ret) {
             if (message.getTime() == 0) {
@@ -638,6 +631,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     /**
      * 聊天权限处理
+     *
      * @param message
      */
     private void checkPermissions(BaseMessage message) {
@@ -772,17 +766,24 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     /**
      * 处理在群聊中的时候，断线重连后。自动重新加入群。<br>
      *
-     * @param msgType 消息类型。
-     * @param msg     消息内容。
+     * @param key   消息类型。
+     * @param value 消息内容
      */
     @Override
-    public void onMessage(MsgType msgType, Msg msg) {
-        Bundle bundle = (Bundle) msg.getData();
-
-        int type = bundle.getInt("type");
-
-        if (type == 0) {
-            MMLog.autoDebug("" + attach);
+    public void onMessage(String key, Object value) {
+        switch (key){
+            case MsgType.MT_App_IMStatus:
+                try {//防止类型转换错误
+                    Map<String,Object> map = (HashMap<String, Object>) value;
+                    int type = (int) map.get("type");
+                    String msg = (String) map.get("msg");
+                    if (type == 0) {
+                        PLogger.d("" + attach);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
@@ -795,7 +796,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onLoadMore() {}
+    public void onLoadMore() {
+    }
 
     /**
      * 是否可以聊天

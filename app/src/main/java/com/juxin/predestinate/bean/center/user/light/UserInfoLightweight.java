@@ -2,7 +2,6 @@ package com.juxin.predestinate.bean.center.user.light;
 
 import android.os.Parcel;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 
@@ -31,11 +30,7 @@ public class UserInfoLightweight extends UserBasic {
     private int heartNum = 0;
 
     private int kf_id = 0; //不为0就是机器人
-
-    /**
-     * 排行榜排名
-     */
-    private int top = 0;
+    private int top = 0;//排行榜排名
 
     /**
      * 0 没上榜 1土豪榜 2魅力榜
@@ -54,6 +49,10 @@ public class UserInfoLightweight extends UserBasic {
 
     public void parseUserInfoLightweight(UserDetail userInfo) {
         if (userInfo == null) return;
+        this.setUid(userInfo.getUid());
+        this.setNickname(userInfo.getNickname());
+        this.setGender(userInfo.getGender());
+        this.setAvatar(userInfo.getAvatar());
     }
 
     /**
@@ -63,21 +62,28 @@ public class UserInfoLightweight extends UserBasic {
     public void parseJson(String jsonResult) {
         super.parseJson(jsonResult);
         if (TextUtils.isEmpty(jsonResult)) return;
-
+        this.setInfoJson(jsonResult);
         JSONObject jsonObject = getJsonObject(jsonResult);
         this.setAlias(jsonObject.optString("alias"));
         this.setVip(jsonObject.optBoolean("is_vip"));
         this.setAuth(jsonObject.optBoolean("is_auth"));
         this.setSignname(jsonObject.optString("signname"));
         this.setDistance(jsonObject.optString("distance"));
-        this.setVideo_busy(jsonObject.optInt("video_busy") == 1 ? true : false);
-        this.setVideo_available(jsonObject.optInt("video_available") == 1 ? true : false);
-        this.setAudio_available(jsonObject.optInt("audio_available") == 1 ? true : false);
+        this.setVideo_busy(jsonObject.optInt("video_busy") == 1);
+        this.setVideo_available(jsonObject.optInt("video_available") == 1);
+        this.setAudio_available(jsonObject.optInt("audio_available") == 1);
         this.setSayHello(jsonObject.optBoolean("isSayHello"));
         this.setHeartNum(jsonObject.optInt("heartnum"));
         this.setKf_id(jsonObject.optInt("kf_id"));
         this.setTop(jsonObject.optInt("top"));
         this.setTopType(jsonObject.optInt("toptype"));
+    }
+
+
+    public void parseUserInfoLightweight(long userID, String infoJson, long time) {
+        this.setUid(userID);
+        this.setTime(time);
+        parseJson(infoJson);
     }
 
     public long getTime() {

@@ -9,9 +9,12 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 
 /**
@@ -19,12 +22,14 @@ import com.juxin.predestinate.module.util.UIShow;
  * xy
  */
 
-public class MyAuthenticationAct extends BaseActivity implements View.OnClickListener {
+public class MyAuthenticationAct extends BaseActivity implements View.OnClickListener,RequestComplete{
     private TextView tv_txt_auth_phone, tv_txt_auth_video,tv_txt_auth_id;
     private UserDetail userDetail;
     private int  authForVodeo = 104;
     public static final int AUTHENTICSTION_REQUESTCODE=103;
+    private int authIDCard = 105;
     private VideoVerifyBean videoVerifyBean;
+    private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.f1_authentication_act);
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
+        mIdCardVerifyStatusInfo = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo();
         setBackView(getResources().getString(R.string.title_auth));
         initView();
     }
@@ -53,14 +59,37 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
             tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this,R.color.gray_text));
         }
         tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authno));
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this,R.color.gray_text));
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
         initVideoAuth();
+        initIdCardAuth();
         initConfig();
     }
 
 
     private void initVideoAuth() {
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this,R.color.gray_text));
+        tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+
+        switch (mIdCardVerifyStatusInfo.getStatus()) {
+            case 0:
+                tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authno));
+                break;
+            case 1:
+                tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authing));
+                ContextCompat.getColor(this,R.color.txt_authing);
+                break;
+            case 2:
+                tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authok));
+                ContextCompat.getColor(this, R.color.authentication_txt_bg);
+                break;
+            case 3:
+            case 4:
+                tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_autherror));
+                break;
+        }
+    }
+
+    private void initIdCardAuth() {
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
 
         switch (videoVerifyBean.getStatus()) {
             case 0:
@@ -100,6 +129,8 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.ll_auth_id://身份认证
                 //TODO
+                if (mIdCardVerifyStatusInfo.isOk())
+                    UIShow.showIDCardAuthenticationAct(this,authIDCard);
                 break;
         }
     }
@@ -119,6 +150,17 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         } else if (requestCode == authForVodeo) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             initVideoAuth();
+        }else if (requestCode == authIDCard) {
+            if (data != null){
+                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
+//                Log.e("TTTTTTTTTTTTTPPP000","zhixing"+back);
+                if (back == 1){
+//                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
+                    this.finish();
+                }
+            }
+//            userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+//            initVideoAuth();
         }
     }
 
@@ -129,5 +171,13 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
 
         ModuleMgr.getCommonMgr().requestVideochatConfig();
         setResult(203);
+        if (mIdCardVerifyStatusInfo.getStatus() == 2)
+            return;
+        ModuleMgr.getCommonMgr().getVerifyStatus(null);
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+
     }
 }

@@ -8,12 +8,12 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -22,7 +22,8 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 /**
  * 查看用户资料头部panel
  */
-public class UserCheckInfoHeadPanel extends BaseViewPanel implements IMProxy.SendCallBack {
+public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCallBack {
+
     private final int channel;
     private UserProfile userProfile; // TA人资料
     private TextView user_follow;

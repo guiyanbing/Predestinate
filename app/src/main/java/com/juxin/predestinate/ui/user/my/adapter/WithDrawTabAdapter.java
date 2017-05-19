@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.user.my.adapter;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -68,7 +69,7 @@ public class WithDrawTabAdapter extends BaseRecyclerViewAdapter<WithdrawList.Wit
                     public void onClick(View v) {
                         //红包提现--银行卡界面
                         if (mContext != null) {
-                            UIShow.showWithDrawApplyAct((int) info.getId(), info.getMoney(), true, mContext);
+                            UIShow.showWithDrawApplyAct((int) info.getId(), info.getMoney(), true, (FragmentActivity)mContext);
                         }
                     }
                 });

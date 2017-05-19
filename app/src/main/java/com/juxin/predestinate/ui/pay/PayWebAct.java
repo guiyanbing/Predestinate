@@ -15,9 +15,10 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.juxin.library.log.PToast;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -166,20 +167,20 @@ public class PayWebAct extends BaseActivity{
                                 if ("1".equals(result)) {
                                     // 更新信息
                                     getUpdateInfo();
-                                    MMToast.showShort(jsonObject.optString("content"));
+                                    PToast.showShort(jsonObject.optString("content"));
                                 }else{
-                                    MMToast.showShort(jsonObject.optString("content"));
+                                    PToast.showShort(jsonObject.optString("content"));
                                     PayWebAct.this.finish();
                                 }
                             } catch (Exception e) {
-                                MMToast.showShort("支付出错");
+                                PToast.showShort("支付出错");
                                 PayWebAct.this.finish();
                                 e.printStackTrace();
                             }
                             return;
                         }
                     }else{
-                        MMToast.showShort("支付出错");
+                        PToast.showShort("支付出错");
                         PayWebAct.this.finish();
                     }
                     break;
@@ -198,7 +199,7 @@ public class PayWebAct extends BaseActivity{
                 LoadingDialog.closeLoadingDialog();
                 JSONObject jsonObject = response.getResponseJson();
                 if(!jsonObject.isNull("userDetail")){
-                    MMToast.showShort("更新失败!");
+                    PToast.showShort("更新失败!");
                 }
                 PayWebAct.this.setResult(Constant.PAY_ALIPAY_WEB_ACT);
                 PayWebAct.this.finish();
@@ -226,7 +227,7 @@ public class PayWebAct extends BaseActivity{
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
-            MMToast.showShort("加载失败");
+            PToast.showShort("加载失败");
             customFrameLayout.show(R.id.common_net_error);
         }
 

@@ -7,13 +7,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
@@ -26,7 +26,8 @@ import java.util.List;
 /**
  * 查看他人资料底部panel
  */
-public class UserCheckInfoFootPanel extends BaseViewPanel {
+public class UserCheckInfoFootPanel extends BasePanel {
+
     private final int channel;
     private UserDetail userDetail;  // 个人资料
     private UserProfile userProfile;// TA人资料

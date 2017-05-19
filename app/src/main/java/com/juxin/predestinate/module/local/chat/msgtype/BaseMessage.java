@@ -1,8 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+
+import com.juxin.library.log.PLogger;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
@@ -10,10 +11,10 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class BaseMessage implements IBaseMessage {
                 BaseMessageType messageType = BaseMessageType.valueOf("Msg_" + type);
                 return messageType.msgClass;
             } catch (Exception e) {
-                MMLog.autoDebug(type);
+                PLogger.d("Msg_" + type);
             }
             return null;
         }
@@ -125,7 +126,7 @@ public class BaseMessage implements IBaseMessage {
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
-        MMLog.autoDebug(jsonStr);
+        PLogger.d(jsonStr);
         this.setJsonStr(jsonStr);
         return null;
     }
@@ -246,7 +247,7 @@ public class BaseMessage implements IBaseMessage {
 
     //转成LONG型
     public long getLWhisperID() {
-        return TypeConvUtil.toLong(whisperID);
+        return TypeConvertUtil.toLong(whisperID);
     }
 
     public void setWhisperID(String whisperID) {
@@ -523,7 +524,7 @@ public class BaseMessage implements IBaseMessage {
                 return new JSONObject(str);
             }
         } catch (JSONException var3) {
-            MMLog.printThrowable(var3);
+            PLogger.printThrowable(var3);
         }
 
         return new JSONObject();
@@ -541,7 +542,7 @@ public class BaseMessage implements IBaseMessage {
         this.setTime(getCurrentTime());
         this.setcMsgID(getCMsgID());
         this.setMsgID(getcMsgID());
-        MMLog.autoDebug("getCMsgID()=" + getcMsgID() + "");
+        PLogger.d("getCMsgID()=" + getcMsgID() + "");
     }
 
 
@@ -565,12 +566,12 @@ public class BaseMessage implements IBaseMessage {
         this.setId(Long.parseLong(map.get("id").toString()));
         this.setChannelID(map.get("channelId") == null ? StrDefault : map.get("channelId").toString());
         this.setWhisperID(map.get("whisperID") == null ? StrDefault : map.get("whisperID").toString());
-        this.setSendID(map.get("sendId") == null ? NumDefault : TypeConvUtil.toLong(map.get("sendId").toString()));
-        this.setMsgID(map.get("msgid") == null ? NumDefault : TypeConvUtil.toLong(map.get("msgid").toString()));
-        this.setcMsgID(map.get("cMsgid") == null ? NumDefault : TypeConvUtil.toLong(map.get("cMsgid").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvUtil.toInt(map.get("status").toString()));
-        this.setfStatus(map.get("f_status") == null ? NumDefault : TypeConvUtil.toInt(map.get("f_status").toString()));
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvUtil.toLong(map.get("time").toString()));
+        this.setSendID(map.get("sendId") == null ? NumDefault : TypeConvertUtil.toLong(map.get("sendId").toString()));
+        this.setMsgID(map.get("msgid") == null ? NumDefault : TypeConvertUtil.toLong(map.get("msgid").toString()));
+        this.setcMsgID(map.get("cMsgid") == null ? NumDefault : TypeConvertUtil.toLong(map.get("cMsgid").toString()));
+        this.setStatus(map.get("status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("status").toString()));
+        this.setfStatus(map.get("f_status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("f_status").toString()));
+        this.setTime(map.get("time") == null ? NumDefault : TypeConvertUtil.toLong(map.get("time").toString()));
         this.setType(type);
     }
 
@@ -591,14 +592,14 @@ public class BaseMessage implements IBaseMessage {
     public BaseMessage(int type, Map<String, Object> map) {
         this.setId(Long.parseLong(map.get("id").toString()));
         this.setWhisperID(map.get("userid") == null ? StrDefault : map.get("userid").toString());
-        this.setIsOnline(map.get("isOnline") == null ? NumDefault : TypeConvUtil.toInt(map.get("isOnline").toString()));
-        this.setKfID(map.get("kf_id") == null ? NumDefault : TypeConvUtil.toInt(map.get("kf_id").toString()));
+        this.setIsOnline(map.get("isOnline") == null ? NumDefault : TypeConvertUtil.toInt(map.get("isOnline").toString()));
+        this.setKfID(map.get("kf_id") == null ? NumDefault : TypeConvertUtil.toInt(map.get("kf_id").toString()));
         this.setInfoJson(map.get("infoJson") == null ? StrDefault : map.get("infoJson").toString());
         paseInfoJson(this.getInfoJson());
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvUtil.toLong(map.get("time").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvUtil.toInt(map.get("status").toString()));
+        this.setTime(map.get("time") == null ? NumDefault : TypeConvertUtil.toLong(map.get("time").toString()));
+        this.setStatus(map.get("status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("status").toString()));
 
-        this.setNum(map.get("num") == null ? NumDefault : TypeConvUtil.toInt(map.get("num").toString()));
+        this.setNum(map.get("num") == null ? NumDefault : TypeConvertUtil.toInt(map.get("num").toString()));
         this.setType(type);
     }
 

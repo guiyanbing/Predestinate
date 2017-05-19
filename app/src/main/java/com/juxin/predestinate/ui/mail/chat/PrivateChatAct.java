@@ -1,25 +1,18 @@
 package com.juxin.predestinate.ui.mail.chat;
 
 import android.content.Intent;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
@@ -28,11 +21,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 聊天页
@@ -384,7 +372,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             try {
                 lastActivity.finish();
             } catch (Exception e) {
-                MMLog.printThrowable(e);
+                PLogger.printThrowable(e);
             }
         }
         lastActivity = this;

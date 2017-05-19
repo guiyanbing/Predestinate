@@ -2,9 +2,9 @@ package com.juxin.predestinate.ui.pay.cupvoice;
 
 import android.content.Context;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 
@@ -14,8 +14,7 @@ import java.util.ArrayList;
  * 银行卡
  * Created by Kind on 2017/4/26.
  */
-
-public class PayCupVoiceBankPanel extends BaseViewPanel{
+public class PayCupVoiceBankPanel extends BasePanel {
 
     public PayCupVoiceBankPanel(Context context, PayGood payGood) {
         super(context);

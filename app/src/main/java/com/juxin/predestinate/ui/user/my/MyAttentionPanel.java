@@ -6,11 +6,11 @@ import android.view.View;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -28,7 +28,7 @@ import java.util.List;
  * 我关注的
  * Created by zm on 2017/4/25
  */
-public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,XRecyclerView.LoadingListener{
+public class MyAttentionPanel extends BasePanel implements RequestComplete,XRecyclerView.LoadingListener{
 
     private Context mContext;
     //有关控件

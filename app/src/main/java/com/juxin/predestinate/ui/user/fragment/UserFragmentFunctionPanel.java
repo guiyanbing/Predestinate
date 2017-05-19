@@ -6,16 +6,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
  * 用户中心功能panel
  */
-public class UserFragmentFunctionPanel extends BaseViewPanel {
+public class UserFragmentFunctionPanel extends BasePanel {
 
     private ImageView iv_vip_privilege, iv_phone_verify, iv_video_verify;
     private TextView tv_vip_title, tv_vip_status, tv_verify_status;

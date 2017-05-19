@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.alipay.sdk.app.PayTask;
 import com.alipay.sdk.util.H5PayResultModel;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.utils.NetUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.WebPanel;
 
@@ -45,7 +45,7 @@ public class PayViewPanel extends WebPanel{
 //                    progressListener.progressOver();
 //                }
                 // 判断有无网络
-                if (!NetUtil.isAvaliable()) {
+                if (!NetworkUtils.isConnected(getContext())) {
                     customFrameLayout.show(R.id.common_net_error);
                     refresh.setVisibility(View.VISIBLE);
                     refresh.setOnClickListener(new View.OnClickListener() {

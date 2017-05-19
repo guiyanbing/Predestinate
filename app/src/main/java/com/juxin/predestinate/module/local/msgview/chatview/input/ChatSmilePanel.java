@@ -4,7 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import com.juxin.mumu.bean.log.MMLog;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
@@ -130,7 +131,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
                 ++position;
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 

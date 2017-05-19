@@ -11,14 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -90,7 +89,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
-        MMLog.d("yao","gender=="+ ModuleMgr.getCenterMgr().getMyInfo().getGender());
+        PLogger.d("gender=="+ ModuleMgr.getCenterMgr().getMyInfo().getGender());
         ifUpHead = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1;
     }
 
@@ -275,13 +274,13 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                             ifUpHead = true;
                         } else {
-                            MMToast.showShort("头像上传失败，请重试");
+                            PToast.showShort("头像上传失败，请重试");
                         }
                     }
                 }
             });
         } else {
-            MMToast.showShort("图片地址无效");
+            PToast.showShort("图片地址无效");
         }
     }
 

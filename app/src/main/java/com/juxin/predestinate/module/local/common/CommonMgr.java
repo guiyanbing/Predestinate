@@ -10,11 +10,14 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.mumu.bean.utils.MD5;
+import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -52,6 +55,7 @@ public class CommonMgr implements ModuleBase {
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
+    private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
 
     @Override
     public void init() {
@@ -108,6 +112,7 @@ public class CommonMgr implements ModuleBase {
     public void requestStaticConfig() {
         requestConfig();
         requestGiftList(null);
+        getVerifyStatus(null);
         AttentionUtil.initUserDetails();
     }
 
@@ -161,12 +166,7 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("videochat", videoVerify.getVideochat());
         post_param.put("audiochat", videoVerify.getAudiochat());
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-
-            }
-        });
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, null);
     }
 
     /**
@@ -225,6 +225,15 @@ public class CommonMgr implements ModuleBase {
         return giftLists;
     }
 
+    /**
+     * @return 返回认证消息对象
+     */
+    public IdCardVerifyStatusInfo getIdCardVerifyStatusInfo() {
+        if (mIdCardVerifyStatusInfo == null)
+            mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+        return mIdCardVerifyStatusInfo;
+    }
+
     public VideoVerifyBean getVideoVerify() {
         return videoVerify != null ? videoVerify : new VideoVerifyBean();
     }
@@ -247,6 +256,30 @@ public class CommonMgr implements ModuleBase {
             }
         }
         return false;
+    }
+
+    /**
+     * 判断是否到达第二天
+     *
+     * @return true 达到第二天
+     */
+    public boolean checkDate(String key) {
+        String recommendDate = PSP.getInstance().getString(key, "-1");
+        if (recommendDate != null) {
+            if (!recommendDate.equals(TimeUtil.getCurrentData())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 保存达到第二天的状态
+     *
+     * @param key
+     */
+    public void saveDateState(String key) {
+        PSP.getInstance().put(key, TimeUtil.getCurrentData() + "");
     }
 
     // ---------------------------- 软件升级 start ------------------------------
@@ -272,7 +305,8 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkUpdate, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (isShowTip) LoadingDialog.closeLoadingDialog(300);
+                if (isShowTip)
+                    LoadingDialog.closeLoadingDialog(300);
                 AppUpdate appUpdate = new AppUpdate();
                 appUpdate.parseJson(response.getResponseString());
                 UIShow.showUpdateDialog(activity, appUpdate, isShowTip);
@@ -418,6 +452,37 @@ public class CommonMgr implements ModuleBase {
     }
 
     //============================== 小友模块相关接口 =============================
+    /**
+     * 上传身份证照片
+     *
+     * @param url      图片本地地址
+     * @param complete 上传完成回调
+     */
+    public void uploadIdCard(final String url, final RequestComplete complete) {
+        if (com.juxin.mumu.bean.utils.FileUtil.isExist(url)) {
+            Map<String, File> fileParams = new HashMap<>();
+            fileParams.put("userfile", new File(url));
+
+            long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
+
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadIdCard, null, fileParams, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (complete != null)
+                        complete.onRequestComplete(response);
+                }
+            });
+
+        } else {
+            LoadingDialog.closeLoadingDialog();
+            MMToast.showShort("图片地址无效");
+        }
+    }
 
     /**
      * 我关注的列表
@@ -472,6 +537,56 @@ public class CommonMgr implements ModuleBase {
         getParams.put("cellPhone", phoneNum);
         getParams.put("verifyCode", code);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.bindCellPhone, getParams, complete);
+    }
+
+    /**
+     * 用户身份认证提交
+     *
+     * @param id_num         身份证号码
+     * @param accountname    真实姓名
+     * @param accountnum     银行账号/支付宝账户
+     * @param bank           银行
+     * @param subbank        支行
+     * @param id_front_img   身份证正面照URL
+     * @param id_back_img    身份证背面照URL
+     * @param face_img       手持身份证照URL
+     * @param paytype        支付类型 1银行 2支付宝 (默认支付宝)
+     * @param complete       请求完成后回调
+     */
+    public void userVerify(String id_num,String accountname,String accountnum,String bank,String subbank,String id_front_img,
+                           String id_back_img,String face_img,int paytype, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("id_num", id_num);
+        getParams.put("accountname", accountname);
+        getParams.put("accountnum", accountnum);
+        getParams.put("bank", bank);
+        getParams.put("subbank", subbank);
+        getParams.put("id_front_img", id_front_img);
+        getParams.put("id_back_img", id_back_img);
+        getParams.put("face_img", face_img);
+        getParams.put("paytype", paytype);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.userVerify, getParams, complete);
+    }
+
+    /**
+     * 获取用户验证信息(密)
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getVerifyStatus(final RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getVerifyStatus, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+//                Log.e("TTTTTTTTTTTTTEEE",response.getResponseString()+"|||");
+                if (response.isOk()){
+                    videoVerify = (VideoVerifyBean) response.getBaseData();
+                     mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+                     mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
+                }
+                if (complete != null)
+                    complete.onRequestComplete(response);
+            }
+        });
     }
 
     /**
@@ -605,16 +720,17 @@ public class CommonMgr implements ModuleBase {
      * 红包记录--提现申请
      *
      * @param money       提现金额(分)
+     * @param paytype     支付方式(1或为空 银行卡, 2 支付宝)
      * @param accountname 帐户姓名
      * @param accountnum  银行卡号/支付宝账号
      * @param bank        开户行/支付类型
      * @param subbank     开户支行
      * @param complete    请求完成后回调
      */
-    public void reqWithdraw(String money, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
+    public void reqWithdraw(String money,int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
         postParams.put("money", (Float.parseFloat(money) * 100) + "");
+        postParams.put("paytype", paytype);
         postParams.put("accountname", accountname);
         postParams.put("accountnum", accountnum);
         postParams.put("bank", bank);
@@ -628,24 +744,26 @@ public class CommonMgr implements ModuleBase {
      * @param complete 请求完成后回调
      */
     public void reqWithdrawAddress(RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, postParams, complete);
+//        Map<String, Object> postParams = new HashMap<>();
+//        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, null, complete);
     }
 
     /**
      * 红包记录--提现申请修改地址
      *
-     * @param accountname 请求完成后回调
-     * @param accountnum  请求完成后回调
-     * @param bank        请求完成后回调
-     * @param subbank     请求完成后回调
+     * @param money       提现金额(分)
+     * @param paytype     支付方式(1或为空 银行卡, 2 支付宝)
+     * @param accountname 帐户姓名
+     * @param accountnum  银行卡号/支付宝账号
+     * @param bank        开户行/支付类型
+     * @param subbank     开户支行
      * @param complete    请求完成后回调
      */
-    public void reqWithdrawModify(int id, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
+    public void reqWithdrawModify(String money,int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        postParams.put("id", id);
+        postParams.put("money", (Float.parseFloat(money) * 100) + "");
+        postParams.put("paytype", paytype);
         postParams.put("accountname", accountname);
         postParams.put("accountnum", accountnum);
         postParams.put("bank", bank);
@@ -891,6 +1009,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 获取自定义表情列表
+     *
      * @param complete
      */
     public void reqCustomFace(RequestComplete complete) {
@@ -899,6 +1018,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * add自定义表情
+     *
      * @param url
      * @param complete
      */
@@ -907,4 +1027,14 @@ public class CommonMgr implements ModuleBase {
         postParms.put("url", url);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
     }
+
+
+    public void getSimpleDetail(long uid, RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("uid", uid);
+        getParms.put("ver", Constant.SUB_VERSION);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getSimpleDetail, getParms, complete);
+    }
+
+
 }

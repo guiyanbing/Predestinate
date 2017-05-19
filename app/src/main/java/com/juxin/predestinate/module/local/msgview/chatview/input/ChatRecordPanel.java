@@ -8,19 +8,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.FileUtil;
-import com.juxin.mumu.bean.utils.MMToast;
+
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
+import com.juxin.library.utils.FileUtil;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 /**
+ * 音频录制panel
  * Created by Kind on 2017/3/30.
  */
-
-public class ChatRecordPanel extends BaseViewPanel implements ChatMediaRecord.OnRecordListener{
+public class ChatRecordPanel extends BasePanel implements ChatMediaRecord.OnRecordListener{
 
     private ChatAdapter.ChatInstance chatInstance = null;
     private ImageView micImage = null;
@@ -92,7 +93,7 @@ public class ChatRecordPanel extends BaseViewPanel implements ChatMediaRecord.On
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                MMLog.e("ACTION_MOVE", "posY--->" + posY);
+                PLogger.e("ACTION_MOVE: posY--->" + posY);
                 if (posY < 0) {
                     micImage.setImageResource(R.drawable.v3_voice_up_cancel);
                     recordingHint.setText(getContext().getString(R.string.chat_release_to_cancel));
@@ -124,7 +125,7 @@ public class ChatRecordPanel extends BaseViewPanel implements ChatMediaRecord.On
                   //          ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000, null);
                     //    }
                     } else {
-                        MMToast.showShort("录音不能小于1秒!");
+                        PToast.showShort("录音不能小于1秒!");
                         FileUtil.deleteFile(voiceFileUri);//清除无效文件
                     }
                 }
@@ -147,7 +148,7 @@ public class ChatRecordPanel extends BaseViewPanel implements ChatMediaRecord.On
         try {
             return getContext().getResources().getDrawable(id);
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return null;
     }
@@ -165,7 +166,7 @@ public class ChatRecordPanel extends BaseViewPanel implements ChatMediaRecord.On
                 micImage.setImageDrawable(micImages[index]);
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 

@@ -9,8 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -99,7 +99,7 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
      * 获取轻量级用户信息
      */
     private void getUserInfo(long[] uids) {
-        MMLog.d("yao", "uids1==" + Arrays.toString(uids));
+        PLogger.d("uids1==" + Arrays.toString(uids));
         ModuleMgr.getCenterMgr().reqUserSimpleList(uids, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -166,11 +166,11 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
 //                    exListView.addFooterView(divider_footer);
                 } else {
                     recyclerView.setLoadingMoreEnabled(true);
-                    MMLog.d("yao", "loadingMoreEnable");
+                    PLogger.d("loadingMoreEnable");
                 }
             } else {
                 if (adapter.getList() != null && adapter.getList().size() > 0) {
-                    MMToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                    PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
                 } else {
                     cv_common.showNetError("点击刷新", new View.OnClickListener() {
                         @Override
@@ -212,13 +212,13 @@ public class RecommendAct extends BaseActivity implements RequestComplete, XRecy
     public void onRefresh() {
         b_resetPage = true;
         ModuleMgr.getCommonMgr().sysRecommend(this, 1, post_param);
-        MMLog.d("yao", "onRefresh");
+        PLogger.d("onRefresh");
     }
 
     @Override
     public void onLoadMore() {
         b_resetPage = false;
         ModuleMgr.getCommonMgr().sysRecommend(this, page, post_param);
-        MMLog.d("yao", "onLoadMore");
+        PLogger.d("onLoadMore");
     }
 }

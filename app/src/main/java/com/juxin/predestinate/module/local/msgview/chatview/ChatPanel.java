@@ -28,8 +28,8 @@ import pl.droidsonroids.gif.GifDrawable;
  *
  * Created by Kind on 2017/3/30.
  */
-
 public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.OnClickChatItemListener {
+
     private boolean isSender = true;
     protected ChatContentAdapter.ChatItemHolder chatItemHolder = null;
 

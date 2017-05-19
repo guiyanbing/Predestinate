@@ -5,13 +5,13 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="@dimen/px8_dp" />
-            <solid android:color="@color/color_48CFD3" />
+            <solid android:color="@color/color_FD6C8E" />
         </shape>
     </item>
     <item android:state_focused="true">
         <shape>
             <corners android:radius="@dimen/px8_dp" />
-            <solid android:color="@color/color_48CFD3" />
+            <solid android:color="@color/color_FD6C8E" />
         </shape>
     </item>
     <item android:state_enabled="false">
@@ -23,7 +23,7 @@
     <item>
         <shape>
             <corners android:radius="@dimen/px8_dp" />
-            <solid android:color="@color/color_48CFD3" />
+            <solid android:color="@color/color_FD6C8E" />
         </shape>
     </item>
 

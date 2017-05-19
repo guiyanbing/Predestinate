@@ -28,12 +28,16 @@ import static com.juxin.library.observe.MsgType.MT_Inner_Suspension_Notice;
  * Created by zhang on 2016/8/30.
  */
 public class NetErrorTips extends TipsBarBasePanel implements View.OnClickListener, PObserver {
+    
     private View net_error_panel;
 
+    public NetErrorTips(Context context) {
+        super(context);
+    }
 
     @Override
-    public void init(Context context, JSONObject jsonObject) {
-        super.init(context, jsonObject);
+    public void init(JSONObject jsonObject) {
+        super.init(jsonObject);
         MsgMgr.getInstance().attach(this);
         setContentView(R.layout.y1_net_error_tips);
         initView();

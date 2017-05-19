@@ -16,11 +16,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import com.juxin.mumu.bean.net.BasicNameValuePair;
-import com.juxin.mumu.bean.net.NameValuePair;
-import com.juxin.mumu.bean.utils.MD5;
-import com.juxin.mumu.bean.utils.MMToast;
+
+import com.juxin.library.log.PToast;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.net.BasicNameValuePair;
+import com.juxin.predestinate.bean.net.NameValuePair;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -66,7 +67,7 @@ public class PayWeixinUtils {
 
     public void onPayment(final PayGood payGood) {
         if (!api.isWXAppInstalled()) {
-            MMToast.showShort("未安装微信!");
+            PToast.showShort("未安装微信!");
             return;
         }
 
@@ -89,7 +90,7 @@ public class PayWeixinUtils {
                         onPayment(payGood);
                         return;
                     } else
-                        MMToast.showShort(R.string.request_error);
+                        PToast.showShort(R.string.request_error);
                 }
 
             }
@@ -125,7 +126,7 @@ public class PayWeixinUtils {
                 ZFWechatPay.Pay(context, payWX.getJsonParamPost());
                 break;
             default:
-                MMToast.showShort("不支持的支付类型！");
+                PToast.showShort("不支持的支付类型！");
                 break;
         }
     }
@@ -159,7 +160,7 @@ public class PayWeixinUtils {
             api.sendReq(req);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort(R.string.pay_order_error);
+            PToast.showShort(R.string.pay_order_error);
         }
     }
 
@@ -178,20 +179,20 @@ public class PayWeixinUtils {
 
 //		sb.append("sign str\n" + ss.toString() + "\n\n");
         //String appSign = MD5.getMessageDigest(ss.toString().getBytes()).toUpperCase();
-        String appSign = MD5.encode(ss.toString()).toUpperCase();
+        String appSign = EncryptUtil.md5(ss.toString()).toUpperCase();
         Log.e("orion", appSign);
         return appSign;
     }
 
     private String genOutTradNo() {
         Random random = new Random();
-        return MD5.encode(String.valueOf(random.nextInt(10000)));
+        return EncryptUtil.md5(String.valueOf(random.nextInt(10000)));
 //        return MD5.getMessageDigest(String.valueOf(random.nextInt(10000)).getBytes());
     }
 
     private void To_Pay_WeiXin_Protocol(String payData) {
         if (!payData.startsWith("weixin://")) {
-            MMToast.showShort(R.string.request_error);
+            PToast.showShort(R.string.request_error);
             return;
         }
         Uri uri = Uri.parse(payData);
@@ -203,14 +204,14 @@ public class PayWeixinUtils {
                 context.startActivity(intent);
             }
         } else {
-            MMToast.showShort("微信未安装");
+            PToast.showShort("微信未安装");
         }
     }
 
     private void To_Pay_WeiXin_Http(String payData) {
         if (!payData.startsWith("http://") &&
                 !payData.startsWith("https://")) {
-            MMToast.showShort(R.string.request_error);
+            PToast.showShort(R.string.request_error);
             return;
         }
         LoadingDialog.show((FragmentActivity) context, "");
@@ -241,7 +242,7 @@ public class PayWeixinUtils {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 LoadingDialog.closeLoadingDialog();
-                MMToast.showShort("支付失败");
+                PToast.showShort("支付失败");
             }
 
             @Override
@@ -281,7 +282,7 @@ public class PayWeixinUtils {
     private void To_Pay_WeiXin_Wft_Wap(String payData) {
         try {
             if (TextUtils.isEmpty(payData)) {
-                MMToast.showShort(R.string.pay_order_error);
+                PToast.showShort(R.string.pay_order_error);
                 return;
             }
 
@@ -306,14 +307,14 @@ public class PayWeixinUtils {
             new WtfPlugin().getOrderForPay((Activity) context, data);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort(R.string.pay_order_error);
+            PToast.showShort(R.string.pay_order_error);
         }
     }
 
     private void To_Pay_WeiXin_Wft_App(String payData) {
         try {
             if (TextUtils.isEmpty(payData)) {
-                MMToast.showShort(R.string.pay_order_error);
+                PToast.showShort(R.string.pay_order_error);
                 return;
             }
 
@@ -329,7 +330,7 @@ public class PayWeixinUtils {
             PayPlugin.unifiedAppPay((Activity) context, msg);
         } catch (Exception e) {
             e.printStackTrace();
-            MMToast.showShort(R.string.pay_order_error);
+            PToast.showShort(R.string.pay_order_error);
         }
     }
 }
