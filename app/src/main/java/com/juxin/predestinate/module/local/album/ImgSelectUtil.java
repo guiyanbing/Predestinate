@@ -93,6 +93,7 @@ public class ImgSelectUtil {
 
     /**
      * 调用系统相机拍照
+     * @param  frontCamera 是否默认前置摄像头
      */
     public void takePhoto(Activity activity, boolean frontCamera) {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
