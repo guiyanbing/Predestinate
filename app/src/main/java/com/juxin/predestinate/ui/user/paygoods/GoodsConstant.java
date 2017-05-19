@@ -11,6 +11,11 @@ public class GoodsConstant {
     public static final int PAY_TYPE_ALIPAY = 1;  // 支付宝支付
     public static final int PAY_TYPE_OTHER = -1;   // 其他支付
 
+    // ----- 支付类型 在线配置接口定义，不可随便更改------
+    public static final String PAY_TYPE_WECHAT_NAME = "wechat";  // 微信支付
+    public static final String PAY_TYPE_ALIPAY_NAME = "alipay";  // 支付宝支付
+    public static final String PAY_TYPE_OTHER_NAME = "other";    // 其他支付
+
     public static final int PAY_TYPE_OLD = 0;     // 布局类型：老布局样式
     public static final int PAY_TYPE_NEW = 1;     // 布局类型：新布局样式
 

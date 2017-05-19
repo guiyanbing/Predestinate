@@ -314,6 +314,7 @@
     <string name="user_other_set_chat_clear">清空聊天记录</string>
     <string name="user_other_set_chat_del">确定清除与TA的聊天记录吗？</string>
     <string name="user_other_set_chat_del_suc">成功清除了聊天记录！</string>
+    <string name="user_other_set_chat_del_fail">清除失败，请重试！</string>
     <string name="user_other_set_chat_shield">屏蔽</string>
     <string name="user_other_set_complain">投诉</string>
     <string name="user_other_label">标签</string>
