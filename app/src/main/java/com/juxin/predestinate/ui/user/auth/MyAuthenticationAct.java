@@ -27,7 +27,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
     private UserDetail userDetail;
     private int  authForVodeo = 104;
     public static final int AUTHENTICSTION_REQUESTCODE=103;
-    private int authResult = 103, authForVodeo = 104,authIDCard = 105;
+    private int authIDCard = 105;
     private VideoVerifyBean videoVerifyBean;
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
 
