@@ -12,9 +12,11 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.db.cache.DBCache;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -26,6 +28,8 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
+
+import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener {
 

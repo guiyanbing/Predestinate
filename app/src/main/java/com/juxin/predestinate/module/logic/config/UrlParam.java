@@ -54,6 +54,10 @@ public enum UrlParam {
     setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
     addVideoVerify(Hosts.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
+    // 用户身份认证提交
+    userVerify("User/Verify", true),
+    // 获取用户验证信息(密)
+    getVerifyStatus("User/getVerifyStatus", true),
 
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
@@ -69,6 +73,13 @@ public enum UrlParam {
     reqVideoChatConfig(Hosts.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true), // 获取他人音视频开关配置
     reqGetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
+
+
+    getSimpleDetail("user/getSimpleDetail", null, true),   //获取轻量级的用户信息
+
+
+
+
 
     // 私密视频相关
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值
@@ -103,13 +114,13 @@ public enum UrlParam {
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
     reqAddredonekey("fruit/addredonekey", RedOneKeyList.class, true),
     // 客户端请求用户提现列表
-    reqWithdrawlist("fruit/withdrawlist", true),
+    reqWithdrawlist("fruit/withdrawlistNew", true),
     // 红包记录--提现申请
-    reqWithdraw("fruit/withdraw", true),
+    reqWithdraw("fruit/withdrawNew", true),
     // 红包记录--提现申请获取地址
-    reqWithdrawAddress("fruit/withdrawaddress", true),
+    reqWithdrawAddress("fruit/withdrawaddressNew", true),
     // 红包记录--提现申请修改地址
-    reqWithdrawModify("fruit/withdrawmodify", true),
+    reqWithdrawModify("fruit/withdrawmodifyNew", true),
     // 获取礼物列表
     getGiftLists("gift/getGifts", true),
     // 获取钻石余额
@@ -138,6 +149,8 @@ public enum UrlParam {
     unfollow("follow/unfollow", true),
     // 关注某某
     follow("follow/follow", true),
+    // 上传身份证照片
+    uploadIdCard("User/uploadIdCard", true),
 
     //================= 发现 ===========
     //举报

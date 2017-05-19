@@ -7,7 +7,6 @@ import android.os.Build;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.FMessage;
-import com.juxin.predestinate.bean.db.cache.FProfile;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -19,20 +18,20 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
- * FProfile 处理
+ * FProfileCache 处理
  * Created by Kind on 2017/3/28.
  */
 
-public class DBCacheCenterFProfile {
+public class CacheCenterFProfile {
     private BriteDatabase mDatabase;
 
-    public DBCacheCenterFProfile(BriteDatabase database) {
+    public CacheCenterFProfile(BriteDatabase database) {
         this.mDatabase = database;
     }
 
 
     public Observable<UserInfoLightweightList> queryBySqlFProfile(String sql) {
-        return mDatabase.createQuery(FProfile.FPROFILE_TABLE, sql)
+        return mDatabase.createQuery(FProfileCache.FPROFILE_TABLE, sql)
                 .map(new Func1<SqlBrite.Query, UserInfoLightweightList>() {
                     @Override
                     public UserInfoLightweightList call(SqlBrite.Query query) {
@@ -51,9 +50,9 @@ public class DBCacheCenterFProfile {
         try {
             while (cursor.moveToNext()) {
                 lightweightList.getUserInfos().add(new UserInfoLightweight(
-                        CursorUtil.getLong(cursor, FProfile.COLUMN_USERID),
-                        CursorUtil.getString(cursor, FProfile.COLUMN_INFOJSON),
-                        CursorUtil.getLong(cursor, FProfile.COLUMN_TIME)
+                        CursorUtil.getLong(cursor, FProfileCache.COLUMN_USERID),
+                        CursorUtil.getString(cursor, FProfileCache.COLUMN_INFOJSON),
+                        CursorUtil.getLong(cursor, FProfileCache.COLUMN_TIME)
                 ));
             }
         } catch (Exception e) {
@@ -108,12 +107,12 @@ public class DBCacheCenterFProfile {
 
     private Observable<Boolean> isExistProfile(long userid) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ")
-                .append(FProfile.FPROFILE_TABLE)
+                .append(FProfileCache.FPROFILE_TABLE)
                 .append(" WHERE ")
-                .append(FProfile.COLUMN_USERID + " = ")
+                .append(FProfileCache.COLUMN_USERID + " = ")
                 .append(userid);
 
-        return mDatabase.createQuery(FProfile.FPROFILE_TABLE, sql.toString())
+        return mDatabase.createQuery(FProfileCache.FPROFILE_TABLE, sql.toString())
                 .map(new Func1<SqlBrite.Query, Boolean>() {
                     @Override
                     public Boolean call(SqlBrite.Query query) {
@@ -132,18 +131,18 @@ public class DBCacheCenterFProfile {
     private long updateMsg(Boolean b, UserInfoLightweight lightweight) {
         try {
             final ContentValues values = new ContentValues();
-            values.put(FProfile.COLUMN_USERID, lightweight.getUid());
+            values.put(FProfileCache.COLUMN_USERID, lightweight.getUid());
 
             if (lightweight.getInfoJson() != null)
-                values.put(FProfile.COLUMN_INFOJSON, lightweight.getInfoJson());
+                values.put(FProfileCache.COLUMN_INFOJSON, lightweight.getInfoJson());
             if (lightweight.getTime() != -1)
-                values.put(FProfile.COLUMN_TIME, lightweight.getTime());
+                values.put(FProfileCache.COLUMN_TIME, lightweight.getTime());
 
             if (!b) {
-                return mDatabase.insert(FProfile.FPROFILE_TABLE, values);
+                return mDatabase.insert(FProfileCache.FPROFILE_TABLE, values);
             } else {
-//                return mDatabase.update(FProfile.FPROFILE_TABLE, values, FProfile.COLUMN_USERID + " = ? ", lightweight.getSUid());
-                return mDatabase.update(FProfile.FPROFILE_TABLE, values, FProfile.COLUMN_USERID + " = ? ", "");
+//                return mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", lightweight.getSUid());
+                return mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", "");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,6 +157,6 @@ public class DBCacheCenterFProfile {
      * @return
      */
     public int delete(long userid) {
-        return mDatabase.delete(FProfile.FPROFILE_TABLE, FProfile.COLUMN_USERID + " = ? ", String.valueOf(userid));
+        return mDatabase.delete(FProfileCache.FPROFILE_TABLE, FProfileCache.COLUMN_USERID + " = ? ", String.valueOf(userid));
     }
 }

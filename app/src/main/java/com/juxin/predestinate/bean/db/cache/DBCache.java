@@ -3,7 +3,6 @@ package com.juxin.predestinate.bean.db.cache;
 import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import com.juxin.predestinate.bean.db.DBCenter;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.BuildConfig;
 import com.squareup.sqlbrite.SqlBrite;
@@ -20,7 +19,7 @@ public class DBCache {
     @Provides
     @Singleton
     SQLiteOpenHelper provideOpenHelper(Application application) {
-        return new DBCacheHelper(application);
+        return new CacheHelper(application);
     }
 
     @Provides
@@ -51,7 +50,7 @@ public class DBCache {
 
     @Provides
     @Singleton
-    DBCenter provideConsumerDao(BriteDatabase briteDatabase) {
-        return new DBCenter(briteDatabase);
+    DBCacheCenter provideConsumerDao(BriteDatabase briteDatabase) {
+        return new DBCacheCenter(briteDatabase);
     }
 }

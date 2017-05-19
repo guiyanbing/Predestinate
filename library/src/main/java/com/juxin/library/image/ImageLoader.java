@@ -95,7 +95,16 @@ public class ImageLoader {
         BlurImage blurImage = new BlurImage(context, level);
         localPic(context, localResImg, view, R.drawable.default_pic, R.drawable.default_pic, centerCrop, blurImage);
     }
-
+    /**
+     * 图片圆角处理: 默认全角处理，其他需求自行重载方法(本地图片圆角处理)
+     *
+     * @param roundPx 圆角弧度
+     */
+    public static void localRoundCorners (Context context, int localResImg, int roundPx, ImageView view) {
+        CenterCrop centerCrop = new CenterCrop(context);
+        RoundedCorners roundedCorners = new RoundedCorners(context, roundPx, 0, RoundedCorners.CornerType.ALL);
+        localPic(context, localResImg, view, R.drawable.default_pic, R.drawable.default_pic, centerCrop, roundedCorners);
+    }
     /**
      * 本地图片
      */

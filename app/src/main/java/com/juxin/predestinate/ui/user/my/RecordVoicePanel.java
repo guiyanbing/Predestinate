@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.user.my;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class RecordVoicePanel extends BaseViewPanel implements ChatMediaRecord.O
     public void onTouch(int action, float posY) {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                Log.e("TTTTTTTTTGGGACTION_DOWN","按下");
                 if (ChatMediaRecord.getInstance().startRecordVoice(this)) {
                     setVisibility(View.VISIBLE);
                     recordingHint.setText(getContext().getString(R.string.chat_move_up_to_cancel));
@@ -97,9 +99,11 @@ public class RecordVoicePanel extends BaseViewPanel implements ChatMediaRecord.O
 
                 if (posY < 0) {// 取消发送
                     FileUtil.deleteFile(ChatMediaRecord.getInstance().getVoiceFileName());
+                    Log.e("TTTTTTTTTGGGACTION_U", "删除文件");
                 } else {
                     int length = ChatMediaRecord.getInstance().getVoiceDuration();
                     String voiceFileUri = ChatMediaRecord.getInstance().getVoiceFileName();
+                    Log.e("TTTTTTTTTGGGACTION_UP","抬起"+"||||"+length);
                     if (length > 1000) {
 //                        ModuleMgr.getChatMgr().sendVoiceMsg(voiceFileUri, (length + 500) / 1000);
                         if(mOnRecordVoiceCallBack != null){
@@ -108,13 +112,16 @@ public class RecordVoicePanel extends BaseViewPanel implements ChatMediaRecord.O
                     } else {
                         MMToast.showShort("录音不能小于1秒!");
                         FileUtil.deleteFile(voiceFileUri);//清除无效文件
+                        Log.e("TTTTTTTTTGGGACTION_U", "删除文件");
                     }
                 }
                 break;
             default:
+                Log.e("TTTTTTTTTGGGdefault","默认");
                 setVisibility(View.INVISIBLE);
                 ChatMediaRecord.getInstance().stopRecordVoice();
                 FileUtil.deleteFile(ChatMediaRecord.getInstance().getVoiceFileName());
+                Log.e("TTTTTTTTTGGGACTION_U", "删除文件");
                 break;
         }
     }

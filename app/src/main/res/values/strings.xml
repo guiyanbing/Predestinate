@@ -489,6 +489,8 @@
     <string name="branch_cannot_be_empty">开户支行不能为空</string>
     <string name="bank_card_cannot_be_empty">银行卡号不能为空</string>
     <string name="money_cannot_be_empty">提现金额不能为空</string>
+    <string name="please_complete_the_information">请完整填写信息</string>
+    <string name="please_upload_the_relevant_pictures">请上传相关照片</string>
     <string name="withdraw_tips">提现金额需要大于</string>
     <string name="not_beyond">提现不能超出您的金额</string>
     <string name="delay_contact_qq">若有延迟，请联系客服QQ：</string>
@@ -625,6 +627,23 @@
     <string name="txt_authtype_face">自拍认证</string>
     <string name="txt_phoneverify_ok">认证成功</string>
     <string name="txt_verify_complete_desc">你可以用手机号登录，密码为:</string>
+    <string name="bank_id">银行卡号</string>
+    <string name="zhi_fu_id">支付宝账号</string>
+    <string name="id_card_tips">请填写与本人身份证一致的支付宝信息</string>
+    <string name="real_name">真实姓名</string>
+    <string name="input_real_name">输入真实姓名</string>
+    <string name="id_card">身份证号</string>
+    <string name="bank_card">银行卡</string>
+    <string name="bank_of_deposit">开户行</string>
+    <string name="input_your_bank_of_deposit">输入您的开户行</string>
+    <string name="input_your_bank_card_id">输入您的银行卡号</string>
+    <string name="upload_id">上传身份证</string>
+    <string name="id_front">身份证正面</string>
+    <string name="id_tail">身份证背面</string>
+    <string name="id_hand">上传手持身份证照片</string>
+    <string name="the_certification_audit">认证审核中</string>
+    <string name="input_your_zhifubao_id">输入您的支付宝帐号</string>
+
     <string name="txt_record_time_desc">请保持正面录制5秒钟</string>
     <string name="txt_getpic">拍摄照片</string>
     <string name="txt_getpic_desc">建议在网络良好的状态下上传，注意照片反光</string>
