@@ -89,6 +89,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
                     //                iGiftSend.onSend(giftBean);
                     //            }
                     ModuleMgr.getCommonMgr().sendGift(otherId,giftBean.getId()+"",this);
+                    ModuleMgr.getChatMgr().sendGiftMsg(null, otherId + "", gifId, 1, 0);
                 } else {
                     //            if (null != iGiftSend) {
                     //                iGiftSend.onSendToPay(giftBean);

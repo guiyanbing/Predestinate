@@ -127,6 +127,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     return;
                 }
                 ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);//发送送礼物请求
+                dismiss();
                 break;
             case R.id.bottom_gif_txv_sendnum:
                 gpvPop.setVisibility(View.VISIBLE);
@@ -241,7 +242,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     public void onRequestComplete(HttpResponse response) {
         SendGiftResultInfo info = new SendGiftResultInfo();
         info.parseJson(response.getResponseString());
-        ModuleMgr.getChatMgr().sendGiftMsg(null, uid+"",arrGifts.get(position).getId(),num,0);
+        ModuleMgr.getChatMgr().sendGiftMsg(null, uid + "", arrGifts.get(position).getId(),num,0);
         PToast.showShort(info.getMsg()+"");
     }
     private CharSequence temp;
