@@ -72,8 +72,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatBtnExtend = findViewById(R.id.chat_extend);
         chatBtnSend = findViewById(R.id.chat_send);
 
-        findViewById(R.id.input_giftview).setOnClickListener(this);
-
         input_monthly.setOnClickListener(this);
         chatBtnVoice.setOnClickListener(this);
         chatBtnText.setOnClickListener(this);
@@ -99,6 +97,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatTextEdit.addTextChangedListener(this);
 
         showSendBtn(false);
+
+        onClickChatGift();
     }
 
     /**
@@ -195,10 +195,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             case R.id.input_monthly:
                 //  UIShow.showGoodsMonthlyLetterAct((Activity) getContext(), UIHelper.PAY_ACT);
                 //    UIShow.showMonthMailAct((Activity) getContext());
-
-                break;
-            case R.id.input_giftview:
-                onClickChatGift();
                 break;
         }
     }
@@ -439,8 +435,13 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 发送礼物
      */
     private void onClickChatGift() {
-        closeAllInput();
-        UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
+        getChatInstance().chatViewLayout.onClickChatGift(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeAllInput();
+                UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
+            }
+        });
     }
 
     /**

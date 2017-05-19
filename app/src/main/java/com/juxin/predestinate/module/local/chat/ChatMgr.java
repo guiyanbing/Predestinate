@@ -38,7 +38,6 @@ import rx.functions.Action1;
  *
  * Created by Kind on 2017/3/28.
  */
-
 public class ChatMgr implements ModuleBase {
 
     private RecMessageMgr messageMgr = new RecMessageMgr();

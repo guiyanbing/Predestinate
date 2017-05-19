@@ -1,5 +1,6 @@
 package com.juxin.predestinate.bean.db.cache;
 
+import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.module.local.chat.ChatMgr;
 import javax.inject.Singleton;
 import dagger.Component;
@@ -8,9 +9,9 @@ import dagger.Component;
  * 配表
  * Created by Kind on 2017/3/29.
  */
-@Singleton
+
 @Component( modules = { CacheModule.class })
 public interface CacheComponent {
 
-    //void inject(ChatMgr chatMgr);
+   // void inject(ChatMgr chatMgr);
 }

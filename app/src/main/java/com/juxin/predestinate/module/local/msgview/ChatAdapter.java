@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.Msg;
 import com.juxin.mumu.bean.message.MsgMgr;
@@ -14,7 +13,6 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -26,7 +24,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +33,6 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/30.
  */
-
 public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, MsgMgr.IObserver {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
@@ -339,24 +335,20 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     return infoLightweight;
                 }
             }
-//            ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-//                @Override
-//                public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-//                    if (ret) {
-//                        addUserInfo(infoLightweight);
-//                    }
-//                }
-//            });
+            ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
+                @Override
+                public void onReqComplete(UserInfoLightweight infoLightweight) {
+                    addUserInfo(infoLightweight);
+                }
+            });
         } else {
             if (TextUtils.isEmpty(userInfo.getNickname()) && TextUtils.isEmpty(userInfo.getAvatar())) {
-//                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-//                    @Override
-//                    public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-//                        if (ret) {
-//                            addUserInfo(infoLightweight);
-//                        }
-//                    }
-//                });
+                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
+                    @Override
+                    public void onReqComplete(UserInfoLightweight infoLightweight) {
+                        addUserInfo(infoLightweight);
+                    }
+                });
             }
         }
         return userInfo;
