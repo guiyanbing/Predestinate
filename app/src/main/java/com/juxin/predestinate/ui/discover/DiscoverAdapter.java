@@ -114,23 +114,25 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
-                            context.getString(R.string.say_hello_txt),
-                            userInfo.getKf_id(),
-                            ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
-                                @Override
-                                public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                    PToast.showShort(context.getString(R.string.user_info_hi_suc));
-                                }
+                    if (ModuleMgr.getCenterMgr().isCanSayHi(context)) {
+                        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
+                                context.getString(R.string.say_hello_txt),
+                                userInfo.getKf_id(),
+                                ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
+                                        Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                                    @Override
+                                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                                        PToast.showShort(context.getString(R.string.user_info_hi_suc));
+                                        getItem(position).setSayHello(true);
+                                        notifyDataSetChanged();
+                                    }
 
-                                @Override
-                                public void onSendFailed(NetData data) {
-                                    PToast.showShort(context.getString(R.string.user_info_hi_fail));
-                                }
-                            });
-                    getItem(position).setSayHello(true);
-                    notifyDataSetChanged();
+                                    @Override
+                                    public void onSendFailed(NetData data) {
+                                        PToast.showShort(context.getString(R.string.user_info_hi_fail));
+                                    }
+                                });
+                    }
                 }
             });
         }
