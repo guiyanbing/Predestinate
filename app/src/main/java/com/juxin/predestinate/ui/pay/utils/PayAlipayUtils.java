@@ -1,6 +1,8 @@
 package com.juxin.predestinate.ui.pay.utils;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -25,7 +27,13 @@ public class PayAlipayUtils {
         this.activity = activity;
     }
 
-    public void pay(final String payInfo) {
+    public void pay(int payType, final String payInfo) {
+        if (payType == 2) {
+            Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(payInfo));
+            activity.startActivity(intent);
+            return;
+        }
+
         Runnable payRunnable = new Runnable() {
 
             @Override

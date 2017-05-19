@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.Hosts;
+import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -46,12 +47,15 @@ import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.mail.popup.RandomRedBoxActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.pay.BasePayPannel;
 import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.pay.PayWebAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
+import com.juxin.predestinate.ui.pay.utils.PayAlipayUtils;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
+import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
@@ -764,6 +768,53 @@ public class UIShow {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 选择支付
+     * @param activity
+     * @param commodity_Id
+     * @param payType
+     */
+    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final String payType) {
+        LoadingDialog.show(activity, "生成订单中");
+        ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("Re===" + response.getResponseString());
+                PayGood payGood = new PayGood(response.getResponseString());
+                if (!payGood.isOK()) {
+                    LoadingDialog.closeLoadingDialog();
+                    PToast.showShort("支付出错，请重试！");
+                    return;
+                }
+
+                if (GoodsConstant.PAY_TYPE_WECHAT_NAME.equals(payType)) {//微信支付
+                    LoadingDialog.closeLoadingDialog();
+                    new PayWeixinUtils(activity).onPayment(payGood);
+                    return;
+                }
+                //支付宝支付
+                ModuleMgr.getCommonMgr().reqCUPOrAlipayMethod(UrlParam.reqAlipay, BasePayPannel.getOutTradeNo(), payGood.getPay_name(),
+                        payGood.getPay_id(), payGood.getPay_money(), new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(final HttpResponse response) {
+                                LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PayWX payWX = new PayWX(response.getResponseString());
+                                        if (!payWX.isOK()) {
+                                            PToast.showShort("支付出错，请重试！");
+                                            return;
+                                        }
+                                        new PayAlipayUtils(activity).pay(payWX.getCupPayType(), payWX.getParam());
+                                    }
+                                });
+
+                            }
+                        });
             }
         });
     }
