@@ -21,7 +21,7 @@
     <string name="title_findpwdact">重置密码</string>
     <string name="title_recommend_filter">筛选</string>
     <string name="title_recommend">推荐的人</string>
-    <string name="title_phone_certification">手机认证</string>
+    <string name="title_phone_certification">认证手机号</string>
     <string name="title_feedback">意见反馈</string>
     <string name="title_reginfo_complete">完善资料</string>
     <string name="title_set">设置</string>
@@ -149,13 +149,12 @@
     <string name="txt_phone">手机号</string>
     <string name="txt_verifycode">请输入验证码</string>
     <string name="txt_setpwd">新密码</string>
-    <string name="txt_verify_tip_up">请输入手机号，获取验证码 \n可以直接用手机号码登录</string>
+    <string name="txt_verify_tip_up">绑定会让您的账号更加安全 \n完成绑定后，您还可以通过手机号登录</string>
     <string name="txt_sendmsg_tip">您的手机将会收到一条有验证码的短信</string>
     <string name="txt_phoneverify_hit">13574193515</string>
-    <string name="txt_verify_complete_desc">您已经验证成功，登录密码为：</string>
-    <string name="ext_phone_hit">请输入手机号码</string>
+    <string name="ext_phone_hit">手机号</string>
     <string name="ext_verifycode_hit">请输入短信中的验证码</string>
-    <string name="bt_verify">立即验证</string>
+    <string name="bt_verify">立即绑定</string>
     <string name="toast_server_busy">系统忙，请稍候再试。</string>
     <string name="toast_phone_verified">您的帐号已与手机绑定，不能再绑定。</string>
     <string name="toast_phone_used">该手机已经被验证过了，请输入其他的手机号。</string>
@@ -206,7 +205,7 @@
     <string name="bt_reg">注册</string>
     <string name="bt_complete">完成</string>
     <string name="bt_ok">确定</string>
-    <string name="ext_setpwd_hit">(请设置4~16位密码)</string>
+    <string name="ext_setpwd_hit">(请设置8~20位密码)</string>
     <string name="ext_nickname_hit">请输入您的昵称</string>
     <string name="ext_age_hit">请选择您的年龄</string>
     <string name="ext_account_number_hit">手机/账户</string>
@@ -225,6 +224,7 @@
     <string name="toast_setpwd_isnull">请输入您要设置的密码</string>
     <string name="toast_userdetail_isnull">请完善您的资料</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
+    <string name="toast_pwd_length_iserror">请设置8~20位密码</string>
     <string name="toast_mobile_authok">手机认证成功</string>
     <string name="toast_resetpwd_ok">密码修改成功</string>
     <string name="toast_suggest_ok">提交成功，感谢您的支持</string>
@@ -314,6 +314,7 @@
     <string name="user_other_set_chat_clear">清空聊天记录</string>
     <string name="user_other_set_chat_del">确定清除与TA的聊天记录吗？</string>
     <string name="user_other_set_chat_del_suc">成功清除了聊天记录！</string>
+    <string name="user_other_set_chat_del_fail">清除失败，请重试！</string>
     <string name="user_other_set_chat_shield">屏蔽</string>
     <string name="user_other_set_complain">投诉</string>
     <string name="user_other_label">标签</string>
@@ -614,6 +615,8 @@
     <string name="txt_authtype_phone">手机认证</string>
     <string name="txt_authtype_id">身份认证</string>
     <string name="txt_authtype_face">自拍认证</string>
+    <string name="txt_phoneverify_ok">认证成功</string>
+    <string name="txt_verify_complete_desc">你可以用手机号登录，密码为:</string>
     <string name="bank_id">银行卡号</string>
     <string name="zhi_fu_id">支付宝账号</string>
     <string name="id_card_tips">请填写与本人身份证一致的支付宝信息</string>

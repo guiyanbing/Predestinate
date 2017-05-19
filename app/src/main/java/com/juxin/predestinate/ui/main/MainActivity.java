@@ -22,6 +22,7 @@ import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.DiscoverFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
+import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
@@ -173,6 +174,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 200) {
             UIShow.showNavUserAct(this);
+            finish();
+        }
+        if (requestCode == MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE&& resultCode==200){//手机绑定成功,跳转到登录页
+            UIShow.showUserLoginExtAct(this);
             finish();
         }
     }

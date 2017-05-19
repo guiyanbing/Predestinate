@@ -63,6 +63,7 @@ import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.start.PhoneVerifyAct;
+import com.juxin.predestinate.ui.start.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
@@ -246,7 +247,7 @@ public class UIShow {
      * @param activity
      * @param isVerify 是否绑定手机
      */
-    public static void showPhoneVerify_Act(FragmentActivity activity, boolean isVerify, int requestCode) {
+    public static void showPhoneVerifyAct(FragmentActivity activity, boolean isVerify, int requestCode) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
         intent.putExtra("isVerify", isVerify);
         activity.startActivityForResult(intent, requestCode);
@@ -1243,5 +1244,14 @@ public class UIShow {
      */
     public static void showFindPwdAct(FragmentActivity context){
         context.startActivity(new Intent(context, FindPwdAct.class));
+    }
+
+    /**
+     * 打开手机认证完成页面
+     * @param context
+     * @param requestCode
+     */
+    public static void showPhoneVerifyCompleteAct(FragmentActivity context,int requestCode){
+        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class),requestCode);
     }
 }

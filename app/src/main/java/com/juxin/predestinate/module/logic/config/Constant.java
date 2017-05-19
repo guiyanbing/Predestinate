@@ -109,4 +109,9 @@ public class Constant {
 
     //============= 打招呼类型 end =============\\
 
+    /**
+     * 退出登录resultcode
+     */
+    public static final int EXITLOGIN_RESULTCODE=200;
+
 }

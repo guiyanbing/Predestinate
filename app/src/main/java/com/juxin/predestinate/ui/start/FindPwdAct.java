@@ -84,6 +84,9 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
             PToast.showShort(getResources().getString(R.string.toast_setpwd_isnull));
             return false;
         }
+        if (pwd.length() < 8) {
+            PToast.showShort(getResources().getString(R.string.toast_pwd_length_iserror));
+        }
         return true;
     }
 

@@ -102,7 +102,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
     public void onItemClick(View convertView, int position) {
         switch (position) {
             case CenterItemID.i_Center_item_1: // 我的主页
-//                UIShow.showCheckOtherInfoAct(getContext(), 110871663);
                 UIShow.showCheckOwnInfoAct(getContext());
                 break;
 
