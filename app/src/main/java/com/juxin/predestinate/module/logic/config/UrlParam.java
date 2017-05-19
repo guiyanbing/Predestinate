@@ -70,6 +70,13 @@ public enum UrlParam {
     reqGetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
+
+    getSimpleDetail("user/getSimpleDetail", null, true),   //获取轻量级的用户信息
+
+
+
+
+
     // 私密视频相关
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值
     reqSetViewTime("video2/setviewtime"),    // 设置私密视频观看次数

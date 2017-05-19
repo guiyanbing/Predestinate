@@ -1,6 +1,6 @@
 package com.juxin.predestinate.bean.db.cache;
 
-import com.juxin.predestinate.ui.mail.MailFragment;
+import com.juxin.predestinate.module.local.chat.ChatMgr;
 import javax.inject.Singleton;
 import dagger.Component;
 
@@ -9,8 +9,8 @@ import dagger.Component;
  * Created by Kind on 2017/3/29.
  */
 @Singleton
-@Component(modules = { CacheModule.class })
+@Component( modules = { CacheModule.class })
 public interface CacheComponent {
 
-    void inject(MailFragment mailFragment);
+    //void inject(ChatMgr chatMgr);
 }

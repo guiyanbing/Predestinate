@@ -8,9 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.config.PayTypeList;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
+import java.util.List;
 
 /**
  * 支付选择方式
@@ -48,6 +52,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
 
         paylist_title.setText(Html.fromHtml("订单信息：" + payGood.getPay_name() + " " + "<font color='#fd6c8e'>" + payGood.getPay_money() + "</font>" + " 元"));
 
+
         LinearLayout pay_listView = (LinearLayout) findViewById(R.id.paytype_list);
         payAlipayPannel = new PayAlipayPannel(this, payGood);
         payWXPannel = new PayWXPannel(this, payGood);
@@ -56,25 +61,37 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         payAlipayWebPannel = new PayAlipayWebPannel(this, payGood);
         payPhonecardPannel = new PayPhoneCardPannel(this, payGood);
 
-        pay_listView.addView(payAlipayPannel.getContentView());
-        pay_listView.addView(payWXPannel.getContentView());
+        PayTypeList payTypeList = ModuleMgr.getCommonMgr().getCommonConfig().getPayTypeList();
+        List<PayTypeList.PayType> payTypes = payTypeList.getPayTypes();
+        if (payTypes.size() > 0) {
+            for (PayTypeList.PayType temp : payTypes) {
+
+                if (GoodsConstant.PAY_TYPE_WECHAT_NAME.equals(temp.getName())) { // 微信支付
+                    pay_listView.addView(payWXPannel.getContentView());
+                } else if (GoodsConstant.PAY_TYPE_ALIPAY_NAME.equals(temp.getName())) {// 支付宝支付
+                    pay_listView.addView(payAlipayPannel.getContentView());
+                } else if (GoodsConstant.PAY_TYPE_OTHER_NAME.equals(temp.getName())) { // 其他支付
+
+                }
+            }
+        } else {
+            pay_listView.addView(payAlipayPannel.getContentView());
+            pay_listView.addView(payWXPannel.getContentView());
+        }
+
         pay_listView.addView(payVoicePannel.getContentView());
         pay_listView.addView(payCupPannel.getContentView());
         pay_listView.addView(payAlipayWebPannel.getContentView());
         pay_listView.addView(payPhonecardPannel.getContentView());
-
-        findViewById(R.id.paylist_qq).setOnClickListener(this);
-        paylist_help_txt = (TextView) findViewById(R.id.paylist_help_txt);
-        findViewById(R.id.paylist_help).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.paylist_qq:{
+        switch (view.getId()) {
+            case R.id.paylist_qq: {
                 UIShow.showQQService(this);
             }
-            case R.id.paylist_help:{
+            case R.id.paylist_help: {
                 if (help_txt) {
                     paylist_help_txt.setVisibility(View.VISIBLE);
                     help_txt = false;

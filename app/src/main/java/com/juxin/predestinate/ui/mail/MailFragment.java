@@ -14,10 +14,9 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.db.cache.DBCache;
-import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -30,8 +29,6 @@ import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * 消息
@@ -49,10 +46,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
-
-
-    @Inject
-    DBCacheCenter center;
 
     @Nullable
     @Override
@@ -139,7 +132,12 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
 
-        App.getCacheComponent().inject(this);
+//        ModuleMgr.getChatMgr().getUserInfoLightweight(86954288, new ChatMsgInterface.InfoComplete() {
+//            @Override
+//            public void onReqComplete(UserInfoLightweight infoLightweight) {
+//
+//            }
+//        });
     }
 
     @Override

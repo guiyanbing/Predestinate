@@ -907,4 +907,14 @@ public class CommonMgr implements ModuleBase {
         postParms.put("url", url);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
     }
+
+
+    public void getSimpleDetail(long uid, RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("uid", uid);
+        getParms.put("ver", Constant.SUB_VERSION);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getSimpleDetail, getParms, complete);
+    }
+
+
 }

@@ -1,6 +1,8 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.mumu.bean.message.MsgMgr;
@@ -44,12 +46,15 @@ public class ChatMgr implements ModuleBase {
 
     @Inject
     DBCenter dbCenter;
-    DBCacheCenter dbCacheCenter;
+
+//    @Inject
+//    DBCacheCenter dbCacheCenter;
 
     @Override
     public void init() {
         messageMgr.init();
         specialMgr.init();
+      //  App.getCacheComponent().inject(this);
     }
 
     @Override
@@ -496,27 +501,32 @@ public class ChatMgr implements ModuleBase {
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<Long, ChatMsgInterface.InfoComplete>();
 
     public void getUserInfoLightweight(long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-        synchronized (infoMap) {
-            infoMap.put(uid, infoComplete);
-            Observable<UserInfoLightweight> observable = dbCacheCenter.queryProfile(uid);
-            observable.subscribe(new Action1<UserInfoLightweight>() {
-                @Override
-                public void call(UserInfoLightweight lightweight) {
-                    long infoTime = lightweight.getTime();
-                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
-                        removeInfoComplete(true, lightweight.getUid(), lightweight);
-                    } else {
-                        removeInfoComplete(false, lightweight.getUid(), lightweight);
-                        getProFile(lightweight.getUid());
-                    }
-                }
-            });
-        }
+//        synchronized (infoMap) {
+//            infoMap.put(uid, infoComplete);
+//            Observable<UserInfoLightweight> observable = dbCacheCenter.queryProfile(uid);
+//            observable.subscribe(new Action1<UserInfoLightweight>() {
+//                @Override
+//                public void call(UserInfoLightweight lightweight) {
+//                    long infoTime = lightweight.getTime();
+//                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+//                        removeInfoComplete(true, lightweight.getUid(), lightweight);
+//                    } else {
+//                        removeInfoComplete(false, lightweight.getUid(), lightweight);
+//                        getProFile(lightweight.getUid());
+//                    }
+//                }
+//            });
+//        }
     }
 
     // 获取个人资料
-    private void getProFile(final long userID) {
-
+    private void getProFile(long userID) {
+        ModuleMgr.getCommonMgr().getSimpleDetail(userID, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("res=====2222===" + response.getResponseString());
+            }
+        });
     }
 
     /**
