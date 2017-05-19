@@ -775,8 +775,8 @@ public class UIShow {
     /**
      * 选择支付
      * @param activity
-     * @param commodity_Id
-     * @param payType
+     * @param commodity_Id 订单
+     * @param payType 类型
      */
     public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final String payType) {
         LoadingDialog.show(activity, "生成订单中");

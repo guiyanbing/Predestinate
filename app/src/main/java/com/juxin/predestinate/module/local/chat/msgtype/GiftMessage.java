@@ -23,7 +23,7 @@ public class GiftMessage extends BaseMessage {
         this.setGiftID(giftID);
         this.setGiftCount(giftCount);
         this.setGiftLogID(giftLogID);
-        this.setType(BaseMessageType.common.getMsgType());
+        this.setType(BaseMessageType.gift.getMsgType());
     }
 
     @Override

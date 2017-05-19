@@ -25,8 +25,6 @@ public enum ChatMsgType {
 
      CMT_20(ChatPanelGiveMeGift.class, "礼物消息"),
 
-    CMT_4(ChatPanelText.class, "系统消息"),
-
 //
 //    CMT_3(ChatPanelText.class, "打招呼消息-用普通文字消息模板"),
 //

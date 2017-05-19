@@ -54,7 +54,7 @@ public class ChatPanelGiveMeGift extends ChatPanel {
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !(msgData instanceof CommonMessage)) return false;
+        if (msgData == null || !(msgData instanceof GiftMessage)) return false;
 
         GiftMessage msg = (GiftMessage) msgData;
 

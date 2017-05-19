@@ -2,11 +2,15 @@ package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
@@ -39,16 +43,18 @@ public class ChatPanelGift extends ChatPanel {
         if (isSender()) {
             chat_item_gift_tvMsg.setTextColor(getContext().getResources().getColor(R.color.white));
             chat_item_gift_tvInfo.setTextColor(getContext().getResources().getColor(R.color.color_EEEEEE));
+            chat_item_gift_tvGetGift.setVisibility(View.GONE);
         }else {
             chat_item_gift_tvMsg.setTextColor(getContext().getResources().getColor(R.color.color_040000));
             chat_item_gift_tvInfo.setTextColor(getContext().getResources().getColor(R.color.color_777777));
             chat_item_gift_tvGetGift.setTextColor(getContext().getResources().getColor(R.color.color_777777));
+            chat_item_gift_tvGetGift.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !(msgData instanceof CommonMessage)) return false;
+        if (msgData == null || !(msgData instanceof GiftMessage)) return false;
 
         GiftMessage msg = (GiftMessage) msgData;
 
@@ -57,15 +63,20 @@ public class ChatPanelGift extends ChatPanel {
             return false;
         }
 
+        if(msgData.getfStatus() == 0){
+            chat_item_gift_tvGetGift.setVisibility(View.GONE);
+        }
+
         chat_item_gift_tvMsg.setText(Html.fromHtml(giftInfo.getName() + ""));
         chat_item_gift_tvInfo.setText(Html.fromHtml(giftInfo.getGif() + ""));
+        PLogger.printObject("giftInfo.getPic()==" + giftInfo.getPic());
         ImageLoader.loadAvatar(context, giftInfo.getPic(), chat_item_gift_img);
         return true;
     }
 
     @Override
     public boolean onClickContent(BaseMessage msgData, boolean longClick) {
-        if (msgData == null || !(msgData instanceof GiftMessage)) {
+        if (msgData == null || !(msgData instanceof GiftMessage) || isSender() || msgData.getfStatus() == 0) {
             return false;
         }
         GiftMessage msg = (GiftMessage) msgData;
