@@ -1,6 +1,9 @@
 package com.juxin.predestinate.bean.my;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
@@ -9,7 +12,7 @@ import org.json.JSONObject;
  * 标签列表
  * Created by zm on 17/3/20.
  */
-public class WithdrawAddressInfo extends BaseData {
+public class WithdrawAddressInfo extends BaseData implements Parcelable {
 
 //    "status": "ok",
 //            "list": {
@@ -25,6 +28,31 @@ public class WithdrawAddressInfo extends BaseData {
     private String subbank;
     private String status;
     private int paytype;
+
+    public  WithdrawAddressInfo(){
+
+    }
+
+    protected WithdrawAddressInfo(Parcel in) {
+        accountname = in.readString();
+        accountnum = in.readString();
+        bank = in.readString();
+        subbank = in.readString();
+        status = in.readString();
+        paytype = in.readInt();
+    }
+
+    public static final Creator<WithdrawAddressInfo> CREATOR = new Creator<WithdrawAddressInfo>() {
+        @Override
+        public WithdrawAddressInfo createFromParcel(Parcel in) {
+            return new WithdrawAddressInfo(in);
+        }
+
+        @Override
+        public WithdrawAddressInfo[] newArray(int size) {
+            return new WithdrawAddressInfo[size];
+        }
+    };
 
     public boolean isOk() {
         if ("ok".equalsIgnoreCase(status))
@@ -90,13 +118,28 @@ public class WithdrawAddressInfo extends BaseData {
 
     @Override
     public String toString() {
-        return "RankList{" +
-                //                    "uid=" + uid +
-                //                    ", avatar=" + avatar +
-                //                    ", nickname=" + nickname +
-                //                    ", gender=" + gender +
-                //                    ", score=" + score +
-                //                    ", exp=" + exp +
+        return "WithdrawAddressInfo{" +
+                "accountname=" + accountname +
+                ", accountnum=" + accountnum +
+                ", bank=" + bank +
+                ", subbank=" + subbank +
+                ", status=" + status +
+                ", paytype=" + paytype +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(accountname);
+        parcel.writeString(accountnum);
+        parcel.writeString(bank);
+        parcel.writeString(subbank);
+        parcel.writeString(status);
+        parcel.writeInt(paytype);
     }
 }

@@ -727,7 +727,7 @@ public class CommonMgr implements ModuleBase {
     public void reqWithdrawAddress(RequestComplete complete) {
 //        Map<String, Object> postParams = new HashMap<>();
 //        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqWithdrawAddress, null, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, null, complete);
     }
 
     /**

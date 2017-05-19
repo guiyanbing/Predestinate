@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -981,12 +982,26 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showWithDrawApplyAct(int id, double money, boolean fromEdit, Context context) {
-        Intent intent = new Intent(context, WithDrawApplyAct.class);
-        intent.putExtra("id", id);
-        intent.putExtra("money", money);
-        intent.putExtra("fromEdit", fromEdit);
-        context.startActivity(intent);
+    public static void showWithDrawApplyAct(final int id, final double money, final boolean fromEdit, final FragmentActivity context) {
+        LoadingDialog.show(context,context.getString(R.string.xlistview_header_hint_loading));
+        ModuleMgr.getCommonMgr().reqWithdrawAddress(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk()) {
+                    WithdrawAddressInfo info = new WithdrawAddressInfo();
+                    info.parseJson(response.getResponseString());
+                    Intent intent = new Intent(context, WithDrawApplyAct.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("money", money);
+                    intent.putExtra("fromEdit", fromEdit);
+                    intent.putExtra("info",info);
+                    context.startActivity(intent);
+                } else {
+                    PToast.showShort(context.getString(R.string.net_error_retry));
+                }
+            }
+        });
     }
 
     /**

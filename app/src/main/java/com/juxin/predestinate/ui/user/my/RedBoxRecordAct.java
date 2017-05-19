@@ -51,6 +51,9 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_wode_red_bag_record_act);
+        if (!ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getIsVerifyIdCard()){
+            ModuleMgr.getCommonMgr().getVerifyStatus(null);
+        }
         initView();
     }
 
