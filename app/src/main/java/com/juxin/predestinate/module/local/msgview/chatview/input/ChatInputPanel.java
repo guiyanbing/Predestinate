@@ -8,10 +8,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.InputUtils;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
@@ -207,7 +208,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
-        MMLog.autoDebug(event.getAction());
+        PLogger.d("--->" + event.getAction());
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -226,7 +227,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 if (timeCount == 0 || System.currentTimeMillis() - timeCount > 500) {
                     chatRecordPanel.onTouch(action, 0f);
                 } else {
-                    MMLog.autoDebug("---ChatInputPanel--->点击间隔<500ms，过于频繁");
+                    PLogger.d("---ChatInputPanel--->点击间隔<500ms，过于频繁");
                 }
                 break;
 
@@ -267,7 +268,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     @Override
     public void afterTextChanged(Editable s) {
         if (s.length() > Constant.CHAT_TEXT_LIMIT) {
-            MMToast.showShort("字数超出限制");
+            PToast.showShort("字数超出限制");
         }
     }
 
@@ -303,7 +304,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到语音输入模式。0
      */
     private void onClickChatVoice() {
-      //  chatBtnExpression.setVisibility(View.GONE);
+        //  chatBtnExpression.setVisibility(View.GONE);
 
         chatBtnVoice.setVisibility(View.INVISIBLE);
         chatTextEdit.setVisibility(View.GONE);
@@ -312,7 +313,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         chatVoiceRecord.setVisibility(View.VISIBLE);
 
-      //  chat_rel.setVisibility(View.GONE);
+        //  chat_rel.setVisibility(View.GONE);
 
         showSendBtn(false);
         closeAllInput();
@@ -322,14 +323,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到文本输入模式。
      */
     private void onClickChatText() {
-     //   chatBtnExpression.setVisibility(View.VISIBLE);
+        //   chatBtnExpression.setVisibility(View.VISIBLE);
 
         chatBtnVoice.setVisibility(View.VISIBLE);
         chatTextEdit.setVisibility(View.VISIBLE);
 
         chatBtnText.setVisibility(View.INVISIBLE);
         chatVoiceRecord.setVisibility(View.INVISIBLE);
-     //   chat_rel.setVisibility(View.VISIBLE);
+        //   chat_rel.setVisibility(View.VISIBLE);
 
         showSendBtn();
     }
@@ -355,8 +356,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         showMatchingSmile(chatTextEdit.getText().toString());
 
-        // 键盘弹出需要时间。
-        MsgMgr.getInstance().sendMsg(new Runnable() {
+        // 键盘弹出需要时间
+        MsgMgr.getInstance().delay(new Runnable() {
             @Override
             public void run() {
                 getChatInstance().chatAdapter.moveToBottom();
@@ -386,7 +387,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 matchingPanel.show(false);
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -410,7 +411,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             }
 
             if (context.length() > Constant.CHAT_TEXT_LIMIT) {
-                MMToast.showShort("字数超出限制,请分条发送.");
+                PToast.showShort("字数超出限制,请分条发送.");
                 return;
             }
 
@@ -427,7 +428,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
             //      MediaUtils.playSound(R.raw.send_msg);
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 

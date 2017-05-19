@@ -386,7 +386,7 @@ public class TipsBarMgr implements ModuleBase, PObserver {
             } else {
                 Log.d("_test", "getTipsBarData().getObject() -- " + (getTipsBarData().getObject() == null));
             }
-            barBasePanel.init(viewGroup.getContext(), getTipsBarData().getObject());
+            barBasePanel.init(getTipsBarData().getObject());
             return barBasePanel.getContentView();
         } else {
             Class<? extends TipsBarBasePanel> panelClass = tipsBarType.getBaseViewPanel();
@@ -397,7 +397,7 @@ public class TipsBarMgr implements ModuleBase, PObserver {
             try {
                 Constructor c = panelClass.getDeclaredConstructor();
                 TipsBarBasePanel chatPanel = (TipsBarBasePanel) c.newInstance();
-                chatPanel.init(viewGroup.getContext(), getTipsBarData().getObject());
+                chatPanel.init(getTipsBarData().getObject());
                 barBasePanelMap.put(tipsBarType.getBarType(), chatPanel);
                 return chatPanel.getContentView();
             } catch (NoSuchMethodException e) {

@@ -14,7 +14,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -510,7 +509,7 @@ public class UIShow {
      */
     private static void showPhotoDisplayAct(FragmentActivity activity, Serializable list, int position, int type) {
         if (list == null || ((List<String>) list).size() == 0) {
-            MMToast.showShort("没有图片数据");
+            PToast.showShort("没有图片数据");
             return;
         }
         Intent intent = new Intent(activity, PhotoDisplayAct.class);
@@ -1240,18 +1239,20 @@ public class UIShow {
 
     /**
      * 打开重置密码
+     *
      * @param context
      */
-    public static void showFindPwdAct(FragmentActivity context){
+    public static void showFindPwdAct(FragmentActivity context) {
         context.startActivity(new Intent(context, FindPwdAct.class));
     }
 
     /**
      * 打开手机认证完成页面
+     *
      * @param context
      * @param requestCode
      */
-    public static void showPhoneVerifyCompleteAct(FragmentActivity context,int requestCode){
-        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class),requestCode);
+    public static void showPhoneVerifyCompleteAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
     }
 }

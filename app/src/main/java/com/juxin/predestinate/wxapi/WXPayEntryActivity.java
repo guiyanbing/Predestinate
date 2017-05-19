@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.ui.pay.PayListAct;
@@ -50,18 +51,18 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             switch (resp.errCode) {
                 case BaseResp.ErrCode.ERR_OK:// 表示支付成功
                     PayListAct.bPayOkFlag = true;
-                    MMToast.showShort(R.string.pay_errcode_success);
+                    PToast.showShort(R.string.pay_errcode_success);
                     // 更新信息
                     MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                     break;
                 case BaseResp.ErrCode.ERR_USER_CANCEL:// 用户取消支付
-                    MMToast.showShort(R.string.pay_errcode_cancel);
+                    PToast.showShort(R.string.pay_errcode_cancel);
                     break;
                 case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                    MMToast.showShort(R.string.pay_errcode_deny);
+                    PToast.showShort(R.string.pay_errcode_deny);
                     break;
                 default:
-                    MMToast.showShort(R.string.pay_errcode_unknown);
+                    PToast.showShort(R.string.pay_errcode_unknown);
                     break;
             }
             finish();

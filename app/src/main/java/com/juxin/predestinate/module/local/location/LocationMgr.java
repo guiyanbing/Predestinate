@@ -9,11 +9,10 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.module.logic.application.App;
 
 /**
@@ -45,7 +44,7 @@ public class LocationMgr implements Handler.Callback {
      */
     public synchronized void start() {
         if (locationClient != null && !locationClient.isStarted()) {
-            MMLog.autoDebug("BDLocation ::::: Start");
+            PLogger.d("BDLocation ::::: Start");
             initSDK();
             locationClient.registerLocationListener(listener);
             locationClient.start();
@@ -58,7 +57,7 @@ public class LocationMgr implements Handler.Callback {
      */
     private synchronized void stop() {
         if (locationClient != null && locationClient.isStarted()) {
-            MMLog.autoDebug("BDLocation ::::: Stop");
+            PLogger.d("BDLocation ::::: Stop");
             locationClient.unRegisterLocationListener(listener);
             locationClient.stop();
         }
@@ -187,9 +186,7 @@ public class LocationMgr implements Handler.Callback {
             startTime();  // 启动定位重启
 
             // 发送定位成功消息
-            Msg msg = new Msg();
-            msg.setData(pointDTemp);
-            MsgMgr.getInstance().sendMsg(MsgType.MT_Util_Location, msg);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Located, pointDTemp);
         }
 
         @Override
@@ -244,7 +241,7 @@ public class LocationMgr implements Handler.Callback {
             sb.append("\ndescribe : ");
             sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
         }
-        MMLog.autoDebug("BDLocation: " + sb.toString());
+        PLogger.d("BDLocation: " + sb.toString());
     }
 
 
@@ -323,7 +320,7 @@ public class LocationMgr implements Handler.Callback {
             fixPlace.longitude = Double.valueOf(PSP.getInstance().getString("LM_Fix_latitude", "1000"));
             fixPlace.latitude = Double.valueOf(PSP.getInstance().getString("LM_Fix_longitude", "1000"));
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -346,7 +343,7 @@ public class LocationMgr implements Handler.Callback {
             PSP.getInstance().put("LM_Fix_latitude", String.valueOf(fixPlace.latitude));
             PSP.getInstance().put("LM_Fix_longitude", String.valueOf(fixPlace.longitude));
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 

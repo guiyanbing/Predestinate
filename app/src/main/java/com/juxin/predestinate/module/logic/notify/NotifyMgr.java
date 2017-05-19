@@ -1,25 +1,14 @@
 package com.juxin.predestinate.module.logic.notify;
 
-import android.text.TextUtils;
-import android.view.View;
-
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
-import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmile;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
-import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
-import com.juxin.predestinate.module.util.UIShow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,7 +53,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
 
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
-        MMLog.autoDebug("---onChatUpdate--->ret：" + ret + "，message：" + MMLog.printObjectFields(message));
+        PLogger.d("---onChatUpdate--->ret：" + ret + "，message：" + message.toString());
         if (message.getSendID() == App.uid) return;
 
         showTextNotify(message);

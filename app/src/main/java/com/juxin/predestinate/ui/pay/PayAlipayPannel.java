@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import com.juxin.mumu.bean.utils.MMToast;
+
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -38,7 +39,7 @@ public class PayAlipayPannel extends BasePayPannel {
                     public void onRequestComplete(HttpResponse response) {
                         PayWX payWX = new PayWX(response.getResponseString());
                         if(!payWX.isOK()){
-                            MMToast.showShort("请求失败，请稍后再试");
+                            PToast.showShort("请求失败，请稍后再试");
                             return;
                         }
                         AliPay(payWX);

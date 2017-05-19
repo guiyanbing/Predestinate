@@ -1,11 +1,9 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -19,7 +17,6 @@ import java.util.List;
 /**
  * Created by Kind on 2017/3/31.
  */
-
 public class ChatExtendPanel extends ChatViewPanel {
     private ChatExtend chatExtend = new ChatExtend();
     private ViewPager vp = null;
@@ -103,11 +100,11 @@ public class ChatExtendPanel extends ChatViewPanel {
 //                                @Override
 //                                public void onReqComplete(HttpResult result) {
 //                                    if (result.isOk()) {//解析发送邀请信息状态
-//                                        MMToast.showShort("邀请成功!");
+//                                        PToast.showShort("邀请成功!");
 //                                        //打开游戏方法
 //                                        UIShow.showMyGame(App.getActivity(), Constant.GAME_COWRY, "");
 //                                    } else {
-//                                        MMToast.showShort("邀请失败，请重试!");
+//                                        PToast.showShort("邀请失败，请重试!");
 //                                    }
 //                                }
 //                            });

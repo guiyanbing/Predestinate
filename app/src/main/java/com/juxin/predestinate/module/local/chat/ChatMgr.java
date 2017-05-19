@@ -4,10 +4,8 @@ import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.utils.BitmapUtil;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -21,6 +19,7 @@ import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -123,7 +122,7 @@ public class ChatMgr implements ModuleBase {
 
     public void sendImgMsg(String channelID, String whisperID, String img_url) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
-        commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url));
+        commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url, DirType.getImageDir()));
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
 
@@ -188,7 +187,7 @@ public class ChatMgr implements ModuleBase {
 
 
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack){
-        MMLog.autoDebug("isMsgID=" + message.getcMsgID());
+        PLogger.d("isMsgID=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -203,7 +202,7 @@ public class ChatMgr implements ModuleBase {
                     updateOk(message, messageRet);
                 }
 
-                MMLog.autoDebug("isMsgOK=" + contents);
+                PLogger.d("isMsgOK=" + contents);
             }
 
             @Override
@@ -212,7 +211,7 @@ public class ChatMgr implements ModuleBase {
                     sendCallBack.onSendFailed(data);
                 }
                 updateFail(message, null);
-                MMLog.autoDebug("isMsgError=" + message.getJsonStr());
+                PLogger.d("isMsgError=" + message.getJsonStr());
             }
         });
     }
@@ -375,10 +374,10 @@ public class ChatMgr implements ModuleBase {
      * @param messageList
      */
     public void onChatMsgRecently(String msgID0, String msgID1, final boolean ret, final List<BaseMessage> messageList) {
-        MMLog.autoDebug(messageList);
+        PLogger.printObject(messageList);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (listeners != null) {
@@ -407,10 +406,10 @@ public class ChatMgr implements ModuleBase {
      * @param messageList
      */
     public void onChatMsgHistory(String msgID0, String msgID1, final boolean ret, final List<BaseMessage> messageList) {
-        MMLog.autoDebug(messageList);
+        PLogger.printObject(messageList);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (listeners != null) {
@@ -441,10 +440,10 @@ public class ChatMgr implements ModuleBase {
      * @param message
      */
     public void onChatMsgUpdate(String msgID0, String msgID1, final boolean ret, final BaseMessage message) {
-        MMLog.autoDebug(message);
+        PLogger.printObject(message);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (listeners != null) {

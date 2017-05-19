@@ -6,7 +6,6 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -158,7 +157,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         initAppComponent();
                         getAppComponent().inject(this);
                         ModuleMgr.getChatMgr().inject();
-                        MMLog.autoDebug("uid=======" + App.uid);
+                        PLogger.d("uid=======" + App.uid);
                         getWhisperList();
 
 //                        dbCenter.insertUnRead("1", "11111");

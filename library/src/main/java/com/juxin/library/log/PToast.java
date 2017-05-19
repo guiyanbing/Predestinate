@@ -1,6 +1,7 @@
 package com.juxin.library.log;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -31,11 +32,29 @@ public class PToast {
     }
 
     /**
+     * 显示短时间的toast提示
+     *
+     * @param tip 提示文字
+     */
+    public static void showShort(@StringRes int tip) {
+        Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
      * 显示长时间的toast提示
      *
      * @param tip 提示文字
      */
     public static void showLong(String tip) {
+        Toast.makeText(context, tip, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 显示长时间的toast提示
+     *
+     * @param tip 提示文字
+     */
+    public static void showLong(@StringRes int tip) {
         Toast.makeText(context, tip, Toast.LENGTH_LONG).show();
     }
 

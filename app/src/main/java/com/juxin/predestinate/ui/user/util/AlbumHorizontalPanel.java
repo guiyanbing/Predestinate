@@ -5,12 +5,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
@@ -24,7 +23,8 @@ import java.util.List;
  * 水平查看相册/视频panel
  * Created by Su on 2017/3/23.
  */
-public class AlbumHorizontalPanel extends BaseViewPanel implements AdapterView.OnItemClickListener {
+public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnItemClickListener {
+
     public static final int EX_HORIZONTAL_ALBUM = 1;  // 展示照片
     public static final int EX_HORIZONTAL_VIDEO = 2;  // 展示视频
     private int channel = CenterConstant.USER_CHECK_INFO_OWN; // 默认查看自己

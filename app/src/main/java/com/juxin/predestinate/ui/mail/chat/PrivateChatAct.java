@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
@@ -372,7 +372,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             try {
                 lastActivity.finish();
             } catch (Exception e) {
-                MMLog.printThrowable(e);
+                PLogger.printThrowable(e);
             }
         }
         lastActivity = this;

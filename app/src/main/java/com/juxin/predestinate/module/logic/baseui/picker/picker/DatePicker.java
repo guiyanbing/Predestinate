@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.logic.baseui.picker.widget.WheelView;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
@@ -184,7 +184,7 @@ public class DatePicker extends WheelPicker {
     protected View makeCenterView() {
         LinearLayout layout = new LinearLayout(activity);
         layout.setOrientation(LinearLayout.HORIZONTAL);
-        int padding = UIUtil.dip2px(activity,15);
+        int padding = UIUtil.dip2px(activity, 15);
         layout.setPadding(0, padding, 0, padding);
         layout.setGravity(Gravity.CENTER);
 
@@ -312,7 +312,7 @@ public class DatePicker extends WheelPicker {
             //截取掉前缀0以便转换为整数
             text = text.substring(1);
         }
-        return TypeConvUtil.toInt(text);
+        return TypeConvertUtil.toInt(text);
     }
 
     @Override

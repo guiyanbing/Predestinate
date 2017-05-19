@@ -21,10 +21,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.EditText;
 
-
-import com.shuisili.android.library.FFLibrary;
-import com.shuisili.android.library.app.AppUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -601,53 +597,4 @@ public class BaseUtil {
         }
         return osName + "-" + osArch;
     }
-
-    public static String sha1(String string) {
-        try {
-            byte[] hash;
-            try {
-                hash = MessageDigest.getInstance("SHA-1").digest(string.getBytes("UTF-8"));
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException("Huh, MD5 should be supported?", e);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException("Huh, UTF-8 should be supported?", e);
-            }
-
-            StringBuilder hex = new StringBuilder(hash.length * 2);
-            for (byte b : hash) {
-                if ((b & 0xFF) < 0x10) hex.append("0");
-                hex.append(Integer.toHexString(b & 0xFF));
-            }
-            return hex.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    /**
-     * 获取签名
-     *
-     * @return
-     */
-    public static String getInstallPackageSignature() {
-        try {
-            PackageManager pm = FFLibrary.mContext.getPackageManager();
-            List<PackageInfo> apps = pm
-                    .getInstalledPackages(PackageManager.GET_SIGNATURES);
-
-            Iterator<PackageInfo> iter = apps.iterator();
-            while (iter.hasNext()) {
-                PackageInfo packageinfo = iter.next();
-                String thisName = packageinfo.packageName;
-                if (thisName.equals(AppUtils.getPackageName())) {
-                    return packageinfo.signatures[0].toCharsString();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

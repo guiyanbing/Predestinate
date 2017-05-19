@@ -14,10 +14,9 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.utils.EncryptUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.StringUtils;
-import com.juxin.mumu.bean.utils.FileUtil;
-import com.juxin.mumu.bean.utils.MD5;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
@@ -289,7 +288,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 
             Map<String, Object> postParams = new HashMap<>();
             postParams.put("uid", uid);
-            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+            postParams.put("code", EncryptUtil.md5(uid + EncryptUtil.md5(password)));
 
             ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadAvatar, postParams, fileParams, new RequestComplete() {
                 @Override
@@ -302,7 +301,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 
         } else {
             LoadingDialog.closeLoadingDialog();
-            MMToast.showShort("图片地址无效");
+            PToast.showShort("图片地址无效");
         }
     }
 
@@ -319,13 +318,13 @@ public class CenterMgr implements ModuleBase, PObserver {
 
             Map<String, Object> postParams = new HashMap<>();
             postParams.put("uid", uid);
-            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+            postParams.put("code", EncryptUtil.md5(uid + EncryptUtil.md5(password)));
 
             ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadPhoto, postParams, fileParams, complete);
 
         } else {
             LoadingDialog.closeLoadingDialog();
-            MMToast.showShort("图片地址无效");
+            PToast.showShort("图片地址无效");
         }
     }
 

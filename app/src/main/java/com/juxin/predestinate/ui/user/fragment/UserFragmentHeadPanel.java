@@ -11,13 +11,13 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
+import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -29,10 +29,10 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 /**
  * 个人中心条目头部
  */
-public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
+public class UserFragmentHeadPanel extends BasePanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
 
     private CircleImageView user_head, user_head_vip, user_head_status;
-    private TextView user_nick, user_id, iv_invite_code,tv_video_title,tv_video_status;
+    private TextView user_nick, user_id, iv_invite_code, tv_video_title, tv_video_status;
     private ImageView iv_video_verify;
     private UserFragmentFunctionPanel functionPanel;
 
@@ -53,7 +53,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
-
 
 
         //根据屏幕分辨率设置最大显示长度
@@ -145,12 +144,13 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
 
     public void initVideoAuthView() {
         int authStatus = ModuleMgr.getCommonMgr().getVideoVerify().getStatus();
-        if (authStatus == 3&&ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//TODO
+        if (authStatus == 3 && ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//TODO
             showVerify();
         } else {
             showUnVerify();
         }
     }
+
     public void showUnVerify() {
         tv_video_title.setTextColor(getContext().getResources().getColor(R.color.user_text_gray_top));
         tv_video_status.setTextColor(getContext().getResources().getColor(R.color.user_text_blue));

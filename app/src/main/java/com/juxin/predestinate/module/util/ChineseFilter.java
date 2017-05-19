@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
 
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.log.PToast;
 
 import org.json.JSONObject;
 
@@ -175,6 +175,6 @@ public class ChineseFilter {
     public static void copyString(Context context, String copy_string) {
         ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboardManager.setText(copy_string);
-        MMToast.showShort("已复制到剪贴板");
+        PToast.showShort("已复制到剪贴板");
     }
 }

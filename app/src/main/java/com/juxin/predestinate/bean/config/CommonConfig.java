@@ -25,7 +25,7 @@ public class CommonConfig extends BaseData {
     private long plugin_version;        //插件版本号控制
     private int audiochat_minute_cost;  //语音通话每分钟费用
     private int videochat_minute_cost;  //视频通话每分钟费用
-    private String video_chat_apk_url;//视频插件地址
+    private String video_chat_apk_url;  //视频插件地址
 
     private PayTypeList payTypeList;    //支付方式控制
 
@@ -167,6 +167,7 @@ public class CommonConfig extends BaseData {
                 ", plugin_version=" + plugin_version +
                 ", audiochat_minute_cost=" + audiochat_minute_cost +
                 ", videochat_minute_cost=" + videochat_minute_cost +
+                ", video_chat_apk_url='" + video_chat_apk_url + '\'' +
                 ", payTypeList=" + payTypeList +
                 '}';
     }

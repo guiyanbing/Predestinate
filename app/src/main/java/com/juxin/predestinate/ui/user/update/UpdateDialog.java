@@ -11,11 +11,11 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.APKUtil;
-import com.juxin.mumu.bean.utils.DirUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.logic.config.DirType;
 
 /**
  * 软件升级dialog
@@ -92,8 +92,7 @@ public class UpdateDialog extends BaseDialogFragment implements DownloadListener
                 dismiss();
                 downloadingDialog.showDialog(activity);
 
-                String fileName = DirUtils.getDir(DirUtils.DirType.DT_SD_EXT_Cache_APK) +
-                        "xiaou_" + appUpdate.getVersion() + ".apk";
+                String fileName = DirType.getApkDir() + "xiaou_" + appUpdate.getVersion() + ".apk";
                 ModuleMgr.getHttpMgr().download(appUpdate.getUrl(), fileName, this);
                 break;
         }

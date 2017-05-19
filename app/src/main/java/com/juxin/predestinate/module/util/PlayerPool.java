@@ -9,8 +9,8 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
@@ -75,7 +75,7 @@ public class PlayerPool implements SoundPool.OnLoadCompleteListener {
                 soundsMap.put(filename, id);
             }
         }
-        MMLog.autoDebug("---PlayerPool--->filename：" + filename + "，soundId：" + id + "，soundPool：" + soundPool);
+        PLogger.d("---PlayerPool--->filename：" + filename + "，soundId：" + id + "，soundPool：" + soundPool);
         return id;
     }
 
@@ -114,7 +114,7 @@ public class PlayerPool implements SoundPool.OnLoadCompleteListener {
             }
             mediaPlayer = null;
         }
-        MMLog.autoDebug("---PlayerPool--->releaseMediaPlayer");
+        PLogger.d("---PlayerPool--->releaseMediaPlayer");
     }
 
     /**
@@ -196,11 +196,11 @@ public class PlayerPool implements SoundPool.OnLoadCompleteListener {
     }
 
     private void playLocalSound(String filename) {
-        MMLog.autoDebug("---PlayerPool--->filename：" + filename);
+        PLogger.d("---PlayerPool--->filename：" + filename);
 
         Integer id = loadSound(filename);
         if (id != null && soundPool != null && loadedSoundsMap.contains(id)) {
-            MMLog.autoDebug("---PlayerPool--->playing，filename：" + filename + "，soundId：" + id);
+            PLogger.d("---PlayerPool--->playing，filename：" + filename + "，soundId：" + id);
             soundPool.play(id,
                     volume, // 左声道音量
                     volume, // 右声道音量
@@ -209,7 +209,7 @@ public class PlayerPool implements SoundPool.OnLoadCompleteListener {
                     1f // 回放速度，该值在0.5-2.0之间 1为正常速度
             );
         } else {
-            MMLog.autoDebug("---PlayerPool--->not play，filename：" + filename + "，soundId：" + id
+            PLogger.d("---PlayerPool--->not play，filename：" + filename + "，soundId：" + id
                     + "，soundPool：" + soundPool + "，loadedSoundsMap.contains(id)：" + loadedSoundsMap.contains(id));
         }
     }
@@ -217,7 +217,7 @@ public class PlayerPool implements SoundPool.OnLoadCompleteListener {
     @Override
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
         loadedSoundsMap.add(sampleId);
-        MMLog.autoDebug("---PlayerPool--->soundId：" + sampleId);
+        PLogger.d("---PlayerPool--->soundId：" + sampleId);
     }
 
     /**

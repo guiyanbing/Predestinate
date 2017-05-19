@@ -2,9 +2,9 @@ package com.juxin.predestinate.ui.pay.cupvoice;
 
 import android.content.Context;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by Kind on 2017/4/26.
  */
 
-public class PayCupVoiceCreditPanel extends BaseViewPanel {
+public class PayCupVoiceCreditPanel extends BasePanel {
 
     public PayCupVoiceCreditPanel(Context context, PayGood payGood) {
         super(context);

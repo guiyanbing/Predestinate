@@ -6,7 +6,8 @@ import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.juxin.mumu.bean.utils.MMToast;
+
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.PayTypeList;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -43,7 +44,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     private void initView() {
         payGood = (PayGood) getIntent().getSerializableExtra("payGood");
         if (payGood == null) {
-            MMToast.showShort(R.string.request_error);
+            PToast.showShort(R.string.request_error);
             this.finish();
             return;
         }

@@ -5,8 +5,9 @@ import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.custom.VerticalImageSpan;
 import com.juxin.predestinate.module.util.UIUtil;
@@ -96,7 +97,7 @@ public class EmojiPack {
                 emoticons.add(addPattern(tempKey, jsonObject.optString(tempKey)));
             }
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
             return false;
         }
 

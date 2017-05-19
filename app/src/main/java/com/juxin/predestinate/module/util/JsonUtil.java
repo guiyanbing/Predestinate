@@ -2,7 +2,7 @@ package com.juxin.predestinate.module.util;
 
 import android.text.TextUtils;
 
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +28,7 @@ public final class JsonUtil {
         try {
             if (!TextUtils.isEmpty(str)) return new JSONObject(str);
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return new JSONObject();
     }
@@ -43,7 +43,7 @@ public final class JsonUtil {
         try {
             return new JSONArray(str);
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return new JSONArray();
     }

@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.area.City;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.AddressPicker;
 import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
@@ -30,8 +30,8 @@ import java.util.HashMap;
  * 基本资料
  * Created by Su on 2017/5/3.
  */
+public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete {
 
-public class UserEditBaseInfoPanel extends BaseViewPanel implements RequestComplete {
     private TextView name, age, home, height, income, marry,        //基本资料
             qq_info, qq, mobile_info, mobile, wechat_info, wechat;  //联系方式
 

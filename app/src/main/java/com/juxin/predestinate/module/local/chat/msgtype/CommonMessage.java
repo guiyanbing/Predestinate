@@ -1,7 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-import com.juxin.mumu.bean.log.MMLog;
+
+import com.juxin.library.log.PLogger;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -150,7 +152,7 @@ public class CommonMessage extends BaseMessage{
             }
             return json.toString();
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return null;
     }
