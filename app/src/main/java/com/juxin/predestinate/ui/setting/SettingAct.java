@@ -224,7 +224,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     }
                 }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
                 break;
-            case R.id.setting_video_switch: {
+            case R.id.setting_video_switch: {//视频通话开关
                 if (validChange()) {
                     if (videoStatus) {
                         videoStatus = false;
@@ -239,7 +239,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             }
-            case R.id.setting_audio_switch: {
+            case R.id.setting_audio_switch: {//语音通话开关
                 if (validChange()) {
                     if (audioStatus) {
                         audioStatus = false;

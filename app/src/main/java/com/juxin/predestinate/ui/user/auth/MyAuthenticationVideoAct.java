@@ -225,7 +225,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     }
 
     private void uploadAuthPic(String sPic) {
-        LoadingDialog.show(MyAuthenticationVideoAct.this, "正在上传照片");
+        LoadingDialog.show(MyAuthenticationVideoAct.this, getResources().getString(R.string.loading_pushpic));
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO_CHAT, sPic, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -243,10 +243,10 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                         changePicStatus(0);
                         tvMakePic.setVisibility(View.VISIBLE);
                     } else {
-                        PToast.showShort("照片处理失败请重试");
+                        PToast.showShort(getResources().getString(R.string.toast_pic_deal_error));
                     }
                 } catch (JSONException e) {
-                    PToast.showShort("照片处理失败请重试");
+                    PToast.showShort(getResources().getString(R.string.toast_pic_deal_error));
                 }
             }
         });
@@ -269,10 +269,10 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                         changeVideoPlay();
                         tvMakeVideo.setVisibility(View.VISIBLE);
                     } else {
-                        PToast.showShort("视频处理失败请重试");
+                        PToast.showShort(getResources().getString(R.string.toast_video_deal_error));
                     }
                 } catch (JSONException e) {
-                    PToast.showShort("视频处理失败请重试");
+                    PToast.showShort(getResources().getString(R.string.toast_video_deal_error));
                 }
             }
         });
@@ -281,7 +281,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     private void submitAuth() {
         if ("".equals(sPicNoHttp) ||
                 "".equals(videoVerifyBean.getVideourl())) {
-            PToast.showShort("必须完成照片和视频的上传");
+            PToast.showShort(getResources().getString(R.string.toast_authentication_invalid));
             return;
         }
         ModuleMgr.getCommonMgr().addVideoVerify(sPicNoHttp, videoVerifyBean.getVideourl(), new RequestComplete() {
@@ -291,9 +291,9 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                     videoVerifyBean.setStatus(1);
                     changeAllStatus(1);
                     setHideTopRightView(true);
-                    PToast.showShort("提交成功，请等待审核");
+                    PToast.showShort(getResources().getString(R.string.toast_auth_submit_ok));
                 } else {
-                    PToast.showShort("提交失败，请稍后重试");
+                    PToast.showShort(getResources().getString(R.string.toast_auth_submit_error));
                 }
             }
         });
@@ -305,7 +305,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         if (bool) {
             setTitleRight("", null);
         } else {
-            setTitleRight("提交", new View.OnClickListener() {
+            setTitleRight(getResources().getString(R.string.txt_submit), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     submitAuth();

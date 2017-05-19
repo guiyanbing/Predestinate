@@ -161,12 +161,7 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("videochat", videoVerify.getVideochat());
         post_param.put("audiochat", videoVerify.getAudiochat());
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-
-            }
-        });
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, null);
     }
 
     /**
