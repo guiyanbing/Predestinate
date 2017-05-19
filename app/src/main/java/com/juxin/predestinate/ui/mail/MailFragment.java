@@ -142,6 +142,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 //
 //            }
 //        });
+
+
     }
 
     @Override

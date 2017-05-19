@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
@@ -14,6 +13,7 @@ import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
@@ -184,6 +184,23 @@ public class ChatMgr implements ModuleBase {
                 }
             }
         });
+    }
+
+    /**
+     * 发送礼物
+     * @param channelID
+     * @param whisperID
+     * @param giftID
+     * @param giftCount
+     * @param giftLogID
+     */
+    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
+        GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount, giftLogID);
+        giftMessage.setStatus(DBConstant.OK_STATUS);
+        giftMessage.setJsonStr(giftMessage.getJson(giftMessage));
+
+        long ret = dbCenter.insertMsg(giftMessage);
+        onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), ret != DBConstant.ERROR, giftMessage);
     }
 
 
