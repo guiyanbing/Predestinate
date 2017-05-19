@@ -9,7 +9,7 @@ public class Hosts {
     // --------------------逻辑服务器地址 start-----------------------
     public static String NO_HOST = "no_host";
 
-    public static int SERVER_TYPE = 0;//0-正式服，1-测试服，对应以上几个host-array的position
+    public static int SERVER_TYPE = 1;//0-正式服，1-测试服，对应以上几个host-array的position
 
     private static final String[] PHP_HOST = {"http://api2.app.yuanfenba.net/", "http://test.api2.app.yuanfenba.net/"};
     private static final String[] GO_HOST = {"http://g.api.yuanfenba.net/", "http://123.59.187.33:8681/"};
