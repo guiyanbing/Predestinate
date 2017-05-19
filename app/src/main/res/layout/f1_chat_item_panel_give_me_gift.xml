@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/chat_item_give_thumb_img"
+            android:layout_width="64dip"
+            android:layout_height="64dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/default_pic" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dip">
+
+                <TextView
+                    android:id="@+id/chat_item_give_tvMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HI，女神"
+                    android:textColor="#040000"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/chat_item_give_tvInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="想要棒棒糖一个"
+                    android:textColor="#777777"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </RelativeLayout>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/p1_give_me_flag"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAE0B5"
+        android:gravity="right"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/chat_item_give_tvSendGift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="点击赠送"
+            android:textColor="#ea5514"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

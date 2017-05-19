@@ -1,6 +1,5 @@
 package com.juxin.predestinate.bean.db;
 
-import com.juxin.predestinate.bean.db.cache.DBCache;
 import com.juxin.predestinate.module.local.chat.ChatListMgr;
 import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;

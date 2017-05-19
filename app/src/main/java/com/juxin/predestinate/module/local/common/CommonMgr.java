@@ -7,11 +7,10 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.mumu.bean.utils.MD5;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
@@ -459,7 +458,7 @@ public class CommonMgr implements ModuleBase {
      * @param complete 上传完成回调
      */
     public void uploadIdCard(final String url, final RequestComplete complete) {
-        if (com.juxin.mumu.bean.utils.FileUtil.isExist(url)) {
+        if (FileUtil.isExist(url)) {
             Map<String, File> fileParams = new HashMap<>();
             fileParams.put("userfile", new File(url));
 
@@ -480,7 +479,7 @@ public class CommonMgr implements ModuleBase {
 
         } else {
             LoadingDialog.closeLoadingDialog();
-            MMToast.showShort("图片地址无效");
+            PToast.showShort("图片地址无效");
         }
     }
 

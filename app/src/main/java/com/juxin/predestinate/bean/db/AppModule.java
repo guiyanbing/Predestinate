@@ -11,7 +11,8 @@ import dagger.Provides;
 /**
  * Created by Kind on 2017/3/27.
  */
-@Module(includes = {DBModule.class, DBCache.class})
+//@Module(includes = {DBModule.class, DBCache.class})
+@Module(includes = {DBModule.class})
 public class AppModule {
     private final Application mApplication;
 

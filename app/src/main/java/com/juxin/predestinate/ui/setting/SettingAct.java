@@ -15,7 +15,6 @@ import android.widget.ToggleButton;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
-import com.juxin.mumu.bean.net.NetInterface;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;

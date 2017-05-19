@@ -6,6 +6,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -45,8 +46,8 @@ public class ChatMgr implements ModuleBase {
     @Inject
     DBCenter dbCenter;
 
-    @Inject
-    DBCacheCenter dbCacheCenter;
+//    @Inject
+//    DBCacheCenter dbCacheCenter;
 
     @Override
     public void init() {
@@ -533,7 +534,7 @@ public class ChatMgr implements ModuleBase {
      * @param infoLightweight 个人资料数据
      */
     private void removeInfoComplete(boolean isRemove, long userID, UserInfoLightweight infoLightweight) {
-        MMLog.autoDebug(infoLightweight);
+        PLogger.printObject(infoLightweight);
         for (Object key : infoMap.keySet()) {
             if (key.equals(userID)) {
                 ChatMsgInterface.InfoComplete infoComplete = infoMap.get(key);
