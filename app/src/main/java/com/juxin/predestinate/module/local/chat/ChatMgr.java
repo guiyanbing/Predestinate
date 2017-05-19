@@ -45,14 +45,14 @@ public class ChatMgr implements ModuleBase {
     @Inject
     DBCenter dbCenter;
 
-//    @Inject
-//    DBCacheCenter dbCacheCenter;
+    @Inject
+    DBCacheCenter dbCacheCenter;
 
     @Override
     public void init() {
         messageMgr.init();
         specialMgr.init();
-      //  App.getCacheComponent().inject(this);
+    //    App.getCacheComponent().inject(this);
     }
 
     @Override

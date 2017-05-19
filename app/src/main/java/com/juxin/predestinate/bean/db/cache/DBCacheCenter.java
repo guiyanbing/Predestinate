@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.juxin.mumu.bean.utils.ByteUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.FLetter;
-import com.juxin.predestinate.bean.db.FMessage;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;

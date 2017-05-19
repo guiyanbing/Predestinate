@@ -1,15 +1,10 @@
 package com.juxin.predestinate.module.logic.application;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
-import com.juxin.predestinate.bean.db.cache.CacheComponent;
-import com.juxin.predestinate.bean.db.cache.DBCache;
-import com.juxin.predestinate.bean.db.cache.CacheModule;
-import com.juxin.predestinate.bean.db.cache.DaggerCacheComponent;
 
 /**
  * Application
@@ -39,7 +34,7 @@ public class App extends MultiDexApplication {
         super.onCreate();
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
-        initAppComponent();
+      //  initAppComponent();
 
         ModuleMgr.initModule(context);
     }
@@ -56,19 +51,19 @@ public class App extends MultiDexApplication {
     }
 
 
-    private static CacheComponent cacheComponent;
-
-    public static CacheComponent getCacheComponent() {
-        return cacheComponent;
-    }
-
-    /**
-     * 缓存初始化
-     */
-    private void initAppComponent() {
-        cacheComponent = DaggerCacheComponent.builder()
-                .cacheModule(new CacheModule((Application) getContext()))
-                .dBCache(new DBCache())
-                .build();
-    }
+//    private static CacheComponent cacheComponent;
+//
+//    public static CacheComponent getCacheComponent() {
+//        return cacheComponent;
+//    }
+//
+//    /**
+//     * 缓存初始化
+//     */
+//    private void initAppComponent() {
+//        cacheComponent = DaggerCacheComponent.builder()
+//                .cacheModule(new CacheModule((Application) getContext()))
+//                .dBCache(new DBCache())
+//                .build();
+//    }
 }

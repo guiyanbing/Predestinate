@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -16,7 +15,6 @@ import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
-
 
 /**
  * Created by Kind on 2017/5/10.
@@ -62,7 +60,6 @@ public class ChatPanelGift extends ChatPanel {
         chat_item_gift_tvMsg.setText(Html.fromHtml(giftInfo.getName() + ""));
         chat_item_gift_tvInfo.setText(Html.fromHtml(giftInfo.getGif() + ""));
         ImageLoader.loadAvatar(context, giftInfo.getPic(), chat_item_gift_img);
-
         return true;
     }
 
