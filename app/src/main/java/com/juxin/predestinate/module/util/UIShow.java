@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.util;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,8 @@ import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
+import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
+import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -1218,5 +1221,31 @@ public class UIShow {
      */
     public static void showPhoneVerifyCompleteAct(FragmentActivity context,int requestCode){
         context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class),requestCode);
+    }
+
+    /**
+     * 显示微信二维码支付
+     *
+     * @param context
+     * @param QRUrl   二维码URL
+     */
+
+    public static void showWxpayForQRCode(Context context, String QRUrl, int time, int money, String uri) {
+        Intent intent = new Intent(context, WepayQRCodeAct.class);
+        intent.putExtra("qrurl", QRUrl);
+        intent.putExtra("time", time);
+        intent.putExtra("money", money);
+        intent.putExtra("uri", uri);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示打开微信对话框
+     *
+     * @param context
+     */
+    public static void showWxpayOpenWx(Context context, String UIR) {
+        Dialog dialog = new OpenWxDialog(context, UIR);
+        dialog.show();
     }
 }

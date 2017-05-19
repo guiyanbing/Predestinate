@@ -389,6 +389,30 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
+        <!-- ============== 微信其它支付 ==================== -->
+        <!-- ============== 二维码支付 ==================== -->
+        <activity
+            android:name=".ui.pay.wepayother.qrcode.WepayQRCodeAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <!-- ============== 二维码支付结束 ==================== -->
+        <!--杰莘公众号-->
+        <activity
+            android:name="com.switfpass.pay.activity.QQWapPayWebView"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--杰莘公众号end-->
+        <!--掌付公众号-->
+        <activity
+            android:name="com.third.wa5.sdk.ThirdActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent" />
+        <!--掌付公众号end-->
+        <activity
+            android:name="com.switfpass.pay.activity.PayResultActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <!-- ============== 微信其它支付结束 ==================== -->
     </application>
 
 </manifest>

@@ -28,6 +28,9 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.pay.wepayother.third.JXWechatPay;
+import com.juxin.predestinate.ui.pay.wepayother.third.ZFWechatPay;
 import com.switfpass.pay.MainApplication;
 import com.switfpass.pay.activity.PayPlugin;
 import com.switfpass.pay.bean.RequestMsg;
@@ -53,6 +56,7 @@ public class PayWeixinUtils {
 
     private int iPayIdx;
     private int[] aryPayType = {0, 3, 6};
+    private PayGood payGood;
 
     public PayWeixinUtils(Context context) {
         this.context = context;
@@ -71,7 +75,7 @@ public class PayWeixinUtils {
             payCType = aryPayType[iPayIdx];
         }
 
-
+        this.payGood = payGood;
         ModuleMgr.getCommonMgr().reqWXMethod(payGood.getPay_name(), payGood.getPay_id(), payGood.getPay_money(), payCType, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -109,6 +113,16 @@ public class PayWeixinUtils {
                 break;
             case 5:
                 To_Pay_WeiXin_Wft_App(payWX.getPayData());
+                break;
+            case 8:
+                UIShow.showWxpayForQRCode(context, payWX.getQrcode_url(), payWX.getQrcode_time()
+                        ,this.payGood.getPay_money(), payWX.getUri());
+                break;
+            case 9:
+                JXWechatPay.Pay(context, payWX);
+                break;
+            case 10:
+                ZFWechatPay.Pay(context, payWX.getJsonParamPost());
                 break;
             default:
                 MMToast.showShort("不支持的支付类型！");
