@@ -1,20 +1,18 @@
-package com.juxin.predestinate.bean.db;
+package com.juxin.predestinate.bean.db.cache;
 
 import android.app.Application;
 import com.juxin.library.observe.RxBus;
-
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by Kind on 2017/3/27.
+ * Created by Kind on 2017/5/18.
  */
-@Module(includes = {DBModule.class})
-public class AppModule {
+@Module(includes = {DBCache.class})
+public class CacheModule {
     private final Application mApplication;
-
-    public AppModule(Application application) {
+    public CacheModule(Application application) {
         this.mApplication = application;
     }
 

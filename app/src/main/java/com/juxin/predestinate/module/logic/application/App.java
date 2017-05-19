@@ -1,8 +1,15 @@
 package com.juxin.predestinate.module.logic.application;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
+import com.juxin.predestinate.bean.db.cache.CacheComponent;
+import com.juxin.predestinate.bean.db.cache.DBCache;
+import com.juxin.predestinate.bean.db.cache.CacheModule;
+import com.juxin.predestinate.bean.db.cache.DaggerCacheComponent;
 
 /**
  * Application
@@ -26,11 +33,13 @@ public class App extends MultiDexApplication {
      */
     public static boolean isLogin = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
+        initAppComponent();
 
         ModuleMgr.initModule(context);
     }
@@ -44,5 +53,22 @@ public class App extends MultiDexApplication {
 
     public static Context getContext() {
         return context;
+    }
+
+
+    private static CacheComponent cacheComponent;
+
+    public static CacheComponent getCacheComponent() {
+        return cacheComponent;
+    }
+
+    /**
+     * 缓存初始化
+     */
+    private void initAppComponent() {
+        cacheComponent = DaggerCacheComponent.builder()
+                .cacheModule(new CacheModule((Application) getContext()))
+                .dBCache(new DBCache())
+                .build();
     }
 }

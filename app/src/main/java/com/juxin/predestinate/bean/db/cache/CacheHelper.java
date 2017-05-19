@@ -8,17 +8,18 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Kind on 2017/3/21.
  */
 
-public class DBCacheHelper extends SQLiteOpenHelper {
+public class CacheHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
 
-    public DBCacheHelper(Context context) {
+    public CacheHelper(Context context) {
         super(context, "predestinate.db", null, VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(FProfile.getCreateTable());
+        db.execSQL(FProfileCache.getCreateTable());
+        db.execSQL(FHttpCache.getCreateTable());
     }
 
     @Override
