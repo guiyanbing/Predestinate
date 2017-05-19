@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
@@ -36,6 +36,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ChatAdapter.ChatInstance chatInstance = null;
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
+    private ImageView input_giftview;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -72,6 +73,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
 
         chatFixedTip = (ViewGroup) contentView.findViewById(R.id.chat_fixed_tip);
         chatFloatTip = (ViewGroup) contentView.findViewById(R.id.chat_float_tip);
+        input_giftview = (ImageView) contentView.findViewById(R.id.input_giftview);
 
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -104,6 +106,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         ExListView list = (ExListView) contentView.findViewById(R.id.chat_content_list);
         list.setHeaderStr(chatInstance.context.getString(R.string.xlistview_header_hint_normal),
                 chatInstance.context.getString(R.string.xlistview_header_hint_loading));
+
         chatInstance.chatListView = list;
         list.setAdapter(chatContentAdapter);
         list.setXListViewListener(chatInstance.chatAdapter);
@@ -127,6 +130,10 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      */
     public void setChatAdapter(ChatAdapter chatAdapter) {
         this.chatInstance.chatAdapter = chatAdapter;
+    }
+
+    public void onClickChatGift(View.OnClickListener listener){
+        input_giftview.setOnClickListener(listener);
     }
 
     /**

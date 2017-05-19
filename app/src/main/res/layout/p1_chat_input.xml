@@ -2,17 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
     android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/input_giftview"
-        android:layout_width="@dimen/px150_dp"
-        android:layout_height="@dimen/px150_dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="@dimen/px35_dp"
-        android:layout_marginBottom="@dimen/px35_dp"
-        android:src="@drawable/f1_fc_gift" />
 
     <LinearLayout
         android:id="@+id/input_monthly"
@@ -76,8 +66,8 @@
             </FrameLayout>
 
             <!--<View-->
-                <!--style="@style/divider_line_vertical"-->
-                <!--android:layout_marginLeft="@dimen/px35_dp" />-->
+            <!--style="@style/divider_line_vertical"-->
+            <!--android:layout_marginLeft="@dimen/px35_dp" />-->
 
             <FrameLayout
                 android:layout_width="0dp"

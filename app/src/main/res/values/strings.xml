@@ -585,6 +585,9 @@
 
     <string name="top_type_man">豪</string>
     <string name="top_type_woman">魅</string>
+    <string name="say_hi_avatar_fail">您的头像被拒绝，请重新上传头像，通过审核后才能继续打招呼</string>
+    <string name="say_hi_group_num_state">群发功能每天只能使用三次！</string>
+    <string name="say_hi_group_refresh">请先刷新列表再打招呼</string>
     <!--发现end-->
 
 

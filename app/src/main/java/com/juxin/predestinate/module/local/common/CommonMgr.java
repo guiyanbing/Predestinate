@@ -258,6 +258,30 @@ public class CommonMgr implements ModuleBase {
         return false;
     }
 
+    /**
+     * 判断是否到达第二天
+     *
+     * @return true 达到第二天
+     */
+    public boolean checkDate(String key) {
+        String recommendDate = PSP.getInstance().getString(key, "-1");
+        if (recommendDate != null) {
+            if (!recommendDate.equals(TimeUtil.getCurrentData())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 保存达到第二天的状态
+     *
+     * @param key
+     */
+    public void saveDateState(String key) {
+        PSP.getInstance().put(key, TimeUtil.getCurrentData() + "");
+    }
+
     // ---------------------------- 软件升级 start ------------------------------
 
     /* 软件升级账号密码迁移临时文件路径 */
@@ -985,6 +1009,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 获取自定义表情列表
+     *
      * @param complete
      */
     public void reqCustomFace(RequestComplete complete) {
@@ -993,6 +1018,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * add自定义表情
+     *
      * @param url
      * @param complete
      */

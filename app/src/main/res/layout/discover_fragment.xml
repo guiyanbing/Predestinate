@@ -17,6 +17,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/discover_group_sayhi_btn"
         android:layout_width="@dimen/px300_dp"
         android:layout_height="@dimen/px120_dp"
         android:layout_alignParentBottom="true"
@@ -24,6 +25,6 @@
         android:layout_marginBottom="@dimen/px35_dp"
         android:layout_marginRight="@dimen/px35_dp"
         android:background="@drawable/f1_qdzh_btn"
-        android:visibility="gone"/>
+        android:visibility="visible" />
 
 </RelativeLayout>
