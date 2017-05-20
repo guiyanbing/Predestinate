@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
@@ -22,6 +23,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -401,7 +403,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     name.setVisibility(View.VISIBLE);
                 }
 
-                //      ModuleMgr.getChatMgr().reqUserHeadImage(head, infoLightweight.getAvatar());
+                ImageLoader.loadAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
                 head.setTag("" + msg.getSendID());
@@ -528,10 +530,10 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     break;
 
                 case R.id.chat_item_content:
-//                    if (chatpanel != null) {
-//                        chatpanel.onClickContent(msg, true);
-//                        return true;
-//                    }
+                    if (chatpanel != null) {
+                        chatpanel.onClickContent(msg, true);
+                        return true;
+                    }
                     break;
             }
             return false;

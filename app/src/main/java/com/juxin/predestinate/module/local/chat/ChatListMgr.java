@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.chat;
 import android.app.Activity;
 import android.app.Application;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -16,6 +17,7 @@ import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -97,6 +99,28 @@ public class ChatListMgr implements ModuleBase, PObserver {
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
         // updateBasicUserInfo();
     }
+
+    //是否能聊天
+    private String getIsTodayChatKey() {//是否显示问题反馈第一句KEY
+        return "isTodayChat" + App.uid;
+    }
+
+    public void setTodayChatShow(boolean b) {//隐藏，显示私聊列表
+        PSP.getInstance().put(getIsTodayChatKey(), TimeUtil.getCurrentData());
+    }
+
+    /**
+     * 当前时否可以聊天
+     *
+     * @return true是可以发信的，false不可以发信
+     */
+    public boolean getTodayChatShow() {
+        String currentData = TimeUtil.getCurrentData();
+        String isTodayChat = PSP.getInstance().getString(getIsTodayChatKey(), "");
+        return isTodayChat.equals("") || !isTodayChat.equals(currentData);
+    }
+
+
 
     /**
      * 批量删除消息

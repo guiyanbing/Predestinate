@@ -34,7 +34,6 @@ public class ChatPanelGiveMeGift extends ChatPanel {
 
     @Override
     public void initView() {
-
         imgThumb = (ImageView) findViewById(R.id.chat_item_give_thumb_img);
         tvMsg = (TextView) findViewById(R.id.chat_item_give_tvMsg);
         tvInfo = (TextView) findViewById(R.id.chat_item_give_tvInfo);
@@ -91,7 +90,7 @@ public class ChatPanelGiveMeGift extends ChatPanel {
             return false;
         }
         GiftMessage msg = (GiftMessage) msgData;
-
+        UIShow.showDiamondSendGiftDlg(getContext(), msg.getGiftID(), msg.getWhisperID());
         return true;
     }
 }
