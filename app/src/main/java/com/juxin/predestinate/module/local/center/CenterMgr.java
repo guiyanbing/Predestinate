@@ -32,7 +32,6 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
-import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -238,44 +237,20 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取自己的个人资料
      */
     public void reqMyInfo(final RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("ver", Constant.SUB_VERSION);
-
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, getParams, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (complete != null) {
                     complete.onRequestComplete(response);
                 }
-                String responseStr = response.getResponseString();
-                if (userDetail == null) userDetail = new UserDetail();
-                userDetail.parseJson(responseStr);
-                setMyInfo(responseStr);         // 保存到SP
+
+                userDetail = (UserDetail) response.getBaseData();
+                setMyInfo(response.getResponseString());         // 保存到SP
                 if (!response.isCache()) {
                     MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
                 }
             }
         });
-
-
-//        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
-//            @Override
-//            public void onRequestComplete(HttpResponse response) {
-//
-//                PLogger.d("kjskjkjjj---" + response.getResponseString());
-//
-//                if (complete != null) {
-//                    complete.onRequestComplete(response);
-//                }
-//                String responseStr = response.getResponseString();
-//                if (userDetail == null) userDetail = new UserDetail();
-//                userDetail.parseJson(responseStr);
-//                setMyInfo(responseStr);         // 保存到SP
-//                if (!response.isCache()) {
-//                    MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
-//                }
-//            }
-//        });
     }
 
     /**
@@ -360,40 +335,6 @@ public class CenterMgr implements ModuleBase, PObserver {
 
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.deletePhoto, getParams, complete);
     }
-
-    /**
-     * 获取用户Y币情况: 个人资料里可直接拿用户Y币金额
-     */
-    public void reqYCoinInfo(final RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", App.uid);
-
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqYCoinInfo, getParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (complete != null) complete.onRequestComplete(response);
-                YCoin yCoin = new YCoin();
-                getMyInfo().setYCoinInfo(yCoin);
-
-            }
-        });
-    }
-
-    /**
-     * 获取用户红包总额
-     */
-    public void reqRedbagSum(final RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", App.uid);
-
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRedbagSum, postParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (complete != null) complete.onRequestComplete(response);
-            }
-        });
-    }
-
 
     // ------------------------- 他人 ----------------------
 

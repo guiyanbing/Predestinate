@@ -1,90 +1,182 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
-import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
-
 import org.json.JSONObject;
 
 /**
  * 用户基本信息
  */
 public class UserInfo extends UserBasic {
-    private boolean isSayHello;     // 是否打过招呼 true是打过
     private String aboutme;         // 内心独白
-    private String complete;        // 资料完整度(%)
-    private int hits;               // 点击数
+    private String avatar_121;      // 头像小图 121*153
+    private String avatar_146;      // 头像小图 146*185
+    private int blood;              // 血型
     private String c_uid;           // -1机器人
-    private boolean isOnline;       // 在线数
-    private int distance;           // 距离
-    private boolean isFollowed;     // 是否关注
-    private String qqNum;           // QQ号码
-    private int qqNumAuth;          // 1为公开，2为保密
-    private String phone;           // 手机号码
-    private int phoneAuth;          // 1为公开，2为保密
-    private boolean isVip;          // 是否开通VIP
-    private String wechatNum;       //微信号码
-    private int wechatAuth;         // 1为公开, 2为保密
-    private boolean isVerifyCellphone; // 是否绑定了手机
+    private boolean c_user;         // 自增用户
+    private String complete;        // 资料完整度(%)
+    private int diamand;            // 我的钻石
     private boolean isMonthMail;    // 是否开通包月发信
-    private String reasons;         // 上传头像审核未通过的原因
+    private boolean isOnline;       // 是否在线
+    private String idcard;          // 身份证号
+    private int idcard_validation;  // 省份证验证
+    private long memdatenum;        // 计算会员到期时间
+    private String mobile;          // 手机号码
+    private int mobileAuth;         // 1为公开，2为保密
+    private int mobile_validation;  // 手机是否已验证
     private int photoNum;           // 相册的数目
-    private long regTime;           // 注册时间
-    private boolean isBindRose;     // 是否绑定了红娘
+    private String qq;              // QQ号码
+    private int qqAuth;             // 1为公开，2为保密
+    private double redbagsum;       // 红包总额
+    private String shareCode;       // 邀请码
+    private int videoAuth;          // 用户视频权限
+    private String weChat;          // 微信号码
+    private int wechatAuth;         // 1为公开, 2为保密
     private int ycoin = 0;          // Y币
-    private YCoin yCoin;            // 用户Y币信息
-    private int diamand;            // 钻石
-    private double redbagsum;       //红包总额
-
-
-    // -------2017-1-5红包来了添加字段 -------
-    private String shareCode;       //邀请码
-    private long invite_uid;        //邀请人ID,0表示无邀请人
 
     @Override
     public void parseJson(String s) {
         super.parseJson(s);
         JSONObject detailObject = getJsonObject(s);
 
-        this.setSayHello(detailObject.optBoolean("isSayHello"));
-        this.setAboutme(detailObject.isNull("aboutme") ? null : detailObject.optString("aboutme"));
-        this.setComplete(detailObject.optString("complete"));
-        this.setHits(detailObject.optInt("hits"));
+        // A
+        this.setAboutme(detailObject.optString("aboutme"));
+        this.setAvatar_121(detailObject.optString("avatar_121"));
+        this.setAvatar_146(detailObject.optString("avatar_146"));
+
+        // B
+        this.setBlood(detailObject.optInt("blood"));
+
+        // C
         this.setC_uid(detailObject.optString("c_uid"));
-        this.setOnline(detailObject.optBoolean("is_online"));
-        this.setDistance(detailObject.optInt("distance"));
-        this.setFollowed(detailObject.optBoolean("is_followed"));
-        this.setQqNum(detailObject.optString("qq"));
-        this.setQqNumAuth(detailObject.optInt("qq_auth"));
-        this.setPhone(detailObject.optString("mobile"));
-        this.setPhoneAuth(detailObject.optInt("mobile_auth"));
-        this.setVip(detailObject.optBoolean("is_month_mail"));
-        this.setWechatNum(detailObject.optString("wechat"));
-        this.setWechatAuth(detailObject.optInt("wechat_auth"));
-        this.setVerifyCellphone(detailObject.optBoolean("is_verify_cellphone"));
-        this.setMonthMail(detailObject.optBoolean("is_month_mail"));
-        this.setReasons(detailObject.isNull("reasons") ? null : detailObject.optString("reasons"));
-        this.setPhotoNum(detailObject.optInt("photoNum"));
-        this.setRegTime(detailObject.optLong("reg_time"));
-        this.setBindRose(detailObject.optBoolean("is_bind_roes"));
-        this.setYcoin(detailObject.optInt("ycoin"));
-        this.setShareCode(detailObject.optString("shareCode"));
-        this.setInvite_uid(detailObject.optLong("invite_uid"));
+        this.setC_user(detailObject.optBoolean("c_user"));
+        this.setComplete(detailObject.optString("complete"));
+
+        // D
         this.setDiamand(detailObject.optInt("diamand"));
+
+        // I
+        this.setMonthMail(detailObject.optBoolean("is_month_mail"));
+        this.setOnline(detailObject.optBoolean("is_online"));
+        this.setIdcard(detailObject.optString("Idcard"));
+        this.setIdcard_validation(detailObject.optInt("Idcard_validation"));
+
+        // M
+        this.setMemdatenum(detailObject.optLong("memdatenum"));
+        this.setMobile(detailObject.optString("mobile"));
+        this.setMobileAuth(detailObject.optInt("mobile_auth"));
+        this.setMobile_validation(detailObject.optInt("mobile_validation"));
+
+        // P
+        this.setPhotoNum(detailObject.optInt("photoNum"));
+
+        // Q
+        this.setQQ(detailObject.optString("qq"));
+        this.setQQAuth(detailObject.optInt("qq_auth"));
+
+        // R
+        this.setRedbagsum(detailObject.optDouble("redbagsum"));
+
+        // S
+        this.setShareCode(detailObject.optString("shareCode"));
+
+        // V
+        this.setVideoAuth(detailObject.optInt("video_auth"));
+
+        // W
+        this.setWeChat(detailObject.optString("wechat"));
+        this.setWechatAuth(detailObject.optInt("wechat_auth"));
+
+        // Y
+        this.setYcoin(detailObject.optInt("ycoin"));
     }
 
     /**
-     * isVip暂时无用，判断是否是vip用户通过 'isMonthMail' 判断
+     * 判断是否是vip用户通过 'isMonthMail' 判断
      */
     public boolean isVip() {
         return isMonthMail;
-        //return isVip;
     }
 
-    public YCoin getYCoinInfo() {
-        return yCoin;
+    /**
+     * 是否绑定手机
+     */
+    public boolean isVerifyCellphone() {
+        return mobile_validation != 0;
     }
 
-    public void setYCoinInfo(YCoin yCoin) {
-        this.yCoin = yCoin;
+    public void setVerifyCellphone(boolean verifyCellphone) {
+        if (verifyCellphone) {
+            mobile_validation = 1;
+            return;
+        }
+        mobile_validation = 0;
+    }
+
+    public void setMobile_validation(int mobile_validation) {
+        this.mobile_validation = mobile_validation;
+    }
+
+    public String getIdcard() {
+        return idcard;
+    }
+
+    public void setIdcard(String idcard) {
+        this.idcard = idcard;
+    }
+
+    public int getIdcard_validation() {
+        return idcard_validation;
+    }
+
+    public void setIdcard_validation(int idcard_validation) {
+        this.idcard_validation = idcard_validation;
+    }
+
+    public int getVideoAuth() {
+        return videoAuth;
+    }
+
+    public void setVideoAuth(int videoAuth) {
+        this.videoAuth = videoAuth;
+    }
+
+    public long getMemdatenum() {
+        return memdatenum;
+    }
+
+    public void setMemdatenum(long memdatenum) {
+        this.memdatenum = memdatenum;
+    }
+
+    public boolean isC_user() {
+        return c_user;
+    }
+
+    public void setC_user(boolean c_user) {
+        this.c_user = c_user;
+    }
+
+    public String getAvatar_121() {
+        return avatar_121;
+    }
+
+    public int getBlood() {
+        return blood;
+    }
+
+    public void setBlood(int blood) {
+        this.blood = blood;
+    }
+
+    public void setAvatar_121(String avatar_121) {
+        this.avatar_121 = avatar_121;
+    }
+
+    public String getAvatar_146() {
+        return avatar_146;
+    }
+
+    public void setAvatar_146(String avatar_146) {
+        this.avatar_146 = avatar_146;
     }
 
     public int getDiamand() {
@@ -103,14 +195,6 @@ public class UserInfo extends UserBasic {
         this.redbagsum = redbagsum;
     }
 
-    public boolean isSayHello() {
-        return isSayHello;
-    }
-
-    public void setSayHello(boolean sayHello) {
-        isSayHello = sayHello;
-    }
-
     public String getAboutme() {
         return aboutme;
     }
@@ -125,14 +209,6 @@ public class UserInfo extends UserBasic {
 
     public void setComplete(String complete) {
         this.complete = complete;
-    }
-
-    public int getHits() {
-        return hits;
-    }
-
-    public void setHits(int hits) {
-        this.hits = hits;
     }
 
     public String getC_uid() {
@@ -151,64 +227,44 @@ public class UserInfo extends UserBasic {
         isOnline = online;
     }
 
-    public int getDistance() {
-        return distance;
+    public String getQQ() {
+        return qq;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public void setQQ(String qq) {
+        this.qq = qq;
     }
 
-    public boolean isFollowed() {
-        return isFollowed;
+    public int getQQAuth() {
+        return qqAuth;
     }
 
-    public void setFollowed(boolean followed) {
-        isFollowed = followed;
+    public void setQQAuth(int qqAuth) {
+        this.qqAuth = qqAuth;
     }
 
-    public String getQqNum() {
-        return qqNum;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setQqNum(String qqNum) {
-        this.qqNum = qqNum;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public int getQqNumAuth() {
-        return qqNumAuth;
+    public int getMobileAuth() {
+        return mobileAuth;
     }
 
-    public void setQqNumAuth(int qqNumAuth) {
-        this.qqNumAuth = qqNumAuth;
+    public void setMobileAuth(int mobileAuth) {
+        this.mobileAuth = mobileAuth;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getWeChat() {
+        return weChat;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getPhoneAuth() {
-        return phoneAuth;
-    }
-
-    public void setPhoneAuth(int phoneAuth) {
-        this.phoneAuth = phoneAuth;
-    }
-
-    public void setVip(boolean vip) {
-        isVip = vip;
-    }
-
-    public String getWechatNum() {
-        return wechatNum;
-    }
-
-    public void setWechatNum(String wechatNum) {
-        this.wechatNum = wechatNum;
+    public void setWeChat(String weChat) {
+        this.weChat = weChat;
     }
 
     public int getWechatAuth() {
@@ -219,14 +275,6 @@ public class UserInfo extends UserBasic {
         this.wechatAuth = wechatAuth;
     }
 
-    public boolean isVerifyCellphone() {
-        return isVerifyCellphone;
-    }
-
-    public void setVerifyCellphone(boolean verifyCellphone) {
-        isVerifyCellphone = verifyCellphone;
-    }
-
     public boolean isMonthMail() {
         return isMonthMail;
     }
@@ -235,36 +283,12 @@ public class UserInfo extends UserBasic {
         isMonthMail = monthMail;
     }
 
-    public String getReasons() {
-        return reasons;
-    }
-
-    public void setReasons(String reasons) {
-        this.reasons = reasons;
-    }
-
     public int getPhotoNum() {
         return photoNum;
     }
 
     public void setPhotoNum(int photoNum) {
         this.photoNum = photoNum;
-    }
-
-    public long getRegTime() {
-        return regTime;
-    }
-
-    public void setRegTime(long regTime) {
-        this.regTime = regTime;
-    }
-
-    public boolean isBindRose() {
-        return isBindRose;
-    }
-
-    public void setBindRose(boolean bindRose) {
-        isBindRose = bindRose;
     }
 
     public int getYcoin() {
@@ -281,13 +305,5 @@ public class UserInfo extends UserBasic {
 
     public void setShareCode(String shareCode) {
         this.shareCode = shareCode;
-    }
-
-    public long getInvite_uid() {
-        return invite_uid;
-    }
-
-    public void setInvite_uid(long invite_uid) {
-        this.invite_uid = invite_uid;
     }
 }

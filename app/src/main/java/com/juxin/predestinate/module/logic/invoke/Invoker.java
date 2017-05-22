@@ -560,7 +560,7 @@ public class Invoker {
             UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
             Map<String, Object> responseObject = new HashMap<>();
             //字符串 没有绑定 返回值空字符，绑定的返回手机号
-            responseObject.put("num", userInfo.isVerifyCellphone() ? userInfo.getPhone() : "");
+            responseObject.put("num", userInfo.isVerifyCellphone() ? userInfo.getMobile() : "");
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 

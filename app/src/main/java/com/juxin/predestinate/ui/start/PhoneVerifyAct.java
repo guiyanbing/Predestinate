@@ -178,7 +178,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
             } else {
                 PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
                 ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
-                ModuleMgr.getCenterMgr().getMyInfo().setPhone(phone);
+                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
                 UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
             }
         }

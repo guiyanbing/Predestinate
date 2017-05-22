@@ -13,13 +13,12 @@ import java.util.List;
 public class UserDetail extends UserInfo {
 
     private List<UserPhoto> userPhotos = new ArrayList<>();
-    private UserRequire userRequire = new UserRequire();
-
     private int voice = 1;  //1为开启语音，0为关闭
 
     @Override
     public void parseJson(String s) {
-        JSONObject jsonObject = getJsonObject(s);
+        String jsonData = getJsonObject(s).optString("res");
+        JSONObject jsonObject = getJsonObject(jsonData);
 
         // 详细信息
         if (!jsonObject.isNull("userDetail")) {
@@ -30,12 +29,6 @@ public class UserDetail extends UserInfo {
         // 用户相册
         if (!jsonObject.isNull("myPhoto")) {
             this.userPhotos = (List<UserPhoto>) getBaseDataList(jsonObject.optJSONArray("myPhoto"), UserPhoto.class);
-        }
-
-        // 用户交友需求
-        if (!jsonObject.isNull("user_require")) {
-            String json = jsonObject.optString("user_require");
-            userRequire.parseJson(json);
         }
 
         // 开启语音状态
@@ -50,10 +43,6 @@ public class UserDetail extends UserInfo {
 
     public int getVoice() {
         return voice;
-    }
-
-    public UserRequire getUserRequire() {
-        return userRequire;
     }
 
     public int getDiamondsSum() {
