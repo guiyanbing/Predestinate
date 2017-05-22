@@ -40,6 +40,8 @@ public class NavUserAct extends BaseActivity {
                 case R.id.btn_user_nav_reg:
                     UIShow.showUserRegInfoAct(NavUserAct.this);
                     break;
+                default:
+                    break;
             }
         }
     };

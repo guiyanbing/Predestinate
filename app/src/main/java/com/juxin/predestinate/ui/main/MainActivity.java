@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.unread.BadgeView;
@@ -176,7 +177,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             UIShow.showNavUserAct(this);
             finish();
         }
-        if (requestCode == MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE&& resultCode==200){//手机绑定成功,跳转到登录页
+        if (requestCode == MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE && resultCode == 200) {//手机绑定成功,跳转到登录页
             UIShow.showUserLoginExtAct(this);
             finish();
         }
@@ -226,8 +227,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return super.onKeyUp(keyCode, event);
     }
 
-    public void onGoneButtom(boolean isGone){
-            layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
+    public void onGoneBottom(boolean isGone) {
+        layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -50,7 +50,6 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         tv_txt_auth_phone = (TextView) findViewById(R.id.txt_auth_phone);
         tv_txt_auth_video = (TextView) findViewById(R.id.txt_auth_video);
         tv_txt_auth_id = (TextView) findViewById(R.id.txt_auth_id);
-//TODO 身份认证状态
         if (userDetail.isVerifyCellphone()) {
             tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authok));
             tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
