@@ -1,9 +1,7 @@
 package com.juxin.predestinate.ui.user.auth;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -42,7 +40,6 @@ import java.io.FileInputStream;
 public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener {
     private Context context;
     private static int PhotoUploadResult = 10001, VideoUploadResult = 10002;
-    private View authPic, authVideo;
     private ImageView ivAuthPic, ivAuthVideo, ivPic, ivVideo;
     private TextView tvAuthPic, tvAuthVideo, tvMakePic, tvMakeVideo;
     private boolean isMakePhotoOK = false, isMakeVideoOk = false, isMakeing = false;
@@ -63,8 +60,6 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
 
 
     private void initView() {
-        authPic = findViewById(R.id.ll_auth_status_pic);
-        authVideo = findViewById(R.id.ll_auth_status_video);
         ivAuthPic = (ImageView) findViewById(R.id.iv_auth_pic);
         ivAuthVideo = (ImageView) findViewById(R.id.iv_auth_video);
         tvAuthPic = (TextView) findViewById(R.id.tv_auth_pic);
@@ -95,7 +90,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
             Bitmap bitmap = BitmapFactory.decodeStream(fis);
             ivVideo.setImageBitmap(bitmap);
         } catch (Exception e) {
-
+            PToast.showShort(getResources().getString(R.string.toast_local_video_isnull));
         }
 
     }

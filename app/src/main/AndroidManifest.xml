@@ -77,7 +77,7 @@
             android:name=".ui.user.check.other.UserBlockAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.PhoneVerifyAct"
+            android:name=".ui.user.auth.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.UsersSetAct"
@@ -327,7 +327,7 @@
             android:name=".ui.start.FindPwdAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.PhoneVerifyCompleteAct"
+            android:name=".ui.user.auth.PhoneVerifyCompleteAct"
             android:screenOrientation="portrait" />
 
         <!-- ============= 锁屏弹窗 ============= -->

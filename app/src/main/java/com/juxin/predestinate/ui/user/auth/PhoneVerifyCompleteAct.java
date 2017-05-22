@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.start;
+package com.juxin.predestinate.ui.user.auth;
 
 import android.os.Bundle;
 import android.view.View;

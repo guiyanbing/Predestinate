@@ -184,6 +184,7 @@
     <string name="toast_contactr_isnull">请留下您的联系方式</string>
     <string name="toast_commit_suggest_error">操作失败，请稍候再试</string>
     <string name="toast_commit_suggest_ok">提交成功</string>
+    <string name="toast_down_plugin">开始下载插件</string>
     <string name="txt_logname">缘份吧</string>
     <string name="txt_vers_def">V1.0.0</string>
     <string name="txt_email">jiaoyoukf@126.com</string>
@@ -235,6 +236,8 @@
     <string name="toast_height_isnull">请选择您的身高</string>
     <string name="toast_marry_isnull">请选择您的婚姻状态</string>
     <string name="toast_head_isnull">请您上传真实照片做为头像</string>
+    <string name="toast_head_error">头像上传失败，请重试</string>
+    <string name="toast_picpath_error">图片地址无效</string>
     <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
     <string name="txt_boy">男</string>
     <string name="txt_girl">女</string>
@@ -615,6 +618,7 @@
     <string name="the_current_diamond">当前钻石：</string>
     <string name="second">秒</string>
 
+    <string name="toast_local_video_isnull">获取录制视频失败</string>
     <string name="toast_down_error">下载失败,请稍后再试</string>
     <string name="toast_camera_isnull">没有前置摄像头</string>
     <string name="toast_sdcard_isnull">SD卡不存在，请插入SD卡</string>

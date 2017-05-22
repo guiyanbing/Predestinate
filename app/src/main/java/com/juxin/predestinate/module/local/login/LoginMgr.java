@@ -196,27 +196,24 @@ public class LoginMgr implements ModuleBase {
         postParams.put("gender", gender);
         postParams.put("nickname", nickname);
         postParams.put("r", new Random().nextLong());
-        PLogger.d("s_uid=" + postParams.get("s_uid")
-                + "s_sid=" + postParams.get("s_sid") + "ie=" +
-                postParams.get("ie") + "app_key=" + postParams.get("app_key") + "pkgname=" + postParams.get("pkgname") + "simoperator=" + postParams.get("simoperator") + "mc=" + postParams.get("mc") + "is=" + postParams.get("is"));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog(300);
                 try {
                     JSONObject jsonObject = new JSONObject(response.getResponseString());
                     if (!"success".equals(jsonObject.optString("respCode"))) {
                         PToast.showShort(context.getResources().getString(R.string.toast_reg_error));
-                    } else {
-                        RegResult result = new RegResult();
-                        result.parseJson(jsonObject.toString());
-                        putAllLoginInfo(Long.parseLong(result.getUsername()), result.getPassword(), false);
-                        ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
-                        UIShow.showUserInfoCompleteAct(context);
+                        return;
                     }
+                    RegResult result = new RegResult();
+                    result.parseJson(jsonObject.toString());
+                    putAllLoginInfo(Long.parseLong(result.getUsername()), result.getPassword(), false);
+                    ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
+                    UIShow.showUserInfoCompleteAct(context);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                LoadingDialog.closeLoadingDialog(300);
             }
         });
     }
@@ -240,51 +237,53 @@ public class LoginMgr implements ModuleBase {
                         LoadingDialog.closeLoadingDialog(500);
                         if (!response.isOk()) {
                             PToast.showShort(context.getResources().getString(R.string.toast_login_iserror));
-                        } else {
-                            // Cookie 在http响应头中返回
-                            putAllLoginInfo(uid, pwd, true);
-                            // 临时资料设置
-                            LoginResult result = (LoginResult) response.getBaseData();
-                            ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
-                            ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
-                            ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());
-                            if (!result.isValidDetailInfo()) {
-                                PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
-                                UIShow.showUserInfoCompleteAct(context);
-                                return;
-                            }
-                            UIShow.showMainClearTask(context);
+                            return;
                         }
+                        // Cookie 在http响应头中返回
+                        putAllLoginInfo(uid, pwd, true);
+                        // 临时资料设置
+                        LoginResult result = (LoginResult) response.getBaseData();
+                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
+                        ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
+                        ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());
+                        if (!result.isValidDetailInfo()) {
+                            PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
+                            UIShow.showUserInfoCompleteAct(context);
+                            return;
+                        }
+                        UIShow.showMainClearTask(context);
                     }
                 });
     }
 
     /**
      * 重置密码获取验证码
+     *
      * @param phone
      * @param complete
      */
-    public void reqForgotsms(String phone,RequestComplete complete) {
+    public void reqForgotsms(String phone, RequestComplete complete) {
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("phone", phone);
-        post_param.put("sign",App.context.getResources().getString(R.string.app_name));
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqForgotsms,post_param,complete);
+        post_param.put("sign", App.context.getResources().getString(R.string.app_name));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqForgotsms, post_param, complete);
     }
 
     /**
      * 重置密码
-     * @param phone 手机号
-     * @param code 验证码
-     * @param pwd 密码
+     *
+     * @param phone    手机号
+     * @param code     验证码
+     * @param pwd      密码
      * @param complete
      */
-    public void forgotPassword(String phone,String code,String pwd,RequestComplete complete){
-        HashMap<String,Object> post_param = new HashMap<>();
-        post_param.put("phone",phone);
-        post_param.put("sign",App.context.getResources().getString(R.string.app_name));
-        post_param.put("code",code);
-        post_param.put("password",pwd);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.forgotPassword,post_param,complete);
+    public void forgotPassword(String phone, String code, String pwd, RequestComplete complete) {
+        HashMap<String, Object> post_param = new HashMap<>();
+        post_param.put("phone", phone);
+        post_param.put("sign", App.context.getResources().getString(R.string.app_name));
+        post_param.put("code", code);
+        post_param.put("password", pwd);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.forgotPassword, post_param, complete);
     }
 
     /**

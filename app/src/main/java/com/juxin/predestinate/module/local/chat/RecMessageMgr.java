@@ -1,12 +1,11 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,18 +77,16 @@ public class RecMessageMgr implements IMProxy.IMListener {
             if (!TextUtils.isEmpty(groupId)) {//群里面的私聊
                 message.setChannelID(groupId);
             }
-            message.setWhisperID(String.valueOf(senderID));
-            JSONObject object = new JSONObject(jsonStr);
 
+            message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
             if(BaseMessage.TalkRed_MsgType == message.getType()){//红包消息不保存，也不通知上层
                 return;
             }
-//
-//            if(BaseMessage.system_MsgType == message.getType()){//系统消息不保存
-//                isSave = false;
-//            }
+            if(BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()){
+                isSave = false;
+            }
 
             if (isSave) {//是否保存
                 ModuleMgr.getChatMgr().onReceiving(message);
@@ -111,14 +108,14 @@ public class RecMessageMgr implements IMProxy.IMListener {
 
     public synchronized boolean checkNewMsgId(long msgId) {
         if (recMsgId == 0) {
-            //        recMsgId = ModuleMgr.getCfgMgr().getLong(REC_KEY_MSGID, REC_DEFVALUE_MSGID);
+            recMsgGId = PSP.getInstance().getLong(REC_KEY_MSGID, REC_DEFVALUE_MSGID);
         }
         if (this.recMsgId >= msgId) {
             return false;
         }
 
         this.recMsgId = msgId;
-        //      ModuleMgr.getCfgMgr().setLong(REC_KEY_MSGID, msgId);
+        PSP.getInstance().put(REC_KEY_MSGID, msgId);
         return true;
     }
 
@@ -134,14 +131,14 @@ public class RecMessageMgr implements IMProxy.IMListener {
      */
     public synchronized boolean checkNewMsgGId(long msgId) {
         if (recMsgGId == 0) {
-            //  recMsgGId = ModuleMgr.getCfgMgr().getLong(REC_KEY_GMSGID, REC_DEFVALUE_MSGID);
+              recMsgGId = PSP.getInstance().getLong(REC_KEY_GMSGID, REC_DEFVALUE_MSGID);
         }
         if (this.recMsgGId >= msgId) {
             return false;
         }
 
         this.recMsgGId = msgId;
-        //    ModuleMgr.getCfgMgr().setLong(REC_KEY_GMSGID, msgId);
+        PSP.getInstance().put(REC_KEY_GMSGID, msgId);
         return true;
     }
 }
