@@ -61,6 +61,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
     private TextView dlg_diamond_tv_decdiamod;
     private String avatar, msg, nickname;
     private String toUid;
+    private int position = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,6 +342,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     int select = index * 8 + position;
+                    position = select;
                     reSetGift();
                     mListGift.get(select).setIsSelect(true);
                     selectGift = mListGift.get(select);
@@ -391,6 +393,8 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         if (response.getUrlParam() == UrlParam.sendGift){
             SendGiftResultInfo info = new SendGiftResultInfo();
             info.parseJson(response.getResponseString());
+            ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
+            ModuleMgr.getChatMgr().sendGiftMsg(null, toUid + "",mListGift.get(position).getId() , 1, 0);
             PToast.showShort(info.getMsg() + "");
             return;
         }

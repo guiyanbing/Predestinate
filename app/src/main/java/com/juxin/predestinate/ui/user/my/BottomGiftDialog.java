@@ -242,6 +242,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     public void onRequestComplete(HttpResponse response) {
         SendGiftResultInfo info = new SendGiftResultInfo();
         info.parseJson(response.getResponseString());
+        ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
         ModuleMgr.getChatMgr().sendGiftMsg(null, uid + "", arrGifts.get(position).getId(),num,0);
         PToast.showShort(info.getMsg()+"");
     }

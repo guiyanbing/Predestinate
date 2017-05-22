@@ -649,6 +649,7 @@
     <string name="id_tail">身份证背面</string>
     <string name="id_hand">上传手持身份证照片</string>
     <string name="the_certification_audit">认证审核中</string>
+    <string name="the_identity_certification_audit">身份认证审核中</string>
     <string name="input_your_zhifubao_id">输入您的支付宝帐号</string>
     <string name="money_cout_be_0">提现金额不能为0</string>
 
