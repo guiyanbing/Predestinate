@@ -116,6 +116,10 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
 //                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
 
                 // 提现请求
+                if (Long.valueOf(mEidtMoney) <= 0){
+                    PToast.showShort(R.string.money_cout_be_0);
+                    break;
+                }
                 ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney,info.getPaytype(),info.getAccountname(),info.getAccountnum(), info.getBank(), info.getSubbank(), this);
                 break;
 

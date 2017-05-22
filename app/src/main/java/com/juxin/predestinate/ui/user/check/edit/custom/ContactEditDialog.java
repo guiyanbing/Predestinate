@@ -174,19 +174,19 @@ public class ContactEditDialog extends SimpleTipDialog implements RadioGroup.OnC
     private boolean isEdited() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         if (type == CONTACT_TYPE_MOBILE) {
-            if (contact.equals(userDetail.getPhone()) && auth == userDetail.getPhoneAuth()) {
+            if (contact.equals(userDetail.getMobile()) && auth == userDetail.getMobileAuth()) {
                 return false;
             }
         }
 
         if (type == CONTACT_TYPE_WECHAT) {
-            if (contact.equals(userDetail.getWechatNum()) && auth == userDetail.getWechatAuth()) {
+            if (contact.equals(userDetail.getWeChat()) && auth == userDetail.getWechatAuth()) {
                 return false;
             }
         }
 
         if (type == CONTACT_TYPE_QQ) {
-            if (contact.equals(userDetail.getQqNum()) && auth == userDetail.getQqNumAuth()) {
+            if (contact.equals(userDetail.getQQ()) && auth == userDetail.getQQAuth()) {
                 return false;
             }
         }

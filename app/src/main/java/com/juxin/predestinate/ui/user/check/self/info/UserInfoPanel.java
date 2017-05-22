@@ -112,15 +112,15 @@ public class UserInfoPanel extends BasePanel {
 
     // 填充联系方式资料
     private void fillContactValue() {
-        String qq = TextUtils.isEmpty(userDetail.getQqNum()) ? "" : userDetail.getQqNum();
-        int qqAuth = userDetail.getQqNumAuth();
+        String qq = TextUtils.isEmpty(userDetail.getQQ()) ? "" : userDetail.getQQ();
+        int qqAuth = userDetail.getQQAuth();
         String qqValue = qq + "-" + qqAuth;
 
-        String mobile = TextUtils.isEmpty(userDetail.getPhone()) ? "" : userDetail.getPhone();
-        int mobileAuth = userDetail.getPhoneAuth();
+        String mobile = TextUtils.isEmpty(userDetail.getMobile()) ? "" : userDetail.getMobile();
+        int mobileAuth = userDetail.getMobileAuth();
         String mobileValue = mobile + "-" + mobileAuth;
 
-        String weChat = TextUtils.isEmpty(userDetail.getWechatNum()) ? "" : userDetail.getWechatNum();
+        String weChat = TextUtils.isEmpty(userDetail.getWeChat()) ? "" : userDetail.getWeChat();
         int weChatAuth = userDetail.getWechatAuth();
         String weChatValue = weChat + "-" + weChatAuth;
 
