@@ -613,6 +613,7 @@
     <string name="the_current_diamond">当前钻石：</string>
     <string name="second">秒</string>
 
+    <string name="toast_down_error">下载失败,请稍后再试</string>
     <string name="toast_camera_isnull">没有前置摄像头</string>
     <string name="toast_sdcard_isnull">SD卡不存在，请插入SD卡</string>
     <string name="toast_camera_error">相机打开失败，请检查权限</string>
