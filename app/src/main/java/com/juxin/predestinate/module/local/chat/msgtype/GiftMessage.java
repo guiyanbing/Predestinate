@@ -1,5 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -13,6 +17,15 @@ public class GiftMessage extends BaseMessage {
     private int giftCount;
     private long giftLogID;
 
+
+    public GiftMessage(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
+        super(channelID, whisperID);
+        this.setGiftID(giftID);
+        this.setGiftCount(giftCount);
+        this.setGiftLogID(giftLogID);
+        this.setType(BaseMessageType.gift.getMsgType());
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
@@ -23,7 +36,7 @@ public class GiftMessage extends BaseMessage {
 
         if(getType() == 20){
             this.setGiftID(object.optInt("gift_id"));
-        }else {
+        }else {//10
             if(!object.isNull("gift")){
                 JSONObject giftJSON = object.optJSONObject("gift");
                 this.setGiftCount(giftJSON.optInt("count"));
@@ -36,9 +49,30 @@ public class GiftMessage extends BaseMessage {
 
     @Override
     public String getJson(BaseMessage message) {
-        return super.getJson(message);
-    }
+        JSONObject json = new JSONObject();
+        try {
+            json.put("tid", message.getWhisperID());
+            json.put("mtp", message.getType());
+            json.put("mt", message.getTime());
+            json.put("d", message.getMsgID());
 
+            if(!TextUtils.isEmpty(message.getMsgDesc())){
+                json.put("mct", message.getMsgDesc());
+            }
+
+            JSONObject tmpGift = new JSONObject();
+            tmpGift.put("count", ((GiftMessage) message).getGiftCount());
+            tmpGift.put("gift_id", ((GiftMessage) message).getGiftID());
+            tmpGift.put("gift_log_id", ((GiftMessage) message).getGiftLogID());
+            json.put("gift", tmpGift);
+
+            return json.toString();
+        } catch (JSONException e) {
+            PLogger.printThrowable(e);
+        }
+        return null;
+
+    }
 
     public int getGiftCount() {
         return giftCount;

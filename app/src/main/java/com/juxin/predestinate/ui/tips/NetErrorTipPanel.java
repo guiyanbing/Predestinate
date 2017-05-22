@@ -11,8 +11,8 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.NetworkUtils;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.util.UIShow;
 
 import static com.juxin.library.observe.MsgType.MT_Network_Status_Change;
@@ -21,7 +21,7 @@ import static com.juxin.library.observe.MsgType.MT_Network_Status_Change;
  * 网络连接状态提示条
  * Created by zhang on 2016/7/12.
  */
-public class NetErrorTipPanel extends BaseViewPanel implements View.OnClickListener, PObserver {
+public class NetErrorTipPanel extends BasePanel implements View.OnClickListener, PObserver {
 
     private String TAG = "NetErrorTipPanel";
 

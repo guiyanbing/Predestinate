@@ -1,18 +1,15 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 /**
+ * 表情实体类
  * Created by Kind on 2017/3/31.
  */
-
 public class SmileItem extends BaseData {
+
     private int id = 0;
     private String name = null;
     private String icon = null;

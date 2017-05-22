@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.config;
 
 import android.os.Environment;
 
+import com.juxin.library.utils.DirUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 
@@ -105,5 +106,29 @@ public class DirType {
      */
     public static String getUploadDir() {
         return isFolderExists(UPLOAD) ? UPLOAD : "";
+    }
+
+    // --------------------------------------------------------------------------------
+
+    /**
+     * @return 获取格式化的缓存大小
+     */
+    public static String getFormatCacheSize() {
+        long dirSize = DirUtils.getDirSize(new File(getRootDir()));
+        if (dirSize < 1024 * 1024) return App.getResource().getString(R.string.cache_state_good);
+        if (dirSize < 1024 * 1024 * 1024 && ((double) dirSize / (1024 * 1024)) < 50)
+            return App.getResource().getString(R.string.cache_state_little);
+        return App.getResource().getString(R.string.cache_state_huge);
+    }
+
+    /**
+     * 清除缓存
+     */
+    public static void clearCache() {
+        DirUtils.delAllFile(getCacheDir(), false);
+        DirUtils.delAllFile(getVideoDir(), false);
+        DirUtils.delAllFile(getVoiceDir(), false);
+        DirUtils.delAllFile(getImageDir(), false);
+        // TODO: 2017/5/19 删除数据库缓存
     }
 }

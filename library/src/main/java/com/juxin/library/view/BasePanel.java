@@ -12,8 +12,8 @@ import android.view.View;
  */
 public abstract class BasePanel {
 
-    private Context context;
-    private View contentView;
+    protected Context context;
+    protected View contentView;
 
     public BasePanel(Context context) {
         this.context = context;
@@ -38,5 +38,12 @@ public abstract class BasePanel {
     public View findViewById(@IdRes int id) {
         if (id < 0 || contentView == null) return null;
         return contentView.findViewById(id);
+    }
+
+    /**
+     * 设置显示
+     */
+    public void setVisibility(int visibility) {
+        if (contentView != null) contentView.setVisibility(visibility);
     }
 }

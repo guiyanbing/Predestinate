@@ -1,7 +1,6 @@
 package com.juxin.predestinate.bean.my;
 
-
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 

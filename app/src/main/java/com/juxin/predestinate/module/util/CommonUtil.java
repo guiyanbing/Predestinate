@@ -36,9 +36,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
 
@@ -81,7 +81,7 @@ public class CommonUtil {
             return;
         }
 
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 imageView.setImageResource(resId);
@@ -106,7 +106,7 @@ public class CommonUtil {
             return;
         }
 
-        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 imageView.setImageBitmap(bm);
@@ -316,7 +316,7 @@ public class CommonUtil {
         if (null == matchTable) {
             matchTable = InfoConfig.getInstance().getConstellation().getSubmit();
         }
-        return day < TypeConvUtil.toInt(matchTable.get(month - 1)) ? starList.get(month - 1) : starList.get(month);
+        return day < TypeConvertUtil.toInt(matchTable.get(month - 1)) ? starList.get(month - 1) : starList.get(month);
     }
 
     /**
@@ -914,7 +914,7 @@ public class CommonUtil {
     public static float toDpMultiple(Activity activity) {
         DisplayMetrics metrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        MMLog.autoDebug("toDpMutliple-" + metrics.density + ", " + metrics.densityDpi);
+        PLogger.d("toDpMutliple-" + metrics.density + ", " + metrics.densityDpi);
         return metrics.density;
     }
 

@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -62,7 +63,9 @@ public enum UrlParam {
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
     reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
+//    reqMyInfo(Hosts.FATE_IT_GO, "xs/userinfo/MyDetail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
+//    reqOtherInfo(Hosts.FATE_IT_GO, "xs/userinfo/OtherDetail", UserProfile.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
     reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
     reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
@@ -74,12 +77,7 @@ public enum UrlParam {
     reqGetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
-
     getSimpleDetail("user/getSimpleDetail", null, true),   //获取轻量级的用户信息
-
-
-
-
 
     // 私密视频相关
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值

@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 
 import java.util.List;
@@ -18,8 +18,7 @@ import java.util.List;
  * 聊天面板多媒体选择扩展panel
  * Created by Kind on 2017/3/31.
  */
-
-public class CommonGridBtnPanel extends BaseViewPanel{
+public class CommonGridBtnPanel extends BasePanel {
 
     public CommonGridBtnPanel(Context context, List<BTN_KEY> list) {
         super(context);

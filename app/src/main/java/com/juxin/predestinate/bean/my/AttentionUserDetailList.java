@@ -1,9 +1,8 @@
 package com.juxin.predestinate.bean.my;
 
-
 import android.text.TextUtils;
 
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ public class AttentionUserDetailList extends BaseData {
     @Override
     public void parseJson(String s) {
         if (!TextUtils.isEmpty(s))
-            attentionUserDetailList = getBaseDataList(getJsonArray(s),AttentionUserDetail.class);
+            attentionUserDetailList = getBaseDataList(getJsonArray(s), AttentionUserDetail.class);
     }
 
     public List getAttentionUserDetailList() {

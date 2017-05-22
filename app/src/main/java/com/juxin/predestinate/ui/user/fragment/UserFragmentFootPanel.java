@@ -7,9 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * 个人中心的list布局panel
  */
-public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
+public class UserFragmentFootPanel extends BasePanel implements BaseRecyclerViewHolder.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private UserAuthAdapter userAuthAdapter;

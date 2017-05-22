@@ -27,6 +27,7 @@ import static com.juxin.library.observe.MsgType.MT_Inner_Suspension_Notice;
  * Created by zhang on 2016/8/30.
  */
 public class PortraitTips extends TipsBarBasePanel implements View.OnClickListener, PObserver {
+
     private String TAG = "PortraitTips";
 
     private TextView update_portrait_content;
@@ -34,10 +35,13 @@ public class PortraitTips extends TipsBarBasePanel implements View.OnClickListen
 
     private int time = 3;
 
+    public PortraitTips(Context context) {
+        super(context);
+    }
 
     @Override
-    public void init(Context context, JSONObject jsonObject) {
-        super.init(context, jsonObject);
+    public void init(JSONObject jsonObject) {
+        super.init(jsonObject);
         setContentView(R.layout.y1_update_portrait_tips);
         initView();
         getContentView().setTag("PortraitTips");

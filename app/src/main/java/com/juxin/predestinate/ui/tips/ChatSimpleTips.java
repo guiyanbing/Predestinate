@@ -43,10 +43,13 @@ public class ChatSimpleTips extends TipsBarBasePanel implements PObserver {
     //对方用户uid
     private long uid = 0;
 
+    public ChatSimpleTips(Context context) {
+        super(context);
+    }
 
     @Override
-    public void init(Context context, JSONObject jsonObject) {
-        super.init(context, jsonObject);
+    public void init(JSONObject jsonObject) {
+        super.init(jsonObject);
         MsgMgr.getInstance().attach(this);
         setContentView(R.layout.y1_simple_tips);
         initView();

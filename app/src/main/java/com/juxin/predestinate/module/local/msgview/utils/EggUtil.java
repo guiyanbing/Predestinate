@@ -9,9 +9,8 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import com.juxin.android.framework.JXToast;
+import com.juxin.library.log.PToast;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.utils.DeviceUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.location.LocationMgr;
@@ -40,7 +39,7 @@ public class EggUtil {
             if (chatAdapter != null) {
                 chatAdapter.getChatInstance().chatViewLayout.setDisableIntercept(true);
 
-                JXToast.show("准备数据中");
+                PToast.showShort("准备数据中");
                 createEgg();
 //                CustomMessage customMessage = new CustomMessage(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), getEggContent());
 //                customMessage.eggMsg = true;
@@ -107,7 +106,7 @@ public class EggUtil {
                 sb.append("\n").append("sex: ").append(userInfo.getGender() == 1 ? "男" : "女");
             }
 
-           // sb.append("\n").append("hosturl: ").append(CommonConfig.getInstance().getLogic_server());
+            // sb.append("\n").append("hosturl: ").append(CommonConfig.getInstance().getLogic_server());
 
             sb.append("\n").append("vercode: ").append(ModuleMgr.getAppMgr().getVerCode());
             sb.append("\n").append("vername: ").append(ModuleMgr.getAppMgr().getVerName());
@@ -117,7 +116,7 @@ public class EggUtil {
             sb.append("\n").append("imei: ").append(ModuleMgr.getAppMgr().getIMEI());
             sb.append("\n").append("imsi: ").append(ModuleMgr.getAppMgr().getIMSI());
             sb.append("\n").append("mac: ").append(ModuleMgr.getAppMgr().getMAC());
-          //  sb.append("\n").append("forground: ").append(ModuleMgr.getAppMgr().isForground());
+            //  sb.append("\n").append("forground: ").append(ModuleMgr.getAppMgr().isForground());
 
             sb.append("\n").append("debug: ").append(ModuleMgr.getAppMgr().isDebug());
             sb.append("\n").append("curaddr: ").append(LocationMgr.getInstance().getPointD().addr);
@@ -129,14 +128,14 @@ public class EggUtil {
                 sb.append("\n").append("lastupdatetime: ").append(TimeUtil.getFormatTimeEgg(packageInfo.lastUpdateTime));
             }
 
-            sb.append("\n").append("型号: ").append(DeviceUtil.model);
-            sb.append("\n").append("版本号: ").append(DeviceUtil.display);
-            sb.append("\n").append("生产商: ").append(DeviceUtil.manufacturer);
+            sb.append("\n").append("型号: ").append(android.os.Build.MODEL);
+            sb.append("\n").append("操作系统版本号: ").append(android.os.Build.DISPLAY);
+            sb.append("\n").append("生产商: ").append(android.os.Build.MANUFACTURER);
             sb.append("\n").append("Android版本号: ").append(Build.VERSION.RELEASE);
             sb.append("\n").append("系统版本号: ").append(Build.VERSION.INCREMENTAL);
 
-          //  sb.append("\n").append("前台: ").append(ModuleMgr.getAppMgr().isForground());
-          //  sb.append("\n").append("运行次数: ").append(App.runCount);
+            //  sb.append("\n").append("前台: ").append(ModuleMgr.getAppMgr().isForground());
+            //  sb.append("\n").append("运行次数: ").append(App.runCount);
 
             sb.append("\n").append("使用固定GPS位置: ").append(LocationMgr.getInstance().isUseFixPlace());
             sb.append("\n").append("经度: ").append(LocationMgr.getInstance().getPointD().latitude);
@@ -184,9 +183,9 @@ public class EggUtil {
             public void onClick(View v) {
                 try {
                     LocationMgr.getInstance().setFixPlace(Double.valueOf(editTextlon.getText().toString()), Double.valueOf(editTextlat.getText().toString()));
-                    JXToast.show("设置成功");
+                    PToast.showShort("设置成功");
                 } catch (Exception e) {
-                    JXToast.show("设置失败");
+                    PToast.showShort("设置失败");
                 }
             }
         });
@@ -203,9 +202,9 @@ public class EggUtil {
             public void onClick(View v) {
                 try {
                     LocationMgr.getInstance().setUseFixPlace(false);
-                    JXToast.show("设置成功");
+                    PToast.showShort("设置成功");
                 } catch (Exception e) {
-                    JXToast.show("设置失败");
+                    PToast.showShort("设置失败");
                 }
             }
         });

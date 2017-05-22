@@ -8,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.ui.user.check.bean.UserPersonInfo;
-import com.juxin.predestinate.ui.user.check.self.info.UserDetailAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,8 @@ import java.util.List;
  * 用户详细资料列表
  * Created by Su on 2016/6/6.
  */
-public class UserInfoPanel extends BaseViewPanel {
+public class UserInfoPanel extends BasePanel {
+
     private ListView list_info;
     private int spaceCount = 0;
     private List<UserPersonInfo> userInfoList;
@@ -128,7 +128,7 @@ public class UserInfoPanel extends BaseViewPanel {
         int count = 12 + spaceCount;
         for (int i = count; i < contactValues.length + count; i++) {
             if (contactValues[i - count] != null) {
-                int auth = TypeConvUtil.toInt(contactValues[i - count].split("-")[1], 0);
+                int auth = TypeConvertUtil.toInt(contactValues[i - count].split("-")[1], 0);
                 String value = contactValues[i - count].split("-")[0];
                 userInfoList.get(i).setValue("".equals(value) ? "未填写" : limits(auth));
                 userInfoList.get(i).setContact(value);

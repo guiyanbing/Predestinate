@@ -8,9 +8,9 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.library.utils.InputUtils;
 import com.juxin.library.view.BasePanel;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
 import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
@@ -67,7 +67,7 @@ public class LockChatPanel extends BasePanel implements OnClickListener {
                 break;
             case R.id.wake_lock_send:
                 if (TextUtils.isEmpty(wake_lock_content.getText().toString())) {
-                    MMToast.showShort("消息不能为空");
+                    PToast.showShort("消息不能为空");
                 } else {
                     InputUtils.forceClose(wake_lock_content);
                     LockScreenMgr.getInstance().closeLockNotify();

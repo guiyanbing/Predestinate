@@ -20,7 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.juxin.library.R;
 import com.juxin.library.image.transform.BlurImage;
 import com.juxin.library.image.transform.RoundedCorners;
-import com.juxin.mumu.bean.utils.FileUtil;
+import com.juxin.library.utils.FileUtil;
 
 import java.io.File;
 

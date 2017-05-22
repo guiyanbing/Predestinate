@@ -1,10 +1,12 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-import com.juxin.mumu.bean.log.MMLog;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +15,7 @@ import org.json.JSONObject;
  * Created by Kind on 2017/4/1.
  */
 
-public class RecMessageMgr implements IMProxy.IMListener{
+public class RecMessageMgr implements IMProxy.IMListener {
 
     public void init() {
         IMProxy.getInstance().attach(this);
@@ -26,9 +28,9 @@ public class RecMessageMgr implements IMProxy.IMListener{
     @Override
     public void onMessage(long msgID, boolean group, String groupId, long senderID, String jsonStr) {
         try {
-            MMLog.autoDebug("reMsg-jsonStr=" + jsonStr);
+            PLogger.d("reMsg-jsonStr=" + jsonStr);
             JSONObject object = new JSONObject(jsonStr);
-            if(senderID <= 0){//如果小于或等于0
+            if (senderID <= 0) {//如果小于或等于0
                 senderID = object.optLong("fid");
             }
             int type = object.optInt("mtp");
@@ -40,16 +42,16 @@ public class RecMessageMgr implements IMProxy.IMListener{
                 message = messageType.msgClass.newInstance();
                 onSaveSendUI(true, message, group, msgID, groupId, senderID, jsonStr, type);
             } else {
-                if(group){//是群聊
+                if (group) {//是群聊
                     //如果是重复消息或小于当前ID的消息就扔掉
                     if (!checkNewMsgGId(msgID) && msgID != -1) {
-                        MMLog.autoDebug("重复群聊消息：" + this.recMsgGId + "-" + msgID);
+                        PLogger.d("重复群聊消息：" + this.recMsgGId + "-" + msgID);
                         return;
                     }
-                }else{
+                } else {
                     //如果是重复消息或小于当前ID的消息就扔掉
                     if (!checkNewMsgId(msgID) && msgID != -1) {
-                        MMLog.autoDebug("重复私聊消息：" + this.recMsgId + "-" + msgID);
+                        PLogger.d("重复私聊消息：" + this.recMsgId + "-" + msgID);
                         return;
                     }
                 }
@@ -57,12 +59,12 @@ public class RecMessageMgr implements IMProxy.IMListener{
                 onSaveSendUI(false, message, group, msgID, groupId, senderID, jsonStr, type);
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
     private void onSaveSendUI(boolean isSave, BaseMessage message, boolean group, long msgID, String groupId, long senderID, String jsonStr, int type) throws JSONException {
-        MMLog.autoDebug(message.getWhisperID());
+        PLogger.d(message.getWhisperID());
         message.setSendID(senderID);
         message.setMsgID(msgID);
         message.setType(type);
@@ -80,7 +82,7 @@ public class RecMessageMgr implements IMProxy.IMListener{
             JSONObject object = new JSONObject(jsonStr);
 
             //接收特殊消息
-//            ModuleMgr.getChatListMgr().setSpecialMsg(message);
+            ModuleMgr.getChatListMgr().setSpecialMsg(message);
 //            if(BaseMessage.addFriend_MsgType == message.getType() && ((FriendsMessage)message).getAddtype() == 2){
 //                return;
 //            }
@@ -106,22 +108,24 @@ public class RecMessageMgr implements IMProxy.IMListener{
     private long recMsgId = 0;
     private final String REC_KEY_MSGID = "rec_key_message";
     private final long REC_DEFVALUE_MSGID = 0;
+
     public synchronized boolean checkNewMsgId(long msgId) {
         if (recMsgId == 0) {
-    //        recMsgId = ModuleMgr.getCfgMgr().getLong(REC_KEY_MSGID, REC_DEFVALUE_MSGID);
+            //        recMsgId = ModuleMgr.getCfgMgr().getLong(REC_KEY_MSGID, REC_DEFVALUE_MSGID);
         }
         if (this.recMsgId >= msgId) {
             return false;
         }
 
         this.recMsgId = msgId;
-  //      ModuleMgr.getCfgMgr().setLong(REC_KEY_MSGID, msgId);
+        //      ModuleMgr.getCfgMgr().setLong(REC_KEY_MSGID, msgId);
         return true;
     }
 
 
     private long recMsgGId = 0;
     private final String REC_KEY_GMSGID = "rec_key_gmessage";
+
     /**
      * 检测新的消息Id是否是合法的，保存并写入文件。
      *
@@ -130,14 +134,14 @@ public class RecMessageMgr implements IMProxy.IMListener{
      */
     public synchronized boolean checkNewMsgGId(long msgId) {
         if (recMsgGId == 0) {
-          //  recMsgGId = ModuleMgr.getCfgMgr().getLong(REC_KEY_GMSGID, REC_DEFVALUE_MSGID);
+            //  recMsgGId = ModuleMgr.getCfgMgr().getLong(REC_KEY_GMSGID, REC_DEFVALUE_MSGID);
         }
         if (this.recMsgGId >= msgId) {
             return false;
         }
 
         this.recMsgGId = msgId;
-    //    ModuleMgr.getCfgMgr().setLong(REC_KEY_GMSGID, msgId);
+        //    ModuleMgr.getCfgMgr().setLong(REC_KEY_GMSGID, msgId);
         return true;
     }
 }

@@ -13,7 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -30,7 +30,6 @@ import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 /**
  * Created by Kind on 2017/3/30.
  */
-
 public class ChatViewLayout extends LinearLayout implements InterceptTouchLinearLayout.OnInterceptTouchEvent {
 
     private ChatAdapter.ChatInstance chatInstance = null;
@@ -154,11 +153,11 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         }
 
         handler.sendEmptyMessageDelayed(0, 3000);
-        MMLog.autoDebug("");
+        PLogger.d("");
     }
 
     public void removeFirstView() {
-        MMLog.autoDebug("" + chatFixedTip.getChildCount());
+        PLogger.d("" + chatFixedTip.getChildCount());
 
         if (chatFixedTip.getChildCount() > 0) {
             View view = chatFixedTip.getChildAt(0);
@@ -238,7 +237,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
                     removeFirstView();
                     break;
                 case 1:
-                    MMLog.autoDebug("");
+                    PLogger.d("");
                     if (chatFixedTip.getChildCount() != 0) {
                         chatFixedTip.removeViewAt(0);
                     }

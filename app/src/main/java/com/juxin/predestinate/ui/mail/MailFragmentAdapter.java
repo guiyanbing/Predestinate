@@ -3,7 +3,8 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import com.juxin.mumu.bean.log.MMLog;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
@@ -12,6 +13,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 //            }
 //        }
 
-        MMLog.autoDebug("messageLists=多少人=" + messageLists.size());
+        PLogger.d("messageLists=多少人=" + messageLists.size());
 
 
         BaseMessage baseMessage = new BaseMessage();

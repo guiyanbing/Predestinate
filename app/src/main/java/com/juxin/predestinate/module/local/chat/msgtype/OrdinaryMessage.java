@@ -1,6 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import org.json.JSONException;
@@ -56,7 +56,7 @@ public class OrdinaryMessage{
 
             return json.toString();
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return null;
     }

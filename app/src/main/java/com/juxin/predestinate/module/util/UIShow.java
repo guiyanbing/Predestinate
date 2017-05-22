@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.util;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.Hosts;
+import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -44,13 +45,19 @@ import com.juxin.predestinate.ui.discover.MyFriendsAct;
 import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
 import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.mail.popup.RandomRedBoxActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.pay.BasePayPannel;
 import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.pay.PayWebAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
+import com.juxin.predestinate.ui.pay.utils.PayAlipayUtils;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
+import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
+import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
+import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.recommend.RecommendAct;
 import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
@@ -119,6 +126,12 @@ import java.util.Map;
  * Created by ZRP on 2016/12/9.
  */
 public class UIShow {
+
+    // ----------------------------activity跳转码------------------------------
+
+    public static final int FROM_RANDOM_RED_BOX = 1000;//聊天随机红包activity result code
+
+    // ---------------------------应用内弹出及跳转------------------------------
 
     public static void show(Context context, Intent intent) {
         context.startActivity(intent);
@@ -510,7 +523,7 @@ public class UIShow {
      */
     private static void showPhotoDisplayAct(FragmentActivity activity, Serializable list, int position, int type) {
         if (list == null || ((List<String>) list).size() == 0) {
-            MMToast.showShort("没有图片数据");
+            PToast.showShort("没有图片数据");
             return;
         }
         Intent intent = new Intent(activity, PhotoDisplayAct.class);
@@ -593,36 +606,51 @@ public class UIShow {
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
-        if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                && ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {//相同包名
+
+        // 直接返回服务器没有返回包名的情况
+        if (TextUtils.isEmpty(appUpdate.getPackage_name())) {
+            if (isShowTip)
+                PToast.showShort(App.getResource().getString(R.string.update_server_error));
+            return;
+        }
+
+        // 相同包名
+        if (ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {
             if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
                 createUpdateDialog(activity, appUpdate);
             } else {
-                if (isShowTip) PToast.showShort("您当前的版本为最新的");
+                if (isShowTip)
+                    PToast.showShort(App.getResource().getString(R.string.update_already_new));
             }
-        } else {//不同包名
-            if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                    && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
-                // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
-                PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
-                    @Override
-                    public void onCancel() {
-                    }
+            return;
+        }
 
-                    @Override
-                    public void onSubmit() {
-                        if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                            activity.moveTaskToBack(activity.isTaskRoot());
+        // 不同包名
+        if (APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
+            // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
+            PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
                         }
-                    }
-                }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
-            } else {
-                if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
-                    createUpdateDialog(activity, appUpdate);
-                } else {
-                    if (isShowTip) PToast.showShort("您当前的版本为最新的");
-                }
-            }
+
+                        @Override
+                        public void onSubmit() {
+                            if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
+                                activity.moveTaskToBack(activity.isTaskRoot());
+                            }
+                        }
+                    }, App.getResource().getString(R.string.update_has_install),
+                    App.getResource().getString(R.string.tip), "",
+                    App.getResource().getString(R.string.ok),
+                    false, false);
+            return;
+        }
+
+        if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
+            createUpdateDialog(activity, appUpdate);
+        } else {
+            if (isShowTip)
+                PToast.showShort(App.getResource().getString(R.string.update_already_new));
         }
     }
 
@@ -693,6 +721,17 @@ public class UIShow {
     }
 
     /**
+     * 弹出聊天随机红包弹窗
+     *
+     * @param msg 红包消息mct字段，若无，传null或空字符串即可
+     */
+    public static void showChatRedBoxDialog(Activity context, String msg) {
+        Intent intent = new Intent(context, RandomRedBoxActivity.class);
+        intent.putExtra("msg", msg);
+        context.startActivityForResult(intent, FROM_RANDOM_RED_BOX);
+    }
+
+    /**
      * 通过配置调起的web-dialog弹框
      *
      * @param activity FragmentActivity实例
@@ -729,6 +768,53 @@ public class UIShow {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 选择支付
+     * @param activity
+     * @param commodity_Id 订单
+     * @param payType 类型
+     */
+    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final int payType) {
+        LoadingDialog.show(activity, "生成订单中");
+        ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("Re===" + response.getResponseString());
+                PayGood payGood = new PayGood(response.getResponseString());
+                if (!payGood.isOK()) {
+                    LoadingDialog.closeLoadingDialog();
+                    PToast.showShort("支付出错，请重试！");
+                    return;
+                }
+
+                if (payType == GoodsConstant.PAY_TYPE_WECHAT) {//微信支付
+                    LoadingDialog.closeLoadingDialog();
+                    new PayWeixinUtils(activity).onPayment(payGood);
+                    return;
+                }
+                //支付宝支付
+                ModuleMgr.getCommonMgr().reqCUPOrAlipayMethod(UrlParam.reqAlipay, BasePayPannel.getOutTradeNo(), payGood.getPay_name(),
+                        payGood.getPay_id(), payGood.getPay_money(), new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(final HttpResponse response) {
+                                LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PayWX payWX = new PayWX(response.getResponseString());
+                                        if (!payWX.isOK()) {
+                                            PToast.showShort("支付出错，请重试！");
+                                            return;
+                                        }
+                                        new PayAlipayUtils(activity).pay(payWX.getCupPayType(), payWX.getParam());
+                                    }
+                                });
+
+                            }
+                        });
             }
         });
     }
@@ -984,7 +1070,7 @@ public class UIShow {
      * @param context
      */
     public static void showWithDrawApplyAct(final int id, final double money, final boolean fromEdit, final FragmentActivity context) {
-        LoadingDialog.show(context,context.getString(R.string.xlistview_header_hint_loading));
+        LoadingDialog.show(context, context.getString(R.string.xlistview_header_hint_loading));
         ModuleMgr.getCommonMgr().reqWithdrawAddress(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -996,7 +1082,7 @@ public class UIShow {
                     intent.putExtra("id", id);
                     intent.putExtra("money", money);
                     intent.putExtra("fromEdit", fromEdit);
-                    intent.putExtra("info",info);
+                    intent.putExtra("info", info);
                     context.startActivity(intent);
                 } else {
                     PToast.showShort(context.getString(R.string.net_error_retry));
@@ -1037,7 +1123,7 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationAct(FragmentActivity context,int requestCode ) {
+    public static void showIDCardAuthenticationAct(FragmentActivity context, int requestCode) {
         context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
     }
 
@@ -1046,8 +1132,8 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context) {
-        context.startActivity(new Intent(context, IDCardAuthenticationSucceedAct.class));
+    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context ,int requestCode) {
+        context.startActivityForResult(new Intent(context, IDCardAuthenticationSucceedAct.class),requestCode);
     }
     // -----------------------我的提示跳转 end----------------------------
 
@@ -1240,18 +1326,46 @@ public class UIShow {
 
     /**
      * 打开重置密码
+     *
      * @param context
      */
-    public static void showFindPwdAct(FragmentActivity context){
+    public static void showFindPwdAct(FragmentActivity context) {
         context.startActivity(new Intent(context, FindPwdAct.class));
     }
 
     /**
      * 打开手机认证完成页面
+     *
      * @param context
      * @param requestCode
      */
-    public static void showPhoneVerifyCompleteAct(FragmentActivity context,int requestCode){
-        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class),requestCode);
+    public static void showPhoneVerifyCompleteAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
+    }
+
+    /**
+     * 显示微信二维码支付
+     *
+     * @param context
+     * @param QRUrl   二维码URL
+     */
+
+    public static void showWxpayForQRCode(Context context, String QRUrl, int time, int money, String uri) {
+        Intent intent = new Intent(context, WepayQRCodeAct.class);
+        intent.putExtra("qrurl", QRUrl);
+        intent.putExtra("time", time);
+        intent.putExtra("money", money);
+        intent.putExtra("uri", uri);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示打开微信对话框
+     *
+     * @param context
+     */
+    public static void showWxpayOpenWx(Context context, String UIR) {
+        Dialog dialog = new OpenWxDialog(context, UIR);
+        dialog.show();
     }
 }

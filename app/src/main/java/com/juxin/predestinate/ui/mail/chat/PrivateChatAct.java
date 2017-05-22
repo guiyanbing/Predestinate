@@ -10,12 +10,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.library.view.CustomFrameLayout;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
+import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -91,43 +94,22 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //        });
     }
 
-
-
-    private boolean onDetectHeart() {
-//        List<MutualHeartUnList.MutualHeartUn> mutualHeartUns = ModuleMgr.getCfgMgr().getMutualHeartUn();
-//        for (MutualHeartUnList.MutualHeartUn tmp : mutualHeartUns) {
-//            if (whisperID == tmp.getUid()) {
-//                /**
-//                 * 如果发送时间是等于0或是小于0，说明没有聊过，可以聊一句，否者不能聊
-//                 */
-//                if (tmp.getSendtime() <= 0) {//如果是用完今天聊的了。相互心动了也不能聊了
-//                    privateChat.getChatAdapter().showIsCanChat(true);
-//                } else {
-//                    privateChat.getChatAdapter().showIsCanChat(false);
-//                }
-//
-//                return false;
-//            }
-//        }
-        return true;
-    }
-
     /**
      * 桌面弹窗
      */
     private void checkReply() {
-//        String replyMsg = getIntent().getStringExtra("replyMsg");
-//        if (!TextUtils.isEmpty(replyMsg)) {
-//            UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
-//            if (!user.isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男
-//                MMToast.showShort("免费发信次数已用完!");
-//                return;
-//            }
+        String replyMsg = getIntent().getStringExtra("replyMsg");
+        if (!TextUtils.isEmpty(replyMsg)) {
+            UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
+            if (!user.isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男
+                PToast.showShort("免费发信次数已用完!");
+                return;
+            }
 //            if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
 //                return;
 //            }
-//            ModuleMgr.getChatMgr().sendTextMsg(ChatListMgr.Folder.whisper, null, String.valueOf(whisperID), replyMsg);
-//        }
+            ModuleMgr.getChatMgr().sendTextMsg(null, String.valueOf(whisperID), replyMsg);
+        }
     }
 
     /**
@@ -176,12 +158,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private void initView() {
         onTitleInit();
 
-       // viewGroup = (CustomFrameLayout) LayoutInflater.from(this).inflate(R.layout.y2_tips_view_group, null);
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
-
-//        if(message != null && ChatListMgr.Folder.sys_notice.equals(message.getFolder())){
-//            privateChat.getChatAdapter().setFolder(ChatListMgr.Folder.sys_notice);
-//        }
 
         // if (IS_REPLY) {//是否是首次回复的消息
         //     privateChat.getChatAdapter().setNewMsg(true);
@@ -190,17 +167,18 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //            privateChat.getChatAdapter().setKf_id(kf_id);
 //        }
 //
-//        privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
-//            @Override
-//            public void onComplete(UserInfoLightweight userProfileSimple) {
-//                if (userProfileSimple != null && whisperID == userProfileSimple.getUid()) {
+        privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
+            @Override
+            public void onComplete(UserInfoLightweight infoLightweight) {
+                if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
 //                    setNickName(userProfileSimple.getNickname());
 //                    kf_id = userProfileSimple.getKf_id();
 //                    name = userProfileSimple.getNickname();
 //                    privateChat.getChatAdapter().setKf_id(userProfileSimple.getKf_id());
-//                }
-//            }
-//        });
+                }
+            }
+        });
+
         privateChat.getChatAdapter().setWhisperId(whisperID);
         initHeadView();
     }
@@ -211,7 +189,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         findViewById(R.id.chat_title_phone).setOnClickListener(this);
         findViewById(R.id.chat_title_wx).setOnClickListener(this);
         findViewById(R.id.chat_title_yb).setOnClickListener(this);
-      //  findViewById(R.id.privatechat_giftview).setOnClickListener(this);
 
         chat_title_attention_icon = (ImageView) findViewById(R.id.chat_title_attention_icon);
         chat_title_attention_name = (TextView) findViewById(R.id.chat_title_attention_name);
@@ -372,7 +349,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             try {
                 lastActivity.finish();
             } catch (Exception e) {
-                MMLog.printThrowable(e);
+                PLogger.printThrowable(e);
             }
         }
         lastActivity = this;

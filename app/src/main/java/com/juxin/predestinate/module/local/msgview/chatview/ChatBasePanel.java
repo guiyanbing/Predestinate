@@ -2,14 +2,13 @@ package com.juxin.predestinate.module.local.msgview.chatview;
 
 import android.content.Context;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 /**
  * Created by Kind on 2017/3/30.
  */
-
-public class ChatBasePanel extends BaseViewPanel {
+public class ChatBasePanel extends BasePanel {
 
     private ChatAdapter.ChatInstance chatInstance = null;
 

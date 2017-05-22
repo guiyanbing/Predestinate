@@ -4,9 +4,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,8 +17,7 @@ import java.util.Random;
 /**
  * Created by Kind on 2017/4/19.
  */
-
-public class BasePayPannel extends BaseViewPanel implements View.OnClickListener {
+public class BasePayPannel extends BasePanel implements View.OnClickListener {
 
     private FragmentActivity activity;
     private PayGood payGood;
@@ -37,8 +37,6 @@ public class BasePayPannel extends BaseViewPanel implements View.OnClickListener
         paylist_item_remark = (TextView) findViewById(R.id.paylist_item_remark);
 
 
-
-
     }
 
     /**
@@ -55,23 +53,24 @@ public class BasePayPannel extends BaseViewPanel implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 
 
-    public void setTextTitle(String text){
+    public void setTextTitle(String text) {
         paylist_item_title.setText(text);
     }
 
-    public void setTextRemark(String text){
+    public void setTextRemark(String text) {
         paylist_item_remark.setText(text);
     }
 
-    public void setImageIcon(int resId){
+    public void setImageIcon(int resId) {
         paylist_item_icon.setImageResource(resId);
     }
 
 
-    public String getOutTradeNo() {
+    public static  String getOutTradeNo() {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
         String key = format.format(new Date());
         int i = new Random().nextInt(89999) + 10000;

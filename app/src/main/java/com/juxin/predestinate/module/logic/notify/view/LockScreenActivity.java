@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
@@ -61,7 +61,7 @@ public class LockScreenActivity extends BaseActivity {
             try {
                 LockScreenActivity.this.finish();
             } catch (Exception e) {
-                MMLog.printThrowable(e);
+                PLogger.printThrowable(e);
             }
         }
 
@@ -70,7 +70,7 @@ public class LockScreenActivity extends BaseActivity {
             try {
                 LockScreenMgr.getInstance().disableKeyguard();
             } catch (Exception e) {
-                MMLog.printThrowable(e);
+                PLogger.printThrowable(e);
             }
         }
     };
