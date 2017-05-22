@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
@@ -11,10 +10,8 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -648,6 +645,10 @@ public class BaseMessage implements IBaseMessage {
                 case common:
                     baseMessages.add(new CommonMessage(tmp));
                     break;
+                case gift:
+                case wantGiftTwo:
+                    baseMessages.add(new GiftMessage(tmp));
+                    break;
                 default:
                     break;
             }
@@ -687,7 +688,6 @@ public class BaseMessage implements IBaseMessage {
             case gift:
             case wantGiftTwo:
                 str = msg.getMsgDesc();
-
                 break;
             default:
                 break;

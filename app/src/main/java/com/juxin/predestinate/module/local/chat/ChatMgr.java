@@ -550,13 +550,14 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("re=====" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if(!response.isOk()){
                     removeInfoComplete(true, userID, temp);
                     return;
                 }
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
-                infoLightweightList.parseJsonSummary(response.getResponseString());
+                infoLightweightList.parseJsonSummary(response.getResponseJson());
 
                 if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
                     temp = infoLightweightList.getUserInfos().get(0);

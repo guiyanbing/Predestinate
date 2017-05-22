@@ -1043,9 +1043,9 @@ public class CommonMgr implements ModuleBase {
             temp[i] = uids.get(0);
         }
 
-        HashMap<String, Object> getParms = new HashMap<>();
-        getParms.put("uid", temp);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqUserInfoSummary, getParms, complete);
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("uids", temp);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserInfoSummary, postParms, complete);
     }
 
 

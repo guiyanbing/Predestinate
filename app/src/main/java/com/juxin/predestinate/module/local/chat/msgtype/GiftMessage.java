@@ -71,7 +71,16 @@ public class GiftMessage extends BaseMessage {
             PLogger.printThrowable(e);
         }
         return null;
+    }
 
+    /**
+     * 转换类 fmessage
+     * @param message
+     */
+    public GiftMessage(BaseMessage message) {
+        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
+                message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
+        parseJson(getJsonStr());
     }
 
     public int getGiftCount() {
