@@ -28,6 +28,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
+import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -165,7 +166,17 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("videochat", videoVerify.getVideochat());
         post_param.put("audiochat", videoVerify.getAudiochat());
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, null);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.setVideochatConfig, post_param, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    return;
+                }
+                JSONObject json = response.getResponseJson();
+                if (json != null)
+                    PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
+            }
+        });
     }
 
     /**
