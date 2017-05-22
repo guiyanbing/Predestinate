@@ -668,15 +668,6 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 最近来访
-     *
-     * @param complete 请求完成后回调
-     */
-    public void viewMeList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.viewMeList, null, complete);
-    }
-
-    /**
      * 获取钻石余额
      *
      * @param complete 请求完成后回调

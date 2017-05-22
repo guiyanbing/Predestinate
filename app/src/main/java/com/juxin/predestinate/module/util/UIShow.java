@@ -99,7 +99,6 @@ import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
 import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.user.my.NearVisitorAct;
 import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
 import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
@@ -935,15 +934,6 @@ public class UIShow {
      */
     public static void showMyDiamondsAct(Context context) {
         context.startActivity(new Intent(context, MyDiamondsAct.class));
-    }
-
-    /**
-     * 打开最近来访页面
-     *
-     * @param context
-     */
-    public static void showNearVisitorAct(Context context) {
-        context.startActivity(new Intent(context, NearVisitorAct.class));
     }
 
     /**

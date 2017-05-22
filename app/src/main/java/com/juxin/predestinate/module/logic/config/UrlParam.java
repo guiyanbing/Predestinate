@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -128,8 +127,6 @@ public enum UrlParam {
     sendSMS("public/sendSMS", true),
     // 手机验证
     bindCellPhone("user/bindCellPhone", true),
-    // 最近来访
-    viewMeList("user/viewMeList", true),
     // 索要礼物群发
     qunFa(Hosts.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
     // 索要礼物群发

@@ -111,14 +111,21 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
                     return;
                 }
 
+                int status = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getStatus();
                 if (!ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()){//是否绑定了手机号
                     UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);
                     //                    UIShow.showPhoneVerify_Act(RedBoxRecordAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(), authResult);//验证手机
-                } else if (!ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getIsVerifyIdCard()){//是否进行了身份认证
-                    UIShow.showIDCardAuthenticationAct(this,authIDCard);
-                }else {
-                    UIShow.showWithDrawApplyAct(0,0,false,this);
+                    break;
                 }
+                if (status <= 0){//是否进行了身份认证
+                    UIShow.showIDCardAuthenticationAct(this,authIDCard);
+                    break;
+                }
+                if (status != 2){//身份认证还未通过
+                    PToast.showShort(R.string.the_identity_certification_audit);
+                    break;
+                }
+                UIShow.showWithDrawApplyAct(0,0,false,this);
                 break;
             default:
                 break;

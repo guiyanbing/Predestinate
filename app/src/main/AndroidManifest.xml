@@ -156,9 +156,6 @@
             android:name=".ui.user.my.GiftDiamondPayDlg"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.my.NearVisitorAct"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.user.my.MyAttentionAct"
             android:screenOrientation="portrait" />
         <activity
