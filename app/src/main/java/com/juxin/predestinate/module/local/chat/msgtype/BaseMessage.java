@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
@@ -11,10 +10,8 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +22,13 @@ import java.util.Map;
 
 public class BaseMessage implements IBaseMessage {
 
-
     public enum BaseMessageType {
 
         common(CommonMessage.class, 2),//文本消息
         hi(TextMessage.class, 3),//打招呼
-        readMe(TextMessage.class, 4),//谁看过我
-        concern(ConcernMessage.class, 5),//关注
-        system(SystemMessage.class, 7),//系统消息
         gift(GiftMessage.class, 10),//礼物消息
-  //      redEnvelopes(RedEnvelopesMessage.class, 12),//聊天红包
         hint(TextMessage.class, 14),//小提示消息
         wantGift(TextMessage.class, 15),//索要礼物消息
-        redEnvelopesBalance(TextMessage.class, 17),//红包余额变动消息
         html(HtmlMessage.class, 19),//html消息
         wantGiftTwo(GiftMessage.class, 20),//索要礼物消息第二版
         video(VideoMessage.class, 24),//视频消息
@@ -113,9 +104,10 @@ public class BaseMessage implements IBaseMessage {
     /**
      * 消息类型，进行未读消息比对
      */
-    public static final int follow_MsgType = 5;//谁关注了我
+    public static final int Concern_MsgType = 5;//关注
+    public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
-
+    public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
 
 
     @Override
@@ -164,6 +156,7 @@ public class BaseMessage implements IBaseMessage {
     private boolean isResending = false;//是否重发中
     private boolean isValid = false;//是否有效当前消息,用于五分钟内重发用
     private String msgDesc;//消息描述 mct
+    private long ru;
 
     private boolean isRead = false;//未读消息（true已经是读过了）//这个字段专门给数据库用的，不是给界面用的
     private boolean isSave;//是否保存
@@ -510,6 +503,22 @@ public class BaseMessage implements IBaseMessage {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public long getRu() {
+        return ru;
+    }
+
+    /**
+     * true 如果为1则为熟人消息，否则为0
+     * @return
+     */
+    public boolean isRu() {
+        return ru == 1;
+    }
+
+    public void setRu(long ru) {
+        this.ru = ru;
     }
 
     public JSONObject getJsonObject(String str) {
