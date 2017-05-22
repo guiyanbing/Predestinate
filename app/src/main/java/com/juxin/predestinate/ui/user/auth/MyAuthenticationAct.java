@@ -22,11 +22,11 @@ import com.juxin.predestinate.module.util.UIShow;
  * xy
  */
 
-public class MyAuthenticationAct extends BaseActivity implements View.OnClickListener,RequestComplete{
-    private TextView tv_txt_auth_phone, tv_txt_auth_video,tv_txt_auth_id;
+public class MyAuthenticationAct extends BaseActivity implements View.OnClickListener, RequestComplete {
+    private TextView tv_txt_auth_phone, tv_txt_auth_video, tv_txt_auth_id;
     private UserDetail userDetail;
-    private int  authForVodeo = 104;
-    public static final int AUTHENTICSTION_REQUESTCODE=103;
+    private int authForVodeo = 104;
+    public static final int AUTHENTICSTION_REQUESTCODE = 103;
     private int authIDCard = 105;
     private VideoVerifyBean videoVerifyBean;
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
@@ -53,10 +53,10 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
 //TODO 身份认证状态
         if (userDetail.isVerifyCellphone()) {
             tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authok));
-            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this,R.color.authentication_txt_bg));
+            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
         } else {
             tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authno));
-            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this,R.color.gray_text));
+            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
         }
         tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authno));
         tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
@@ -75,7 +75,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 1:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authing));
-                ContextCompat.getColor(this,R.color.txt_authing);
+                ContextCompat.getColor(this, R.color.txt_authing);
                 break;
             case 2:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authok));
@@ -97,14 +97,16 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 1:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authing));
-                ContextCompat.getColor(this,R.color.txt_authing);
+                ContextCompat.getColor(this, R.color.txt_authing);
                 break;
             case 2:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_autherror));
                 break;
             case 3:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authok));
-                ContextCompat.getColor(this,R.color.authentication_txt_bg);
+                ContextCompat.getColor(this, R.color.authentication_txt_bg);
+                break;
+            default:
                 break;
         }
     }
@@ -119,18 +121,20 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.ll_auth_phone://手机认证页
                 if (!userDetail.isVerifyCellphone()) {
-                    UIShow.showPhoneVerifyAct(MyAuthenticationAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(),AUTHENTICSTION_REQUESTCODE);
-                }else{//手机认证完成页
-                    UIShow.showPhoneVerifyCompleteAct(MyAuthenticationAct.this,AUTHENTICSTION_REQUESTCODE);
+                    UIShow.showPhoneVerifyAct(MyAuthenticationAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(), AUTHENTICSTION_REQUESTCODE);
+                } else {//手机认证完成页
+                    UIShow.showPhoneVerifyCompleteAct(MyAuthenticationAct.this, AUTHENTICSTION_REQUESTCODE);
                 }
                 break;
             case R.id.ll_auth_video://自拍认证
-                UIShow.showMyAuthenticationVideoAct(this,authForVodeo);
+                UIShow.showMyAuthenticationVideoAct(this, authForVodeo);
                 break;
             case R.id.ll_auth_id://身份认证
                 //TODO
                 if (mIdCardVerifyStatusInfo.isOk())
-                    UIShow.showIDCardAuthenticationAct(this,authIDCard);
+                    UIShow.showIDCardAuthenticationAct(this, authIDCard);
+                break;
+            default:
                 break;
         }
     }
@@ -141,24 +145,22 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         if (requestCode == AUTHENTICSTION_REQUESTCODE) {
             if (userDetail.isVerifyCellphone()) {
                 tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authok));
-                tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this,R.color.authentication_txt_bg));
+                tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
             }
-            if (resultCode== Constant.EXITLOGIN_RESULTCODE){
+            if (resultCode == Constant.EXITLOGIN_RESULTCODE) {
                 setResult(Constant.EXITLOGIN_RESULTCODE);
                 back();
             }
         } else if (requestCode == authForVodeo) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             initVideoAuth();
-        }else if (requestCode == authIDCard) {
-            if (data != null){
-                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
-//                Log.e("TTTTTTTTTTTTTPPP000","zhixing"+back);
-                if (back == 1){
-//                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
-                    this.finish();
-                }
+        } else if (requestCode == authIDCard) {
+            if (data == null) {
+                return;
             }
+            int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK, 0);
+            if (back == 1)
+                this.finish();
 //            userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 //            initVideoAuth();
         }

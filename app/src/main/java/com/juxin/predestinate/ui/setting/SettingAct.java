@@ -352,7 +352,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             public void onFail(String url, Throwable throwable) {
                 isDownloading = false;
                 downLoadDialog.dismiss();
-                PToast.showShort("下载失败,请稍后再试");
+                PToast.showShort(getResources().getString(R.string.toast_down_error));
 
             }
         });
