@@ -84,7 +84,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         }
 
         ModuleMgr.getCenterMgr().reqGetRemarkName(userProfile.getUid(), this);            // 请求用户备注
-        ModuleMgr.getCenterMgr().reqGetOpposingVideoSetting(userProfile.getUid(), this);  // 请求用户接受音视频配置
+        //ModuleMgr.getCenterMgr().reqGetOpposingVideoSetting(userProfile.getUid(), this);  // 请求用户接受音视频配置
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
@@ -287,7 +287,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
     @Override
     protected void onDestroy() {
-        reqSetVideoSetting();
+        //reqSetVideoSetting();
         reqAddOrRemoveBlack();
         super.onDestroy();
     }
