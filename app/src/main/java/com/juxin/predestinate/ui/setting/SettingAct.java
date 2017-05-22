@@ -35,9 +35,9 @@ import java.util.Date;
 
 
 /**
- * 设置页面`
+ * 设置页面
  *
- * @author Kind
+ * @author xy
  */
 public class SettingAct extends BaseActivity implements OnClickListener {
 
@@ -320,7 +320,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
      * 下载视频插件
      */
     private void downloadVideoPlugin() {
-        PToast.showShort("开始下载插件");
+        PToast.showShort(getResources().getString(R.string.toast_down_plugin));
         downLoadDialog.show(getSupportFragmentManager(), "download");
         if (isDownloading) {
             return;

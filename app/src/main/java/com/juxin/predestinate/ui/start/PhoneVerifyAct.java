@@ -36,8 +36,8 @@ import java.lang.ref.WeakReference;
  */
 public class PhoneVerifyAct extends BaseActivity implements OnClickListener, RequestComplete {
 
-    private EditText edtPhone,et_code;
-    private Button bt_send_code,btnok;
+    private EditText edtPhone, et_code;
+    private Button bt_send_code, btnok;
 
 
     // byIQQ phone fare
@@ -111,10 +111,10 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 }
                 break;
             case R.id.btn_phoneverify_ok:
-                    if (validInput()) {
-                        ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
-                        LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
-                    }
+                if (validInput()) {
+                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
+                    LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                }
                 break;
         }
 
@@ -148,15 +148,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqReqVerifyCode) {
             PhoneVerifyResult result = (PhoneVerifyResult) response.getBaseData();
-            if (response.isOk()) {
-                et_code.requestFocus();
-                bt_send_code.setEnabled(false);
-                btnok.setEnabled(true);
-                if (sendthread == null || sendthread.getState() == State.TERMINATED) {
-                    sendthread = new SendEnableThread();
-                    sendthread.start();
-                }
-            } else {
+            if (!response.isOk()) {
                 switch (result.getErrno()) {
                     case 0:
                         PToast.showLong(getResources().getString(R.string.toast_server_busy));
@@ -170,24 +162,36 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                         PToast.showLong(getResources().getString(R.string.toast_phone_used));
                         bt_send_code.setEnabled(true);
                         break;
+                    default:
+                        break;
                 }
+                return;
             }
-        } else if (response.getUrlParam() == UrlParam.mobileAuth) {
+            et_code.requestFocus();
+            bt_send_code.setEnabled(false);
+            btnok.setEnabled(true);
+            if (sendthread == null || sendthread.getState() == State.TERMINATED) {
+                sendthread = new SendEnableThread();
+                sendthread.start();
+            }
+        } else if (response.getUrlParam() == UrlParam.mobileAuth)
+        {
             if (!response.isOk()) {
                 PToast.showLong(getResources().getString(R.string.toast_code_error));
-            } else {
-                PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
-                ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
-                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
-                UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
+                return;
             }
+            PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
+            ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
+            ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
+            UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
         }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE){
+        if (requestCode == MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE) {
             setResult(resultCode);
             finish();
         }
