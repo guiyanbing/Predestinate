@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.start;
+package com.juxin.predestinate.ui.user.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +9,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -24,7 +21,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
