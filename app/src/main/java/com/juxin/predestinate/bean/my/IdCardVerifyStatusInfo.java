@@ -50,9 +50,9 @@ public class IdCardVerifyStatusInfo extends BaseData {
             this.setAccountnum(jsonObject.optString("accountnum"));
             this.setBank(jsonObject.optString("bank"));
             this.setSubbank(jsonObject.optString("subbank"));
-            this.setId_front_img_small("id_front_img_small");
-            this.setId_back_img_small("id_back_img_small");
-            this.setFace_img_small("face_img_small");
+            this.setId_front_img_small(jsonObject.optString("id_front_img_small"));
+            this.setId_back_img_small(jsonObject.optString("id_back_img_small"));
+            this.setFace_img_small(jsonObject.optString("face_img_small"));
         }
     }
 

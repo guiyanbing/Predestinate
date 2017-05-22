@@ -650,6 +650,7 @@
     <string name="id_hand">上传手持身份证照片</string>
     <string name="the_certification_audit">认证审核中</string>
     <string name="input_your_zhifubao_id">输入您的支付宝帐号</string>
+    <string name="money_cout_be_0">提现金额不能为0</string>
 
     <string name="txt_record_time_desc">请保持正面录制5秒钟</string>
     <string name="txt_getpic">拍摄照片</string>

@@ -87,7 +87,7 @@ public class AddPhotoView extends LinearLayout implements View.OnClickListener, 
         if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
             return;
         }
-        ImageLoader.loadRoundCorners(getContext(), path[0], 8, imgPhoto);
+//        ImageLoader.loadRoundCorners(getContext(), path[0], 8, imgPhoto);
 
         //上传图片
         LoadingDialog.show((FragmentActivity) getContext(), "正在上传图片");
