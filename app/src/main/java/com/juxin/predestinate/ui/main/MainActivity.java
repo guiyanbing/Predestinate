@@ -8,15 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.db.cache.DBCache;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -28,8 +27,6 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
-
-import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener {
 
@@ -180,7 +177,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             UIShow.showNavUserAct(this);
             finish();
         }
-        if (requestCode == MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE&& resultCode==200){//手机绑定成功,跳转到登录页
+        if (requestCode == MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE && resultCode == 200) {//手机绑定成功,跳转到登录页
             UIShow.showUserLoginExtAct(this);
             finish();
         }
@@ -230,8 +227,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return super.onKeyUp(keyCode, event);
     }
 
-    public void onGoneButtom(boolean isGone){
-            layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
+    public void onGoneBottom(boolean isGone) {
+        layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
     }
 
     @Override

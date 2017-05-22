@@ -8,7 +8,10 @@ public enum UnreadReceiveMsgType {
 
     /* 看过消息 */
     can_msgType(4),
-
+    // 谁关注我消息类型
+    follow_msgType(5),
+    // 聊天红包等红包变更消息
+    wallet_msgType(12),
     ;
 
     public long msgType;
