@@ -1,7 +1,9 @@
 package com.juxin.predestinate.ui.start;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
@@ -47,6 +50,33 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
         setBackView(getResources().getString(R.string.title_loginact));
         initView();
         initData();
+        controlInput();
+    }
+
+    private void controlInput() {
+        et_uid.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                List<UP> userList = loginMgr.getUserList();
+                et_pwd.setText("");
+                for (int i = 0; i < userList.size(); i++) {
+                    if (s.toString().equals(userList.get(i).getUid()+"")) {
+                        et_pwd.setText(userList.get(i).getPw());
+                        return;
+                    }
+                }
+            }
+        });
     }
 
     private void initData() {
