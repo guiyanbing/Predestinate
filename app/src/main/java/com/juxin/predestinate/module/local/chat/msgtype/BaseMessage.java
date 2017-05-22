@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
@@ -10,16 +11,18 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * [消息类型处理](http://doc.dev.yuanfenba.net/pkg/yuanfen/common/msg_data/)
  * Created by Kind on 2017/3/17.
  */
-
 public class BaseMessage implements IBaseMessage {
 
     public enum BaseMessageType {
@@ -81,11 +84,6 @@ public class BaseMessage implements IBaseMessage {
         }
     }
 
-
-
-
-
-
     //数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟
     public static int ONE = 1;
     public static int TWO = 2;
@@ -104,11 +102,10 @@ public class BaseMessage implements IBaseMessage {
     /**
      * 消息类型，进行未读消息比对
      */
-    public static final int follow_MsgType = 5;//关注
+    public static final int Follow_MsgType = 5;//关注
     public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
-
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -459,12 +456,12 @@ public class BaseMessage implements IBaseMessage {
 
     /**
      * 是否是机器人
+     *
      * @return ture是机器人
      */
 //    public boolean isKF_ID() {
 //        return ModuleMgr.getCenterMgr().isRobot(getKf_id());
 //    }
-
     public int getVersion() {
         return version;
     }
@@ -511,6 +508,7 @@ public class BaseMessage implements IBaseMessage {
 
     /**
      * true 如果为1则为熟人消息，否则为0
+     *
      * @return
      */
     public boolean isRu() {
@@ -547,7 +545,6 @@ public class BaseMessage implements IBaseMessage {
         this.setMsgID(getcMsgID());
         PLogger.d("getCMsgID()=" + getcMsgID() + "");
     }
-
 
     //fmessage
     public BaseMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID,
@@ -632,20 +629,17 @@ public class BaseMessage implements IBaseMessage {
         this.setJsonStr(jsonStr);
     }
 
-
-
-
     public static List<BaseMessage> conversionListMsg(List<BaseMessage> cMessages) {
         List<BaseMessage> baseMessages = new ArrayList<BaseMessage>();
         if (cMessages == null || cMessages.size() <= 0) {
             return baseMessages;
         }
 
-        for(BaseMessage tmp : cMessages){
+        for (BaseMessage tmp : cMessages) {
             BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(tmp.getType());
             if (messageType == null) {
                 baseMessages.add(tmp);
-               continue;
+                continue;
             }
             switch (messageType) {
                 case hi:
@@ -654,7 +648,8 @@ public class BaseMessage implements IBaseMessage {
                 case common:
                     baseMessages.add(new CommonMessage(tmp));
                     break;
-
+                default:
+                    break;
             }
         }
         return baseMessages;
