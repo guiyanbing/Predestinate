@@ -72,7 +72,14 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
     @Override
     public void onUpdateUnread(BaseMessage message) {
         switch (message.getType()) {//比对抛出的未读类型消息，进行角标的添加
-            //TODO 聊天红包消息
+            case BaseMessage.follow_MsgType://谁关注我消息
+                getUnreadMgr().addNumUnread(FOLLOW_ME);
+                break;
+            case BaseMessage.TalkRed_MsgType://钱包余额变更消息
+                getUnreadMgr().addNumUnread(MY_WALLET);
+                break;
+            default:
+                break;
         }
     }
 
