@@ -164,7 +164,7 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
                 case PhoneVerifyInfo.VERIFICATIONCODE_SUCCEED:
                     PToast.showLong(getString(R.string.toast_code_succeed));
                     ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
-                    ModuleMgr.getCenterMgr().getMyInfo().setPhone(phoneNum);
+                    ModuleMgr.getCenterMgr().getMyInfo().setMobile(phoneNum);
                     startActivity(new Intent(this, WithDrawApplyAct.class));
                     this.finish();
                     break;

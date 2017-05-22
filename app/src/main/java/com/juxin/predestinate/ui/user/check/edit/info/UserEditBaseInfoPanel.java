@@ -84,23 +84,23 @@ public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete 
         height.setText(userDetail.getHeight() + "cm");
         income.setText(TextUtils.isEmpty(userDetail.getIncome()) ? sNotFilled : userDetail.getIncome());
         marry.setText(TextUtils.isEmpty(userDetail.getMarry()) ? sNotFilled : userDetail.getMarry());
-        qq_info.setText(TextUtils.isEmpty(userDetail.getQqNum())
-                || userDetail.getQqNum() == "null" ? "QQ" : "QQ：" + userDetail.getQqNum());
-        mobile_info.setText(TextUtils.isEmpty(userDetail.getPhone())
-                || userDetail.getPhone() == "null" ? context.getString(R.string.user_edit_info_phone)
-                : context.getString(R.string.user_edit_info_phone) + "：" + userDetail.getPhone());
-        wechat_info.setText(TextUtils.isEmpty(userDetail.getWechatNum())
-                || userDetail.getWechatNum() == "null" ? context.getString(R.string.user_edit_info_wechat)
-                : context.getString(R.string.user_edit_info_wechat) + "：" + userDetail.getWechatNum());
+        qq_info.setText(TextUtils.isEmpty(userDetail.getQQ())
+                || userDetail.getQQ() == "null" ? "QQ" : "QQ：" + userDetail.getQQ());
+        mobile_info.setText(TextUtils.isEmpty(userDetail.getMobile())
+                || userDetail.getMobile() == "null" ? context.getString(R.string.user_edit_info_phone)
+                : context.getString(R.string.user_edit_info_phone) + "：" + userDetail.getMobile());
+        wechat_info.setText(TextUtils.isEmpty(userDetail.getWeChat())
+                || userDetail.getWeChat() == "null" ? context.getString(R.string.user_edit_info_wechat)
+                : context.getString(R.string.user_edit_info_wechat) + "：" + userDetail.getWeChat());
 
         setAuthTip();
     }
 
     // 填充权限
     private void setAuthTip() {
-        qq.setText(contactStatus(userDetail.getQqNum(), userDetail.getQqNumAuth() != 2));
-        mobile.setText(contactStatus(userDetail.getPhone(), userDetail.getPhoneAuth() != 2));
-        wechat.setText(contactStatus(userDetail.getWechatNum(), userDetail.getWechatAuth() != 2));
+        qq.setText(contactStatus(userDetail.getQQ(), userDetail.getQQAuth() != 2));
+        mobile.setText(contactStatus(userDetail.getMobile(), userDetail.getMobileAuth() != 2));
+        wechat.setText(contactStatus(userDetail.getWeChat(), userDetail.getWechatAuth() != 2));
     }
 
     /**
@@ -163,9 +163,9 @@ public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete 
                     break;
 
                 case R.id.view_qq:
-                    String qqValue = TextUtils.isEmpty(userDetail.getQqNum())
-                            || userDetail.getQqNum() == "null" ? "" : userDetail.getQqNum();
-                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), qqValue, userDetail.getQqNumAuth(), ContactEditDialog.CONTACT_TYPE_QQ);
+                    String qqValue = TextUtils.isEmpty(userDetail.getQQ())
+                            || userDetail.getQQ() == "null" ? "" : userDetail.getQQ();
+                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), qqValue, userDetail.getQQAuth(), ContactEditDialog.CONTACT_TYPE_QQ);
                     break;
 
                 case R.id.view_mobile:
@@ -173,14 +173,14 @@ public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete 
                         PToast.showShort(context.getString(R.string.user_edit_info_not_phone));
                         break;
                     }
-                    String moblieValue = TextUtils.isEmpty(userDetail.getPhone())
-                            || userDetail.getPhone() == "null" ? "" : userDetail.getPhone();
-                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), moblieValue, userDetail.getPhoneAuth(), ContactEditDialog.CONTACT_TYPE_MOBILE);
+                    String moblieValue = TextUtils.isEmpty(userDetail.getMobile())
+                            || userDetail.getMobile() == "null" ? "" : userDetail.getMobile();
+                    PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), moblieValue, userDetail.getMobileAuth(), ContactEditDialog.CONTACT_TYPE_MOBILE);
                     break;
 
                 case R.id.view_wechat:
-                    String weChatValue = TextUtils.isEmpty(userDetail.getWechatNum())
-                            || userDetail.getWechatNum() == "null" ? "" : userDetail.getWechatNum();
+                    String weChatValue = TextUtils.isEmpty(userDetail.getWeChat())
+                            || userDetail.getWeChat() == "null" ? "" : userDetail.getWeChat();
                     PickerDialogUtil.showContactEditDialog((FragmentActivity) getContext(), weChatValue, userDetail.getWechatAuth(), ContactEditDialog.CONTACT_TYPE_WECHAT);
                     break;
             }
