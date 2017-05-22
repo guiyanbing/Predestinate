@@ -16,6 +16,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -48,14 +49,10 @@ public class ChatMgr implements ModuleBase {
     @Inject
     DBCenter dbCenter;
 
-//    @Inject
-//    DBCacheCenter dbCacheCenter;
-
     @Override
     public void init() {
         messageMgr.init();
         specialMgr.init();
-        //    App.getCacheComponent().inject(this);
     }
 
     @Override
@@ -291,7 +288,9 @@ public class ChatMgr implements ModuleBase {
         observable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                onChatMsgHistory(channelID, whisperID, true, baseMessages);
+                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
+                SortList.sortListView(messageList);// 排序
+                onChatMsgHistory(channelID, whisperID, true, messageList);
             }
         });
     }
@@ -309,7 +308,9 @@ public class ChatMgr implements ModuleBase {
             observable.subscribe(new Action1<List<BaseMessage>>() {
                 @Override
                 public void call(List<BaseMessage> baseMessages) {
-                    onChatMsgRecently(channelID, whisperID, true, BaseMessage.conversionListMsg(baseMessages));
+                    List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
+                    SortList.sortListView(messageList);// 排序
+                    onChatMsgRecently(channelID, whisperID, true, messageList);
                 }
             });
 //            DBCenter.getInstance().queryMsgListWG(channelID, whisperID, 20);
@@ -513,11 +514,9 @@ public class ChatMgr implements ModuleBase {
 //                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Whisper, msg);
 //                }
 
-                if (App.uid != message.getSendID()) {
-                    //角标消息更改
-                    if (UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
-                        specialMgr.updateUnreadMsg(message);
-                    }
+                //角标消息更改
+                if (App.uid != message.getSendID() && UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
+                    specialMgr.updateUnreadMsg(message);
                 }
             }
         });
@@ -528,23 +527,23 @@ public class ChatMgr implements ModuleBase {
      ******************************/
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<Long, ChatMsgInterface.InfoComplete>();
 
-    public void getUserInfoLightweight(long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-//        synchronized (infoMap) {
-//            infoMap.put(uid, infoComplete);
-//            Observable<UserInfoLightweight> observable = dbCacheCenter.queryProfile(uid);
-//            observable.subscribe(new Action1<UserInfoLightweight>() {
-//                @Override
-//                public void call(UserInfoLightweight lightweight) {
-//                    long infoTime = lightweight.getTime();
-//                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
-//                        removeInfoComplete(true, lightweight.getUid(), lightweight);
-//                    } else {
-//                        removeInfoComplete(false, lightweight.getUid(), lightweight);
-//                        getProFile(lightweight.getUid());
-//                    }
-//                }
-//            });
-//        }
+    public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
+        synchronized (infoMap) {
+            infoMap.put(uid, infoComplete);
+            Observable<UserInfoLightweight> observable = dbCenter.queryProfile(uid);
+            observable.subscribe(new Action1<UserInfoLightweight>() {
+                @Override
+                public void call(UserInfoLightweight lightweight) {
+                    long infoTime = lightweight.getTime();
+                    if (uid  > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+                        removeInfoComplete(true, uid, lightweight);
+                    } else {
+                        removeInfoComplete(false, uid, lightweight);
+                        getProFile(uid);
+                    }
+                }
+            });
+        }
     }
 
     // 获取个人资料
