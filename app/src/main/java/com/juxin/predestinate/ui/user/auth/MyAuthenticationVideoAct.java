@@ -39,7 +39,7 @@ import java.io.FileInputStream;
  * IQQ
  */
 
-public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener{
+public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener {
     private Context context;
     private static int PhotoUploadResult = 10001, VideoUploadResult = 10002;
     private View authPic, authVideo;
@@ -140,6 +140,8 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 iv.setBackgroundResource(R.drawable.f1_auth_ok);
                 tv.setText(getResources().getString(R.string.txt_authstatus_auth_success));
                 break;
+            default:
+                break;
         }
     }
 
@@ -170,7 +172,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                     return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
-                    ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this,true);
+                    ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this, true);
                 break;
             case R.id.tv_make_video:
                 if (isMakeing)
@@ -188,6 +190,8 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
             case R.id.iv_auth_video:
                 Video.videoPlay(this);
                 break;
+            default:
+                break;
         }
     }
 
@@ -196,24 +200,26 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         isMakeing = false;
         if (resultCode == PhotoUploadResult) {
-
-        } else if (requestCode == VideoUploadResult) {
+            return;
+        }
+        if (requestCode == VideoUploadResult) {
             if (resultCode == RESULT_OK) {
                 String sVideo = data.getStringExtra(RecordVideoAct.EXTRA_RECORD_FILE_PATH);
                 Video.getVideoThumb(sVideo);
                 loadLocalVideoImg();
                 VideoUpload(sVideo);
             }
-        } else {
-            isMakeing = false;
-            String path = AlbumHelper.getInstance().getPhotoUri().getPath();
-            if (path == null  || TextUtils.isEmpty(path)) {
-                return;
-            }
-            if (FileUtil.isExist(path)) {
-                uploadAuthPic(path);
-            }
+            return;
         }
+        isMakeing = false;
+        String path = AlbumHelper.getInstance().getPhotoUri().getPath();
+        if (path == null || TextUtils.isEmpty(path)) {
+            return;
+        }
+        if (FileUtil.isExist(path)) {
+            uploadAuthPic(path);
+        }
+
     }
 
 
@@ -232,19 +238,19 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 LoadingDialog.closeLoadingDialog();
                 try {
                     JSONObject jsonObject = new JSONObject(response.getResponseString());
-                    if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
-                        String spic = jsonObject.optJSONObject("res").optString("file_http_path");
-                        sPicNoHttp = jsonObject.optJSONObject("res").optString("file_s_path");
-                        ImageLoader.loadCenterCrop(context, spic, ivPic);
-                        videoVerifyBean.setImgurl(spic);
-                        tvMakePic.setVisibility(View.VISIBLE);
-                        isMakePhotoOK = true;
-                        checkAndShowSubmit();
-                        changePicStatus(0);
-                        tvMakePic.setVisibility(View.VISIBLE);
-                    } else {
+                    if (!"ok".equals(jsonObject.optString("status")) || jsonObject.optJSONObject("res") == null) {
                         PToast.showShort(getResources().getString(R.string.toast_pic_deal_error));
+                        return;
                     }
+                    String spic = jsonObject.optJSONObject("res").optString("file_http_path");
+                    sPicNoHttp = jsonObject.optJSONObject("res").optString("file_s_path");
+                    ImageLoader.loadCenterCrop(context, spic, ivPic);
+                    videoVerifyBean.setImgurl(spic);
+                    tvMakePic.setVisibility(View.VISIBLE);
+                    isMakePhotoOK = true;
+                    checkAndShowSubmit();
+                    changePicStatus(0);
+                    tvMakePic.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     PToast.showShort(getResources().getString(R.string.toast_pic_deal_error));
                 }
@@ -259,18 +265,18 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
             public void onRequestComplete(HttpResponse response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response.getResponseString());
-                    if ("ok".equals(jsonObject.optString("status")) && jsonObject.optJSONObject("res") != null) {
-                        videoVerifyBean.setVideourl(jsonObject.optJSONObject("res").optString("file_http_path"));
-                        loadLocalVideoImg();
-                        tvMakeVideo.setVisibility(View.VISIBLE);
-                        isMakeVideoOk = true;
-                        checkAndShowSubmit();
-                        changeVideoStatus(0);
-                        changeVideoPlay();
-                        tvMakeVideo.setVisibility(View.VISIBLE);
-                    } else {
+                    if (!"ok".equals(jsonObject.optString("status")) || jsonObject.optJSONObject("res") == null) {
                         PToast.showShort(getResources().getString(R.string.toast_video_deal_error));
+                        return;
                     }
+                    videoVerifyBean.setVideourl(jsonObject.optJSONObject("res").optString("file_http_path"));
+                    loadLocalVideoImg();
+                    tvMakeVideo.setVisibility(View.VISIBLE);
+                    isMakeVideoOk = true;
+                    checkAndShowSubmit();
+                    changeVideoStatus(0);
+                    changeVideoPlay();
+                    tvMakeVideo.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     PToast.showShort(getResources().getString(R.string.toast_video_deal_error));
                 }
@@ -287,14 +293,14 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         ModuleMgr.getCommonMgr().addVideoVerify(sPicNoHttp, videoVerifyBean.getVideourl(), new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.getResponseString().contains("ok")) {
-                    videoVerifyBean.setStatus(1);
-                    changeAllStatus(1);
-                    setHideTopRightView(true);
-                    PToast.showShort(getResources().getString(R.string.toast_auth_submit_ok));
-                } else {
+                if (!response.getResponseString().contains("ok")) {
                     PToast.showShort(getResources().getString(R.string.toast_auth_submit_error));
+                    return;
                 }
+                videoVerifyBean.setStatus(1);
+                changeAllStatus(1);
+                setHideTopRightView(true);
+                PToast.showShort(getResources().getString(R.string.toast_auth_submit_ok));
             }
         });
 

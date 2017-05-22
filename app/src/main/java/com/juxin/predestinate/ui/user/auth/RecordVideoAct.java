@@ -190,6 +190,8 @@ public class RecordVideoAct extends FragmentActivity {
             case Surface.ROTATION_270:
                 degree = 180;
                 break;
+            default:
+                break;
         }
         return degree;
     }
