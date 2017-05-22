@@ -117,7 +117,7 @@ public class DBCacheCenter {
      * @param content
      * @return
      */
-    public long storageData(String key, String content){
+    public long storageDataCache(String key, String content){
         try {
             boolean ret = isExist(key);
             final ContentValues values = new ContentValues();

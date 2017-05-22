@@ -46,6 +46,17 @@ public class UserInfoLightweightList extends BaseData {
         }
     }
 
+    /**
+     * 轻量级个人资料
+     * @param jsonStr
+     */
+    public void parseJsonSummary(String jsonStr) {
+        if (!TextUtils.isEmpty(jsonStr)) {
+            JSONArray jsonArray = getJsonObject(jsonStr).optJSONArray("content");
+            this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+        }
+    }
+
 
     public ArrayList<UserInfoLightweight> getUserInfos() {
         Iterator<UserInfoLightweight> infos = lightweightLists.iterator();

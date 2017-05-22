@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -1045,11 +1046,15 @@ public class CommonMgr implements ModuleBase {
     }
 
 
-    public void getSimpleDetail(long uid, RequestComplete complete) {
+    public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
+        Long[] temp = new Long[uids.size()];
+        for(int i = 0; i < uids.size(); i++){
+            temp[i] = uids.get(0);
+        }
+
         HashMap<String, Object> getParms = new HashMap<>();
-        getParms.put("uid", uid);
-        getParms.put("ver", Constant.SUB_VERSION);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getSimpleDetail, getParms, complete);
+        getParms.put("uid", temp);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqUserInfoSummary, getParms, complete);
     }
 
 

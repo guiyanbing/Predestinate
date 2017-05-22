@@ -1,12 +1,12 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -26,15 +26,13 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -60,7 +58,6 @@ public class ChatMgr implements ModuleBase {
         messageMgr.release();
         specialMgr.release();
     }
-
 
     public void inject() {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
@@ -530,7 +527,7 @@ public class ChatMgr implements ModuleBase {
     public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
-            Observable<UserInfoLightweight> observable = dbCenter.queryProfile(uid);
+            Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
             observable.subscribe(new Action1<UserInfoLightweight>() {
                 @Override
                 public void call(UserInfoLightweight lightweight) {
@@ -547,11 +544,28 @@ public class ChatMgr implements ModuleBase {
     }
 
     // 获取个人资料
-    private void getProFile(long userID) {
-        ModuleMgr.getCommonMgr().getSimpleDetail(userID, new RequestComplete() {
+    private void getProFile(final long userID) {
+        List<Long> longs = new ArrayList<>();
+        longs.add(userID);
+        ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("res=====2222===" + response.getResponseString());
+                UserInfoLightweight temp = new UserInfoLightweight();
+                if(!response.isOk()){
+                    removeInfoComplete(true, userID, temp);
+                    return;
+                }
+                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
+                infoLightweightList.parseJsonSummary(response.getResponseString());
+
+                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                    temp = infoLightweightList.getUserInfos().get(0);
+                    dbCenter.getCacheCenter().storageProfileData(temp);
+                    dbCenter.getCenterFLetter().updateUserInfoLight(temp);
+                }
+
+                temp.setUid(userID);
+                removeInfoComplete(true, userID, temp);
             }
         });
     }

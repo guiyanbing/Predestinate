@@ -15,6 +15,8 @@ public class UserInfoLightweight extends UserBasic {
 
     private long time;
     private String infoJson;    //存储json
+    private boolean isOk;
+
 
     private String alias;       // 别名
     private boolean isVip;      // 是否vip
@@ -79,11 +81,63 @@ public class UserInfoLightweight extends UserBasic {
         this.setTopType(jsonObject.optInt("toptype"));
     }
 
+    public void parseJson(JSONObject jsonObject) {
+        if(jsonObject == null || jsonObject.isNull("result")) return;
+
+        setOk("success".equals(jsonObject.optString("result")));
+        if(isOk()) return;
+
+        JSONObject jsonResult = jsonObject.optJSONObject("content");
+        this.setInfoJson(jsonResult.toString());
+
+        this.setUid(jsonResult.optLong("uid"));
+        this.setAvatar(jsonResult.optString("avatar"));
+        this.setAvatar_status(jsonResult.optInt("avatarstatus"));
+        this.setGender(jsonResult.optInt("gender"));
+        this.setNickname(jsonResult.optString("nickname"));
+        this.setVip(jsonObject.optBoolean("is_vip"));
+        this.setSignname(jsonObject.optString("sign"));
+
+
+
+        this.setUsername(jsonResult.optString("username"));
+
+
+
+
+        this.setAge(jsonResult.optInt("age"));
+        this.setBirthday(jsonResult.optString("birthday"));
+        this.setHeight(jsonResult.optInt("height"));
+
+
+        this.setAlias(jsonObject.optString("alias"));
+
+        this.setAuth(jsonObject.optBoolean("is_auth"));
+
+        this.setDistance(jsonObject.optString("distance"));
+        this.setVideo_busy(jsonObject.optInt("video_busy") == 1);
+        this.setVideo_available(jsonObject.optInt("video_available") == 1);
+        this.setAudio_available(jsonObject.optInt("audio_available") == 1);
+        this.setSayHello(jsonObject.optBoolean("isSayHello"));
+        this.setHeartNum(jsonObject.optInt("heartnum"));
+        this.setKf_id(jsonObject.optInt("kf_id"));
+        this.setTop(jsonObject.optInt("top"));
+        this.setTopType(jsonObject.optInt("toptype"));
+    }
+
 
     public void parseUserInfoLightweight(long userID, String infoJson, long time) {
         this.setUid(userID);
         this.setTime(time);
         parseJson(infoJson);
+    }
+
+    public boolean isOk() {
+        return isOk;
+    }
+
+    public void setOk(boolean ok) {
+        isOk = ok;
     }
 
     public long getTime() {

@@ -3,6 +3,7 @@ package com.juxin.predestinate.bean.db;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -33,8 +34,8 @@ public class DBCenter {
 
     /******************** DBCacheCenter **************************/
 
-    public Observable<UserInfoLightweight> queryProfile(long userID) {
-        return cacheCenter.queryProfile(userID);
+    public DBCacheCenter getCacheCenter() {
+        return cacheCenter;
     }
 
 
@@ -74,6 +75,10 @@ public class DBCenter {
         if(ret == DBConstant.ERROR) return DBConstant.ERROR;
 
         return centerFmessage.insertMsg(baseMessage);
+    }
+
+    public DBCenterFLetter getCenterFLetter() {
+        return centerFLetter;
     }
 
     /**
