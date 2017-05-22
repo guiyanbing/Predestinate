@@ -27,7 +27,7 @@ public class OrdinaryMessage{
      */
     public OrdinaryMessage(long userID, String content, int kf, int gz) {
         this.setUserID(userID);
-        this.setType(BaseMessage.Concern_MsgType);
+        this.setType(BaseMessage.follow_MsgType);
         this.setcMsgID(MsgIDUtils.getMsgIDUtils().getMsgID());
         this.setContent(content);
         this.setKf(kf);

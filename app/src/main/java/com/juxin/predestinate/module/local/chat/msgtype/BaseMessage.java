@@ -104,7 +104,7 @@ public class BaseMessage implements IBaseMessage {
     /**
      * 消息类型，进行未读消息比对
      */
-    public static final int Concern_MsgType = 5;//关注
+    public static final int follow_MsgType = 5;//关注
     public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
