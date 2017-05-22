@@ -236,7 +236,8 @@
             <!-- 接受对方视频 -->
             <LinearLayout
                 android:id="@+id/ll_accept_video"
-                style="@style/center_set_item">
+                style="@style/center_set_item"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/center_item_text"
@@ -264,12 +265,14 @@
                     style="@style/SeekBar" />
             </LinearLayout>
 
-            <include layout="@layout/center_information_line" />
+            <include layout="@layout/center_information_line"
+                android:visibility="gone"/>
 
             <!-- 接受对方语音 -->
             <LinearLayout
                 android:id="@+id/ll_accept_voice"
-                style="@style/center_set_item">
+                style="@style/center_set_item"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/center_item_text"
@@ -297,7 +300,8 @@
                     style="@style/SeekBar" />
             </LinearLayout>
 
-            <include layout="@layout/layout_margintop" />
+            <include layout="@layout/layout_margintop"
+                android:visibility="gone"/>
 
             <!-- 清空聊天记录 -->
             <RelativeLayout

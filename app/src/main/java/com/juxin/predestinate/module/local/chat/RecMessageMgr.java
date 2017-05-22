@@ -83,9 +83,9 @@ public class RecMessageMgr implements IMProxy.IMListener {
 
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-//            if(BaseMessage.addFriend_MsgType == message.getType() && ((FriendsMessage)message).getAddtype() == 2){
-//                return;
-//            }
+            if(BaseMessage.TalkRed_MsgType == message.getType()){//红包消息不保存，也不通知上层
+                return;
+            }
 //
 //            if(BaseMessage.system_MsgType == message.getType()){//系统消息不保存
 //                isSave = false;
