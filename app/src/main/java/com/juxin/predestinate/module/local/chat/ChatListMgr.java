@@ -95,7 +95,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             for (BaseMessage tmp : messages) {
                 if(!tmp.isRu()){
                     greetList.add(tmp);
-                }msgList.add(tmp);
+                }
                 unreadNum += tmp.getNum();
             }
         }
