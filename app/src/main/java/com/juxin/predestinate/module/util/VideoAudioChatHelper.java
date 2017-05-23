@@ -167,12 +167,12 @@ public class VideoAudioChatHelper{
         lastOptTime = System.currentTimeMillis();
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         //开启音、视频通话时，男性用户判断是否VIP
-        if(userDetail.getGender() == 1
-                && isOpenConfig(type)
-                && !userDetail.isMonthMail()){
+//        if(userDetail.getGender() == 1
+//                && isOpenConfig(type)
+//                && !userDetail.isMonthMail()){
 //            createTipsVipDialog(context,"您非VIP会员，无法开启此功能","去开通","取消",1);
-            return;
-        }
+//            return;
+//        }
         //开启音、视频通话时，女性用户判断是否视频认证
 //        if(userDetail.getGender() == 2 && isOpenConfig(type)){
 //            if(VideoVerifyBean.getStatus() == 0 || VideoVerifyBean.getStatus() == 2){
