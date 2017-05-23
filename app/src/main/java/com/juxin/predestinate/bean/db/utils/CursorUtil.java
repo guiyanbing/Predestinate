@@ -41,11 +41,14 @@ public class CursorUtil {
     }
 
     public static String getBlobToString(Cursor cursor, String columnName){
+        if(cursor == null || columnName == null){
+            return "";
+        }
         try {
             return new String(getBlob(cursor, columnName), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return "";
         }
-        return "";
     }
 }

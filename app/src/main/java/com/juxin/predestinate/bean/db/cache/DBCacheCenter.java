@@ -3,7 +3,6 @@ package com.juxin.predestinate.bean.db.cache;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
@@ -12,7 +11,6 @@ import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -79,10 +77,7 @@ public class DBCacheCenter {
 
     public Observable<UserInfoLightweight> queryProfile(long userID) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FProfileCache.FPROFILE_TABLE)
-                .append(" WHERE ")
-                .append(FProfileCache.COLUMN_USERID + " = ")
-                .append(userID);
-
+                .append(" WHERE ").append(FProfileCache.COLUMN_USERID + " = ").append(userID);
 
         return mDatabase.createQuery(FProfileCache.FPROFILE_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, UserInfoLightweight>() {
             @Override
@@ -90,13 +85,16 @@ public class DBCacheCenter {
                 UserInfoLightweight lightweight = new UserInfoLightweight();
                 Cursor cursor = query.run();
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        lightweight.parseUserInfoLightweight(
-                                CursorUtil.getLong(cursor, FProfileCache.COLUMN_USERID),
-                                CursorUtil.getBlobToString(cursor, FProfileCache.COLUMN_INFOJSON),
-                                CursorUtil.getLong(cursor, FProfileCache.COLUMN_TIME)
-                        );
+                    if (cursor == null || !cursor.moveToNext()) {
+                        return lightweight;
                     }
+
+                    lightweight.parseUserInfoLightweight(
+                            CursorUtil.getLong(cursor, FProfileCache.COLUMN_USERID),
+                            CursorUtil.getBlobToString(cursor, FProfileCache.COLUMN_INFOJSON),
+                            CursorUtil.getLong(cursor, FProfileCache.COLUMN_TIME)
+                    );
+                    return lightweight;
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -106,8 +104,6 @@ public class DBCacheCenter {
             }
         });
     }
-
-
 
     /******************** FHttpCache **************************/
 

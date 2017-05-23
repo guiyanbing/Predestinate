@@ -207,6 +207,7 @@ public class DBCenterFLetter {
                         CursorUtil.getInt(cursor, FLetter.Num)
                 ));
             }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
