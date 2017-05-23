@@ -193,7 +193,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
     private void onTextDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_text);
-        chat_item_text.setText(Html.fromHtml(msg.getMsgDesc() + ""));
+        chat_item_text.setText(msg.getMsgDesc());
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
 

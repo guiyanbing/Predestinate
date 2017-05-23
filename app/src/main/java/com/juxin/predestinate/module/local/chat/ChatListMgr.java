@@ -34,6 +34,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
+    private List<BaseMessage> friendsList = new ArrayList<>(); //好友列表
 
     @Inject
     DBCenter dbCenter;
@@ -69,12 +70,28 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
+    /**
+     * 好友列表
+     * @return
+     */
+    public List<BaseMessage> getFriendsList() {
+        List<BaseMessage> tempList = new ArrayList<>();
+        synchronized (friendsList) {
+            tempList.addAll(friendsList);
+            return tempList;
+        }
+    }
+
     public void updateListMsg(List<BaseMessage> messages) {
         unreadNum = 0;
         msgList.clear();
+        friendsList.clear();
         if (messages != null && messages.size() > 0) {
             msgList.addAll(messages);
             for (BaseMessage tmp : messages) {
+                if(tmp.isRu()){
+                    friendsList.add(tmp);
+                }
                 unreadNum += tmp.getNum();
             }
         }
