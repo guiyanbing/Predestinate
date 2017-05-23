@@ -13,17 +13,21 @@ import org.json.JSONObject;
  * 用户信息基类
  */
 public class UserBasic extends BaseData implements Parcelable {
-    public long uid;             // 用户Id
-    private String nickname;     // 昵称
+    private int age;             // 年龄
     private String avatar;       // 头像
     private int avatar_status;   // 头像状态 -1:没有数据  0:正在审核 1:审核通过 2:未通过 3:未上传（老版本） 4：好 5：很好 6待复审 7 新版未审核
+    private String nickname;     // 昵称
+    public long uid;             // 用户Id
     private int gender;          // 性别 1男2女
-    private int age;             // 年龄
     private String weight;       // 体重
+    private String edu;          // 学历  1:初中及以下 2：高中及中专 3，大专 4 ，本科 5：硕士及以上
+    private String income;       // 收入情况
+    private String job;          // 工作情况
+    private String marry;        // 情感状态  1:单身， 2:恋爱中， 3:已婚， 4:保密
+    private int height;          // 身高
+    private String star;         // 星座
+    private String birthday;     // 生日
 
-
-
-    // ------------------ 缺少字段 ---------------------------
     // 地址
     private String province;      // 完整省份
     private String city;          // 完整城市
@@ -32,25 +36,17 @@ public class UserBasic extends BaseData implements Parcelable {
     private int scity;            // 城市代码
     private int sprovince;        // 省份代码
 
-    private String birthday;     // 生日
-    private int height;          // 身高
-    private String star;         // 星座
-    private String edu;          // 学历  1:初中及以下 2：高中及中专 3，大专 4 ，本科 5：硕士及以上
-    private String income;       // 收入情况
-    private String job;          // 工作情况
-    private String marry;        // 情感状态  1:单身， 2:恋爱中， 3:已婚， 4:保密
-
     @Override
     public void parseJson(String s) {
         InfoConfig infoConfig = InfoConfig.getInstance();
         JSONObject detailObject = getJsonObject(s);
 
-        this.setUid(detailObject.optLong("uid"));
-        this.setNickname(detailObject.optString("nickname"));
+        this.setAge(detailObject.optInt("age"));
         this.setAvatar(detailObject.optString("avatar"));
         this.setAvatar_status(detailObject.optInt("avatarstatus"));
+        this.setUid(detailObject.optLong("uid"));
+        this.setNickname(detailObject.optString("nickname"));
         this.setGender(detailObject.optInt("gender"));
-        this.setAge(detailObject.optInt("age"));
         this.setBirthday(detailObject.optString("birthday"));
         this.setHeight(detailObject.optInt("height"));
 
@@ -262,7 +258,6 @@ public class UserBasic extends BaseData implements Parcelable {
         this.sprovince = sprovince;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -270,52 +265,52 @@ public class UserBasic extends BaseData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.uid);
-        dest.writeString(this.nickname);
+        dest.writeInt(this.age);
         dest.writeString(this.avatar);
         dest.writeInt(this.avatar_status);
+        dest.writeString(this.nickname);
+        dest.writeLong(this.uid);
         dest.writeInt(this.gender);
-        dest.writeInt(this.age);
         dest.writeString(this.weight);
+        dest.writeString(this.edu);
+        dest.writeString(this.income);
+        dest.writeString(this.job);
+        dest.writeString(this.marry);
+        dest.writeInt(this.height);
+        dest.writeString(this.star);
+        dest.writeString(this.birthday);
         dest.writeString(this.province);
         dest.writeString(this.city);
         dest.writeString(this.provinceName);
         dest.writeString(this.cityName);
         dest.writeInt(this.scity);
         dest.writeInt(this.sprovince);
-        dest.writeString(this.birthday);
-        dest.writeInt(this.height);
-        dest.writeString(this.star);
-        dest.writeString(this.edu);
-        dest.writeString(this.income);
-        dest.writeString(this.job);
-        dest.writeString(this.marry);
     }
 
     public UserBasic() {
     }
 
     protected UserBasic(Parcel in) {
-        this.uid = in.readLong();
-        this.nickname = in.readString();
+        this.age = in.readInt();
         this.avatar = in.readString();
         this.avatar_status = in.readInt();
+        this.nickname = in.readString();
+        this.uid = in.readLong();
         this.gender = in.readInt();
-        this.age = in.readInt();
         this.weight = in.readString();
+        this.edu = in.readString();
+        this.income = in.readString();
+        this.job = in.readString();
+        this.marry = in.readString();
+        this.height = in.readInt();
+        this.star = in.readString();
+        this.birthday = in.readString();
         this.province = in.readString();
         this.city = in.readString();
         this.provinceName = in.readString();
         this.cityName = in.readString();
         this.scity = in.readInt();
         this.sprovince = in.readInt();
-        this.birthday = in.readString();
-        this.height = in.readInt();
-        this.star = in.readString();
-        this.edu = in.readString();
-        this.income = in.readString();
-        this.job = in.readString();
-        this.marry = in.readString();
     }
 
     public static final Creator<UserBasic> CREATOR = new Creator<UserBasic>() {

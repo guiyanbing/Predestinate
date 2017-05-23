@@ -414,6 +414,15 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 用户是否处于黑名单
+     */
+    public void reqIsBlack(long uid, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqIsBlack, postParams, complete);
+    }
+
+    /**
      * 拉黑用户
      */
     public void reqAddBlack(long uid, RequestComplete complete) {
