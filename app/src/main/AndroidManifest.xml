@@ -80,9 +80,6 @@
             android:name=".ui.user.auth.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.setting.UsersSetAct"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.setting.SettingAct"
             android:screenOrientation="portrait" />
         <activity
@@ -93,15 +90,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.UserModifyPwdAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.recommend.RecommendAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.recommend.RecommendFilterAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.setting.FeedBackAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.SuggestAct"
