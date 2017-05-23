@@ -70,7 +70,7 @@
                 android:src="@drawable/f1_user_phone_selector" />
 
             <TextView
-                android:id="@+id/tv_verify_status"
+                android:id="@+id/tv_phone_status"
                 style="@style/text_middle"
                 android:text="@string/center_phone_to_verify"
                 android:textColor="@color/color_666666" />
@@ -79,7 +79,7 @@
 
     <!--真人认证-->
     <RelativeLayout
-        android:id="@+id/ll_video_verify"
+        android:id="@+id/ll_immortal_verify"
         style="@style/center_pieces_item">
 
         <LinearLayout
@@ -91,19 +91,19 @@
             android:padding="@dimen/px30_dp">
 
             <TextView
-                android:id="@+id/tv_video_title"
+                android:id="@+id/tv_immortal_title"
                 style="@style/text_small"
                 android:text="@string/center_video_verify"
                 android:textColor="@color/text_ciyao_gray" />
 
             <ImageView
-                android:id="@+id/iv_video_verify"
+                android:id="@+id/iv_immortal_verify"
                 android:layout_width="@dimen/px87_dp"
                 android:layout_height="@dimen/px87_dp"
                 android:src="@drawable/f1_video_auth_selector" />
 
             <TextView
-                android:id="@+id/tv_video_status"
+                android:id="@+id/tv_immortal_status"
                 style="@style/text_middle"
                 android:text="@string/center_video_to_verify"
                 android:textColor="@color/color_666666" />

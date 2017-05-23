@@ -276,20 +276,20 @@ public class UserBasic extends BaseData implements Parcelable {
         dest.writeInt(this.avatar_status);
         dest.writeInt(this.gender);
         dest.writeInt(this.age);
-        dest.writeString(this.birthday);
-        dest.writeInt(this.height);
         dest.writeString(this.weight);
-        dest.writeString(this.star);
-        dest.writeString(this.edu);
-        dest.writeString(this.income);
-        dest.writeString(this.job);
-        dest.writeString(this.marry);
         dest.writeString(this.province);
         dest.writeString(this.city);
         dest.writeString(this.provinceName);
         dest.writeString(this.cityName);
         dest.writeInt(this.scity);
         dest.writeInt(this.sprovince);
+        dest.writeString(this.birthday);
+        dest.writeInt(this.height);
+        dest.writeString(this.star);
+        dest.writeString(this.edu);
+        dest.writeString(this.income);
+        dest.writeString(this.job);
+        dest.writeString(this.marry);
     }
 
     public UserBasic() {
@@ -302,20 +302,20 @@ public class UserBasic extends BaseData implements Parcelable {
         this.avatar_status = in.readInt();
         this.gender = in.readInt();
         this.age = in.readInt();
-        this.birthday = in.readString();
-        this.height = in.readInt();
         this.weight = in.readString();
-        this.star = in.readString();
-        this.edu = in.readString();
-        this.income = in.readString();
-        this.job = in.readString();
-        this.marry = in.readString();
         this.province = in.readString();
         this.city = in.readString();
         this.provinceName = in.readString();
         this.cityName = in.readString();
         this.scity = in.readInt();
         this.sprovince = in.readInt();
+        this.birthday = in.readString();
+        this.height = in.readInt();
+        this.star = in.readString();
+        this.edu = in.readString();
+        this.income = in.readString();
+        this.job = in.readString();
+        this.marry = in.readString();
     }
 
     public static final Creator<UserBasic> CREATOR = new Creator<UserBasic>() {
