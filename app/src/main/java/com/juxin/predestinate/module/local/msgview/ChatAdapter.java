@@ -236,6 +236,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * @return 返回用户信息，如果没有则返回null。
      */
     public synchronized UserInfoLightweight getUserInfo(long uid) {
+        PLogger.printObject("userInfos====" + userInfos.size());
         UserInfoLightweight userInfo = userInfos.get(uid);
         if (userInfo == null) {
             if (uid == App.uid) {
@@ -381,11 +382,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      */
     private void attach() {
         PLogger.printObject(this);
-        if (TextUtils.isEmpty(channelId)) {
-            ModuleMgr.getChatMgr().attachChatListener(whisperId, this);
-        } else {
-            ModuleMgr.getChatMgr().attachChatListener(channelId, this);
-        }
+        ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
     }
