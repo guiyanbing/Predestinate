@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -30,7 +30,7 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
     private TextView tv_gift, tv_gift_diamonds;
     private ImageView iv_gift;
 
-    private UserProfile userProfile;
+    private UserDetail userDetail;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
-        userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        userDetail = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
         tv_gift = (TextView) findViewById(R.id.tv_gift_count);
         iv_gift = (ImageView) findViewById(R.id.iv_gift_pic);
         tv_gift_diamonds = (TextView) findViewById(R.id.tv_gift_diamonds);
@@ -74,7 +74,7 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
      */
     private void unlock() {
         LoadingDialog.show(this, getString(R.string.user_secret_media_unlock));
-        ModuleMgr.getCenterMgr().reqUnlockVideo(userProfile.getUid(), 0, new RequestComplete() {
+        ModuleMgr.getCenterMgr().reqUnlockVideo(userDetail.getUid(), 0, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {

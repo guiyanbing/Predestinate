@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -31,8 +30,7 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
     private static final int SECRET_SHOW_COLUMN = 3; // 列数
     private int channel = CenterConstant.USER_CHECK_INFO_OWN; // 默认查看自己
 
-    private UserDetail userDetail;   // 自己
-    private UserProfile userProfile; // 他人
+    private UserDetail userDetail;       // 用户资料
     private UserVideoInfo userVideoInfo; // 用户视频信息
 
     private RecyclerView recyclerView;
@@ -50,21 +48,19 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
 
     private void initData() {
         channel = getIntent().getIntExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OWN);
-        userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        }
-
-        if (userDetail != null) {
             setBackView(getString(R.string.user_info_own_video));
             ModuleMgr.getCenterMgr().reqGetVideoList(userDetail.getUid(), this);
             return;
         }
 
-        if (userProfile == null) return;
-        setBackView(getString(R.string.user_info_other_video, userProfile.getNickname()));
-        ModuleMgr.getCenterMgr().reqGetVideoList(userProfile.getUid(), this);
-        ModuleMgr.getCenterMgr().reqSetPopnum(userProfile.getUid(), null);
+        userDetail = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        if (userDetail == null) return;
+        setBackView(getString(R.string.user_info_other_video, userDetail.getNickname()));
+        ModuleMgr.getCenterMgr().reqGetVideoList(userDetail.getUid(), this);
+        ModuleMgr.getCenterMgr().reqSetPopnum(userDetail.getUid(), null);
     }
 
     private void initView() {
@@ -99,9 +95,9 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
      * 设置视频播放次数
      */
     private void reqSetViewTime() {
-        if (userProfile == null) return;
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
-        ModuleMgr.getCenterMgr().reqSetViewTime(userProfile.getUid(), 0, new RequestComplete() {
+        ModuleMgr.getCenterMgr().reqSetViewTime(userDetail.getUid(), 0, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
             }

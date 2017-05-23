@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -63,8 +62,7 @@ public enum UrlParam {
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
     reqMyInfo(Hosts.FATE_IT_GO, "xs/userinfo/MyDetail", UserDetail.class, true),         // 获取个人资料
-    reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
-//    reqOtherInfo(Hosts.FATE_IT_GO, "xs/userinfo/OtherDetail", UserProfile.class, true), // 获取他人资料
+    reqOtherInfo(Hosts.FATE_IT_GO, "xs/userinfo/OtherDetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
     reqAddBlack(Hosts.FATE_IT_GO, "xs/userrelation/AddBlack", null, true),          // 拉黑某用户
     reqRemoveBlack(Hosts.FATE_IT_GO, "xs/userrelation/RemoveBlack", null, true),    // 拉黑列表移除某用户

@@ -342,21 +342,10 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取他人用户详细信息
      */
     public void reqOtherInfo(final long uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", uid);
-        getParams.put("ver", Constant.SUB_VERSION);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("hisuid", uid);
 
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
-
-//        Map<String, Object> postParams = new HashMap<>();
-//        postParams.put("hisuid", uid);
-//
-//        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOtherInfo, postParams, new RequestComplete() {
-//            @Override
-//            public void onRequestComplete(HttpResponse response) {
-//                PLogger.d("kjsknxmmakkj----" + response.getResponseString());
-//            }
-//        });
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOtherInfo, postParams, complete);
     }
 
     /**

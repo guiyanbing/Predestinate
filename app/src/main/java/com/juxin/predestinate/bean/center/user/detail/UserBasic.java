@@ -14,21 +14,16 @@ import org.json.JSONObject;
  */
 public class UserBasic extends BaseData implements Parcelable {
     public long uid;             // 用户Id
-    private String username;     // 用户名：返回值同uid
     private String nickname;     // 昵称
     private String avatar;       // 头像
     private int avatar_status;   // 头像状态 -1:没有数据  0:正在审核 1:审核通过 2:未通过 3:未上传（老版本） 4：好 5：很好 6待复审 7 新版未审核
     private int gender;          // 性别 1男2女
     private int age;             // 年龄
-    private String birthday;     // 生日
-    private int height;          // 身高
     private String weight;       // 体重
-    private String star;         // 星座
-    private String edu;          // 学历  1:初中及以下 2：高中及中专 3，大专 4 ，本科 5：硕士及以上
-    private String income;       // 收入情况
-    private String job;          // 工作情况
-    private String marry;        // 情感状态  1:单身， 2:恋爱中， 3:已婚， 4:保密
 
+
+
+    // ------------------ 缺少字段 ---------------------------
     // 地址
     private String province;      // 完整省份
     private String city;          // 完整城市
@@ -37,13 +32,20 @@ public class UserBasic extends BaseData implements Parcelable {
     private int scity;            // 城市代码
     private int sprovince;        // 省份代码
 
+    private String birthday;     // 生日
+    private int height;          // 身高
+    private String star;         // 星座
+    private String edu;          // 学历  1:初中及以下 2：高中及中专 3，大专 4 ，本科 5：硕士及以上
+    private String income;       // 收入情况
+    private String job;          // 工作情况
+    private String marry;        // 情感状态  1:单身， 2:恋爱中， 3:已婚， 4:保密
+
     @Override
     public void parseJson(String s) {
         InfoConfig infoConfig = InfoConfig.getInstance();
         JSONObject detailObject = getJsonObject(s);
 
         this.setUid(detailObject.optLong("uid"));
-        this.setUsername(detailObject.optString("username"));
         this.setNickname(detailObject.optString("nickname"));
         this.setAvatar(detailObject.optString("avatar"));
         this.setAvatar_status(detailObject.optInt("avatarstatus"));
@@ -122,14 +124,6 @@ public class UserBasic extends BaseData implements Parcelable {
 
     public void setUid(long uid) {
         this.uid = uid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getNickname() {
@@ -277,7 +271,6 @@ public class UserBasic extends BaseData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.uid);
-        dest.writeString(this.username);
         dest.writeString(this.nickname);
         dest.writeString(this.avatar);
         dest.writeInt(this.avatar_status);
@@ -304,7 +297,6 @@ public class UserBasic extends BaseData implements Parcelable {
 
     protected UserBasic(Parcel in) {
         this.uid = in.readLong();
-        this.username = in.readString();
         this.nickname = in.readString();
         this.avatar = in.readString();
         this.avatar_status = in.readInt();
