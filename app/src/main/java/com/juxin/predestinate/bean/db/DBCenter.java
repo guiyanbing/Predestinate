@@ -142,19 +142,6 @@ public class DBCenter {
         return centerFmessage.updateToRead(channelID, userID);
     }
 
-    /**
-     * 聊天记录
-     *
-     * @param channelID
-     * @param whisperID
-     * @param start
-     * @param offset
-     * @return
-     */
-    public Observable<List<BaseMessage>> queryFmessageList(String channelID, String whisperID, int start, int offset) {
-        return centerFmessage.queryMsgList(channelID, whisperID, start, offset);
-    }
-
 
     /**
      * 删除

@@ -348,7 +348,7 @@ public class ChatMgr implements ModuleBase {
      * @param page      页码
      */
     public void getHistoryChat(final String channelID, final String whisperID, int page) {
-        Observable<List<BaseMessage>> observable = dbCenter.queryFmessageList(channelID, whisperID, page, 20);
+        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
         observable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
@@ -368,7 +368,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
         if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
-            Observable<List<BaseMessage>> observable = dbCenter.queryFmessageList(channelID, whisperID, 0, 20);
+            Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
             observable.subscribe(new Action1<List<BaseMessage>>() {
                 @Override
                 public void call(List<BaseMessage> baseMessages) {

@@ -78,8 +78,9 @@ public class GiftMessage extends BaseMessage {
      * @param message
      */
     public GiftMessage(BaseMessage message) {
-        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
-                message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
+        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(),
+                message.getcMsgID(), message.getSpecialMsgID(), message.getType(),message.getStatus(),
+                message.getfStatus(), message.getTime(), message.getJsonStr());
         parseJson(getJsonStr());
     }
 

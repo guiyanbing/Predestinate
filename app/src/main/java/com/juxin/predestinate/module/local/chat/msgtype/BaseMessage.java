@@ -138,6 +138,7 @@ public class BaseMessage implements IBaseMessage {
     private long sendID;// 发送ID
     private long msgID = -1;//服务器消息ID
     private long cMsgID = -1;//客户端消息ID
+    private long specialMsgID = -1;//客户端消息ID
     private long time;
     private String content;//具体内容
     private String jsonStr;//json串
@@ -355,6 +356,14 @@ public class BaseMessage implements IBaseMessage {
         this.cMsgID = cMsgID;
     }
 
+    public long getSpecialMsgID() {
+        return specialMsgID;
+    }
+
+    public void setSpecialMsgID(long specialMsgID) {
+        this.specialMsgID = specialMsgID;
+    }
+
     public int getType() {
         return type;
     }
@@ -544,13 +553,14 @@ public class BaseMessage implements IBaseMessage {
     }
 
     //fmessage
-    public BaseMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID,
+    public BaseMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
                        int type, int status, int fStatus, long time, String jsonStr) {
         this.channelID = channelID;
         this.whisperID = whisperID;
         this.sendID = sendID;
         this.msgID = msgID;
         this.cMsgID = cMsgID;
+        this.specialMsgID = specialMsgID;
         this.type = type;
         this.status = status;
         this.fStatus = fStatus;

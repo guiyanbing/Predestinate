@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -258,6 +260,7 @@ public class DBCenterFMessage {
      * @return
      */
     public Observable<List<BaseMessage>> queryBySqlFmessage(String sql) {
+        PLogger.printObject("convert==" + "111111111");
         return mDatabase.createQuery(FMessage.FMESSAGE_TABLE, sql)
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override
@@ -272,15 +275,18 @@ public class DBCenterFMessage {
         if (null == cursor) {
             return null;
         }
+        PLogger.printObject("convert==" + "222222222");
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
+                PLogger.printObject("convert==" + "333333333");
                 result.add(new BaseMessage(
                         CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
                         CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID),
+                        CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID),
                         CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE),
                         CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
                         CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
@@ -288,6 +294,8 @@ public class DBCenterFMessage {
                         CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)
                 ));
             }
+            PLogger.printObject("convert==" + "4444444");
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
