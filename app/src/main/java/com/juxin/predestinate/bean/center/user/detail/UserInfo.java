@@ -162,6 +162,15 @@ public class UserInfo extends UserBasic {
         return isSayHello;
     }
 
+    /**
+     * 用户是否处于正常状态
+     *
+     * @return true 正常  false  删除/禁用
+     */
+    public boolean isUserNormal() {
+        return user_status == 1;
+    }
+
     public void setGroup(int group) {
         this.group = group;
     }

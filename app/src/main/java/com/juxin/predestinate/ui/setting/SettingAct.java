@@ -273,7 +273,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         //开启音、视频通话时，男性用户判断是否VIP
         if (userDetail.getGender() == 1
-                && !userDetail.isMonthMail()) {
+                && !userDetail.isVip()) {
 
             PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
                 @Override

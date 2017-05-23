@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import com.juxin.predestinate.bean.net.BaseData;
-
 import org.json.JSONObject;
 
 /**
@@ -32,7 +31,6 @@ public class MessageRet extends BaseData {
             this.setS(jsonObject.optInt("s"));
         }
     }
-
 
     public long getMsgId() {
         return msgId;

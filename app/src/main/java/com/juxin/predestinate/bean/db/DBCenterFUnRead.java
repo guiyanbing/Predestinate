@@ -3,6 +3,8 @@ package com.juxin.predestinate.bean.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
+
+import com.juxin.predestinate.bean.db.cache.FProfileCache;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -145,25 +147,20 @@ public class DBCenterFUnRead {
                 .append(FUnRead.COLUMN_KEY + " = ")
                 .append(key);
 
-
         return mDatabase.createQuery(FUnRead.FUNREAD_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, String>() {
             @Override
             public String call(SqlBrite.Query query) {
-                String str = null;
                 Cursor cursor = query.run();
-                if (null == cursor) {
-                    return str;
-                }
                 try {
-                    while (cursor.moveToNext()) {
-                        str = CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
-                    }
+                    if (cursor == null || !cursor.moveToNext()) return null;
+
+                    return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     CloseUtil.close(cursor);
                 }
-                return str;
+                return null;
             }
         });
     }
