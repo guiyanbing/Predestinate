@@ -35,9 +35,9 @@ import java.util.Date;
 
 
 /**
- * 设置页面`
+ * 设置页面
  *
- * @author Kind
+ * @author xy
  */
 public class SettingAct extends BaseActivity implements OnClickListener {
 
@@ -270,45 +270,43 @@ public class SettingAct extends BaseActivity implements OnClickListener {
      * 切换音视频开关配置
      */
     public boolean validChange() {
-//        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-//        //开启音、视频通话时，男性用户判断是否VIP
-//        if (userDetail.getGender() == 1
-//                && !userDetail.isMonthMail()) {
-//
-//            PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
-//                @Override
-//                public void onCancel() {
-//                }
-//
-//                @Override
-//                public void onSubmit() {
-//                    UIShow.showOpenVipActivity(SettingAct.this);
-//                }
-//            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
-//            return false;
-//        }
-//        //开启音、视频通话时，女性用户判断是否视频认证
-//        if (userDetail.getGender() == 2) {
-//            if (videoVerifyBean.getStatus() == 0 || videoVerifyBean.getStatus() == 2) {
-//                PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
-//                    @Override
-//                    public void onCancel() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSubmit() {
-//                        UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
-//                    }
-//                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
-//                return false;
-//            } else if (videoVerifyBean.getStatus() == 1) {
-//                PToast.showShort(getResources().getString(R.string.toast_under_review));
-//                return false;
-//            }
-//        }
-//        chatType = type;
-//        lastOpt = OPT_TOGGLE;
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        //开启音、视频通话时，男性用户判断是否VIP
+        if (userDetail.getGender() == 1
+                && !userDetail.isMonthMail()) {
+
+            PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
+                @Override
+                public void onCancel() {
+                }
+
+                @Override
+                public void onSubmit() {
+                    UIShow.showOpenVipActivity(SettingAct.this);
+                }
+            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
+            return false;
+        }
+        //开启音、视频通话时，女性用户判断是否视频认证
+        if (userDetail.getGender() == 2) {
+            if (videoVerifyBean.getStatus() == 0 || videoVerifyBean.getStatus() == 2) {
+                PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onSubmit() {
+                        UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
+                    }
+                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
+                return false;
+            } else if (videoVerifyBean.getStatus() == 1) {
+                PToast.showShort(getResources().getString(R.string.toast_under_review));
+                return false;
+            }
+        }
         if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) == ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             return true;
         } else {
@@ -322,7 +320,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
      * 下载视频插件
      */
     private void downloadVideoPlugin() {
-        PToast.showShort("开始下载插件");
+        PToast.showShort(getResources().getString(R.string.toast_down_plugin));
         downLoadDialog.show(getSupportFragmentManager(), "download");
         if (isDownloading) {
             return;

@@ -77,10 +77,7 @@
             android:name=".ui.user.check.other.UserBlockAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.PhoneVerifyAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.setting.UsersSetAct"
+            android:name=".ui.user.auth.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.SettingAct"
@@ -93,15 +90,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.UserModifyPwdAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.recommend.RecommendAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.recommend.RecommendFilterAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.setting.FeedBackAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.SuggestAct"
@@ -154,9 +142,6 @@
         <!-- ============= 小友模块start ============= -->
         <activity
             android:name=".ui.user.my.GiftDiamondPayDlg"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.my.NearVisitorAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.my.MyAttentionAct"
@@ -330,7 +315,7 @@
             android:name=".ui.start.FindPwdAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.PhoneVerifyCompleteAct"
+            android:name=".ui.user.auth.PhoneVerifyCompleteAct"
             android:screenOrientation="portrait" />
 
         <!-- ============= 锁屏弹窗 ============= -->

@@ -85,6 +85,7 @@ public class CommonMessage extends BaseMessage{
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setImg(object.optString("img"));
+        this.setRu(object.optInt("ru"));
         if(!object.isNull("voice")){
             JSONObject voiceJSON = object.optJSONObject("voice");
             this.setVoiceUrl(voiceJSON.optString("url"));

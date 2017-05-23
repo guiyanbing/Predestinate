@@ -43,14 +43,14 @@ public class IDCardAuthenticationSucceedAct extends BaseActivity implements View
                 data.putExtra(IDCARDBACK, 1);
                 setResult(RESULT_OK, data);
                 finish();
-                UIShow.show(this, RedBoxRecordAct.class,Intent.FLAG_ACTIVITY_NEW_TASK);
+                UIShow.show(this, RedBoxRecordAct.class,Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
             case R.id.id_card_succeed_btn_main:
                 //返回首页
                 data.putExtra(IDCARDBACK, 2);
                 setResult(RESULT_OK, data);
                 finish();
-                UIShow.show(this, MyAuthenticationAct.class,Intent.FLAG_ACTIVITY_NEW_TASK);
+                UIShow.show(this, MyAuthenticationAct.class,Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
             default:
                 break;

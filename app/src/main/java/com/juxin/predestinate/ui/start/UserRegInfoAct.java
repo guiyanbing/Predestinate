@@ -47,15 +47,7 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.p2_user_reg_info_act);
         setBackView(getResources().getString(R.string.title_reg));
         initView();
-        initData();
         initEvent();
-    }
-
-    private void initData() {
-        int gen = getIntent().getIntExtra("gender", 0);
-        if (gen > 0) {
-            rg_gender.setVisibility(View.VISIBLE);
-        }
     }
 
     private void initView() {
@@ -90,6 +82,8 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                     ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
                     ModuleMgr.getLoginMgr().onRegister(this,urlParam, nickname, age, gender);
                 }
+                break;
+            default:
                 break;
         }
     }

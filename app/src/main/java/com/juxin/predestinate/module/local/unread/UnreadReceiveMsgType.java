@@ -6,9 +6,10 @@ package com.juxin.predestinate.module.local.unread;
  */
 public enum UnreadReceiveMsgType {
 
-    /* 看过消息 */
-    can_msgType(4),
-
+    // 谁关注我消息类型
+    follow_msgType(5),
+    // 红包余额变动消息
+    wallet_msgType(17),
     ;
 
     public long msgType;

@@ -21,7 +21,6 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
-import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.App;
@@ -59,18 +58,13 @@ import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
-import com.juxin.predestinate.ui.recommend.RecommendAct;
-import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.AboutAct;
-import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
-import com.juxin.predestinate.ui.start.PhoneVerifyAct;
-import com.juxin.predestinate.ui.start.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
@@ -78,6 +72,8 @@ import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationAct;
 import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationSucceedAct;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationVideoAct;
+import com.juxin.predestinate.ui.user.auth.PhoneVerifyAct;
+import com.juxin.predestinate.ui.user.auth.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.user.auth.RecordVideoAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
@@ -99,7 +95,6 @@ import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
 import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.user.my.NearVisitorAct;
 import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
 import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
@@ -271,15 +266,6 @@ public class UIShow {
      *
      * @param activity
      */
-    public static void showFeedBackAct(FragmentActivity activity) {
-        activity.startActivity(new Intent(activity, FeedBackAct.class));
-    }
-
-    /**
-     * 打开意见反馈页面
-     *
-     * @param activity
-     */
     public static void showSuggestAct(FragmentActivity activity) {
         activity.startActivity(new Intent(activity, SuggestAct.class));
     }
@@ -314,33 +300,6 @@ public class UIShow {
         context.startActivityForResult(new Intent(context, UserModifyPwdAct.class), 100);
     }
 
-    /**
-     * 打开推荐的人页面
-     */
-    public static void showRecommendAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, RecommendAct.class);
-        activity.startActivity(intent);
-    }
-
-    /**
-     * 打开推荐的人筛选页面
-     */
-    public static void showRecommendFilterAct(final FragmentActivity activity) {
-        LoadingDialog.show(activity, activity.getResources().getString(R.string.tip_is_loading));
-        ModuleMgr.getCommonMgr().sysTags(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                LoadingDialog.closeLoadingDialog();
-                if (response.isOk()) {
-                    Intent intent = new Intent(activity, RecommendFilterAct.class);
-                    intent.putExtra("tags", (TagInfoList) response.getBaseData());
-                    activity.startActivityForResult(intent, 100);
-                } else {
-                    PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
-                }
-            }
-        });
-    }
 
     /**
      * 打开个人信息页
@@ -933,15 +892,6 @@ public class UIShow {
      */
     public static void showMyDiamondsAct(Context context) {
         context.startActivity(new Intent(context, MyDiamondsAct.class));
-    }
-
-    /**
-     * 打开最近来访页面
-     *
-     * @param context
-     */
-    public static void showNearVisitorAct(Context context) {
-        context.startActivity(new Intent(context, NearVisitorAct.class));
     }
 
     /**

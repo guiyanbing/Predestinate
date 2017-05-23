@@ -15,10 +15,8 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -31,8 +29,6 @@ import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * 消息
@@ -136,19 +132,18 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
 
-//        ModuleMgr.getChatMgr().getUserInfoLightweight(86954288, new ChatMsgInterface.InfoComplete() {
-//            @Override
-//            public void onReqComplete(UserInfoLightweight infoLightweight) {
-//
-//            }
-//        });
+        ModuleMgr.getChatMgr().getUserInfoLightweight(86954288, new ChatMsgInterface.InfoComplete(){
+            @Override
+            public void onReqComplete(UserInfoLightweight infoLightweight) {
 
+            }
+        });
 
     }
 
     @Override
     public void onSwipeChooseOpened() {
-        ((MainActivity)getActivity()).onGoneButtom(false);
+        ((MainActivity)getActivity()).onGoneBottom(false);
         mail_bottom.setVisibility(View.VISIBLE);
         mail_title_right_text.setText("取消");
         isGone = true;
@@ -156,7 +151,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onSwipeChooseClosed() {
-        ((MainActivity)getActivity()).onGoneButtom(true);
+        ((MainActivity)getActivity()).onGoneBottom(true);
         mail_bottom.setVisibility(View.GONE);
         mail_title_right_text.setText("编辑");
         isGone = false;

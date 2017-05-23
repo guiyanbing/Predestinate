@@ -99,8 +99,8 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         eitName.setText(mIdCardVerifyStatusInfo.getAccountname());
         eitIdCard.setText(mIdCardVerifyStatusInfo.getId_num());
         eitBankCardId.setText(mIdCardVerifyStatusInfo.getAccountnum());
-        if (!TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_front_img()) && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_back_img())
-                && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getFace_img())){
+        if (!TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_front_img_small()) && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_back_img_small())
+                && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getFace_img_small())){
             apvFrontPhoto.setImg(mIdCardVerifyStatusInfo.getId_front_img_small());
             apvTailPhoto.setImg(mIdCardVerifyStatusInfo.getId_back_img_small());
             apvHandPhoto.setImg(mIdCardVerifyStatusInfo.getFace_img_small());
@@ -177,20 +177,21 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         if (requestCode == authIDCard) {
             if (data != null){
                 int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
-                //                Log.e("TTTTTTTTTTTTTPPP000","zhixing"+back);
+//                                Log.e("TTTTTTTTTTTTTPPP000", "zhixing" + back);
                 if (back == 1){
-                    //                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
-                    this.finish();
+//                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
+                    data.putExtra(IDCardAuthenticationSucceedAct.IDCARDBACK, 1);
+                    setResult(RESULT_OK, data);
                 }
             }
         }
+        this.finish();
     }
 
     @Override
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()){
             UIShow.showIDCardAuthenticationSucceedAct(this,authIDCard);
-            finish();
         }
 //        Log.e("TTTTTTTTTTTTTTTMMM",response.getResponseString()+"|||");
         PToast.showShort(response.getMsg()+"");

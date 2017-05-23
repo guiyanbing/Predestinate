@@ -7,6 +7,8 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -115,6 +117,29 @@ public class DBCenterFLetter {
         return DBConstant.ERROR;
     }
 
+    /**
+     * 更新个人资料
+     * @param lightweight
+     * @return
+     */
+    public long updateUserInfoLight(UserInfoLightweight lightweight){
+        if(lightweight == null){
+            return DBConstant.ERROR;
+        }
+        try {
+            if (!isExist(String.valueOf(lightweight.getUid()))) return DBConstant.ERROR;//没有数据
+
+            final ContentValues values = new ContentValues();
+            if (lightweight.getInfoJson() != null)
+                values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
+
+            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", String.valueOf(lightweight.getUid()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return DBConstant.ERROR;
+    }
+
 
     private boolean isExist(String userid) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
@@ -182,6 +207,7 @@ public class DBCenterFLetter {
                         CursorUtil.getInt(cursor, FLetter.Num)
                 ));
             }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

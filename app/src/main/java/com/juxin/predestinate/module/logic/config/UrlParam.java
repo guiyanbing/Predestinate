@@ -8,8 +8,6 @@ import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.my.RedOneKeyList;
 import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.bean.net.BaseData;
-import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
-import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
@@ -29,10 +27,6 @@ public enum UrlParam {
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
     reqForgotsms("Public/forgotsms", PhoneVerifyResult.class, false),//找回密码发送验证码
-
-    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
-    sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
-
     //================================ 配置项 ==================================
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
@@ -72,7 +66,7 @@ public enum UrlParam {
     reqGetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
-    getSimpleDetail("user/getSimpleDetail", null, true),   //获取轻量级的用户信息
+    reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
 
     // 私密视频相关
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值
@@ -126,8 +120,6 @@ public enum UrlParam {
     sendSMS("public/sendSMS", true),
     // 手机验证
     bindCellPhone("user/bindCellPhone", true),
-    // 最近来访
-    viewMeList("user/viewMeList", true),
     // 索要礼物群发
     qunFa(Hosts.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
     // 索要礼物群发

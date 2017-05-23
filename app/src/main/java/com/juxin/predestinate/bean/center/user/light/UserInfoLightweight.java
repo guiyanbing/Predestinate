@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.text.TextUtils;
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.module.logic.config.AreaConfig;
 
 import org.json.JSONObject;
 
@@ -15,6 +16,11 @@ public class UserInfoLightweight extends UserBasic {
 
     private long time;
     private String infoJson;    //存储json
+
+    private int channel_uid;
+    private int group;
+    private boolean isOnline;
+
 
     private String alias;       // 别名
     private boolean isVip;      // 是否vip
@@ -77,6 +83,37 @@ public class UserInfoLightweight extends UserBasic {
         this.setKf_id(jsonObject.optInt("kf_id"));
         this.setTop(jsonObject.optInt("top"));
         this.setTopType(jsonObject.optInt("toptype"));
+    }
+
+    public void parseJson(JSONObject jsonObject) {
+        if(jsonObject == null) return;
+
+        this.setInfoJson(jsonObject.toString());
+
+        this.setUid(jsonObject.optLong("uid"));
+        this.setAvatar(jsonObject.optString("avatar"));
+        this.setAvatar_status(jsonObject.optInt("avatarstatus"));
+        this.setGender(jsonObject.optInt("gender"));
+        this.setNickname(jsonObject.optString("nickname"));
+        this.setSignname(jsonObject.optString("about"));
+        this.setAge(jsonObject.optInt("age"));
+
+
+        this.setHeight(jsonObject.optInt("height"));
+        this.setKf_id(jsonObject.optInt("kf_id"));
+        this.setTop(jsonObject.optInt("top"));
+        this.setTopType(jsonObject.optInt("toptype"));
+        int pid = jsonObject.optInt("province");
+        int cit = jsonObject.optInt("city");
+        this.setScity(cit);
+        this.setSprovince(pid);
+        this.setProvince(AreaConfig.getInstance().getProvinceByID(pid));
+        this.setCity(AreaConfig.getInstance().getCityByID(cit));
+        this.setProvinceName(AreaConfig.getInstance().getProvinceNameByID(pid));
+        this.setCityName(AreaConfig.getInstance().getCityNameByID(cit));
+        this.setChannel_uid(jsonObject.optInt("channel_uid"));
+        this.setGroup(jsonObject.optInt("group"));
+        this.setOnline(jsonObject.optBoolean("isOnline"));
     }
 
 
@@ -209,6 +246,31 @@ public class UserInfoLightweight extends UserBasic {
 
     public void setTopType(int topType) {
         this.topType = topType;
+    }
+
+
+    public int getChannel_uid() {
+        return channel_uid;
+    }
+
+    public void setChannel_uid(int channel_uid) {
+        this.channel_uid = channel_uid;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     @Override

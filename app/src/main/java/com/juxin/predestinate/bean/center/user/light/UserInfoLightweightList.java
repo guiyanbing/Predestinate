@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.net.BaseData;
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -43,6 +45,22 @@ public class UserInfoLightweightList extends BaseData {
             PLogger.d("UserInfoLightweightList parseJsonSayhi ---- jsonStr " + jsonStr);
             JSONArray jsonArray = getJsonObject(jsonStr).optJSONArray("content");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+        }
+    }
+
+    /**
+     * 轻量级个人资料
+     * @param jsonObject
+     */
+    public void parseJsonSummary(JSONObject jsonObject) {
+        if(jsonObject == null || jsonObject.isNull("res")) return;
+        JSONArray jsonArray = jsonObject.optJSONObject("res").optJSONArray("content");
+        UserInfoLightweight lightweight;
+        for(int i = 0; i < jsonArray.length(); i++){
+            JSONObject temp = jsonArray.optJSONObject(i);
+            lightweight = new UserInfoLightweight();
+            lightweight.parseJson(temp);
+            lightweightLists.add(lightweight);
         }
     }
 

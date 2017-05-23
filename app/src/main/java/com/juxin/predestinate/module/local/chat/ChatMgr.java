@@ -1,12 +1,12 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -16,6 +16,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -25,15 +26,13 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -48,14 +47,10 @@ public class ChatMgr implements ModuleBase {
     @Inject
     DBCenter dbCenter;
 
-//    @Inject
-//    DBCacheCenter dbCacheCenter;
-
     @Override
     public void init() {
         messageMgr.init();
         specialMgr.init();
-        //    App.getCacheComponent().inject(this);
     }
 
     @Override
@@ -63,7 +58,6 @@ public class ChatMgr implements ModuleBase {
         messageMgr.release();
         specialMgr.release();
     }
-
 
     public void inject() {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
@@ -291,7 +285,9 @@ public class ChatMgr implements ModuleBase {
         observable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                onChatMsgHistory(channelID, whisperID, true, baseMessages);
+                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
+                SortList.sortListView(messageList);// 排序
+                onChatMsgHistory(channelID, whisperID, true, messageList);
             }
         });
     }
@@ -309,7 +305,9 @@ public class ChatMgr implements ModuleBase {
             observable.subscribe(new Action1<List<BaseMessage>>() {
                 @Override
                 public void call(List<BaseMessage> baseMessages) {
-                    onChatMsgRecently(channelID, whisperID, true, BaseMessage.conversionListMsg(baseMessages));
+                    List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
+                    SortList.sortListView(messageList);// 排序
+                    onChatMsgRecently(channelID, whisperID, true, messageList);
                 }
             });
 //            DBCenter.getInstance().queryMsgListWG(channelID, whisperID, 20);
@@ -513,11 +511,9 @@ public class ChatMgr implements ModuleBase {
 //                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Whisper, msg);
 //                }
 
-                if (App.uid != message.getSendID()) {
-                    //角标消息更改
-                    if (UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
-                        specialMgr.updateUnreadMsg(message);
-                    }
+                //角标消息更改
+                if (App.uid != message.getSendID() && UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
+                    specialMgr.updateUnreadMsg(message);
                 }
             }
         });
@@ -528,31 +524,50 @@ public class ChatMgr implements ModuleBase {
      ******************************/
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<Long, ChatMsgInterface.InfoComplete>();
 
-    public void getUserInfoLightweight(long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-//        synchronized (infoMap) {
-//            infoMap.put(uid, infoComplete);
-//            Observable<UserInfoLightweight> observable = dbCacheCenter.queryProfile(uid);
-//            observable.subscribe(new Action1<UserInfoLightweight>() {
-//                @Override
-//                public void call(UserInfoLightweight lightweight) {
-//                    long infoTime = lightweight.getTime();
-//                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
-//                        removeInfoComplete(true, lightweight.getUid(), lightweight);
-//                    } else {
-//                        removeInfoComplete(false, lightweight.getUid(), lightweight);
-//                        getProFile(lightweight.getUid());
-//                    }
-//                }
-//            });
-//        }
+    public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
+        synchronized (infoMap) {
+            infoMap.put(uid, infoComplete);
+            Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
+            observable.subscribe(new Action1<UserInfoLightweight>() {
+                @Override
+                public void call(UserInfoLightweight lightweight) {
+                    PLogger.printObject("lightweight==222==" + lightweight);
+                    long infoTime = lightweight.getTime();
+                    if (uid  > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+                        removeInfoComplete(true, uid, lightweight);
+                    } else {
+                        removeInfoComplete(false, uid, lightweight);
+                        getProFile(uid);
+                    }
+                }
+            });
+        }
     }
 
     // 获取个人资料
-    private void getProFile(long userID) {
-        ModuleMgr.getCommonMgr().getSimpleDetail(userID, new RequestComplete() {
+    private void getProFile(final long userID) {
+        List<Long> longs = new ArrayList<>();
+        longs.add(userID);
+        ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("res=====2222===" + response.getResponseString());
+                PLogger.printObject("re=====" + response.getResponseString());
+                UserInfoLightweight temp = new UserInfoLightweight();
+                if(!response.isOk()){
+                    removeInfoComplete(true, userID, temp);
+                    return;
+                }
+                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
+                infoLightweightList.parseJsonSummary(response.getResponseJson());
+
+                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                    temp = infoLightweightList.getUserInfos().get(0);
+                    dbCenter.getCacheCenter().storageProfileData(temp);
+                    dbCenter.getCenterFLetter().updateUserInfoLight(temp);
+                }
+
+                temp.setUid(userID);
+                removeInfoComplete(true, userID, temp);
             }
         });
     }

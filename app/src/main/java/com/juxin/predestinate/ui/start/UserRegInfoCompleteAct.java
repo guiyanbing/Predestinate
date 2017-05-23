@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.start;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -42,11 +40,6 @@ import java.util.HashMap;
  * @Date:2017-4-19
  */
 public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListener, ImgSelectUtil.OnChooseCompleteListener, PObserver {
-    private final static int TASK_TYPE_HEADUPLOAD = 0;
-    private final static int TASK_TYPE_MODIFYDATA = 1;
-
-    public final static int REQUEST_TYPE_REGISTER = 2;
-    public final static int REQUEST_TYPE_LOGIN = 3;
 
     private final static String HEIGHT_MALE_DEFAULT = "175cm";
     private final static String HEIGHT_FEMALE_DEFAULT = "160cm";
@@ -64,8 +57,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
 
     private HashMap<String, Object> postParams;
-
-    private int requestType;
 
     private boolean ifUpHead = true;             // 是否已设置头像
 
@@ -89,7 +80,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
-        PLogger.d("gender=="+ ModuleMgr.getCenterMgr().getMyInfo().getGender());
         ifUpHead = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1;
     }
 
@@ -112,18 +102,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     }
 
     private void fillData() {
-        requestType = getIntent().getIntExtra("requestType", REQUEST_TYPE_REGISTER);
         eduValue = getResources().getString(R.string.txt_reg_edu_default);
         jobValue = getResources().getString(R.string.txt_reg_job_default);
         marryValue = getResources().getString(R.string.txt_reg_marry_default);
         incomeValue = getResources().getString(R.string.txt_reg_income_default);
-        if (requestType == REQUEST_TYPE_REGISTER) {
-            int gender = getIntent().getIntExtra("gender", 1);
-            heightValue = gender == 1 ? HEIGHT_MALE_DEFAULT : HEIGHT_FEMALE_DEFAULT;
-        } else {
-            // 从数据库获取用户信息
-            heightValue = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 ? HEIGHT_MALE_DEFAULT : HEIGHT_FEMALE_DEFAULT;
-        }
+        heightValue = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 ? HEIGHT_MALE_DEFAULT : HEIGHT_FEMALE_DEFAULT;
         // 将从数据库获取的信息显示页面上
         tv_edu.setText(eduValue);
         tv_job.setText(jobValue);
@@ -211,17 +194,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        updateDataToLocal();
-        if (requestType == REQUEST_TYPE_REGISTER) {
-            Intent intent = new Intent(this, NavUserAct.class);
-            startActivity(intent);
-        }
-        overridePendingTransition(R.anim.slide_fragment_right_in, R.anim.slide_fragment_right_out);
-        finish();
-    }
-
     private boolean validValue(String[] values, int[] toasts) {
         for (int i = 0; i < values.length; i++) {
             if (TextUtils.isEmpty(values[i])) {
@@ -246,14 +218,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         return true;
     }
 
-    private void updateDataToLocal() {
-//        int height = !postParams.containsKey("height") ? -1 : Integer.parseInt(postParams.get("height").toString());
-//        DataCenter.getInstance().update_userinfo_item(AppCtx.getPreference(AppCtx.UserName), AppCtx.getPreference(AppCtx.SUid),
-//                User.DEFAULT_STRING_VALUE, User.DEFAULT_INT_VALUE, User.DEFAULT_STRING_VALUE, User.DEFAULT_INT_VALUE, User.DEFAULT_INT_VALUE,
-//                User.DEFAULT_INT_VALUE, User.DEFAULT_INT_VALUE, User.DEFAULT_INT_VALUE, User.DEFAULT_INT_VALUE, User.DEFAULT_INT_VALUE,
-//                User.DEFAULT_INT_VALUE, jobValue, eduValue, height, incomeValue, marryValue, User.DEFAULT_STRING_VALUE, User.DEFAULT_STRING_VALUE
-//                , User.DEFAULT_STRING_VALUE);
-    }
 
     @Override
     public void onComplete(final String... path) {
@@ -261,7 +225,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
             return;
         }
         if (FileUtil.isExist(path[0])) {
-            LoadingDialog.show(UserRegInfoCompleteAct.this, "正在上传头像");
+            LoadingDialog.show(UserRegInfoCompleteAct.this, getResources().getString(R.string.user_info_avatar_upload));
             ModuleMgr.getCenterMgr().uploadAvatar(path[0], new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
@@ -274,13 +238,13 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                             ifUpHead = true;
                         } else {
-                            PToast.showShort("头像上传失败，请重试");
+                            PToast.showShort(getResources().getString(R.string.toast_head_error));
                         }
                     }
                 }
             });
         } else {
-            PToast.showShort("图片地址无效");
+            PToast.showShort(getResources().getString(R.string.toast_picpath_error));
         }
     }
 

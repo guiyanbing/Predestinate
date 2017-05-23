@@ -1,6 +1,10 @@
 package com.juxin.predestinate.bean.db;
 
 import android.text.TextUtils;
+
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -9,23 +13,31 @@ import java.util.Map;
 import rx.Observable;
 
 /**
+ * DB处理中心
  * Created by Kind on 2017/3/28.
- * TODO 线程问题
  */
-
 public class DBCenter {
 
     private BriteDatabase mDatabase;
     private DBCenterFLetter centerFLetter;
     private DBCenterFMessage centerFmessage;
     private DBCenterFUnRead centerFUnRead;
+    private DBCacheCenter cacheCenter;
 
     public DBCenter(BriteDatabase database) {
         this.mDatabase = database;
         centerFLetter = new DBCenterFLetter(database);
         centerFmessage = new DBCenterFMessage(database);
         centerFUnRead = new DBCenterFUnRead(database);
+        cacheCenter = new DBCacheCenter(database);
     }
+
+    /******************** DBCacheCenter **************************/
+
+    public DBCacheCenter getCacheCenter() {
+        return cacheCenter;
+    }
+
 
     /******************** FUnRead **************************/
 
@@ -63,6 +75,10 @@ public class DBCenter {
         if(ret == DBConstant.ERROR) return DBConstant.ERROR;
 
         return centerFmessage.insertMsg(baseMessage);
+    }
+
+    public DBCenterFLetter getCenterFLetter() {
+        return centerFLetter;
     }
 
     /**

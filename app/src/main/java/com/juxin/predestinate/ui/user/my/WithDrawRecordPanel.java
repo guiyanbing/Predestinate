@@ -89,6 +89,7 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,XR
             showNoData();
             return;
         }
+        showNoData();
         crvView.showXrecyclerView();
         PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
     }
