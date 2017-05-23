@@ -10,8 +10,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
@@ -285,16 +285,16 @@ public class Invoker {
             ModuleMgr.getCenterMgr().reqOtherInfo(dataObject.optLong("uid"), new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    UserProfile userProfile = new UserProfile();
-                    userProfile.parseJson(response.getResponseString());
+                    if (!response.isOk()) return;
 
+                    UserDetail userDetail = (UserDetail) response.getBaseData();
                     Map<String, Object> responseObject = new HashMap<>();
-                    responseObject.put("uid", userProfile.getUid());
-                    responseObject.put("avatar", userProfile.getAvatar());
-                    responseObject.put("avatar_status", userProfile.getAvatar_status());
-                    responseObject.put("nickname", userProfile.getNickname());
-                    responseObject.put("gender", userProfile.getGender());
-                    responseObject.put("is_vip", userProfile.isVip());
+                    responseObject.put("uid", userDetail.getUid());
+                    responseObject.put("avatar", userDetail.getAvatar());
+                    responseObject.put("avatar_status", userDetail.getAvatar_status());
+                    responseObject.put("nickname", userDetail.getNickname());
+                    responseObject.put("gender", userDetail.getGender());
+                    responseObject.put("is_vip", userDetail.isVip());
 
                     doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
                 }

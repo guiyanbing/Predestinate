@@ -17,8 +17,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.module.local.pay.PayWX;
@@ -325,7 +325,7 @@ public class UIShow {
     /**
      * 打开TA人资料查看页
      */
-    public static void showCheckOtherInfoAct(final Context context, UserProfile userProfile) {
+    public static void showCheckOtherInfoAct(final Context context, UserDetail userProfile) {
         showCheckOtherInfoAct(context, userProfile.getUid(), userProfile);
     }
 
@@ -339,7 +339,7 @@ public class UIShow {
     /**
      * 打开TA人资料查看页
      */
-    private static void showCheckOtherInfoAct(final Context context, long uid, UserProfile userProfile) {
+    private static void showCheckOtherInfoAct(final Context context, long uid, UserDetail userProfile) {
         if (userProfile != null) {
             skipCheckOtherInfoAct(context, userProfile);
             return;
@@ -352,13 +352,12 @@ public class UIShow {
                 LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        UserProfile userProfile = new UserProfile();
-                        userProfile.parseJson(response.getResponseString());
-
-                        if ("error".equals(userProfile.getResult())) {
+                        if (!response.isOk()) {
                             PToast.showShort(context.getString(R.string.request_error));
                             return;
                         }
+
+                        UserDetail userProfile = (UserDetail) response.getBaseData();
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
                         skipCheckOtherInfoAct(context, userProfile);
@@ -368,7 +367,7 @@ public class UIShow {
         });
     }
 
-    private static void skipCheckOtherInfoAct(Context context, UserProfile userProfile) {
+    private static void skipCheckOtherInfoAct(Context context, UserDetail userProfile) {
         Intent intent = new Intent(context, UserCheckInfoAct.class);
         intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
@@ -411,7 +410,7 @@ public class UIShow {
      *
      * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context, UserProfile userProfile) {
+    public static void showUserSecretAct(Context context, UserDetail userProfile) {
         Intent intent = new Intent(context, UserSecretAct.class);
         if (userProfile != null) {
             intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
@@ -427,11 +426,11 @@ public class UIShow {
      * @param uid     他人用户id，无详细资料UserProfile对象时，传递uid, UserProfile传递null
      * @param channel 跳转来源渠道{@link CenterConstant}
      */
-    public static void showUserOtherSetAct(final Context context, long uid, UserProfile userProfile, final int channel) {
+    public static void showUserOtherSetAct(final Context context, long uid, UserDetail userDetail, final int channel) {
         final Intent intent = new Intent(context, UserOtherSetAct.class);
 
-        if (userProfile != null) {
-            intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        if (userDetail != null) {
+            intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userDetail);
             intent.putExtra(CenterConstant.USER_SET_KEY, channel);
             context.startActivity(intent);
             return;
@@ -444,13 +443,12 @@ public class UIShow {
                 LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        UserProfile userProfile = new UserProfile();
-                        userProfile.parseJson(response.getResponseString());
-
-                        if ("error".equals(userProfile.getResult())) {
+                        if (!response.isOk()) {
                             PToast.showShort(context.getString(R.string.request_error));
                             return;
                         }
+
+                        UserDetail userProfile = (UserDetail) response.getBaseData();
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
                         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
@@ -1225,9 +1223,9 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context, UserProfile userProfile) {
+    public static void showSecretGiftDlg(Context context, UserDetail userDetail) {
         Intent intent = new Intent(context, SecretGiftDlg.class);
-        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userDetail);
         context.startActivity(intent);
     }
 

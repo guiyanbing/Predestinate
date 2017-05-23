@@ -10,8 +10,6 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -21,7 +19,6 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 查看他人资料底部panel
@@ -29,48 +26,32 @@ import java.util.List;
 public class UserCheckInfoFootPanel extends BasePanel {
 
     private final int channel;
-    private UserDetail userDetail;  // 个人资料
-    private UserProfile userProfile;// TA人资料
+    private UserDetail userDetail;  // 用户资料
 
     private LinearLayout albumLayout, videoLayout, chatPriceLayout;
     private TextView tv_album, tv_video_price, tv_audio_price;
     private AlbumHorizontalPanel albumPanel, videoPanel;
     private ImageView iv_auth_photo, iv_auth_phone, iv_auth_video; // 认证
-    private boolean isAuthPhoto, isAuthPhone, isAuthVideo;
+    private boolean isAuthPhoto;
 
-    private int albumNum;
-    private List<UserPhoto> userPhotos;
-
-    public UserCheckInfoFootPanel(Context context, int channel, UserProfile userProfile) {
+    public UserCheckInfoFootPanel(Context context, int channel, UserDetail userProfile) {
         super(context);
         setContentView(R.layout.p1_user_checkinfo_footer);
         this.channel = channel;
-        this.userProfile = userProfile;
+        this.userDetail = userProfile;
 
-        initData();
         initView();
     }
 
-    private void initData() {
+    private void initView() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-            userPhotos = userDetail.getUserPhotos();
-            albumNum = userDetail.getUserPhotos().size();
-            isAuthPhone = userDetail.isVerifyCellphone();
-            isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
-            return;
         }
-
-        if (userProfile == null) {
+        if (userDetail == null) {
             PToast.showShort(getContext().getString(R.string.user_other_info_req_fail));
             return;
         }
-        userPhotos = userProfile.getUserPhotos();
-        albumNum = userProfile.getUserPhotos().size();
-        isAuthPhone = userProfile.isVerifyCellphone();
-    }
 
-    private void initView() {
         tv_album = (TextView) findViewById(R.id.album_num);
         chatPriceLayout = (LinearLayout) findViewById(R.id.ll_chat_price);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
@@ -84,10 +65,10 @@ public class UserCheckInfoFootPanel extends BasePanel {
         refreshAuth();  // 认证状态
 
         // 照片列表
-        albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userPhotos);
+        albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
         albumLayout.addView(albumPanel.getContentView());
 
-        tv_album.setText(String.valueOf(albumNum));
+        tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
     }
 
     // 添加右滑退出忽略view
@@ -100,8 +81,10 @@ public class UserCheckInfoFootPanel extends BasePanel {
      * 认证状态
      */
     public void refreshAuth() {
+        boolean isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
+
         iv_auth_photo.setVisibility(isAuthPhoto ? View.VISIBLE : View.GONE);
-        iv_auth_phone.setVisibility(isAuthPhone ? View.VISIBLE : View.GONE);
+        iv_auth_phone.setVisibility(userDetail.isVerifyCellphone() ? View.VISIBLE : View.GONE);
         iv_auth_video.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
     }
 
@@ -109,8 +92,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
         if (userDetail == null) return;
 
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-            albumNum = userDetail.getUserPhotos().size();
-            tv_album.setText(String.valueOf(albumNum));
+            tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
             albumPanel.refresh(userDetail);
             refreshAuth();
         }
@@ -132,7 +114,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_video:
-                    UIShow.showUserSecretAct(getContext(), userProfile);
+                    UIShow.showUserSecretAct(getContext(), userDetail);
                     break;
             }
         }

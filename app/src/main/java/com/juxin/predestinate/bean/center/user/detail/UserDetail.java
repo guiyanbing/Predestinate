@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
+import android.os.Parcel;
+
 import com.juxin.library.log.PSP;
 
 import org.json.JSONObject;
@@ -52,4 +54,38 @@ public class UserDetail extends UserInfo {
     public void setDiamondsSum(int diamondsSum) {
         PSP.getInstance().put("diamondsSum" + uid, diamondsSum);
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeTypedList(this.userPhotos);
+        dest.writeInt(this.voice);
+    }
+
+    public UserDetail() {
+    }
+
+    protected UserDetail(Parcel in) {
+        super(in);
+        this.userPhotos = in.createTypedArrayList(UserPhoto.CREATOR);
+        this.voice = in.readInt();
+    }
+
+    public static final Creator<UserDetail> CREATOR = new Creator<UserDetail>() {
+        @Override
+        public UserDetail createFromParcel(Parcel source) {
+            return new UserDetail(source);
+        }
+
+        @Override
+        public UserDetail[] newArray(int size) {
+            return new UserDetail[size];
+        }
+    };
 }

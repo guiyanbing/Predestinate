@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -42,7 +42,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
     private SeekBar videoBar, voiceBar, shieldBar;
     private boolean videoBarStatus, voiceBarStatus, shieldBarStatus;
 
-    private UserProfile userProfile; // 他人资料
+    private UserDetail userDetail; // 他人资料
     private String tempRemark;       // 临时备注名称
     private int channel = CenterConstant.USER_SET_FROM_CHECK;  // 默认个人主页跳转
 
@@ -63,27 +63,27 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         user_remark = (TextView) findViewById(R.id.user_remark);
-        if (userProfile == null) return;
+        if (userDetail == null) return;
 
         user_remark.setOnClickListener(listener);
         findViewById(R.id.rl_clear).setOnClickListener(listener);
         findViewById(R.id.rl_complain).setOnClickListener(listener);
         findViewById(R.id.ll_edit).setOnClickListener(listener);
 
-        ImageLoader.loadRoundCorners(this, userProfile.getAvatar(), 8, user_head);
-        user_nick.setText(userProfile.getNickname());
-        user_id.setText("ID: " + userProfile.getUid());
+        ImageLoader.loadRoundCorners(this, userDetail.getAvatar(), 8, user_head);
+        user_nick.setText(userDetail.getNickname());
+        user_id.setText("ID: " + userDetail.getUid());
     }
 
     private void initData() {
-        userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        userDetail = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
         channel = getIntent().getIntExtra(CenterConstant.USER_SET_KEY, CenterConstant.USER_SET_FROM_CHECK);
-        if (userProfile == null) {
+        if (userDetail == null) {
             PToast.showShort(getString(R.string.user_other_info_req_fail));
             return;
         }
 
-        ModuleMgr.getCenterMgr().reqGetRemarkName(userProfile.getUid(), this);            // 请求用户备注
+        ModuleMgr.getCenterMgr().reqGetRemarkName(userDetail.getUid(), this);            // 请求用户备注
         //ModuleMgr.getCenterMgr().reqGetOpposingVideoSetting(userProfile.getUid(), this);  // 请求用户接受音视频配置
     }
 
@@ -93,7 +93,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
             switch (v.getId()) {
                 case R.id.ll_edit:
                     if (channel == CenterConstant.USER_SET_FROM_CHAT) {
-                        UIShow.showCheckOtherInfoAct(UserOtherSetAct.this, userProfile);
+                        UIShow.showCheckOtherInfoAct(UserOtherSetAct.this, userDetail);
                     }
                     break;
 
@@ -104,7 +104,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                         @Override
                         public void editFinish(String text) {
                             tempRemark = text;
-                            ModuleMgr.getCenterMgr().reqSetRemarkName(userProfile.getUid(), text, UserOtherSetAct.this);
+                            ModuleMgr.getCenterMgr().reqSetRemarkName(userDetail.getUid(), text, UserOtherSetAct.this);
                         }
                     });
                     break;
@@ -114,7 +114,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                     break;
 
                 case R.id.rl_complain:  // 投诉，跳转举报
-                    UIShow.showDefriendAct(userProfile.getUid(), UserOtherSetAct.this);
+                    UIShow.showDefriendAct(userDetail.getUid(), UserOtherSetAct.this);
                     break;
             }
         }
@@ -207,29 +207,29 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         int videoSet = videoBarStatus ? 1 : 0;
         int voiceSet = voiceBarStatus ? 1 : 0;
 
-        if (userProfile == null) return;
+        if (userDetail == null) return;
 
         if (videoSetting == null) {
-            ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userProfile.getUid(), videoSet, voiceSet, this);
+            ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userDetail.getUid(), videoSet, voiceSet, this);
             return;
         }
 
         if (videoSetting.getAcceptvideo() == videoSet
                 && videoSetting.getAcceptvoice() == voiceSet)
             return;
-        ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userProfile.getUid(), videoSet, voiceSet, this);
+        ModuleMgr.getCenterMgr().reqSetOpposingVideoSetting(userDetail.getUid(), videoSet, voiceSet, this);
     }
 
     /**
      * 拉黑、取消拉黑
      */
     private void reqAddOrRemoveBlack() {
-        if (userProfile == null) return;
+        if (userDetail == null) return;
         if (shieldBarStatus) {
-            ModuleMgr.getCenterMgr().reqAddBlack(userProfile.getUid(), this);
+            ModuleMgr.getCenterMgr().reqAddBlack(userDetail.getUid(), this);
             return;
         }
-        ModuleMgr.getCenterMgr().reqRemoveBlack(userProfile.getUid(), this);
+        ModuleMgr.getCenterMgr().reqRemoveBlack(userDetail.getUid(), this);
     }
 
     /**
@@ -243,7 +243,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
             @Override
             public void onSubmit() {
-                long ret = ModuleMgr.getChatListMgr().deleteFmessage(userProfile.getUid());
+                long ret = ModuleMgr.getChatListMgr().deleteFmessage(userDetail.getUid());
                 if (ret != DBConstant.ERROR) {
                     PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
                     return;
