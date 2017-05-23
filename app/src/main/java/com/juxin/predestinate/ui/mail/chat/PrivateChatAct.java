@@ -45,9 +45,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private boolean isFollow = false;
     private int kf_id;
     private ChatViewLayout privateChat = null;
-    private TextView base_title_title;
-
-    private CustomFrameLayout viewGroup;
+    private TextView base_title_title, cus_top_title_txt;
 
     private LinearLayout privatechat_head;
     private ImageView chat_title_attention_icon;
@@ -66,7 +64,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.p1_privatechatact);
 
         initView();
-
         MsgMgr.getInstance().attach(this);
 
         //addMessageListener(MsgType.MT_MyInfo_Change, this);//个人资料已更新
@@ -94,23 +91,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //                }
 //            }
 //        }
-
-        //进入该页面之后请求视频权限
-//        PermissionUtils.requestCamera(this, new Runnable() {
-//            @Override
-//            public void run() {
-//                Camera camera = CameraHelper.getCameraInstance(CameraHelper.getDefaultCameraID());
-//                if (camera != null) camera.release();
-//
-//                //获取到视频权限之后再请求录音权限
-//                PermissionUtils.requestAudio(PrivateChatAct.this, new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        ChatMediaRecord.getInstance().requestPermission();
-//                    }
-//                });
-//            }
-//        });
     }
 
     /**
@@ -124,9 +104,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 PToast.showShort("免费发信次数已用完!");
                 return;
             }
-//            if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
-//                return;
-//            }
             ModuleMgr.getChatMgr().sendTextMsg(null, String.valueOf(whisperID), replyMsg);
         }
     }
@@ -140,7 +117,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         setTitleCenterContainer(baseTitleView);
         base_title_title = (TextView) baseTitleView.findViewById(R.id.cus_top_title);
 
-
+        setNickName(name);
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//小友客服
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
                 @Override
@@ -161,8 +138,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //                    break;
             }
         } else {
-            if (!TextUtils.isEmpty(name)) {
-                str = name;
+            if (!TextUtils.isEmpty(nickName)) {
+                str = nickName;
             }
         }
 
@@ -208,6 +185,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 UserDetail userDetail = (UserDetail) response.getBaseData();
                 isFollow = userDetail.isFollow();
                 kf_id = userDetail.getKf_id();
+            //    cus_top_title_txt.setText(userDetail.get);
             }
         });
     }
@@ -390,14 +368,13 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        //    ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Chat_Page, viewGroup, getParmsJson());
+        //ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Chat_Page, viewGroup, getParmsJson());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //  ModuleMgr.getTipsBarMgr().detach();
-        //  TipToolUtils.dismiss();
+        //ModuleMgr.getTipsBarMgr().detach();
     }
 
     @Override

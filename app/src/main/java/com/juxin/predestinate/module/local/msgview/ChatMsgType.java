@@ -2,9 +2,14 @@ package com.juxin.predestinate.module.local.msgview;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.HtmlMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCommon;
+import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomHint;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomSimple;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGift;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGiveMeGift;
@@ -23,7 +28,15 @@ public enum ChatMsgType {
 
      CMT_10(ChatPanelGift.class, "礼物消息"),
 
+    CMT_14(ChatPanelCustomHint.class, "小提示消息"),
+
      CMT_20(ChatPanelGiveMeGift.class, "礼物消息"),
+
+
+
+//    wantGift(TextMessage.class, 15),//索要礼物消息
+//    html(HtmlMessage.class, 19),//html消息
+
 
 
 //    CMT_3(ChatPanelText.class, "打招呼消息-用普通文字消息模板"),

@@ -105,7 +105,6 @@
                 android:visibility="visible" />
 
             <RelativeLayout
-                android:id="@+id/chat_rel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center">

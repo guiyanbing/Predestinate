@@ -83,25 +83,6 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
-     * 文字消息
-     *
-     * @param whisperID
-     * @param content
-     */
-    public void sendTextMsg(String channelID, String whisperID, String content) {
-        CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
-        commonMessage.setStatus(DBConstant.SENDING_STATUS);
-        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-
-        long ret = dbCenter.insertMsg(commonMessage);
-
-        boolean b = ret != DBConstant.ERROR;
-        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
-
-        if (b) sendMessage(commonMessage, null);
-    }
-
-    /**
      * 打招呼
      *
      * @param whisperID
@@ -124,6 +105,25 @@ public class ChatMgr implements ModuleBase {
         } else {
             sendCallBack.onSendFailed(null);
         }
+    }
+
+    /**
+     * 文字消息
+     *
+     * @param whisperID
+     * @param content
+     */
+    public void sendTextMsg(String channelID, String whisperID, String content) {
+        CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
+        commonMessage.setStatus(DBConstant.SENDING_STATUS);
+        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+
+        long ret = dbCenter.insertMsg(commonMessage);
+
+        boolean b = ret != DBConstant.ERROR;
+        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
+
+        if (b) sendMessage(commonMessage, null);
     }
 
     /**
@@ -229,7 +229,7 @@ public class ChatMgr implements ModuleBase {
     }
 
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack) {
-        PLogger.d("isMsgID=" + message.getcMsgID());
+        PLogger.d("isMsgID=" +message.getType()+ "=" + message.getcMsgID());
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -245,7 +245,7 @@ public class ChatMgr implements ModuleBase {
                     updateOk(message, messageRet);
                 }
 
-                PLogger.d("isMsgOK=" + contents);
+                PLogger.d("isMsgOK=" + message.getType()+ "="  + contents);
             }
 
             @Override

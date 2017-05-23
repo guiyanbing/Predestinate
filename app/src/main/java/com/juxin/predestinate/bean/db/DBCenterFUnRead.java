@@ -3,17 +3,14 @@ package com.juxin.predestinate.bean.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -159,7 +156,7 @@ public class DBCenterFUnRead {
                 }
                 try {
                     while (cursor.moveToNext()) {
-                        str = CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT);
+                        str = CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
