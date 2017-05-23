@@ -2,8 +2,11 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -61,6 +64,22 @@ public class ChatMgr implements ModuleBase {
 
     public void inject() {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
+    }
+
+
+    /**
+     * 更新某个用户的本地状态
+     * 如果在聊天框的时候。发送过来消息立即更改为已读
+     *
+     * @param channelID
+     * @param whisperID
+     */
+    public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
+        dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+
+       // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
+
+       // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
     /**
@@ -219,6 +238,7 @@ public class ChatMgr implements ModuleBase {
                 }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
+                onInternalPro(messageRet);
                 if (!messageRet.isOk() || !messageRet.isS()) {
                     updateFail(message, messageRet);
                 } else {
@@ -237,6 +257,53 @@ public class ChatMgr implements ModuleBase {
                 PLogger.d("isMsgError=" + message.getJsonStr());
             }
         });
+    }
+
+    /**
+     * 消息内部处理,如果失败之类等等
+     */
+    private void onInternalPro(MessageRet messageRet) {
+        if (messageRet.isOk()){
+            PLogger.printObject("s=" + messageRet.getS());
+            switch (messageRet.getS()) {
+                case MessageRet.MSG_CODE_BALANCE_INSUFFICIENT: {//-1 余额不足或者不是VIP
+                    sendChatCanError();
+                    break;
+                }
+                case MessageRet.MSG_CODE_PULL_BLACK: {//已拉黑
+                    toSendMsgToUI("已拉黑，消息无法发送！");
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 是否已经发完当天发的一条了
+     */
+    private void sendChatCanError() {
+        ModuleMgr.getChatListMgr().setTodayChatShow(true);
+        Msg msg = new Msg();
+        msg.setData(false);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+    }
+
+    /**
+     * 提示消息
+     *
+     * @param strMsg
+     */
+    private void toSendMsgToUI(final String strMsg) {
+        MsgMgr.getInstance().delay(new Runnable() {
+            @Override
+            public void run() {
+                if (!TextUtils.isEmpty(strMsg)) {
+                    PToast.showShort(strMsg);
+                }
+            }
+        }, 0);
     }
 
     // 成功后更新数据库
@@ -522,7 +589,7 @@ public class ChatMgr implements ModuleBase {
     /******************************
      * 个人资料存储
      ******************************/
-    private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<Long, ChatMsgInterface.InfoComplete>();
+    private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<>();
 
     public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
         synchronized (infoMap) {
@@ -534,9 +601,9 @@ public class ChatMgr implements ModuleBase {
                     PLogger.printObject("lightweight==222==" + lightweight);
                     long infoTime = lightweight.getTime();
                     if (uid  > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
-                        removeInfoComplete(true, uid, lightweight);
+                        removeInfoComplete(true, true, uid, lightweight);
                     } else {
-                        removeInfoComplete(false, uid, lightweight);
+                        removeInfoComplete(false, true, uid, lightweight);
                         getProFile(uid);
                     }
                 }
@@ -554,7 +621,7 @@ public class ChatMgr implements ModuleBase {
                 PLogger.printObject("re=====" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if(!response.isOk()){
-                    removeInfoComplete(true, userID, temp);
+                    removeInfoComplete(true, false, userID, temp);
                     return;
                 }
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
@@ -567,7 +634,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 temp.setUid(userID);
-                removeInfoComplete(true, userID, temp);
+                removeInfoComplete(true, true, userID, temp);
             }
         });
     }
@@ -576,14 +643,15 @@ public class ChatMgr implements ModuleBase {
      * 更新个人资料
      *
      * @param isRemove        是否要重回调map中移除 true是移除
+     * @param isOK            是否请求成功 true是成功
      * @param infoLightweight 个人资料数据
      */
-    private void removeInfoComplete(boolean isRemove, long userID, UserInfoLightweight infoLightweight) {
+    private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.printObject(infoLightweight);
         for (Object key : infoMap.keySet()) {
             if (key.equals(userID)) {
                 ChatMsgInterface.InfoComplete infoComplete = infoMap.get(key);
-                infoComplete.onReqComplete(infoLightweight);
+                infoComplete.onReqComplete(isOK, infoLightweight);
                 if (isRemove) {
                     infoMap.remove(key);
                 }

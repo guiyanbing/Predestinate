@@ -7,19 +7,17 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 import java.io.IOException;
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -102,10 +100,10 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             return true;
         }
 
-//        if (ChatAdapter.isSender(msgData.getSendID()) || MailSpecialID.smallSecretary.getSpecialID() == msgData.getLWhisperID()) {
-//         //   UIShow.showMyInfoActivity(getChatInstance().context);
-//            return true;
-//        }
+        if (ChatAdapter.isSender(msgData.getSendID())) {
+         //   UIShow.showMyInfoActivity(getChatInstance().context);
+            return true;
+        }
 
         if (ChatAdapter.isSender(msgData.getSendID())) {
             //   UIShow.showMyInfoActivity(getChatInstance().context);
@@ -123,9 +121,9 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 
         if(MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()){
             if (getChatInstance().chatAdapter.isGroup()) {
-              //  UIShow.showUserInfo((FragmentActivity) getChatInstance().context,msgData.getLWhisperID());
+                UIShow.showUserOtherSetAct(getChatInstance().context,msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
             } else {
-              //  UIShow.showUserInfo((FragmentActivity) getChatInstance().context,msgData.getLWhisperID());
+                UIShow.showUserOtherSetAct(getChatInstance().context,msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
             }
         }
         return true;

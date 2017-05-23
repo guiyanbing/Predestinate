@@ -131,14 +131,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listMail.setPullRefreshEnable(false);
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
-
-        ModuleMgr.getChatMgr().getUserInfoLightweight(86954288, new ChatMsgInterface.InfoComplete(){
-            @Override
-            public void onReqComplete(UserInfoLightweight infoLightweight) {
-
-            }
-        });
-
     }
 
     @Override

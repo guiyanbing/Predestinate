@@ -12,6 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.Msg;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -29,7 +33,7 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
  * 聊天页
  * Created by Kind on 2017/3/23.
  */
-public class PrivateChatAct extends BaseActivity implements View.OnClickListener {
+public class PrivateChatAct extends BaseActivity implements View.OnClickListener, PObserver {
 
     private long whisperID = 0;
     private String name;
@@ -54,6 +58,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.p1_privatechatact);
 
         initView();
+
+        MsgMgr.getInstance().attach(this);
+
         //addMessageListener(MsgType.MT_Chat_Can, this);
         //addMessageListener(MsgType.MT_MyInfo_Change, this);//个人资料已更新
         //addMessageListener(MsgType.MT_Contacts_Change, this);//好友关系发生变化
@@ -62,6 +69,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         //ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
 
         checkReply();
+
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
+                .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
+            privateChat.getChatAdapter().showIsCanChat(false);
+        }
 
 //        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//小友客服
 //            privateChat.getChatAdapter().showInputGONE();//输入框不显示
@@ -223,6 +235,23 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         super.onNewIntent(intent);
         checkReply();
     }
+
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_Chat_Can:
+                if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {//男
+                    if ((Boolean) ((Msg)value).getData()) {
+                        privateChat.getChatAdapter().showIsCanChat(true);
+                    } else {//不能回复信息
+                        privateChat.getChatAdapter().showIsCanChat(false);
+                    }
+                }
+                break;
+        }
+    }
+
 
 //    @Override
 //    public void onMessage(MsgType msgType, Msg msg) {

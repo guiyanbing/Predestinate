@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CircleImageView;
@@ -23,7 +22,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +74,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         BaseMessage data;
-
         for (int i = 0; i < datas.size(); i++) {
             data = datas.get(i);
 
@@ -231,12 +228,11 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 long tmp = TimeUtil.onPad(msgData.getTime());
                 long temp = TimeUtil.onPad(preMsgData.getTime());
-                PLogger.printObject("time==2222==" + tmp);
+                PLogger.printObject("time==msgData==" + msgData);
                 if (tmp - temp > Constant.CHAT_SHOW_TIP_TIME_Interval) {
                     tipTime = TimeUtil.getFormatTimeChatTip(tmp);
                 }
             }
-
 
             if (TextUtils.isEmpty(tipTime)) {
                 time.setVisibility(View.GONE);
@@ -407,7 +403,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             } else {
                 name.setVisibility(View.GONE);
                 head.setTag("" + msg.getSendID());
-                //      head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
+              //  head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
             }
         }
 

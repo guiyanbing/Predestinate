@@ -173,7 +173,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
             @Override
             public void call(List<BaseMessage> baseMessages) {
                 PLogger.printObject("xxxxxxxxxxx" + baseMessages.size());
-                updateListMsg(baseMessages);
+                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
+                updateListMsg(messageList);
             }
         });
     }

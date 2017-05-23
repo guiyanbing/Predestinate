@@ -14,6 +14,7 @@ import org.json.JSONObject;
  */
 public class UserInfoLightweight extends UserBasic {
 
+    private boolean isOk = false;
     private long time;
     private String infoJson;    //存储json
 
@@ -88,6 +89,7 @@ public class UserInfoLightweight extends UserBasic {
     public void parseJson(JSONObject jsonObject) {
         if(jsonObject == null) return;
 
+        this.setOk(true);
         this.setInfoJson(jsonObject.toString());
 
         this.setUid(jsonObject.optLong("uid"));
@@ -121,6 +123,14 @@ public class UserInfoLightweight extends UserBasic {
         this.setUid(userID);
         this.setTime(time);
         parseJson(infoJson);
+    }
+
+    public boolean isOk() {
+        return isOk;
+    }
+
+    public void setOk(boolean ok) {
+        isOk = ok;
     }
 
     public long getTime() {

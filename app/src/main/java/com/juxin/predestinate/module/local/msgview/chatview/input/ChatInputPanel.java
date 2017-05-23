@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -194,8 +193,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 onClickChatSend();
                 break;
             case R.id.input_monthly:
-                //  UIShow.showGoodsMonthlyLetterAct((Activity) getContext(), UIHelper.PAY_ACT);
-                //    UIShow.showMonthMailAct((Activity) getContext());
+                UIShow.showGoodsVipDlgOld(getContext());
                 break;
         }
     }

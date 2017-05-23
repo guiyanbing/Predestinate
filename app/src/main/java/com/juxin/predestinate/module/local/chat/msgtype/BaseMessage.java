@@ -573,7 +573,8 @@ public class BaseMessage implements IBaseMessage {
     }
 
     //私聊列表
-    public BaseMessage(long id, String userID, String infoJson, int type, int kfID, int status, long time, String content, int num) {
+    public BaseMessage(long id, String userID, String infoJson, int type, int kfID,
+                       int status, int ru, long time, String content, int num) {
         this.setId(id);
         this.setWhisperID(userID);
         this.setInfoJson(infoJson);
@@ -581,8 +582,10 @@ public class BaseMessage implements IBaseMessage {
         paseInfoJson(this.getInfoJson());
         this.setKfID(kfID);
         this.setStatus(status);
+        this.setRu(ru);
         this.setTime(time);
         this.setNum(num);
+        this.setJsonStr(content);
     }
 
     //私聊列表
@@ -615,16 +618,6 @@ public class BaseMessage implements IBaseMessage {
         this.setIsVip(object.optInt("isVip"));
     }
 
-    /**
-     * 转换JSON 转子类的时候用
-     *
-     * @param map
-     */
-    public void convertJSON(Map<String, Object> map) {
-        String jsonStr = map.get("content") == null ? StrDefault : map.get("content").toString();
-        if (TextUtils.isEmpty(jsonStr)) return;
-        this.setJsonStr(jsonStr);
-    }
 
     public static List<BaseMessage> conversionListMsg(List<BaseMessage> cMessages) {
         List<BaseMessage> baseMessages = new ArrayList<BaseMessage>();

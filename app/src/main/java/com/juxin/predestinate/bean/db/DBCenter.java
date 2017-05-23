@@ -96,6 +96,10 @@ public class DBCenter {
 
     /******************** FMessage **************************/
 
+    public DBCenterFMessage getCenterFMessage() {
+        return centerFmessage;
+    }
+
     /**
      * 多条消息插入
      * @param list

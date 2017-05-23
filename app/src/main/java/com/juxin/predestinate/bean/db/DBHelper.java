@@ -3,7 +3,6 @@ package com.juxin.predestinate.bean.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.juxin.predestinate.bean.db.cache.FHttpCache;
 import com.juxin.predestinate.bean.db.cache.FProfileCache;
 
