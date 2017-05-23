@@ -96,6 +96,10 @@ public class DBCenter {
 
     /******************** FMessage **************************/
 
+    public DBCenterFMessage getCenterFMessage() {
+        return centerFmessage;
+    }
+
     /**
      * 多条消息插入
      * @param list
@@ -136,19 +140,6 @@ public class DBCenter {
      */
     public long updateToRead(String channelID, String userID) {
         return centerFmessage.updateToRead(channelID, userID);
-    }
-
-    /**
-     * 聊天记录
-     *
-     * @param channelID
-     * @param whisperID
-     * @param start
-     * @param offset
-     * @return
-     */
-    public Observable<List<BaseMessage>> queryFmessageList(String channelID, String whisperID, int start, int offset) {
-        return centerFmessage.queryMsgList(channelID, whisperID, start, offset);
     }
 
 

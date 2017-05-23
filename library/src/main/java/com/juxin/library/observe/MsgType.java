@@ -111,6 +111,12 @@ public class MsgType {
      */
     public static final String MT_User_List_Msg_Change = "MT_User_List_Msg_Change";
 
+
+    /**
+     * 能否聊天
+     */
+    public static final String MT_Chat_Can = "MT_Chat_Can";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**

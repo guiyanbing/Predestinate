@@ -10,9 +10,9 @@ import org.json.JSONObject;
  */
 public class MessageRet extends BaseData {
 
-    public static final int MSG_STATUS_BALANCE_INSUFFICIENT = -1;//余额不足或者不是VIP
-    public static final int MSG_STATUS_PULL_BLACK = -2;//已拉黑
-    public static final int MSG_STATUS_OK = 0;//成功
+    public static final int MSG_CODE_BALANCE_INSUFFICIENT = -1;//余额不足或者不是VIP
+    public static final int MSG_CODE_PULL_BLACK = -2;//已拉黑
+    public static final int MSG_CODE_OK = 0;//成功
 
     //  {"d":301,"s":-1,"status":"ok","tm":1494484725}
 
@@ -63,7 +63,7 @@ public class MessageRet extends BaseData {
     }
 
     public boolean isS() {
-        return s == MSG_STATUS_OK;
+        return s == MSG_CODE_OK;
     }
 
     public void setS(int s) {

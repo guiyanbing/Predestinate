@@ -34,6 +34,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
+    private List<BaseMessage> greetList = new ArrayList<>(); //好友列表
 
     @Inject
     DBCenter dbCenter;
@@ -44,8 +45,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     @Override
-    public void release() {
-    }
+    public void release() {}
 
     public int getUnreadNumber() {
         return unreadNum;
@@ -58,6 +58,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public String getUnreadNum(int unreadNum) {
+        return unreadNum <= 9 ? String.valueOf(unreadNum) : "9+";
+    }
+
+    public String getUnreadTotalNum(int unreadNum) {
         return unreadNum <= 99 ? String.valueOf(unreadNum) : "99+";
     }
 
@@ -69,12 +73,28 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
+    /**
+     * 好友列表
+     * @return
+     */
+    public List<BaseMessage> getGeetList() {
+        List<BaseMessage> tempList = new ArrayList<>();
+        synchronized (greetList) {
+            tempList.addAll(greetList);
+            return tempList;
+        }
+    }
+
     public void updateListMsg(List<BaseMessage> messages) {
         unreadNum = 0;
         msgList.clear();
+        greetList.clear();
         if (messages != null && messages.size() > 0) {
             msgList.addAll(messages);
             for (BaseMessage tmp : messages) {
+                if(!tmp.isRu()){
+                    greetList.add(tmp);
+                }
                 unreadNum += tmp.getNum();
             }
         }
@@ -173,7 +193,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
             @Override
             public void call(List<BaseMessage> baseMessages) {
                 PLogger.printObject("xxxxxxxxxxx" + baseMessages.size());
-                updateListMsg(baseMessages);
+                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
+                updateListMsg(messageList);
             }
         });
     }

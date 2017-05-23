@@ -81,6 +81,9 @@ public class DBCenterFLetter {
             if (baseMessage.getKfID() != -1)
                 values.put(FLetter.COLUMN_KFID, baseMessage.getKfID());
 
+            if (baseMessage.getRu() != -1)
+                values.put(FLetter.COLUMN_RU, baseMessage.getRu());
+
             values.put(FLetter.COLUMN_TYPE, baseMessage.getType());
             values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
             values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
@@ -102,6 +105,9 @@ public class DBCenterFLetter {
             final ContentValues values = new ContentValues();
             if (baseMessage.getStatus() != -1)
                 values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
+
+            if (baseMessage.getRu() != -1 && baseMessage.getRu() != 0)
+                values.put(FLetter.COLUMN_RU, baseMessage.getRu());
 
             if (baseMessage.getTime() != -1)
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
@@ -164,7 +170,7 @@ public class DBCenterFLetter {
      * @return
      */
     public Observable<List<BaseMessage>> queryLetterList() {
-        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.time, f.content, " +
+        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.ru, f.time, f.content, " +
                 "m.whisperID, m.num from " + FLetter.FLETTER_TABLE + " f left join (select whisperID,count(*) " +
                 "num from " + FMessage.FMESSAGE_TABLE + " where status = 10 group by whisperID) m on f.userID = m.whisperID";
         return queryBySqlFletter(sql);
@@ -202,6 +208,7 @@ public class DBCenterFLetter {
                         CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE),
                         CursorUtil.getInt(cursor, FLetter.COLUMN_KFID),
                         CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS),
+                        CursorUtil.getInt(cursor, FLetter.COLUMN_RU),
                         CursorUtil.getLong(cursor, FLetter.COLUMN_TIME),
                         CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT),
                         CursorUtil.getInt(cursor, FLetter.Num)

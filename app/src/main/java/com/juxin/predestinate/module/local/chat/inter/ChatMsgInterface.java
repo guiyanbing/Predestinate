@@ -46,7 +46,7 @@ public class ChatMsgInterface {
      * 查询单个用户个人资料
      */
     public interface InfoComplete {
-        void onReqComplete(UserInfoLightweight infoLightweight);
+        void onReqComplete(boolean ret, UserInfoLightweight infoLightweight);
     }
 
     /**
