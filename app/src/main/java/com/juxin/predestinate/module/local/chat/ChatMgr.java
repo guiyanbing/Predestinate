@@ -66,7 +66,6 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
     }
 
-
     /**
      * 更新某个用户的本地状态
      * 如果在聊天框的时候。发送过来消息立即更改为已读
@@ -352,9 +351,8 @@ public class ChatMgr implements ModuleBase {
         observable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
-                SortList.sortListView(messageList);// 排序
-                onChatMsgHistory(channelID, whisperID, true, messageList);
+                SortList.sortListView(baseMessages);// 排序
+                onChatMsgHistory(channelID, whisperID, true, baseMessages);
             }
         });
     }
@@ -372,9 +370,8 @@ public class ChatMgr implements ModuleBase {
             observable.subscribe(new Action1<List<BaseMessage>>() {
                 @Override
                 public void call(List<BaseMessage> baseMessages) {
-                    List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
-                    SortList.sortListView(messageList);// 排序
-                    onChatMsgRecently(channelID, whisperID, true, messageList);
+                    SortList.sortListView(baseMessages);// 排序
+                    onChatMsgRecently(channelID, whisperID, true, baseMessages);
                 }
             });
 //            DBCenter.getInstance().queryMsgListWG(channelID, whisperID, 20);

@@ -379,13 +379,13 @@ public class VideoAudioChatHelper{
     private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType) {
         Bundle bundle = new Bundle();
 //        bundle.putString("vc_get_user_url", GetLittleUserInfoTask.getGetLittleUserInfoTaskUrl(dstUid + ""));
-//        bundle.putString("vc_cookie", "auth=" + AppCtx.getPreference("auth") + ";" + "v=" + AppCtx.VersionCode);
+        bundle.putString("vc_cookie", "auth="+ModuleMgr.getLoginMgr().getCookieVerCode());
         bundle.putInt("vc_chat_type", chatType);
         bundle.putInt("vc_invite_type", inviteType);
         bundle.putInt("vc_id", vcId);
         bundle.putInt("vc_project", 0);
         bundle.putString("vc_channel", JniUtil.GetEncryptString("juxin_live_" + vcId));
-//        bundle.putString("vc_uid", AppModel.getInstance().getUserDetail().getUid() + "");
+        bundle.putString("vc_uid", ModuleMgr.getCenterMgr().getMyInfo().getUid() + "");
         return bundle;
     }
 

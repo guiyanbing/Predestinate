@@ -84,6 +84,12 @@ public class GiftMessage extends BaseMessage {
         parseJson(getJsonStr());
     }
 
+    public GiftMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                         int type, int status, int fStatus, long time, String jsonStr) {
+        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        parseJson(getJsonStr());
+    }
+
     public int getGiftCount() {
         return giftCount;
     }
