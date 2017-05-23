@@ -43,7 +43,7 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //获取自己的音频、视频开关配置
-    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
+    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig2", VideoVerifyBean.class, true),
     //音视频开关修改
     setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
