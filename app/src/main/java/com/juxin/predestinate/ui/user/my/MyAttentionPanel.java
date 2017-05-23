@@ -20,6 +20,8 @@ import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.MyAttentionAdapter;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,17 +117,24 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete,XRecy
             return;
         }
         count--;
-        if (JsonUtil.getJsonObject(response.getResponseString()).has("uid")){
-            AttentionUserDetail userDetail = new AttentionUserDetail();
-            userDetail.parseJson(response.getResponseString());
-            userDetail.setType(1);
-            mUserDetails.add(userDetail);
-            AttentionUtil.addUser(userDetail);
+        try {
+            JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString()).optJSONObject("res").optJSONObject("userDetail");
+            if (jsonObject != null && jsonObject.has("uid")){
+                AttentionUserDetail userDetail = new AttentionUserDetail();
+                userDetail.parseJson(response.getResponseString());
+                userDetail.setType(1);
+                mUserDetails.add(userDetail);
+                AttentionUtil.addUser(userDetail);
+            }
+        }catch (Exception e){
+
+        }finally {
             if (count <= 0){
                 AttentionUtil.saveUserDetails();
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
+
     }
     //刷新界面
     public void reFreshUI(){

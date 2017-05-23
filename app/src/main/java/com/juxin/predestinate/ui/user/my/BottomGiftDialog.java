@@ -126,7 +126,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     PToast.showShort(getContext().getString(R.string.please_select_a_gift));
                     return;
                 }
-                ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",this);//发送送礼物请求
+                ModuleMgr.getCommonMgr().sendGift(uid+"",arrGifts.get(position).getId()+"",num,1,this);//发送送礼物请求
                 dismiss();
                 break;
             case R.id.bottom_gif_txv_sendnum:

@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.user.my.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -53,19 +52,16 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 
         MyViewHolder mHolder = new MyViewHolder(viewHolder);
         final AttentionUserDetail info = getItem(position);
-        if (info != null && info.getNickname() != null && info.getAge() > 0 && info.getAvatar() != null && info.getGender() > 0) {
-            mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
-            checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
-            mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : mContext.getString(R.string.no_nickname));
-            checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
-            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));
-            mHolder.tvDiqu.setText(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())));
-            mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
-        } else {
-            mHolder.tvNickname.setText(info.getUid()+"");
+        mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
+        checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
+        mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : info.getUid()+"");
+        checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
+        if (info.getAge() <= 0)
             mHolder.tvAge.setText(mContext.getString(R.string.loading));
-            mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
-        }
+        else
+            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));
+        mHolder.tvDiqu.setText(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())));
+        mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
         mHolder.tvconcern.setText(mContext.getString(R.string.cancel_the_attention));
         mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,13 +73,18 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 TextView txtAttention = (TextView) view;
                 // 取消关注
                 txtAttention.setText(R.string.canceling);
+                String content;
+                if (!TextUtils.isEmpty(info.getNickname()) && !"null".equals(info.getNickname()))
+                    content =  "[" + info.getNickname() + "]"+mContext.getString(R.string.just_looking_for_you);
+                else
+                    content = mContext.getString(R.string.just_looking_for_you);
 
-                ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), "", info.getKf_id(), 2, new IMProxy.SendCallBack() {
+                ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), content, info.getKf_id(), 2, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();
                         messageRet.parseJson(contents);
-                        Log.e("TTTTTTTTTTTTT11111", contents + "|||");
+//                        Log.e("TTTTTTTTTTTTT11111", contents + "|||");
 
                         if (messageRet.getS() == 0) {
                             int mPosition = getPosition(info);
@@ -136,9 +137,9 @@ public class MyAttentionAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 
     private String getContent(String nickname){
         if (!TextUtils.isEmpty(nickname) && !"null".equals(nickname))
-             return "[" + nickname + "]刚刚关注了你";
+             return "[" + nickname + "]"+mContext.getString(R.string.net_error_check_your_net);
         else
-            return "刚刚关注了你";
+            return mContext.getString(R.string.net_error_check_your_net);
     }
 
     private void checkAndShowAvatarStatus(int status, ImageView img, String avatar) {

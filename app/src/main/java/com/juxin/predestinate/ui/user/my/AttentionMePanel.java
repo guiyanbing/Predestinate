@@ -8,17 +8,19 @@ import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.AttentionList;
+import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.JsonUtil;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.AttentionMeAdapter;
-import com.juxin.predestinate.bean.my.AttentionList;
-import com.juxin.predestinate.bean.my.AttentionUserDetail;
-import com.juxin.predestinate.module.util.my.AttentionUtil;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,16 +116,25 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
             return;
         }
         count--;
-        if (JsonUtil.getJsonObject(response.getResponseString()).has("uid")){//用户信息请求返回成功
-            AttentionUserDetail userDetail = new AttentionUserDetail();
-            userDetail.parseJson(response.getResponseString());
-            mUserDetails.add(userDetail);//添加到数据列表
-            AttentionUtil.addUser(userDetail);//添加到缓存列表
+        try {
+            JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString()).optJSONObject("res").optJSONObject("userDetail");
+            if (jsonObject != null && jsonObject.has("uid")){//用户信息请求返回成功
+//                Log.e("TTTTTTTTTTTTTYYY111", response.getResponseString() + "|||");
+                AttentionUserDetail userDetail = new AttentionUserDetail();
+                userDetail.parseJson(response.getResponseString());
+                mUserDetails.add(userDetail);//添加到数据列表
+                AttentionUtil.addUser(userDetail);//添加到缓存列表
+            }
+        }catch (Exception e){
+
+        }finally {
             if (count <= 0){
+//                Log.e("TTTTTTTTTTTTT000",count+"|||");
                 AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
+
     }
     //刷新界面
     public void reFreshUI(){
@@ -143,7 +154,7 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
 
     //此方法只用于测试使用
     private String testData(){
-        String str = "/*{\n" +
+        String str = "{\n" +
                 "    \"result\": \"success\",\n" +
                 "    \"item\": [\n" +
                 "        {\n" +
@@ -163,7 +174,7 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
                 "            \"time\": 1423042627\n" +
                 "        }\n" +
                 "    ]\n" +
-                "}*/";
+                "}";
         return str;
     }
 }

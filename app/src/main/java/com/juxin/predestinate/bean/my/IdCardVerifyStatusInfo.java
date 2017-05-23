@@ -2,6 +2,7 @@ package com.juxin.predestinate.bean.my;
 
 
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 import org.json.JSONObject;
 
@@ -189,7 +190,7 @@ public class IdCardVerifyStatusInfo extends BaseData {
     }
 
     public boolean getIsVerifyIdCard(){
-        if (status == 2)
+        if (status == 2 || ModuleMgr.getCenterMgr().getMyInfo().getIdcard_validation() == 2)
             return true;
         else
             return false;

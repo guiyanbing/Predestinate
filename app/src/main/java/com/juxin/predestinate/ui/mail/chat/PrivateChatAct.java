@@ -46,6 +46,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private int kf_id;
     private ChatViewLayout privateChat = null;
     private TextView base_title_title;
+    private TextView base_title_right_txt;
+    private ImageView base_title_right_img;
 
     private CustomFrameLayout viewGroup;
 
@@ -139,6 +141,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         View baseTitleView = LayoutInflater.from(this).inflate(R.layout.f1_privatechatact_titleview, null);
         setTitleCenterContainer(baseTitleView);
         base_title_title = (TextView) baseTitleView.findViewById(R.id.cus_top_title);
+        base_title_right_txt = (TextView) baseTitleView.findViewById(R.id.cus_top_title_right_txt);
+        base_title_right_img = (ImageView) baseTitleView.findViewById(R.id.cus_top_title_right_img);
+
 
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//小友客服
@@ -188,6 +193,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
                     setNickName(infoLightweight.getNickname());
+                    if (infoLightweight.getGender() == 1)
+                        base_title_right_img.setImageResource(R.drawable.f1_top02);
                     kf_id = infoLightweight.getKf_id();
                     name = infoLightweight.getNickname();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());

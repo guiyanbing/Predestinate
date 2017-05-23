@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.user.my.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,19 +60,16 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 
         final MyViewHolder mHolder = new MyViewHolder(viewHolder);//初始化MyViewHolder
         final AttentionUserDetail info = getItem(position);
-        if (info != null && info.getNickname() != null && info.getAge() > 0 && info.getAvatar() != null && info.getGender() > 0) {
-            mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);//头像
-            checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
-            mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : mContext.getString(R.string.no_nickname));//昵称
-            checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
-            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));//年龄
-            checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);//地区
-            mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
-        } else {
-            mHolder.tvNickname.setText(info.getUid() + "");
+        mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);//头像
+        checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
+        mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : info.getUid() + "");//昵称
+        checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
+        if (info.getAge() <= 0)
             mHolder.tvAge.setText(R.string.loading);
-            mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);
-        }
+        else
+            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));//年龄
+        checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);//地区
+        mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
         if (info.getType() == 0){
             mHolder.tvconcern.setText(R.string.attention_ta);
         }else {
@@ -104,7 +102,12 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 //                    return;
 //                }
 //                ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);//已关注时取消关注
-                ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), "", info.getKf_id(), followType, new IMProxy.SendCallBack() {
+                String content;
+                if (!TextUtils.isEmpty(info.getNickname()) && !"null".equals(info.getNickname()))
+                    content =  "[" + info.getNickname() + "]刚刚关注了你";
+                else
+                    content = "刚刚关注了你";
+                ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), content, info.getKf_id(), followType, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();

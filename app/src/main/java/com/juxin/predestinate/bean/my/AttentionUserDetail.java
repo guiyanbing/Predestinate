@@ -28,21 +28,25 @@ public class AttentionUserDetail extends BaseData {
 
     @Override
     public void parseJson(String s) {
-        JSONObject jsonObject = getJsonObject(s);
-        if (jsonObject.has("type"))
-            this.setType(getJsonObject(s).optInt("type"));
-        this.setUid(jsonObject.optLong("uid"));
-        this.setAge(jsonObject.optInt("age"));
-        this.setAvatar(jsonObject.optString("avatar"));
-        this.setAvatar_status(jsonObject.optInt("avatar_status"));
-        this.setCity(jsonObject.optInt("city") + "");
-        this.setGender(jsonObject.optInt("gender"));
-        this.setIs_vip(jsonObject.optBoolean("is_vip"));
-        this.setNickname(jsonObject.optString("nickname"));
-        this.setPhotoNum(jsonObject.optInt("photoNum"));
-        this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
-//        UserDetail detail ;
-//        detail.isVip()
+        JSONObject jObject = getJsonObject(s).optJSONObject("res");
+        if (jObject != null){
+            JSONObject jsonObject = jObject.optJSONObject("userDetail");
+            if (jsonObject.has("type"))
+                this.setType(getJsonObject(s).optInt("type"));
+            this.setUid(jsonObject.optLong("uid"));
+            this.setAge(jsonObject.optInt("age"));
+            this.setAvatar(jsonObject.optString("avatar"));
+            this.setAvatar_status(jsonObject.optInt("avatarstatus"));
+            this.setCity(jsonObject.optInt("city") + "");
+            this.setGender(jsonObject.optInt("gender"));
+            this.setIs_vip(jsonObject.optBoolean("isvip"));
+            this.setNickname(jsonObject.optString("nickname"));
+            this.setPhotoNum(jsonObject.optInt("photoNum"));
+            this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
+            this.setPhotoNum(getJsonObject(s).optJSONObject("res").optJSONArray("myPhoto").length());
+            //        UserDetail detail ;
+            //        detail.isVip()
+        }
     }
 
     public int getKf_id() {
