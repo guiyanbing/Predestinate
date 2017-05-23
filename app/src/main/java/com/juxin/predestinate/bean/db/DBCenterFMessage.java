@@ -279,7 +279,7 @@ public class DBCenterFMessage {
         try {
             while (cursor.moveToNext()) {
                 PLogger.printObject("convert==" + "333333333");
-                result.add(new BaseMessage(
+                result.add(BaseMessage.parseToBaseMessage(
                         CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
                         CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),
@@ -290,8 +290,7 @@ public class DBCenterFMessage {
                         CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
                         CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_TIME),
-                        CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)
-                ));
+                        CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)));
             }
             PLogger.printObject("convert==" + "4444444");
             return result;

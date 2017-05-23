@@ -1324,4 +1324,12 @@ public class UIShow {
         Dialog dialog = new OpenWxDialog(context, UIR);
         dialog.show();
     }
+
+    public static void sendBroadcast(Context context, int vcTp, String vcChannelKey) {
+        Intent intent = new Intent("com.xiaochen.android.fate_it.va.event");
+        intent.putExtra("vcTp", vcTp);
+        intent.putExtra("vcChannelKey", vcChannelKey);
+        context.sendBroadcast(intent);
+    }
+
 }
