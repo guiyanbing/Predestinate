@@ -21,7 +21,6 @@ import com.juxin.predestinate.module.util.BaseUtil;
  */
 public class UserMailNotifyAct extends BaseActivity implements View.OnClickListener {
 
-    private int type;//消息类型
     private UserInfoLightweight simpleData;//简单的用户资料
     private String content;//消息内容
     private int iClick;
@@ -37,7 +36,6 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
     }
 
     private void initData() {
-        type = getIntent().getIntExtra("type", -1);
         simpleData = getIntent().getParcelableExtra("simple_data");
         content = getIntent().getStringExtra("content");
     }
@@ -121,7 +119,6 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
             case R.id.floating_tip:
             case R.id.btn_reply:
                 finish();
-                //TODO 跳转到私聊页面
                 Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + ",\"nickname\":" + simpleData.getNickname() + "}");
                 break;
         }

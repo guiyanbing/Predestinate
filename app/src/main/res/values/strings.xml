@@ -449,6 +449,15 @@
     <string name="toast_chosen_repeat">标签不可以重复哦</string>
 
     <!-- 消息 -->
+    <string name="video">视频</string>
+    <string name="audio">语音</string>
+    <string name="photo">图片</string>
+
+    <string name="notify_normal">给您发了一条消息，请查收！</string>
+    <string name="notify_video">有一条新%s通话，立即接听！</string>
+    <string name="notify_gift">送你一个礼物，请查收！</string>
+    <string name="notify_media">给您发了一条%s消息，请查收！</string>
+
     <string name="message_xiaou">小友消息</string>
     <string name="message_close">关闭</string>
     <string name="message_replay">回复</string>
