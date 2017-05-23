@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
@@ -172,7 +171,7 @@ public class DBCacheCenter {
                 }
                 try {
                     while (cursor.moveToNext()) {
-                        str = CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT);
+                        str = CursorUtil.getBlobToString(cursor, FHttpCache.COLUMN_CONTENT);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

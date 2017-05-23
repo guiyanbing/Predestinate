@@ -69,7 +69,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         MsgMgr.getInstance().attach(this);
 
-        //addMessageListener(MsgType.MT_Chat_Can, this);
         //addMessageListener(MsgType.MT_MyInfo_Change, this);//个人资料已更新
         //addMessageListener(MsgType.MT_Contacts_Change, this);//好友关系发生变化
         //addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
