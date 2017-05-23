@@ -14,6 +14,7 @@ import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -402,10 +403,13 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 statusProgress.setVisibility(View.GONE);
                 statusError.setVisibility(View.GONE);
 
-//                if (ChatMsgType.CMT_10 == msgType && msg.getF_status() == 1) {
-//                    statusImg.setVisibility(View.VISIBLE);
-//                    return;
-//                }
+                if (ChatMsgType.CMT_2 == msgType && msg.getfStatus() == 1) {
+                    CommonMessage message = (CommonMessage) msg;
+                    if(!TextUtils.isEmpty(message.getVoiceUrl())){
+                        statusImg.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                }
 
                 statusImg.setVisibility(View.GONE);
                 return;

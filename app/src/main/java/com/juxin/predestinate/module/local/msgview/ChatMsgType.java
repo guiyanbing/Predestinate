@@ -28,7 +28,7 @@ public enum ChatMsgType {
 
      CMT_10(ChatPanelGift.class, "礼物消息"),
 
-    CMT_14(ChatPanelCustomHint.class, "小提示消息"),
+     CMT_14(ChatPanelCustomHint.class, "小提示消息"),
 
      CMT_20(ChatPanelGiveMeGift.class, "礼物消息"),
 
@@ -37,23 +37,6 @@ public enum ChatMsgType {
 //    wantGift(TextMessage.class, 15),//索要礼物消息
 //    html(HtmlMessage.class, 19),//html消息
 
-
-
-//    CMT_3(ChatPanelText.class, "打招呼消息-用普通文字消息模板"),
-//
-//    CMT_8(ChatPanelText.class, "心动消息-用普通文字消息模板"),
-//
-//    CMT_10(ChatPanelVoice.class, "语音消息"),
-//
-//    CMT_11(ChatPanelVideo.class, "小视频消息"),
-//
-//    CMT_12(ChatPanelImg.class, "图片消息"),
-//
-//    CMT_14(ChatPanelText.class, "加好友消息-用普通文字消息模板"),
-//
-//    CMT_15(ChatPanelInterAct.class, "游戏互动消息"),
-//
-//    CMT_17(ChatPanelText.class, "Html消息-用普通文字消息模板"),
 
     // 特殊类型消息
     //   CMT_del_msg("删除消息"),
