@@ -1,9 +1,6 @@
 package com.juxin.predestinate.bean.db.utils;
 
 import android.database.Cursor;
-
-import com.juxin.library.log.PLogger;
-
 import java.io.UnsupportedEncodingException;
 
 /**

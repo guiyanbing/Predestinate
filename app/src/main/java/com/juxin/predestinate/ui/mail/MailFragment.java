@@ -14,8 +14,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;

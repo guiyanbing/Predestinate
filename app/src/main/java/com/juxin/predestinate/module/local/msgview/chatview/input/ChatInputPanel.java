@@ -39,7 +39,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     private View bgline = null;
     private View bg = null;
     private View input_monthly = null;
-    private View chat_rel;
 
     private ChatBigSmileMatchingPanel matchingPanel = null;
 
@@ -66,8 +65,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         chatVoiceRecord = (TextView) findViewById(R.id.chat_voice_record);
         chatTextEdit = (EditText) findViewById(R.id.chat_text_edit);
-
-        chat_rel = findViewById(R.id.chat_rel);
 
         chatBtnExtend = findViewById(R.id.chat_extend);
         chatBtnSend = findViewById(R.id.chat_send);
@@ -302,16 +299,12 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到语音输入模式。0
      */
     private void onClickChatVoice() {
-        //  chatBtnExpression.setVisibility(View.GONE);
-
         chatBtnVoice.setVisibility(View.INVISIBLE);
         chatTextEdit.setVisibility(View.GONE);
 
         chatBtnText.setVisibility(View.VISIBLE);
 
         chatVoiceRecord.setVisibility(View.VISIBLE);
-
-        //  chat_rel.setVisibility(View.GONE);
 
         showSendBtn(false);
         closeAllInput();
@@ -321,14 +314,11 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 切换到文本输入模式。
      */
     private void onClickChatText() {
-        //   chatBtnExpression.setVisibility(View.VISIBLE);
-
         chatBtnVoice.setVisibility(View.VISIBLE);
         chatTextEdit.setVisibility(View.VISIBLE);
 
         chatBtnText.setVisibility(View.INVISIBLE);
         chatVoiceRecord.setVisibility(View.INVISIBLE);
-        //   chat_rel.setVisibility(View.VISIBLE);
 
         showSendBtn();
     }
@@ -465,7 +455,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatTextEdit.setSelection(text.length());
         chatTextEdit.requestFocus();
     }
-
 
     public EditText getChatTextEdit() {
         return chatTextEdit;

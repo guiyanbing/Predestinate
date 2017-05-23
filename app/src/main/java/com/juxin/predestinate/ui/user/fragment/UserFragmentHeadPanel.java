@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,8 +31,7 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 public class UserFragmentHeadPanel extends BasePanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
 
     private CircleImageView user_head, user_head_vip, user_head_status;
-    private TextView user_nick, user_id, iv_invite_code, tv_video_title, tv_video_status;
-    private ImageView iv_video_verify;
+    private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
 
     private UserDetail myInfo;
@@ -54,7 +52,6 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
 
-
         //根据屏幕分辨率设置最大显示长度
         user_nick.setMaxEms(App.context.getResources().getDisplayMetrics().density <= 1.5 ? 5 : 7);
 
@@ -65,11 +62,6 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
         functionPanel = new UserFragmentFunctionPanel(getContext());
         function_container.addView(functionPanel.getContentView());
-
-        tv_video_title = (TextView) function_container.findViewById(R.id.tv_video_title);
-        tv_video_status = (TextView) function_container.findViewById(R.id.tv_video_status);
-        iv_video_verify = (ImageView) function_container.findViewById(R.id.iv_video_verify);
-        initVideoAuthView();
     }
 
     /**
@@ -137,32 +129,6 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         if (requestCode == 101) {
             refreshView();
         }
-        if (requestCode == 103 && resultCode == 203) {
-            initVideoAuthView();
-        }
-    }
-
-    public void initVideoAuthView() {
-        int authStatus = ModuleMgr.getCommonMgr().getVideoVerify().getStatus();
-        if (authStatus == 3 && ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//TODO
-            showVerify();
-        } else {
-            showUnVerify();
-        }
-    }
-
-    public void showUnVerify() {
-        tv_video_title.setTextColor(getContext().getResources().getColor(R.color.user_text_gray_top));
-        tv_video_status.setTextColor(getContext().getResources().getColor(R.color.user_text_blue));
-        tv_video_status.setText("我的认证");
-        iv_video_verify.setEnabled(true);
-    }
-
-    public void showVerify() {
-        tv_video_title.setTextColor(getContext().getResources().getColor(R.color.user_text_blue));
-        tv_video_status.setTextColor(getContext().getResources().getColor(R.color.user_text_gray_bottom));
-        tv_video_status.setText("已认证");
-        iv_video_verify.setEnabled(false);
     }
 
     @Override

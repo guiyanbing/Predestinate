@@ -240,7 +240,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void onMsgNum(int num) {
-        mail_num.setText(ModuleMgr.getChatListMgr().getUnreadNum(num));
+        mail_num.setText(ModuleMgr.getChatListMgr().getUnreadTotalNum(num));
         mail_num.setVisibility(num > 0 ? View.VISIBLE : View.GONE);
     }
 }

@@ -9,14 +9,13 @@ import org.json.JSONObject;
  */
 public class UserInfo extends UserBasic {
     private String aboutme;         // 内心独白
-    private int blood;              // 血型
     private String c_uid;           // -1机器人
     private boolean c_user;         // 自增用户
     private String complete;        // 资料完整度(%)
     private boolean isMonthMail;    // 是否开通包月发信
     private boolean isOnline;       // 是否在线
     private String idcard;          // 身份证号
-    private int idcard_validation;  // 省份证验证状态  0 未提交 1 待审核 2 审核通过 3 审核不通过
+    private int idcard_validation;  // 身份证验证状态  0 未提交 1 待审核 2 审核通过 3 审核不通过
     private String mobile;          // 手机号码
     private int mobileAuth;         // 1为公开，2为保密
     private int mobile_validation;  // 手机是否已验证
@@ -56,12 +55,11 @@ public class UserInfo extends UserBasic {
         this.setAvatar_146(detailObject.optString("avatar_146"));
 
         // B
-        this.setBlood(detailObject.optInt("blood"));
-
         // C
         this.setC_uid(detailObject.optString("c_uid"));
         this.setC_user(detailObject.optBoolean("c_user"));
         this.setComplete(detailObject.optString("complete"));
+        this.setCell_phone(detailObject.optString("cell_phone"));
 
         // D
         this.setDiamand(detailObject.optInt("diamand"));
@@ -73,8 +71,8 @@ public class UserInfo extends UserBasic {
         // I
         this.setMonthMail(detailObject.optBoolean("is_month_mail"));
         this.setOnline(detailObject.optBoolean("is_online"));
-        this.setIdcard(detailObject.optString("Idcard"));
-        this.setIdcard_validation(detailObject.optInt("Idcard_validation"));
+        this.setIdcard(detailObject.optString("idcard"));
+        this.setIdcard_validation(detailObject.optInt("idcard_validation"));
         this.setIsfollow(detailObject.optInt("isfollow"));
 
         // K
@@ -117,6 +115,13 @@ public class UserInfo extends UserBasic {
     }
 
     /**
+     * 是否通过真人认证
+     */
+    public boolean isVerifyIdcard() {
+        return idcard_validation == 2;
+    }
+
+    /**
      * 判断是否是vip用户通过 'isMonthMail' 判断
      */
     public boolean isVip() {
@@ -143,6 +148,14 @@ public class UserInfo extends UserBasic {
             return;
         }
         mobile_validation = 0;
+    }
+
+    public String getCell_phone() {
+        return cell_phone;
+    }
+
+    public void setCell_phone(String cell_phone) {
+        this.cell_phone = cell_phone;
     }
 
     public int getUser_status() {
@@ -236,14 +249,6 @@ public class UserInfo extends UserBasic {
 
     public String getAvatar_121() {
         return avatar_121;
-    }
-
-    public int getBlood() {
-        return blood;
-    }
-
-    public void setBlood(int blood) {
-        this.blood = blood;
     }
 
     public void setAvatar_121(String avatar_121) {
@@ -396,7 +401,6 @@ public class UserInfo extends UserBasic {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(this.aboutme);
-        dest.writeInt(this.blood);
         dest.writeString(this.c_uid);
         dest.writeByte(this.c_user ? (byte) 1 : (byte) 0);
         dest.writeString(this.complete);
@@ -412,6 +416,7 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.qqAuth);
         dest.writeDouble(this.redbagsum);
         dest.writeString(this.shareCode);
+        dest.writeInt(this.user_status);
         dest.writeInt(this.videoAuth);
         dest.writeString(this.weChat);
         dest.writeInt(this.wechatAuth);
@@ -420,6 +425,7 @@ public class UserInfo extends UserBasic {
         dest.writeString(this.avatar_146);
         dest.writeInt(this.diamand);
         dest.writeLong(this.memdatenum);
+        dest.writeString(this.cell_phone);
         dest.writeInt(this.kf_id);
         dest.writeString(this.distance);
         dest.writeInt(this.followmecount);
@@ -433,7 +439,6 @@ public class UserInfo extends UserBasic {
     protected UserInfo(Parcel in) {
         super(in);
         this.aboutme = in.readString();
-        this.blood = in.readInt();
         this.c_uid = in.readString();
         this.c_user = in.readByte() != 0;
         this.complete = in.readString();
@@ -449,6 +454,7 @@ public class UserInfo extends UserBasic {
         this.qqAuth = in.readInt();
         this.redbagsum = in.readDouble();
         this.shareCode = in.readString();
+        this.user_status = in.readInt();
         this.videoAuth = in.readInt();
         this.weChat = in.readString();
         this.wechatAuth = in.readInt();
@@ -457,6 +463,7 @@ public class UserInfo extends UserBasic {
         this.avatar_146 = in.readString();
         this.diamand = in.readInt();
         this.memdatenum = in.readLong();
+        this.cell_phone = in.readString();
         this.kf_id = in.readInt();
         this.distance = in.readString();
         this.followmecount = in.readInt();

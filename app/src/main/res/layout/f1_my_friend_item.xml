@@ -107,6 +107,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_right_relation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -127,6 +128,15 @@
                 android:layout_marginLeft="@dimen/px15_dp"
                 android:src="@drawable/f1_xingx" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_va_open"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:src="@drawable/ic_va_open" />
     </RelativeLayout>
 
 </LinearLayout>

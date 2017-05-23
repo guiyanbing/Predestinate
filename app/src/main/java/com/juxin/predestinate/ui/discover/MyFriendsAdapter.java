@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -20,11 +21,13 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 
 public class MyFriendsAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight> {
 
+    private boolean mIsMan;
     private Context context;
 
     public MyFriendsAdapter(Context context) {
         super();
         this.context = context;
+        mIsMan = ModuleMgr.getCenterMgr().getMyInfo().isMan();
     }
 
     @Override
@@ -69,6 +72,22 @@ public class MyFriendsAdapter extends BaseRecyclerViewAdapter<UserInfoLightweigh
             holder.tv_height.setText(userInfo.getHeight() + "cm");
         }
 
+        if (mIsMan) { // 女号好友列表扔显示爱心值
+            if (userInfo.isVideo_available() || userInfo.isVideo_available()) {
+                holder.ll_right_relation.setVisibility(View.GONE);
+                holder.iv_va_open.setVisibility(View.VISIBLE);
+                holder.iv_va_open.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new SelectCallTypeDialog(context, userInfo.uid);
+                    }
+                });
+            } else {
+                holder.iv_va_open.setVisibility(View.GONE);
+                holder.ll_right_relation.setVisibility(View.VISIBLE);
+            }
+        }
+
         holder.tv_heartNum.setText(userInfo.getHeartNum() + "");
 
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +116,8 @@ public class MyFriendsAdapter extends BaseRecyclerViewAdapter<UserInfoLightweigh
         private TextView tv_name, tv_age, tv_height, tv_ranking_type, tv_ranking_level, tv_heartNum;
         private LinearLayout lin_ranking;
         private RelativeLayout rel_item;
+        private LinearLayout ll_right_relation;
+        private ImageView iv_va_open;
 
         public MyViewHolder(BaseRecyclerViewHolder convertView) {
             initView(convertView);
@@ -118,6 +139,9 @@ public class MyFriendsAdapter extends BaseRecyclerViewAdapter<UserInfoLightweigh
 
             lin_ranking = (LinearLayout) convertView.findViewById(R.id.myfriend_item_ranking_state);
             rel_item = (RelativeLayout) convertView.findViewById(R.id.myfriend_item);
+
+            ll_right_relation = (LinearLayout) convertView.findViewById(R.id.ll_right_relation);
+            iv_va_open = (ImageView) convertView.findViewById(R.id.iv_va_open);
         }
 
     }
