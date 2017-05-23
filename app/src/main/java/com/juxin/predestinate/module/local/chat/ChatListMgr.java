@@ -17,6 +17,7 @@ import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import org.json.JSONObject;
@@ -98,7 +99,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 unreadNum += tmp.getNum();
             }
         }
-//            unreadNum += getVisitNum();//最近访客
+            unreadNum += getFollowNum();//关注
 //            List<FriendInfo> friendInfos = ModuleMgr.getMsgCommonMgr().getFriendsData().getFriendData();
 //            if (messages != null) {
 //                for (BaseMessage tmp : messages) {
@@ -119,6 +120,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
         // updateBasicUserInfo();
     }
+
+    /**
+     * 关注
+     * @return
+     */
+    public int getFollowNum() {
+        return ModuleMgr.getUnreadMgr().getUnreadNumByKey(UnreadMgrImpl.FOLLOW_ME);
+    }
+
 
     //是否能聊天
     private String getIsTodayChatKey() {//是否显示问题反馈第一句KEY

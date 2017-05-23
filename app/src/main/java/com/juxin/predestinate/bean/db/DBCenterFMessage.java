@@ -113,7 +113,6 @@ public class DBCenterFMessage {
                 str = new String[]{whisperID, String.valueOf(cMsgID)};
             }
 
-
             ContentValues values = new ContentValues();
             if (baseMessage.getMsgID() != -1)
                 values.put(FMessage.COLUMN_MSGID, baseMessage.getMsgID());

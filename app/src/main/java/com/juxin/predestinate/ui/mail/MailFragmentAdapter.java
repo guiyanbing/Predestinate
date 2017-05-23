@@ -53,41 +53,18 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         return messageList;
     }
 
-//        if (messages != null && messages.size() > 0) {
-//            msgList.addAll(messages);
-//            for (BaseMessage tmp : messages) {
-//                unreadNum += tmp.getNum();
-//            }
-//        }
-
     public void updateAllData() {
         List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getMsgList();
-//        Boolean b = false;
-//        for(BaseMessage tmp : messageLists){
-//            MailMsgID mailMsgID = MailMsgID.getMailMsgID(tmp.getLWhisperID());
-//            if(mailMsgID != null){
-//                switch (mailMsgID){
-//                    case act_msg:
-//                        b = true;
-//                        tmp.setWeight(BaseMessage.In_Weight);
-//                        tmp.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-//                        tmp.setName("活动");
-//                        tmp.setAboutme(BaseMessage.getContent(ModuleMgr.getChatListMgr().getActMsg()));
-//                        tmp.setLocalAvatar(R.drawable.y2_msg_2);
-//                        break;
-//                }
-//            }
-//        }
-
         PLogger.d("messageLists=多少人=" + messageLists.size());
-
 
         BaseMessage baseMessage = new BaseMessage();
         baseMessage.setWhisperID(String.valueOf(MailMsgID.WhoAttentionMe_Msg.type));
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
+        int num = ModuleMgr.getChatListMgr().getFollowNum();
+        baseMessage.setNum(num);
         baseMessage.setName("谁关注我");
-        baseMessage.setAboutme("暂时还没有人关注我");
+        baseMessage.setAboutme(num > 0 ?  "共有"+num+"位关注我" : "暂时还没有人关注我");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
         messageLists.add(baseMessage);
 
@@ -99,61 +76,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setAboutme("我的好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
-
-
-
-        baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(979797));
-        //  baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
-        baseMessage.setWeight(BaseMessage.Small_Weight);
-        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Ordinary.type);
-        baseMessage.setName("张三");
-        baseMessage.setAboutme("暂未");
-        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
-        messageLists.add(baseMessage);
-
-//        if(!b){
-//            //活动
-//            baseMessage = new BaseMessage();
-//            baseMessage.setWhisperID(String.valueOf(MailMsgID.act_msg.type));
-//            baseMessage.setWeight(BaseMessage.In_Weight);
-//            baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-//            baseMessage.setName("活动");
-//            baseMessage.setAboutme(BaseMessage.getContent(ModuleMgr.getChatListMgr().getActMsg()));
-//            baseMessage.setLocalAvatar(R.drawable.y2_msg_2);
-//            messageLists.add(baseMessage);
-//        }
-//
-//       //新朋友
-//        baseMessage = new BaseMessage();
-//        baseMessage.setWhisperID(String.valueOf(MailMsgID.new_friend_msg.type));
-//        baseMessage.setNum(ModuleMgr.getChatListMgr().getNewFriendListUnread());
-//        baseMessage.setWeight(BaseMessage.In_Weight);
-//        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-//        baseMessage.setName("新朋友消息");
-//
-//        List<BaseMessage> messageList = ModuleMgr.getChatListMgr().getNewFriendList();
-//        if(messageList != null && messageList.size() > 0){
-//            SortList.sortWeightTimeListView(messageList);
-//            BaseMessage tmpMsg = messageList.get(0);
-//            if(tmpMsg != null){
-//                baseMessage.setAboutme(BaseMessage.getContent(tmpMsg));
-//            }
-//        }
-//
-//        baseMessage.setLocalAvatar(R.drawable.y2_msg_3);
-//        messageLists.add(baseMessage);
-
-        //最近来访
-//        baseMessage = new BaseMessage();
-//        baseMessage.setWhisperID(String.valueOf(MailMsgID.visitors_msg.type));
-//        baseMessage.setNum(ModuleMgr.getChatListMgr().getVisitNum());
-//        baseMessage.setWeight(BaseMessage.In_Weight);
-//        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Act.type);
-//        baseMessage.setName("最近来访");
-//        baseMessage.setAboutme("点击查看");
-//        baseMessage.setLocalAvatar(R.drawable.y2_msg_4);
-      //  messageLists.add(baseMessage);
 
         setList(messageLists);
         SortList.sortWeightTimeListView(getList());

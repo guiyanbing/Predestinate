@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -85,12 +86,11 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     public void showData(BaseMessage msgData) {
-      //  ModuleMgr.getHttpMgr().reqBigUserHeadImage(item_headpic, msgData.getAvatar());
+        ImageLoader.loadAvatar(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
         if (!TextUtils.isEmpty(nickname)) {
-          //  item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
-            item_nickname.setText(nickname);
+            item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
         } else {
             item_nickname.setText(String.valueOf(msgData.getLWhisperID()));
         }
