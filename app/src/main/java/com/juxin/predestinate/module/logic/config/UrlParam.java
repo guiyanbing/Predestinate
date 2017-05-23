@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -43,11 +44,13 @@ public enum UrlParam {
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //获取自己的音频、视频开关配置
-    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
+    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig2", VideoVerifyBean.class, true),
     //音视频开关修改
     setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
     addVideoVerify(Hosts.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
+    //邀请视频、音频聊天
+    inviteVideoChat(Hosts.FATE_IT_GO, "xs/message/InviteVideoChat", null, true),
     // 用户身份认证提交
     userVerify("User/Verify", true),
     // 获取用户验证信息(密)
@@ -58,6 +61,7 @@ public enum UrlParam {
     reqMyInfo(Hosts.FATE_IT_GO, "xs/userinfo/MyDetail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo(Hosts.FATE_IT_GO, "xs/userinfo/OtherDetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    reqIsBlack(Hosts.FATE_IT_GO, "xs/userrelation/IsMyBlack", UserBlack.class, true), // 查询某用户是否处于黑名单中
     reqAddBlack(Hosts.FATE_IT_GO, "xs/userrelation/AddBlack", null, true),          // 拉黑某用户
     reqRemoveBlack(Hosts.FATE_IT_GO, "xs/userrelation/RemoveBlack", null, true),    // 拉黑列表移除某用户
     reqSetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名

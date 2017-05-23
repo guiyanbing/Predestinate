@@ -50,13 +50,10 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
     /**
      * 将更新的消息添加到消息列表中。如果已经存在的替换，新消息则添加的末尾。<br>
      * 注意区分发送的消息还是接收到的消息。
-     *
      * @param message 需要更新的消息。
      */
     public void updateData(BaseMessage message) {
-        if (message == null) {
-            return;
-        }
+        if (message == null) return;
 
         List<BaseMessage> datas = getList();
 
@@ -181,10 +178,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             cih.statusProgress = (ProgressBar) cih.parent.findViewById(R.id.chat_item_status_progress);
             cih.statusError = (ImageView) cih.parent.findViewById(R.id.chat_item_status_error);
 
-            if (getChatInstance().chatAdapter.isGroup()) {
-                cih.name.setVisibility(View.VISIBLE);
-            }
-
             cih = (ChatItemHolder) vh.sender;
             cih.parent = convertView.findViewById(R.id.chat_item_right);
             cih.name = (TextView) cih.parent.findViewById(R.id.chat_item_name);
@@ -194,10 +187,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             cih.statusImg = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img);
             cih.statusProgress = (ProgressBar) cih.parent.findViewById(R.id.chat_item_status_progress);
             cih.statusError = (ImageView) cih.parent.findViewById(R.id.chat_item_status_error);
-
-            if (getChatInstance().chatAdapter.isGroup()) {
-                cih.name.setVisibility(View.VISIBLE);
-            }
 
             ChatViewHolder cvh = vh.custom;
             cvh.parent = convertView.findViewById(R.id.chat_item_custom);
@@ -392,7 +381,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
             if (infoLightweight != null) {
-                if (sender || !getChatInstance().chatAdapter.isGroup()) {
+                if (sender) {
                     name.setVisibility(View.GONE);
                 } else {
                     name.setText(infoLightweight.getNickname());
@@ -403,7 +392,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             } else {
                 name.setVisibility(View.GONE);
                 head.setTag("" + msg.getSendID());
-              //  head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
+                //  head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
             }
         }
 
@@ -425,37 +414,34 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             statusImg.setVisibility(View.GONE);
             statusError.setVisibility(View.GONE);
 
-            if (getChatInstance().chatAdapter.isGroup()) {
-                status.setVisibility(View.GONE);
-            } else {
-                switch (msg.getStatus()) {
-                    case 1: // 发送成功
-                        status.setText("送达");
-                        break;
+            switch (msg.getStatus()) {
+                case 1: // 发送成功
+                    status.setText("送达");
+                    break;
 
-                    case 2: // 发送失败
-                        status.setText("失败");
-                        break;
+                case 2: // 发送失败
+                    status.setText("失败");
+                    break;
 
-                    case 3: // 发送中
-                        status.setText("");
-                        break;
+                case 3: // 发送中
+                    status.setText("");
+                    break;
 
-                    case 11: // 已读
-                        status.setText("已读");
-                        break;
+                case 11: // 已读
+                    status.setText("已读");
+                    break;
 
-                    case 12: // 审核未通过
-                        status.setText("");
-                        break;
+                case 12: // 审核未通过
+                    status.setText("");
+                    break;
 
-                    default: // "未知状态" + msg.getStatus()
-                        status.setText("");
-                        break;
-                }
+                default: // "未知状态" + msg.getStatus()
+                    status.setText("");
+                    break;
+            }
 
-                // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
-                //显示进度条或发送失败且小于五分钟也显示进度条
+            // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
+            //显示进度条或发送失败且小于五分钟也显示进度条
 //                    if(msg.isValid() && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())){
 //                        statusProgress.setVisibility(View.VISIBLE);
 //                        status.setVisibility(View.GONE);
@@ -466,19 +452,18 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 //                        statusError.setVisibility(View.VISIBLE);
 //                    }
 
-                if (msg.getStatus() == 3 && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())) {//发送中,
-                    statusProgress.setVisibility(View.VISIBLE);
-                    status.setVisibility(View.GONE);
-                    statusError.setVisibility(View.GONE);
-                } else if (msg.getStatus() == 2) {//发送失败
-                    statusProgress.setVisibility(View.GONE);
-                    status.setVisibility(View.GONE);
-                    statusError.setVisibility(View.VISIBLE);
-                } else {
-                    statusProgress.setVisibility(View.GONE);
-                    status.setVisibility(View.VISIBLE);
-                    statusError.setVisibility(View.GONE);
-                }
+            if (msg.getStatus() == 3 && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())) {//发送中,
+                statusProgress.setVisibility(View.VISIBLE);
+                status.setVisibility(View.GONE);
+                statusError.setVisibility(View.GONE);
+            } else if (msg.getStatus() == 2) {//发送失败
+                statusProgress.setVisibility(View.GONE);
+                status.setVisibility(View.GONE);
+                statusError.setVisibility(View.VISIBLE);
+            } else {
+                statusProgress.setVisibility(View.GONE);
+                status.setVisibility(View.VISIBLE);
+                statusError.setVisibility(View.GONE);
             }
         }
 

@@ -77,6 +77,12 @@ public class CommonMessage extends BaseMessage{
         parseJson(getJsonStr());
     }
 
+    public CommonMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                       int type, int status, int fStatus, long time, String jsonStr) {
+        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        parseJson(getJsonStr());
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);

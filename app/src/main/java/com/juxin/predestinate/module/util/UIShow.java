@@ -368,6 +368,13 @@ public class UIShow {
     }
 
     private static void skipCheckOtherInfoAct(Context context, UserDetail userProfile) {
+        if (userProfile == null) return;
+
+        if (!userProfile.isUserNormal()) {
+            showUserBlockAct(context);
+            return;
+        }
+
         Intent intent = new Intent(context, UserCheckInfoAct.class);
         intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
@@ -731,9 +738,10 @@ public class UIShow {
 
     /**
      * 选择支付
+     *
      * @param activity
      * @param commodity_Id 订单
-     * @param payType 类型
+     * @param payType      类型
      */
     public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final int payType) {
         LoadingDialog.show(activity, "生成订单中");
@@ -1080,8 +1088,8 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context ,int requestCode) {
-        context.startActivityForResult(new Intent(context, IDCardAuthenticationSucceedAct.class),requestCode);
+    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, IDCardAuthenticationSucceedAct.class), requestCode);
     }
     // -----------------------我的提示跳转 end----------------------------
 
@@ -1316,4 +1324,12 @@ public class UIShow {
         Dialog dialog = new OpenWxDialog(context, UIR);
         dialog.show();
     }
+
+    public static void sendBroadcast(Context context, int vcTp, String vcChannelKey) {
+        Intent intent = new Intent("com.xiaochen.android.fate_it.va.event");
+        intent.putExtra("vcTp", vcTp);
+        intent.putExtra("vcChannelKey", vcChannelKey);
+        context.sendBroadcast(intent);
+    }
+
 }

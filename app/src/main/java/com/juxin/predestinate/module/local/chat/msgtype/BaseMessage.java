@@ -42,15 +42,6 @@ public class BaseMessage implements IBaseMessage {
             this.msgType = msgType;
         }
 
-        public static BaseMessageType getBaseMessageByType(String str) {
-            for (BaseMessageType messageType : BaseMessageType.values()) {
-                if (messageType.toString().equals(str)) {
-                    return messageType;
-                }
-            }
-            return null;
-        }
-
         public static BaseMessageType valueOf(int msgType) {
             for (BaseMessageType messageType : BaseMessageType.values()) {
                 if (messageType.getMsgType() == msgType) {
@@ -103,6 +94,7 @@ public class BaseMessage implements IBaseMessage {
     public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
+    public static final int video_MsgType = 24;//视频消息
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -114,13 +106,6 @@ public class BaseMessage implements IBaseMessage {
     @Override
     public String getJson(BaseMessage message) {
         return null;
-    }
-
-    /**
-     * 判断是否为群私聊
-     */
-    public boolean isWhisper() {
-        return !TextUtils.isEmpty(getChannelID()) && !TextUtils.isEmpty(getWhisperID());
     }
 
     /**
@@ -598,21 +583,6 @@ public class BaseMessage implements IBaseMessage {
         this.setJsonStr(content);
     }
 
-    //私聊列表
-    public BaseMessage(int type, Map<String, Object> map) {
-        this.setId(Long.parseLong(map.get("id").toString()));
-        this.setWhisperID(map.get("userid") == null ? StrDefault : map.get("userid").toString());
-        this.setIsOnline(map.get("isOnline") == null ? NumDefault : TypeConvertUtil.toInt(map.get("isOnline").toString()));
-        this.setKfID(map.get("kf_id") == null ? NumDefault : TypeConvertUtil.toInt(map.get("kf_id").toString()));
-        this.setInfoJson(map.get("infoJson") == null ? StrDefault : map.get("infoJson").toString());
-        paseInfoJson(this.getInfoJson());
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvertUtil.toLong(map.get("time").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("status").toString()));
-
-        this.setNum(map.get("num") == null ? NumDefault : TypeConvertUtil.toInt(map.get("num").toString()));
-        this.setType(type);
-    }
-
     /**
      * 解析
      *
@@ -626,6 +596,37 @@ public class BaseMessage implements IBaseMessage {
         this.setName(object.optString("nickname"));
         this.setIsMonth(object.optInt("ismonth"));
         this.setIsVip(object.optInt("isVip"));
+    }
+
+
+    public static BaseMessage parseToBaseMessage(String channelID, String whisperID,
+                                                 long sendID, long msgID, long cMsgID, long specialMsgID, int type, int status,
+                                                 int fStatus, long time, String jsonStr) {
+        BaseMessage message = new BaseMessage();
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
+        if (messageType == null) {
+            message = new BaseMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                    status, fStatus, time, jsonStr);
+            return message;
+        }
+        switch (messageType) {
+            case hi:
+                message = new TextMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                        status, fStatus, time, jsonStr);
+                break;
+            case common:
+                message = new CommonMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                        status, fStatus, time, jsonStr);
+                break;
+            case gift:
+            case wantGiftTwo:
+                message = new GiftMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                        status, fStatus, time, jsonStr);
+                break;
+            default:
+                break;
+        }
+        return message;
     }
 
 

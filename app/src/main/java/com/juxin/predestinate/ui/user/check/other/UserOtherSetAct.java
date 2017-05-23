@@ -13,6 +13,7 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -84,6 +85,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         }
 
         ModuleMgr.getCenterMgr().reqGetRemarkName(userDetail.getUid(), this);            // 请求用户备注
+        ModuleMgr.getCenterMgr().reqIsBlack(userDetail.getUid(), this);                  // 用户是否处于黑名单
         //ModuleMgr.getCenterMgr().reqGetOpposingVideoSetting(userProfile.getUid(), this);  // 请求用户接受音视频配置
     }
 
@@ -194,10 +196,23 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         if (videoSetting.getAcceptvoice() == 1) {  // 接受
             voiceBarStatus = true;
             voiceBar.setProgress(100);
-        } else {
-            voiceBarStatus = false;
-            voiceBar.setProgress(0);
+            return;
         }
+        voiceBarStatus = false;
+        voiceBar.setProgress(0);
+    }
+
+    /**
+     * 初始化拉黑seekBar
+     */
+    private void initShieldBar(boolean isBlack) {
+        if (isBlack) {  // 处于黑名单
+            shieldBarStatus = true;
+            shieldBar.setProgress(100);
+            return;
+        }
+        shieldBarStatus = false;
+        shieldBar.setProgress(0);
     }
 
     /**
@@ -271,6 +286,14 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                 return;
             }
             user_remark.setText(TextUtils.isEmpty(tempRemark) ? "" : tempRemark);
+        }
+
+        // 用户拉黑状态
+        if (response.getUrlParam() == UrlParam.reqIsBlack) {
+            if (!response.isOk()) return;
+
+            UserBlack userBlack = (UserBlack) response.getBaseData();
+            initShieldBar(userBlack.inBlack());
         }
 
         // 获取音视频配置

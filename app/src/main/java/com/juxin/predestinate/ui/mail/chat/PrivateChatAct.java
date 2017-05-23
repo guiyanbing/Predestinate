@@ -16,7 +16,6 @@ import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -189,7 +188,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
         });
     }
-
 
     private void initHeadView() {
         privatechat_head = (LinearLayout) findViewById(R.id.privatechat_head);
@@ -364,18 +362,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //
 //        return object;
 //    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Chat_Page, viewGroup, getParmsJson());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //ModuleMgr.getTipsBarMgr().detach();
-    }
 
     @Override
     public void onDestroy() {

@@ -15,11 +15,13 @@ import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +97,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             for (BaseMessage tmp : messages) {
                 if(!tmp.isRu()){
                     greetList.add(tmp);
-                }msgList.add(tmp);
+                }
                 unreadNum += tmp.getNum();
             }
         }
@@ -198,7 +200,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void getWhisperList() {
-        Observable<List<BaseMessage>> listObservable = dbCenter.queryLetterList();
+        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
@@ -270,8 +272,26 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.TalkRed_MsgType://红包消息
                 setTalkMsg(message);
                 break;
+            case BaseMessage.video_MsgType://视频消息
+                setVideoMsg(message);
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 视频消息
+     * @param message
+     */
+    private void setVideoMsg(BaseMessage message) {
+        if (message == null) return;
+        VideoMessage videoMessage = (VideoMessage) message;
+        if(videoMessage.getVideoTp() ==1){
+            VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
+                    videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
+        }else {
+            UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
         }
     }
 
@@ -288,6 +308,5 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
         String content = jsonObject.optString("mct");
         UIShow.showChatRedBoxDialog((Activity) App.getActivity(), content);
-
     }
 }
