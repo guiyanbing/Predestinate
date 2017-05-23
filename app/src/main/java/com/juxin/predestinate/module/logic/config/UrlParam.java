@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
@@ -58,6 +59,7 @@ public enum UrlParam {
     reqMyInfo(Hosts.FATE_IT_GO, "xs/userinfo/MyDetail", UserDetail.class, true),         // 获取个人资料
     reqOtherInfo(Hosts.FATE_IT_GO, "xs/userinfo/OtherDetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
+    reqIsBlack(Hosts.FATE_IT_GO, "xs/userrelation/IsMyBlack", UserBlack.class, true), // 查询某用户是否处于黑名单中
     reqAddBlack(Hosts.FATE_IT_GO, "xs/userrelation/AddBlack", null, true),          // 拉黑某用户
     reqRemoveBlack(Hosts.FATE_IT_GO, "xs/userrelation/RemoveBlack", null, true),    // 拉黑列表移除某用户
     reqSetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名

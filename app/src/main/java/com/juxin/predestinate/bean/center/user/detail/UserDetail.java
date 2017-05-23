@@ -37,6 +37,11 @@ public class UserDetail extends UserInfo {
         if (!jsonObject.isNull("voice")) {
             this.voice = jsonObject.optInt("voice");
         }
+
+        // -------- 他人 -----
+        // 视频列表
+        if (!jsonObject.isNull("videolist")) {
+        }
     }
 
     public List<UserPhoto> getUserPhotos() {
@@ -54,7 +59,6 @@ public class UserDetail extends UserInfo {
     public void setDiamondsSum(int diamondsSum) {
         PSP.getInstance().put("diamondsSum" + uid, diamondsSum);
     }
-
 
     @Override
     public int describeContents() {
