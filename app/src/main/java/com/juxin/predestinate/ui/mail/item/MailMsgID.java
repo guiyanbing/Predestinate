@@ -11,6 +11,9 @@ public enum MailMsgID {
 	/**我的好友**/
 	MyFriend_Msg(2),
 
+	/**打招呼的人**/
+	Greet_Msg(3),
+
 	;
 
 	public long type;

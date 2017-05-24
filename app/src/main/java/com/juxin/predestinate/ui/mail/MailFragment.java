@@ -133,8 +133,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 menu.setTitleColor(Color.WHITE);
                 menu.setViewHeight(mailFragmentAdapter.getItemHeight());
             }
-
-
         });
 
         listMail.setPullLoadEnable(false);
@@ -189,6 +187,9 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     case MyFriend_Msg:
 
                         break;
+                    case Greet_Msg:
+
+                        break;
                 }
             } else {
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
@@ -214,6 +215,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());
+                        break;
+                    case Greet_Msg://打招呼的人
                         break;
                 }
             } else {
@@ -251,11 +254,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (mailFragmentAdapter == null) return;
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
-                mailFragmentAdapter.updateAllData();
-
-                break;
             case MsgType.MT_Friend_Num_Notice:
-                mailFragmentAdapter.notifyFriendNum((Integer) value);
+                mailFragmentAdapter.updateAllData();
                 break;
             default:
                 break;

@@ -124,6 +124,26 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     /**
+     * 截取语音
+     *
+     * @param url
+     * @return
+     */
+    public String subStringAmr(String url) {
+        return url.contains(".amr") ? (url.replace(".amr", "")) : url;
+    }
+
+    /**
+     * 拼接
+     *
+     * @param url
+     * @return
+     */
+    public String spliceStringAmr(String url) {
+        return url.contains(".amr") ? url : (url + ".amr");
+    }
+
+    /**
      * 关注
      * @return
      */
