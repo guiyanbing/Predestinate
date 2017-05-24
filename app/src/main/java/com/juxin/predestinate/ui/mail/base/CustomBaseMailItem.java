@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,9 +14,9 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
+import com.juxin.predestinate.module.util.TimeUtil;
 
 /**
  * item基类
@@ -107,7 +106,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_last_msg.setText(BaseMessage.getContent(msgData));
         long time = msgData.getTime();
         if (time > 0) {
-     //       item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));
+            item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));
         } else {
             item_last_time.setText("");
         }

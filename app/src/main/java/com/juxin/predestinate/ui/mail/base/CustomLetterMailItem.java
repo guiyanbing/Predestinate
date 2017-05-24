@@ -37,10 +37,6 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
         super.init(-1);
         mail_item_right_icon = (Button) findViewById(R.id.mail_item_right_icon);
         mail_item_right_icon.setOnClickListener(this);
-
-        if(item_last_time != null && BaseMessage.video_MsgType == msgData.getType()){
-            item_last_time.setVisibility(GONE);
-        }
     }
 
     @Override
@@ -76,7 +72,11 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
     public void showData(BaseMessage msgData) {
         super.showData(msgData);
         this.msgData = msgData;
+        findViewById(R.id.gap_item).setVisibility(GONE);
 
+        if(item_last_time != null && BaseMessage.video_MsgType == msgData.getType()){
+            item_last_time.setVisibility(GONE);
+        }
         if (mail_item_right_icon == null || BaseMessage.video_MsgType != msgData.getType() || !(msgData instanceof VideoMessage)) {// 视频语音消息
             return;
         }

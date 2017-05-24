@@ -167,7 +167,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public long deleteMessage(long userID) {
-        return dbCenter.deleteMessage(userID);
+        long ret = dbCenter.deleteMessage(userID);
+        if(ret != DBConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
     }
 
     /**
