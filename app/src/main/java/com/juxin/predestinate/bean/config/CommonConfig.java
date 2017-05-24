@@ -26,6 +26,7 @@ public class CommonConfig extends BaseData {
     private int audiochat_minute_cost;  //语音通话每分钟费用
     private int videochat_minute_cost;  //视频通话每分钟费用
     private String video_chat_apk_url;  //视频插件地址
+    private int checkYellow;            //鉴黄检测间隔时间,单位秒
 
     private PayTypeList payTypeList;    //支付方式控制
 
@@ -53,6 +54,7 @@ public class CommonConfig extends BaseData {
         this.setAudiochat_minute_cost(jsonObject.optInt("audiochat_minute_cost"));
         this.setVideochat_minute_cost(jsonObject.optInt("videochat_minute_cost"));
         this.setVideo_chat_apk_url(jsonObject.optString("videochat_apk_url"));
+        checkYellow = jsonObject.optInt("check_yellow");
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
@@ -154,6 +156,10 @@ public class CommonConfig extends BaseData {
         this.video_chat_apk_url = video_chat_apk_url;
     }
 
+    public int getCheckYellow() {
+        return checkYellow;
+    }
+
     @Override
     public String toString() {
         return "CommonConfig{" +
@@ -168,6 +174,7 @@ public class CommonConfig extends BaseData {
                 ", audiochat_minute_cost=" + audiochat_minute_cost +
                 ", videochat_minute_cost=" + videochat_minute_cost +
                 ", video_chat_apk_url='" + video_chat_apk_url + '\'' +
+                ", checkYellow=" + checkYellow +
                 ", payTypeList=" + payTypeList +
                 '}';
     }
