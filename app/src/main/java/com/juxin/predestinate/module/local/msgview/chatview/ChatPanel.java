@@ -19,7 +19,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import java.io.IOException;
-import pl.droidsonroids.gif.GifDrawable;
 
 /**
  * 只处理聊天内容部分的信息
@@ -214,15 +213,16 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             return;
         }
 
-        GifDrawable drawable = null;
-
-        try {
-            drawable = new GifDrawable(fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setImg(img, drawable, key);
+        // TODO: 2017/5/24 替换使用glide进行gif加载
+//        GifDrawable drawable = null;
+//
+//        try {
+//            drawable = new GifDrawable(fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        setImg(img, drawable, key);
     }
 
     protected void setAssetsGiftImg(ImageView img, String fileName) {
@@ -230,15 +230,16 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             return;
         }
 
-        GifDrawable drawable = null;
-
-        try {
-            drawable = new GifDrawable(getContext().getAssets(), fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setImg(img, drawable, fileName);
+        // TODO: 2017/5/24 替换使用glide进行gif加载
+//        GifDrawable drawable = null;
+//
+//        try {
+//            drawable = new GifDrawable(getContext().getAssets(), fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        setImg(img, drawable, fileName);
     }
 
     protected void setAssetsImg(ImageView img, String fileName) {

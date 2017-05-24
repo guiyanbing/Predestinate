@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
@@ -56,6 +58,9 @@ public class CustomStatusListView extends LinearLayout {
 
     private void init(Context context) {
         inflate(context, R.layout.custom_status_listview, this);
+        ImageView loading_gif = (ImageView) findViewById(R.id.loading_gif);
+        ImageLoader.loadGif(context, R.drawable.p1_loading, loading_gif);
+        
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.common_ex_listview,
                 R.id.common_listviewLayout, R.id.common_nodata, R.id.common_loading, R.id.common_net_error});

@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.third.pagerecyeler.PageRecyclerView;
@@ -50,6 +52,9 @@ public class CustomRecyclerView extends LinearLayout {
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.custom_status_recyclerview, this);
+        ImageView loading_gif = (ImageView) view.findViewById(R.id.loading_gif);
+        ImageLoader.loadGif(context, R.drawable.p1_loading, loading_gif);
+
         customFrameLayout = (CustomFrameLayout) view.findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.common_recyclerView, R.id.common_xrecyclerView, R.id.common_pagerecylerview,
                 R.id.common_nodata, R.id.common_loading, R.id.common_net_error});
