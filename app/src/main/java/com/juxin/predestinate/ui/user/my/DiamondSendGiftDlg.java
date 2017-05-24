@@ -94,7 +94,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
                     //                iGiftSend.onSendToPay(giftBean);
                     //            }
                     //            UIHelper.showDiamondsNormalDlg((Activity) mContext, otherId, channelId, Math.abs(dec));
-                    UIShow.showGoodsDiamondDialog(mContext);
+                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec));
                 }
                 dismiss();
                 break;
