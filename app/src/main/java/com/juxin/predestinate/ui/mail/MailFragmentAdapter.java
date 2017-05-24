@@ -21,8 +21,6 @@ import java.util.List;
  */
 public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
-    private int ViewType;
-
     private  boolean scrollState=false;
     public void setScrollState(boolean scrollState) {
         this.scrollState = scrollState;
@@ -63,7 +61,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         PLogger.d("messageLists=多少人=" + messageLists.size());
 
         BaseMessage baseMessage = new BaseMessage();
-        baseMessage.setWhisperID(String.valueOf(MailMsgID.WhoAttentionMe_Msg.type));
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.Follow_Msg.type));
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         int num = ModuleMgr.getChatListMgr().getFollowNum();
@@ -119,6 +117,11 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         BaseMessage msgData = getItem(position);
         if (msgData != null) {
             int tempViewType = getItemViewType(position);
+
+            int ViewType = -1;
+            if((position-1) >= 0){
+                ViewType = getItemViewType(position-1);
+            }
             MailItemType mailItemType = MailItemType.getMailMsgType(tempViewType);
             if (mailItemType != null) {
                 switch (mailItemType){
@@ -136,10 +139,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                 setItemHeight(vh.customMailItem.getMeasuredHeight());
 
                 PLogger.printObject("ViewType=" + ViewType + "---tempViewType" + tempViewType);
-                if (this.ViewType != tempViewType) {
-                    this.ViewType = tempViewType;
-
-                    PLogger.printObject("mailItemType=" +mailItemType);
+                if(tempViewType != ViewType){
                     switch (mailItemType) {
                         case Mail_Item_Ordinary:
                             vh.customMailItem.showLetterGap();

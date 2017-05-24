@@ -127,7 +127,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             getUserInfo(getLWhisperId());
 
             chatInstance.chatInputPanel.showSendBtn();
-            page = 0;
+            page = 1;
             attach();
         } catch (Exception e) {
             PLogger.printThrowable(e);
@@ -620,12 +620,12 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return false;
     }
 
-    private int page = 0;
+    private int page = 1;
 
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, page++);
     }
 
     @Override

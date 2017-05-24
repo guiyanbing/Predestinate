@@ -131,6 +131,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return ModuleMgr.getUnreadMgr().getUnreadNumByKey(UnreadMgrImpl.FOLLOW_ME);
     }
 
+    public void updateFollow() {
+        ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.FOLLOW_ME);
+    }
+
 
     //是否能聊天
     private String getIsTodayChatKey() {//是否显示问题反馈第一句KEY
