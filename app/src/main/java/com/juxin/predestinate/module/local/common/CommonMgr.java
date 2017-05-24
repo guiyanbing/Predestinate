@@ -455,7 +455,6 @@ public class CommonMgr implements ModuleBase {
         });
     }
 
-
     //============================== 小友模块相关接口 =============================
 
     /**
@@ -622,7 +621,7 @@ public class CommonMgr implements ModuleBase {
      *                 //     * @param begid     索要Id
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid,int giftnum,int gtype/*,int begid*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
@@ -999,8 +998,8 @@ public class CommonMgr implements ModuleBase {
 
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
-        for (int i = 0; i < uids.size(); i++) {
-            temp[i] = uids.get(0);
+        for(int i = 0; i < uids.size(); i++){
+            temp[i] = uids.get(i);
         }
 
         HashMap<String, Object> postParms = new HashMap<>();

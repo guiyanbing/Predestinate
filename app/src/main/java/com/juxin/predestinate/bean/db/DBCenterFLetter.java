@@ -119,6 +119,26 @@ public class DBCenterFLetter {
         return DBConstant.ERROR;
     }
 
+    public boolean updateUserInfoLightList(List<UserInfoLightweight> lightweights){
+        if (lightweights == null || lightweights.size() <= 0) {
+            return false;
+        }
+        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+        try {
+            for (UserInfoLightweight temp : lightweights) {
+                updateUserInfoLight(temp);
+            }
+            transaction.markSuccessful();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transaction.end();
+        }
+        return false;
+    }
+
+
     /**
      * 更新个人资料
      * @param lightweight
@@ -172,7 +192,6 @@ public class DBCenterFLetter {
         return queryBySqlFletter(sql);
     }
 
-
     /**
      * 查询 列表
      * @param sql
@@ -197,7 +216,7 @@ public class DBCenterFLetter {
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
-                result.add(new BaseMessage(
+                result.add(BaseMessage.parseToBaseMessage(
                         CursorUtil.getLong(cursor, FLetter._ID),
                         CursorUtil.getString(cursor, FLetter.COLUMN_USERID),
                         CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON),

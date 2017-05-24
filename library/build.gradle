@@ -51,6 +51,8 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.versions.libRxAndroid"
 
+    //gif文件加载
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     //日志打印库:[https://github.com/elvishew/XLog]
     compile "com.elvishew:xlog:$rootProject.versions.libXLog"
     //图片缩放查看控件:[https://github.com/chrisbanes/PhotoView]

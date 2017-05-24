@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.user.check;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -68,6 +69,8 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         TextView user_height = (TextView) findViewById(R.id.tv_height);
         TextView user_distance = (TextView) findViewById(R.id.tv_distance);
         TextView user_online_time = (TextView) findViewById(R.id.tv_last_online);
+        FrameLayout fl_topN = (FrameLayout) findViewById(R.id.fl_top_n);
+        TextView tv_topN = (TextView) findViewById(R.id.tv_top_n);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
         iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
         iv_vip = (ImageView) findViewById(R.id.iv_vip);
@@ -92,6 +95,8 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         user_online_time.setText(online);
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
+        fl_topN.setVisibility(userDetail.getTopN() <= 0 ? View.GONE : View.VISIBLE);
+        tv_topN.setText("TOP" + userDetail.getTopN());
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {

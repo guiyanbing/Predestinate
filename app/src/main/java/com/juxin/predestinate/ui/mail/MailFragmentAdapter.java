@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -13,7 +12,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,12 @@ import java.util.List;
  */
 public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
-    private MailItemType mailItemType = null;
+    private int ViewType;
+
+    private  boolean scrollState=false;
+    public void setScrollState(boolean scrollState) {
+        this.scrollState = scrollState;
+    }
 
     public MailFragmentAdapter(Context context, List<BaseMessage> datas) {
         super(context, datas);
@@ -75,7 +78,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
-        baseMessage.setAboutme("我的好友");
+        baseMessage.setAboutme("赠送礼物即可成为好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 
@@ -115,16 +118,12 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
         BaseMessage msgData = getItem(position);
         if (msgData != null) {
-            MailItemType mailItemType = MailItemType.getMailMsgType(getItemViewType(position));
+            int tempViewType = getItemViewType(position);
+            MailItemType mailItemType = MailItemType.getMailMsgType(tempViewType);
             if (mailItemType != null) {
-                switch (mailItemType) {
+                switch (mailItemType){
                     case Mail_Item_Ordinary:
-                        if (msgData.getWeight() == BaseMessage.Max_Weight) {
-                            vh.customMailItem.showItemAct(msgData);
-                        } else {
-                            vh.customMailItem.showItemLetter(msgData);
-                        }
-
+                        vh.customMailItem.showItemLetter(msgData);
                         break;
                     case Mail_Item_Other:
                         vh.customMailItem.showItemAct(msgData);
@@ -136,8 +135,11 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                 vh.customMailItem.measure(width, height);
                 setItemHeight(vh.customMailItem.getMeasuredHeight());
 
-                if (this.mailItemType != mailItemType) {
-                    this.mailItemType = mailItemType;
+                PLogger.printObject("ViewType=" + ViewType + "---tempViewType" + tempViewType);
+                if (this.ViewType != tempViewType) {
+                    this.ViewType = tempViewType;
+
+                    PLogger.printObject("mailItemType=" +mailItemType);
                     switch (mailItemType) {
                         case Mail_Item_Ordinary:
                             vh.customMailItem.showLetterGap();

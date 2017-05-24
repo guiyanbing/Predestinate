@@ -67,7 +67,7 @@ public class LockChatPanel extends BasePanel implements OnClickListener {
                 break;
             case R.id.wake_lock_send:
                 if (TextUtils.isEmpty(wake_lock_content.getText().toString())) {
-                    PToast.showShort("消息不能为空");
+                    PToast.showShort(getContext().getString(R.string.message_empty_warn));
                 } else {
                     InputUtils.forceClose(wake_lock_content);
                     LockScreenMgr.getInstance().closeLockNotify();
@@ -78,6 +78,8 @@ public class LockChatPanel extends BasePanel implements OnClickListener {
             case R.id.wake_lock_nickname:
                 LockScreenMgr.getInstance().closeLockNotify();
                 Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + uid + "}");
+                break;
+            default:
                 break;
         }
     }
