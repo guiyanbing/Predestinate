@@ -1010,6 +1010,17 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
     }
 
+    /**
+     * del自定义表情
+     *
+     * @param url
+     * @param complete
+     */
+    public void delCustomFace(String url, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("url", url);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.delCustomFace, postParms, complete);
+    }
 
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
