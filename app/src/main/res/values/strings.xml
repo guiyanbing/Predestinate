@@ -110,6 +110,7 @@
 
     <string name="user_info_last_week_video_hot">最近1周私密视频总人气：</string>
 
+    <string name="user_edit_zone_info">个人空间</string>
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>
     <string name="user_edit_info_detail_info">详细资料</string>
