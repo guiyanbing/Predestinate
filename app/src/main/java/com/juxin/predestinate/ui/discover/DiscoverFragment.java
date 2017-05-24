@@ -21,6 +21,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -82,6 +83,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void initView() {
         groupSayhiBtn = (Button) findViewById(R.id.discover_group_sayhi_btn);
         groupSayhiBtn.setOnClickListener(this);
+        groupSayhiBtn.setVisibility(View.GONE);
 
         customRecyclerView = (CustomRecyclerView) findViewById(R.id.discover_content);
         xRecyclerView = customRecyclerView.getXRecyclerView();
@@ -142,7 +144,6 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void setMainData(HttpResponse response) {
         if (response.isOk()) {
             if (!response.isCache()) {
-//                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
 
@@ -243,6 +244,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void doGroupSayHi() {
         if (ModuleMgr.getCenterMgr().isCanGroupSayHi(getActivity())) {
             if (isHasNoSayHi()) {
+                LoadingDialog.show(getActivity());
                 handler.sendEmptyMessage(Group_sayHai_Msg);
             } else {
                 PToast.showShort(getString(R.string.say_hi_group_refresh));
@@ -272,6 +274,10 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                         });
                 break;
             }
+        }
+
+        if (!isHasNoSayHi()) {
+            LoadingDialog.closeLoadingDialog();
         }
     }
 

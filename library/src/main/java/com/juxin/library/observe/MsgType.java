@@ -141,4 +141,10 @@ public class MsgType {
      */
     public static final String MT_Say_Hello_Notice = "MT_Say_Hello_Notice";
 
+    /**
+     * 好友条数通知
+     */
+    public static final String MT_Friend_Num_Notice = "MT_Friend_Num_Notice";
+
+
 }
