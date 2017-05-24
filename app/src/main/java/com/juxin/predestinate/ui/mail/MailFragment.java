@@ -135,8 +135,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listMail.setSwipeItemClickedListener(this);
 
         listMail.setOnScrollListener(this);
-
-        detectInfo(listMail);
     }
 
     @Override
@@ -177,8 +175,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case WhoAttentionMe_Msg:
-
+                    case Follow_Msg:
+                        ModuleMgr.getChatListMgr().updateFollow();
                         break;
                     case MyFriend_Msg:
 
@@ -203,7 +201,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(message.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case WhoAttentionMe_Msg://谁关注我
+                    case Follow_Msg://谁关注我
                         UIShow.showMyAttentionAct(getContext());
                         break;
                     case MyFriend_Msg://我的好友
@@ -246,6 +244,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
                 mailFragmentAdapter.updateAllData();
+                detectInfo(listMail);
                 break;
         }
     }
