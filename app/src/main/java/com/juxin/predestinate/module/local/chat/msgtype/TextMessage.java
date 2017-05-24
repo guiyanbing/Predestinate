@@ -1,6 +1,8 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import com.juxin.library.log.PLogger;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,7 +50,7 @@ public class TextMessage extends BaseMessage {
     public String getJson(BaseMessage message) {
         JSONObject json = new JSONObject();
         try {
-            json.put("tid", message.getWhisperID());
+            json.put("tid", new JSONArray().put(message.getWhisperID()));
             json.put("mtp", message.getType());
             json.put("mct", message.getMsgDesc());
             json.put("mt", getCurrentTime());

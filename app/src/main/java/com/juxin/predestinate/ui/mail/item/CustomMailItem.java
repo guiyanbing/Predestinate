@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -60,6 +61,7 @@ public class CustomMailItem extends LinearLayout {
      * @return
      */
     CustomLetterMailItem customLetterMailItem;
+
     public CustomBaseMailItem getItemLetterView() {
         customLetterMailItem = (CustomLetterMailItem) customFrameLayout.findViewById(R.id.chat_fragment_item_letter);
         customLetterMailItem.init();
@@ -69,7 +71,7 @@ public class CustomMailItem extends LinearLayout {
     /**
      * 显示私聊类型
      */
-    public void showItemLetter( BaseMessage msgData) {
+    public void showItemLetter(BaseMessage msgData) {
         customFrameLayout.show(R.id.chat_fragment_item_letter);
         customLetterMailItem.showData(msgData);
     }
@@ -84,6 +86,7 @@ public class CustomMailItem extends LinearLayout {
      * @return
      */
     CustomOtherMailItem customActMailItem;
+
     public CustomBaseMailItem getItemActView() {
         customActMailItem = (CustomOtherMailItem) customFrameLayout.findViewById(R.id.chat_fragment_item_act);
         customActMailItem.init();

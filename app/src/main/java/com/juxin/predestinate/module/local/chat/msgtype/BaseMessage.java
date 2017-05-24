@@ -147,6 +147,7 @@ public class BaseMessage implements IBaseMessage {
     private String name;// 名称
     private String avatar;// 头像
     private int localAvatar;// 本地头像
+    private int top;
     private String aboutme;// 内心读白
     private int isMonth;//包月
     private int isVip;
@@ -178,6 +179,18 @@ public class BaseMessage implements IBaseMessage {
 
     public void setLocalAvatar(int localAvatar) {
         this.localAvatar = localAvatar;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public boolean isTop() {
+        return top != 0;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
     }
 
     /***********************/

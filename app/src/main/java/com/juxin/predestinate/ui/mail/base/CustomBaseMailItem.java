@@ -57,9 +57,10 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         return contentView;
     }
 
-    public LinearLayout mail_item_letter;
-    public ImageView item_headpic;
-    public TextView item_nickname, item_unreadnum, item_last_time, item_online, item_last_status, item_certification;
+    public LinearLayout mail_item_letter, item_ranking_state;
+    public ImageView item_headpic, item_vip;
+    public TextView item_nickname, item_unreadnum, item_last_time, item_online, item_last_status,
+            item_certification, item_ranking_type, item_ranking_level;
     public EmojiTextView item_last_msg;
 
     public void onCreateView(View contentView) {
@@ -74,6 +75,11 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_last_status = (TextView) contentView.findViewById(R.id.mail_item_last_status);
         item_headpic.setOnClickListener(this);
         // mail_item_letter.setOnClickListener(this);
+
+        item_ranking_state = (LinearLayout) contentView.findViewById(R.id.mail_item_ranking_state);
+        item_ranking_type = (TextView) contentView.findViewById(R.id.mail_item_ranking_type);
+        item_ranking_level = (TextView) contentView.findViewById(R.id.mail_item_ranking_level);
+        item_vip = (ImageView) contentView.findViewById(R.id.discover_item_vip_state);
     }
 
     public void showGap(){
@@ -118,8 +124,14 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //        }
         setUnreadnum(msgData);
         setStatus(msgData);
+
+     //   setRanking(msgData);
     }
 
+    /**
+     * 角标
+     * @param msgData
+     */
     protected void setUnreadnum(BaseMessage msgData) {
         item_unreadnum.setVisibility(View.GONE);
         if (msgData.getNum() > 0) {
@@ -128,6 +140,10 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
     }
 
+    /**
+     * 状态
+     * @param msgData
+     */
     protected void setStatus(BaseMessage msgData) {
         if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType()) {
             item_last_status.setVisibility(View.GONE);
@@ -138,6 +154,23 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             item_last_status.setText("已读");
             item_last_status.setVisibility(View.VISIBLE);
         }
+    }
+
+    protected void setRanking(BaseMessage msgData) {
+        if (!msgData.isTop()) item_ranking_state.setVisibility(View.GONE);
+
+        item_ranking_state.setVisibility(View.VISIBLE);
+        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            item_ranking_state.setBackgroundResource(R.drawable.f1_ranking_bg_m);
+            item_ranking_type.setText(context.getString(R.string.top_type_man));
+            item_ranking_level.setText("TOP " + msgData.getTop());
+        } else {
+            item_ranking_state.setBackgroundResource(R.drawable.f1_ranking_bg_w);
+            item_ranking_type.setText(context.getString(R.string.top_type_woman));
+            item_ranking_level.setText("TOP " + msgData.getTop());
+        }
+
+        item_vip.setVisibility( ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
     }
 
     @Override
