@@ -336,7 +336,7 @@ public class VideoAudioChatHelper{
             } else {
                 int code = jo.optInt("code");
                 if(code == 3003) {
-                    UIShow.showGoodsDiamondAct(context);
+                    UIShow.showGoodsDiamondDialog(context);
 //                    int leastDiamond = type == TYPE_AUDIO_CHAT ? AppCfg.ASet.getVoice_cost_per_minute() : AppCfg.ASet.getVideo_cost_per_minute();
 //                    if (AppModel.getInstance().getUserDetail().getDiamondsSum() < leastDiamond) {
 //                        UIHelper.showDiamondsDlg((Activity) context, String.valueOf(dstUid), "1", leastDiamond - AppModel.getInstance().getUserDetail().getDiamondsSum(), true, true);
