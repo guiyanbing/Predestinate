@@ -8,6 +8,7 @@ import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -120,8 +121,10 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete,XRecy
         try {
             JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString()).optJSONObject("res").optJSONObject("userDetail");
             if (jsonObject != null && jsonObject.has("uid")){
+                UserDetail detail = new UserDetail();
                 AttentionUserDetail userDetail = new AttentionUserDetail();
-                userDetail.parseJson(response.getResponseString());
+                detail.parseJson(response.getResponseString());
+                userDetail.parse(detail);
                 userDetail.setType(1);
                 mUserDetails.add(userDetail);
                 AttentionUtil.addUser(userDetail);

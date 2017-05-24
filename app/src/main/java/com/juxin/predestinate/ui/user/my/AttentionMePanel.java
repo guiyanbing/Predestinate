@@ -8,6 +8,7 @@ import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -120,8 +121,10 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
             JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString()).optJSONObject("res").optJSONObject("userDetail");
             if (jsonObject != null && jsonObject.has("uid")){//用户信息请求返回成功
 //                Log.e("TTTTTTTTTTTTTYYY111", response.getResponseString() + "|||");
+                UserDetail detail = new UserDetail();
                 AttentionUserDetail userDetail = new AttentionUserDetail();
-                userDetail.parseJson(response.getResponseString());
+                detail.parseJson(response.getResponseString());
+                userDetail.parse(detail);
                 mUserDetails.add(userDetail);//添加到数据列表
                 AttentionUtil.addUser(userDetail);//添加到缓存列表
             }
