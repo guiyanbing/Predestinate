@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -31,6 +33,7 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
     private static final int SAY_HELLO_MSG_WHAT = 100;
 
     private List<UserInfoLightweight> data = new ArrayList<>();
+    private List<UserInfoLightweight> tmp = new ArrayList<>();
 
     private ImageView iv_big;
     private ImageView iv_small1;
@@ -121,6 +124,9 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
                 break;
             }
         } else {
+            ModuleMgr.getCommonMgr().saveDateState(ModuleMgr.getCommonMgr().getSayHelloKey());
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Say_Hello_Notice, tmp);
+
             LoadingDialog.closeLoadingDialog();
             dismiss();
         }
@@ -128,5 +134,6 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     public void setData(List<UserInfoLightweight> data) {
         this.data = data;
+        this.tmp.addAll(data);
     }
 }

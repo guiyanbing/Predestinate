@@ -185,8 +185,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                 }
             } else {
-                ArrayList<String> strings = new ArrayList<String>();
-                strings.add(item.getWhisperID());
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+
 //                ModuleMgr.getChatListMgr().deleteWhisperChatUser(strings, new ChatMsgInterface.DelChatUserComplete() {
 //                    @Override
 //                    public void onReqChatUser(boolean ret) {

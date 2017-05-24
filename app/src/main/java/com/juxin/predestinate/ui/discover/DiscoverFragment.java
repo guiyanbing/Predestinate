@@ -13,6 +13,9 @@ import android.widget.Button;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -35,7 +38,7 @@ import java.util.List;
  * Created by zhang on 2017/4/20.
  */
 
-public class DiscoverFragment extends BaseFragment implements XRecyclerView.LoadingListener, RequestComplete, View.OnClickListener {
+public class DiscoverFragment extends BaseFragment implements XRecyclerView.LoadingListener, RequestComplete, View.OnClickListener, PObserver {
 
     private static final int Look_All = 0; //查看全部
     private static final int Look_Near = 1; //只看附近的人
@@ -72,6 +75,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                 showDiscoverSelectDialog();
             }
         });
+        MsgMgr.getInstance().attach(this);
     }
 
 
@@ -157,6 +161,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                         customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                customRecyclerView.showLoading();
                                 onRefresh();
                             }
                         });
@@ -176,6 +181,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customRecyclerView.showLoading();
                     onRefresh();
                 }
             });
@@ -201,6 +207,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                     customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            customRecyclerView.showLoading();
                             getNearData();
                         }
                     });
@@ -212,6 +219,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customRecyclerView.showLoading();
                     getNearData();
                 }
             });
@@ -298,6 +306,20 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             return false;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_Say_Hello_Notice:
+                List<UserInfoLightweight> data = (List<UserInfoLightweight>) value;
+                for (int i = 0; i < data.size(); i++) {
+                    notifyAdapter(data.get(i).getUid());
+                }
+                break;
+            default:
+                break;
         }
     }
 }

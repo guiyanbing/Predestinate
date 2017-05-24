@@ -664,7 +664,7 @@ public class BaseMessage implements IBaseMessage {
             case common:
                 str = msg.getMsgDesc();
                 break;
-            //case hint:
+            case hint:
             case html://html消息
                 str = msg.getMsgDesc();
                 break;
