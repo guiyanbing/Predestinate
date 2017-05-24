@@ -45,4 +45,12 @@ public class TimerUtil {
         if (increaseTimeCount > maxTime) increaseTimeCount = minTime;
         return increaseTimeCount;
     }
+
+    /**
+     * 重置递增数值
+     */
+    public static void resetIncreaseTime(){
+        increaseTimeCount = 0;
+    }
+
 }
