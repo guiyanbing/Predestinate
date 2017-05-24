@@ -60,9 +60,6 @@ public class VideoAudioChatHelper{
     public static final int TYPE_AUDIO_CHAT = 2;
     private static final int OPT_INVITE = 1;
     private static final int OPT_TOGGLE = 2;
-    private static final int TASK_WHAT_INVITE_VA_CHAT = 100;
-    private static final int TASK_WHAT_VA_CONFIG = 101;
-    private static final int TASK_WHAT_GET_SELF_VA_CONFIG = 102;
     private static VideoAudioChatHelper instance;
     private VaCallback vaCallback;
     private DownloadPluginFragment downloadPluginFragment = new DownloadPluginFragment();
@@ -235,7 +232,7 @@ public class VideoAudioChatHelper{
      *
      * @param context
      */
-    private void downloadVideoPlugin(final Context context) {
+    public void downloadVideoPlugin(final Context context) {
         if(!downloadPluginFragment.isAdded())
             downloadPluginFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "download");
         if (isDownloading) {
@@ -287,20 +284,6 @@ public class VideoAudioChatHelper{
                 handleInviteChat(context, response.getResponseString(), dstUid, type);
             }
         });
-//        AsyncTaskUtil.getInstance(context)
-//                .setUrl(AppCfg.FATE_GO_INVITE_VA_CHAT).isDes(true).setMethod(BaseAsyncTask.METHOD_POST)
-//                .setPostParams(postParams).setWhat(TASK_WHAT_INVITE_VA_CHAT).setOnAsyncCallback(new OnAsyncCallback() {
-//            @Override
-//            public void requestSuccess(BaseAsyncTask task) {
-//                handleInviteChat(context, task.getJsonResult(true), dstUid, type);
-//            }
-//
-//            @Override
-//            public void requestFail(BaseAsyncTask task, Exception e) {
-//                Log.e("video", e.getMessage(), e);
-//                T.showShort(context, "请求失败");
-//            }
-//        }).executeTask();
     }
 
     /**
