@@ -31,12 +31,13 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
     private String mEidtMoney = "0";
     private boolean mIsFromEdit;
 
-    private LinearLayout llOpenBank;
+    private LinearLayout llOpenBank,llBankBranch;
     private EditText etMoney;
     private EditText etCardName;
     private EditText etCardLocal;
     private EditText etCardLocalBranch;
     private EditText etCardNum;
+    private View viewBank,viewBankBranch;
     private TextView tvOpenBank;
     private Button btnNext;
     private WithdrawAddressInfo info;
@@ -55,11 +56,14 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         setTitle(getString(R.string.withdrawal_page));
 
         llOpenBank = (LinearLayout) findViewById(R.id.bank_card_ll_open_bank);
+        llBankBranch = (LinearLayout) findViewById(R.id.bank_card_ll_open_bank_branch);
         etMoney = (EditText) findViewById(R.id.bank_card_et_money);
         etCardName = (EditText) findViewById(R.id.bank_card_et_card_name);
         etCardLocal = (EditText) findViewById(R.id.bank_card_et_card_local);
         etCardLocalBranch = (EditText) findViewById(R.id.bank_card_et_card_local_branch);
         etCardNum = (EditText) findViewById(R.id.bank_card_et_card_num);
+        viewBank = findViewById(R.id.bank_card_view_bank);
+        viewBankBranch = findViewById(R.id.bank_card_view_bank_branch);
         btnNext = (Button) findViewById(R.id.bank_card_btn_next);
         tvOpenBank = (TextView) findViewById(R.id.bank_card_tv_card);
         mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
@@ -72,9 +76,13 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
     private void initDefaultAddress() {
         etCardName.setText(info.getAccountname());
         etCardLocal.setText(info.getBank());
+        etCardLocalBranch.setText(info.getSubbank());
         etCardNum.setText(info.getAccountnum());
         if (info.getPaytype() == 2){
             llOpenBank.setVisibility(View.GONE);
+            llBankBranch.setVisibility(View.GONE);
+            viewBank.setVisibility(View.GONE);
+            viewBankBranch.setVisibility(View.GONE);
             tvOpenBank.setText(getString(R.string.zhi_fu_id));
         }
 //        LoadingDialog.show(this);
@@ -116,7 +124,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
 //                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
 
                 // 提现请求
-                if (Long.valueOf(mEidtMoney) <= 0){
+                if (Float.valueOf(mEidtMoney) <= 0){
                     PToast.showShort(R.string.money_cout_be_0);
                     break;
                 }
