@@ -19,10 +19,6 @@ public class TextMessage extends BaseMessage {
     //关注状态1为关注2为取消关注
     private int gz;
 
-    public TextMessage() {
-        super();
-    }
-
     /**
      * 打招呼
      * @param whisperID
@@ -38,36 +34,11 @@ public class TextMessage extends BaseMessage {
         this.setSayHelloType(sayHelloType);
     }
 
-
-    /**
-     * 构造文本消息
-     *
-     * @param channelID 频道ID
-     * @param whisperID 私聊ID
-     * @param content
-     * @return
-     */
-//    public TextMessage(String channelID, String whisperID, String content) {
-//        super(channelID, whisperID);
-//        this.setMsgDesc(content);
-//        this.setType(BaseMessageType.text.getMsgType());
-//    }
-
-    /**
-     * 机器人专用
-     * @param whisperID
-     * @param content
-     */
-//    public TextMessage(long whisperID, String content) {
-//        super();
-//        this.setChannelID(null);
-//        this.setWhisperID(String.valueOf(whisperID));
-//        this.setSendID(whisperID);
-//        this.setTime(getCurrentTime());
-//        this.setcMsgid(getCMsgID());
-//        this.setMsgDesc(content);
-//        this.setType(BaseMessageType.text.getMsgType());
-//    }
+    public TextMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                       int type, int status, int fStatus, long time, String jsonStr) {
+        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        parseJson(getJsonStr());
+    }
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -106,22 +77,6 @@ public class TextMessage extends BaseMessage {
         }
         return null;
     }
-
-//    public TextMessage(Map<String, Object> map, int type) {
-//        super(map, type);
-//        convertJSON(map);
-//    }
-//
-//    public TextMessage(int type, Map<String, Object> map) {
-//        super(type, map);
-//        convertJSON(map);
-//    }
-
-//    @Override
-//    public void convertJSON(Map<String, Object> map) {
-//        super.convertJSON(map);
-//        this.setMsgDesc(getJsonObject(getJsonStr()).optString("mct"));
-//    }
 
 
     public int getKf() {

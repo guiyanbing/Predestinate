@@ -9,6 +9,8 @@ public class SwipeMenu {
 	private int titleColor;
 	private int viewType;
 
+	private int viewHeight;
+
 	public Context getContext() {
 		return context;
 	}
@@ -47,5 +49,13 @@ public class SwipeMenu {
 
 	public void setViewType(int viewType) {
 		this.viewType = viewType;
+	}
+
+	public int getViewHeight() {
+		return viewHeight;
+	}
+
+	public void setViewHeight(int viewHeight) {
+		this.viewHeight = viewHeight;
 	}
 }

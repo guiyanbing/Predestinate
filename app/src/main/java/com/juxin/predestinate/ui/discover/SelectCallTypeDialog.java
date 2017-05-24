@@ -123,7 +123,7 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
                     activity = (PrivateChatAct) mContext;
                 }
                 if (activity != null) {
-                    VideoAudioChatHelper.getInstance().inviteVAChat(activity, (int) mOtherUserId, type);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(activity, mOtherUserId, type);
                 }
             }
         } catch (Exception e) {

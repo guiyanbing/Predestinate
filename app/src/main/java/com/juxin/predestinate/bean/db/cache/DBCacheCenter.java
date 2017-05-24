@@ -40,7 +40,7 @@ public class DBCacheCenter {
             values.put(FProfileCache.COLUMN_USERID, lightweight.getUid());
             values.put(FProfileCache.COLUMN_TIME, lightweight.getTime());
 
-            if(TextUtils.isEmpty(lightweight.getInfoJson()))
+            if (lightweight.getInfoJson() != null)
                 values.put(FProfileCache.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
 
             if(!ret){

@@ -1,7 +1,6 @@
 package com.juxin.predestinate.ui.mail.base;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import com.juxin.predestinate.R;

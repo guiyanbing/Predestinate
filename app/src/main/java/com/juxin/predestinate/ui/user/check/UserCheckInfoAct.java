@@ -102,12 +102,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
         if (userDetail == null) return;
 
-        // TODO  isSayHello
-//        if (userDetail.isSayHello()) {   // 已打招呼
-//            initSayHi();
-//        } else {
-        sayHibottom.setOnClickListener(listener);
-//        }
+        if (userDetail.isSayHello()) {   // 已打招呼
+            initSayHi();
+        } else {
+            sayHibottom.setOnClickListener(listener);
+        }
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
@@ -127,10 +126,9 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    // TODO
-//                    if (userDetail.isSayHello()) {
-//                        return;
-//                    }
+                    if (userDetail.isSayHello()) {
+                        return;
+                    }
                     handleSayHi();
                     break;
 

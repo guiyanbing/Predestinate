@@ -5,12 +5,12 @@ apply plugin: 'org.greenrobot.greendao'
 
 android {
     signingConfigs {
-        debug {
-            storeFile file(cStoreFile)
-            storePassword cStorePassword
-            keyAlias cKeyAlias
-            keyPassword cKeyPassword
-        }
+//        debug {
+//            storeFile file(cStoreFile)
+//            storePassword cStorePassword
+//            keyAlias cKeyAlias
+//            keyPassword cKeyPassword
+//        }
 
         release {
             storeFile file(cStoreFile)

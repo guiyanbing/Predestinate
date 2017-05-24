@@ -16,6 +16,7 @@ import com.juxin.library.request.DownloadListener;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -48,8 +49,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     private Boolean Message_Status, Vibration_Status, Voice_Status, Quit_Message_Status, videoStatus, audioStatus;
 
     private VideoVerifyBean videoVerifyBean;
-    private DownloadingDialog downLoadDialog = new DownloadingDialog();
-    private boolean isDownloading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,8 +271,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     public boolean validChange() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         //开启音、视频通话时，男性用户判断是否VIP
-        if (userDetail.getGender() == 1
-                && !userDetail.isMonthMail()) {
+        if (userDetail.getGender() == 1 && !userDetail.isVip()) {
 
             PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
                 @Override
@@ -310,52 +308,11 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) == ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             return true;
         } else {
-            downloadVideoPlugin();
+            VideoAudioChatHelper.getInstance().downloadVideoPlugin(SettingAct.this);
         }
         return true;
     }
 
-
-    /**
-     * 下载视频插件
-     */
-    private void downloadVideoPlugin() {
-        PToast.showShort(getResources().getString(R.string.toast_down_plugin));
-        downLoadDialog.show(getSupportFragmentManager(), "download");
-        if (isDownloading) {
-            return;
-        }
-        isDownloading = true;
-        HttpMgr httpMgr = ModuleMgr.getHttpMgr();
-        String apkFile = Common.getCahceDir("apk") + Long.toString(new Date().getTime()) + ".apk";//AppCfg.ASet.getVideo_chat_apk_url()
-        httpMgr.download(ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url(), apkFile, new DownloadListener() {
-            @Override
-            public void onStart(String url, String filePath) {
-
-            }
-
-            @Override
-            public void onProcess(String url, int process, long size) {
-                if (downLoadDialog.isAdded() && downLoadDialog.isVisible())
-                    downLoadDialog.updateProgress(process);
-            }
-
-            @Override
-            public void onSuccess(String url, String filePath) {
-                isDownloading = false;
-                downLoadDialog.dismiss();
-                ApkUnit.ExecApkFile(SettingAct.this, filePath);
-            }
-
-            @Override
-            public void onFail(String url, Throwable throwable) {
-                isDownloading = false;
-                downLoadDialog.dismiss();
-                PToast.showShort(getResources().getString(R.string.toast_down_error));
-
-            }
-        });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

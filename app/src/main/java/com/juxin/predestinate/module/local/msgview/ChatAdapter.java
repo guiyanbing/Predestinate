@@ -7,7 +7,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
-import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -35,14 +34,9 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, PObserver {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
-
-    /**
-     * 私聊还是群聊。
-     */
-    private boolean group = false;
 
     /**
      * 频道Id（群聊的），私聊时聊天对象的uid；群聊时是群聊Id。
@@ -53,16 +47,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 频道Id（私聊的），私聊时聊天对象的uid；群聊时是群聊Id。
      */
     private String whisperId = "";
-
-    /**
-     * 群创建者uid。私聊没啥用。
-     */
-    private long creatorId = 0;
-
-    /**
-     * 是否已经注册监听消息。
-     */
-    private boolean attach = false;
 
     /**
      * 是否显示扩展功能按钮。
@@ -116,10 +100,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return App.uid == uid;
     }
 
-    public boolean isGroup() {
-        return group;
-    }
-
     public String getChannelId() {
         return channelId;
     }
@@ -132,10 +112,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return TypeConvertUtil.toLong(whisperId);
     }
 
-    public long getCreatorId() {
-        return creatorId;
-    }
-
     public boolean isShowExtend() {
         return showExtend;
     }
@@ -144,62 +120,15 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         this.showExtend = showExtend;
     }
 
-    /**
-     * 设置聊天频道Id。会自动注册消息监听。
-     *
-     * @param group     群聊还是私聊。true为群聊。
-     * @param channelId 聊天频道Id。
-     * @param creatorId 群的创建者Id。
-     */
-    public void setChannelId(boolean group, String channelId, long creatorId) {
-        this.group = group;
-        this.creatorId = creatorId;
-
-        if (group) {
-            this.channelId = channelId;
-            this.whisperId = null;
-        } else {
-            this.channelId = null;
-            this.whisperId = channelId;
-            getUserInfo(getLWhisperId());
-        }
-
-        chatInstance.chatInputPanel.showSendBtn();
-        page = 0;
-        attach();
-    }
-
-    /**
-     * 设置群聊频道。
-     *
-     * @param channelId 频道Id。
-     * @param creatorId 群的创建者Id。
-     */
-    public void setGroupId(String channelId, long creatorId) {
-        setChannelId(true, channelId, creatorId);
-    }
-
-    /**
-     * 设置群聊频道。
-     *
-     * @param channelId 频道Id。
-     */
-    public void setGroupId(String channelId) {
-        setGroupId(channelId, 0);
-    }
-
-    /**
-     * 设置私聊频道。
-     *
-     * @param whisperID 频道Id（用户uid）。
-     */
-    public void setWhisperId(String whisperID) {
-        setChannelId(false, whisperID, 0);
-    }
-
     public void setWhisperId(long whisperID) {
         try {
-            setWhisperId(String.valueOf(whisperID));
+            this.channelId = null;
+            this.whisperId = String.valueOf(whisperID);
+            getUserInfo(getLWhisperId());
+
+            chatInstance.chatInputPanel.showSendBtn();
+            page = 0;
+            attach();
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }
@@ -307,6 +236,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * @return 返回用户信息，如果没有则返回null。
      */
     public synchronized UserInfoLightweight getUserInfo(long uid) {
+        PLogger.printObject("userInfos====" + userInfos.size());
         UserInfoLightweight userInfo = userInfos.get(uid);
         if (userInfo == null) {
             if (uid == App.uid) {
@@ -322,7 +252,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                 @Override
                 public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                    if(ret){
+                    if (ret) {
                         addUserInfo(infoLightweight);
                     }
                 }
@@ -333,7 +263,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                     @Override
                     public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                        if(ret){
+                        if (ret) {
                             addUserInfo(infoLightweight);
                         }
                     }
@@ -452,17 +382,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      */
     private void attach() {
         PLogger.printObject(this);
-        if (TextUtils.isEmpty(channelId)) {
-            ModuleMgr.getChatMgr().attachChatListener(whisperId, this);
-        } else {
-            ModuleMgr.getChatMgr().attachChatListener(channelId, this);
-        }
-
-        attach = true;
-
-        if (isGroup()) {
-            MsgMgr.getInstance().attach(this);
-        }
+        ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
     }
@@ -471,42 +391,25 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 反注册消息模块，解除绑定。
      */
     public void detach() {
-        if (attach) {
-            attach = false;
+        ModuleMgr.getChatMgr().detachChatListener(this);
+        ChatMediaPlayer.getInstance().stopPlayVoice();
 
-            if (isGroup()) {
-                // MsgMgr.getInstance().detach(this);//暂无消息主动解绑功能
-            }
-
-            ModuleMgr.getChatMgr().detachChatListener(this);
-            ChatMediaPlayer.getInstance().stopPlayVoice();
-
-            //关闭页面的时候查看是否下在输入中
-            if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
-                getChatInstance().chatInputPanel.sendSystemMsgCancelInput();
-            }
+        //关闭页面的时候查看是否下在输入中
+        if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
+            getChatInstance().chatInputPanel.sendSystemMsgCancelInput();
         }
     }
 
     @Override
     public void onChatRecently(boolean ret, List<BaseMessage> baseMessages) {
         PLogger.printObject(baseMessages);
-        List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+        List<BaseMessage> listTemp = new ArrayList<>();
 
         if (ret) {
             for (BaseMessage baseMessage : baseMessages) {
                 if (isShowMsg(baseMessage)) {
                     listTemp.add(baseMessage);
                 }
-            }
-        }
-
-        if (listTemp.size() < 5) {
-            long uid = 0;
-            if (isGroup()) {
-                uid = getCreatorId();
-            } else {
-                uid = getLWhisperId();
             }
         }
 
@@ -715,30 +618,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         }
 
         return false;
-    }
-
-    /**
-     * 处理在群聊中的时候，断线重连后。自动重新加入群。<br>
-     *
-     * @param key   消息类型。
-     * @param value 消息内容
-     */
-    @Override
-    public void onMessage(String key, Object value) {
-        switch (key){
-            case MsgType.MT_App_IMStatus:
-                try {//防止类型转换错误
-                    Map<String,Object> map = (HashMap<String, Object>) value;
-                    int type = (int) map.get("type");
-                    String msg = (String) map.get("msg");
-                    if (type == 0) {
-                        PLogger.d("" + attach);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
     }
 
     private int page = 0;

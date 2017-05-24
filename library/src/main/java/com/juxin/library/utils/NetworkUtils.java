@@ -8,6 +8,12 @@ import android.telephony.TelephonyManager;
 
 import com.juxin.library.log.PLogger;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 /**
  * 网络状态工具类
  *
@@ -15,6 +21,13 @@ import com.juxin.library.log.PLogger;
  * @version 2.0 2014.02.12
  */
 public final class NetworkUtils {
+
+    /**
+     * 网络状态枚举
+     */
+    public enum NetworkType {
+        WIFI, MOBILE, OTHER, NONE
+    }
 
     private NetworkUtils() {
     }
@@ -121,7 +134,25 @@ public final class NetworkUtils {
         return NetworkType.MOBILE.equals(getNetworkType(context));
     }
 
-    public enum NetworkType {
-        WIFI, MOBILE, OTHER, NONE
+    /**
+     * @return 获取当前ip地址
+     */
+    public static String getIpAddressString() {
+        try {
+            for (Enumeration<NetworkInterface> enNetI = NetworkInterface
+                    .getNetworkInterfaces(); enNetI.hasMoreElements(); ) {
+                NetworkInterface netI = enNetI.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = netI
+                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (inetAddress instanceof Inet4Address && !inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

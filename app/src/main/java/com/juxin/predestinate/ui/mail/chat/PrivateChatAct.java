@@ -208,7 +208,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
     }
 
-
     private void initHeadView() {
         privatechat_head = (LinearLayout) findViewById(R.id.privatechat_head);
         findViewById(R.id.chat_title_attention).setOnClickListener(this);
@@ -385,18 +384,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //
 //        return object;
 //    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //ModuleMgr.getTipsBarMgr().attach(TipsBarMsg.Chat_Page, viewGroup, getParmsJson());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //ModuleMgr.getTipsBarMgr().detach();
-    }
 
     @Override
     public void onDestroy() {

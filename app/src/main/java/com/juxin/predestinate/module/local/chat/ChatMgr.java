@@ -66,7 +66,6 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
     }
 
-
     /**
      * 更新某个用户的本地状态
      * 如果在聊天框的时候。发送过来消息立即更改为已读
@@ -352,9 +351,8 @@ public class ChatMgr implements ModuleBase {
         observable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
-                SortList.sortListView(messageList);// 排序
-                onChatMsgHistory(channelID, whisperID, true, messageList);
+                SortList.sortListView(baseMessages);// 排序
+                onChatMsgHistory(channelID, whisperID, true, baseMessages);
             }
         });
     }
@@ -372,9 +370,8 @@ public class ChatMgr implements ModuleBase {
             observable.subscribe(new Action1<List<BaseMessage>>() {
                 @Override
                 public void call(List<BaseMessage> baseMessages) {
-                    List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
-                    SortList.sortListView(messageList);// 排序
-                    onChatMsgRecently(channelID, whisperID, true, messageList);
+                    SortList.sortListView(baseMessages);// 排序
+                    onChatMsgRecently(channelID, whisperID, true, baseMessages);
                 }
             });
 //            DBCenter.getInstance().queryMsgListWG(channelID, whisperID, 20);
@@ -439,7 +436,7 @@ public class ChatMgr implements ModuleBase {
     public void attachChatListener(final String msgID, final ChatMsgInterface.ChatMsgListener chatListener) {
         Set<ChatMsgInterface.ChatMsgListener> observers = chatMapMsgListener.get(msgID);
         if (observers == null) {
-            observers = new LinkedHashSet<ChatMsgInterface.ChatMsgListener>();
+            observers = new LinkedHashSet<>();
             chatMapMsgListener.put(msgID, observers);
         }
         observers.add(chatListener);
@@ -592,6 +589,7 @@ public class ChatMgr implements ModuleBase {
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<>();
 
     public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
+        PLogger.printObject("getUserInfoLightweight");
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
@@ -600,10 +598,10 @@ public class ChatMgr implements ModuleBase {
                 public void call(UserInfoLightweight lightweight) {
                     PLogger.printObject("lightweight==222==" + lightweight);
                     long infoTime = lightweight.getTime();
-                    if (uid  > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+                    if (lightweight.getUid()  > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
                         removeInfoComplete(true, true, uid, lightweight);
                     } else {
-                        removeInfoComplete(false, true, uid, lightweight);
+                        removeInfoComplete(false, false, uid, lightweight);
                         getProFile(uid);
                     }
                 }
@@ -629,6 +627,7 @@ public class ChatMgr implements ModuleBase {
 
                 if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
                     temp = infoLightweightList.getUserInfos().get(0);
+                    temp.setTime(getTime());
                     dbCenter.getCacheCenter().storageProfileData(temp);
                     dbCenter.getCenterFLetter().updateUserInfoLight(temp);
                 }
