@@ -23,6 +23,13 @@ public class GoodsConstant {
     public static final int PAY_STATUS_UNCHOOSE = 0; // 未选中支付
     public static final int PAY_STATUS_CHOOSE = 1;   // 选中支付
 
+    // 钻石充值弹框
+    public static final String DLG_TYPE_KEY = "typeKey";    // 弹框样式
+    public static final String DLG_GIFT_NEED = "needKey";   // 钻石不足数目
+    public static final int DLG_DIAMOND_NORMAL = 0;         // 默认弹框样式
+    public static final int DLG_DIAMOND_GIFT_SHORT = 1;     // 送礼钻石不足弹框
+
+
     // vip弹框类型
     public static final String DLG_VIP_TYPE = "vip_type";   // vip key
     public static final int DLG_VIP_PRIVEDEG = 1;           // 开通VIP特权

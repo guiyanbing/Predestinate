@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
@@ -29,6 +30,10 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel; // 商品列表
     private GoodsPayTypePanel payTypePanel; // 支付方式
+
+    private int needDiamond;  // 送礼需要钻石数
+    private int type = GoodsConstant.DLG_DIAMOND_NORMAL;   // 正常展示样式
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +60,17 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
     }
 
     private void initView() {
+        type = getIntent().getIntExtra(GoodsConstant.DLG_TYPE_KEY, GoodsConstant.DLG_DIAMOND_NORMAL);
+        needDiamond = getIntent().getIntExtra(GoodsConstant.DLG_GIFT_NEED, 0);
+
+        LinearLayout ll_diamond_tips = (LinearLayout) findViewById(R.id.ll_diamond_tips);
+        TextView tv_decdiamod = (TextView) findViewById(R.id.tv_decdiamod); // 送礼差钻石数
         findViewById(R.id.btn_recharge).setOnClickListener(this);
+
+        if (type == GoodsConstant.DLG_DIAMOND_GIFT_SHORT && needDiamond > 0) {
+            ll_diamond_tips.setVisibility(View.VISIBLE);
+            tv_decdiamod.setText(getString(R.string.goods_diamond_need, needDiamond));
+        }
 
         fillGoodsPanel();
     }

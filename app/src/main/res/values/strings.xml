@@ -338,6 +338,7 @@
 
     <string name="goods_price">%d元</string>
     <string name="goods_diamond_title">钻石充值</string>
+    <string name="goods_diamond_need">%d钻石</string>
     <string name="goods_diamond_remain">余额</string>
     <string name="goods_diamond_lack">余额不足</string>
     <string name="goods_diamond_type">请选择购买金额</string>
