@@ -686,5 +686,4 @@ public class ChatMgr implements ModuleBase {
     private long getTime() {
         return ModuleMgr.getAppMgr().getTime();
     }
-
 }

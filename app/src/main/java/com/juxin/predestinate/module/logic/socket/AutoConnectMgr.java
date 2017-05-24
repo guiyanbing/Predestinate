@@ -52,7 +52,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     /**
      * 发送消息线程池
      */
-    private final Executor sendExecutor = Executors.newSingleThreadExecutor();
+    private final Executor sendExecutor = Executors.newCachedThreadPool();
 
     private static class SingletonHolder {
         static AutoConnectMgr instance = new AutoConnectMgr();
