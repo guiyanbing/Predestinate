@@ -64,10 +64,6 @@ public class DBCenter {
     }
 
     /******************** FLetter **************************/
-    public Observable<List<BaseMessage>> queryLetterList() {
-        return centerFLetter.queryLetterList();
-    }
-
     public long insertMsg(BaseMessage baseMessage){
         if (TextUtils.isEmpty(baseMessage.getWhisperID())) return DBConstant.ERROR;
 

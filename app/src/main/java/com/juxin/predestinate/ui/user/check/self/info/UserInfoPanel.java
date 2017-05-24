@@ -1,19 +1,15 @@
 package com.juxin.predestinate.ui.user.check.self.info;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ListView;
 
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.ui.user.check.bean.UserPersonInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,89 +19,104 @@ import java.util.List;
  * Created by Su on 2016/6/6.
  */
 public class UserInfoPanel extends BasePanel {
-
-    private ListView list_info;
-    private int spaceCount = 0;
     private List<UserPersonInfo> userInfoList;
-    private UserDetailAdapter userDetailAdapter;
+    private UserInfoAdapter userInfoAdapter;
 
     private UserDetail userDetail;
+    private String[] zoneDatas, baseDatas, detailDatas, contactDatas;
+    private String notFill = getContext().getString(R.string.str_not_filled);
+    private String secretStr = getContext().getString(R.string.user_edit_info_auth_secret);
 
-    public UserInfoPanel(Context context, ListView list_info) {
+    public UserInfoPanel(Context context, UserDetail userDetail) {
         super(context);
-        setContentView(list_info);
+        setContentView(R.layout.f1_user_info_base_panel);
+        this.userDetail = userDetail;
 
         initData();
         initView();
-        handleUserDetailData();
+        refreshData();
     }
 
     private void initView() {
-        userDetailAdapter = new UserDetailAdapter(getContext(), userInfoList);
-        list_info = (ListView) findViewById(R.id.list_info);
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.layout_margintop, null);
-        View footerView = inflater.inflate(R.layout.common_footer_distance, null);
-        list_info.addHeaderView(view);
-        list_info.addFooterView(footerView);
-        list_info.setAdapter(userDetailAdapter);
-        list_info.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        userInfoAdapter = new UserInfoAdapter();
+        RecyclerView list_info = (RecyclerView) findViewById(R.id.list_info);
+        list_info.setLayoutManager(new LinearLayoutManager(getContext()));
+        list_info.setNestedScrollingEnabled(false);
+        list_info.setAdapter(userInfoAdapter);
     }
 
     private void initData() {
-        userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-
         userInfoList = new ArrayList<>();
-        String[] baseDatas = getContext().getResources().getStringArray(R.array.base_data);
-        String[] detailDatas = getContext().getResources().getStringArray(R.array.detail_data);
-        String[] contactDatas = getContext().getResources().getStringArray(R.array.contact_data);
+        zoneDatas = getContext().getResources().getStringArray(R.array.zone_data);
+        baseDatas = getContext().getResources().getStringArray(R.array.base_data);
+        detailDatas = getContext().getResources().getStringArray(R.array.detail_data);
+        contactDatas = getContext().getResources().getStringArray(R.array.contact_data);
 
+        for (String zoneData : zoneDatas) {
+            userInfoList.add(new UserPersonInfo(getContext().getString(R.string.user_edit_zone_info), zoneData));
+        }
         for (String baseData : baseDatas) {
-            userInfoList.add(new UserPersonInfo("基本信息", baseData));
+            userInfoList.add(new UserPersonInfo(getContext().getString(R.string.user_edit_base_info), baseData));
         }
         for (String detailData : detailDatas) {
-            userInfoList.add(new UserPersonInfo("详细资料", detailData));
+            userInfoList.add(new UserPersonInfo(getContext().getString(R.string.user_edit_info_detail_info), detailData));
         }
         for (String contactData : contactDatas) {
-            userInfoList.add(new UserPersonInfo("联系方式", contactData));
+            userInfoList.add(new UserPersonInfo(getContext().getString(R.string.user_edit_info_contact), contactData));
         }
     }
 
-    private void handleUserDetailData() {
+    private void refreshData() {
+        fillZoneValue();
         fillBaseValue();
         fillDetailValue();
         fillContactValue();
-        userDetailAdapter.notifyDataSetChanged();
+        userInfoAdapter.setList(userInfoList);
+    }
+
+    // 填充个人空间
+    private void fillZoneValue() {
+        String online = TextUtils.isEmpty(userDetail.getOnline_text()) ? secretStr : userDetail.getOnline_text();
+        String datingfor = TextUtils.isEmpty(userDetail.getDatingfor()) ? secretStr : userDetail.getDatingfor();
+        String concept = TextUtils.isEmpty(userDetail.getConcept()) ? secretStr : userDetail.getConcept();
+        String favplace = TextUtils.isEmpty(userDetail.getFavplace()) ? secretStr : userDetail.getFavplace();
+        String favaction = TextUtils.isEmpty(userDetail.getFavaction()) ? secretStr : userDetail.getFavaction();
+        String[] zoneValues = new String[]{online, datingfor, concept, favplace, favaction};
+        for (int i = 0; i < zoneDatas.length; i++) {
+            userInfoList.get(i).setValue(zoneValues[i]);
+        }
     }
 
     // 填充基本资料
     private void fillBaseValue() {
-        String gender = userDetail.getGender() == 1 ? "男" : "女";
+        String gender = userDetail.isMan() ? getContext().getString(R.string.txt_boy) :
+                getContext().getString(R.string.txt_girl);
         String address = userDetail.getAddressShow();
         if (!TextUtils.isEmpty(address) && address.length() > 14) {
             address = address.substring(0, 14) + "...";
         }
-        String height = userDetail.getHeight() == 0 ? "" : (userDetail.getHeight() + "cm");
-        String income = userDetail.getIncome() == null ? "" : userDetail.getIncome();
-        String marry = userDetail.getMarry() == null ? "" : userDetail.getMarry();
-        String age = userDetail.getAge() == 0 ? "" : userDetail.getAge() + "岁";
+        String height = userDetail.getHeight() == 0 ? notFill : (userDetail.getHeight() + "cm");
+        String income = TextUtils.isEmpty(userDetail.getIncome()) ? notFill : userDetail.getIncome();
+        String marry = TextUtils.isEmpty(userDetail.getMarry()) ? notFill : userDetail.getMarry();
+        String age = userDetail.getAge() == 0 ? notFill : getContext().getString(R.string.user_info_age, userDetail.getAge());
         String nickName = userDetail.getNickname();
         String[] baseValues = new String[]{nickName, gender, age, address, height, income, marry};
-        int count = spaceCount;
-        for (int i = count; i < baseValues.length + count; i++) {
+        int count = zoneDatas.length;
+        for (int i = count; i < baseDatas.length + count; i++) {
             userInfoList.get(i).setValue(baseValues[i - count]);
         }
     }
 
     // 填充详细资料
     private void fillDetailValue() {
-        String edu = userDetail.getEdu() == null ? "" : userDetail.getEdu();
-        String job = userDetail.getJob() == null ? "" : userDetail.getJob();
-        String weight = userDetail.getWeight() == null ? "" : userDetail.getWeight();
-        String star = userDetail.getStar() == null ? "" : userDetail.getStar();
-        String[] detailValues = new String[]{edu, job, userDetail.getBirthday(), weight, star};
-        int count = 7 + spaceCount;
-        for (int i = count; i < detailValues.length + count; i++) {
+        String edu = TextUtils.isEmpty(userDetail.getEdu()) ? notFill : userDetail.getEdu();
+        String job = TextUtils.isEmpty(userDetail.getJob()) ? notFill : userDetail.getJob();
+        String birthday = TextUtils.isEmpty(userDetail.getBirthday()) ? notFill : userDetail.getBirthday();
+        String weight = TextUtils.isEmpty(userDetail.getWeight()) ? notFill : userDetail.getWeight();
+        String star = TextUtils.isEmpty(userDetail.getStar()) ? notFill : userDetail.getStar();
+        String[] detailValues = new String[]{edu, job, birthday, weight, star};
+        int count = zoneDatas.length + baseDatas.length;
+        for (int i = count; i < detailDatas.length + count; i++) {
             userInfoList.get(i).setValue(detailValues[i - count]);
         }
     }
@@ -113,31 +124,30 @@ public class UserInfoPanel extends BasePanel {
     // 填充联系方式资料
     private void fillContactValue() {
         String qq = TextUtils.isEmpty(userDetail.getQQ()) ? "" : userDetail.getQQ();
-        int qqAuth = userDetail.getQQAuth();
-        String qqValue = qq + "-" + qqAuth;
+        String qqValue = qq + "-" + userDetail.getQQAuth();
 
         String mobile = TextUtils.isEmpty(userDetail.getMobile()) ? "" : userDetail.getMobile();
-        int mobileAuth = userDetail.getMobileAuth();
-        String mobileValue = mobile + "-" + mobileAuth;
+        String mobileValue = mobile + "-" + userDetail.getMobileAuth();
 
         String weChat = TextUtils.isEmpty(userDetail.getWeChat()) ? "" : userDetail.getWeChat();
-        int weChatAuth = userDetail.getWechatAuth();
-        String weChatValue = weChat + "-" + weChatAuth;
+        String weChatValue = weChat + "-" + userDetail.getWechatAuth();
 
         String[] contactValues = new String[]{qqValue, mobileValue, weChatValue};
-        int count = 12 + spaceCount;
-        for (int i = count; i < contactValues.length + count; i++) {
+        int count = zoneDatas.length + baseDatas.length + detailDatas.length;
+        for (int i = count; i < contactDatas.length + count; i++) {
             if (contactValues[i - count] != null) {
                 int auth = TypeConvertUtil.toInt(contactValues[i - count].split("-")[1], 0);
                 String value = contactValues[i - count].split("-")[0];
-                userInfoList.get(i).setValue("".equals(value) ? "未填写" : limits(auth));
+                userInfoList.get(i).setValue(TextUtils.isEmpty(value) ? notFill : limits(auth));
                 userInfoList.get(i).setContact(value);
             }
         }
     }
 
     private String limits(int auth) {
-        return auth == 2 ? "保密" : userDetail.isMan() ? "公开" : "仅对VIP公开";
+        return auth == 2 ? secretStr : userDetail.isMan() ?
+                getContext().getString(R.string.user_edit_info_open) :
+                getContext().getString(R.string.user_edit_info_just_vip_open);
     }
 
     //****************************************************************************************
@@ -154,15 +164,16 @@ public class UserInfoPanel extends BasePanel {
         String showString = "";
         boolean isVip = ModuleMgr.getCenterMgr().getMyInfo().isVip();
         if (secret == 2) {//保密显示
-            showString = "保密";
+            showString = secretStr;
         } else if (isVip || !userDetail.isMan() || TextUtils.isEmpty(field)) {//女或vip显示联系方式
             showString = field;
         } else if (position == 1) {//隐藏部分手机号
             if (!"".equals(field) && field.length() >= 4) {//手机号处理
-                showString = field.substring(0, 4) + "***仅VIP可见";
+                showString = field.substring(0, 4) + "***" +
+                        getContext().getString(R.string.user_edit_info_just_vip_open);
             }
         } else {
-            showString = "仅VIP可见";
+            showString = getContext().getString(R.string.user_edit_info_just_vip_open);
         }
         return showString;
     }

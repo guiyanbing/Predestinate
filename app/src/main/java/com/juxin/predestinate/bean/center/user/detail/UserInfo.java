@@ -29,7 +29,7 @@ public class UserInfo extends UserBasic {
     private int topN;               // 用户排行
     private int group;              // 1 普通用户  2,3包月用户
 
-    // 自己字段
+    // --------------- 自己字段 -----------------------
     private String complete;        // 资料完整度(%)
     private String idcard;          // 身份证号
     private double redbagsum;       // 红包总额
@@ -38,7 +38,7 @@ public class UserInfo extends UserBasic {
     private long memdatenum;        // 计算会员到期时间
     private String cell_phone;      // 认证的手机号
 
-    // TA人字段
+    // --------------- TA人字段 ------------------------
     private int kf_id;
     private String distance;        // 距离
     private int followmecount;      // 关注数
@@ -46,11 +46,11 @@ public class UserInfo extends UserBasic {
     private String online_text;     // 在线时间 "七天前在线"
     private boolean isSayHello;     // 是否已打招呼
 
-
-//    mudi==目的 ==Datingfor 交友意向
-//    guannain==观念==Concept
-//    didian==地点==Favplace
-//    xiwang==希望==FavAction
+    // 个人空间
+    private String datingfor;       // 目的，交友意向
+    private String concept;         // 观念
+    private String favplace;        // 地点
+    private String favaction;       // 希望
 
     @Override
     public void parseJson(String s) {
@@ -67,13 +67,17 @@ public class UserInfo extends UserBasic {
         this.setC_user(detailObject.optBoolean("c_user"));
         this.setComplete(detailObject.optString("complete"));
         this.setCell_phone(detailObject.optString("cell_phone"));
+        this.setConcept(detailObject.optString("concept"));
 
         // D
         this.setDiamand(detailObject.optInt("diamand"));
         this.setDistance(detailObject.optString("distance"));
+        this.setDatingfor(detailObject.optString("datingfor"));
 
         // F
         this.setFollowmecount(detailObject.optInt("followmecount"));
+        this.setFavplace(detailObject.optString("favplace"));
+        this.setFavaction(detailObject.optString("favaction"));
 
         // G
         this.setGroup(detailObject.optInt("group"));
@@ -185,6 +189,38 @@ public class UserInfo extends UserBasic {
             return;
         }
         mobile_validation = 0;
+    }
+
+    public String getDatingfor() {
+        return datingfor;
+    }
+
+    public void setDatingfor(String datingfor) {
+        this.datingfor = datingfor;
+    }
+
+    public String getConcept() {
+        return concept;
+    }
+
+    public void setConcept(String concept) {
+        this.concept = concept;
+    }
+
+    public String getFavplace() {
+        return favplace;
+    }
+
+    public void setFavplace(String favplace) {
+        this.favplace = favplace;
+    }
+
+    public String getFavaction() {
+        return favaction;
+    }
+
+    public void setFavaction(String favaction) {
+        this.favaction = favaction;
     }
 
     public int getTopN() {
@@ -429,6 +465,9 @@ public class UserInfo extends UserBasic {
     }
 
 
+    public UserInfo() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -470,9 +509,10 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.isfollow);
         dest.writeString(this.online_text);
         dest.writeByte(this.isSayHello ? (byte) 1 : (byte) 0);
-    }
-
-    public UserInfo() {
+        dest.writeString(this.datingfor);
+        dest.writeString(this.concept);
+        dest.writeString(this.favplace);
+        dest.writeString(this.favaction);
     }
 
     protected UserInfo(Parcel in) {
@@ -510,6 +550,10 @@ public class UserInfo extends UserBasic {
         this.isfollow = in.readInt();
         this.online_text = in.readString();
         this.isSayHello = in.readByte() != 0;
+        this.datingfor = in.readString();
+        this.concept = in.readString();
+        this.favplace = in.readString();
+        this.favaction = in.readString();
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {

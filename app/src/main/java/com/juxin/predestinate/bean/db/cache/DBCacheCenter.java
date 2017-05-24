@@ -10,6 +10,9 @@ import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
+import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -26,6 +29,31 @@ public class DBCacheCenter {
     }
 
     /******************** FProfileCache **************************/
+
+    /**
+     * 批量更新个人资料
+     * @param lightweights
+     * @return
+     */
+    public boolean storageProfileData(List<UserInfoLightweight> lightweights){
+        if (lightweights == null || lightweights.size() <= 0) {
+            return false;
+        }
+        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+        try {
+            for (UserInfoLightweight temp : lightweights) {
+                storageProfileData(temp);
+            }
+            transaction.markSuccessful();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            transaction.end();
+        }
+        return false;
+    }
+
 
     /**
      * 插入或更新内容

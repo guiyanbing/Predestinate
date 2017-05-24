@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import com.juxin.library.log.PLogger;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,12 +31,6 @@ public class TextMessage extends BaseMessage {
         this.setType(BaseMessageType.hi.getMsgType());
         this.setKf(kf);
         this.setSayHelloType(sayHelloType);
-    }
-
-    public TextMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
-        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
-        parseJson(getJsonStr());
     }
 
     @Override
@@ -95,10 +88,18 @@ public class TextMessage extends BaseMessage {
         this.sayHelloType = sayHelloType;
     }
 
-    public TextMessage(BaseMessage message) {
-        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(),
-                message.getcMsgID(), message.getSpecialMsgID(), message.getType(),message.getStatus(),
-                message.getfStatus(), message.getTime(), message.getJsonStr());
+
+    public TextMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                       int type, int status, int fStatus, long time, String jsonStr) {
+        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
+
+    //私聊列表
+    public TextMessage(long id, String userID, String infoJson, int type, int kfID,
+                       int status, int ru, long time, String content, int num) {
+        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+        parseJson(getJsonStr());
+    }
+
 }

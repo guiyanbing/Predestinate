@@ -57,6 +57,10 @@ public class VideoMessage extends BaseMessage {
         return videoMediaTp;
     }
 
+    public boolean isVideoMediaTp() {
+        return videoMediaTp == 1;
+    }
+
     public void setVideoMediaTp(int videoMediaTp) {
         this.videoMediaTp = videoMediaTp;
     }

@@ -90,6 +90,7 @@ public class MyDefriendAct extends BaseActivity implements XRecyclerView.Loading
                     customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            customRecyclerView.showLoading();
                             onRefresh();
                         }
                     });
@@ -100,6 +101,7 @@ public class MyDefriendAct extends BaseActivity implements XRecyclerView.Loading
             customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customRecyclerView.showLoading();
                     onRefresh();
                 }
             });
