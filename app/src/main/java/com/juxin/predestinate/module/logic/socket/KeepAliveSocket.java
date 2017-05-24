@@ -359,8 +359,9 @@ public class KeepAliveSocket {
         }
 
         private void readPacket() {
-            try {
-                while (!done()) {
+            while (!done()) {
+                try {
+
                     PLogger.d("Socket read packet thread start read");
                     NetData data = NetData.parseNetData(input);
                     if (data != null) {
@@ -369,11 +370,14 @@ public class KeepAliveSocket {
                     } else {
                         PLogger.d("Socket read packet dispatch packet null");
                     }
+                } catch (IOException e) {
+                    if (shutDownTime == null) {
+                        endWithException = true;
+                        shutDownTime = System.currentTimeMillis();
+                        PLogger.d("Socket read packet error:" + e.getMessage());
+                    }
+                    break;
                 }
-            } catch (IOException e) {
-                shutDownTime = System.currentTimeMillis();
-                endWithException = true;
-                PLogger.d("Socket read packet error:" + e.getMessage());
             }
 
             shutDownLock.lock();
@@ -402,15 +406,18 @@ public class KeepAliveSocket {
             shutDownLock.lock();
             shutDownTime = System.currentTimeMillis();
             instantShutdown = instant;
-            if (instantShutdown) {
-                readThread.interrupt();
-            }
             try {
-                if (shutDownDone == false)
-                    PLogger.d("Socket read packet thread shutdown wait for done start");
+//                if (shutDownDone == false)
+//                    PLogger.d("Socket read packet thread shutdown wait for done start");
+                if (instantShutdown) {
+                    readThread.interrupt();
+                    input.close();
+                }
                 shutDownCondition.await();
                 PLogger.d("Socket read packet thread shutdown wait for done end");
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             PLogger.d("Socket read packet thread shutdown instant:" + instant + " end");
