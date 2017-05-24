@@ -656,6 +656,8 @@
     <string name="id_card">身份证号</string>
     <string name="bank_card">银行卡</string>
     <string name="bank_of_deposit">开户行</string>
+    <string name="bankbranch_of_deposit">开户支行</string>
+    <string name="bank_branch_such_as">如：北京市，朝阳支行</string>
     <string name="input_your_bank_of_deposit">输入您的开户行</string>
     <string name="input_your_bank_card_id">输入您的银行卡号</string>
     <string name="upload_id">上传身份证</string>

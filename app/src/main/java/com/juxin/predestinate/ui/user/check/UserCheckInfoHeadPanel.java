@@ -27,7 +27,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
     private final int channel;
     private UserDetail userDetail; // 用户资料
     private TextView user_follow;
-    private ImageView iv_follow, iv_vip;  // 关注星标
+    private ImageView iv_follow;  // 关注星标
     private int followType = 1;   // 关注、取消关注
 
     private String distance, online;
@@ -71,9 +71,9 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         TextView user_online_time = (TextView) findViewById(R.id.tv_last_online);
         FrameLayout fl_topN = (FrameLayout) findViewById(R.id.fl_top_n);
         TextView tv_topN = (TextView) findViewById(R.id.tv_top_n);
+        ImageView iv_vip = (ImageView) findViewById(R.id.iv_vip);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
         iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
-        iv_vip = (ImageView) findViewById(R.id.iv_vip);
 
         if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
             findViewById(R.id.ll_guanzhu).setOnClickListener(listener);
@@ -91,7 +91,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
         user_id.setText("ID:" + userDetail.getUid());
         user_height.setText(userDetail.getHeight() + "cm");
-        user_distance.setText(distance);
+        user_distance.setText(distance + "km");
         user_online_time.setText(online);
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
@@ -128,6 +128,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
                 iv_follow.setImageResource(R.drawable.f1_followed_star);
                 user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
                 if (userDetail != null) {
+                    userDetail.setIsfollow(1);
                     userDetail.setFollowmecount(follow);
                 }
                 break;
@@ -138,6 +139,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
                 iv_follow.setImageResource(R.drawable.f1_follow_star);
                 user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
                 if (userDetail != null) {
+                    userDetail.setIsfollow(0);
                     userDetail.setFollowmecount(follow);
                 }
                 break;
