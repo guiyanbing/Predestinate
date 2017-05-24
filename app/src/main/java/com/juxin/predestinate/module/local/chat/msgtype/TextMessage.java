@@ -89,9 +89,9 @@ public class TextMessage extends BaseMessage {
     }
 
 
-    public TextMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+    public TextMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
                        int type, int status, int fStatus, long time, String jsonStr) {
-        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
 

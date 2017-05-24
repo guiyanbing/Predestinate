@@ -67,9 +67,9 @@ public class CommonMessage extends BaseMessage{
     /**
      * 转换类 fmessage
      */
-    public CommonMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+    public CommonMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
                        int type, int status, int fStatus, long time, String jsonStr) {
-        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
 

@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
@@ -10,6 +11,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -535,8 +537,9 @@ public class BaseMessage implements IBaseMessage {
     }
 
     //fmessage
-    public BaseMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+    public BaseMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
                        int type, int status, int fStatus, long time, String jsonStr) {
+        this.id = id;
         this.channelID = channelID;
         this.whisperID = whisperID;
         this.sendID = sendID;
@@ -610,29 +613,29 @@ public class BaseMessage implements IBaseMessage {
         return message;
     }
 
-    public static BaseMessage parseToBaseMessage(String channelID, String whisperID,
+    public static BaseMessage parseToBaseMessage(long id, String channelID, String whisperID,
                                                  long sendID, long msgID, long cMsgID, long specialMsgID, int type, int status,
                                                  int fStatus, long time, String jsonStr) {
         BaseMessage message = new BaseMessage();
         BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
         if (messageType == null) {
-            message = new BaseMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+            message = new BaseMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
                     status, fStatus, time, jsonStr);
             return message;
         }
         switch (messageType) {
             case hi:
-                message = new TextMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
-                        status, fStatus, time, jsonStr);
+                message = new TextMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
+                        type, status, fStatus, time, jsonStr);
                 break;
             case common:
-                message = new CommonMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
-                        status, fStatus, time, jsonStr);
+                message = new CommonMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
+                        type, status, fStatus, time, jsonStr);
                 break;
             case gift:
             case wantGiftTwo:
-                message = new GiftMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
-                        status, fStatus, time, jsonStr);
+                message = new GiftMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
+                        type, status, fStatus, time, jsonStr);
                 break;
             default:
                 break;
@@ -672,11 +675,11 @@ public class BaseMessage implements IBaseMessage {
             case wantGiftTwo:
                 str = msg.getMsgDesc();
                 break;
-            case video:{
+            case video: {
                 VideoMessage videoMessage = (VideoMessage) msg;
-                if(videoMessage.getVideoTp() != 3){
+                if (videoMessage.getVideoTp() != 3) {
                     str = "通话结束";
-                }else {
+                } else {
                     str = videoMessage.isSender() ? "[未接通]" : "[未接来电]";
                 }
                 break;

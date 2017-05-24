@@ -89,7 +89,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     return;
                 }
             } else {
-                if (data.getMsgID() == message.getMsgID() && data.getMsgID() == message.getMsgID()) {
+                if (data.getMsgID() == message.getMsgID() && data.getcMsgID() == message.getcMsgID()) {
                     datas.set(i, message);
                     notifyDataSetChanged();
                     return;
@@ -212,13 +212,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         public void reset(boolean sender, BaseMessage msgData, BaseMessage preMsgData) {
             if (msgData == null) return;
-
+            PLogger.printObject("time==msgData==" + TimeUtil.onPad(msgData.getTime()));
             String tipTime = "";
             if (preMsgData != null) {
 
                 long tmp = TimeUtil.onPad(msgData.getTime());
                 long temp = TimeUtil.onPad(preMsgData.getTime());
-                PLogger.printObject("time==msgData==" + msgData);
                 if (tmp - temp > Constant.CHAT_SHOW_TIP_TIME_Interval) {
                     tipTime = TimeUtil.getFormatTimeChatTip(tmp);
                 }
@@ -382,18 +381,18 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
             if (infoLightweight != null) {
-                if (sender) {
-                    name.setVisibility(View.GONE);
-                } else {
-                    name.setText(infoLightweight.getNickname());
-                    name.setVisibility(View.VISIBLE);
-                }
+//                if (sender) {
+//                    name.setVisibility(View.GONE);
+//                } else {
+//                    name.setText(infoLightweight.getNickname());
+//                    name.setVisibility(View.VISIBLE);
+//                }
 
                 ImageLoader.loadAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
                 head.setTag("" + msg.getSendID());
-                //  head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
+              //    head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
             }
         }
 
