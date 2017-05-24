@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_FFF2E2"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/txt_info_one"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_marginLeft="@dimen/px60_dp"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/px40_sp"
+        android:textColor="@color/color_62BFDE"
+        android:text="间距"/>
+    <TextView
+        android:id="@+id/txt_info_two"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_marginLeft="@dimen/px10_dp"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/px40_sp"
+        android:textColor="@color/color_999999"
+        android:text="间距"/>
+    <TextView
+        android:id="@+id/txt_info_three"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_marginLeft="@dimen/px10_dp"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/px40_sp"
+        android:textColor="@color/color_62BFDE"
+        android:text="间距"/>
+    <TextView
+        android:id="@+id/txt_info_four"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_marginLeft="@dimen/px10_dp"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/px40_sp"
+        android:textColor="@color/color_999999"
+        android:text="间距"/>
+</LinearLayout>
