@@ -38,7 +38,7 @@
                 android:layout_width="@dimen/px90_dp"
                 android:layout_height="@dimen/px90_dp"
                 android:src="@drawable/f1_user_auth_photo"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_auth_phone"
@@ -46,7 +46,7 @@
                 android:layout_height="@dimen/px90_dp"
                 android:layout_marginLeft="@dimen/px30_dp"
                 android:src="@drawable/f1_user_auth_phone"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_auth_video"
@@ -54,7 +54,7 @@
                 android:layout_height="@dimen/px90_dp"
                 android:layout_marginLeft="@dimen/px30_dp"
                 android:src="@drawable/f1_user_auth_video"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -121,84 +121,99 @@
 
     <include layout="@layout/layout_margintop" />
 
-    <!-- 照片头 -->
+    <!-- 照片 -->
     <LinearLayout
+        android:id="@+id/ll_secret_album"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/px35_dp"
-            android:text="@string/check_info_album"
-            android:textColor="@color/text_zhuyao_black"
-            android:textSize="@dimen/px40_sp" />
-
-        <TextView
-            android:id="@+id/album_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textColor="@color/picker_pink_color"
-            android:textSize="@dimen/px40_sp" />
-
-    </LinearLayout>
-
-    <!-- 照片 -->
-    <LinearLayout style="@style/center_media_item">
-
+        <!-- 照片头 -->
         <LinearLayout
-            android:id="@+id/album_item"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:scrollbars="none" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <ImageView style="@style/right_go" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/px35_dp"
+                android:text="@string/check_info_album"
+                android:textColor="@color/text_zhuyao_black"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:id="@+id/album_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/picker_pink_color"
+                android:textSize="@dimen/px40_sp" />
+
+        </LinearLayout>
+
+        <!-- 照片 -->
+        <LinearLayout style="@style/center_media_item">
+
+            <LinearLayout
+                android:id="@+id/album_item"
+                style="@style/center_item_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:scrollbars="none" />
+
+            <ImageView style="@style/right_go" />
+        </LinearLayout>
     </LinearLayout>
 
     <include layout="@layout/center_information_line" />
 
-    <!-- 视频头 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/px35_dp"
-            android:text="@string/check_info_video"
-            android:textColor="@color/text_zhuyao_black"
-            android:textSize="@dimen/px40_sp" />
-
-        <TextView
-            android:id="@+id/video_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textColor="@color/picker_pink_color"
-            android:textSize="@dimen/px40_sp" />
-    </LinearLayout>
-
     <!-- 视频 -->
     <LinearLayout
-        android:id="@+id/ll_video"
-        style="@style/center_media_item">
-
+        android:id="@+id/ll_secret_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <!-- 视频头 -->
         <LinearLayout
-            android:id="@+id/video_item"
-            style="@style/center_item_layout"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:scrollbars="none" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <ImageView style="@style/right_go" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/px35_dp"
+                android:text="@string/check_info_video"
+                android:textColor="@color/text_zhuyao_black"
+                android:textSize="@dimen/px40_sp" />
+
+            <TextView
+                android:id="@+id/video_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/picker_pink_color"
+                android:textSize="@dimen/px40_sp" />
+        </LinearLayout>
+
+        <!-- 视频 -->
+        <LinearLayout
+            android:id="@+id/ll_video"
+            style="@style/center_media_item">
+
+            <LinearLayout
+                android:id="@+id/video_item"
+                style="@style/center_item_layout"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:scrollbars="none" />
+
+            <ImageView style="@style/right_go" />
+        </LinearLayout>
     </LinearLayout>
-
-    <!--<include layout="@layout/center_information_line" />-->
 
     <include layout="@layout/layout_margintop" />
 
@@ -208,7 +223,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

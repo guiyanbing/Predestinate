@@ -15,6 +15,7 @@ import java.util.List;
 public class UserDetail extends UserInfo {
 
     private List<UserPhoto> userPhotos = new ArrayList<>();
+    private List<UserVideo> userVideos = new ArrayList<>();
     private int voice = 1;  //1为开启语音，0为关闭
 
     @Override
@@ -41,7 +42,12 @@ public class UserDetail extends UserInfo {
         // -------- 他人 -----
         // 视频列表
         if (!jsonObject.isNull("videolist")) {
+            this.userVideos = (List<UserVideo>) getBaseDataList(jsonObject.optJSONArray("videolist"), UserVideo.class);
         }
+    }
+
+    public List<UserVideo> getUserVideos() {
+        return userVideos;
     }
 
     public List<UserPhoto> getUserPhotos() {
@@ -69,6 +75,7 @@ public class UserDetail extends UserInfo {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeTypedList(this.userPhotos);
+        dest.writeList(this.userVideos);
         dest.writeInt(this.voice);
     }
 
@@ -78,6 +85,8 @@ public class UserDetail extends UserInfo {
     protected UserDetail(Parcel in) {
         super(in);
         this.userPhotos = in.createTypedArrayList(UserPhoto.CREATOR);
+        this.userVideos = new ArrayList<UserVideo>();
+        in.readList(this.userVideos, UserVideo.class.getClassLoader());
         this.voice = in.readInt();
     }
 
