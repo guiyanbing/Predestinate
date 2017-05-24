@@ -574,6 +574,9 @@
     <string name="open_the_vip_can_be_operation">开通VIP才可以操作!</string>
     <string name="cancel_the_attention">取消关注</string>
     <string name="just_looking_for_you">刚刚关注了你</string>
+    <string name="just_now">刚刚给</string>
+    <string name="sent">送了</string>
+    <string name="ge">个</string>
 
 
     <!--发现start-->

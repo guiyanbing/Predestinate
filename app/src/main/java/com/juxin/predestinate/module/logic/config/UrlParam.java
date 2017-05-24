@@ -6,6 +6,7 @@ import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.my.GiftMessageList;
 import com.juxin.predestinate.bean.my.RedOneKeyList;
 import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.bean.net.BaseData;
@@ -140,6 +141,8 @@ public enum UrlParam {
     follow("follow/follow", true),
     // 上传身份证照片
     uploadIdCard("User/uploadIdCard", true),
+    // 获取最近礼物列表
+    lastGiftList("gift/lastgiftlist", GiftMessageList.class,false),
 
     //================= 发现 ===========
     //举报

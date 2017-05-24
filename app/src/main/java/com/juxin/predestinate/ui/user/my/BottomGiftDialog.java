@@ -119,7 +119,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
             case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
                 int needStone = Integer.valueOf(txvNeedStone.getText().toString());
                 if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()){
-                    UIShow.showGoodsDiamondDialog(getContext());
+                    UIShow.showGoodsDiamondDialog(getContext(),needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand());
                     return;
                 }
                 if (position == -1){//为选择礼物
