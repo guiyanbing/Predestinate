@@ -23,7 +23,6 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
-import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -496,30 +495,6 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 取消关注
-     *
-     * @param to_uid   关注者id
-     * @param complete 请求完成后回调
-     */
-    public void unfollow(Long to_uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("to_uid", to_uid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.unfollow, getParams, complete);
-    }
-
-    /**
-     * 关注
-     *
-     * @param to_uid   关注者id
-     * @param complete 请求完成后回调
-     */
-    public void follow(Long to_uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("to_uid", to_uid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.follow, getParams, complete);
-    }
-
-    /**
      * 手机验证
      *
      * @param phoneNum 手机号
@@ -628,18 +603,18 @@ public class CommonMgr implements ModuleBase {
      *
      * @param touid    赠送对象UId
      * @param giftid   礼物Id
+     * @param giftnum   礼物数量（不填为1）
+     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
      *                 //     * @param begid     索要Id
-     *                 //     * @param giftnum   礼物数量（不填为1）
-     *                 //     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid/*,int begid,int giftnum,int gtype*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid,int giftnum,int gtype/*,int begid*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
-//        getParams.put("begid", begid);
-//        getParams.put("giftnum", giftnum);
-//        getParams.put("gtype", gtype);
+        getParams.put("giftnum", giftnum);
+        getParams.put("gtype", gtype);
+        //        getParams.put("begid", begid);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.sendGift, getParams, complete);
     }
 
@@ -728,8 +703,6 @@ public class CommonMgr implements ModuleBase {
      * @param complete 请求完成后回调
      */
     public void reqWithdrawAddress(RequestComplete complete) {
-//        Map<String, Object> postParams = new HashMap<>();
-//        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, null, complete);
     }
 
@@ -762,12 +735,9 @@ public class CommonMgr implements ModuleBase {
      * @param complete
      */
     public void getUserSimpleList(ArrayList<String> userLists, RequestComplete complete) {
-//        Gson gson = new Gson();
-//        String uidlist = gson.toJson(userLists);
         String[] uidlist = userLists.toArray(new String[userLists.size()]);
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uidlist", uidlist);// uids
-//        Log.e("TTTTTNNN", uidlist + "");
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
     }
 
@@ -1016,7 +986,7 @@ public class CommonMgr implements ModuleBase {
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
         for(int i = 0; i < uids.size(); i++){
-            temp[i] = uids.get(0);
+            temp[i] = uids.get(i);
         }
 
         HashMap<String, Object> postParms = new HashMap<>();

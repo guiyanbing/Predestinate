@@ -52,6 +52,9 @@ public class LockScreenMgr {
         }
     }
 
+    /**
+     * 解除receiver绑定
+     */
     public void unregisterReceiver() {
         if (!reg) return;
 
@@ -119,12 +122,10 @@ public class LockScreenMgr {
     }
 
     /**
-     * 显示锁屏弹窗。
+     * 显示锁屏弹窗
+     *
+     * @param wakeLock 锁屏弹窗是否点亮屏幕
      */
-    public boolean popupActivity() {
-        return popupActivity(true);
-    }
-
     public boolean popupActivity(boolean wakeLock) {
         if (ModuleMgr.getAppMgr().isForeground() || getLockView(null) == null || !isTip() || !isLockScreen()) {
             // 前台/显示面板为空/(应用为退出状态且消息提示状态为退出不提示)/不是锁屏状态：不进行锁屏弹窗
@@ -152,16 +153,16 @@ public class LockScreenMgr {
     }
 
     /**
-     * 是否显示锁屏弹窗。
+     * 是否显示锁屏弹窗
      *
-     * @return true显示。
+     * @return true显示
      */
     public boolean isTip() {
         return PSP.getInstance().getBoolean(Constant.SETTING_QUIT_MESSAGE, Constant.SETTING_QUIT_MESSAGE_DEFAULT);
     }
 
     /**
-     * 解除锁屏。
+     * 解除锁屏
      */
     private KeyguardManager.KeyguardLock keyguardLock = null;
 

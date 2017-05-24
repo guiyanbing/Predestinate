@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import com.juxin.library.log.PLogger;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,10 +18,6 @@ public class TextMessage extends BaseMessage {
     //关注状态1为关注2为取消关注
     private int gz;
 
-    public TextMessage() {
-        super();
-    }
-
     /**
      * 打招呼
      * @param whisperID
@@ -37,37 +32,6 @@ public class TextMessage extends BaseMessage {
         this.setKf(kf);
         this.setSayHelloType(sayHelloType);
     }
-
-
-    /**
-     * 构造文本消息
-     *
-     * @param channelID 频道ID
-     * @param whisperID 私聊ID
-     * @param content
-     * @return
-     */
-//    public TextMessage(String channelID, String whisperID, String content) {
-//        super(channelID, whisperID);
-//        this.setMsgDesc(content);
-//        this.setType(BaseMessageType.text.getMsgType());
-//    }
-
-    /**
-     * 机器人专用
-     * @param whisperID
-     * @param content
-     */
-//    public TextMessage(long whisperID, String content) {
-//        super();
-//        this.setChannelID(null);
-//        this.setWhisperID(String.valueOf(whisperID));
-//        this.setSendID(whisperID);
-//        this.setTime(getCurrentTime());
-//        this.setcMsgid(getCMsgID());
-//        this.setMsgDesc(content);
-//        this.setType(BaseMessageType.text.getMsgType());
-//    }
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -107,22 +71,6 @@ public class TextMessage extends BaseMessage {
         return null;
     }
 
-//    public TextMessage(Map<String, Object> map, int type) {
-//        super(map, type);
-//        convertJSON(map);
-//    }
-//
-//    public TextMessage(int type, Map<String, Object> map) {
-//        super(type, map);
-//        convertJSON(map);
-//    }
-
-//    @Override
-//    public void convertJSON(Map<String, Object> map) {
-//        super.convertJSON(map);
-//        this.setMsgDesc(getJsonObject(getJsonStr()).optString("mct"));
-//    }
-
 
     public int getKf() {
         return kf;
@@ -140,10 +88,18 @@ public class TextMessage extends BaseMessage {
         this.sayHelloType = sayHelloType;
     }
 
-    public TextMessage(BaseMessage message) {
-        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(),
-                message.getcMsgID(), message.getSpecialMsgID(), message.getType(),message.getStatus(),
-                message.getfStatus(), message.getTime(), message.getJsonStr());
+
+    public TextMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                       int type, int status, int fStatus, long time, String jsonStr) {
+        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
+
+    //私聊列表
+    public TextMessage(long id, String userID, String infoJson, int type, int kfID,
+                       int status, int ru, long time, String content, int num) {
+        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+        parseJson(getJsonStr());
+    }
+
 }

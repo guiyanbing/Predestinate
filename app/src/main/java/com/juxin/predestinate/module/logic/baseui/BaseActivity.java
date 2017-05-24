@@ -284,6 +284,18 @@ public class BaseActivity extends FragmentActivity {
     }
 
     /**
+     * 添加title中标题右侧的填充view
+     *
+     * @param container 填充的view
+     */
+    public void setTitleRightContainer(View container) {
+        LinearLayout title_right_container = (LinearLayout) this.findViewById(R.id.base_title_right_container);
+        title_right_container.setVisibility(View.VISIBLE);
+        title_right_container.removeAllViews();
+        title_right_container.addView(container);
+    }
+
+    /**
      * 设置标题右侧文字
      *
      * @param txt      标题右侧显示文字

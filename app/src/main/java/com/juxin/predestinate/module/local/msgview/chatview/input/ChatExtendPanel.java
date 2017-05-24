@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.ViewPagerAdapter;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,45 +73,30 @@ public class ChatExtendPanel extends ChatViewPanel {
         chatExtendAdapter.setBtnClickListener(new CommonGridBtnPanel.BtnClickListener() {
             @Override
             public void onClick(CommonGridBtnPanel.BTN_KEY key) {
-                if (key != null) {
-                    switch (key) {
-                        case IMG:
-                            ImgSelectUtil.getInstance().pickPhotoGallery(getContext(), new ImgSelectUtil.OnChooseCompleteListener() {
-                                @Override
-                                public void onComplete(String... path) {
-                                    if (path.length > 0) {
-                                        ChatAdapter chatAdapter = getChatInstance().chatAdapter;
+                if (key == null) return;
+                final ChatAdapter chatAdapter = getChatInstance().chatAdapter;
+                switch (key) {
+                    case IMG:
+                        ImgSelectUtil.getInstance().pickPhotoGallery(getContext(), new ImgSelectUtil.OnChooseCompleteListener() {
+                            @Override
+                            public void onComplete(String... path) {
+                                if (path.length > 0) {
+
 //                                        if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
 //                                            return;
 //                                        }
-                                        //TODO 发送图片
-                                        ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
-                                    }
+                                    //TODO 发送图片
+                                    ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
                                 }
-                            });
-                            break;
-                        case VIDEO:
-//                            VideoRecordDialog recordDialog = new VideoRecordDialog();
-//                            recordDialog.setData(getChatInstance());
-//                            recordDialog.showDialog((FragmentActivity) App.activity);
-                            break;
-                     //   case TREASURE:
-//                            List<Long> longList = new ArrayList<Long>();
-//                            longList.add(getChatInstance().chatAdapter.getLWhisperId());
-//                            ModuleMgr.getMsgCommonMgr().treasureSendInvitation(longList, new HttpMgr.IReqComplete() {
-//                                @Override
-//                                public void onReqComplete(HttpResult result) {
-//                                    if (result.isOk()) {//解析发送邀请信息状态
-//                                        PToast.showShort("邀请成功!");
-//                                        //打开游戏方法
-//                                        UIShow.showMyGame(App.getActivity(), Constant.GAME_COWRY, "");
-//                                    } else {
-//                                        PToast.showShort("邀请失败，请重试!");
-//                                    }
-//                                }
-//                            });
-                       //     break;
-                    }
+                            }
+                        });
+                        break;
+                    case VIDEO://视频聊天
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                        break;
+                    case VOICE://语音
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                        break;
                 }
             }
         });

@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -18,6 +20,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
@@ -34,7 +37,7 @@ import java.util.List;
  */
 
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
-        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener {
+        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
 
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
@@ -58,7 +61,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         return getContentView();
     }
 
-    private void onTitleRight(){
+    private void onTitleRight() {
         setTitleRightImgGone();
         View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
         mail_title_right_text = (TextView) title_right.findViewById(R.id.mail_title_right_text);
@@ -68,17 +71,17 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             @Override
             public void onClick(View view) {
                 onTitleLeft();
-                if(!isGone){
+                if (!isGone) {
                     editContent();
-                }else {
+                } else {
                     cancleEdit();
                 }
             }
         });
     }
 
-    private void onTitleLeft(){
-        if(!isGone){
+    private void onTitleLeft() {
+        if (!isGone) {
             View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
             title_left.findViewById(R.id.mail_title_left).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,14 +90,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 }
             });
             setTitleLeftContainer(title_left);
-        }else {
+        } else {
             setTitleLeftContainerRemoveAll();
         }
     }
 
     private void initView() {
         listMail = (SwipeListView) findViewById(R.id.mail_list);
-     //   View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
+        //   View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
 
         mail_bottom = findViewById(R.id.mail_bottom);
         mail_delete = (Button) findViewById(R.id.mail_delete);
@@ -120,6 +123,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 }
                 menu.setTitleSize(18);
                 menu.setTitleColor(Color.WHITE);
+                menu.setViewHeight(mailFragmentAdapter.getItemHeight());
             }
 
 
@@ -129,11 +133,15 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listMail.setPullRefreshEnable(false);
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
+
+        listMail.setOnScrollListener(this);
+
+        detectInfo(listMail);
     }
 
     @Override
     public void onSwipeChooseOpened() {
-        ((MainActivity)getActivity()).onGoneBottom(false);
+        ((MainActivity) getActivity()).onGoneBottom(false);
         mail_bottom.setVisibility(View.VISIBLE);
         mail_title_right_text.setText("取消");
         isGone = true;
@@ -141,7 +149,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onSwipeChooseClosed() {
-        ((MainActivity)getActivity()).onGoneBottom(true);
+        ((MainActivity) getActivity()).onGoneBottom(true);
         mail_bottom.setVisibility(View.GONE);
         mail_title_right_text.setText("编辑");
         isGone = false;
@@ -244,7 +252,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.mail_delete:
                 mail_delete.setEnabled(false);
                 ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList);
@@ -255,7 +263,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 //忽略所有未读消息
                 PickerDialogUtil.showSimpleAlertDialog(getActivity(), new SimpleTipDialog.ConfirmListener() {
                     @Override
-                    public void onCancel() {}
+                    public void onCancel() {
+                    }
 
                     @Override
                     public void onSubmit() {
@@ -267,4 +276,55 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 break;
         }
     }
+
+    /**
+     * 检测个人资料
+     * @param view
+     */
+    private void detectInfo(AbsListView view){
+        List<Long> stringList = new ArrayList<>();
+        stringList.clear();
+        int firs = view.getFirstVisiblePosition();
+        int last = view.getLastVisiblePosition();
+
+        PLogger.printObject("Position===11111=" + firs + "====" + last);
+        for(int i = firs; i < last; i++){
+            BaseMessage message = mailFragmentAdapter.getItem(i);
+            PLogger.printObject("Position===for=" + message);
+            if(message != null && ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)){
+                stringList.add(message.getLWhisperID());
+                PLogger.printObject("Position===for2222=" + message.getType() + message.getAvatar() + message.getName());
+
+            }
+        }
+
+        if(stringList.size() > 0){
+            ModuleMgr.getChatMgr().getProFile(stringList);
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        switch (scrollState){
+            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:{//停止滚动
+                //设置为停止滚动
+                mailFragmentAdapter.setScrollState(false);
+                detectInfo(view);
+                break;
+            }
+            case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
+                //设置为正在滚动
+                mailFragmentAdapter.setScrollState(true);
+                break;
+            }
+            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:{//正在滚动
+                //设置为正在滚动
+                mailFragmentAdapter.setScrollState(true);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
 }

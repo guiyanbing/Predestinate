@@ -12,9 +12,6 @@ import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * [消息类型处理](http://doc.dev.yuanfenba.net/pkg/yuanfen/common/msg_data/)
@@ -40,15 +37,6 @@ public class BaseMessage implements IBaseMessage {
         BaseMessageType(Class<? extends BaseMessage> msgClass, int msgType) {
             this.msgClass = msgClass;
             this.msgType = msgType;
-        }
-
-        public static BaseMessageType getBaseMessageByType(String str) {
-            for (BaseMessageType messageType : BaseMessageType.values()) {
-                if (messageType.toString().equals(str)) {
-                    return messageType;
-                }
-            }
-            return null;
         }
 
         public static BaseMessageType valueOf(int msgType) {
@@ -103,6 +91,7 @@ public class BaseMessage implements IBaseMessage {
     public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
+    public static final int video_MsgType = 24;//视频消息
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -114,13 +103,6 @@ public class BaseMessage implements IBaseMessage {
     @Override
     public String getJson(BaseMessage message) {
         return null;
-    }
-
-    /**
-     * 判断是否为群私聊
-     */
-    public boolean isWhisper() {
-        return !TextUtils.isEmpty(getChannelID()) && !TextUtils.isEmpty(getWhisperID());
     }
 
     /**
@@ -568,20 +550,6 @@ public class BaseMessage implements IBaseMessage {
         this.jsonStr = jsonStr;
     }
 
-    //内容表
-    public BaseMessage(Map<String, Object> map, int type) {
-        this.setId(Long.parseLong(map.get("id").toString()));
-        this.setChannelID(map.get("channelId") == null ? StrDefault : map.get("channelId").toString());
-        this.setWhisperID(map.get("whisperID") == null ? StrDefault : map.get("whisperID").toString());
-        this.setSendID(map.get("sendId") == null ? NumDefault : TypeConvertUtil.toLong(map.get("sendId").toString()));
-        this.setMsgID(map.get("msgid") == null ? NumDefault : TypeConvertUtil.toLong(map.get("msgid").toString()));
-        this.setcMsgID(map.get("cMsgid") == null ? NumDefault : TypeConvertUtil.toLong(map.get("cMsgid").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("status").toString()));
-        this.setfStatus(map.get("f_status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("f_status").toString()));
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvertUtil.toLong(map.get("time").toString()));
-        this.setType(type);
-    }
-
     //私聊列表
     public BaseMessage(long id, String userID, String infoJson, int type, int kfID,
                        int status, int ru, long time, String content, int num) {
@@ -598,21 +566,6 @@ public class BaseMessage implements IBaseMessage {
         this.setJsonStr(content);
     }
 
-    //私聊列表
-    public BaseMessage(int type, Map<String, Object> map) {
-        this.setId(Long.parseLong(map.get("id").toString()));
-        this.setWhisperID(map.get("userid") == null ? StrDefault : map.get("userid").toString());
-        this.setIsOnline(map.get("isOnline") == null ? NumDefault : TypeConvertUtil.toInt(map.get("isOnline").toString()));
-        this.setKfID(map.get("kf_id") == null ? NumDefault : TypeConvertUtil.toInt(map.get("kf_id").toString()));
-        this.setInfoJson(map.get("infoJson") == null ? StrDefault : map.get("infoJson").toString());
-        paseInfoJson(this.getInfoJson());
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvertUtil.toLong(map.get("time").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvertUtil.toInt(map.get("status").toString()));
-
-        this.setNum(map.get("num") == null ? NumDefault : TypeConvertUtil.toInt(map.get("num").toString()));
-        this.setType(type);
-    }
-
     /**
      * 解析
      *
@@ -620,6 +573,7 @@ public class BaseMessage implements IBaseMessage {
      */
     private void paseInfoJson(String jsonStr) {
         if (TextUtils.isEmpty(jsonStr)) return;
+        PLogger.printObject("jsonStr=" + jsonStr);
 
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
@@ -628,37 +582,63 @@ public class BaseMessage implements IBaseMessage {
         this.setIsVip(object.optInt("isVip"));
     }
 
-
-    public static List<BaseMessage> conversionListMsg(List<BaseMessage> cMessages) {
-        List<BaseMessage> baseMessages = new ArrayList<BaseMessage>();
-        if (cMessages == null || cMessages.size() <= 0) {
-            return baseMessages;
+    /**
+     * 私聊列表
+     */
+    public static BaseMessage parseToBaseMessage(long id, String userID, String infoJson, int type, int kfID,
+                                                 int status, int ru, long time, String content, int num) {
+        BaseMessage message = new BaseMessage();
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
+        if (messageType == null) {
+            message = new BaseMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+            return message;
         }
-
-        for (BaseMessage tmp : cMessages) {
-            BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(tmp.getType());
-            if (messageType == null) {
-                baseMessages.add(tmp);
-                continue;
-            }
-            switch (messageType) {
-                case hi:
-                    baseMessages.add(new TextMessage(tmp));
-                    break;
-                case common:
-                    baseMessages.add(new CommonMessage(tmp));
-                    break;
-                case gift:
-                case wantGiftTwo:
-                    baseMessages.add(new GiftMessage(tmp));
-                    break;
-                default:
-                    break;
-            }
+        switch (messageType) {
+            case hi:
+                message = new TextMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                break;
+            case common:
+                message = new CommonMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                break;
+            case gift:
+            case wantGiftTwo:
+                message = new GiftMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                break;
+            default:
+                break;
         }
-        return baseMessages;
+        return message;
     }
 
+    public static BaseMessage parseToBaseMessage(String channelID, String whisperID,
+                                                 long sendID, long msgID, long cMsgID, long specialMsgID, int type, int status,
+                                                 int fStatus, long time, String jsonStr) {
+        BaseMessage message = new BaseMessage();
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
+        if (messageType == null) {
+            message = new BaseMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                    status, fStatus, time, jsonStr);
+            return message;
+        }
+        switch (messageType) {
+            case hi:
+                message = new TextMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                        status, fStatus, time, jsonStr);
+                break;
+            case common:
+                message = new CommonMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                        status, fStatus, time, jsonStr);
+                break;
+            case gift:
+            case wantGiftTwo:
+                message = new GiftMessage(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
+                        status, fStatus, time, jsonStr);
+                break;
+            default:
+                break;
+        }
+        return message;
+    }
 
     /**
      * 列表显示转换
@@ -692,6 +672,15 @@ public class BaseMessage implements IBaseMessage {
             case wantGiftTwo:
                 str = msg.getMsgDesc();
                 break;
+            case video:{
+                VideoMessage videoMessage = (VideoMessage) msg;
+                if(videoMessage.getVideoTp() != 3){
+                    str = "通话结束";
+                }else {
+                    str = videoMessage.isSender() ? "[未接通]" : "[未接来电]";
+                }
+                break;
+            }
             default:
                 break;
         }

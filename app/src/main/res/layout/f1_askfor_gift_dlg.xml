@@ -140,7 +140,7 @@
                     android:background="@drawable/f1_view_pink_corners"
                     android:gravity="center"
                     android:padding="@dimen/px15_dp"
-                    android:text="@string/askfor_send"
+                    android:text="@string/send"
                     android:textColor="@color/white" />
             </LinearLayout>
         </RelativeLayout>

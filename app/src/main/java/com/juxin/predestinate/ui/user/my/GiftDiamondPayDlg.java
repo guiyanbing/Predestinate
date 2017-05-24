@@ -437,7 +437,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() >= selectGift.getMoney()) {
                 //发送消息
-                ModuleMgr.getCommonMgr().sendGift(toUid,selectGift.getId()+"",this);
+                ModuleMgr.getCommonMgr().sendGift(toUid,selectGift.getId()+"",1,2,this);
                 finish();
             } else {
                 UIShow.showPayListAct((FragmentActivity)mContext, pay_id);

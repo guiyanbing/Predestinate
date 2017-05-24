@@ -1,13 +1,16 @@
 package com.juxin.predestinate.ui.mail.base;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
 /**
  * 私聊类型
@@ -16,6 +19,7 @@ import com.juxin.predestinate.module.util.UIShow;
 public class CustomLetterMailItem extends CustomBaseMailItem {
 
     private BaseMessage msgData = null;
+    public Button mail_item_right_icon;
 
     public CustomLetterMailItem(Context context) {
         super(context);
@@ -31,16 +35,34 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
 
     public void init() {
         super.init(-1);
+        mail_item_right_icon = (Button) findViewById(R.id.mail_item_right_icon);
+        mail_item_right_icon.setOnClickListener(this);
+
+        if(item_last_time != null && BaseMessage.video_MsgType == msgData.getType()){
+            item_last_time.setVisibility(GONE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mail_item_headpic:
-                if(msgData != null && MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()){
-                    UIShow.showCheckOtherInfoAct(getContext(),msgData.getLWhisperID());
+                if (msgData != null && MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()) {
+                    UIShow.showCheckOtherInfoAct(getContext(), msgData.getLWhisperID());
                 }
+                break;
+            case R.id.mail_item_right_icon:
+                if (msgData == null || !(msgData instanceof VideoMessage)) {
+                    return;
+                }
+                VideoMessage videoMessage = (VideoMessage) msgData;
+                if (videoMessage.isVideoMediaTp()) {
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                } else {
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                }
+            default:
                 break;
         }
     }
@@ -54,5 +76,13 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
     public void showData(BaseMessage msgData) {
         super.showData(msgData);
         this.msgData = msgData;
+
+        if (mail_item_right_icon == null || BaseMessage.video_MsgType != msgData.getType() || !(msgData instanceof VideoMessage)) {// 视频语音消息
+            return;
+        }
+
+        mail_item_right_icon.setVisibility(VISIBLE);
+        VideoMessage videoMessage = (VideoMessage) msgData;
+        mail_item_right_icon.setBackgroundResource(videoMessage.isVideoMediaTp() ? R.drawable.f1_video_state_ico : R.drawable.f1_call_state_ico);
     }
 }

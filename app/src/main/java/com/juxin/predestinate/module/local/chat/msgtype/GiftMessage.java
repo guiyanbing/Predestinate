@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,14 +72,18 @@ public class GiftMessage extends BaseMessage {
         return null;
     }
 
+    public GiftMessage(long id, String userID, String infoJson, int type, int kfID,
+                         int status, int ru, long time, String content, int num) {
+        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+        parseJson(getJsonStr());
+    }
+
     /**
      * 转换类 fmessage
-     * @param message
      */
-    public GiftMessage(BaseMessage message) {
-        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(),
-                message.getcMsgID(), message.getSpecialMsgID(), message.getType(),message.getStatus(),
-                message.getfStatus(), message.getTime(), message.getJsonStr());
+    public GiftMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                         int type, int status, int fStatus, long time, String jsonStr) {
+        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
 

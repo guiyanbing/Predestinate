@@ -9,11 +9,12 @@ import org.json.JSONObject;
 
 public class VideoMessage extends BaseMessage {
 
-    private long videoID;//视频聊天ID，一次视频聊天过程的唯一标识
+    private int videoID;//视频聊天ID，一次视频聊天过程的唯一标识
     private int videoTp;//请求类型，1邀请加入聊天，2同意加入  3拒绝或取消 4挂断（挂断可能会收到不止一次）
     private int videoMediaTp;//现在所有消息都会包含此字段 1视频, 2语音
     private int videoVcEscCode;//拒绝或取消 只在vc_tp=3 时生效 1未接通，对方无应答 2接收方拒绝 3发送方取消
     private long videoVcTalkTime;//聊天耗时 单位秒 只在  vc_tp=4挂断时有效
+    private String vc_channel_key;
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -22,11 +23,12 @@ public class VideoMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
-        this.setVideoID(object.optLong("vc_id"));
+        this.setVideoID(object.optInt("vc_id"));
         this.setVideoTp(object.optInt("vc_tp"));
         this.setVideoMediaTp(object.optInt("media_tp"));
         this.setVideoVcEscCode(object.optInt("vc_esc_code"));
         this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
+        this.setVc_channel_key(object.optString("vc_channel_key"));
         return this;
     }
 
@@ -35,11 +37,11 @@ public class VideoMessage extends BaseMessage {
         return super.getJson(message);
     }
 
-    public long getVideoID() {
+    public int getVideoID() {
         return videoID;
     }
 
-    public void setVideoID(long videoID) {
+    public void setVideoID(int videoID) {
         this.videoID = videoID;
     }
 
@@ -53,6 +55,10 @@ public class VideoMessage extends BaseMessage {
 
     public int getVideoMediaTp() {
         return videoMediaTp;
+    }
+
+    public boolean isVideoMediaTp() {
+        return videoMediaTp == 1;
     }
 
     public void setVideoMediaTp(int videoMediaTp) {
@@ -73,5 +79,13 @@ public class VideoMessage extends BaseMessage {
 
     public void setVideoVcTalkTime(long videoVcTalkTime) {
         this.videoVcTalkTime = videoVcTalkTime;
+    }
+
+    public String getVc_channel_key() {
+        return vc_channel_key;
+    }
+
+    public void setVc_channel_key(String vc_channel_key) {
+        this.vc_channel_key = vc_channel_key;
     }
 }
