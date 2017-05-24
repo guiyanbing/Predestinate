@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -59,14 +60,15 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     public LinearLayout mail_item_letter, item_ranking_state;
     public ImageView item_headpic, item_vip;
-    public TextView item_nickname, item_unreadnum, item_last_time, item_online, item_last_status,
+    public TextView item_nickname, item_last_time, item_online, item_last_status,
             item_certification, item_ranking_type, item_ranking_level;
     public EmojiTextView item_last_msg;
+    public BadgeView item_unreadnum;
 
     public void onCreateView(View contentView) {
         mail_item_letter = (LinearLayout) contentView.findViewById(R.id.mail_item_letter);
         item_headpic = (ImageView) contentView.findViewById(R.id.mail_item_headpic);
-        item_unreadnum = (TextView) contentView.findViewById(R.id.mail_item_unreadnum);
+        item_unreadnum = (BadgeView) contentView.findViewById(R.id.mail_item_unreadnum);
         item_online = (TextView) contentView.findViewById(R.id.mail_item_online);
         item_nickname = (TextView) contentView.findViewById(R.id.mail_item_nickname);
         item_certification = (TextView) contentView.findViewById(R.id.mail_item_certification);

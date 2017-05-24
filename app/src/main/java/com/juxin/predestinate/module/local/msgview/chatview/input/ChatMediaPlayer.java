@@ -14,9 +14,16 @@ import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
+import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.predestinate.bean.db.utils.DBConstant;
+import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
+import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 /**
  * Created by Kind on 2017/5/9.
@@ -112,6 +119,29 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
             playVoice(filePath, mute);
             return;
         }
+
+        String[] split = filePath.split("/");//切出网址url中视频在服务器的名称，以便使用名称进行缓存
+        String fileNameNoEx = FileUtil.getFileNameNoEx(split[split.length - 1]);
+
+        ModuleMgr.getHttpMgr().download(filePath, fileNameNoEx, new DownloadListener() {
+            @Override
+            public void onStart(String url, String filePath) {}
+
+            @Override
+            public void onProcess(String url, int process, long size) {}
+
+            @Override
+            public void onSuccess(String url, String filePath) {
+                if (oriFilePath != null && oriFilePath.equals(filePath)) {
+                    ChatMediaPlayer.getInstance().playVoice(filePath, mute);
+                }
+            }
+
+            @Override
+            public void onFail(String url, Throwable throwable) {
+
+            }
+        });
 
 //        ModuleMgr.getChatMgr().reqVoice(filePath, null, new HttpMgr.IReqComplete() {
 //            @Override

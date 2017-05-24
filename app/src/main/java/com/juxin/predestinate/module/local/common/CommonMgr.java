@@ -59,6 +59,8 @@ public class CommonMgr implements ModuleBase {
     private VideoVerifyBean videoVerify;//视频聊天配置
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
 
+    private int friendNum = 0;
+
     @Override
     public void init() {
         requestServerQQ();
@@ -164,10 +166,10 @@ public class CommonMgr implements ModuleBase {
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig(boolean videoStatus,boolean audioStatus) {
+    public void setVideochatConfig(boolean videoStatus, boolean audioStatus) {
         HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("videochat", videoStatus?1:0);
-        post_param.put("audiochat", audioStatus?1:0);
+        post_param.put("videochat", videoStatus ? 1 : 0);
+        post_param.put("audiochat", audioStatus ? 1 : 0);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.setVideochatConfig, post_param, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -455,12 +457,27 @@ public class CommonMgr implements ModuleBase {
                     if (!response.isCache()) {
                         UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                         lightweightList.parseJsonFriends(response.getResponseString());
-                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice,lightweightList.getTotalcnt());
+                        setFriendNum(lightweightList.getTotalcnt());
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice, getFriendNum());
                     }
                 }
             }
         });
     }
+
+    /**
+     * 获取好友数量
+     *
+     * @return
+     */
+    public int getFriendNum() {
+        return friendNum;
+    }
+
+    public void setFriendNum(int friendNum) {
+        this.friendNum = friendNum;
+    }
+
 
     //============================== 小友模块相关接口 =============================
 
@@ -636,7 +653,7 @@ public class CommonMgr implements ModuleBase {
      *                 //     * @param begid     索要Id
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid,int giftnum,int gtype/*,int begid*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
@@ -1024,7 +1041,7 @@ public class CommonMgr implements ModuleBase {
 
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
-        for(int i = 0; i < uids.size(); i++){
+        for (int i = 0; i < uids.size(); i++) {
             temp[i] = uids.get(i);
         }
 

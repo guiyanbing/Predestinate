@@ -81,6 +81,11 @@ public class ChatMgr implements ModuleBase {
        // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
+    public long updateToReadVoice(long msgID) {
+        return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
+    }
+
+
     /**
      * 打招呼
      *

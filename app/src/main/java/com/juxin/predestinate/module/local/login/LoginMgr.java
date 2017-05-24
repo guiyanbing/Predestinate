@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -239,10 +238,10 @@ public class LoginMgr implements ModuleBase {
                             PToast.showShort(context.getResources().getString(R.string.toast_login_iserror));
                             return;
                         }
-                        // Cookie 在http响应头中返回
-                        putAllLoginInfo(uid, pwd, true);
                         // 临时资料设置
                         LoginResult result = (LoginResult) response.getBaseData();
+                        putAllLoginInfo(result.getUid(), pwd, true);// Cookie 在http响应头中返回
+
                         ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
                         ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
                         ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());

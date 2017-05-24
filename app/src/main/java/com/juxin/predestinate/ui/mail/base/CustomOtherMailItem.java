@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
@@ -31,7 +32,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     public void init() {
         super.init(R.layout.p1_mail_item_act);
         item_headpic = (ImageView) getContentView().findViewById(R.id.mail_item_headpic);
-        item_unreadnum = (TextView) getContentView().findViewById(R.id.mail_item_unreadnum);
+        item_unreadnum = (BadgeView) getContentView().findViewById(R.id.mail_item_unreadnum);
         item_nickname = (TextView) getContentView().findViewById(R.id.mail_item_nickname);
         item_last_msg = (EmojiTextView) getContentView().findViewById(R.id.mail_item_last_msg);
         item_headpic.setOnClickListener(this);

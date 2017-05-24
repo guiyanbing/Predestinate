@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -13,7 +12,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +38,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                 size++;
             }
         }
-
         return size;
     }
 
@@ -79,7 +76,18 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
-      //  baseMessage.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
+        int friendNum = ModuleMgr.getCommonMgr().getFriendNum();
+        baseMessage.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
+        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
+        messageLists.add(baseMessage);
+
+        baseMessage = new BaseMessage();
+        baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
+        baseMessage.setWeight(BaseMessage.Max_Weight);
+        baseMessage.setMailItemStyle(MailItemType.Geet_Item_Other.type);
+        baseMessage.setName("打招呼的人");
+        int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
+        baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 
@@ -87,18 +95,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         SortList.sortWeightTimeListView(getList());
         notifyDataSetChanged();
     }
-
-
-    public void notifyFriendNum(int friendNum) {
-        for (BaseMessage message : getList()) {
-            if (message.getWhisperID().equals(String.valueOf(MailMsgID.MyFriend_Msg.type))) {
-                message.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
-                notifyDataSetChanged();
-                break;
-            }
-        }
-    }
-
 
     @Override
     public int getViewTypeCount() {
@@ -144,6 +140,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                         vh.customMailItem.showItemLetter(msgData);
                         break;
                     case Mail_Item_Other:
+                    case Geet_Item_Other:
                         vh.customMailItem.showItemAct(msgData);
                         break;
                 }
@@ -160,6 +157,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                             vh.customMailItem.showLetterGap();
                             break;
                         case Mail_Item_Other:
+                        case Geet_Item_Other:
                             vh.customMailItem.showActGap();
                             break;
                     }

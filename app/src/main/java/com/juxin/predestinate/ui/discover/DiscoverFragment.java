@@ -26,8 +26,6 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
@@ -260,18 +258,9 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                 ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(infoLightweight.getUid()), getString(R.string.say_hello_txt),
                         infoLightweight.getKf_id(),
                         ModuleMgr.getCenterMgr().isRobot(infoLightweight.getKf_id()) ?
-                                Constant.SAY_HELLO_TYPE_NEAR : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
-                            @Override
-                            public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                notifyAdapter(infoLightweight.getUid());
-                                handler.sendEmptyMessage(Group_sayHai_Msg);
-                            }
-
-                            @Override
-                            public void onSendFailed(NetData data) {
-                                handler.sendEmptyMessage(Group_sayHai_Msg);
-                            }
-                        });
+                                Constant.SAY_HELLO_TYPE_NEAR : Constant.SAY_HELLO_TYPE_SIMPLE, null);
+                notifyAdapter(infoLightweight.getUid());
+                handler.sendEmptyMessage(Group_sayHai_Msg);
                 break;
             }
         }
