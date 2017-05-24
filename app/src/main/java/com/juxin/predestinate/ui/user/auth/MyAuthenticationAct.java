@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
@@ -132,6 +133,8 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 //TODO
                 if (mIdCardVerifyStatusInfo.isOk())
                     UIShow.showIDCardAuthenticationAct(this, authIDCard);
+                else
+                    PToast.showShort(getString(R.string.net_error_retry));
                 break;
             default:
                 break;

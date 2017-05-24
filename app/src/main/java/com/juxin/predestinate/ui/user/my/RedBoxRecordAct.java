@@ -67,6 +67,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         tvTips.setText(Html.fromHtml(getString(R.string.withdraw_tip)));
         tvTips.setVisibility(View.GONE);
         tvWithdraw.setOnClickListener(this);
+        refreshView(ModuleMgr.getCenterMgr().getMyInfo().getRedbagsum()/100f);
         initViewsList();
         initViewPager();
         ((LinearLayout)stlTitles.getTabStrip()).setGravity(Gravity.CENTER_HORIZONTAL);//标题居中

@@ -7,6 +7,7 @@
     <string name="cancel">取消</string>
     <string name="tip">提示</string>
     <string name="exit">退出</string>
+    <string name="send">发送</string>
     <string name="request_error">请求出错!</string>
 
     <!-- 主页Fragment -->
@@ -59,7 +60,6 @@
     <string name="toast_under_review">审核中，请稍后再试</string>
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
-    <string name="button_send">发送</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
     <string name="dal_exit_content">确定退出登录吗</string>
@@ -449,9 +449,19 @@
     <string name="toast_chosen_repeat">标签不可以重复哦</string>
 
     <!-- 消息 -->
-    <string name="message_xiaou">小友消息</string>
+    <string name="video">视频</string>
+    <string name="audio">语音</string>
+    <string name="photo">图片</string>
+
+    <string name="notify_normal">给您发了一条消息，请查收！</string>
+    <string name="notify_video">有一条新%s通话，立即接听！</string>
+    <string name="notify_gift">送你一个礼物，请查收！</string>
+    <string name="notify_media">给您发了一条%s消息，请查收！</string>
+
+    <string name="message_xiaou">缘分吧消息</string>
     <string name="message_close">关闭</string>
     <string name="message_replay">回复</string>
+    <string name="message_empty_warn">消息不能为空</string>
 
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>
@@ -468,7 +478,6 @@
     <string name="pay_errcode_deny">支付被拒绝</string>
     <string name="pay_errcode_unknown">支付出错</string>
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
-    <color name="homeUserSay">#ff333333</color>
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>
@@ -528,7 +537,6 @@
     <string name="hour_into_the_bag">条，其余24小时后才能点击入袋</string>
     <string name="net_error">网络异常</string>
     <string name="want_bag_tips">施展魅力，索要礼物</string>
-    <string name="askfor_send">发送</string>
     <string name="dlg_send_ok">立即赠送</string>
     <string name="dlg_send_gift_je">充值金额</string>
     <!-- 个人中心-我的礼品 -->
@@ -563,6 +571,7 @@
     <string name="attention_ta">关注TA</string>
     <string name="open_the_vip_can_be_operation">开通VIP才可以操作!</string>
     <string name="cancel_the_attention">取消关注</string>
+    <string name="just_looking_for_you">刚刚关注了你</string>
 
 
     <!--发现start-->
