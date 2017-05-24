@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:visibility="gone"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:visibility="gone">
 
     <View
         style="@style/divider_line"
         android:background="@color/color_dddddd" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/px540_dp"
@@ -18,11 +19,12 @@
             android:id="@+id/chat_smile_package_layouts"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <View
             style="@style/divider_line"
-            android:visibility="gone"
-            android:background="@color/color_dddddd" />
+            android:background="@color/color_dddddd"
+            android:visibility="gone" />
     </LinearLayout>
 
     <com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView

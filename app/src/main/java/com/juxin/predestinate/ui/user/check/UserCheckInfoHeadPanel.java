@@ -55,7 +55,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
             PToast.showShort(getContext().getString(R.string.user_other_info_req_fail));
             return;
         }
-        distance = userDetail.getDistance();
+        distance = userDetail.getDistance() + "km";
         online = userDetail.getOnline_text();
         follow = userDetail.getFollowmecount();
     }
@@ -91,7 +91,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
         user_id.setText("ID:" + userDetail.getUid());
         user_height.setText(userDetail.getHeight() + "cm");
-        user_distance.setText(distance + "km");
+        user_distance.setText(distance);
         user_online_time.setText(online);
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
