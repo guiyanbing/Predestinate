@@ -1016,7 +1016,7 @@ public class CommonMgr implements ModuleBase {
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
         for(int i = 0; i < uids.size(); i++){
-            temp[i] = uids.get(0);
+            temp[i] = uids.get(i);
         }
 
         HashMap<String, Object> postParms = new HashMap<>();

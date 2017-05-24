@@ -7,12 +7,15 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
 
@@ -61,7 +64,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     public EmojiTextView item_last_msg;
 
     public void onCreateView(View contentView) {
-        mail_item_letter = (LinearLayout) findViewById(R.id.mail_item_letter);
+        mail_item_letter = (LinearLayout) contentView.findViewById(R.id.mail_item_letter);
         item_headpic = (ImageView) contentView.findViewById(R.id.mail_item_headpic);
         item_unreadnum = (TextView) contentView.findViewById(R.id.mail_item_unreadnum);
         item_online = (TextView) contentView.findViewById(R.id.mail_item_online);
@@ -87,6 +90,8 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         ImageLoader.loadAvatar(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
+        PLogger.printObject("nickname===1" + nickname);
+        PLogger.printObject("nickname===2" + msgData.getAvatar());
         if (!TextUtils.isEmpty(nickname)) {
             item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
         } else {

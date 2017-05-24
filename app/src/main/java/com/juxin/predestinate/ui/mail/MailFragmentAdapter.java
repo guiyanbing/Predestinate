@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -13,7 +12,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,11 @@ import java.util.List;
  * Created by Kind on 16/1/20.
  */
 public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
+
+    private  boolean scrollState=false;
+    public void setScrollState(boolean scrollState) {
+        this.scrollState = scrollState;
+    }
 
     private MailItemType mailItemType = null;
 
@@ -75,7 +78,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
-        baseMessage.setAboutme("我的好友");
+        baseMessage.setAboutme("赠送礼物即可成为好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 
