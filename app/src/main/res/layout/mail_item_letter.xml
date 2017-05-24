@@ -95,7 +95,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/mail_item_vip_state"
+                    android:id="@+id/mail_item_vip"
                     android:layout_marginLeft="@dimen/px15_dp"
                     android:layout_marginRight="@dimen/px15_dp"
                     style="@style/icon_middle"

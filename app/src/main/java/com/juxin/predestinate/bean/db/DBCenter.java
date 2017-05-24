@@ -1,14 +1,10 @@
 package com.juxin.predestinate.bean.db;
 
 import android.text.TextUtils;
-
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.squareup.sqlbrite.BriteDatabase;
-import java.util.List;
 import java.util.Map;
 import rx.Observable;
 
@@ -94,24 +90,6 @@ public class DBCenter {
 
     public DBCenterFMessage getCenterFMessage() {
         return centerFmessage;
-    }
-
-    /**
-     * 多条消息插入
-     * @param list
-     * @return
-     */
-    public void insertFmessage(List<BaseMessage> list){
-        centerFmessage.insertMsg(list);
-    }
-
-    /**
-     * 单条消息插入
-     * @param baseMessage
-     * @return
-     */
-    public long insertFmessage(BaseMessage baseMessage){
-       return centerFmessage.insertMsg(baseMessage);
     }
 
     /**

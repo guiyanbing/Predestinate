@@ -79,7 +79,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_ranking_state = (LinearLayout) contentView.findViewById(R.id.mail_item_ranking_state);
         item_ranking_type = (TextView) contentView.findViewById(R.id.mail_item_ranking_type);
         item_ranking_level = (TextView) contentView.findViewById(R.id.mail_item_ranking_level);
-        item_vip = (ImageView) contentView.findViewById(R.id.discover_item_vip_state);
+        item_vip = (ImageView) contentView.findViewById(R.id.mail_item_vip);
     }
 
     public void showGap(){
@@ -125,7 +125,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         setUnreadnum(msgData);
         setStatus(msgData);
 
-     //   setRanking(msgData);
+        setRanking(msgData);
     }
 
     /**
@@ -157,7 +157,12 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     protected void setRanking(BaseMessage msgData) {
-        if (!msgData.isTop()) item_ranking_state.setVisibility(View.GONE);
+        item_vip.setVisibility( ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
+
+        if (!msgData.isTop()){
+            item_ranking_state.setVisibility(View.GONE);
+            return;
+        }
 
         item_ranking_state.setVisibility(View.VISIBLE);
         if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
@@ -169,8 +174,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             item_ranking_type.setText(context.getString(R.string.top_type_woman));
             item_ranking_level.setText("TOP " + msgData.getTop());
         }
-
-        item_vip.setVisibility( ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
     }
 
     @Override
