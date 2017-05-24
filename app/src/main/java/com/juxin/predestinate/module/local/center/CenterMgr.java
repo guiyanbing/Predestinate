@@ -544,10 +544,12 @@ public class CenterMgr implements ModuleBase, PObserver {
             PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
             return false;
         }
+        PLogger.d("isCanGroupSayHi------ " + ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey()));
         //判断是否达到第二天
         if (ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey())) {
             //判断群打招呼次数
             int num = PSP.getInstance().getInt(getGroupSayHiNumKey(), 0);
+            PLogger.d("isCanGroupSayHi ----- num == " + num);
             if (num >= 2) { //如果达到第三次重置 是否达到第二天的状态 并清除打招呼次数
                 ModuleMgr.getCommonMgr().saveDateState(getGroupSayHiDayKey());
                 PSP.getInstance().put(getGroupSayHiNumKey(), 0);

@@ -32,8 +32,9 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private EditText eitIdCard;
     private EditText eitOpenBank;
     private EditText eitBankCardId;
+    private EditText eitBankBranch;
     private TextView tvBankCardId;
-    private LinearLayout llOpenBank;
+    private LinearLayout llOpenBank,llBankBranch;
     private RadioButton rbZhi;
     private RadioButton rbYin;
     private AddPhotoView apvFrontPhoto;
@@ -41,7 +42,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private AddPhotoView apvHandPhoto;
     private LinearLayout llKeFu;
 
-    private String cardName,cardLocal,cardIdCard,cardNum;
+    private String cardName,cardLocal,cardLocalBranch,cardIdCard,cardNum;
     private String strImgFront,strImgTail,strImgHand;
 
     private int paytype = 2;
@@ -61,7 +62,9 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         eitIdCard = (EditText) findViewById(R.id.id_card_eit_id_card);
         eitOpenBank = (EditText) findViewById(R.id.id_card_eit_open_bank);
         eitBankCardId = (EditText) findViewById(R.id.id_card_eit_open_bank_id);
+        eitBankBranch = (EditText) findViewById(R.id.id_card_eit_open_bank_branch);
         llOpenBank = (LinearLayout) findViewById(R.id.id_card_ll_open_bank);
+        llBankBranch = (LinearLayout) findViewById(R.id.id_card_ll_open_bank_branch);
         tvBankCardId = (TextView) findViewById(R.id.id_card_tv_open_bank_id);
         llAudit = (LinearLayout) findViewById(R.id.id_card_ll_the_certification_audit);
         llCertification = (LinearLayout) findViewById(R.id.id_card_ll_certification_by);
@@ -85,8 +88,10 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             rbYin.setChecked(true);
             rbZhi.setChecked(false);
             llOpenBank.setVisibility(View.VISIBLE);
+            llBankBranch.setVisibility(View.VISIBLE);
             tvBankCardId.setText(getString(R.string.bank_id));
             eitOpenBank.setText(mIdCardVerifyStatusInfo.getBank());
+            eitBankBranch.setText(mIdCardVerifyStatusInfo.getSubbank());
             eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
             eitBankCardId.setHint(R.string.input_your_bank_card_id);
             paytype = 1;
@@ -117,8 +122,10 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                     cardName = eitName.getText().toString();
                     cardIdCard = eitIdCard.getText().toString();
                     cardLocal = eitOpenBank.getText().toString();
+                    cardLocalBranch = eitBankBranch.getText().toString();
                     cardNum = eitBankCardId.getText().toString();
-                    if (TextUtils.isEmpty(cardNum) || TextUtils.isEmpty(cardIdCard) || TextUtils.isEmpty(cardName) || (paytype == 1 && TextUtils.isEmpty(cardLocal))) {
+                    if (TextUtils.isEmpty(cardNum) || TextUtils.isEmpty(cardIdCard) || TextUtils.isEmpty(cardName) ||
+                            (paytype == 1 && (TextUtils.isEmpty(cardLocal) || TextUtils.isEmpty(cardLocalBranch)))) {
                         PToast.showShort(getString(R.string.please_complete_the_information));
                         return;
                     }
@@ -129,7 +136,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                         PToast.showShort(getString(R.string.please_upload_the_relevant_pictures));
                         return;
                     }
-                    ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum, cardLocal, cardLocal, strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
+                    ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum, cardLocal, cardLocalBranch, strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
                 }
             });
         }
@@ -144,6 +151,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             case R.id.id_card_rb_zhi:
                 rbYin.setChecked(false);
                 llOpenBank.setVisibility(View.GONE);
+                llBankBranch.setVisibility(View.GONE);
                 tvBankCardId.setText(R.string.zhi_fu_id);
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_TEXT);
                 eitBankCardId.setHint(R.string.input_your_zhifubao_id);
@@ -152,6 +160,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             case R.id.id_card_rb_yin:
                 rbZhi.setChecked(false);
                 llOpenBank.setVisibility(View.VISIBLE);
+                llBankBranch.setVisibility(View.VISIBLE);
                 tvBankCardId.setText(getString(R.string.bank_id));
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
                 eitBankCardId.setHint(R.string.input_your_bank_card_id);
@@ -179,7 +188,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
 //                                Log.e("TTTTTTTTTTTTTPPP000", "zhixing" + back);
                 if (back == 1){
-//                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
+                    //                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
                     data.putExtra(IDCardAuthenticationSucceedAct.IDCARDBACK, 1);
                     setResult(RESULT_OK, data);
                 }
@@ -192,6 +201,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     public void onRequestComplete(HttpResponse response) {
         if (response.isOk()){
             UIShow.showIDCardAuthenticationSucceedAct(this,authIDCard);
+            ModuleMgr.getCenterMgr().getMyInfo().setIdcard_validation(1);
         }
 //        Log.e("TTTTTTTTTTTTTTTMMM",response.getResponseString()+"|||");
         PToast.showShort(response.getMsg()+"");
