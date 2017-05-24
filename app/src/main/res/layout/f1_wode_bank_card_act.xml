@@ -19,6 +19,8 @@
             android:id="@+id/bank_card_et_money"
             android:hint="请输入您的提现金额"
             style="@style/id_card_eit"
+            android:textColor="@color/color_FD7194"
+            android:focusable="false"
             android:clickable="false"/>
     </LinearLayout>
     <View
@@ -38,9 +40,12 @@
             android:id="@+id/bank_card_et_card_name"
             android:hint="请输入与您银行卡一致的真实姓名"
             style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
+            android:focusable="false"
             android:clickable="false"/>
     </LinearLayout>
     <View
+        android:id="@+id/bank_card_view_bank"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px1_dp"
         android:background="@color/color_E4E4E4"
@@ -57,38 +62,33 @@
         <EditText
             android:id="@+id/bank_card_et_card_local"
             style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
             android:clickable="false"
+            android:focusable="false"
             android:hint="请输入您的开户行，如：工商银行"/>
     </LinearLayout>
-
-    <LinearLayout
+    <View
+        android:id="@+id/bank_card_view_bank_branch"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px180_dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:layout_height="@dimen/px1_dp"
+        android:background="@color/color_E4E4E4"
+        style="@style/id_card_content"/>
+    <LinearLayout
+        android:id="@+id/bank_card_ll_open_bank_branch"
+        style="@style/id_card_ll"
+        android:background="@color/white">
 
         <TextView
-            android:id="@+id/bank_card_tv_card"
-            android:layout_width="@dimen/px306_dp"
-            android:layout_height="wrap_content"
-            style="@style/id_card_content"
-            android:textColor="@color/color_zhuyao"
-            android:textSize="@dimen/px48_sp"
-            android:text="开户支行"/>
+            style="@style/id_card_tv"
+            android:text="@string/bankbranch_of_deposit" />
 
         <EditText
             android:id="@+id/bank_card_et_card_local_branch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/px55_dp"
-            android:textColorHint="@color/color_CCCCCC"
-            android:textColor="@color/color_zhuyao"
-            android:textSize="@dimen/px48_sp"
-            android:singleLine="true"
-            android:background="@color/transparent"
-            android:hint="如：北京市，朝阳支行" />
+            style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="如：北京市，朝阳支行"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -100,13 +100,16 @@
         android:background="@color/white">
 
         <TextView
+            android:id="@+id/bank_card_tv_card"
             style="@style/id_card_tv"
             android:text="银行卡号"/>
 
         <EditText
             android:id="@+id/bank_card_et_card_num"
             style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
             android:clickable="false"
+            android:focusable="false"
             android:hint="请输入您的储蓄卡银行卡号"/>
     </LinearLayout>
 

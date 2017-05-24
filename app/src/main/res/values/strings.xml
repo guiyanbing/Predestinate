@@ -110,6 +110,7 @@
 
     <string name="user_info_last_week_video_hot">最近1周私密视频总人气：</string>
 
+    <string name="user_edit_zone_info">个人空间</string>
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>
     <string name="user_edit_info_detail_info">详细资料</string>
@@ -337,6 +338,7 @@
 
     <string name="goods_price">%d元</string>
     <string name="goods_diamond_title">钻石充值</string>
+    <string name="goods_diamond_need">%d钻石</string>
     <string name="goods_diamond_remain">余额</string>
     <string name="goods_diamond_lack">余额不足</string>
     <string name="goods_diamond_type">请选择购买金额</string>
@@ -655,6 +657,8 @@
     <string name="id_card">身份证号</string>
     <string name="bank_card">银行卡</string>
     <string name="bank_of_deposit">开户行</string>
+    <string name="bankbranch_of_deposit">开户支行</string>
+    <string name="bank_branch_such_as">如：北京市，朝阳支行</string>
     <string name="input_your_bank_of_deposit">输入您的开户行</string>
     <string name="input_your_bank_card_id">输入您的银行卡号</string>
     <string name="upload_id">上传身份证</string>

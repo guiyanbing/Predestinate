@@ -361,6 +361,7 @@ public class NetData implements Parcelable {
         dest.writeString(this.content);
         dest.writeInt(this.num1);
         dest.writeInt(this.num2);
+        dest.writeLong(this.messageId);
     }
 
     protected NetData(Parcel in) {
@@ -370,6 +371,7 @@ public class NetData implements Parcelable {
         this.content = in.readString();
         this.num1 = in.readInt();
         this.num2 = in.readInt();
+        this.messageId = in.readLong();
     }
 
     public static final Parcelable.Creator<NetData> CREATOR = new Parcelable.Creator<NetData>() {

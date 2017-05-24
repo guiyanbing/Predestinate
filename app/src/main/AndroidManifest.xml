@@ -94,10 +94,6 @@
         <activity
             android:name=".ui.setting.SuggestAct"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.check.self.info.UserInfoAct"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.check.self.album.UserPhotoAct"
@@ -366,6 +362,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.discover.UserRegHeadUploadAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.SayHelloUserAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
         <!-- ============= service =============== -->

@@ -120,12 +120,14 @@
                     tools:text="165cm" />
 
                 <FrameLayout
+                    android:id="@+id/fl_top_n"
                     android:layout_width="@dimen/px116_dp"
-                    android:layout_height="@dimen/px49_dp"
+                    android:layout_height="@dimen/px51_dp"
                     android:layout_marginLeft="@dimen/px15_dp"
                     android:background="@drawable/f1_user_check_info_rank">
 
                     <TextView
+                        android:id="@+id/tv_top_n"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

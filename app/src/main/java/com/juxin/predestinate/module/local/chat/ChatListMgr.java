@@ -131,6 +131,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return ModuleMgr.getUnreadMgr().getUnreadNumByKey(UnreadMgrImpl.FOLLOW_ME);
     }
 
+    public void updateFollow() {
+        ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.FOLLOW_ME);
+    }
+
 
     //是否能聊天
     private String getIsTodayChatKey() {//是否显示问题反馈第一句KEY
@@ -167,7 +171,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public long deleteMessage(long userID) {
-        return dbCenter.deleteMessage(userID);
+        long ret = dbCenter.deleteMessage(userID);
+        if(ret != DBConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
     }
 
     /**
@@ -205,8 +213,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             @Override
             public void call(List<BaseMessage> baseMessages) {
                 PLogger.printObject("xxxxxxxxxxx" + baseMessages.size());
-                List<BaseMessage> messageList = BaseMessage.conversionListMsg(baseMessages);
-                updateListMsg(messageList);
+                updateListMsg(baseMessages);
             }
         });
     }

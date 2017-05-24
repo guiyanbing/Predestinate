@@ -12,7 +12,6 @@ public enum MailItemType {
     /**其他**/
     Mail_Item_Other(1),
 
-    Mail_Item_Gap(2),
     ;
 
     public int type;

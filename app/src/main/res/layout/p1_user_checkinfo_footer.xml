@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -198,12 +198,21 @@
         <ImageView style="@style/right_go" />
     </LinearLayout>
 
-    <include layout="@layout/center_information_line" />
+    <!--<include layout="@layout/center_information_line" />-->
+
+    <include layout="@layout/layout_margintop" />
+
+    <!-- 信息展示 -->
+    <LinearLayout
+        android:id="@+id/ll_info_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/px300_dp"
         android:background="@color/bg_color" />
 
-    <include layout="@layout/fillbottom_bg" />
 </LinearLayout>
