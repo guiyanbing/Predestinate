@@ -87,7 +87,6 @@ import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerDlg;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
-import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
@@ -298,14 +297,6 @@ public class UIShow {
      */
     public static void showModifyAct(final Activity context) {
         context.startActivityForResult(new Intent(context, UserModifyPwdAct.class), 100);
-    }
-
-
-    /**
-     * 打开个人信息页
-     */
-    public static void showUserInfoAct(Context context) {
-        context.startActivity(new Intent(context, UserInfoAct.class));
     }
 
     /**

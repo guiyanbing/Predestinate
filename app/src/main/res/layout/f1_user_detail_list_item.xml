@@ -5,14 +5,14 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/layout_detail_list_item_title"
+        android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txt_detail_list_item_title"
+            android:id="@+id/item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -47,7 +47,7 @@
         android:paddingTop="10dip">
 
         <TextView
-            android:id="@+id/txt_detail_list_item_name"
+            android:id="@+id/item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -57,7 +57,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/txt_detail_list_item_value"
+            android:id="@+id/item_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -67,17 +67,17 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/txt_detail_list_item_contact"
+            android:id="@+id/item_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/txt_detail_list_item_name"
-            android:layout_toRightOf="@+id/txt_detail_list_item_name"
+            android:layout_alignBottom="@+id/item_name"
+            android:layout_toRightOf="@+id/item_name"
             android:textColor="#575757"
             android:textSize="14sp" />
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/view_detail_middle_line"
+        android:id="@+id/middle_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px3_dp"
         android:orientation="horizontal">
@@ -94,7 +94,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/view_detail_bottom_line"
+        android:id="@+id/bottom_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px35_dp"
         android:background="@color/bg_color" />

@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.check.bean;
+package com.juxin.predestinate.ui.user.check.self.info;
 
 public class UserPersonInfo {
 	private String title;

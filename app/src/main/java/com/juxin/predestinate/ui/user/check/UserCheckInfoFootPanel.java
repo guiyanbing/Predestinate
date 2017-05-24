@@ -14,6 +14,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
+import com.juxin.predestinate.ui.user.check.self.info.UserInfoPanel;
 import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -52,6 +53,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
             return;
         }
 
+        LinearLayout info_container = (LinearLayout) findViewById(R.id.ll_info_container);
         tv_album = (TextView) findViewById(R.id.album_num);
         chatPriceLayout = (LinearLayout) findViewById(R.id.ll_chat_price);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
@@ -67,6 +69,13 @@ public class UserCheckInfoFootPanel extends BasePanel {
         // 照片列表
         albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
         albumLayout.addView(albumPanel.getContentView());
+
+        // 详细信息列表
+        if (channel == CenterConstant.USER_CHECK_INFO_OTHER){
+            info_container.setVisibility(View.VISIBLE);
+            UserInfoPanel infoPanel = new UserInfoPanel(getContext(), userDetail);
+            info_container.addView(infoPanel.getContentView());
+        }
 
         tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
     }
