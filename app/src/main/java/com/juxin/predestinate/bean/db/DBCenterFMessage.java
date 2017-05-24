@@ -281,6 +281,7 @@ public class DBCenterFMessage {
             while (cursor.moveToNext()) {
                 PLogger.printObject("convert==" + "333333333");
                 result.add(BaseMessage.parseToBaseMessage(
+                        CursorUtil.getLong(cursor, FMessage._ID),
                         CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
                         CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),

@@ -81,9 +81,9 @@ public class GiftMessage extends BaseMessage {
     /**
      * 转换类 fmessage
      */
-    public GiftMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+    public GiftMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
                          int type, int status, int fStatus, long time, String jsonStr) {
-        super(channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
 

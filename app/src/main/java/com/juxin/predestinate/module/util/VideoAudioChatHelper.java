@@ -336,6 +336,7 @@ public class VideoAudioChatHelper{
             } else {
                 int code = jo.optInt("code");
                 if(code == 3003) {
+                    UIShow.showGoodsDiamondAct(context);
 //                    int leastDiamond = type == TYPE_AUDIO_CHAT ? AppCfg.ASet.getVoice_cost_per_minute() : AppCfg.ASet.getVideo_cost_per_minute();
 //                    if (AppModel.getInstance().getUserDetail().getDiamondsSum() < leastDiamond) {
 //                        UIHelper.showDiamondsDlg((Activity) context, String.valueOf(dstUid), "1", leastDiamond - AppModel.getInstance().getUserDetail().getDiamondsSum(), true, true);
@@ -361,14 +362,16 @@ public class VideoAudioChatHelper{
      */
     private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType) {
         Bundle bundle = new Bundle();
-//        bundle.putString("vc_get_user_url", GetLittleUserInfoTask.getGetLittleUserInfoTaskUrl(dstUid + ""));
+        bundle.putString("vc_get_user_url", UrlParam.reqUserInfoSummary.getFinalUrl());
         bundle.putString("vc_cookie", "auth="+ModuleMgr.getLoginMgr().getCookieVerCode());
         bundle.putInt("vc_chat_type", chatType);
         bundle.putInt("vc_invite_type", inviteType);
         bundle.putInt("vc_id", vcId);
-        bundle.putInt("vc_project", 0);
+        bundle.putInt("vc_project", 1);
         bundle.putString("vc_channel", JniUtil.GetEncryptString("juxin_live_" + vcId));
         bundle.putString("vc_uid", ModuleMgr.getCenterMgr().getMyInfo().getUid() + "");
+        bundle.putLong("vc_check_yellow",ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellow() * 1000);
+        bundle.putLong("vc_dst_uid,",dstUid);
         return bundle;
     }
 
