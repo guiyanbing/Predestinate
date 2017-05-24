@@ -13,10 +13,11 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
+        <pl.droidsonroids.gif.GifTextView
             android:id="@+id/loading_gif"
             android:layout_width="@dimen/px180_dp"
-            android:layout_height="@dimen/px180_dp" />
+            android:layout_height="@dimen/px180_dp"
+            android:background="@drawable/p1_loading" />
 
         <TextView
             android:id="@+id/loading_txt"

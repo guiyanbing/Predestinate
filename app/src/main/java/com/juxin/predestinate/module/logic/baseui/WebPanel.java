@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
@@ -53,9 +51,6 @@ public class WebPanel extends BasePanel {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initView() {
-        ImageView loading_gif = (ImageView) findViewById(R.id.loading_gif);
-        ImageLoader.loadGif(getContext(), R.drawable.f1_loading_h5, loading_gif);
-
         webView = (WebView) findViewById(R.id.webView);
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.webView, R.id.common_net_error, R.id.common_loading});

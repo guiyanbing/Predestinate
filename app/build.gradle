@@ -26,9 +26,8 @@ android {
         targetSdkVersion rootProject.versions.targetSDK
         applicationId cApplicationId
         signingConfig signingConfigs.release;
-        ndk { abiFilters "armeabi", "armeabi-v7a", "x86", "mips" }//让64位的操作系统可以兼容32位的库文件
-        // 65535限制
-        multiDexEnabled true
+        ndk { abiFilters "armeabi", "armeabi-v7a", "armeabi-v8a", "x86" }//让64位的操作系统可以兼容32位的库文件
+        multiDexEnabled true// 65535限制
     }
 
     dexOptions {

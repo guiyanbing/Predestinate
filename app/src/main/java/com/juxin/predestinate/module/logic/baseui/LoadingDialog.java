@@ -4,10 +4,8 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.picker.common.popup.BottomPopup;
 import com.juxin.predestinate.module.util.TimerUtil;
@@ -128,10 +126,10 @@ public class LoadingDialog extends BottomPopup {
     protected View makeContentView() {
         View inflate = LayoutInflater.from(activity).inflate(R.layout.common_loading_dialog, null);
         TextView loading_txt = (TextView) inflate.findViewById(R.id.loading_txt);
-        ImageView loading_gif = (ImageView) inflate.findViewById(R.id.loading_gif);
+        View loading_gif = inflate.findViewById(R.id.loading_gif);
         View cancel = inflate.findViewById(R.id.cancel);
 
-        ImageLoader.loadGif(activity, resId != -1 ? resId : R.drawable.p1_loading, loading_gif);
+        if (resId != -1) loading_gif.setBackgroundResource(resId);
         loading_txt.setText(loadingTxt);
         loading_txt.setVisibility(TextUtils.isEmpty(loadingTxt) ? View.GONE : View.VISIBLE);
         cancel.setVisibility(onCancelListener == null ? View.GONE : View.VISIBLE);
