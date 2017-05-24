@@ -514,6 +514,15 @@ public class CenterMgr implements ModuleBase, PObserver {
         return kf_id != 0;
     }
 
+    /**
+     * 是否是包月vip用户
+     *
+     * @param group 1 普通用户  2,3包月用户
+     * @return true 是vip
+     */
+    public boolean isVip(int group) {
+        return group == 2 || group == 3;
+    }
 
     /**
      * 是否可以打招呼

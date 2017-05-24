@@ -458,6 +458,15 @@ public class CommonMgr implements ModuleBase {
     //============================== 小友模块相关接口 =============================
 
     /**
+     * 获取最近礼物列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void lastGiftList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.lastGiftList, null, complete);
+    }
+
+    /**
      * 上传身份证照片
      *
      * @param url      图片本地地址

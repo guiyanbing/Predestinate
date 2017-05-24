@@ -54,6 +54,8 @@ public class UserCheckInfoFootPanel extends BasePanel {
         }
 
         LinearLayout info_container = (LinearLayout) findViewById(R.id.ll_info_container);
+        LinearLayout ll_secret_album = (LinearLayout) findViewById(R.id.ll_secret_album);
+        LinearLayout ll_secret_video = (LinearLayout) findViewById(R.id.ll_secret_video);
         tv_album = (TextView) findViewById(R.id.album_num);
         chatPriceLayout = (LinearLayout) findViewById(R.id.ll_chat_price);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
@@ -66,18 +68,25 @@ public class UserCheckInfoFootPanel extends BasePanel {
         findViewById(R.id.ll_video).setOnClickListener(listener);
         refreshAuth();  // 认证状态
 
-        // 照片列表
-        albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
-        albumLayout.addView(albumPanel.getContentView());
-
         // 详细信息列表
-        if (channel == CenterConstant.USER_CHECK_INFO_OTHER){
+        if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
             info_container.setVisibility(View.VISIBLE);
             UserInfoPanel infoPanel = new UserInfoPanel(getContext(), userDetail);
             info_container.addView(infoPanel.getContentView());
         }
 
-        tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
+        // 照片列表
+        if (userDetail.getUserPhotos() != null) {
+            ll_secret_album.setVisibility(View.VISIBLE);
+            albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
+            albumLayout.addView(albumPanel.getContentView());
+            tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
+        }
+
+        // 视频列表
+        if (userDetail.getUserVideos() != null) {
+            ll_secret_video.setVisibility(View.VISIBLE);
+        }
     }
 
     // 添加右滑退出忽略view
