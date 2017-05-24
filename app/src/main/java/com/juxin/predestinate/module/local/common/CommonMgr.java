@@ -569,7 +569,6 @@ public class CommonMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
 //                Log.e("TTTTTTTTTTTTTEEE",response.getResponseString()+"|||");
                 if (response.isOk()) {
-                    videoVerify = (VideoVerifyBean) response.getBaseData();
                     mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
                     mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
                 }
