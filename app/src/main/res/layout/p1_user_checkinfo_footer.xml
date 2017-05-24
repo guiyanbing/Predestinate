@@ -167,8 +167,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/center_information_line" />
-
     <!-- 视频 -->
     <LinearLayout
         android:id="@+id/ll_secret_video"
@@ -176,6 +174,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
+
+        <include layout="@layout/center_information_line" />
+
         <!-- 视频头 -->
         <LinearLayout
             android:layout_width="match_parent"

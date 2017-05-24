@@ -68,15 +68,8 @@ public class UserCheckInfoFootPanel extends BasePanel {
         findViewById(R.id.ll_video).setOnClickListener(listener);
         refreshAuth();  // 认证状态
 
-        // 详细信息列表
-        if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
-            info_container.setVisibility(View.VISIBLE);
-            UserInfoPanel infoPanel = new UserInfoPanel(getContext(), userDetail);
-            info_container.addView(infoPanel.getContentView());
-        }
-
         // 照片列表
-        if (userDetail.getUserPhotos() != null) {
+        if (userDetail.getUserPhotos().size() > 0) {
             ll_secret_album.setVisibility(View.VISIBLE);
             albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
             albumLayout.addView(albumPanel.getContentView());
@@ -84,9 +77,20 @@ public class UserCheckInfoFootPanel extends BasePanel {
         }
 
         // 视频列表
-        if (userDetail.getUserVideos() != null) {
+        if (userDetail.getUserVideos().size() > 0) {
             ll_secret_video.setVisibility(View.VISIBLE);
         }
+
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+            ll_secret_album.setVisibility(View.VISIBLE);
+            ll_secret_video.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        // TA人详细信息列表
+        info_container.setVisibility(View.VISIBLE);
+        UserInfoPanel infoPanel = new UserInfoPanel(getContext(), userDetail);
+        info_container.addView(infoPanel.getContentView());
     }
 
     // 添加右滑退出忽略view
