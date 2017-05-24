@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/px212_dp"
+    android:layout_height="@dimen/px212_dp">
     <ImageView
         android:id="@+id/chat_custom_smile"
         android:layout_width="@dimen/px170_dp"
         android:layout_height="@dimen/px170_dp"
+        android:padding="@dimen/px30_dp"
         android:scaleType="centerInside" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/iv_custom_emoji_del"
+        android:layout_width="@dimen/px60_dp"
+        android:layout_height="@dimen/px60_dp"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:src="@drawable/ic_custom_emoji_del"/>
+</RelativeLayout>
