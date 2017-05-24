@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -12,6 +13,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,8 @@ import java.util.List;
  */
 public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
-    private  boolean scrollState=false;
+    private boolean scrollState = false;
+
     public void setScrollState(boolean scrollState) {
         this.scrollState = scrollState;
     }
@@ -85,6 +88,18 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         notifyDataSetChanged();
     }
 
+
+    public void notifyFriendNum(int friendNum) {
+        for (BaseMessage message : getList()) {
+            if (message.getWhisperID().equals(String.valueOf(MailMsgID.MyFriend_Msg.type))) {
+                message.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
+
     @Override
     public int getViewTypeCount() {
         int TYPE_COUNT = 2;
@@ -119,12 +134,12 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
             int tempViewType = getItemViewType(position);
 
             int ViewType = -1;
-            if((position-1) >= 0){
-                ViewType = getItemViewType(position-1);
+            if ((position - 1) >= 0) {
+                ViewType = getItemViewType(position - 1);
             }
             MailItemType mailItemType = MailItemType.getMailMsgType(tempViewType);
             if (mailItemType != null) {
-                switch (mailItemType){
+                switch (mailItemType) {
                     case Mail_Item_Ordinary:
                         vh.customMailItem.showItemLetter(msgData);
                         break;
@@ -139,7 +154,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                 setItemHeight(vh.customMailItem.getMeasuredHeight());
 
                 PLogger.printObject("ViewType=" + ViewType + "---tempViewType" + tempViewType);
-                if(tempViewType != ViewType){
+                if (tempViewType != ViewType) {
                     switch (mailItemType) {
                         case Mail_Item_Ordinary:
                             vh.customMailItem.showLetterGap();

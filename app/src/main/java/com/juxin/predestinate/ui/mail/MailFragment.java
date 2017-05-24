@@ -10,6 +10,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -28,6 +29,7 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         initView();
 
         MsgMgr.getInstance().attach(this);
+        ModuleMgr.getCommonMgr().getFriendsSize();
         return getContentView();
     }
 
@@ -246,6 +249,11 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 mailFragmentAdapter.updateAllData();
                 detectInfo(listMail);
                 break;
+            case MsgType.MT_Friend_Num_Notice:
+                mailFragmentAdapter.notifyFriendNum((Integer) value);
+                break;
+            default:
+                break;
         }
     }
 
@@ -278,34 +286,35 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     /**
      * 检测个人资料
+     *
      * @param view
      */
-    private void detectInfo(AbsListView view){
+    private void detectInfo(AbsListView view) {
         List<Long> stringList = new ArrayList<>();
         stringList.clear();
         int firs = view.getFirstVisiblePosition();
         int last = view.getLastVisiblePosition();
 
         PLogger.printObject("Position===11111=" + firs + "====" + last);
-        for(int i = firs; i < last; i++){
+        for (int i = firs; i < last; i++) {
             BaseMessage message = mailFragmentAdapter.getItem(i);
             PLogger.printObject("Position===for=" + message);
-            if(message != null && ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)){
+            if (message != null && ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)) {
                 stringList.add(message.getLWhisperID());
                 PLogger.printObject("Position===for2222=" + message.getType() + message.getAvatar() + message.getName());
 
             }
         }
 
-        if(stringList.size() > 0){
+        if (stringList.size() > 0) {
             ModuleMgr.getChatMgr().getProFile(stringList);
         }
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch (scrollState){
-            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:{//停止滚动
+        switch (scrollState) {
+            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
                 detectInfo(view);
@@ -316,7 +325,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 mailFragmentAdapter.setScrollState(true);
                 break;
             }
-            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:{//正在滚动
+            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL: {//正在滚动
                 //设置为正在滚动
                 mailFragmentAdapter.setScrollState(true);
                 break;
@@ -325,5 +334,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
 }
