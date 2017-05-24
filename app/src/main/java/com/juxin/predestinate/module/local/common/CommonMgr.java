@@ -9,6 +9,8 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
@@ -442,6 +444,9 @@ public class CommonMgr implements ModuleBase {
     }
 
 
+    /**
+     * 请求好友数据  发出更新好友条数通知
+     */
     public void getFriendsSize() {
         getMyFriends(1, new RequestComplete() {
             @Override
@@ -450,6 +455,7 @@ public class CommonMgr implements ModuleBase {
                     if (!response.isCache()) {
                         UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                         lightweightList.parseJsonFriends(response.getResponseString());
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice,lightweightList.getTotalcnt());
                     }
                 }
             }
