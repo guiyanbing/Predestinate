@@ -79,7 +79,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(BaseMessage.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
-        baseMessage.setAboutme("赠送礼物即可成为好友");
+      //  baseMessage.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 

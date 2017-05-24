@@ -6,6 +6,7 @@ import android.view.View;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
@@ -140,42 +141,60 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                 if (simpleData.getUid() == MailSpecialID.customerService.getSpecialID()) {
                     simpleData.setNickname(MailSpecialID.customerService.getSpecialIDName());
                 }
-                //锁屏状态，锁屏弹窗
-                if (BaseUtil.isScreenLock(App.context)) {
-                    LockScreenMgr.getInstance().setChatData(simpleData, content);
-                    popupActivity();
-                    return;
-                }
-
-                //解锁状态
-                if (CommonUtil.isForeground() && ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
-                    if (App.getActivity() instanceof BaseActivity &&
-                            !((BaseActivity) App.getActivity()).isCanNotify()) return;
-
-                    final CustomFloatingPanel floatingPanelChat = new CustomFloatingPanel(App.context);
-                    floatingPanelChat.initView();
-                    floatingPanelChat.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
-                            content, simpleData.getAvatar(), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    UIShow.showPrivateChatAct(App.getActivity(), Long.valueOf(whisperID), simpleData.getNickname());
-                                    FloatingMgr.getInstance().removePanel(floatingPanelChat);
-                                }
-                            });
-                    FloatingMgr.getInstance().addPanel(floatingPanelChat);
-                } else {//在后台，桌面悬浮窗
-                    if (ModuleMgr.getAppMgr().isForeground() || !LockScreenMgr.getInstance().isTip()) {
-                        //应用在前台/(应用在退出状态且应用设置为退出不提示)：不进行应用外弹框
-                        PLogger.d("------>应用外弹框，return");
-                        return;
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPrivacy(simpleData, whisperID, type, content);
                     }
-                    UIShow.showUserMailNotifyAct(type, simpleData, content);
-                }
-                playSound();
-                vibrator();
+                });
             }
         });
     }
+
+    /**
+     * 界面展示
+     *
+     * @param simpleData 数据库查询出的个人资料数据
+     * @param whisperID  私聊ID
+     * @param type       消息类型
+     * @param content    消息提示内容
+     */
+    private void viewPrivacy(final UserInfoLightweight simpleData, final String whisperID, final int type, final String content) {
+        //锁屏状态，锁屏弹窗
+        if (BaseUtil.isScreenLock(App.context)) {
+            LockScreenMgr.getInstance().setChatData(simpleData, content);
+            popupActivity();
+            return;
+        }
+
+        //解锁状态
+        if (CommonUtil.isForeground() && ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
+            if (App.getActivity() instanceof BaseActivity &&
+                    !((BaseActivity) App.getActivity()).isCanNotify()) return;
+
+            final CustomFloatingPanel floatingPanelChat = new CustomFloatingPanel(App.context);
+            floatingPanelChat.initView();
+            floatingPanelChat.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
+                    content, simpleData.getAvatar(), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UIShow.showPrivateChatAct(App.getActivity(), Long.valueOf(whisperID), simpleData.getNickname());
+                            FloatingMgr.getInstance().removePanel(floatingPanelChat);
+                        }
+                    });
+            FloatingMgr.getInstance().addPanel(floatingPanelChat);
+        } else {//在后台，桌面悬浮窗
+            if (ModuleMgr.getAppMgr().isForeground() || !LockScreenMgr.getInstance().isTip()) {
+                //应用在前台/(应用在退出状态且应用设置为退出不提示)：不进行应用外弹框
+                PLogger.d("------>应用外弹框，return");
+                return;
+            }
+            UIShow.showUserMailNotifyAct(type, simpleData, content);
+        }
+        playSound();
+        vibrator();
+    }
+
     //------------------新消息通知end--------------------
 
     /**

@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
@@ -11,7 +10,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -149,9 +147,7 @@ public class BaseMessage implements IBaseMessage {
     private int localAvatar;// 本地头像
     private int top;
     private String aboutme;// 内心读白
-    private int isMonth;//包月
     private int isVip;
-    private int isOnline;//是否在线
     private int kfID;//是否是机器人
     private int num;//私聊列表专用字段
     private int Weight = Small_Weight;//Item的权重
@@ -283,14 +279,6 @@ public class BaseMessage implements IBaseMessage {
 
     public void setIsVip(int isVip) {
         this.isVip = isVip;
-    }
-
-    public int getIsMonth() {
-        return isMonth;
-    }
-
-    public void setIsMonth(int isMonth) {
-        this.isMonth = isMonth;
     }
 
     public long getTime() {
@@ -437,18 +425,6 @@ public class BaseMessage implements IBaseMessage {
         this.isRead = isRead;
     }
 
-    public int getIsOnline() {
-        return isOnline;
-    }
-
-//    public boolean isOnline() {
-//        return ModuleMgr.getCenterMgr().isOnline(isOnline);
-//    }
-
-    public void setIsOnline(int isOnline) {
-        this.isOnline = isOnline;
-    }
-
     public int getKfID() {
         return kfID;
     }
@@ -511,7 +487,6 @@ public class BaseMessage implements IBaseMessage {
 
     /**
      * true 如果为1则为熟人消息，否则为0
-     *
      * @return
      */
     public boolean isRu() {
@@ -530,7 +505,6 @@ public class BaseMessage implements IBaseMessage {
         } catch (JSONException var3) {
             PLogger.printThrowable(var3);
         }
-
         return new JSONObject();
     }
 
@@ -594,8 +568,8 @@ public class BaseMessage implements IBaseMessage {
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
         this.setName(object.optString("nickname"));
-        this.setIsMonth(object.optInt("ismonth"));
-        this.setIsVip(object.optInt("isVip"));
+        this.setIsVip(object.optInt("group"));
+        this.setTop(object.optInt("top"));
     }
 
     /**
