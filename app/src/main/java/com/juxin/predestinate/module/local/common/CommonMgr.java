@@ -162,14 +162,15 @@ public class CommonMgr implements ModuleBase {
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig() {
+    public void setVideochatConfig(boolean videoStatus,boolean audioStatus) {
         HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("videochat", videoVerify.getVideochat());
-        post_param.put("audiochat", videoVerify.getAudiochat());
+        post_param.put("videochat", videoStatus?1:0);
+        post_param.put("audiochat", audioStatus?1:0);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.setVideochatConfig, post_param, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
+                    requestVideochatConfig();
                     return;
                 }
                 JSONObject json = response.getResponseJson();
