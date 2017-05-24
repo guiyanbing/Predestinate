@@ -52,7 +52,7 @@
             android:layout_marginTop="@dimen/px45_dp"
             android:singleLine="true"
             android:text="HELLO美女"
-            android:textColor="@color/text_theme_blue"
+            android:textColor="@color/theme_color_red"
             android:textSize="@dimen/px45_sp" />
 
         <TextView
@@ -85,7 +85,7 @@
             <TextView
                 android:id="@+id/wake_lock_send"
                 style="@style/button_small"
-                android:text="发送"
+                android:text="@string/send"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
