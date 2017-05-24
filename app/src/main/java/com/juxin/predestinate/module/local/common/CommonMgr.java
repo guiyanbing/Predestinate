@@ -412,7 +412,7 @@ public class CommonMgr implements ModuleBase {
      *
      * @return
      */
-    private String getSayHelloKey() {
+    public String getSayHelloKey() {
         return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
@@ -422,25 +422,39 @@ public class CommonMgr implements ModuleBase {
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
-//        if (checkDateAndSave(getSayHelloKey())) {
+        if (checkDate(getSayHelloKey())) {
 
-        getSayHiList(new RequestComplete() {
+            getSayHiList(new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
+                    if (response.isOk()) {
+                        UserInfoLightweightList list = new UserInfoLightweightList();
+                        list.parseJsonSayhi(response.getResponseString());
+                        SayHelloDialog sayHelloDialog = new SayHelloDialog();
+                        sayHelloDialog.showDialog(context);
+                        sayHelloDialog.setData(list.getLightweightLists());
+                    }
+                }
+            });
+        }
+    }
+
+
+    public void getFriendsSize() {
+        getMyFriends(1, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
                 if (response.isOk()) {
-                    UserInfoLightweightList list = new UserInfoLightweightList();
-                    list.parseJsonSayhi(response.getResponseString());
-                    SayHelloDialog sayHelloDialog = new SayHelloDialog();
-                    sayHelloDialog.showDialog(context);
-                    sayHelloDialog.setData(list.getLightweightLists());
+                    if (!response.isCache()) {
+                        UserInfoLightweightList lightweightList = new UserInfoLightweightList();
+                        lightweightList.parseJsonFriends(response.getResponseString());
+                    }
                 }
             }
         });
-
-
-//        }
     }
+
 
     //============================== 小友模块相关接口 =============================
 
@@ -603,12 +617,12 @@ public class CommonMgr implements ModuleBase {
      *
      * @param touid    赠送对象UId
      * @param giftid   礼物Id
-     * @param giftnum   礼物数量（不填为1）
-     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
+     * @param giftnum  礼物数量（不填为1）
+     * @param ftype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
      *                 //     * @param begid     索要Id
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid,int giftnum,int gtype/*,int begid*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
@@ -985,7 +999,7 @@ public class CommonMgr implements ModuleBase {
 
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
-        for(int i = 0; i < uids.size(); i++){
+        for (int i = 0; i < uids.size(); i++) {
             temp[i] = uids.get(0);
         }
 
