@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -19,6 +21,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
@@ -36,7 +39,7 @@ import java.util.List;
  */
 
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
-        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener {
+        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
 
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
@@ -57,6 +60,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         initView();
 
         MsgMgr.getInstance().attach(this);
+        ModuleMgr.getCommonMgr().getFriendsSize();
         return getContentView();
     }
 
@@ -132,6 +136,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listMail.setPullRefreshEnable(false);
         listMail.setOnItemClickListener(this);
         listMail.setSwipeItemClickedListener(this);
+
+        listMail.setOnScrollListener(this);
     }
 
     @Override
@@ -172,16 +178,16 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case WhoAttentionMe_Msg:
-
+                    case Follow_Msg:
+                        ModuleMgr.getChatListMgr().updateFollow();
                         break;
                     case MyFriend_Msg:
 
                         break;
                 }
             } else {
-                ArrayList<String> strings = new ArrayList<String>();
-                strings.add(item.getWhisperID());
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+
 //                ModuleMgr.getChatListMgr().deleteWhisperChatUser(strings, new ChatMsgInterface.DelChatUserComplete() {
 //                    @Override
 //                    public void onReqChatUser(boolean ret) {
@@ -198,7 +204,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(message.getLWhisperID());
             if (mailMsgID != null) {
                 switch (mailMsgID) {
-                    case WhoAttentionMe_Msg://谁关注我
+                    case Follow_Msg://谁关注我
                         UIShow.showMyAttentionAct(getContext());
                         break;
                     case MyFriend_Msg://我的好友
@@ -241,6 +247,12 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
                 mailFragmentAdapter.updateAllData();
+                detectInfo(listMail);
+                break;
+            case MsgType.MT_Friend_Num_Notice:
+                mailFragmentAdapter.notifyFriendNum((Integer) value);
+                break;
+            default:
                 break;
         }
     }
@@ -270,5 +282,58 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");
                 break;
         }
+    }
+
+    /**
+     * 检测个人资料
+     *
+     * @param view
+     */
+    private void detectInfo(AbsListView view) {
+        List<Long> stringList = new ArrayList<>();
+        stringList.clear();
+        int firs = view.getFirstVisiblePosition();
+        int last = view.getLastVisiblePosition();
+
+        PLogger.printObject("Position===11111=" + firs + "====" + last);
+        for (int i = firs; i < last; i++) {
+            BaseMessage message = mailFragmentAdapter.getItem(i);
+            PLogger.printObject("Position===for=" + message);
+            if (message != null && ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)) {
+                stringList.add(message.getLWhisperID());
+                PLogger.printObject("Position===for2222=" + message.getType() + message.getAvatar() + message.getName());
+
+            }
+        }
+
+        if (stringList.size() > 0) {
+            ModuleMgr.getChatMgr().getProFile(stringList);
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        switch (scrollState) {
+            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
+                //设置为停止滚动
+                mailFragmentAdapter.setScrollState(false);
+                detectInfo(view);
+                break;
+            }
+            case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
+                //设置为正在滚动
+                mailFragmentAdapter.setScrollState(true);
+                break;
+            }
+            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL: {//正在滚动
+                //设置为正在滚动
+                mailFragmentAdapter.setScrollState(true);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
 }

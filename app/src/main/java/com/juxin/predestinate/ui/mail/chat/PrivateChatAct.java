@@ -17,9 +17,12 @@ import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.view.roadlights.LMarqueeFactory;
+import com.juxin.library.view.roadlights.LMarqueeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.my.GiftMessageList;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
@@ -33,7 +36,10 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+
+import java.util.List;
 
 /**
  * 聊天页
@@ -48,6 +54,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img,cus_top_img_phone;
     private TextView base_title_title, cus_top_title_txt;
+    private LMarqueeView lmvMeassages;
+    private  LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
 
     private LinearLayout privatechat_head;
     private ImageView chat_title_attention_icon;
@@ -93,6 +101,25 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //                }
 //            }
 //        }
+    }
+
+    private void initLastGiftList() {
+        ModuleMgr.getCommonMgr().lastGiftList(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()){
+                    GiftMessageList list = (GiftMessageList) response.getBaseData();
+                    List<GiftMessageList.GiftMessageInfo> lastGiftMessages = list.getGiftMessageList();
+                    if (lastGiftMessages != null && !lastGiftMessages.isEmpty()){
+                        lmvMeassages.setVisibility(View.VISIBLE);
+                        marqueeView.setData(lastGiftMessages);
+                        lmvMeassages.setAnimInAndOut(R.anim.top_in, R.anim.bottom_out);
+                        lmvMeassages.setMarqueeFactory(marqueeView);
+                        lmvMeassages.startFlipping();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -164,6 +191,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         onTitleInit();
 
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
+        lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
+        marqueeView = new GiftMessageInforView(this);
 
         // if (IS_REPLY) {//是否是首次回复的消息
         //     privateChat.getChatAdapter().setNewMsg(true);
@@ -172,6 +201,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //            privateChat.getChatAdapter().setKf_id(kf_id);
 //        }
 //
+        initLastGiftList();
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {

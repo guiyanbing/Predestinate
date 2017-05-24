@@ -638,6 +638,30 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
+
+    public void getProFile(List<Long> userIds) {
+        ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("re=====" + response.getResponseString());
+                if(!response.isOk()){
+                    return;
+                }
+                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
+                infoLightweightList.parseJsonSummary(response.getResponseJson());
+
+                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                    ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
+                    dbCenter.getCacheCenter().storageProfileData(infoLightweights);
+                    boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
+                    if(ret){
+                        ModuleMgr.getChatListMgr().getWhisperList();
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * 更新个人资料
      *
@@ -662,5 +686,4 @@ public class ChatMgr implements ModuleBase {
     private long getTime() {
         return ModuleMgr.getAppMgr().getTime();
     }
-
 }

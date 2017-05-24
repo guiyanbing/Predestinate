@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListAdapter;
 
 import com.juxin.predestinate.module.logic.baseui.xlistview.XListView;

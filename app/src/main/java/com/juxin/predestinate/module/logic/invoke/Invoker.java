@@ -564,6 +564,33 @@ public class Invoker {
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
+        // 获取服务器请求url
+        public void get_agent_url(String data) {
+            PLogger.d("---get_agent_url--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            String url = Hosts.HOST_URL;
+            switch (dataObject.optString("type")) {
+                case "php":
+                    url = Hosts.FATE_IT_HTTP;
+                    break;
+                case "go":
+                    url = Hosts.FATE_IT_GO;
+                    break;
+                case "pay":
+                    url = Hosts.FATE_IT_PROTOCOL;
+                    break;
+                case "image":
+                    url = Hosts.FATE_IT_HTTP_PIC;
+                    break;
+                default:
+                    break;
+            }
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("url", url);
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+        }
+
         // ------------------------------游戏用cmd---------------------------------
 
         // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid

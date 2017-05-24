@@ -514,6 +514,15 @@ public class CenterMgr implements ModuleBase, PObserver {
         return kf_id != 0;
     }
 
+    /**
+     * 是否是包月vip用户
+     *
+     * @param group 1 普通用户  2,3包月用户
+     * @return true 是vip
+     */
+    public boolean isVip(int group) {
+        return group == 2 || group == 3;
+    }
 
     /**
      * 是否可以打招呼
@@ -544,10 +553,12 @@ public class CenterMgr implements ModuleBase, PObserver {
             PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
             return false;
         }
+        PLogger.d("isCanGroupSayHi------ " + ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey()));
         //判断是否达到第二天
         if (ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey())) {
             //判断群打招呼次数
             int num = PSP.getInstance().getInt(getGroupSayHiNumKey(), 0);
+            PLogger.d("isCanGroupSayHi ----- num == " + num);
             if (num >= 2) { //如果达到第三次重置 是否达到第二天的状态 并清除打招呼次数
                 ModuleMgr.getCommonMgr().saveDateState(getGroupSayHiDayKey());
                 PSP.getInstance().put(getGroupSayHiNumKey(), 0);

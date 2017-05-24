@@ -52,7 +52,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     /**
      * 发送消息线程池
      */
-    private final Executor sendExecutor = Executors.newSingleThreadExecutor();
+    private final Executor sendExecutor = Executors.newCachedThreadPool();
 
     private static class SingletonHolder {
         static AutoConnectMgr instance = new AutoConnectMgr();
@@ -374,6 +374,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     @Override
     public void onSocketConnected() {
         onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
+        TimerUtil.resetIncreaseTime();
         socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_Heartbeat));//登录时发送的是普通心跳消息
         socket.sendPacket(getLoginData());
     }

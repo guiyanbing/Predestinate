@@ -32,7 +32,7 @@ import java.util.HashMap;
  */
 public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete {
 
-    private TextView name, age, home, height, income, marry,        //基本资料
+    private TextView name, gender, age, home, height, income, marry,        //基本资料
             qq_info, qq, mobile_info, mobile, wechat_info, wechat;  //联系方式
 
     private UserDetail userDetail;
@@ -48,6 +48,7 @@ public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete 
 
     private void initView() {
         name = (TextView) findViewById(R.id.name);
+        gender = (TextView) findViewById(R.id.gender);
         age = (TextView) findViewById(R.id.age);
         home = (TextView) findViewById(R.id.home);
         height = (TextView) findViewById(R.id.height);
@@ -79,6 +80,8 @@ public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete 
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         String sNotFilled = getContext().getResources().getString(R.string.str_not_filled);
         name.setText(userDetail.getNickname());
+        gender.setText(userDetail.isMan() ? getContext().getString(R.string.txt_boy) :
+                getContext().getString(R.string.txt_girl));
         age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
         home.setText(TextUtils.isEmpty(userDetail.getAddressShow()) ? sNotFilled : userDetail.getAddressShow());
         height.setText(userDetail.getHeight() + "cm");

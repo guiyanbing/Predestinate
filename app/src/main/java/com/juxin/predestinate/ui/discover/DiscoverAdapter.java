@@ -178,8 +178,8 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             iv_video = (Button) convertView.findViewById(R.id.discover_item_video);
             iv_call = (Button) convertView.findViewById(R.id.discover_item_call);
 
-            tv_name = (TextView) convertView.findViewById(R.id.discover_item_name);
-            tv_age = (TextView) convertView.findViewById(R.id.discover_item_age);
+            tv_name = convertView.findViewById(R.id.discover_item_name);
+            tv_age = convertView.findViewById(R.id.discover_item_age);
             tv_height = (TextView) convertView.findViewById(R.id.discover_item_height);
             tv_distance = (TextView) convertView.findViewById(R.id.discover_item_distance);
 

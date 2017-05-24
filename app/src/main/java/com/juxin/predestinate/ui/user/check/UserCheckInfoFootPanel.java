@@ -14,6 +14,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
+import com.juxin.predestinate.ui.user.check.self.info.UserInfoPanel;
 import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -52,6 +53,9 @@ public class UserCheckInfoFootPanel extends BasePanel {
             return;
         }
 
+        LinearLayout info_container = (LinearLayout) findViewById(R.id.ll_info_container);
+        LinearLayout ll_secret_album = (LinearLayout) findViewById(R.id.ll_secret_album);
+        LinearLayout ll_secret_video = (LinearLayout) findViewById(R.id.ll_secret_video);
         tv_album = (TextView) findViewById(R.id.album_num);
         chatPriceLayout = (LinearLayout) findViewById(R.id.ll_chat_price);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
@@ -65,10 +69,28 @@ public class UserCheckInfoFootPanel extends BasePanel {
         refreshAuth();  // 认证状态
 
         // 照片列表
-        albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
-        albumLayout.addView(albumPanel.getContentView());
+        if (userDetail.getUserPhotos().size() > 0) {
+            ll_secret_album.setVisibility(View.VISIBLE);
+            albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
+            albumLayout.addView(albumPanel.getContentView());
+            tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
+        }
 
-        tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
+        // 视频列表
+        if (userDetail.getUserVideos().size() > 0) {
+            ll_secret_video.setVisibility(View.VISIBLE);
+        }
+
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+            ll_secret_album.setVisibility(View.VISIBLE);
+            ll_secret_video.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        // TA人详细信息列表
+        info_container.setVisibility(View.VISIBLE);
+        UserInfoPanel infoPanel = new UserInfoPanel(getContext(), userDetail);
+        info_container.addView(infoPanel.getContentView());
     }
 
     // 添加右滑退出忽略view

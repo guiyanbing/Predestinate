@@ -3,6 +3,8 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +40,7 @@ public class OrdinaryMessage{
     public String toFllowJson() {
         JSONObject json = new JSONObject();
         try {
-            json.put("tid", this.getUserID());
+            json.put("tid", new JSONArray().put(String.valueOf(this.getUserID())));
             json.put("mtp", this.getType());
             json.put("mct", this.getContent());
             json.put("mt", ModuleMgr.getAppMgr().getTime());

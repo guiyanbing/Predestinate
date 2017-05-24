@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 
@@ -53,11 +54,16 @@ public class CustomFloatingPanel extends FloatingBasePanel {
      * @param content 消息内容
      * @param avatar  用户头像
      */
-    public void init(String name, String content, String avatar, OnClickListener listener) {
-        ImageLoader.loadAvatar(getContext(), avatar, user_img);
-        user_name.setText(name);
-        user_content.setText(Html.fromHtml(content));
-        floating_tip.setOnClickListener(listener);
-        btn_reply.setOnClickListener(listener);
+    public void init(final String name, final String content, final String avatar, final OnClickListener listener) {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ImageLoader.loadAvatar(getContext(), avatar, user_img);
+                user_name.setText(name);
+                user_content.setText(Html.fromHtml(content));
+                floating_tip.setOnClickListener(listener);
+                btn_reply.setOnClickListener(listener);
+            }
+        });
     }
 }

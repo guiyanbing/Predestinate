@@ -11,6 +11,7 @@ import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -280,6 +281,7 @@ public class DBCenterFMessage {
             while (cursor.moveToNext()) {
                 PLogger.printObject("convert==" + "333333333");
                 result.add(BaseMessage.parseToBaseMessage(
+                        CursorUtil.getLong(cursor, FMessage._ID),
                         CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
                         CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
                         CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),

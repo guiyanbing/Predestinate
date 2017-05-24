@@ -28,48 +28,11 @@
                 android:layout_marginTop="@dimen/px30_dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_head" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/mail_item_unreadnum"-->
-            <!--style="@style/badge_num_big"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="@dimen/px30_dp"-->
-            <!--android:layout_marginTop="@dimen/px45_dp"-->
-            <!--android:visibility="visible" />-->
         </RelativeLayout>
-        <!--<RelativeLayout-->
-        <!--android:layout_width="@dimen/px240_dp"-->
-        <!--android:layout_height="@dimen/px230_dp"-->
-        <!--android:paddingLeft="@dimen/px35_dp">-->
-
-        <!--<com.xiaoyou.friends.module.baseui.SelectableRoundedImageView-->
-        <!--android:id="@+id/mail_item_headpic"-->
-        <!--android:layout_width="@dimen/px165_dp"-->
-        <!--android:layout_height="@dimen/px165_dp"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:layout_marginBottom="@dimen/px30_dp"-->
-        <!--android:layout_marginTop="@dimen/px30_dp"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:src="@drawable/default_head"-->
-        <!--app:sriv_left_bottom_corner_radius="@dimen/px5_dp"-->
-        <!--app:sriv_left_top_corner_radius="@dimen/px5_dp"-->
-        <!--app:sriv_right_bottom_corner_radius="@dimen/px5_dp"-->
-        <!--app:sriv_right_top_corner_radius="@dimen/px5_dp" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/mail_item_unreadnum"-->
-        <!--style="@style/badge_num_big_no_borders"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_marginRight="@dimen/px15_dp"-->
-        <!--android:layout_marginTop="@dimen/px15_dp"-->
-        <!--android:visibility="visible" />-->
-        <!--</RelativeLayout>-->
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:orientation="vertical">

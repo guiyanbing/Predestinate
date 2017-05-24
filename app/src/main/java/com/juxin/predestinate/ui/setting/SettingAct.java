@@ -241,7 +241,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setVideochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig();
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus,audioStatus);
                 }
                 break;
             }
@@ -256,7 +256,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setAudiochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig();
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus,audioStatus);
                 }
                 break;
             }

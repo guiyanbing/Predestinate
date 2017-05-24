@@ -13,11 +13,15 @@ import android.widget.Button;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -35,7 +39,7 @@ import java.util.List;
  * Created by zhang on 2017/4/20.
  */
 
-public class DiscoverFragment extends BaseFragment implements XRecyclerView.LoadingListener, RequestComplete, View.OnClickListener {
+public class DiscoverFragment extends BaseFragment implements XRecyclerView.LoadingListener, RequestComplete, View.OnClickListener, PObserver {
 
     private static final int Look_All = 0; //查看全部
     private static final int Look_Near = 1; //只看附近的人
@@ -72,12 +76,14 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                 showDiscoverSelectDialog();
             }
         });
+        MsgMgr.getInstance().attach(this);
     }
 
 
     private void initView() {
         groupSayhiBtn = (Button) findViewById(R.id.discover_group_sayhi_btn);
         groupSayhiBtn.setOnClickListener(this);
+        groupSayhiBtn.setVisibility(View.GONE);
 
         customRecyclerView = (CustomRecyclerView) findViewById(R.id.discover_content);
         xRecyclerView = customRecyclerView.getXRecyclerView();
@@ -138,7 +144,6 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void setMainData(HttpResponse response) {
         if (response.isOk()) {
             if (!response.isCache()) {
-//                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
 
@@ -157,6 +162,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                         customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                customRecyclerView.showLoading();
                                 onRefresh();
                             }
                         });
@@ -176,6 +182,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customRecyclerView.showLoading();
                     onRefresh();
                 }
             });
@@ -201,6 +208,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                     customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            customRecyclerView.showLoading();
                             getNearData();
                         }
                     });
@@ -212,6 +220,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customRecyclerView.showLoading();
                     getNearData();
                 }
             });
@@ -235,6 +244,7 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private void doGroupSayHi() {
         if (ModuleMgr.getCenterMgr().isCanGroupSayHi(getActivity())) {
             if (isHasNoSayHi()) {
+                LoadingDialog.show(getActivity());
                 handler.sendEmptyMessage(Group_sayHai_Msg);
             } else {
                 PToast.showShort(getString(R.string.say_hi_group_refresh));
@@ -264,6 +274,10 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                         });
                 break;
             }
+        }
+
+        if (!isHasNoSayHi()) {
+            LoadingDialog.closeLoadingDialog();
         }
     }
 
@@ -298,6 +312,20 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             return false;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_Say_Hello_Notice:
+                List<UserInfoLightweight> data = (List<UserInfoLightweight>) value;
+                for (int i = 0; i < data.size(); i++) {
+                    notifyAdapter(data.get(i).getUid());
+                }
+                break;
+            default:
+                break;
         }
     }
 }

@@ -1,18 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_color"
     android:orientation="vertical">
 
     <include layout="@layout/base_title" />
 
-    <ListView
-        android:id="@+id/list_info"
+    <com.juxin.predestinate.module.logic.swipemenu.SwipeListView
+        android:id="@+id/say_hello_user_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:cacheColorHint="@color/transparent"
         android:divider="@null"
         android:dividerHeight="0dip"
-        android:fastScrollEnabled="false"
-        android:footerDividersEnabled="false"
         android:scrollbars="none" />
-
 </LinearLayout>

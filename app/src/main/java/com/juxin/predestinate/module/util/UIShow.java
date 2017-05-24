@@ -87,7 +87,6 @@ import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerDlg;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
-import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
@@ -298,14 +297,6 @@ public class UIShow {
      */
     public static void showModifyAct(final Activity context) {
         context.startActivityForResult(new Intent(context, UserModifyPwdAct.class), 100);
-    }
-
-
-    /**
-     * 打开个人信息页
-     */
-    public static void showUserInfoAct(Context context) {
-        context.startActivity(new Intent(context, UserInfoAct.class));
     }
 
     /**
@@ -1169,10 +1160,26 @@ public class UIShow {
     // -----------------------各种充值弹框跳转 start----------------------------
 
     /**
-     * 钻石充值弹框
+     * 普通送礼钻石充值弹框
      */
     public static void showGoodsDiamondDialog(Context context) {
-        context.startActivity(new Intent(context, GoodsDiamondDialog.class));
+       showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
+    }
+
+    /**
+     * 送礼钻石充值弹框
+     *
+     * @param needDiamond 所需钻石差值
+     */
+    public static void showGoodsDiamondDialog(Context context, int needDiamond) {
+        showGoodsDiamondDialog(context, needDiamond, GoodsConstant.DLG_DIAMOND_GIFT_SHORT);
+    }
+
+    private static void showGoodsDiamondDialog(Context context, int needDiamond, int type) {
+        Intent intent = new Intent(context, GoodsDiamondDialog.class);
+        intent.putExtra(GoodsConstant.DLG_TYPE_KEY, type);
+        intent.putExtra(GoodsConstant.DLG_GIFT_NEED, needDiamond);
+        context.startActivity(intent);
     }
 
     /**

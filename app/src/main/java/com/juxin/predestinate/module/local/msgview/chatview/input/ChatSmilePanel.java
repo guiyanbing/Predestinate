@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
 import java.util.List;
 
 /**
+ * 表情
  * Created by Kind on 2017/3/31.
  */
 

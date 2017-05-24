@@ -23,6 +23,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -133,9 +134,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this,userDetail.getUid(),VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this,userDetail.getUid(),VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
