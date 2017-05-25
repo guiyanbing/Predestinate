@@ -46,7 +46,6 @@
                 android:layout_marginRight="@dimen/px15_dp"
                 android:layout_marginTop="@dimen/px15_dp"
                 android:visibility="visible"
-
                 android:text="1" />
 
             <!--<TextView-->
