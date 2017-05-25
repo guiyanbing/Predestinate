@@ -112,6 +112,7 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.PhotoDisplayAct;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -242,9 +243,11 @@ public class UIShow {
 
     /**
      * 打开资料完善页
+     * @param gender 性别
      */
-    public static void showUserInfoCompleteAct(Context activity) {
+    public static void showUserInfoCompleteAct(Context activity,int gender) {
         Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
+        intent.putExtra("gender",gender);
         activity.startActivity(intent);
     }
 
@@ -512,12 +515,11 @@ public class UIShow {
 
     /**
      * 查看大图界面 url
-     *
-     * @param activity
-     * @param list
      */
-    public static void showPhotoOfBigImg(FragmentActivity activity, Serializable list) {
-        showPhotoDisplayAct(activity, list, 0, PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG);
+    public static void showPhotoOfBigImg(FragmentActivity activity, String url) {
+        ArrayList<String> pics = new ArrayList<>();
+        pics.add(url);
+        showPhotoDisplayAct(activity, pics, 0, PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG);
     }
 
     // -----------------------消息提示跳转 start--------------------------
