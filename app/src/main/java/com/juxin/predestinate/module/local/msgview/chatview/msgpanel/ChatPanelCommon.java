@@ -24,6 +24,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
+import com.juxin.predestinate.module.local.msgview.chatview.input.MsgPopView;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.video.VideoPlayDialog;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -267,7 +268,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
     private void onImgClickContent(CommonMessage msg, boolean longClick) {
         if(longClick){//长按图片
-            //TODO
+            new MsgPopView(context, msg.getImg()).show(contentView);
             return;
         }
         String url = msg.getLocalImg();
