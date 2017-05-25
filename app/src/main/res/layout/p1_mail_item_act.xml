@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/common_gap_item"/>
+    <include layout="@layout/common_gap_item" />
 
     <LinearLayout
         android:id="@+id/mail_item_letter"
@@ -28,11 +28,21 @@
                 android:layout_marginTop="@dimen/px30_dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_head" />
+
+            <com.juxin.library.unread.BadgeView
+                android:id="@+id/mail_item_unreadnum"
+                style="@style/badge_num_big"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="@dimen/px15_dp"
+                android:layout_marginTop="@dimen/px15_dp"
+                android:text="1"
+                android:visibility="visible" />
         </RelativeLayout>
+
         <LinearLayout
-            android:layout_width="0dip"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -45,34 +55,19 @@
                 android:textColor="@color/color_333333"
                 android:textSize="@dimen/px45_sp" />
 
-            <LinearLayout
+            <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView
+                android:id="@+id/mail_item_last_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/px2_dp"
                 android:layout_marginTop="@dimen/px25_dp"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView
-                    android:id="@+id/mail_item_last_msg"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:maxWidth="200dp"
-                    android:singleLine="true"
-                    android:textColor="@color/color_aaaaaa"
-                    android:textSize="@dimen/px39_sp" />
-
-                <TextView
-                    android:id="@+id/mail_item_unreadnum"
-                    style="@style/badge_num_big"
-                    android:layout_marginBottom="@dimen/px4_dp"
-                    android:layout_marginLeft="@dimen/px30_dp"
-                    android:visibility="visible" />
-            </LinearLayout>
+                android:maxLines="1"
+                android:maxWidth="200dp"
+                android:singleLine="true"
+                android:textColor="@color/color_aaaaaa"
+                android:textSize="@dimen/px39_sp" />
         </LinearLayout>
     </LinearLayout>
 

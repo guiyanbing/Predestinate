@@ -12,6 +12,9 @@ public enum MailItemType {
     /**其他**/
     Mail_Item_Other(1),
 
+    /**其他**/
+    Geet_Item_Other(2),
+
     ;
 
     public int type;

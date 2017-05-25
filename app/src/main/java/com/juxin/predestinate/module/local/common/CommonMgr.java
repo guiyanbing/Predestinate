@@ -9,6 +9,8 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
@@ -56,6 +58,8 @@ public class CommonMgr implements ModuleBase {
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
+
+    private int friendNum = 0;
 
     @Override
     public void init() {
@@ -162,14 +166,15 @@ public class CommonMgr implements ModuleBase {
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig() {
+    public void setVideochatConfig(boolean videoStatus, boolean audioStatus) {
         HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("videochat", videoVerify.getVideochat());
-        post_param.put("audiochat", videoVerify.getAudiochat());
+        post_param.put("videochat", videoStatus ? 1 : 0);
+        post_param.put("audiochat", audioStatus ? 1 : 0);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.setVideochatConfig, post_param, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
+                    requestVideochatConfig();
                     return;
                 }
                 JSONObject json = response.getResponseJson();
@@ -441,6 +446,9 @@ public class CommonMgr implements ModuleBase {
     }
 
 
+    /**
+     * 请求好友数据  发出更新好友条数通知
+     */
     public void getFriendsSize() {
         getMyFriends(1, new RequestComplete() {
             @Override
@@ -449,11 +457,27 @@ public class CommonMgr implements ModuleBase {
                     if (!response.isCache()) {
                         UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                         lightweightList.parseJsonFriends(response.getResponseString());
+                        setFriendNum(lightweightList.getTotalcnt());
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice, getFriendNum());
                     }
                 }
             }
         });
     }
+
+    /**
+     * 获取好友数量
+     *
+     * @return
+     */
+    public int getFriendNum() {
+        return friendNum;
+    }
+
+    public void setFriendNum(int friendNum) {
+        this.friendNum = friendNum;
+    }
+
 
     //============================== 小友模块相关接口 =============================
 
@@ -569,7 +593,6 @@ public class CommonMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
 //                Log.e("TTTTTTTTTTTTTEEE",response.getResponseString()+"|||");
                 if (response.isOk()) {
-                    videoVerify = (VideoVerifyBean) response.getBaseData();
                     mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
                     mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
                 }
@@ -630,7 +653,7 @@ public class CommonMgr implements ModuleBase {
      *                 //     * @param begid     索要Id
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid,int giftnum,int gtype/*,int begid*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
@@ -1004,10 +1027,21 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
     }
 
+    /**
+     * del自定义表情
+     *
+     * @param url
+     * @param complete
+     */
+    public void delCustomFace(String url, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("url", url);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.delCustomFace, postParms, complete);
+    }
 
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
         Long[] temp = new Long[uids.size()];
-        for(int i = 0; i < uids.size(); i++){
+        for (int i = 0; i < uids.size(); i++) {
             temp[i] = uids.get(i);
         }
 

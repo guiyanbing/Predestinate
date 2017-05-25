@@ -38,6 +38,26 @@
                 android:layout_marginRight="@dimen/px42_dp"
                 android:visibility="visible" />
 
+            <com.juxin.library.unread.BadgeView
+                android:id="@+id/mail_item_unreadnum"
+                style="@style/badge_num_big"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="@dimen/px15_dp"
+                android:layout_marginTop="@dimen/px15_dp"
+                android:visibility="visible"
+
+                android:text="1" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/mail_item_unreadnum"-->
+                <!--style="@style/badge_num_big"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_marginRight="@dimen/px15_dp"-->
+                <!--android:layout_marginTop="@dimen/px15_dp"-->
+                <!--android:visibility="visible" />-->
+
         </RelativeLayout>
 
         <LinearLayout
@@ -95,7 +115,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/mail_item_vip_state"
+                    android:id="@+id/mail_item_vip"
                     android:layout_marginLeft="@dimen/px15_dp"
                     android:layout_marginRight="@dimen/px15_dp"
                     style="@style/icon_middle"
@@ -163,12 +183,7 @@
                     android:lines="1"
                     android:textColor="@color/color_aaaaaa"
                     android:textSize="@dimen/px39_sp" />
-                <TextView
-                    android:id="@+id/mail_item_unreadnum"
-                    style="@style/badge_num_big"
-                    android:layout_marginLeft="@dimen/px30_dp"
-                    android:layout_marginBottom="@dimen/px4_dp"
-                    android:visibility="visible" />
+
 
             </LinearLayout>
         </LinearLayout>

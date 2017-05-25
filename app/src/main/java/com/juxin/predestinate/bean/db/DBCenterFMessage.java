@@ -171,8 +171,13 @@ public class DBCenterFMessage {
         return DBConstant.ERROR;
     }
 
+    public long updateToReadVoice(long msgID) {
+        ContentValues values = new ContentValues();
+        values.put(FMessage.COLUMN_FSTATUS, 0);
+        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+    }
 
-    public boolean updateToReadVoice(String channelID, String userID, String sendID) {
+        public boolean updateToReadVoice(String channelID, String userID, String sendID) {
 //        try {
 //            String sql;
 //            String[] str;
@@ -250,7 +255,7 @@ public class DBCenterFMessage {
                 .append(" ORDER BY ")
                 .append(FMessage._ID)
                 .append(" DESC")
-                .append(" LIMIT ").append(start).append(",").append(offset);
+                .append(" LIMIT ").append((start * offset)).append(",").append(offset);
         return queryBySqlFmessage(sql.toString());
     }
 

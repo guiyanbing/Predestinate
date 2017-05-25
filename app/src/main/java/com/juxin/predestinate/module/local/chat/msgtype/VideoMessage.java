@@ -29,6 +29,7 @@ public class VideoMessage extends BaseMessage {
         this.setVideoVcEscCode(object.optInt("vc_esc_code"));
         this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
         this.setVc_channel_key(object.optString("vc_channel_key"));
+        this.setRu(object.optInt("ru"));
         return this;
     }
 

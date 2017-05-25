@@ -26,6 +26,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.video.VideoPlayDialog;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
@@ -247,7 +248,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
             onVideoClickContent(msg);
         } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
-
+            onVoiceClickContent(msg);
         } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
             onImgClickContent(msg);
         } else {
@@ -292,6 +293,28 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
                     //  ModuleMgr.getChatMgr().x(msg.getVideoUrl(), this);
                 }
             }
+        }
+    }
+
+    private void onVoiceClickContent(CommonMessage msg) {
+        String url = msg.getLocalVoiceUrl();
+
+        if (TextUtils.isEmpty(url)) {
+            url = msg.getVoiceUrl();
+        }
+
+        PLogger.printObject(url);
+
+        ChatMediaPlayer.getInstance().togglePlayVoice(ModuleMgr.getChatListMgr().spliceStringAmr(url), this);
+
+        if (msg.getfStatus() == 1) {
+            palySound = true;
+            msg.setfStatus(0);
+            if (chatItemHolder != null) {
+                chatItemHolder.statusImg.setVisibility(View.GONE);
+            }
+
+            ModuleMgr.getChatMgr().updateToReadVoice(msg.getMsgID());
         }
     }
 

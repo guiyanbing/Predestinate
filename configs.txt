@@ -1,5 +1,5 @@
 ﻿#APK 签名key文件目录
-storeFile = ../../../key/fate_it_new.keystore
+storeFile = ../fate_it_new.keystore
 
 #APK 签名key密码（第一重密码）
 storePassword = fate123
@@ -14,10 +14,10 @@ keyPassword = fate123
 PrjProguard = proguard-rules.pro
 
 #版本号
-VersionCode = 10200108
-VersionName = 3.0.8
+VersionCode = 10230300
+VersionName = 3.3.0
 
-#APK输出目录
+#APK输出目录相对路径，生成加固包的时候需要指定确切的路径
 ApkPath = ../../K_GEN_APK/Predestinate/
 
 #App名称

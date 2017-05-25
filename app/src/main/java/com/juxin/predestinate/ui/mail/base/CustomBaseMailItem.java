@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -59,14 +60,15 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     public LinearLayout mail_item_letter, item_ranking_state;
     public ImageView item_headpic, item_vip;
-    public TextView item_nickname, item_unreadnum, item_last_time, item_online, item_last_status,
+    public TextView item_nickname, item_last_time, item_online, item_last_status,
             item_certification, item_ranking_type, item_ranking_level;
     public EmojiTextView item_last_msg;
+    public BadgeView item_unreadnum;
 
     public void onCreateView(View contentView) {
         mail_item_letter = (LinearLayout) contentView.findViewById(R.id.mail_item_letter);
         item_headpic = (ImageView) contentView.findViewById(R.id.mail_item_headpic);
-        item_unreadnum = (TextView) contentView.findViewById(R.id.mail_item_unreadnum);
+        item_unreadnum = (BadgeView) contentView.findViewById(R.id.mail_item_unreadnum);
         item_online = (TextView) contentView.findViewById(R.id.mail_item_online);
         item_nickname = (TextView) contentView.findViewById(R.id.mail_item_nickname);
         item_certification = (TextView) contentView.findViewById(R.id.mail_item_certification);
@@ -79,7 +81,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_ranking_state = (LinearLayout) contentView.findViewById(R.id.mail_item_ranking_state);
         item_ranking_type = (TextView) contentView.findViewById(R.id.mail_item_ranking_type);
         item_ranking_level = (TextView) contentView.findViewById(R.id.mail_item_ranking_level);
-        item_vip = (ImageView) contentView.findViewById(R.id.discover_item_vip_state);
+        item_vip = (ImageView) contentView.findViewById(R.id.mail_item_vip);
     }
 
     public void showGap(){
@@ -92,7 +94,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     public void showData(BaseMessage msgData) {
-        ImageLoader.loadAvatar(getContext(), msgData.getAvatar(), item_headpic);
+        ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
         PLogger.printObject("nickname===1" + nickname);
@@ -125,7 +127,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         setUnreadnum(msgData);
         setStatus(msgData);
 
-     //   setRanking(msgData);
+        setRanking(msgData);
     }
 
     /**
@@ -157,7 +159,12 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     protected void setRanking(BaseMessage msgData) {
-        if (!msgData.isTop()) item_ranking_state.setVisibility(View.GONE);
+        item_vip.setVisibility( ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
+
+        if (!msgData.isTop()){
+            item_ranking_state.setVisibility(View.GONE);
+            return;
+        }
 
         item_ranking_state.setVisibility(View.VISIBLE);
         if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
@@ -169,8 +176,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             item_ranking_type.setText(context.getString(R.string.top_type_woman));
             item_ranking_level.setText("TOP " + msgData.getTop());
         }
-
-        item_vip.setVisibility( ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
     }
 
     @Override

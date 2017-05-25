@@ -93,11 +93,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
         msgList.clear();
         greetList.clear();
         if (messages != null && messages.size() > 0) {
-            msgList.addAll(messages);
             for (BaseMessage tmp : messages) {
-                if(!tmp.isRu()){
+                PLogger.printObject("tmp===dd=" + tmp.getRu());
+                if(tmp.isRu()){
+
+                }else {
                     greetList.add(tmp);
                 }
+                msgList.add(tmp);
                 unreadNum += tmp.getNum();
             }
         }
@@ -121,6 +124,26 @@ public class ChatListMgr implements ModuleBase, PObserver {
 //            }
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
         // updateBasicUserInfo();
+    }
+
+    /**
+     * 截取语音
+     *
+     * @param url
+     * @return
+     */
+    public String subStringAmr(String url) {
+        return url.contains(".amr") ? (url.replace(".amr", "")) : url;
+    }
+
+    /**
+     * 拼接
+     *
+     * @param url
+     * @return
+     */
+    public String spliceStringAmr(String url) {
+        return url.contains(".amr") ? url : (url + ".amr");
     }
 
     /**

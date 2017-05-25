@@ -65,6 +65,9 @@ public class ImageLoader {
         loadPic(context, url, view, defResImg, errResImg, bitmapFitCenter);
     }
 
+    public static void loadRoundCorners(Context context, String url, ImageView view) {
+        loadRoundCorners(context, url, 8, view);
+    }
     /**
      * 图片圆角处理: 默认全角处理，其他需求自行重载方法
      *
