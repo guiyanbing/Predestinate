@@ -391,7 +391,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 ImageLoader.loadAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
-                head.setTag("" + msg.getSendID());
+             //   head.setTag("" + msg.getSendID());
               //    head.setImageResource(ModuleMgr.getCenterMgr().isMan() ? R.drawable.y2_hd_man : R.drawable.y2_hd_woman);
             }
         }
