@@ -12,6 +12,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -127,7 +128,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             getUserInfo(getLWhisperId());
 
             chatInstance.chatInputPanel.showSendBtn();
-            page = 1;
+            page = 0;
             attach();
         } catch (Exception e) {
             PLogger.printThrowable(e);
@@ -484,8 +485,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
              * 本地模拟消息
              * 接收的网络消息
              */
-            if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == BaseMessage.FOUR
-                    || (message.getDataSource() == BaseMessage.TWO && show)) {
+            if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
+                    || (message.getDataSource() == MessageConstant.TWO && show)) {
                 ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
             }
         }
@@ -620,12 +621,12 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return false;
     }
 
-    private int page = 1;
+    private int page = 0;
 
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, page++);
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
     }
 
     @Override

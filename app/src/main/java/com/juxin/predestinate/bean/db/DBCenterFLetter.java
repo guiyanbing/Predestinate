@@ -11,6 +11,7 @@ import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -102,7 +103,7 @@ public class DBCenterFLetter {
             if (baseMessage.getStatus() != -1)
                 values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
 
-            if (baseMessage.getRu() != -1 && baseMessage.getRu() != 0)
+            if (baseMessage.getRu() != -1 && baseMessage.getRu() != MessageConstant.Ru_Stranger)
                 values.put(FLetter.COLUMN_RU, baseMessage.getRu());
 
             if (baseMessage.getTime() != -1)

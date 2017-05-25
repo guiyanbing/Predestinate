@@ -18,6 +18,7 @@ public class HtmlMessage extends BaseMessage {
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setHtm(object.optString("htm"));
+        this.setRu(object.optInt("ru"));
         return this;
     }
 

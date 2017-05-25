@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import org.json.JSONException;
@@ -68,7 +69,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
         message.setMsgID(msgID);
         message.setType(type);
         message.parseJson(jsonStr);
-        message.setDataSource(BaseMessage.TWO);
+        message.setDataSource(MessageConstant.TWO);
 
         if (group) {// 群聊
             message.setChannelID(groupId);
