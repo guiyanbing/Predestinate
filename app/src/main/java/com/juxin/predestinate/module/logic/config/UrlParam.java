@@ -13,7 +13,6 @@ import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.OfflineMsg;
-import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
 import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
@@ -29,19 +28,18 @@ public enum UrlParam {
     reqRegister("pubtest/quickReg", null, false),//注册接口
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
-    reqForgotsms("Public/forgotsms", PhoneVerifyResult.class, false),//找回密码发送验证码
+    reqForgotsms("Public/forgotsms", false),//找回密码发送验证码
     //================================ 配置项 ==================================
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
-    serviceQQ("user/serviceQQ", null, false),//请求在线客服QQ
     statistics(Hosts.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
     reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
 
     //============================== 设置页相关接口 =============================
     reqReqVerifyCode("Public/sendSMSM", false),//获取手机验证码
-    mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
+    mobileAuth("user/bindCellPhone",true),//手机认证
     modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("user/feedback"),//意见反馈
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息

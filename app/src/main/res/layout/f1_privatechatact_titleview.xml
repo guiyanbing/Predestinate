@@ -37,7 +37,7 @@
             android:id="@+id/cus_top_title_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/f1_top01" />
+            android:background="@drawable/f1_top01" />
 
         <TextView
             android:id="@+id/cus_top_title_txt"

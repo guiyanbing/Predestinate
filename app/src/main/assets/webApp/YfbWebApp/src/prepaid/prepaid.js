@@ -17,6 +17,10 @@ var PrePaid = function () {
   };
   var _yCoinId = CARD_TYPES.yCoin100;
   var _vipId = CARD_TYPES.vipQuarter;
+  const MSG_HEIGHT = 25;
+  var _yCoin_limit_count = 3;
+  var _vip_limit_count = 3;
+
 
   that.yCoinBtnClick = function (id) {
     if (_yCoinId === id) {
@@ -61,16 +65,16 @@ var PrePaid = function () {
     window.platform.jumpToQQService();
   };
 
-  let _lunbo = function (id, height) {
+  var _lunbo = function (id, count) {
     var ul = $(id);
-    var liFirst = ul.find('li:lt(3)');
-    if (ul.find('li').length <= 3) {
-      //默认显示三条 总条数小于等于3条不滚动
+    var liFirst = ul.find('li:lt(' + count + ')');
+    if (ul.find('li').length <= count) {
+      //默认显示三条 总条数小于等于显示条不滚动
       return;
     }
     var clone = liFirst.clone();
     $(id).append(clone);
-    $(id).animate({top: height}).animate({"top": 0}, 0, function () {
+    $(id).animate({top: -count * MSG_HEIGHT+'px'}).animate({"top": 0}, 0, function () {
       liFirst.remove();
     })
   };
@@ -118,7 +122,7 @@ var PrePaid = function () {
   };
 
   var _requestServerData = function () {
-    window.platform.normalRequest("Get", web.urlConfig.agentURL + web.urlMethod.BuyYCoinList, {}, {}, function (data) {
+    window.platform.normalRequestNoUrl("Get", web.urlType.Php , web.urlMethod.BuyYCoinList, {}, {}, function (data) {
       if (data.status != 'ok') {
         return;
       }
@@ -139,7 +143,7 @@ var PrePaid = function () {
       ;
       ele.innerHTML = html;
     });
-    window.platform.normalRequest("Get", web.urlConfig.agentURL + web.urlMethod.BuyVIPList, {}, {}, function (data) {
+    window.platform.normalRequestNoUrl("Get", web.urlType.Php ,web.urlMethod.BuyVIPList, {}, {}, function (data) {
       if (data.status != 'ok') {
         return;
       }
@@ -177,15 +181,34 @@ var PrePaid = function () {
     }
     var key = '#buyer-lists' + _currentPage;
     console.log('lunbo key ' + key);
+    var msg_count = _currentPage === PAGES.vip ? _vip_limit_count : _yCoin_limit_count;
     _intervalId = setInterval(function () {
-      _lunbo(key, '-75px');
+      _lunbo(key, msg_count);
     }, 3000);
+  };
+
+  var _initBuyInfoList = function () {
+    var yLunbo = document.getElementById('lunboYCoin');
+    var vipLunbo = document.getElementById('lunboVip');
+    var slider = document.getElementById('slider');
+    var scrolls = document.querySelectorAll('.mui-scroll');
+    var topHeight = document.getElementById('sliderSegmentedControl').offsetHeight;
+    console.log('height ', slider.offsetHeight, scrolls[0].offsetHeight, scrolls[1].offsetHeight);
+    var bottom = 25;
+    var yHeight = slider.offsetHeight - scrolls[0].offsetHeight - topHeight - bottom ;
+    var vipHeight = slider.offsetHeight - scrolls[1].offsetHeight - topHeight - bottom  ;
+    yLunbo.setAttribute('style', 'height:' + yHeight + 'px');
+    vipLunbo.setAttribute('style', 'height:' + vipHeight + 'px');
+    _yCoin_limit_count = Math.floor(yHeight / MSG_HEIGHT);
+    _vip_limit_count = Math.floor(vipHeight / MSG_HEIGHT);
+    console.log('cell count', _yCoin_limit_count, _vip_limit_count);
   };
 
   that.init = function (vipType) {
     mui.init();
     mui('.mui-scroll-wrapper').scroll();
     _requestServerData();
+    _initBuyInfoList();
     _scrollInfoList();
     _initTotalPayData();
     console.log('vip type ', vipType);

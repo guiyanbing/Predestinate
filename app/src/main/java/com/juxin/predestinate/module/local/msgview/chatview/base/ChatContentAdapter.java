@@ -132,7 +132,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
     /**
      * 回调所有消息。
      *
-     * @param message
+     * @param
      */
 //    public void callAllMsg(SystemMessage message) {
 //        if (message == null) {

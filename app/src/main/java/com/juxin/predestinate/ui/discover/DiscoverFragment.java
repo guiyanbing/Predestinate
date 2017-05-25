@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -22,11 +20,12 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
+import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,15 +36,15 @@ import java.util.List;
  * Created by zhang on 2017/4/20.
  */
 
-public class DiscoverFragment extends BaseFragment implements XRecyclerView.LoadingListener, RequestComplete, View.OnClickListener, PObserver {
+public class DiscoverFragment extends BaseFragment implements RequestComplete, View.OnClickListener, PObserver, ExListView.IXListViewListener {
 
     private static final int Look_All = 0; //查看全部
     private static final int Look_Near = 1; //只看附近的人
 
     private static final int Group_sayHai_Msg = 100; //只看附近的人
 
-    private XRecyclerView xRecyclerView;
-    private CustomRecyclerView customRecyclerView;
+    private ExListView exListView;
+    private CustomStatusListView customStatusListView;
 
     private int page = 0;
 
@@ -53,6 +52,8 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
     private DiscoverAdapter adapter;
 
     private Button groupSayhiBtn;
+
+    private boolean isNearPage = false;
 
 
     @Nullable
@@ -83,25 +84,33 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
         groupSayhiBtn.setOnClickListener(this);
         groupSayhiBtn.setVisibility(View.GONE);
 
-        customRecyclerView = (CustomRecyclerView) findViewById(R.id.discover_content);
-        xRecyclerView = customRecyclerView.getXRecyclerView();
-        xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        xRecyclerView.setLoadingListener(this);
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingMoreEnabled(true);
-        adapter = new DiscoverAdapter(getActivity());
-        adapter.setList(infos);
-        xRecyclerView.setAdapter(adapter);
-        customRecyclerView.showLoading();
+        customStatusListView = (CustomStatusListView) findViewById(R.id.discover_content);
+        View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
+        exListView = customStatusListView.getExListView();
+        exListView.setXListViewListener(this);
+        exListView.setPullRefreshEnable(true);
+        exListView.setPullLoadEnable(true);
+        exListView.addHeaderView(mViewTop);
+        adapter = new DiscoverAdapter(getActivity(), infos);
+        exListView.setAdapter(adapter);
+        exListView.setHeaderStr(null, null);
+        exListView.setHeaderHintType(2);
+        customStatusListView.showLoading();
     }
 
 
     @Override
     public void onRefresh() {
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingMoreEnabled(true);
-        page = 1;
-        ModuleMgr.getCommonMgr().getMainPage(page, 1, this);
+        exListView.setPullRefreshEnable(true);
+        if (!isNearPage) {
+            exListView.setPullLoadEnable(true);
+            page = 1;
+            ModuleMgr.getCommonMgr().getMainPage(page, 1, this);
+        } else {
+            exListView.setPullLoadEnable(false);
+            getNearData();
+        }
+
     }
 
     @Override
@@ -117,11 +126,14 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
             public void onDialogItemCilck(AdapterView<?> parent, View view, int position) {
                 switch (position) {
                     case Look_All: //查看全部
+                        isNearPage = false;
+                        groupSayhiBtn.setVisibility(View.GONE);
                         onRefresh();
                         dialog.dismiss();
                         break;
                     case Look_Near: //只看附近的人
-                        getNearData();
+                        isNearPage = true;
+                        onRefresh();
                         dialog.dismiss();
                         break;
                 }
@@ -152,46 +164,55 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                         }
                     }
                     infos.addAll(lightweightList.getUserInfos());
-                    customRecyclerView.showXrecyclerView();
+                    customStatusListView.showExListView();
                     adapter.notifyDataSetChanged();
-                    groupSayhiBtn.setVisibility(View.VISIBLE);
                 } else {
                     if (page == 1) {
-                        customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
+                        customStatusListView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                customRecyclerView.showLoading();
+                                customStatusListView.showLoading();
                                 onRefresh();
                             }
                         });
-                        groupSayhiBtn.setVisibility(View.GONE);
                     } else {
-                        xRecyclerView.setLoadingMoreEnabled(false);
+                        exListView.setPullLoadEnable(false);
                     }
                 }
 
                 if (page == 1) {
-                    xRecyclerView.refreshComplete();
+                    exListView.stopRefresh();
                 } else {
-                    xRecyclerView.loadMoreComplete();
+                    exListView.stopLoadMore();
+                }
+            } else {
+                if (page == 1) {
+                    UserInfoLightweightList lightweightList = new UserInfoLightweightList();
+                    lightweightList.parseJson(response.getResponseString());
+                    if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                        if (infos.size() != 0) {
+                            infos.clear();
+                        }
+                        infos.addAll(lightweightList.getUserInfos());
+                        customStatusListView.showExListView();
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
         } else {
-            customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
+            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    customRecyclerView.showLoading();
+                    customStatusListView.showLoading();
                     onRefresh();
                 }
             });
-            groupSayhiBtn.setVisibility(View.GONE);
         }
     }
 
     private void setNearData(HttpResponse response) {
         if (response.isOk()) {
             if (!response.isCache()) {
-//                UserInfoLightweightList lightweightList = (UserInfoLightweightList) response.getBaseData();
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
                 if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
@@ -200,25 +221,25 @@ public class DiscoverFragment extends BaseFragment implements XRecyclerView.Load
                     }
                     infos.addAll(lightweightList.getUserInfos());
                     adapter.notifyDataSetChanged();
-                    customRecyclerView.showXrecyclerView();
+                    customStatusListView.showExListView();
                     groupSayhiBtn.setVisibility(View.VISIBLE);
                 } else {
-                    customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
+                    customStatusListView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            customRecyclerView.showLoading();
+                            customStatusListView.showLoading();
                             getNearData();
                         }
                     });
                     groupSayhiBtn.setVisibility(View.GONE);
                 }
-                xRecyclerView.refreshComplete();
+                exListView.stopRefresh();
             }
         } else {
-            customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
+            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    customRecyclerView.showLoading();
+                    customStatusListView.showLoading();
                     getNearData();
                 }
             });
