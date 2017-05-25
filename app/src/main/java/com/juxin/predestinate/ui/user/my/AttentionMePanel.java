@@ -8,7 +8,8 @@ import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -20,8 +21,6 @@ import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.AttentionMeAdapter;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,6 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
     //数据相关
     private List<AttentionUserDetail> mUserDetails = new ArrayList<>();
     private AttentionMeAdapter mAttentionMeAdapter;
-    private int count;
 
     public AttentionMePanel(Context context) {
         super(context);
@@ -82,13 +80,14 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
                 lists.parseJson(response.getResponseString());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
-                mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos,AttentionUtil.ATTENTIONME));//先从缓存中获取数据
+                mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos, AttentionUtil.ATTENTIONME));//先从缓存中获取数据
                 if (infos != null && !infos.isEmpty()){//缓存中处理完毕后，还有消息记录，则该记录没有获取过，去服务器请求用户详细信息
+                    List<Long> userIds = new ArrayList<>();
                     int size = infos.size();
-                    count = size;
-                    for (int i = 0 ;i < size;i++){
-                        ModuleMgr.getCenterMgr().reqOtherInfo(infos.get(i).getUid(),this);//请求用户详细信息
+                    for (int i = 0;i < size;i++){
+                        userIds.add(infos.get(i).getUid());
                     }
+                    ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds,this);//批量获取用户信息
                     return;
                 }
                 mAttentionMeAdapter.setList(mUserDetails);
@@ -116,28 +115,22 @@ public class AttentionMePanel extends BasePanel implements RequestComplete,XRecy
             PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
             return;
         }
-        count--;
-        try {
-            JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString()).optJSONObject("res").optJSONObject("userDetail");
-            if (jsonObject != null && jsonObject.has("uid")){//用户信息请求返回成功
-//                Log.e("TTTTTTTTTTTTTYYY111", response.getResponseString() + "|||");
-                UserDetail detail = new UserDetail();
-                AttentionUserDetail userDetail = new AttentionUserDetail();
-                detail.parseJson(response.getResponseString());
-                userDetail.parse(detail);
-                mUserDetails.add(userDetail);//添加到数据列表
-                AttentionUtil.addUser(userDetail);//添加到缓存列表
-            }
-        }catch (Exception e){
-
-        }finally {
-            if (count <= 0){
-//                Log.e("TTTTTTTTTTTTT000",count+"|||");
+        UserInfoLightweightList userInfos = new UserInfoLightweightList();
+        userInfos.parseJsonSummary(JsonUtil.getJsonObject(response.getResponseString()));
+        List<UserInfoLightweight> userList = userInfos.getLightweightLists();
+        int size = userList.size();
+//        Log.e("TTTTTTTTTTTGG",response.getResponseString()+"|||"+size);
+        for (int i = 0;i < size;i++){
+            AttentionUserDetail userDetail = new AttentionUserDetail();
+            userDetail.parseJs(userList.get(i));
+            mUserDetails.add(userDetail);//添加到数据列表
+            AttentionUtil.addUser(userDetail);//添加到缓存列表
+            if (i == size-1){
+//                                Log.e("TTTTTTTTTTTTT000",count+"|||");
                 AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
-
     }
     //刷新界面
     public void reFreshUI(){

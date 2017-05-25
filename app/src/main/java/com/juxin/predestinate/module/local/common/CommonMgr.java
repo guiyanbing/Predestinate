@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -143,6 +144,16 @@ public class CommonMgr implements ModuleBase {
         return commonConfig == null ? new CommonConfig() : commonConfig;
     }
 
+    /**
+     * 获取离线消息
+     */
+    public void reqOfflineMsg(RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", App.uid);
+        getParams.put("count", 50);
+
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
+    }
 
     /**
      * 获取自己的音频、视频开关配置

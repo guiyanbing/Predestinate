@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
@@ -56,10 +57,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img,cus_top_img_phone;
     private TextView base_title_title, cus_top_title_txt;
+    private View cus_top_title_view;
     private LMarqueeView lmvMeassages;
     private LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
 
     private LinearLayout privatechat_head;
+    private RelativeLayout llTitleRight;
     private ImageView chat_title_attention_icon;
     private TextView chat_title_attention_name, chat_title_yb_name;
 
@@ -148,8 +151,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         View baseTitleViewRight = LayoutInflater.from(this).inflate(R.layout.f1_privatechatact_titleview_right, null);
         setTitleCenterContainer(baseTitleView);
         setTitleRightContainer(baseTitleViewRight);
+        llTitleRight = (RelativeLayout) baseTitleView.findViewById(R.id.cus_top_title_ll);
         base_title_title = (TextView) baseTitleView.findViewById(R.id.cus_top_title);
         cus_top_title_txt = (TextView) baseTitleView.findViewById(R.id.cus_top_title_txt);
+        cus_top_title_view = baseTitleView.findViewById(R.id.cus_top_title_view);
         cus_top_title_img = (ImageView) baseTitleView.findViewById(R.id.cus_top_title_img);
         cus_top_img_phone = (ImageView) baseTitleViewRight.findViewById(R.id.cus_top_title_img_phone);
         cus_top_img_phone.setOnClickListener(this);
@@ -209,11 +214,17 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
                     setNickName(infoLightweight.getNickname());
-                    if (infoLightweight.getGender() == 1)//是男的显示豪
+                    if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setBackgroundResource(R.drawable.f1_top02);
+                    }
                     if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
-                            (infoLightweight.isVideo_available() || infoLightweight.isVideo_available()))
+                            (infoLightweight.isVideo_available() || infoLightweight.isVideo_available()))//女性用户显示可通话图标
                         cus_top_img_phone.setVisibility(View.VISIBLE);
+                    if (infoLightweight.isToper()) {//Top榜
+                        cus_top_title_view.setVisibility(View.VISIBLE);
+                        llTitleRight.setVisibility(View.VISIBLE);
+                        cus_top_title_txt.setText("Top" + infoLightweight.getTop());
+                    }
 
                     kf_id = infoLightweight.getKf_id();
                     name = infoLightweight.getNickname();
@@ -223,7 +234,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
 
         privateChat.getChatAdapter().setWhisperId(whisperID);
-        initHeadView();
+        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1){
+            initHeadView();
+        }
         initFollow();
         //标题、（关注TA、查看手机）、滚动条 高度
         PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight());
@@ -237,13 +250,21 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 UserDetail userDetail = (UserDetail) response.getBaseData();
                 isFollow = userDetail.isFollow();
                 kf_id = userDetail.getKf_id();
-            //    cus_top_title_txt.setText(userDetail.get);
+                if(isFollow){
+                    chat_title_attention_name.setText("已关注");
+                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
+                }else {
+                    chat_title_attention_name.setText("关注她");
+                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
+                }
+//                cus_top_title_txt.setText(userDetail.get);
             }
         });
     }
 
     private void initHeadView() {
         privatechat_head = (LinearLayout) findViewById(R.id.privatechat_head);
+        privatechat_head.setVisibility(View.VISIBLE);
         findViewById(R.id.chat_title_attention).setOnClickListener(this);
         findViewById(R.id.chat_title_phone).setOnClickListener(this);
         findViewById(R.id.chat_title_wx).setOnClickListener(this);
@@ -260,18 +281,24 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.chat_title_attention: {//关注
-                ModuleMgr.getChatMgr().sendAttentionMsg(whisperID, "", kf_id, isFollow ? 2 : 1, new IMProxy.SendCallBack() {
+                String content = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
+                if (!TextUtils.isEmpty(content) && !"null".equals(content))
+                    content =  "[" + content + "]"+getString(R.string.just_looking_for_you);
+                else
+                    content = getString(R.string.just_looking_for_you);
+                ModuleMgr.getChatMgr().sendAttentionMsg(whisperID, content, kf_id, isFollow ? 2 : 1, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();
                         messageRet.parseJson(contents);
                         if (messageRet.isOk() && messageRet.isS()) {
+                            isFollow = !isFollow;
                             if(isFollow){
-                                chat_title_attention_name.setText("取消关注");
+                                chat_title_attention_name.setText("已关注");
                                 chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
                             }else {
-                                chat_title_attention_name.setText("关注TA");
-                                chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
+                                chat_title_attention_name.setText("关注她");
+                                chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
                             }
                         }else {
                             PToast.showShort(isFollow ? "取消关注失败！" : "关注失败！");
@@ -286,10 +313,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.chat_title_phone://手机
-                UIShow.showCheckOtherContactAct(this, whisperID);
+                checkAndShowVip();
                 break;
             case R.id.chat_title_wx://微信
-                UIShow.showCheckOtherContactAct(this, whisperID);
+                checkAndShowVip();
                 break;
             case R.id.chat_title_yb://Y币
                 UIShow.showGoodsYCoinDlgOld(this);
@@ -298,6 +325,15 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 new SelectCallTypeDialog(this, whisperID);
                 break;
         }
+    }
+
+    private void checkAndShowVip() {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            UIShow.showCheckOtherInfoAct(this, whisperID);
+        } else {
+            UIShow.showGoodsVipDlgOld(this);
+        }
+
     }
 
     @Override

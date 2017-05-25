@@ -3,26 +3,29 @@
     android:id="@+id/privatechat_head"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:visibility="visible">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_a8baea"/>
     <LinearLayout
         android:id="@+id/chat_title_attention"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/f1_privatechatact_head_depth"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:background="@color/color_a8baea"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/px24_dp"
-        android:paddingLeft="@dimen/px30_dp"
-        android:paddingRight="@dimen/px30_dp"
-        android:paddingTop="@dimen/px24_dp">
+        android:paddingLeft="@dimen/px10_dp"
+        android:paddingRight="@dimen/px10_dp">
 
         <ImageView
             android:id="@+id/chat_title_attention_icon"
             android:layout_width="@dimen/px36_dp"
             android:layout_height="@dimen/px36_dp"
-            android:src="@drawable/f1_chat01" />
+            android:background="@drawable/f1_follow_star" />
 
         <TextView
             android:id="@+id/chat_title_attention_name"
@@ -33,19 +36,26 @@
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
     </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_a8baea"/>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_afc0ee"/>
     <LinearLayout
         android:id="@+id/chat_title_phone"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/f1_privatechatact_head_shallow_depth"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:background="@color/color_afc0ee"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/px24_dp"
-        android:paddingLeft="@dimen/px30_dp"
-        android:paddingRight="@dimen/px30_dp"
-        android:paddingTop="@dimen/px24_dp">
+        android:paddingLeft="@dimen/px10_dp"
+        android:paddingRight="@dimen/px10_dp">
 
         <ImageView
             android:layout_width="@dimen/px36_dp"
@@ -60,19 +70,26 @@
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
     </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_afc0ee"/>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_a8baea"/>
     <LinearLayout
         android:id="@+id/chat_title_wx"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/f1_privatechatact_head_depth"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:background="@color/color_a8baea"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/px24_dp"
-        android:paddingLeft="@dimen/px30_dp"
-        android:paddingRight="@dimen/px30_dp"
-        android:paddingTop="@dimen/px24_dp">
+        android:paddingLeft="@dimen/px10_dp"
+        android:paddingRight="@dimen/px10_dp">
 
         <ImageView
             android:layout_width="@dimen/px36_dp"
@@ -87,19 +104,26 @@
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
     </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_a8baea"/>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_afc0ee"/>
     <LinearLayout
         android:id="@+id/chat_title_yb"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/f1_privatechatact_head_shallow_depth"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/px100_dp"
+        android:background="@color/color_afc0ee"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/px24_dp"
-        android:paddingLeft="@dimen/px30_dp"
-        android:paddingRight="@dimen/px30_dp"
-        android:paddingTop="@dimen/px24_dp">
+        android:paddingLeft="@dimen/px10_dp"
+        android:paddingRight="@dimen/px10_dp">
 
         <ImageView
             android:layout_width="@dimen/px36_dp"
@@ -115,6 +139,10 @@
             android:textColor="@color/white"
             android:textSize="@dimen/px39_sp" />
     </LinearLayout>
-
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/px100_dp"
+        android:layout_weight="1"
+        android:background="@color/color_afc0ee"/>
 
 </LinearLayout>

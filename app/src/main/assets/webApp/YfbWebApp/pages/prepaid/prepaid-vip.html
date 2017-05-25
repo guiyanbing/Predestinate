@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="stylesheet" href="../../css/mui.css">
+    <link rel="stylesheet" href="../../css/mui.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/app.css"/>
     <style>
     </style>
@@ -89,7 +89,7 @@
     .lunbo{
         position: relative;
         width: 100%;
-        height: 75px;
+        height: 0px;
         overflow: hidden;
         padding:0 15px;
         box-sizing: border-box;
@@ -160,7 +160,7 @@
                             <h5 style="color: white">立即支付</h5>
                         </button>
                         <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">购买Y币用户</p>
-                        <div class="lunbo">
+                        <div id="lunboYCoin" class="lunbo">
                             <ul id="buyer-lists1">
                             </ul>
                         </div>
@@ -200,7 +200,7 @@
                             <h5 style="color: white">立即支付</h5>
                         </button>
                         <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">热门特权</p>
-                        <div class="lunbo">
+                        <div class="lunbo" style="height: 75px">
                             <ul>
                                 <li style="color: #000000"><span style="color: #fd698c">[特权01]</span>可与所有女用户聊天</li>
                                 <li style="color: #000000"><span style="color: #fd698c">[特权02]</span>购买Y币额外增送10%</li>
@@ -208,7 +208,7 @@
                             </ul>
                         </div>
                         <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">已充值vip用户</p>
-                        <div class="lunbo">
+                        <div id="lunboVip"  class="lunbo">
                             <ul id="buyer-lists2">
                             </ul>
                         </div>
@@ -227,7 +227,7 @@
 <script src="../../lib/jxlib.all.js"></script>
 <script src="../../lib/url-config.js"></script>
 <script src="../../lib/defines.js"></script>
-<script src="../../src/prepaid/prepaid.js?v=5"></script>
+<script src="../../src/prepaid/prepaid.js"></script>
 <script type="text/javascript">
   var prePaid = null;
   window.onload = function () {
