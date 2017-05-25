@@ -282,10 +282,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.chat_title_phone://手机
-                UIShow.showCheckOtherInfoAct(this, whisperID);
+                UIShow.showCheckOtherContactAct(this, whisperID);
                 break;
             case R.id.chat_title_wx://微信
-                UIShow.showCheckOtherInfoAct(this, whisperID);
+                UIShow.showCheckOtherContactAct(this, whisperID);
                 break;
             case R.id.chat_title_yb://Y币
                 UIShow.showGoodsYCoinDlgOld(this);

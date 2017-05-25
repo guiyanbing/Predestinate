@@ -7,8 +7,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -30,15 +33,16 @@ import java.util.Map;
  * 自定义
  * Created by Kind on 2017/3/30.
  */
-public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterView.OnItemClickListener, ChatCustomSmileAdapter.DelCEmojiCallBack {
+public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterView.OnItemClickListener, ChatCustomSmileAdapter.DelCEmojiCallBack, PObserver {
 
     //保存表情资源的列表
     private static int pageResNum = 8;
     private boolean mOutDelClick = false;
-
     private List<SmileItem> items = null;
 
-    public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance) {
+    private TextView mOutDelTv;
+
+    public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance, TextView outDelTv) {
         super(context, chatInstance);
         if (items == null) {
             items = new ArrayList<>();
@@ -47,6 +51,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             items.add(0, new SmileItem("custom"));
         }
         this.items = items;
+        this.mOutDelTv = outDelTv;
         setContentView(R.layout.p1_chat_default_smile);
         initView();
     }
@@ -124,6 +129,10 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         if (id == -1) return;
         SmileItem item = (SmileItem) parent.getAdapter().getItem(position);
         if ("custom".equals(item.getPic())) {
+            if (mOutDelClick) {
+                mOutDelTv.setText("删除");
+                setDeleteClick(false);
+            }
             ImgSelectUtil.getInstance().pickPhotoGallery(context, new ImgSelectUtil.OnChooseCompleteListener() {
                 @Override
                 public void onComplete(String... path) {
@@ -182,5 +191,20 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                 initView();
             }
         });
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        if (null == value) {
+            return;
+        }
+        switch (key) {
+            case MsgType.MT_ADD_CUSTOM_SMILE:
+                uploadCFace((String) value);
+                break;
+
+            default:
+                break;
+        }
     }
 }

@@ -408,10 +408,7 @@ public class KeepAliveSocket {
             shutDownTime = System.currentTimeMillis();
             instantShutdown = instant;
             try {
-                if (instantShutdown) {
-                    readThread.interrupt();
-                    input.close();
-                }
+                input.close();
                 if (shutDownDone == false) {
                     PLogger.d("Socket read packet thread shutdown wait for done start");
                     shutDownCondition.await();

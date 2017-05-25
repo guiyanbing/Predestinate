@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 /**
  * item基类
@@ -147,7 +148,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     protected void setStatus(BaseMessage msgData) {
-        if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType()) {
+        if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType() || msgData.getLWhisperID() == MailMsgID.Greet_Msg.type) {
             item_last_status.setVisibility(View.GONE);
             return;
         }

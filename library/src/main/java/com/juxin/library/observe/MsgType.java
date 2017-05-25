@@ -117,6 +117,16 @@ public class MsgType {
      */
     public static final String MT_Chat_Can = "MT_Chat_Can";
 
+    /**
+     * 数据库初始化完成
+     */
+    public static final String MT_DB_Init_Ok = "MT_DB_Init_Ok";
+
+    /**
+     * 添加自定义表情
+     */
+    public static final String MT_ADD_CUSTOM_SMILE = "MT_ADD_CUSTOM_SMILE";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**

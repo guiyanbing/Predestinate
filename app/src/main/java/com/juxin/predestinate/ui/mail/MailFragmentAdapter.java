@@ -85,7 +85,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage = new BaseMessage();
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
-        baseMessage.setMailItemStyle(MailItemType.Geet_Item_Other.type);
+        baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("打招呼的人");
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
         baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");
@@ -99,7 +99,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public int getViewTypeCount() {
-        int TYPE_COUNT = 3;
+        int TYPE_COUNT = 2;
         return TYPE_COUNT;
     }
 
@@ -141,8 +141,9 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                         vh.customMailItem.showItemLetter(msgData);
                         break;
                     case Mail_Item_Other:
-                    case Geet_Item_Other:
                         vh.customMailItem.showItemAct(msgData);
+                        break;
+                    default:
                         break;
                 }
 
@@ -158,8 +159,9 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                             vh.customMailItem.showLetterGap();
                             break;
                         case Mail_Item_Other:
-                        case Geet_Item_Other:
                             vh.customMailItem.showActGap();
+                            break;
+                        default:
                             break;
                     }
                 }

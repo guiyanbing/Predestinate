@@ -80,7 +80,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
         iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
 
-        if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
+        if (channel != CenterConstant.USER_CHECK_INFO_OWN) {
             findViewById(R.id.ll_guanzhu).setOnClickListener(listener);
             if (userDetail != null) {
                 if (userDetail.isFollow())
