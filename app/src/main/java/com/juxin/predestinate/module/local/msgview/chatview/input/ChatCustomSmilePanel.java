@@ -44,6 +44,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     private List<SmileItem> items = null;
 
     private TextView mOutDelTv;
+    private ViewPager viewPager;
 
     public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance, TextView outDelTv) {
         super(context, chatInstance);
@@ -58,18 +59,22 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         setContentView(R.layout.p1_chat_default_smile);
         MsgMgr.getInstance().attach(this);
         initView();
+        initData();
     }
 
     public void setDeleteClick(boolean del) {
         mOutDelClick = del;
-        initView();
+        initData();
     }
 
-    public void initView() {
-        ViewPager vp = (ViewPager) findViewById(R.id.chat_panel_viewpager);
+    private void initView() {
+        viewPager = (ViewPager) findViewById(R.id.chat_panel_viewpager);
+    }
+
+    private void initData() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
-        vp.setAdapter(viewPagerAdapter);
-        initPointsView(vp, viewPagerAdapter.getCount());
+        viewPager.setAdapter(viewPagerAdapter);
+        initPointsView(viewPager, viewPagerAdapter.getCount(), true);
     }
 
     private List<View> getAllViews() {
@@ -108,7 +113,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @param index 对应页。
      * @return 指定页的资源信息。
      */
-    public List<SmileItem> getPageRes(int index) {
+    private List<SmileItem> getPageRes(int index) {
         if (items == null) {
             return null;
         }
@@ -190,12 +195,20 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         ModuleMgr.getCommonMgr().addCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (!response.isOk()) {
-                    PToast.showShort("表情添加失败");
-                    return;
+                try {
+                    if (!response.isOk()) {
+                        PToast.showShort("表情添加失败");
+                        return;
+                    }
+                    if (null == items) {
+                        return;
+                    }
+                    items.add(new SmileItem(url));
+                    PToast.showShort("表情添加成功");
+                    initData();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                items.add(new SmileItem(url));
-                initView();
             }
         });
     }
@@ -211,15 +224,20 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         ModuleMgr.getCommonMgr().delCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (!response.isOk()) {
-                    PToast.showShort("表情删除失败");
-                    return;
-                }
-                if (null != items) {
-                    PToast.showShort("表情删除成功");
+                try {
+                    if (!response.isOk()) {
+                        PToast.showShort("表情删除失败");
+                        return;
+                    }
+                    if (null == items) {
+                        return;
+                    }
                     items.remove(curPage * pageResNum + positon);
+                    PToast.showShort("表情删除成功");
+                    initData();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                initView();
             }
         });
     }
