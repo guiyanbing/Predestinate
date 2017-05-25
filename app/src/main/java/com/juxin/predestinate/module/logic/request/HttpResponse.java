@@ -50,7 +50,6 @@ public class HttpResponse extends BaseData {
      * @return 数据是否正常返回，该方法根据实际接口返回确定是否有效
      */
     public boolean isOk() {
-        if (TextUtils.isEmpty(status)) return false;
         return "ok".equals(status) || "success".equals(status);
     }
 
