@@ -123,7 +123,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
             vh = new ViewHolder();
             convertView = inflate(R.layout.p1_mail_fragment_item);
             vh.customMailItem = (CustomMailItem) convertView.findViewById(R.id.mail_item);
-
             vh.customMailItem.onCreateView();
             convertView.setTag(vh);
         } else {
@@ -149,10 +148,13 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                     default:
                         break;
                 }
-                int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                vh.customMailItem.measure(width, height);
-                setItemHeight(vh.customMailItem.getMeasuredHeight());
+                if (getItemHeight() == 0) {
+                    int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                    int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                    vh.customMailItem.measure(width, height);
+                    setItemHeight(vh.customMailItem.getMeasuredHeight());
+                }
+
                 if (tempViewType != ViewType) {
                     switch (mailItemType) {
                         case Mail_Item_Ordinary:

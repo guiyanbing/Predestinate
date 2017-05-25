@@ -1175,6 +1175,19 @@ public class UIShow {
         context.startActivity(intent);
     }
 
+
+    /**
+     * 打开头像更新界面 完成后跳转到主页
+     *
+     * @param context
+     */
+    public static void showNoHeadUploadActToMain(Context context) {
+        Intent intent = new Intent(context, UserNoHeadUploadAct.class);
+        intent.putExtra("type", 0);
+        context.startActivity(intent);
+    }
+
+
     /**
      * 打开打招呼的人界面
      *
