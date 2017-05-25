@@ -33,7 +33,7 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
             vh = (MyViewHolder) convertView.getTag();
         }
 
-        vh.letterMailItem.showData(getItem(position));
+        vh.letterMailItem.showData(getItem(position), false);
         return convertView;
     }
 
