@@ -111,6 +111,7 @@ public class ChatMgr implements ModuleBase {
                 messageRet.parseJson(contents);
                 if (!messageRet.isOk() || !messageRet.isS()) return;
 
+
                 Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
                 observable.subscribe(new Action1<Boolean>() {
                     @Override
@@ -119,11 +120,11 @@ public class ChatMgr implements ModuleBase {
                             if(dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR){
                                return;
                             }
-                            ModuleMgr.getChatListMgr().getWhisperList();
+                       //     ModuleMgr.getChatListMgr().getWhisperList();
                         }
                         dbCenter.getCenterFMessage().insertMsg(textMessage);
                     }
-                });
+                }).unsubscribe();
             }
 
             @Override
@@ -410,7 +411,7 @@ public class ChatMgr implements ModuleBase {
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if(ret != MessageConstant.ERROR){
-                ModuleMgr.getChatListMgr().getWhisperList();
+            //    ModuleMgr.getChatListMgr().getWhisperList();
             }
 //            updateLocalReadStatus(channelID, whisperID, last_msgid);
         }
@@ -677,7 +678,7 @@ public class ChatMgr implements ModuleBase {
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                     boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
                     if(ret){
-                        ModuleMgr.getChatListMgr().getWhisperList();
+                 //       ModuleMgr.getChatListMgr().getWhisperList();
                     }
                 }
             }

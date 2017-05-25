@@ -263,7 +263,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onUpdateWhisper(BaseMessage message) {
         if (!TextUtils.isEmpty(message.getWhisperID())) {
             PLogger.printObject("message====" + message);
-            ModuleMgr.getChatListMgr().getWhisperList();
+        //    ModuleMgr.getChatListMgr().getWhisperList();
         }
     }
 
