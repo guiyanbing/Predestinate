@@ -84,6 +84,7 @@ public class UserFragmentFunctionPanel extends BasePanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_vip_privilege: // 开通vip
+                    if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) return;
                     UIShow.showOpenVipActivity(getContext());
                     break;
 

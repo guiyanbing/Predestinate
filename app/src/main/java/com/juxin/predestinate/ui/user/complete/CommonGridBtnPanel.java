@@ -55,13 +55,21 @@ public class CommonGridBtnPanel extends BasePanel {
                 holder.icon = (ImageView) convertView.findViewById(R.id.icon);
                 holder.txt = (TextView) convertView.findViewById(R.id.txt);
                 holder.btn = (LinearLayout) convertView.findViewById(R.id.btn);
+                holder.price = (TextView) convertView.findViewById(R.id.price);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             final BTN_KEY item = getItem(position);
-            holder.icon.setImageResource(item.getIcon());
             holder.txt.setText(item.getTitle());
+
+            // 价格配置
+            if (item.getPrice() > 0) {
+                holder.price.setVisibility(View.VISIBLE);
+                holder.price.setText(getContext().getString(R.string.user_other_set_chat_price, item.getPrice()));
+            }
+
+            // 点击监听
             holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -70,6 +78,13 @@ public class CommonGridBtnPanel extends BasePanel {
                     }
                 }
             });
+
+            // 点击配置
+            holder.icon.setImageResource(item.getIcon());
+            if (!item.isEnable()) {
+                holder.icon.setEnabled(!item.isEnable());
+                holder.price.setTextColor(getResources().getColor(R.color.text_ciyao_gray));
+            }
             return convertView;
         }
 
@@ -77,21 +92,40 @@ public class CommonGridBtnPanel extends BasePanel {
             ImageView icon;
             TextView txt;
             LinearLayout btn;
+            TextView price;
         }
     }
 
     public enum BTN_KEY {
         IMG("图片", R.drawable.chat_input_grid_img_selector),           //发送图片按钮
-        VIDEO("视频聊天", R.drawable.chat_input_grid_video_selector),       //视频聊天
+        VIDEO("视频聊天", R.drawable.chat_input_grid_video_selector),    //视频聊天
         VOICE("语音聊天", R.drawable.chat_input_grid_voice_selector),    //语音聊天
         ;
 
         String title;
         int icon;
+        int price;              // 音视频价格
+        boolean enable = true;  // 是否可点击
 
         BTN_KEY(String title, int icon) {
             this.title = title;
             this.icon = icon;
+        }
+
+        public boolean isEnable() {
+            return enable;
+        }
+
+        public void setEnable(boolean enable) {
+            this.enable = enable;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
         }
 
         public String getTitle() {

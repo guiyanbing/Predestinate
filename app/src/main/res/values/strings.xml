@@ -317,7 +317,7 @@
     <string name="user_other_set_chat_video">为TA设置视频接听</string>
     <string name="user_other_set_chat_video_accept">接受对方视频</string>
     <string name="user_other_set_chat_voice_accept">接受对方语音</string>
-    <string name="user_other_set_chat_price">钻石/分</string>
+    <string name="user_other_set_chat_price">%d钻石/分</string>
     <string name="user_other_set_chat_stick">消息置顶</string>
     <string name="user_other_set_chat_disturb">消息免打扰</string>
     <string name="user_other_set_chat_clear">清空聊天记录</string>
@@ -329,6 +329,8 @@
     <string name="user_other_label">标签</string>
     <string name="user_other_label_often">常用标签</string>
     <string name="user_other_info_req_fail">资料请求出错！</string>
+    <string name="user_other_not_video_chat">对方未开启视频聊天</string>
+    <string name="user_other_not_voice_chat">对方未开启语音聊天</string>
     <string name="user_online">在线</string>
     <string name="user_secret_media_unlock">正在解锁</string>
     <string name="user_secret_media_lock_suc">解锁成功</string>

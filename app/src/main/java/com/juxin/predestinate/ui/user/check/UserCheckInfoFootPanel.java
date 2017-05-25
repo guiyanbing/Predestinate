@@ -29,11 +29,10 @@ public class UserCheckInfoFootPanel extends BasePanel {
     private final int channel;
     private UserDetail userDetail;  // 用户资料
 
-    private LinearLayout albumLayout, videoLayout, chatPriceLayout;
+    private LinearLayout albumLayout, videoLayout, chatLayout;
     private TextView tv_album, tv_video_price, tv_audio_price;
     private AlbumHorizontalPanel albumPanel, videoPanel;
     private ImageView iv_auth_photo, iv_auth_phone, iv_auth_video; // 认证
-    private boolean isAuthPhoto;
 
     public UserCheckInfoFootPanel(Context context, int channel, UserDetail userProfile) {
         super(context);
@@ -57,7 +56,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
         LinearLayout ll_secret_album = (LinearLayout) findViewById(R.id.ll_secret_album);
         LinearLayout ll_secret_video = (LinearLayout) findViewById(R.id.ll_secret_video);
         tv_album = (TextView) findViewById(R.id.album_num);
-        chatPriceLayout = (LinearLayout) findViewById(R.id.ll_chat_price);
+        chatLayout = (LinearLayout) findViewById(R.id.item_chat);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
         tv_audio_price = (TextView) findViewById(R.id.tv_audio_price);
         albumLayout = (LinearLayout) findViewById(R.id.album_item);
@@ -103,11 +102,15 @@ public class UserCheckInfoFootPanel extends BasePanel {
      * 认证状态
      */
     public void refreshAuth() {
-        boolean isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
+        boolean isAuthVideo = false;
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+            isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
+        }
 
-        iv_auth_photo.setVisibility(isAuthPhoto ? View.VISIBLE : View.GONE);
+        iv_auth_photo.setVisibility(userDetail.isVerifyIdcard() ? View.VISIBLE : View.GONE);
         iv_auth_phone.setVisibility(userDetail.isVerifyCellphone() ? View.VISIBLE : View.GONE);
         iv_auth_video.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
+        chatLayout.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
     }
 
     public void refreshView(UserDetail userDetail) {
@@ -124,8 +127,9 @@ public class UserCheckInfoFootPanel extends BasePanel {
      * 刷新聊天价格
      */
     public void refreshChatPrice(VideoConfig config) {
-        if (config == null) return;
-        chatPriceLayout.setVisibility(View.VISIBLE);
+        if (config == null || !config.isVerifyVideo()) return;
+
+        chatLayout.setVisibility(config.isVerifyVideo() ? View.VISIBLE : View.GONE);
         tv_video_price.setText(getContext().getString(R.string.user_info_chat_video, config.getVideoPrice()));
         tv_audio_price.setText(getContext().getString(R.string.user_info_chat_voice, config.getAudioPrice()));
         iv_auth_video.setVisibility(config.isVerifyVideo() ? View.VISIBLE : View.GONE);
