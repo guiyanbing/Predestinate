@@ -11,6 +11,7 @@ import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -893,5 +894,17 @@ public class TimeUtil extends TimeBaseUtil {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
+    }
+
+    public static String getCurrentTime(Long l) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date curDate = new Date(l);// 获取当前时间
+        return formatter.format(curDate);
+    }
+
+    public static String formatTimeLong(Long l) {
+        DecimalFormat f = new DecimalFormat();
+        f.applyPattern("00");
+        return f.format(l / 60) + ':' + f.format(l % 60);
     }
 }
