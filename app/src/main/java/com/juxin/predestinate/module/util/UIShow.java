@@ -242,9 +242,11 @@ public class UIShow {
 
     /**
      * 打开资料完善页
+     * @param gender 性别
      */
-    public static void showUserInfoCompleteAct(Context activity) {
+    public static void showUserInfoCompleteAct(Context activity,int gender) {
         Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
+        intent.putExtra("gender",gender);
         activity.startActivity(intent);
     }
 
