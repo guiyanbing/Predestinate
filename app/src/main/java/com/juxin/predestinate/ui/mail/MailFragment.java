@@ -246,8 +246,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (mailFragmentAdapter.mailItemOrdinarySize() > 0) {
             listMail.smoothOpenChooseView();
         } else {
-//            mAAMainAct.main_top_left_bt.setVisibility(View.GONE);
-//            mAAMainAct.main_top_left.setVisibility(View.GONE);
+            setTitleLeftContainerRemoveAll();
             PToast.showCenterShort("没有可编辑选项");
         }
     }

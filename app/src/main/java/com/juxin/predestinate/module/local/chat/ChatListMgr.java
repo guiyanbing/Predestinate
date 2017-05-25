@@ -170,7 +170,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void deleteBatchMessage(List<BaseMessage> messageList) {
         for (BaseMessage temp : messageList) {
-            deleteMessage(temp.getLWhisperID());
+            dbCenter.deleteMessage(temp.getLWhisperID());
         }
         getWhisperList();
     }
