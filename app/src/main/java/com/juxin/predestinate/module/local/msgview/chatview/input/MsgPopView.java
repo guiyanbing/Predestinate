@@ -56,7 +56,7 @@ public class MsgPopView {
             int[] location = new int[2];
             view.getLocationOnScreen(location);
             // 50 + 34 + 30 标题、（关注TA、查看手机）、滚动条
-            int topH = PSP.getInstance().getInt(Constant.PRIVATE_CHAT_TOP_H, UIUtil.dip2px(mContext, 114)) + UIUtil.getStatusHeight((PrivateChatAct) mContext);
+            int topH = PSP.getInstance().getInt(Constant.PRIVATE_CHAT_TOP_H, UIUtil.dip2px(mContext, 114));
             int x = (location[0] + view.getWidth() / 2) - mPopW / 2;
             int y = location[1] - mPopH;
             y = y < topH ? topH : y;
