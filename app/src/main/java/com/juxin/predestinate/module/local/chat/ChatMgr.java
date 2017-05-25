@@ -29,6 +29,9 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -700,6 +703,36 @@ public class ChatMgr implements ModuleBase {
                 }
                 return;
             }
+        }
+    }
+
+    //离线消息
+    public void offlineMessage(String str){
+        try {
+            JSONObject tmp = new JSONObject(str);
+            long from_id = tmp.optLong("fid");//发送者ID
+            int type = tmp.optInt("mtp");
+            long msgID = tmp.optLong("d");
+            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
+            BaseMessage message;
+            if (messageType != null) {
+                message = messageType.msgClass.newInstance();
+                message.setSave(true);
+            } else {
+                message = new BaseMessage();
+                message.setSave(false);
+            }
+            message.parseJson(tmp.toString());
+            message.setSendID(from_id);
+            message.setWhisperID(String.valueOf(from_id));
+            message.setMsgID(msgID);
+            message.setDataSource(MessageConstant.THREE);
+            message.setType(type);
+            message.setChannelID(null);
+
+            ModuleMgr.getChatMgr().onReceiving(message);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
