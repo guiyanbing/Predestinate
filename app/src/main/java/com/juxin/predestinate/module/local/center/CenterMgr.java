@@ -99,8 +99,6 @@ public class CenterMgr implements ModuleBase, PObserver {
         getparam.put("cellPhone", mobile);
         getparam.put("sign",App.context.getResources().getString(R.string.app_name));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode,getparam,complete);
-//        getparam.put("type", "1");
-//        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null, getparam, RequestParam.CacheType.CT_Cache_Url, true, complete);
     }
 
 
