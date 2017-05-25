@@ -41,6 +41,7 @@ import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.discover.MyDefriendAct;
 import com.juxin.predestinate.ui.discover.MyFriendsAct;
+import com.juxin.predestinate.ui.discover.SayHelloUserAct;
 import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
 import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
@@ -243,11 +244,12 @@ public class UIShow {
 
     /**
      * 打开资料完善页
+     *
      * @param gender 性别
      */
-    public static void showUserInfoCompleteAct(Context activity,int gender) {
+    public static void showUserInfoCompleteAct(Context activity, int gender) {
         Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
-        intent.putExtra("gender",gender);
+        intent.putExtra("gender", gender);
         activity.startActivity(intent);
     }
 
@@ -1163,6 +1165,15 @@ public class UIShow {
         context.startActivity(intent);
     }
 
+    /**
+     * 打开打招呼的人界面
+     * @param context
+     */
+    public static void showSayHelloUserAct(Context context) {
+        Intent intent = new Intent(context, SayHelloUserAct.class);
+        context.startActivity(intent);
+    }
+
 
     //============================发现 end =============================\\
 
@@ -1172,7 +1183,7 @@ public class UIShow {
      * 普通送礼钻石充值弹框
      */
     public static void showGoodsDiamondDialog(Context context) {
-       showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
+        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
     }
 
     /**

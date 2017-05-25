@@ -7,13 +7,8 @@
 
     <include layout="@layout/base_title" />
 
-    <com.juxin.predestinate.module.logic.swipemenu.SwipeListView
-        android:id="@+id/say_hello_user_list"
+    <com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView
+        android:id="@+id/say_hello_users_list"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:cacheColorHint="@color/transparent"
-        android:divider="@null"
-        android:dividerHeight="0dip"
-        android:scrollbars="none" />
+        android:layout_height="match_parent" />
 </LinearLayout>
