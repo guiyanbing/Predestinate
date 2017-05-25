@@ -16,7 +16,7 @@ import com.juxin.predestinate.R;
 public class PointsView extends LinearLayout implements ViewPager.OnPageChangeListener{
 
     private int totalNum = 0;
-    private int selectIndex = 0;
+    public int selectIndex = 0;
     private int layoutId = R.layout.common_point;
 
     public PointsView(Context context) {
