@@ -250,7 +250,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
             onVoiceClickContent(msg);
         } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
-            onImgClickContent(msg);
+            onImgClickContent(msg, longClick);
         } else {
 
         }
@@ -258,7 +258,11 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         return true;
     }
 
-    private void onImgClickContent(CommonMessage msg) {
+    private void onImgClickContent(CommonMessage msg, boolean longClick) {
+        if(longClick){//长按图片
+            //TODO
+            return;
+        }
         String url = msg.getLocalImg();
 
         if (TextUtils.isEmpty(url)) {

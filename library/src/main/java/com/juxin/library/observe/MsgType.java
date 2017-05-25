@@ -117,6 +117,11 @@ public class MsgType {
      */
     public static final String MT_Chat_Can = "MT_Chat_Can";
 
+    /**
+     * 数据库初始化完成
+     */
+    public static final String MT_DB_Init_Ok = "MT_DB_Init_Ok";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**

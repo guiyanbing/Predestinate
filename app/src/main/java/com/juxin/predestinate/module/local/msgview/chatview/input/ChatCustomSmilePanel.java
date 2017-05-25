@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
@@ -35,10 +36,11 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     //保存表情资源的列表
     private static int pageResNum = 8;
     private boolean mOutDelClick = false;
-
     private List<SmileItem> items = null;
 
-    public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance) {
+    private TextView mOutDelTv;
+
+    public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance, TextView outDelTv) {
         super(context, chatInstance);
         if (items == null) {
             items = new ArrayList<>();
@@ -47,6 +49,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             items.add(0, new SmileItem("custom"));
         }
         this.items = items;
+        this.mOutDelTv = outDelTv;
         setContentView(R.layout.p1_chat_default_smile);
         initView();
     }
@@ -124,6 +127,10 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         if (id == -1) return;
         SmileItem item = (SmileItem) parent.getAdapter().getItem(position);
         if ("custom".equals(item.getPic())) {
+            if(mOutDelClick) {
+                mOutDelTv.setText("删除");
+                setDeleteClick(false);
+            }
             ImgSelectUtil.getInstance().pickPhotoGallery(context, new ImgSelectUtil.OnChooseCompleteListener() {
                 @Override
                 public void onComplete(String... path) {

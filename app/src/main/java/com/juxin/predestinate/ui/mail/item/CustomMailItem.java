@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;

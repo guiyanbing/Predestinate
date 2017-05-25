@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,20 +65,7 @@ public class CommonMessage extends BaseMessage{
         this.setType(BaseMessageType.common.getMsgType());
     }
 
-    /**
-     * 转换类 fmessage
-     */
-    public CommonMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
-        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
-        parseJson(getJsonStr());
-    }
 
-    public CommonMessage(long id, String userID, String infoJson, int type, int kfID,
-                       int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
-        parseJson(getJsonStr());
-    }
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -91,22 +77,8 @@ public class CommonMessage extends BaseMessage{
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setImg(object.optString("img"));
         this.setRu(object.optInt("ru"));
-        if(!object.isNull("voice")){
-            JSONObject voiceJSON = object.optJSONObject("voice");
-            this.setVoiceUrl(voiceJSON.optString("url"));
-            this.setVoiceLen(voiceJSON.optInt("len"));
-            this.setVoiceUserid(voiceJSON.optLong("voice_userid"));
-        }
 
-        if(!object.isNull("video")){
-            JSONObject videoJSON = object.optJSONObject("video");
-            this.setVideoUrl(videoJSON.optString("url"));
-            this.setVideoLen(videoJSON.optInt("len"));
-            this.setVideoSize(videoJSON.optInt("size"));
-            this.setVideoThumb(videoJSON.optString("thumb"));
-            this.setVideoWidth(videoJSON.optInt("width"));
-            this.setVideoHeight(videoJSON.optInt("height"));
-        }
+        parseCommonJson(object);
         return this;
     }
 
@@ -266,4 +238,49 @@ public class CommonMessage extends BaseMessage{
     public void setVideoHeight(int videoHeight) {
         this.videoHeight = videoHeight;
     }
+
+
+    /**
+     * 转换类 fmessage
+     */
+    public CommonMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                         int type, int status, int fStatus, long time, String jsonStr) {
+        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        convertJSON(getJsonStr());
+    }
+
+    public CommonMessage(long id, String userID, String infoJson, int type, int kfID,
+                         int status, int ru, long time, String content, int num) {
+        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+        convertJSON(getJsonStr());
+    }
+
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        parseCommonJson(object);
+    }
+
+    private void parseCommonJson(JSONObject object){
+        if(!object.isNull("voice")){
+            JSONObject voiceJSON = object.optJSONObject("voice");
+            this.setVoiceUrl(voiceJSON.optString("url"));
+            this.setVoiceLen(voiceJSON.optInt("len"));
+            this.setVoiceUserid(voiceJSON.optLong("voice_userid"));
+        }
+
+        if(!object.isNull("video")){
+            JSONObject videoJSON = object.optJSONObject("video");
+            this.setVideoUrl(videoJSON.optString("url"));
+            this.setVideoLen(videoJSON.optInt("len"));
+            this.setVideoSize(videoJSON.optInt("size"));
+            this.setVideoThumb(videoJSON.optString("thumb"));
+            this.setVideoWidth(videoJSON.optInt("width"));
+            this.setVideoHeight(videoJSON.optInt("height"));
+        }
+    }
+
 }

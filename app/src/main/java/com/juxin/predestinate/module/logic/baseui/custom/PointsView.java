@@ -40,7 +40,7 @@ public class PointsView extends LinearLayout implements ViewPager.OnPageChangeLi
         CustomFrameLayout view = null;
 
         clearFocus();
-        setVisibility(totalNum > 1 ? View.VISIBLE : View.INVISIBLE);
+        setVisibility(totalNum >= 1 ? View.VISIBLE : View.INVISIBLE);
         for (int i = 0; i < totalNum; ++i) {
             view = (CustomFrameLayout) inflate(getContext(), layoutId, null);
             view.showOfIndex(0);
