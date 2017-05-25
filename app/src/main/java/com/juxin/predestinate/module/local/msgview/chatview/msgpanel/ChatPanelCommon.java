@@ -24,6 +24,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
+import com.juxin.predestinate.module.local.msgview.chatview.input.MsgPopView;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.video.VideoPlayDialog;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -156,12 +157,19 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String localVoiceUrl = msg.getLocalVoiceUrl();
         String img = msg.getImg();
         String localImg = msg.getLocalImg();
+        PLogger.printObject("图片消==" + msg.toString());
         if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
+
             onVideoDisplayContent(msg);
+
         } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
+
             onVoiceDisplayContent(msg);
+
         } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
+
             onImgDisplayContent(msg);
+
         } else {
             onTextDisplayContent(msg);
         }
@@ -207,7 +215,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         }
 
         PLogger.d("url====" + url);
-        ImageLoader.loadRoundCorners(getContext(), url, 6, chat_item_img);
+        ImageLoader.loadRoundCorners(getContext(), url, chat_item_img);
 
 //        if (FileUtil.isURL(url)) {
 //            MMLog.e("Img===", url);
@@ -260,7 +268,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
     private void onImgClickContent(CommonMessage msg, boolean longClick) {
         if(longClick){//长按图片
-            //TODO
+            new MsgPopView(context, msg.getImg()).show(contentView);
             return;
         }
         String url = msg.getLocalImg();

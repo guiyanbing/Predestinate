@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import java.lang.Thread.State;
@@ -143,24 +144,9 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     public void onRequestComplete(HttpResponse response) {
         LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqReqVerifyCode) {
-            PhoneVerifyResult result = (PhoneVerifyResult) response.getBaseData();
             if (!response.isOk()) {
-                switch (result.getErrno()) {
-                    case 0:
-                        PToast.showLong(getResources().getString(R.string.toast_server_busy));
-                        bt_send_code.setEnabled(true);
-                        break;
-                    case 1:
-                        PToast.showLong(getResources().getString(R.string.toast_phone_verified));
-                        this.finish();
-                        break;
-                    case 2:
-                        PToast.showLong(getResources().getString(R.string.toast_phone_used));
-                        bt_send_code.setEnabled(true);
-                        break;
-                    default:
-                        break;
-                }
+                PToast.showLong(CommonUtil.getErrorMsg(response.getMsg()));
+                bt_send_code.setEnabled(true);
                 return;
             }
             et_code.requestFocus();
@@ -173,7 +159,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         } else if (response.getUrlParam() == UrlParam.mobileAuth)
         {
             if (!response.isOk()) {
-                PToast.showLong(getResources().getString(R.string.toast_code_error));
+                PToast.showLong(CommonUtil.getErrorMsg(response.getMsg()));
                 return;
             }
             PToast.showShort(getResources().getString(R.string.toast_mobile_authok));

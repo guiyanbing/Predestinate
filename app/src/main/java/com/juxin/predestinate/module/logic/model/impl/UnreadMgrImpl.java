@@ -101,7 +101,7 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
                     ModuleMgr.getChatListMgr().getAppComponent().inject(this);
 
                     // 初始化角标数据
-                    Observable<String> observable = dbCenter.queryUnRead(getStoreTag());
+                    Observable<String> observable = dbCenter.getCenterFUnRead().queryUnRead(getStoreTag());
                     observable.subscribe(new Action1<String>() {
                         @Override
                         public void call(String storeString) {

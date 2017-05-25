@@ -150,8 +150,9 @@ public class DBCenterFUnRead {
         return mDatabase.createQuery(FUnRead.FUNREAD_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, String>() {
             @Override
             public String call(SqlBrite.Query query) {
-                Cursor cursor = query.run();
+                Cursor cursor = null;
                 try {
+                    cursor = query.run();
                     if (cursor == null || !cursor.moveToNext()) return null;
 
                     return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);

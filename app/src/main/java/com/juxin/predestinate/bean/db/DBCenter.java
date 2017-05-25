@@ -37,6 +37,11 @@ public class DBCenter {
 
     /******************** FUnRead **************************/
 
+
+    public DBCenterFUnRead getCenterFUnRead() {
+        return centerFUnRead;
+    }
+
     public long insertUnRead(String key, String content){
         if (TextUtils.isEmpty(key)) return DBConstant.ERROR;
         return centerFUnRead.storageData(key, content);
