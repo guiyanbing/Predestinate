@@ -130,7 +130,8 @@ var CMD = {
   getBindPhoneNum: 'get_phone_number',
   refreshUserDetail: 'refresh_userdetail',
   showLoading: 'show_data_loading',
-  hideLoading: 'hide_data_loading'
+  hideLoading: 'hide_data_loading',
+  getAgentUrl: 'get_agent_url'
 }; /**
     * Created by chuhaoyuan on 2016/11/2.
     */
@@ -318,6 +319,10 @@ var PlatformHelper = function PlatformHelper() {
     _executeCMD(CMD.getBindPhoneNum, null, cb);
   };
 
+  that.getAgentUrl = function (urlType, cb) {
+    _executeCMD(CMD.getAgentUrl, { type: urlType }, cb);
+  };
+
   that.jumpToUserInfo = function (target_uid) {
     console.log('jump to userInfo', target_uid);
     _executeCMD(CMD.jumpToUserInfo, {
@@ -411,6 +416,32 @@ var PlatformHelper = function PlatformHelper() {
       that.checkError(resp);
       cb(resp);
     });
+  };
+
+  that.requestUrlMaps = {};
+
+  that.normalRequestNoUrl = function (method, urlType, urlMethod, params, body, cb) {
+    var url = that.requestUrlMaps[urlType];
+    if (url === undefined) {
+      that.getAgentUrl(urlType, function (data) {
+        that.requestUrlMaps[urlType] = data.url;
+        that.normalRequest(method, data.url + urlMethod, params, body, cb);
+      });
+    } else {
+      that.normalRequest(method, url + urlMethod, params, body, cb);
+    }
+  };
+
+  that.safeRequestNoUrl = function (method, urlType, urlMethod, params, body, cb) {
+    var url = that.requestUrlMaps[urlType];
+    if (url === undefined) {
+      that.getAgentUrl(urlType, function (data) {
+        that.requestUrlMaps[urlType] = data.url;
+        that.safeRequest(method, data.url + urlMethod, params, body, cb);
+      });
+    } else {
+      that.safeRequest(method, url + urlMethod, params, body, cb);
+    }
   };
 
   that.changeWindowTitle = function (title) {

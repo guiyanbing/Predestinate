@@ -8,6 +8,13 @@ web.urlConfig = {
   // agentURL : "http://api2.app.yuanfenba.net/", //正式服
 };
 
+web.urlType = {
+  Php: 'php',
+  Go: 'go',
+  Pay: 'pay',
+  Image: 'image'
+}
+
 web.urlMethod = {
   MostSendList: 'gift/mostsendlist',
   MostGetList: 'gift/mostgetlist',
