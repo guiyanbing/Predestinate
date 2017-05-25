@@ -2,6 +2,7 @@ package com.juxin.predestinate.bean.center.user.light;
 
 import android.os.Parcel;
 import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
@@ -30,12 +31,12 @@ public class UserInfoLightweight extends UserBasic {
     private String signname;    // 签名
 
     private String distance; //距离
-    private boolean video_available = false;
-    private boolean audio_available = false;
-    private boolean video_busy = false;
-    private boolean isSayHello = false;
+    private boolean video_available = false; //可否视频
+    private boolean audio_available = false; //可否语音
+    private boolean video_busy = false; //是否通话中
+    private boolean isSayHello = false; //是否打过招呼
 
-    private int heartNum = 0;
+    private int heartNum = 0; //亲密度
 
     private int kf_id = 0; //不为0就是机器人
     private int top = 0;//排行榜排名
@@ -45,6 +46,8 @@ public class UserInfoLightweight extends UserBasic {
      * 暂时 不用该字段 用用户性别进行判断
      */
     private int topType = 0;
+
+    private String last_onLine;
 
     public UserInfoLightweight() {
     }
@@ -73,23 +76,34 @@ public class UserInfoLightweight extends UserBasic {
         this.setInfoJson(jsonResult);
         JSONObject jsonObject = getJsonObject(jsonResult);
         this.setAlias(jsonObject.optString("alias"));
-        this.setVip(jsonObject.optBoolean("is_vip"));
         this.setAuth(jsonObject.optBoolean("is_auth"));
         this.setSignname(jsonObject.optString("signname"));
         this.setDistance(jsonObject.optString("distance"));
         this.setVideo_busy(jsonObject.optInt("video_busy") == 1);
-        this.setVideo_available(jsonObject.optInt("video_available") == 1);
-        this.setAudio_available(jsonObject.optInt("audio_available") == 1);
+        if (!jsonObject.isNull("video_available")) {
+            this.setVideo_available(jsonObject.optInt("video_available") == 1);
+        } else {
+            this.setVideo_available(jsonObject.optInt("videochat") == 1);
+        }
+        if (!jsonObject.isNull("audio_available")) {
+            this.setAudio_available(jsonObject.optInt("audio_available") == 1);
+        } else {
+            this.setAudio_available(jsonObject.optInt("audiochat") == 1);
+        }
+
         this.setSayHello(jsonObject.optBoolean("isSayHello"));
-        this.setHeartNum(jsonObject.optInt("heartnum"));
+        this.setHeartNum(jsonObject.optInt("diamond"));
         this.setKf_id(jsonObject.optInt("kf_id"));
         this.setTop(jsonObject.optInt("top"));
         this.setTopType(jsonObject.optInt("toptype"));
         this.setPhotoNum(jsonObject.optInt("photoNum"));
+        this.setGroup(jsonObject.optInt("group"));
+        this.setOnline(jsonObject.optBoolean("is_online"));
+        this.setLast_onLine(jsonObject.optString("last_online"));
     }
 
     public void parseJson(JSONObject jsonObject) {
-        if(jsonObject == null) return;
+        if (jsonObject == null) return;
 
         this.setOk(true);
         this.setInfoJson(jsonObject.toString());
@@ -283,6 +297,14 @@ public class UserInfoLightweight extends UserBasic {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public String getLast_onLine() {
+        return last_onLine;
+    }
+
+    public void setLast_onLine(String last_onLine) {
+        this.last_onLine = last_onLine;
     }
 
     @Override
