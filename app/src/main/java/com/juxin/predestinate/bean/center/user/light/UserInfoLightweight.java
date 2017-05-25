@@ -21,6 +21,7 @@ public class UserInfoLightweight extends UserBasic {
     private int channel_uid;
     private int group;
     private boolean isOnline;
+    private int photoNum;
 
 
     private String alias;       // 别名
@@ -84,6 +85,7 @@ public class UserInfoLightweight extends UserBasic {
         this.setKf_id(jsonObject.optInt("kf_id"));
         this.setTop(jsonObject.optInt("top"));
         this.setTopType(jsonObject.optInt("toptype"));
+        this.setPhotoNum(jsonObject.optInt("photoNum"));
     }
 
     public void parseJson(JSONObject jsonObject) {
@@ -286,6 +288,14 @@ public class UserInfoLightweight extends UserBasic {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public int getPhotoNum() {
+        return photoNum;
+    }
+
+    public void setPhotoNum(int photoNum) {
+        this.photoNum = photoNum;
     }
 
     @Override
