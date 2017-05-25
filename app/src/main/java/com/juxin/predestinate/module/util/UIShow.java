@@ -318,22 +318,29 @@ public class UIShow {
      * 打开TA人资料查看页
      */
     public static void showCheckOtherInfoAct(final Context context, UserDetail userProfile) {
-        showCheckOtherInfoAct(context, userProfile.getUid(), userProfile);
+        showCheckOtherInfoAct(context, userProfile.getUid(), CenterConstant.USER_CHECK_INFO_OTHER, userProfile);
     }
 
     /**
      * 打开TA人资料查看页
      */
     public static void showCheckOtherInfoAct(final Context context, long uid) {
-        showCheckOtherInfoAct(context, uid, null);
+        showCheckOtherInfoAct(context, uid, CenterConstant.USER_CHECK_INFO_OTHER, null);
+    }
+
+    /**
+     * 打开TA人资料查看页: 查看联系方式
+     */
+    public static void showCheckOtherContactAct(final Context context, long uid) {
+        showCheckOtherInfoAct(context, uid, CenterConstant.USER_CHECK_CONNECT_OTHER, null);
     }
 
     /**
      * 打开TA人资料查看页
      */
-    private static void showCheckOtherInfoAct(final Context context, long uid, UserDetail userProfile) {
+    private static void showCheckOtherInfoAct(final Context context, long uid, final int channel, UserDetail userProfile) {
         if (userProfile != null) {
-            skipCheckOtherInfoAct(context, userProfile);
+            skipCheckOtherInfoAct(context, channel, userProfile);
             return;
         }
 
@@ -352,14 +359,14 @@ public class UIShow {
                         UserDetail userProfile = (UserDetail) response.getBaseData();
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
-                        skipCheckOtherInfoAct(context, userProfile);
+                        skipCheckOtherInfoAct(context, channel, userProfile);
                     }
                 });
             }
         });
     }
 
-    private static void skipCheckOtherInfoAct(Context context, UserDetail userProfile) {
+    private static void skipCheckOtherInfoAct(Context context, int channel, UserDetail userProfile) {
         if (userProfile == null) return;
 
         if (!userProfile.isUserNormal()) {
@@ -368,7 +375,7 @@ public class UIShow {
         }
 
         Intent intent = new Intent(context, UserCheckInfoAct.class);
-        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, channel);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
         context.startActivity(intent);
     }
