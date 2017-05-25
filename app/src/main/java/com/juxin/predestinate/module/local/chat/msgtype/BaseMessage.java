@@ -542,6 +542,17 @@ public class BaseMessage implements IBaseMessage {
         this.setJsonStr(content);
     }
 
+
+    /**
+     * 转换JSON 转子类的时候用
+     *
+     * @param jsonStr
+     */
+    public void convertJSON(String jsonStr) {
+        if (TextUtils.isEmpty(jsonStr)) return;
+        this.setJsonStr(jsonStr);
+    }
+
     /**
      * 解析
      *
@@ -580,7 +591,11 @@ public class BaseMessage implements IBaseMessage {
             case wantGiftTwo:
                 message = new GiftMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
                 break;
+            case video:
+                message = new VideoMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                break;
             default:
+                message = new BaseMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
                 break;
         }
         return message;
@@ -608,6 +623,10 @@ public class BaseMessage implements IBaseMessage {
             case gift:
             case wantGiftTwo:
                 message = new GiftMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
+                        type, status, fStatus, time, jsonStr);
+                break;
+            case video:
+                message = new VideoMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
                         type, status, fStatus, time, jsonStr);
                 break;
             default:

@@ -18,7 +18,6 @@ public class GiftMessage extends BaseMessage {
     private int giftCount;
     private long giftLogID;
 
-
     public GiftMessage(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
         super(channelID, whisperID);
         this.setGiftID(giftID);
@@ -36,16 +35,7 @@ public class GiftMessage extends BaseMessage {
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setRu(object.optInt("ru"));
 
-        if(getType() == 20){
-            this.setGiftID(object.optInt("gift_id"));
-        }else {//10
-            if(!object.isNull("gift")){
-                JSONObject giftJSON = object.optJSONObject("gift");
-                this.setGiftCount(giftJSON.optInt("count"));
-                this.setGiftID(giftJSON.optInt("gift_id"));
-                this.setGiftLogID(giftJSON.optLong("gift_log_id"));
-            }
-        }
+        parseCommonJson(object);
         return this;
     }
 
@@ -58,7 +48,7 @@ public class GiftMessage extends BaseMessage {
             json.put("mt", message.getTime());
             json.put("d", message.getMsgID());
 
-            if(!TextUtils.isEmpty(message.getMsgDesc())){
+            if (!TextUtils.isEmpty(message.getMsgDesc())) {
                 json.put("mct", message.getMsgDesc());
             }
 
@@ -76,7 +66,7 @@ public class GiftMessage extends BaseMessage {
     }
 
     public GiftMessage(long id, String userID, String infoJson, int type, int kfID,
-                         int status, int ru, long time, String content, int num) {
+                       int status, int ru, long time, String content, int num) {
         super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
         parseJson(getJsonStr());
     }
@@ -85,7 +75,7 @@ public class GiftMessage extends BaseMessage {
      * 转换类 fmessage
      */
     public GiftMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                         int type, int status, int fStatus, long time, String jsonStr) {
+                       int type, int status, int fStatus, long time, String jsonStr) {
         super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         parseJson(getJsonStr());
     }
@@ -112,5 +102,28 @@ public class GiftMessage extends BaseMessage {
 
     public void setGiftLogID(long giftLogID) {
         this.giftLogID = giftLogID;
+    }
+
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setMsgDesc(object.optString("mct")); //消息内容
+
+        parseCommonJson(object);
+    }
+
+    private void parseCommonJson(JSONObject object) {
+        if (getType() == 20) {
+            this.setGiftID(object.optInt("gift_id"));
+        } else {//10
+            if (!object.isNull("gift")) {
+                JSONObject giftJSON = object.optJSONObject("gift");
+                this.setGiftCount(giftJSON.optInt("count"));
+                this.setGiftID(giftJSON.optInt("gift_id"));
+                this.setGiftLogID(giftJSON.optLong("gift_log_id"));
+            }
+        }
     }
 }
