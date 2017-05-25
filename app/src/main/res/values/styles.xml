@@ -390,7 +390,7 @@
     </style>
     <!--手机号输入框-->
     <style name="editText_input_phone" parent="editText_input">
-        <item name="android:maxLength">16</item>
+        <item name="android:maxLength">11</item>
         <item name="android:inputType">phone</item>
         <item name="android:digits">@string/phone_digits</item>
     </style>
