@@ -9,7 +9,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.FMessage;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.List;
@@ -147,7 +147,7 @@ public class CacheCenterFProfile {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     /**

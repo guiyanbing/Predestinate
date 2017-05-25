@@ -18,6 +18,10 @@ public class GiftMessage extends BaseMessage {
     private int giftCount;
     private long giftLogID;
 
+    public GiftMessage() {
+        super();
+    }
+
     public GiftMessage(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
         super(channelID, whisperID);
         this.setGiftID(giftID);

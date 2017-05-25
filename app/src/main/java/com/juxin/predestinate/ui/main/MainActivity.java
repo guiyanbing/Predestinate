@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         plaza_layout.setOnClickListener(this);
         user_layout.setOnClickListener(this);
 
-        mail_num = (BadgeView) findViewById(R.id.mail_num);
+        mail_num = (BadgeView) findViewById(R.id.mail_number);
         layout_main_bottom = findViewById(R.id.layout_main_bottom);
     }
 

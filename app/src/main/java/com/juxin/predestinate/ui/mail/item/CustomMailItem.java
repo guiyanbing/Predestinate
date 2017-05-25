@@ -69,9 +69,9 @@ public class CustomMailItem extends LinearLayout {
     /**
      * 显示私聊类型
      */
-    public void showItemLetter(BaseMessage msgData) {
+    public void showItemLetter(BaseMessage msgData, boolean isSlideLoading) {
         customFrameLayout.show(R.id.chat_fragment_item_letter);
-        customLetterMailItem.showData(msgData);
+        customLetterMailItem.showData(msgData, isSlideLoading);
     }
 
     public void showLetterGap() {
@@ -94,9 +94,9 @@ public class CustomMailItem extends LinearLayout {
     /**
      * 显示私聊类型
      */
-    public void showItemAct(BaseMessage msgData) {
+    public void showItemAct(BaseMessage msgData, boolean isSlideLoading) {
         customFrameLayout.show(R.id.chat_fragment_item_act);
-        customActMailItem.showData(msgData);
+        customActMailItem.showData(msgData, isSlideLoading);
     }
 
     public void showActGap() {

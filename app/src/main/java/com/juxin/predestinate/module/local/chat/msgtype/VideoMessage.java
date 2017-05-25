@@ -16,6 +16,10 @@ public class VideoMessage extends BaseMessage {
     private long videoVcTalkTime;//聊天耗时 单位秒 只在  vc_tp=4挂断时有效
     private String vc_channel_key;
 
+    public VideoMessage() {
+        super();
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);

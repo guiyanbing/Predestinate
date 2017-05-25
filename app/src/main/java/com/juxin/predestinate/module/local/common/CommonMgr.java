@@ -1040,15 +1040,8 @@ public class CommonMgr implements ModuleBase {
     }
 
     public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
-        Long[] temp = new Long[uids.size()];
-        for (int i = 0; i < uids.size(); i++) {
-            temp[i] = uids.get(i);
-        }
-
         HashMap<String, Object> postParms = new HashMap<>();
-        postParms.put("uids", temp);
+        postParms.put("uids", uids.toArray(new Long[uids.size()]));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserInfoSummary, postParms, complete);
     }
-
-
 }

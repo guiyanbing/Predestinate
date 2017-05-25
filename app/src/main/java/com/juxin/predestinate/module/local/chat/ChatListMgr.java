@@ -13,9 +13,9 @@ import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
@@ -48,7 +48,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     @Override
-    public void release() {}
+    public void release() {
+    }
 
     public int getUnreadNumber() {
         return unreadNum;
@@ -77,7 +78,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     /**
-     * 好友列表
+     * 陌生人列表
+     *
      * @return
      */
     public List<BaseMessage> getGeetList() {
@@ -94,19 +96,16 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                PLogger.printObject("tmp===dd=" + tmp.getRu());
-                if(tmp.isRu()){
+                if (tmp.isRu()) {
                     msgList.add(tmp);
-                }else {
+                } else {
                     greetList.add(tmp);
                 }
                 unreadNum += tmp.getNum();
             }
         }
-            unreadNum += getFollowNum();//关注
-
+        unreadNum += getFollowNum();//关注
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-        // updateBasicUserInfo();
     }
 
     /**
@@ -131,6 +130,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 关注
+     *
      * @return
      */
     public int getFollowNum() {
@@ -163,7 +163,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
 
-
     /**
      * 批量删除消息
      *
@@ -178,7 +177,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public long deleteMessage(long userID) {
         long ret = dbCenter.deleteMessage(userID);
-        if(ret != DBConstant.ERROR){
+        if (ret != MessageConstant.ERROR) {
             getWhisperList();
         }
         return ret;
@@ -192,7 +191,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public long deleteFmessage(long userID) {
         long ret = dbCenter.deleteFmessage(userID);
-        if (ret != DBConstant.ERROR) {
+        if (ret != MessageConstant.ERROR) {
             getWhisperList();
         }
         return ret;
@@ -204,7 +203,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
-        if (ret != DBConstant.ERROR) {
+        if (ret != MessageConstant.ERROR) {
             getWhisperList();
         }
     }
@@ -218,7 +217,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                PLogger.printObject("xxxxxxxxxxx" + baseMessages.size());
                 updateListMsg(baseMessages);
             }
         });
@@ -271,10 +269,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 .appModule(new AppModule((Application) App.getContext()))
                 .dBModule(new DBModule(App.uid))
                 .build();
-
-        MsgMgr.getInstance().sendMsg(MsgType.MT_DB_Init_Ok, null);
     }
-
 
     /**
      * 处理特殊消息
@@ -297,15 +292,16 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 视频消息
+     *
      * @param message
      */
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
-        if(videoMessage.getVideoTp() ==1){
+        if (videoMessage.getVideoTp() == 1) {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
-        }else {
+        } else {
             UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
         }
     }

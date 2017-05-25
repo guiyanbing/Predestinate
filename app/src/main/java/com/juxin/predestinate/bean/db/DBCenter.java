@@ -2,12 +2,9 @@ package com.juxin.predestinate.bean.db;
 
 import android.text.TextUtils;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.squareup.sqlbrite.BriteDatabase;
-import java.util.Map;
-import rx.Observable;
-
 /**
  * DB处理中心
  * Created by Kind on 2017/3/28.
@@ -43,33 +40,16 @@ public class DBCenter {
     }
 
     public long insertUnRead(String key, String content){
-        if (TextUtils.isEmpty(key)) return DBConstant.ERROR;
+        if (TextUtils.isEmpty(key)) return MessageConstant.ERROR;
         return centerFUnRead.storageData(key, content);
-    }
-
-    /**
-     * 单个查询
-     * @param key
-     * @return
-     */
-    public Observable<String> queryUnRead(String key) {
-        return centerFUnRead.queryUnRead(key);
-    }
-
-    public Observable<Map<String, String>> queryUnReadList() {
-        return centerFUnRead.queryUnReadList();
-    }
-
-    public long deleteUnRead(String key){
-        return centerFUnRead.delete(key);
     }
 
     /******************** FLetter **************************/
     public long insertMsg(BaseMessage baseMessage){
-        if (TextUtils.isEmpty(baseMessage.getWhisperID())) return DBConstant.ERROR;
+        if (TextUtils.isEmpty(baseMessage.getWhisperID())) return MessageConstant.ERROR;
 
         long ret = centerFLetter.storageData(baseMessage);
-        if(ret == DBConstant.ERROR) return DBConstant.ERROR;
+        if(ret == MessageConstant.ERROR) return MessageConstant.ERROR;
 
         return centerFmessage.insertMsg(baseMessage);
     }
@@ -85,7 +65,7 @@ public class DBCenter {
      */
     public int deleteMessage(long userID) {
         int ret = centerFLetter.delete(userID);
-        if(ret != DBConstant.ERROR){
+        if(ret != MessageConstant.ERROR){
             return deleteFmessage(userID);
         }
        return ret;

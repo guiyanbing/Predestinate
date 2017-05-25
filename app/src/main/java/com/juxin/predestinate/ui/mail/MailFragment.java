@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
@@ -29,6 +29,7 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import java.util.List;
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
         SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
 
+    private CheckIntervalTimeUtil timeUtil;
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
     private View mail_bottom;
@@ -98,6 +100,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
+        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
         //   View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
 
@@ -255,6 +258,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Friend_Num_Notice:
+                PLogger.printObject("xxxxxxxxxxxxxxx");
                 mailFragmentAdapter.updateAllData();
                 break;
             default:
@@ -294,23 +298,22 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
      * @param view
      */
     private void detectInfo(AbsListView view){
+        if(!timeUtil.check(10 * 1000)){
+            return;
+        }
         List<Long> stringList = new ArrayList<>();
         stringList.clear();
         int firs = view.getFirstVisiblePosition();
         int last = view.getLastVisiblePosition();
 
-        PLogger.printObject("Position===11111=" + firs + "====" + last);
         for(int i = firs; i < last; i++){
             BaseMessage message = mailFragmentAdapter.getItem(i);
-            PLogger.printObject("Position===for=" + message);
-
             if(message == null ||  MailMsgID.getMailMsgID(message.getLWhisperID()) != null){
                 continue;
             }
 
-            if(message.getTime() <= 0 || ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)){
+            if(TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())){
                 stringList.add(message.getLWhisperID());
-                PLogger.printObject("Position===for2222=" + message.getType() + message.getAvatar() + message.getName());
             }
         }
 

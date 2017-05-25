@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.unread.BadgeView;
@@ -55,7 +56,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
     }
 
-    public View getContentView(){
+    public View getContentView() {
         return contentView;
     }
 
@@ -85,7 +86,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_vip = (ImageView) contentView.findViewById(R.id.mail_item_vip);
     }
 
-    public void showGap(){
+    public void showGap() {
         findViewById(R.id.gap_item).setVisibility(VISIBLE);
     }
 
@@ -94,12 +95,10 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      *
      * @param msgData
      */
-    public void showData(BaseMessage msgData) {
+    public void showData(BaseMessage msgData, boolean isSlideLoading) {
         ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
-        PLogger.printObject("nickname===1" + nickname);
-        PLogger.printObject("nickname===2" + msgData.getAvatar());
         if (!TextUtils.isEmpty(nickname)) {
             item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
         } else {
@@ -133,6 +132,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     /**
      * 角标
+     *
      * @param msgData
      */
     protected void setUnreadnum(BaseMessage msgData) {
@@ -145,6 +145,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     /**
      * 状态
+     *
      * @param msgData
      */
     protected void setStatus(BaseMessage msgData) {
@@ -159,10 +160,14 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
     }
 
+    /**
+     * vip角标
+     * @param msgData
+     */
     protected void setRanking(BaseMessage msgData) {
-        item_vip.setVisibility( ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
+        item_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
 
-        if (!msgData.isTop()){
+        if (!msgData.isTop()) {
             item_ranking_state.setVisibility(View.GONE);
             return;
         }
@@ -180,5 +185,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 }

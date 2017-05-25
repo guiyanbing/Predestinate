@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -13,6 +14,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +91,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setName("打招呼的人");
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
         baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");
-        baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
+        baseMessage.setLocalAvatar(R.drawable.f1_hi_btn);
         messageLists.add(baseMessage);
 
         setList(messageLists);
@@ -129,7 +131,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         BaseMessage msgData = getItem(position);
         if (msgData != null) {
             int tempViewType = getItemViewType(position);
-
             int ViewType = -1;
             if ((position - 1) >= 0) {
                 ViewType = getItemViewType(position - 1);
@@ -138,21 +139,18 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
             if (mailItemType != null) {
                 switch (mailItemType) {
                     case Mail_Item_Ordinary:
-                        vh.customMailItem.showItemLetter(msgData);
+                        vh.customMailItem.showItemLetter(msgData, scrollState);
                         break;
                     case Mail_Item_Other:
-                        vh.customMailItem.showItemAct(msgData);
+                        vh.customMailItem.showItemAct(msgData, scrollState);
                         break;
                     default:
                         break;
                 }
-
                 int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
                 int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
                 vh.customMailItem.measure(width, height);
                 setItemHeight(vh.customMailItem.getMeasuredHeight());
-
-                PLogger.printObject("ViewType=" + ViewType + "---tempViewType" + tempViewType);
                 if (tempViewType != ViewType) {
                     switch (mailItemType) {
                         case Mail_Item_Ordinary:
