@@ -27,6 +27,8 @@ public class CommonConfig extends BaseData {
     private int videochat_minute_cost;  //视频通话每分钟费用
     private String video_chat_apk_url;  //视频插件地址
     private int checkYellow;            //鉴黄检测间隔时间,单位秒
+    private boolean isVideoCallNeedVip; //发起视频聊天是否需要VIP
+    private boolean isAudioCallNeedVip; //发起音频聊天是否需要VIP
 
     private PayTypeList payTypeList;    //支付方式控制
 
@@ -55,6 +57,8 @@ public class CommonConfig extends BaseData {
         this.setVideochat_minute_cost(jsonObject.optInt("videochat_minute_cost"));
         this.setVideo_chat_apk_url(jsonObject.optString("videochat_apk_url"));
         checkYellow = jsonObject.optInt("check_yellow");
+        isVideoCallNeedVip = jsonObject.optInt("videochat_call_vip") == 1 ? true : false;
+        isAudioCallNeedVip = jsonObject.optInt("audiochat_call_vip") == 1 ? true : false;
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
@@ -160,6 +164,14 @@ public class CommonConfig extends BaseData {
         return checkYellow;
     }
 
+    public boolean isVideoCallNeedVip() {
+        return isVideoCallNeedVip;
+    }
+
+    public boolean isAudioCallNeedVip() {
+        return isAudioCallNeedVip;
+    }
+
     @Override
     public String toString() {
         return "CommonConfig{" +
@@ -175,6 +187,8 @@ public class CommonConfig extends BaseData {
                 ", videochat_minute_cost=" + videochat_minute_cost +
                 ", video_chat_apk_url='" + video_chat_apk_url + '\'' +
                 ", checkYellow=" + checkYellow +
+                ", isVideoCallNeedVip=" + isVideoCallNeedVip +
+                ", isAudioCallNeedVip=" + isAudioCallNeedVip +
                 ", payTypeList=" + payTypeList +
                 '}';
     }
