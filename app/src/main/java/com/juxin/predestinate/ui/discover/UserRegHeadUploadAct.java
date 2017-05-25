@@ -38,7 +38,6 @@ public class UserRegHeadUploadAct extends BaseActivity implements ImgSelectUtil.
     private Button btn_pick_photo;
     private Button btn_take_photo;
     private ImageButton imgBtn_upload_head;
-    private TextView btn_top_right;
     private ImageView img_upload_logo;
 
 
@@ -98,7 +97,6 @@ public class UserRegHeadUploadAct extends BaseActivity implements ImgSelectUtil.
         this.btn_take_photo.setOnClickListener(this);
         this.btn_pick_photo.setOnClickListener(this);
         this.imgBtn_upload_head.setOnClickListener(this);
-        this.btn_top_right.setOnClickListener(this);
     }
 
     @Override
