@@ -156,12 +156,19 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String localVoiceUrl = msg.getLocalVoiceUrl();
         String img = msg.getImg();
         String localImg = msg.getLocalImg();
+        PLogger.printObject("图片消==" + msg.toString());
         if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
+
             onVideoDisplayContent(msg);
+
         } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
+
             onVoiceDisplayContent(msg);
+
         } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
+
             onImgDisplayContent(msg);
+
         } else {
             onTextDisplayContent(msg);
         }
@@ -207,7 +214,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         }
 
         PLogger.d("url====" + url);
-        ImageLoader.loadRoundCorners(getContext(), url, 6, chat_item_img);
+        ImageLoader.loadRoundCorners(getContext(), url, chat_item_img);
 
 //        if (FileUtil.isURL(url)) {
 //            MMLog.e("Img===", url);

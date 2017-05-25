@@ -58,14 +58,19 @@ public class CommonMessage extends BaseMessage{
         this.setType(BaseMessageType.common.getMsgType());
     }
 
+    /**
+     * 语音消息
+     * @param channelID
+     * @param whisperID
+     * @param url
+     * @param length
+     */
     public CommonMessage(String channelID, String whisperID, String url, int length) {
         super(channelID, whisperID);
-        this.setVideoUrl(url);
-        this.setVideoSize(length);
+        this.setVoiceUrl(url);
+        this.setVoiceLen(length);
         this.setType(BaseMessageType.common.getMsgType());
     }
-
-
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -283,4 +288,22 @@ public class CommonMessage extends BaseMessage{
         }
     }
 
+    @Override
+    public String toString() {
+        return "CommonMessage{" +
+                "img='" + img + '\'' +
+                ", localImg='" + localImg + '\'' +
+                ", voiceUrl='" + voiceUrl + '\'' +
+                ", localVoiceUrl='" + localVoiceUrl + '\'' +
+                ", voiceLen=" + voiceLen +
+                ", voiceUserid=" + voiceUserid +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", localVideoUrl='" + localVideoUrl + '\'' +
+                ", videoLen=" + videoLen +
+                ", videoSize=" + videoSize +
+                ", videoThumb='" + videoThumb + '\'' +
+                ", videoWidth=" + videoWidth +
+                ", videoHeight=" + videoHeight +
+                '}';
+    }
 }
