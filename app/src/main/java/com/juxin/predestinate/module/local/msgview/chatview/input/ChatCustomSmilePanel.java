@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
@@ -53,6 +54,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         this.items = items;
         this.mOutDelTv = outDelTv;
         setContentView(R.layout.p1_chat_default_smile);
+        MsgMgr.getInstance().attach(this);
         initView();
     }
 
