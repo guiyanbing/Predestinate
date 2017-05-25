@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,7 +69,7 @@ public class VideoAudioChatHelper{
     private boolean isDownloading = false;
     private int lastOpt = 0;
     private int chatType;
-    private static final String TEST_URL = "http://jast.djp123.com/starter_platform/test_update/ai_plugin_videotel3.apk";
+    private static final String TEST_URL = "http://123.59.187.32/plugin/ai_plugin_videotel.apk";
     private long lastOptTime = 0;
 
     private VideoAudioChatHelper() {
@@ -212,8 +213,9 @@ public class VideoAudioChatHelper{
      * 检测是否需要下载视频插件
      */
     public void checkDownloadPlugin(FragmentActivity activity){
-//        if((AppCtx.getBPreference(AppCtx.SETTING_VIDEO_CHAT, false)||AppCtx.getBPreference(AppCtx.SETTING_AUDIO_CHAT, false)) && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
-//            downloadVideoPlugin(activity);
+        VideoVerifyBean verifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
+        if((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat()) && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
+            downloadVideoPlugin(activity);
     }
 
     private boolean isOpenConfig(int type){
@@ -254,7 +256,8 @@ public class VideoAudioChatHelper{
         isDownloading = true;
         HttpMgr httpMgr = new HttpMgrImpl();
         String apkFile = Common.getCahceDir("apk") + Long.toString(new Date().getTime()) + ".apk";//AppCfg.ASet.getVideo_chat_apk_url()
-        httpMgr.download(ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url(), apkFile, new DownloadListener() {
+        String downUrl = TextUtils.isEmpty(ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url()) ? TEST_URL : ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url();
+        httpMgr.download(downUrl, apkFile, new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {
                 isDownloading = true;
