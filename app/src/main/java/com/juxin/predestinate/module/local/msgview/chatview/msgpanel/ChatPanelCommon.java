@@ -214,7 +214,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             url = msg.getImg();
         }
 
-        PLogger.d("url====" + url);
+        PLogger.d("url====" + url + ",  " + msg.getImg());
         ImageLoader.loadRoundCorners(getContext(), url, chat_item_img);
 
 //        if (FileUtil.isURL(url)) {
@@ -267,7 +267,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
     }
 
     private void onImgClickContent(CommonMessage msg, boolean longClick) {
-        if(longClick){//长按图片
+        if (longClick) {//长按图片
             new MsgPopView(context, msg.getImg()).show(contentView);
             return;
         }

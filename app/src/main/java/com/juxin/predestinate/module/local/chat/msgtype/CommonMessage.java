@@ -293,4 +293,23 @@ public class CommonMessage extends BaseMessage {
             this.setVideoHeight(videoJSON.optInt("height"));
         }
     }
+
+    @Override
+    public String toString() {
+        return "CommonMessage{" +
+                "img='" + img + '\'' +
+                ", localImg='" + localImg + '\'' +
+                ", voiceUrl='" + voiceUrl + '\'' +
+                ", localVoiceUrl='" + localVoiceUrl + '\'' +
+                ", voiceLen=" + voiceLen +
+                ", voiceUserid=" + voiceUserid +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", localVideoUrl='" + localVideoUrl + '\'' +
+                ", videoLen=" + videoLen +
+                ", videoSize=" + videoSize +
+                ", videoThumb='" + videoThumb + '\'' +
+                ", videoWidth=" + videoWidth +
+                ", videoHeight=" + videoHeight +
+                '}';
+    }
 }
