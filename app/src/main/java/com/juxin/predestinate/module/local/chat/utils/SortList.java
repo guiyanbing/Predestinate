@@ -55,9 +55,9 @@ public class SortList {
 		Collections.sort(baseMessages, new Comparator<BaseMessage>() {
 			@Override
 			public int compare(BaseMessage arg0, BaseMessage arg1) {
-				int i = new Integer(arg1.getWeight()).compareTo(arg0.getWeight());
+				int i = Integer.valueOf(arg1.getWeight()).compareTo(arg0.getWeight());
 				if (i == 0) {
-					return (arg1.getTime() + "").compareTo(arg0.getTime() + "");
+					return Long.valueOf(arg1.getTime()).compareTo(Long.valueOf(arg0.getTime()));
 				} else {
 					return i;
 				}

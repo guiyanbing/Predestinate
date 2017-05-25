@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail.base;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -111,7 +112,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //            item_certification.setText("官方");
 //        }
 
-        item_last_msg.setText(BaseMessage.getContent(msgData));
+        item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
         long time = msgData.getTime();
         if (time > 0) {
             item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));

@@ -96,7 +96,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                PLogger.printObject("是否熟人==" + tmp.getRu());
+
                 if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
                     msgList.add(tmp);
                 } else {
@@ -105,6 +105,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 unreadNum += tmp.getNum();
             }
         }
+
+        PLogger.printObject("List=1111=" + msgList.size());
         unreadNum += getFollowNum();//关注
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
     }
@@ -191,13 +193,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public long deleteFmessage(long userID) {
-        long ret = dbCenter.deleteFmessage(userID);
+        long ret = dbCenter.getCenterFMessage().delete(userID);
         if (ret != MessageConstant.ERROR) {
             getWhisperList();
         }
         return ret;
     }
-
 
     /**
      * 更新已读
@@ -246,6 +247,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void logout() {
         mAppComponent = null;
         msgList.clear();
+        greetList.clear();
         unreadNum = 0;
     }
 
