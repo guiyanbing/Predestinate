@@ -1,6 +1,9 @@
 package com.juxin.predestinate.ui.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +18,21 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.BadgeView;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.start.OfflineBean;
+import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.DiscoverFragment;
@@ -31,6 +41,9 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener, PObserver {
 
@@ -262,6 +275,152 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerNetReceiver();
+
+        // test
+        getOfflineMsg();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(netReceiver);
+        super.onStop();
+    }
+
+    // ------------------------ 离线消息处理 暂时放在这 Start--------------------------
+    private NetReceiver netReceiver = new NetReceiver();
+    private static Map<Integer, Map<String, Object>> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
+
+    /**
+     * 注册网络变化监听广播
+     */
+    private void registerNetReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(netReceiver, filter);
+    }
+
+    /**
+     * 网络监测
+     */
+    public class NetReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()) {
+                getOfflineMsg();
+            }
+        }
+    }
+
+    /**
+     * 获取离线消息并处理
+     */
+    private static void getOfflineMsg() {
+        ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("offlineMsg:  " + response.getResponseString());
+                if (!response.isOk()) return;
+
+                OfflineMsg offlineMsg = (OfflineMsg) response.getBaseData();
+                if (offlineMsg == null || offlineMsg.getMsgList().size() <= 0)
+                    return;
+
+                // 逐条处理离线消息
+                for (OfflineBean bean : offlineMsg.getMsgList()) {
+                    if (bean == null) continue;
+
+                    dispatchOfflineMsg(bean);
+                }
+
+                // 服务器每次最多返50条，若超过则再次请求
+                if (offlineMsg.getMsgList().size() >= 50) {
+                    getOfflineMsg();
+                    return;
+                }
+                dispatchlastOfflineAVMap();
+            }
+        });
+    }
+
+    /**
+     * 把离线消息按推送消息来派发
+     */
+    private static void dispatchOfflineMsg(OfflineBean bean) {
+        if (bean.getD() == 0)
+            return;
+
+        // 音视频消息
+        if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
+            long vc_id = bean.getVc_id();
+            if (lastOfflineAVMap.get(vc_id) == null) {
+//                lastOfflineAVMap.put(vc_id, msgMap);
+            } else {
+                lastOfflineAVMap.remove(vc_id);
+            }
+            return;
+        }
+
+        // TODO 按照推送消息派发离线消息
+//        NetData data = new NetData(msgMap.get("tid").toString(), bean.getMtp(), null, bean.getD());
+//        data.setContent(msgJson);
+//        com.lflibrary.android.designpattern.observer.Message msg = com.lflibrary.android.designpattern.observer.Message.obtain();
+//        msg.type = ChatMgr.CHAT_NOTIFY + 100 + data.getMsgType();
+//        msg.status = 0;
+//        msg.data = data;
+//        MessageMgr.getInstance().sendMessage(msg);
+    }
+
+    /**
+     * 处理最新的音视频离线消息
+     */
+    public static void dispatchlastOfflineAVMap() {
+        if (lastOfflineAVMap.size() == 0)
+            return;
+
+        if (BaseUtil.isScreenLock(App.context))
+            return;
+
+        Map<String, Object> msgMap = null;
+        long mt = 0;
+
+        for (Map.Entry<Integer, Map<String, Object>> entry : lastOfflineAVMap.entrySet()) {
+            Map<String, Object> map = entry.getValue();
+            if (map == null)
+                return;
+            int vc_tp = Integer.parseInt(map.get("vc_tp").toString());
+            if (vc_tp == 1) {
+                long t = Long.parseLong(map.get("mt").toString());
+                if (t > mt) {
+                    mt = t;
+                    msgMap = map;
+                }
+            }
+        }
+
+        lastOfflineAVMap.clear();
+
+        if (msgMap != null) {
+            if (msgMap.get("rawMsg") == null)
+                return;
+            int mtp = Integer.parseInt(msgMap.get("mtp").toString());
+            long msgId = Long.parseLong(msgMap.get("d").toString());
+
+            
+            // TODO 按照推送消息派发离线消息
+//            NetData data = new NetData(msgMap.get("tid").toString(), mtp, null, msgId);
+//            data.setContent(msgMap.get("rawMsg").toString());
+//            com.lflibrary.android.designpattern.observer.Message msg = com.lflibrary.android.designpattern.observer.Message.obtain();
+//            msg.type = ChatMgr.CHAT_NOTIFY + 100 + data.getMsgType();
+//            msg.status = 0;
+//            msg.data = data;
+//            MessageMgr.getInstance().sendMessage(msg);
         }
     }
 }
