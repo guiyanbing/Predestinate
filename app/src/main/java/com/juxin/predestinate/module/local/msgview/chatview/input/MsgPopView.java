@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 
 /**
  * 创建日期：2017/5/25
@@ -49,12 +52,17 @@ public class MsgPopView {
     }
 
     public void show(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        int topH = UIUtil.dip2px(mContext, 110); // 46 + 34 + 30 标题、（关注TA、查看手机）、滚动条
-        int x = (location[0] + view.getWidth() / 2) - mPopW / 2;
-        int y = location[1] - mPopH;
-        y = y < topH ? topH : y;
-        mPopupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y);
+        try {
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            // 50 + 34 + 30 标题、（关注TA、查看手机）、滚动条
+            int topH = PSP.getInstance().getInt(Constant.PRIVATE_CHAT_TOP_H, UIUtil.dip2px(mContext, 114)) + UIUtil.getStatusHeight((PrivateChatAct) mContext);
+            int x = (location[0] + view.getWidth() / 2) - mPopW / 2;
+            int y = location[1] - mPopH;
+            y = y < topH ? topH : y;
+            mPopupWindow.showAtLocation(view, Gravity.NO_GRAVITY, x, y);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

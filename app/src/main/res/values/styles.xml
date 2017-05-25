@@ -171,6 +171,7 @@
     <style name="badge_common" parent="badge">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_badge</item>
     </style>
 
     <!-- *********** item条目 ************ -->
@@ -389,7 +390,7 @@
     </style>
     <!--手机号输入框-->
     <style name="editText_input_phone" parent="editText_input">
-        <item name="android:maxLength">16</item>
+        <item name="android:maxLength">11</item>
         <item name="android:inputType">phone</item>
         <item name="android:digits">@string/phone_digits</item>
     </style>
@@ -697,6 +698,7 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:background">@drawable/f1_setting_ok</item>
         <item name="android:checked">true</item>
+        <item name="android:clickable">false</item>
         <item name="android:textOff"></item>
         <item name="android:textOn"></item>
     </style>
@@ -757,9 +759,11 @@
         <item name="android:textColor">@color/color_666666</item>
         <item name="android:textSize">@dimen/px39_sp</item>
     </style>
+
     <style name="id_card_content">
         <item name="android:layout_marginLeft">@dimen/px55_dp</item>
     </style>
+
     <style name="id_card_tv">
         <item name="android:layout_width">@dimen/px306_dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -767,6 +771,7 @@
         <item name="android:textSize">@dimen/px45_sp</item>
         <item name="android:layout_marginLeft">@dimen/px55_dp</item>
     </style>
+
     <style name="id_card_eit">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -777,6 +782,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:background">@color/transparent</item>
     </style>
+
     <style name="id_card_ll">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/px165_dp</item>
