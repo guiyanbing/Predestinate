@@ -697,6 +697,7 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:background">@drawable/f1_setting_ok</item>
         <item name="android:checked">true</item>
+        <item name="android:clickable">false</item>
         <item name="android:textOff"></item>
         <item name="android:textOn"></item>
     </style>
