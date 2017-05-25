@@ -315,10 +315,11 @@ public class KeepAliveSocket {
             shutDownTime = System.currentTimeMillis();
             writerThread.interrupt();
             try {
-                if (shutDownDone == false)
+                if (shutDownDone == false) {
                     PLogger.d("Socket send packet thread shutdown wait for done start");
-                shutDownCondition.await();
-                PLogger.d("Socket send packet thread shutdown wait for done end");
+                    shutDownCondition.await();
+                    PLogger.d("Socket send packet thread shutdown wait for done end");
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -407,14 +408,15 @@ public class KeepAliveSocket {
             shutDownTime = System.currentTimeMillis();
             instantShutdown = instant;
             try {
-//                if (shutDownDone == false)
-//                    PLogger.d("Socket read packet thread shutdown wait for done start");
                 if (instantShutdown) {
                     readThread.interrupt();
                     input.close();
                 }
-                shutDownCondition.await();
-                PLogger.d("Socket read packet thread shutdown wait for done end");
+                if (shutDownDone == false) {
+                    PLogger.d("Socket read packet thread shutdown wait for done start");
+                    shutDownCondition.await();
+                    PLogger.d("Socket read packet thread shutdown wait for done end");
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
