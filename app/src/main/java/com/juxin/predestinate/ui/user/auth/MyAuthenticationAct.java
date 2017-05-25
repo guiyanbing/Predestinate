@@ -56,18 +56,18 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
             tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
         } else {
             tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authno));
-            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
         }
         tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authno));
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
         initVideoAuth();
         initIdCardAuth();
         initConfig();
     }
 
 
-    private void initVideoAuth() {
-        tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+    private void initIdCardAuth() {
+        tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
 
         switch (mIdCardVerifyStatusInfo.getStatus()) {
             case 0:
@@ -75,21 +75,22 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 1:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authing));
-                ContextCompat.getColor(this, R.color.txt_authing);
+                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.txt_authing));
                 break;
             case 2:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authok));
-                ContextCompat.getColor(this, R.color.authentication_txt_bg);
+                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.color_75CD81));
                 break;
             case 3:
             case 4:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_autherror));
+                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
                 break;
         }
     }
 
-    private void initIdCardAuth() {
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.gray_text));
+    private void initVideoAuth() {
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
 
         switch (videoVerifyBean.getStatus()) {
             case 0:
@@ -97,14 +98,15 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 1:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authing));
-                ContextCompat.getColor(this, R.color.txt_authing);
+                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_authing));
                 break;
             case 2:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_autherror));
+                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
                 break;
             case 3:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authok));
-                ContextCompat.getColor(this, R.color.authentication_txt_bg);
+                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.color_75CD81));
                 break;
             default:
                 break;
@@ -130,7 +132,6 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 UIShow.showMyAuthenticationVideoAct(this, authForVodeo);
                 break;
             case R.id.ll_auth_id://身份认证
-                //TODO
                 if (mIdCardVerifyStatusInfo.isOk())
                     UIShow.showIDCardAuthenticationAct(this, authIDCard);
                 else

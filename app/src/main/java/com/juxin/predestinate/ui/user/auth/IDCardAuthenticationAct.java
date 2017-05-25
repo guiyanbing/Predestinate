@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -96,6 +97,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             eitOpenBank.setText(mIdCardVerifyStatusInfo.getBank());
             eitBankBranch.setText(mIdCardVerifyStatusInfo.getSubbank());
             eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
+            eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(21)});
             eitBankCardId.setHint(R.string.input_your_bank_card_id);
             paytype = 1;
         }
@@ -127,22 +129,81 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                     cardLocal = eitOpenBank.getText().toString();
                     cardLocalBranch = eitBankBranch.getText().toString();
                     cardNum = eitBankCardId.getText().toString();
-                    if (TextUtils.isEmpty(cardNum) || TextUtils.isEmpty(cardIdCard) || TextUtils.isEmpty(cardName) ||
-                            (paytype == 1 && (TextUtils.isEmpty(cardLocal) || TextUtils.isEmpty(cardLocalBranch)))) {
-                        PToast.showShort(getString(R.string.please_complete_the_information));
+                    if (TextUtils.isEmpty(cardName)) {
+                        PToast.showShort(getString(R.string.name_cannot_be_empty));
                         return;
                     }
+                    if (TextUtils.isEmpty(cardIdCard)) {
+                        PToast.showShort(getString(R.string.idcard_cannot_be_empty));
+                        return;
+                    }
+                    if (!idCardForm(cardIdCard)) {
+                        PToast.showShort(getString(R.string.id_card_number_format_is_wrong));
+                        return;
+                    }
+                    if (paytype == 1) {
+                        if (TextUtils.isEmpty(cardLocal)) {
+                            PToast.showShort(getString(R.string.bank_cannot_be_empty));
+                            return;
+                        }
+                        if (TextUtils.isEmpty(cardLocalBranch)) {
+                            PToast.showShort(getString(R.string.branch_cannot_be_empty));
+                            return;
+                        }
+                    }
+                    if (TextUtils.isEmpty(cardNum)) {
+                        PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
+                        return;
+                    }
+                    if (paytype == 1 && bankCardForm(cardNum)){
+                        PToast.showShort(getString(R.string.bank_card_number_format_is_wrong));
+                        return;
+                    }
+
+                    //                    if (TextUtils.isEmpty(cardNum) || TextUtils.isEmpty(cardIdCard) || TextUtils.isEmpty(cardName) ||
+                    //                            (paytype == 1 && (TextUtils.isEmpty(cardLocal) || TextUtils.isEmpty(cardLocalBranch)))) {
+                    //                        PToast.showShort(getString(R.string.please_complete_the_information));
+                    //                        return;
+                    //                    }
                     strImgFront = apvFrontPhoto.getImgStrPath();
                     strImgTail = apvTailPhoto.getImgStrPath();
                     strImgHand = apvHandPhoto.getImgStrPath();
-                    if (TextUtils.isEmpty(strImgFront) || TextUtils.isEmpty(strImgTail) || TextUtils.isEmpty(strImgHand)) {
-                        PToast.showShort(getString(R.string.please_upload_the_relevant_pictures));
+                    if (TextUtils.isEmpty(strImgFront)) {
+                        PToast.showShort(getString(R.string.please_upload_the_idcard_front));
+                        return;
+                    }
+                    if (TextUtils.isEmpty(strImgTail)) {
+                        PToast.showShort(getString(R.string.please_upload_the_idcard_tail));
+                        return;
+                    }
+                    if (TextUtils.isEmpty(strImgHand)) {
+                        PToast.showShort(getString(R.string.please_upload_the_idcard_handle));
                         return;
                     }
                     ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum, cardLocal, cardLocalBranch, strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
                 }
             });
         }
+    }
+
+    //身份证校验
+    public static boolean idCardForm(String num) {
+        String reg = "^\\d{15}$|^\\d{17}[0-9Xx]$";
+        if (!num.matches(reg)) {
+            System.out.println("Format Error!");
+            return false;
+        }
+        return true;
+    }
+
+    //银行卡号校验
+    public static boolean bankCardForm(String num) {
+        String reg = "^\\d{16}$|^\\d{18,21}$";
+        if (!num.matches(reg)) {
+            System.out.println("Format Error!");
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -158,6 +219,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 tvTitleInfo.setText(getString(R.string.id_card_tips_zhi));
                 tvBankCardId.setText(R.string.zhi_fu_id);
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_TEXT);
+                eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
                 eitBankCardId.setHint(R.string.input_your_zhifubao_id);
                 paytype = 2;
                 break;
@@ -168,6 +230,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 tvTitleInfo.setText(getString(R.string.id_card_tips_bank));
                 tvBankCardId.setText(getString(R.string.bank_id));
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
+                eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(21)});
                 eitBankCardId.setHint(R.string.input_your_bank_card_id);
                 paytype = 1;
                 break;

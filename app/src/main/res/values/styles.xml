@@ -50,7 +50,7 @@
     <style name="button_small" parent="button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/btn_fill_green_bg</item>
+        <item name="android:background">@drawable/btn_fill_theme_bg</item>
         <item name="android:paddingLeft">@dimen/px30_dp</item>
         <item name="android:paddingRight">@dimen/px30_dp</item>
         <item name="android:paddingTop">@dimen/px15_dp</item>
@@ -62,7 +62,7 @@
     <style name="button_middle" parent="button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/px87_dp</item>
-        <item name="android:background">@drawable/btn_fill_green_bg</item>
+        <item name="android:background">@drawable/btn_fill_theme_bg</item>
         <item name="android:paddingLeft">@dimen/px45_dp</item>
         <item name="android:paddingRight">@dimen/px45_dp</item>
         <item name="android:gravity">center</item>
@@ -73,7 +73,7 @@
     <style name="button_big" parent="button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/px105_dp</item>
-        <item name="android:background">@drawable/f1_button_big_bg</item>
+        <item name="android:background">@drawable/btn_fill_theme_bg</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/px48_sp</item>
         <item name="android:gravity">center</item>

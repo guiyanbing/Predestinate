@@ -160,7 +160,8 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                videoVerify = (VideoVerifyBean) response.getBaseData();
+                if (response.isOk())
+                    videoVerify = (VideoVerifyBean) response.getBaseData();
             }
         });
     }
