@@ -11,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -31,7 +30,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -198,12 +196,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 }
             } else {
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
-
-//                ModuleMgr.getChatListMgr().deleteWhisperChatUser(strings, new ChatMsgInterface.DelChatUserComplete() {
-//                    @Override
-//                    public void onReqChatUser(boolean ret) {
-//                    }
-//                });
             }
         }
     }
@@ -305,7 +297,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             return;
         }
         List<Long> stringList = new ArrayList<>();
-        stringList.clear();
+
         int firs = view.getFirstVisiblePosition();
         int last = view.getLastVisiblePosition();
 
@@ -327,12 +319,17 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    public void onScrollStateChanged(final AbsListView view, int scrollState) {
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
-                detectInfo(view);
+                TimerUtil.beginTime(new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        detectInfo(view);
+                    }
+                }, 200);
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作

@@ -39,10 +39,10 @@ ext {
                 minSDK      : 14,
                 targetSDK   : 19,
                 supportLib  : "25.3.1",
-                libGlide    : "3.7.0",
-                libRxJava   : "2.0.9",
+                libGlide    : "3.8.0",
+                libRxJava   : "2.1.0",
                 libRxAndroid: "2.0.1",
-                libRetrofit : "2.2.0",
+                libRetrofit : "2.3.0",
                 libOkhttp   : "3.8.0",
                 libXLog     : "1.3.0",
                 libAnimator : "1.0.5"]

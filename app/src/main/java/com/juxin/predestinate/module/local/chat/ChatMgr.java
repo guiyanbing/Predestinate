@@ -97,7 +97,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void sendSayHelloMsg(final String whisperID, String content, int kf, int sayHelloType, final IMProxy.SendCallBack sendCallBack) {
         final TextMessage textMessage = new TextMessage(whisperID, content, kf, sayHelloType);
-        textMessage.setStatus(MessageConstant.SENDING_STATUS);
+        textMessage.setStatus(MessageConstant.OK_STATUS);
         textMessage.setJsonStr(textMessage.getJson(textMessage));
         textMessage.setRu(MessageConstant.Ru_Friend);
 
@@ -665,6 +665,7 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("response==File==" + response.getResponseString());
                 if(!response.isOk()){
                     return;
                 }
