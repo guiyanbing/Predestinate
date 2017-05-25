@@ -317,7 +317,7 @@
     <string name="user_other_set_chat_video">为TA设置视频接听</string>
     <string name="user_other_set_chat_video_accept">接受对方视频</string>
     <string name="user_other_set_chat_voice_accept">接受对方语音</string>
-    <string name="user_other_set_chat_price">钻石/分</string>
+    <string name="user_other_set_chat_price">%d钻石/分</string>
     <string name="user_other_set_chat_stick">消息置顶</string>
     <string name="user_other_set_chat_disturb">消息免打扰</string>
     <string name="user_other_set_chat_clear">清空聊天记录</string>
@@ -329,6 +329,8 @@
     <string name="user_other_label">标签</string>
     <string name="user_other_label_often">常用标签</string>
     <string name="user_other_info_req_fail">资料请求出错！</string>
+    <string name="user_other_not_video_chat">对方未开启视频聊天</string>
+    <string name="user_other_not_voice_chat">对方未开启语音聊天</string>
     <string name="user_online">在线</string>
     <string name="user_secret_media_unlock">正在解锁</string>
     <string name="user_secret_media_lock_suc">解锁成功</string>
@@ -503,9 +505,15 @@
     <string name="service_QQ">客服QQ:131333</string>
     <string name="withdrawal_page">提现页面</string>
     <string name="name_cannot_be_empty">真实姓名不能为空</string>
+    <string name="idcard_cannot_be_empty">身份证号不能为空</string>
+    <string name="id_card_number_format_is_wrong">身份证号格式有误</string>
+    <string name="bank_card_number_format_is_wrong">银行卡号格式有误</string>
     <string name="bank_cannot_be_empty">开户银行不能为空</string>
     <string name="branch_cannot_be_empty">开户支行不能为空</string>
     <string name="bank_card_cannot_be_empty">银行卡号不能为空</string>
+    <string name="please_upload_the_idcard_front">请上传身份证正面照</string>
+    <string name="please_upload_the_idcard_tail">请上传身份证背面照</string>
+    <string name="please_upload_the_idcard_handle">请上传手持身份证照片</string>
     <string name="money_cannot_be_empty">提现金额不能为空</string>
     <string name="please_complete_the_information">请完整填写信息</string>
     <string name="please_upload_the_relevant_pictures">请上传相关照片</string>

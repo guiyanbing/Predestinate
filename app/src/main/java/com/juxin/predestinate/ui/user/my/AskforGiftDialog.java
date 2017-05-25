@@ -434,7 +434,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                     PToast.showShort(mContext.getString(R.string.send_suceed));
                     return;
                 }
-                PToast.showShort(mContext.getString(R.string.send_error_try_again));
+                PToast.showShort(response.getMsg());
             }
         });
         dismiss();

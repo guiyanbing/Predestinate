@@ -67,7 +67,8 @@
         android:layout_height="@dimen/px150_dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/px35_dp">
+        android:padding="@dimen/px35_dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="@dimen/px200_dp"
@@ -81,8 +82,7 @@
             android:id="@+id/ll_chat_price"
             style="@style/center_item_layout"
             android:gravity="center_vertical|end"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="@dimen/px45_dp"

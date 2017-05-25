@@ -5,23 +5,32 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
+
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.ViewPagerAdapter;
+import com.juxin.predestinate.module.logic.config.UrlParam;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Kind on 2017/3/31.
  */
-public class ChatExtendPanel extends ChatViewPanel {
+public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
     private ChatExtend chatExtend = new ChatExtend();
     private ViewPager vp = null;
+    private CommonGridBtnPanel.BtnAdapter chatExtendAdapter;
+    private VideoConfig config;
 
     public ChatExtendPanel(Context context, ChatAdapter.ChatInstance chatInstance) {
         super(context, chatInstance);
@@ -33,6 +42,8 @@ public class ChatExtendPanel extends ChatViewPanel {
     }
 
     public void initView() {
+        // 请求音视频开关配置
+        ModuleMgr.getCenterMgr().reqVideoChatConfig(getChatInstance().chatAdapter.getLWhisperId(), this);
         vp = (ViewPager) findViewById(R.id.chat_panel_viewpager);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
@@ -64,10 +75,10 @@ public class ChatExtendPanel extends ChatViewPanel {
         GridView gv = (GridView) view.findViewById(R.id.chat_panel_gridview);
         gv.setNumColumns(4);
 
-        List<CommonGridBtnPanel.BTN_KEY> list = new ArrayList<CommonGridBtnPanel.BTN_KEY>();
+        List<CommonGridBtnPanel.BTN_KEY> list = new ArrayList<>();
         list.addAll(listTemp);
 
-        CommonGridBtnPanel.BtnAdapter chatExtendAdapter = new CommonGridBtnPanel.BtnAdapter(getContext(), list);
+        chatExtendAdapter = new CommonGridBtnPanel.BtnAdapter(getContext(), list);
         gv.setAdapter(chatExtendAdapter);
 
         chatExtendAdapter.setBtnClickListener(new CommonGridBtnPanel.BtnClickListener() {
@@ -92,9 +103,17 @@ public class ChatExtendPanel extends ChatViewPanel {
                         });
                         break;
                     case VIDEO://视频聊天
+                        if (config == null || !config.isVideoChat()) {
+                            PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
+                            return;
+                        }
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                         break;
                     case VOICE://语音
+                        if (config == null || !config.isVoiceChat()) {
+                            PToast.showShort(getContext().getString(R.string.user_other_not_voice_chat));
+                            return;
+                        }
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                         break;
                 }
@@ -121,6 +140,22 @@ public class ChatExtendPanel extends ChatViewPanel {
         if (vp != null) {
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
             vp.setAdapter(viewPagerAdapter);
+        }
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        if (response.getUrlParam() == UrlParam.reqVideoChatConfig) {
+            if (response.isOk()) {
+                config = (VideoConfig) response.getBaseData();
+                if (config == null) return;
+
+                CommonGridBtnPanel.BTN_KEY.VIDEO.setPrice(config.getVideoPrice());
+                CommonGridBtnPanel.BTN_KEY.VIDEO.setEnable(config.isVideoChat());
+                CommonGridBtnPanel.BTN_KEY.VOICE.setPrice(config.getAudioPrice());
+                CommonGridBtnPanel.BTN_KEY.VOICE.setEnable(config.isVoiceChat());
+                chatExtendAdapter.notifyDataSetChanged();
+            }
         }
     }
 }
