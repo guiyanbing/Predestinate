@@ -167,7 +167,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
                 }
             }
         }
-
         return convertView;
     }
 

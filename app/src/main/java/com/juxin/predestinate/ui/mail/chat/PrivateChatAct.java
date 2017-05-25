@@ -199,6 +199,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         onTitleInit();
 
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
+        privateChat.getChatAdapter().setWhisperId(whisperID);
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
         marqueeView = new GiftMessageInforView(this);
 
@@ -234,7 +235,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        privateChat.getChatAdapter().setWhisperId(whisperID);
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1){
             initHeadView();
             initFollow();

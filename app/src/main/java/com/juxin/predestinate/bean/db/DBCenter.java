@@ -66,7 +66,7 @@ public class DBCenter {
     public int deleteMessage(long userID) {
         int ret = centerFLetter.delete(userID);
         if(ret != MessageConstant.ERROR){
-            return deleteFmessage(userID);
+            return centerFmessage.delete(userID);
         }
        return ret;
     }
@@ -99,17 +99,6 @@ public class DBCenter {
      */
     public long updateToRead(String channelID, String userID) {
         return centerFmessage.updateToRead(channelID, userID);
-    }
-
-
-    /**
-     * 删除
-     *
-     * @param whisperID 私聊ID
-     * @return
-     */
-    public int deleteFmessage(long whisperID) {
-        return centerFmessage.delete(whisperID);
     }
 
     /********************FMessage end **************************/

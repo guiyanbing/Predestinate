@@ -176,7 +176,7 @@ public class VideoMessage extends BaseMessage {
             default:
                 result = "";
         }
-        return result + sendTime;
+        return result +" "+ sendTime;
     }
 
 

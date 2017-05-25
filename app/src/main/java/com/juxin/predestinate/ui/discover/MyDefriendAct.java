@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.juxin.predestinate.R;
@@ -46,12 +47,12 @@ public class MyDefriendAct extends BaseActivity implements RequestComplete, ExLi
 
     private void initView() {
         customStatusListView = (CustomStatusListView) findViewById(R.id.myfriend_list);
+        View mViewTop = LayoutInflater.from(this).inflate(R.layout.layout_margintop, null);
         exListView = customStatusListView.getExListView();
         exListView.setXListViewListener(this);
         exListView.setPullRefreshEnable(true);
         exListView.setPullLoadEnable(false);
-
-
+        exListView.addHeaderView(mViewTop);
         adapter = new MyDefriendAdapter(this, data);
         exListView.setAdapter(adapter);
 
