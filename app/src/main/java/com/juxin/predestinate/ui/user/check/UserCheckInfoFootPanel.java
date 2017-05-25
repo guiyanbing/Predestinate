@@ -102,15 +102,14 @@ public class UserCheckInfoFootPanel extends BasePanel {
      * 认证状态
      */
     public void refreshAuth() {
-        boolean isAuthVideo = false;
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-            isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
+            boolean isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
+            iv_auth_video.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
+            chatLayout.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
         }
 
         iv_auth_photo.setVisibility(userDetail.isVerifyIdcard() ? View.VISIBLE : View.GONE);
         iv_auth_phone.setVisibility(userDetail.isVerifyCellphone() ? View.VISIBLE : View.GONE);
-        iv_auth_video.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
-        chatLayout.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
     }
 
     public void refreshView(UserDetail userDetail) {
