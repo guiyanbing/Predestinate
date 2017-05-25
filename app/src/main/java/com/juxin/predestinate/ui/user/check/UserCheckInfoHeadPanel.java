@@ -1,6 +1,8 @@
 package com.juxin.predestinate.ui.user.check;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,9 +15,11 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -72,6 +76,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         FrameLayout fl_topN = (FrameLayout) findViewById(R.id.fl_top_n);
         TextView tv_topN = (TextView) findViewById(R.id.tv_top_n);
         ImageView iv_vip = (ImageView) findViewById(R.id.iv_vip);
+        img_header.setOnClickListener(listener);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
         iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
 
@@ -103,6 +108,11 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
+                case R.id.img_header:
+                    if (TextUtils.isEmpty(userDetail.getAvatar())) return;
+                    UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), userDetail.getAvatar());
+                    break;
+
                 case R.id.ll_guanzhu:       // 关注星标
                     handleFollow();
                     break;
