@@ -8,6 +8,8 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.unread.UnreadMgr;
+import com.juxin.library.utils.FileUtil;
+import com.juxin.library.utils.ZipUtils;
 import com.juxin.predestinate.BuildConfig;
 import com.juxin.predestinate.module.local.center.CenterMgr;
 import com.juxin.predestinate.module.local.chat.ChatListMgr;
@@ -16,6 +18,7 @@ import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.local.msgview.PhizMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
@@ -29,6 +32,8 @@ import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
 import com.tencent.smtt.sdk.QbSdk;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +63,7 @@ public final class ModuleMgr {
     /**
      * 按等级初始化逻辑模块
      */
-    public static void initModule(Context context) {
+    public static void initModule(final Context context) {
         PLogger.init(BuildConfig.DEBUG);//初始化日志打印，每个进程都初始化一次
 
         String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
@@ -128,6 +133,19 @@ public final class ModuleMgr {
         MobclickAgent.UMAnalyticsConfig config = new MobclickAgent.UMAnalyticsConfig(context,
                 Constant.UMENG_APPKEY, getAppMgr().getUMChannel());
         MobclickAgent.startWithConfigure(config);
+    }
+
+    /**
+     * 初始化网页数据：从assets中读取并解压到指定文件夹目录
+     */
+    private static void initWebApp(Context context) {
+        try {
+            String fileName = "webApp.zip";
+            FileUtil.copyFileFromAssets(context, fileName, DirType.getWebDir() + fileName);
+            ZipUtils.unzip(new File(DirType.getWebDir() + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

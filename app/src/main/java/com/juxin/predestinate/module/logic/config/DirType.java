@@ -18,7 +18,7 @@ public class DirType {
      * 文件夹名称
      */
     private enum Dir {
-        root, cache, download, apk, video, voice, image, upload
+        root, cache, download, apk, video, voice, image, upload, web
     }
 
     private static final String SD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -40,6 +40,7 @@ public class DirType {
     private static final String VOICE = DIR_ROOT + Dir.voice + File.separator;
     private static final String IMAGE = DIR_ROOT + Dir.image + File.separator;
     private static final String UPLOAD = DIR_ROOT + Dir.upload + File.separator;
+    private static final String WEB = DIR_ROOT + Dir.web + File.separator;
 
     /**
      * 文件夹是否存在/是否创建成功（不存在则创建）
@@ -106,6 +107,13 @@ public class DirType {
      */
     public static String getUploadDir() {
         return isFolderExists(UPLOAD) ? UPLOAD : "";
+    }
+
+    /**
+     * @return 获取本地解压的网页文件夹目录
+     */
+    public static String getWebDir() {
+        return isFolderExists(WEB) ? WEB : "";
     }
 
     // --------------------------------------------------------------------------------

@@ -95,28 +95,25 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
-            case MsgType.MT_App_Login:
-                if ((Boolean) value) {// 登录成功
-                    // 注入dagger组件
-                    ModuleMgr.getChatListMgr().getAppComponent().inject(this);
+            case MsgType.MT_DB_Init_Ok:
+                // 注入dagger组件
+                ModuleMgr.getChatListMgr().getAppComponent().inject(this);
 
-                    // 初始化角标数据
-                    Observable<String> observable = dbCenter.getCenterFUnRead().queryUnRead(getStoreTag());
-                    observable.subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String storeString) {
-                            getUnreadMgr().init(storeString, parentMap);
-                        }
-                    });
-                    // 角标变更监听，每次变更之后更新数据库
-                    getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
-                        @Override
-                        public void onUnreadChange(String key, boolean isAdd, String storeString) {
-                            dbCenter.insertUnRead(getStoreTag(), storeString);
-                        }
-                    });
-                }
-                break;
+                // 初始化角标数据
+                Observable<String> observable = dbCenter.queryUnRead(getStoreTag());
+                observable.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String storeString) {
+                        getUnreadMgr().init(storeString, parentMap);
+                    }
+                });
+                // 角标变更监听，每次变更之后更新数据库
+                getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
+                    @Override
+                    public void onUnreadChange(String key, boolean isAdd, String storeString) {
+                        dbCenter.insertUnRead(getStoreTag(), storeString);
+                    }
+                });
             default:
                 break;
         }

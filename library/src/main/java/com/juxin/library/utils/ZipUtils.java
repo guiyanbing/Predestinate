@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
@@ -26,34 +25,29 @@ public class ZipUtils {
         return new ZipCompressor(file);
     }
 
-    public static void unzip(File file) throws ZipException, IOException {
+    public static void unzip(File file) throws IOException {
         new ZipDeCompressor().unzip(file);
     }
 
-    public static void unzip(File file, File toDir) throws ZipException,
-            IOException {
+    public static void unzip(File file, File toDir) throws IOException {
         new ZipDeCompressor().unzip(file, toDir);
     }
 
     public static class ZipDeCompressor {
-        public void unzip(File file) throws ZipException, IOException {
+
+        public void unzip(File file) throws IOException {
 
             String fileName = file.getName();
-            int exindex = fileName.lastIndexOf(".");
-            String dirName = fileName.substring(0, exindex);
+            int exIndex = fileName.lastIndexOf(".");
+            String dirName = fileName.substring(0, exIndex);
 
             File toDir = new File(file.getParent(), dirName + "/");
-
             unzip(file, toDir);
         }
 
-        public void unzip(File file, File toDir) throws ZipException,
-                IOException {
-
+        public void unzip(File file, File toDir) throws IOException {
             toDir.mkdirs();
-            if (!toDir.exists()) {
-                throw new IllegalStateException();
-            }
+            if (!toDir.exists()) throw new IllegalStateException();
 
             ZipFile zipFile = new ZipFile(file);
 
@@ -165,9 +159,7 @@ public class ZipUtils {
             }
         }
 
-        private void pushFile(File file) throws FileNotFoundException,
-                IOException {
-
+        private void pushFile(File file) throws IOException {
             byte[] buf = new byte[8196];
             BufferedInputStream in = new BufferedInputStream(
                     new FileInputStream(file));
@@ -185,9 +177,9 @@ public class ZipUtils {
         }
 
         private String getZipEntryName(String filePath) {
-            String parantPath = mProcessFile.getParent();
-            parantPath = removeLastSeparator(parantPath);
-            return filePath.substring(parantPath.length() + 1);
+            String parentPath = mProcessFile.getParent();
+            parentPath = removeLastSeparator(parentPath);
+            return filePath.substring(parentPath.length() + 1);
         }
 
         private String removeLastSeparator(String path) {

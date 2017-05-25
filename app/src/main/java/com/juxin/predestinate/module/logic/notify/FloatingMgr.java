@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
@@ -153,7 +154,8 @@ public class FloatingMgr implements Handler.Callback {
                     PixelFormat.TRANSPARENT);
             layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 
-            layoutParams.y = ModuleMgr.getAppMgr().getStatusBarHeight();
+            layoutParams.y = ModuleMgr.getAppMgr().getStatusBarHeight() +
+                    App.getResource().getDimensionPixelSize(R.dimen.title_footer_height);
 
             parentView = LayoutInflater.from(App.context).inflate(R.layout.common_floating_window, null);
             fixedViewGroup = (ViewGroup) parentView.findViewById(R.id.floating_fixed_layout);
@@ -199,6 +201,7 @@ public class FloatingMgr implements Handler.Callback {
         layout.addView(view, params);
         Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_in);
         tempViewGroup.addView(layout);
+        animation.setInterpolator(new LinearInterpolator());
         layout.startAnimation(animation);
 
         addView();
