@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -36,6 +38,8 @@ import retrofit2.Response;
  * Created by ZRP on 2016/12/29.
  */
 public class HttpMgrImpl implements HttpMgr {
+
+    private Lock lock = new ReentrantLock();
 
     @Override
     public void init() {
@@ -227,6 +231,9 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
+
+        lock.lock();
+
         final UrlParam urlParam = requestParam.getUrlParam();
         final Map<String, String> headerMap = requestParam.getHead_param();
         final Map<String, Object> get_param = requestParam.getGet_param();
@@ -285,7 +292,8 @@ public class HttpMgrImpl implements HttpMgr {
         final String finalCacheUrl = cacheUrl;
         Call<ResponseBody> httpResultCall = RequestHelper.getInstance().reqHttpCallUrl(
                 requestHeaderMap, urlParam.getFinalUrl(), get_param, post_param, file_param, isEncrypt, isJsonRequest);
-        httpResultCall.enqueue(new Callback<ResponseBody>() {
+
+        Callback<ResponseBody> rb = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // Headers与Raw双重保证Cookie的成功获取
@@ -326,7 +334,8 @@ public class HttpMgrImpl implements HttpMgr {
                         result.setServerResponse();
                         result.setError();//设置失败
                         result.setCache(false);
-                        if (requestCallback != null) requestCallback.onRequestComplete(result);
+                        if (requestCallback != null)
+                            requestCallback.onRequestComplete(result);
                         return;
                     }
                 }
@@ -354,8 +363,12 @@ public class HttpMgrImpl implements HttpMgr {
                 result.setCache(false);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
+        };
 
-        });
+
+        httpResultCall.enqueue(rb);
+        lock.unlock();
+
         return new HTCallBack(httpResultCall);
     }
 }
