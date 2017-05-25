@@ -12,13 +12,10 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.invoke.WebAppInterface;
 import com.juxin.predestinate.module.util.PerformanceHelper;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
-import com.tencent.smtt.sdk.CookieManager;
-import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -74,7 +71,6 @@ public class WebPanel extends BasePanel {
             webSettings.setLoadWithOverviewMode(true);
         }
 
-        synCookies();//格式化写入cookie，需写在setJavaScriptEnabled之后
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView webView, String s) {
@@ -154,16 +150,6 @@ public class WebPanel extends BasePanel {
      */
     public void hideLoading() {
         customFrameLayout.showOfIndex(FRAME_WEB);
-    }
-
-    /**
-     * CookieManager会将这个Cookie存入该应用程序/data/data/databases/目录下的webviewCookiesChromium.db数据库的cookies表中
-     * 需要在当前用户退出登录的时候进行清除
-     */
-    private void synCookies() {
-        CookieSyncManager.createInstance(getContext());
-        CookieManager.getInstance().setCookie(url, LoginMgr.cookie);
-        CookieSyncManager.getInstance().sync();
     }
 
     private WebListener webListener;

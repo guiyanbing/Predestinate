@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.WindowManager;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
 import com.juxin.predestinate.R;
@@ -243,11 +242,12 @@ public class UIShow {
 
     /**
      * 打开资料完善页
+     *
      * @param gender 性别
      */
-    public static void showUserInfoCompleteAct(Context activity,int gender) {
+    public static void showUserInfoCompleteAct(Context activity, int gender) {
         Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
-        intent.putExtra("gender",gender);
+        intent.putExtra("gender", gender);
         activity.startActivity(intent);
     }
 
@@ -841,7 +841,7 @@ public class UIShow {
     public static void showQQService(Context context) {
         try {
             String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
-                    PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
+                    ModuleMgr.getCommonMgr().getCommonConfig().getService_qq();
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             if (intent.resolveActivity(context.getPackageManager()) != null) {
@@ -1172,7 +1172,7 @@ public class UIShow {
      * 普通送礼钻石充值弹框
      */
     public static void showGoodsDiamondDialog(Context context) {
-       showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
+        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
     }
 
     /**

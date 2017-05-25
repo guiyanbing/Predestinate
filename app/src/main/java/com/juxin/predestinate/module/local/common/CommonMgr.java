@@ -64,12 +64,10 @@ public class CommonMgr implements ModuleBase {
 
     @Override
     public void init() {
-        requestServerQQ();
     }
 
     @Override
     public void release() {
-
     }
 
     /**
@@ -203,19 +201,6 @@ public class CommonMgr implements ModuleBase {
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
-    }
-
-    /**
-     * 请求在线QQ配置
-     */
-    private void requestServerQQ() {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.serviceQQ, null, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                String serviceQQ = response.getResponseJson().optString("content");
-                PSP.getInstance().put(FinalKey.CONFIG_SERVICE_QQ, serviceQQ);
-            }
-        });
     }
 
     public void setGiftLists(GiftsList giftLists) {
@@ -602,7 +587,6 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getVerifyStatus, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-//                Log.e("TTTTTTTTTTTTTEEE",response.getResponseString()+"|||");
                 if (response.isOk()) {
                     mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
                     mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
@@ -660,7 +644,7 @@ public class CommonMgr implements ModuleBase {
      * @param touid    赠送对象UId
      * @param giftid   礼物Id
      * @param giftnum  礼物数量（不填为1）
-     * @param ftype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
+     * @param gtype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
      *                 //     * @param begid     索要Id
      * @param complete 请求完成后回调
      */
