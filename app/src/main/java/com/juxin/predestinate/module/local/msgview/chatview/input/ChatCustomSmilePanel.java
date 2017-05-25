@@ -10,8 +10,10 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -24,6 +26,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +56,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         this.items = items;
         this.mOutDelTv = outDelTv;
         setContentView(R.layout.p1_chat_default_smile);
+        MsgMgr.getInstance().attach(this);
         initView();
     }
 
@@ -136,21 +140,25 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             ImgSelectUtil.getInstance().pickPhotoGallery(context, new ImgSelectUtil.OnChooseCompleteListener() {
                 @Override
                 public void onComplete(String... path) {
-                    if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
-                        return;
-                    }
-
-                    ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_FACE, path[0], new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            if (response.isOk()) {
-                                UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                                uploadCFace(upLoadResult.getFile_http_path());
-                            } else {
-                                PToast.showShort("表情添加失败!");
-                            }
+                    try {
+                        if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
+                            PToast.showShort("图片选择失败");
+                            return;
                         }
-                    });
+                        String sPath = path[0];
+                        if (!BitmapUtil.bitmapIsSmall(sPath, 500)) {//尺寸小于500
+                            PToast.showShort("表情尺寸太大");
+                            return;
+                        }
+                        long fileL = new File(sPath).length();
+                        if (fileL > (1024 * 1024)) {//大小小于1M
+                            PToast.showShort("表情大小不能大于1M");
+                            return;
+                        }
+                        uploadCFace(sPath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } else {
@@ -158,7 +166,27 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
     }
 
-    private void uploadCFace(final String url) {
+    /**
+     * 上传图片，成功后执行添加表情接口
+     */
+    private void uploadCFace(String path) {
+        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_FACE, path, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                    addCFace(upLoadResult.getFile_http_path());
+                } else {
+                    PToast.showShort("表情添加失败");
+                }
+            }
+        });
+    }
+
+    /**
+     * 添加表情
+     */
+    private void addCFace(final String url) {
         ModuleMgr.getCommonMgr().addCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -172,6 +200,9 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         });
     }
 
+    /**
+     * 删除表情
+     */
     @Override
     public void delCEmoji(final String url, final int curPage, final int positon) {
         if (TextUtils.isEmpty(url)) {
@@ -200,7 +231,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
         switch (key) {
             case MsgType.MT_ADD_CUSTOM_SMILE:
-                uploadCFace((String) value);
+                addCFace((String) value);
                 break;
 
             default:

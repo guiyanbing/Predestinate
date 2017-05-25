@@ -40,7 +40,7 @@ public class UserInfo extends UserBasic {
 
     // --------------- TA人字段 ------------------------
     private int kf_id;
-    private String distance;        // 距离
+    private int distance;           // 距离
     private int followmecount;      // 关注数
     private int isfollow;           // 是否已关注该用户
     private String online_text;     // 在线时间 "七天前在线"
@@ -71,7 +71,7 @@ public class UserInfo extends UserBasic {
 
         // D
         this.setDiamand(detailObject.optInt("diamand"));
-        this.setDistance(detailObject.optString("distance"));
+        this.setDistance(detailObject.optInt("distance"));
         this.setDatingfor(detailObject.optString("datingfor"));
 
         // F
@@ -296,11 +296,11 @@ public class UserInfo extends UserBasic {
         this.followmecount = followmecount;
     }
 
-    public String getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(String distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
     }
 
@@ -504,7 +504,7 @@ public class UserInfo extends UserBasic {
         dest.writeLong(this.memdatenum);
         dest.writeString(this.cell_phone);
         dest.writeInt(this.kf_id);
-        dest.writeString(this.distance);
+        dest.writeInt(this.distance);
         dest.writeInt(this.followmecount);
         dest.writeInt(this.isfollow);
         dest.writeString(this.online_text);
@@ -545,7 +545,7 @@ public class UserInfo extends UserBasic {
         this.memdatenum = in.readLong();
         this.cell_phone = in.readString();
         this.kf_id = in.readInt();
-        this.distance = in.readString();
+        this.distance = in.readInt();
         this.followmecount = in.readInt();
         this.isfollow = in.readInt();
         this.online_text = in.readString();

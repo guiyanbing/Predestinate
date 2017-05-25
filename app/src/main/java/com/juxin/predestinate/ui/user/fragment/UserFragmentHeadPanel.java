@@ -33,6 +33,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
     private CircleImageView user_head, user_head_vip, user_head_status;
     private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
+    private View edit_top;
 
     private UserDetail myInfo;
 
@@ -45,6 +46,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
     }
 
     private void initView() {
+        edit_top = findViewById(R.id.edit_top);
         user_head = (CircleImageView) findViewById(R.id.user_head);
         user_head_vip = (CircleImageView) findViewById(R.id.user_head_vip);
         user_head_status = (CircleImageView) findViewById(R.id.user_head_status);
@@ -116,7 +118,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
                 break;
             case R.id.user_nick://修改昵称
                 EditPopupWindow popupWindow = new EditPopupWindow(getContext(), EditKey.s_key_nickName, user_nick);
-                popupWindow.showPopupWindow();
+                popupWindow.showPopupWindow(edit_top);
                 break;
             case R.id.iv_code_copy://复制邀请码
                 ChineseFilter.copyString(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getShareCode());

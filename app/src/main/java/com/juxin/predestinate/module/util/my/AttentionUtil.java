@@ -1,7 +1,5 @@
 package com.juxin.predestinate.module.util.my;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -34,14 +32,15 @@ public class AttentionUtil {
             public void run() {
                 if (userInfos.size()<=0){
                     String jsonStr = PSP.getInstance().getString(USERSKEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),"");
-                                Log.e("TTTTTTTJJJ111", jsonStr);
-                                PSP.getInstance().remove(USERSKEY+ModuleMgr.getCenterMgr().getMyInfo().getUid());
+//                                Log.e("TTTTTTTJJJ111", jsonStr);
+//                                PSP.getInstance().remove(USERSKEY+ModuleMgr.getCenterMgr().getMyInfo().getUid());
                     AttentionUserDetailList list = new AttentionUserDetailList();
                     list.parseJson(jsonStr);
                     List<AttentionUserDetail> userDetails = list.getAttentionUserDetailList();
                     for (AttentionUserDetail detail:userDetails){
                         userInfos.put(detail.getUid(),detail);
                     }
+//                    Log.e("TTTTTTTTTTTTPPP",userDetails.size()+"||"+userInfos.size());
                 }
             }
         }).start();
@@ -51,7 +50,7 @@ public class AttentionUtil {
         userInfos.put(userDetail.getUid(),userDetail);
     }
 
-    public static AttentionUserDetail getUserDetail(long uid){
+    public static AttentionUserDetail getUserDetail(Long uid){
         return userInfos.get(uid);
     }
 
@@ -88,10 +87,13 @@ public class AttentionUtil {
      * @return
      */
     public static List<AttentionUserDetail> HandleAttentionList(List<AttentionList.AttentionInfo> infos ,int attention){
-        userDetails.clear();
-        userMyDetails.clear();
+        if (attention == ATTENTIONME)
+            userDetails.clear();
+        else
+            userMyDetails.clear();
         for (int i = 0 ;i < infos.size();i++){
             AttentionUserDetail detail = getUserDetail(infos.get(i).getUid());
+//            Log.e("TTTTTTTTTTTTYYY",detail+"|||i="+i+"||uid="+infos.get(i).getUid());
             if ( detail != null){
                 if (attention == ATTENTIONME){
                     userDetails.add(detail);

@@ -34,7 +34,6 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
     private ImageView iv_follow;  // 关注星标
     private int followType = 1;   // 关注、取消关注
 
-    private String distance, online;
     private int follow;
 
     public UserCheckInfoHeadPanel(Context context, int channel, UserDetail userProfile) {
@@ -50,8 +49,6 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
     private void initData() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-            distance = "5km以内";
-            online = getContext().getString(R.string.user_online);
             return;
         }
 
@@ -59,8 +56,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
             PToast.showShort(getContext().getString(R.string.user_other_info_req_fail));
             return;
         }
-        distance = userDetail.getDistance() + "km";
-        online = userDetail.getOnline_text();
+        getContext().getString(R.string.user_info_distance_near);
         follow = userDetail.getFollowmecount();
     }
 
@@ -96,8 +92,10 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
         user_id.setText("ID:" + userDetail.getUid());
         user_height.setText(userDetail.getHeight() + "cm");
-        user_distance.setText(distance);
-        user_online_time.setText(online);
+        user_online_time.setText(!TextUtils.isEmpty(userDetail.getOnline_text()) ? userDetail.getOnline_text() :
+                getContext().getString(R.string.user_online));
+        user_distance.setText(userDetail.getDistance() > 5 ? getContext().getString(R.string.user_info_distance_far) :
+                getContext().getString(R.string.user_info_distance_near));
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
         fl_topN.setVisibility(userDetail.getTopN() <= 0 ? View.GONE : View.VISIBLE);

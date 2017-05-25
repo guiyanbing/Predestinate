@@ -309,6 +309,8 @@
     <string name="check_info_chat_pay">聊天</string>
     <string name="user_info_chat_video">%d钻石/分钟</string>
     <string name="user_info_chat_voice">%d钻石/分钟</string>
+    <string name="user_info_distance_near">5km以内</string>
+    <string name="user_info_distance_far">5km以外</string>
     <string name="user_other_info_set">资料设置</string>
     <string name="user_other_remark_name">备注名</string>
     <string name="user_other_set_chat_voice">为TA设置语音接听</string>
@@ -654,7 +656,8 @@
     <string name="txt_verify_complete_desc">你可以用手机号登录，密码为:</string>
     <string name="bank_id">银行卡号</string>
     <string name="zhi_fu_id">支付宝账号</string>
-    <string name="id_card_tips">请填写与本人身份证一致的支付宝信息</string>
+    <string name="id_card_tips_zhi">请填写与本人身份证一致的支付宝帐号信息</string>
+    <string name="id_card_tips_bank">请填写与本人身份证一致的银行卡信息</string>
     <string name="real_name">真实姓名</string>
     <string name="input_real_name">输入真实姓名</string>
     <string name="id_card">身份证号</string>

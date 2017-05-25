@@ -109,6 +109,14 @@
                     android:layout_toRightOf="@+id/tv_remark"
                     android:textColor="@color/txt_middle"
                     android:textSize="@dimen/center_item_txt" />
+                <View
+                    android:id="@+id/edit_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignLeft="@+id/user_remark"
+                    android:layout_alignTop="@+id/user_remark"
+                    android:background="@color/black"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <include layout="@layout/center_information_line" />

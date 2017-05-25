@@ -1330,4 +1330,29 @@ public final class BitmapUtil {
         }
         return data;
     }
+
+    /**
+     * 判断图片高度和宽度是否过小
+     */
+    public static boolean bitmapIsSmall(String sPath, int size) {
+        BitmapFactory.Options options = getBitmapOptions(sPath);
+        return options.outWidth < size || options.outHeight < size;
+    }
+
+    private static BitmapFactory.Options getBitmapOptions(String sPath) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(sPath, options);
+
+        if (options.outHeight == -1 || options.outWidth == -1) {
+            try {
+                ExifInterface exifInterface = new ExifInterface(sPath);
+                options.outHeight = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, ExifInterface.ORIENTATION_NORMAL);//获取图片的高度
+                options.outWidth = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, ExifInterface.ORIENTATION_NORMAL);//获取图片的宽度
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return options;
+    }
 }

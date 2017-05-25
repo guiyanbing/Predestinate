@@ -82,8 +82,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     }
 
     private void initTitle() {
-        setTitleBackground(R.color.transparent);
-        setTitleLeftImg(R.drawable.p1_back_white_btn, listener);
+        setBackView(userDetail.getNickname());
+        findViewById(R.id.cut_line).setVisibility(View.GONE);
+        if (userDetail.isMan()) {
+            setTitleBackground(R.color.picker_blue_color);
+        }
         if (channel != CenterConstant.USER_CHECK_INFO_OWN)
             setTitleRightImg(R.drawable.f1_more_vertical_dot, listener);
     }
@@ -118,10 +121,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.base_title_left_view:     // 标题左侧退出按钮
-                    back();
-                    break;
-
                 case R.id.base_title_right_img_container:// 标题右侧按钮
                     UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userDetail.getUid(), userDetail, CenterConstant.USER_SET_FROM_CHECK);
                     break;

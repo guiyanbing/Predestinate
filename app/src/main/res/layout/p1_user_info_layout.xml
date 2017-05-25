@@ -3,10 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/base_title" />
+
     <ScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/base_title"
         android:fadingEdge="none"
         android:overScrollMode="always"
         android:scrollbars="none">
@@ -131,8 +134,6 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <include layout="@layout/base_title" />
-
     <!-- 礼物悬框 -->
     <ImageView
         android:id="@+id/iv_gift"
@@ -143,6 +144,6 @@
         android:layout_marginBottom="@dimen/px30_dp"
         android:layout_marginRight="@dimen/px60_dp"
         android:background="@drawable/f1_user_check_info_gift"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -28,6 +28,7 @@ import com.juxin.predestinate.ui.user.my.view.AddPhotoView;
  */
 public class IDCardAuthenticationAct extends BaseActivity implements View.OnClickListener,RequestComplete{
 
+    private TextView tvTitleInfo;
     private EditText eitName;
     private EditText eitIdCard;
     private EditText eitOpenBank;
@@ -58,6 +59,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
 
     private void initView() {
         mIdCardVerifyStatusInfo = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo();
+        tvTitleInfo = (TextView) findViewById(R.id.id_card_tv_titile_info);
         eitName = (EditText) findViewById(R.id.id_card_eit_name);
         eitIdCard = (EditText) findViewById(R.id.id_card_eit_id_card);
         eitOpenBank = (EditText) findViewById(R.id.id_card_eit_open_bank);
@@ -89,6 +91,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             rbZhi.setChecked(false);
             llOpenBank.setVisibility(View.VISIBLE);
             llBankBranch.setVisibility(View.VISIBLE);
+            tvTitleInfo.setText(getString(R.string.id_card_tips_bank));
             tvBankCardId.setText(getString(R.string.bank_id));
             eitOpenBank.setText(mIdCardVerifyStatusInfo.getBank());
             eitBankBranch.setText(mIdCardVerifyStatusInfo.getSubbank());
@@ -152,6 +155,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 rbYin.setChecked(false);
                 llOpenBank.setVisibility(View.GONE);
                 llBankBranch.setVisibility(View.GONE);
+                tvTitleInfo.setText(getString(R.string.id_card_tips_zhi));
                 tvBankCardId.setText(R.string.zhi_fu_id);
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_TEXT);
                 eitBankCardId.setHint(R.string.input_your_zhifubao_id);
@@ -161,6 +165,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 rbZhi.setChecked(false);
                 llOpenBank.setVisibility(View.VISIBLE);
                 llBankBranch.setVisibility(View.VISIBLE);
+                tvTitleInfo.setText(getString(R.string.id_card_tips_bank));
                 tvBankCardId.setText(getString(R.string.bank_id));
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
                 eitBankCardId.setHint(R.string.input_your_bank_card_id);
