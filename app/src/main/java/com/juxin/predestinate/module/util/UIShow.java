@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.WindowManager;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
 import com.juxin.predestinate.R;
@@ -843,7 +842,7 @@ public class UIShow {
     public static void showQQService(Context context) {
         try {
             String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
-                    PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
+                    ModuleMgr.getCommonMgr().getCommonConfig().getService_qq();
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             if (intent.resolveActivity(context.getPackageManager()) != null) {

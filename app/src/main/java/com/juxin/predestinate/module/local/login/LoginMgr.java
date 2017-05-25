@@ -1,11 +1,8 @@
 package com.juxin.predestinate.module.local.login;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -209,7 +206,7 @@ public class LoginMgr implements ModuleBase {
                     result.parseJson(jsonObject.toString());
                     putAllLoginInfo(Long.parseLong(result.getUsername()), result.getPassword(), false);
                     ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
-                    UIShow.showUserInfoCompleteAct(context,gender);
+                    UIShow.showUserInfoCompleteAct(context, gender);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -247,7 +244,7 @@ public class LoginMgr implements ModuleBase {
                         ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());
                         if (!result.isValidDetailInfo()) {
                             PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
-                            UIShow.showUserInfoCompleteAct(context,result.getGender());
+                            UIShow.showUserInfoCompleteAct(context, result.getGender());
                             return;
                         }
                         UIShow.showMainClearTask(context);
@@ -333,19 +330,9 @@ public class LoginMgr implements ModuleBase {
     }
 
     /**
-     * 清除当前用户存储到cookies表中的所有数据
-     */
-    private void removeCookie(Context context) {
-        CookieSyncManager.createInstance(context);
-        CookieManager.getInstance().removeAllCookie();
-        CookieSyncManager.getInstance().sync();
-    }
-
-    /**
      * 退出登录，并清空用户登录信息
      */
     public void logout() {
-        removeCookie(App.context);
         NotificationsUtils.cancelAll();//如果还有通知栏提示，在退出帐号的时候全部清掉
         setUid("");//清空uid
         clearCookie();//在setLoginInfo方法之前执行
