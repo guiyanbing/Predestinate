@@ -209,7 +209,7 @@ public class LoginMgr implements ModuleBase {
                     result.parseJson(jsonObject.toString());
                     putAllLoginInfo(Long.parseLong(result.getUsername()), result.getPassword(), false);
                     ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
-                    UIShow.showUserInfoCompleteAct(context);
+                    UIShow.showUserInfoCompleteAct(context,gender);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -247,7 +247,7 @@ public class LoginMgr implements ModuleBase {
                         ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());
                         if (!result.isValidDetailInfo()) {
                             PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
-                            UIShow.showUserInfoCompleteAct(context);
+                            UIShow.showUserInfoCompleteAct(context,result.getGender());
                             return;
                         }
                         UIShow.showMainClearTask(context);

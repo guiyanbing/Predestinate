@@ -278,7 +278,7 @@ public class VideoAudioChatHelper{
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("tuid", dstUid);
         postParams.put("vtype", type);
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.inviteVideoChat, postParams, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.inviteVideoChat, postParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 handleInviteChat(context, response.getResponseString(), dstUid, type);
