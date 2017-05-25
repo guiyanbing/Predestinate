@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
@@ -62,7 +63,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
         BaseMessage baseMessage = new BaseMessage();
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Follow_Msg.type));
-        baseMessage.setWeight(BaseMessage.Max_Weight);
+        baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         int num = ModuleMgr.getChatListMgr().getFollowNum();
         baseMessage.setNum(num);
@@ -73,7 +74,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
         baseMessage = new BaseMessage();
         baseMessage.setWhisperID(String.valueOf(MailMsgID.MyFriend_Msg.type));
-        baseMessage.setWeight(BaseMessage.Max_Weight);
+        baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
         int friendNum = ModuleMgr.getCommonMgr().getFriendNum();
@@ -83,7 +84,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
         baseMessage = new BaseMessage();
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
-        baseMessage.setWeight(BaseMessage.Max_Weight);
+        baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Geet_Item_Other.type);
         baseMessage.setName("打招呼的人");
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
@@ -98,7 +99,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public int getViewTypeCount() {
-        int TYPE_COUNT = 2;
+        int TYPE_COUNT = 3;
         return TYPE_COUNT;
     }
 

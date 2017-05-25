@@ -6,7 +6,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -270,9 +269,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             return;
         }
 
-        ArrayList<String> pics = new ArrayList<>();
-        pics.add(url);
-        UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), pics);
+        UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), url);
     }
 
     private void onVideoClickContent(CommonMessage msg) {

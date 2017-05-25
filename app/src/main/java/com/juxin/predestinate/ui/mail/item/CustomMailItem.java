@@ -61,7 +61,6 @@ public class CustomMailItem extends LinearLayout {
      * @return
      */
     CustomLetterMailItem customLetterMailItem;
-
     public CustomBaseMailItem getItemLetterView() {
         customLetterMailItem = (CustomLetterMailItem) customFrameLayout.findViewById(R.id.chat_fragment_item_letter);
         customLetterMailItem.init();

@@ -34,6 +34,7 @@ public class GiftMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setRu(object.optInt("ru"));
 
         if(getType() == 20){
             this.setGiftID(object.optInt("gift_id"));

@@ -46,7 +46,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     @Override
     public void showData(BaseMessage msgData) {
         if (!TextUtils.isEmpty(msgData.getAvatar())) {
-            ImageLoader.loadAvatar(getContext(), msgData.getAvatar(), item_headpic);
+            ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
         } else {
             item_headpic.setImageResource(msgData.getLocalAvatar());
         }

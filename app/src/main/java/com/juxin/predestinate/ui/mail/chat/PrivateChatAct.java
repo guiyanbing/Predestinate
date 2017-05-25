@@ -55,7 +55,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private ImageView cus_top_title_img,cus_top_img_phone;
     private TextView base_title_title, cus_top_title_txt;
     private LMarqueeView lmvMeassages;
-    private  LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
+    private LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
 
     private LinearLayout privatechat_head;
     private ImageView chat_title_attention_icon;

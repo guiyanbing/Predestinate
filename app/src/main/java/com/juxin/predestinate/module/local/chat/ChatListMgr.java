@@ -93,11 +93,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
         msgList.clear();
         greetList.clear();
         if (messages != null && messages.size() > 0) {
-            msgList.addAll(messages);
             for (BaseMessage tmp : messages) {
-                if(!tmp.isRu()){
+                PLogger.printObject("tmp===dd=" + tmp.getRu());
+                if(tmp.isRu()){
+
+                }else {
                     greetList.add(tmp);
                 }
+                msgList.add(tmp);
                 unreadNum += tmp.getNum();
             }
         }

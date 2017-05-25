@@ -256,8 +256,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 TimerUtil.beginTime(new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        int UnreadNumber = ModuleMgr.getChatListMgr().getUnreadNumber();
-                        onMsgNum(UnreadNumber);
+                        onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
                     }
                 }, 200);
                 break;

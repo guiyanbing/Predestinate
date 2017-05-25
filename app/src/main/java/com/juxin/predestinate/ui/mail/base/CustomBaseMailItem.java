@@ -94,7 +94,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     public void showData(BaseMessage msgData) {
-        ImageLoader.loadAvatar(getContext(), msgData.getAvatar(), item_headpic);
+        ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
         PLogger.printObject("nickname===1" + nickname);
