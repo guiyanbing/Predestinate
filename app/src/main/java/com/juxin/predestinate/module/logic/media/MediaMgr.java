@@ -69,7 +69,7 @@ public class MediaMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (complete != null)
                     complete.onRequestComplete(response);
-                FileUtil.deleteFile(url);
+                //FileUtil.deleteFile(url);
             }
         });
     }
