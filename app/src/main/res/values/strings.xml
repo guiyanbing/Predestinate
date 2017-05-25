@@ -592,8 +592,10 @@
     <string name="defriend_sure_dialog_surebtn">知道了</string>
 
     <string name="my_friend_title">我的好友</string>
+    <string name="my_friend_nodata">暂无好友，赠送礼物即可成为好友</string>
     <string name="my_friend_righ_title">黑名单</string>
     <string name="my_defriend_title">黑名单</string>
+    <string name="my_defriend_nodata">您未加任何好友进黑名单</string>
     <string name="send_gift">赠送该礼物需要</string>
     <string name="my_attention">我的关注</string>
 
@@ -609,6 +611,9 @@
     <string name="say_hi_avatar_fail">您的头像被拒绝，请重新上传头像，通过审核后才能继续打招呼</string>
     <string name="say_hi_group_num_state">群发功能每天只能使用三次！</string>
     <string name="say_hi_group_refresh">请先刷新列表再打招呼</string>
+    <string name="say_hello_user_act_title">打招呼的人</string>
+
+    "
     <!--发现end-->
 
 

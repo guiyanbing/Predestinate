@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.discover;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -10,33 +11,34 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+
+import java.util.List;
 
 /**
  * Created by zhang on 2017/5/4.
  */
 
-public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight> {
+public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
 
-    private Context context;
 
-    public MyDefriendAdapter(Context context) {
-        super();
-        this.context = context;
+    public MyDefriendAdapter(Context context, List<UserInfoLightweight> datas) {
+        super(context, datas);
     }
 
     @Override
-    public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_my_defriend_item};
-    }
-
-    @Override
-    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-        MyViewHolder holder = new MyViewHolder(viewHolder);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        MyViewHolder holder;
+        if (convertView == null) {
+            convertView = inflate(R.layout.f1_my_friend_item);
+            holder = new MyViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (MyViewHolder) convertView.getTag();
+        }
         final UserInfoLightweight userInfo = getItem(position);
-        ImageLoader.loadRoundCorners(context, userInfo.getAvatar(), 8, holder.iv_avatar);
+        ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
@@ -44,11 +46,11 @@ public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweig
             holder.lin_ranking.setVisibility(View.VISIBLE);
             if (userInfo.isMan()) {
                 holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-                holder.tv_ranking_type.setText(context.getString(R.string.top_type_man));
+                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_man));
                 holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
             } else {
                 holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-                holder.tv_ranking_type.setText(context.getString(R.string.top_type_woman));
+                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_woman));
                 holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
             }
         } else {
@@ -73,21 +75,17 @@ public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweig
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
             }
         });
 
         holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
             }
         });
-    }
-
-    @Override
-    public int getRecycleViewItemType(int position) {
-        return 0;
+        return convertView;
     }
 
 
@@ -97,11 +95,11 @@ public class MyDefriendAdapter extends BaseRecyclerViewAdapter<UserInfoLightweig
         private LinearLayout lin_ranking;
         private RelativeLayout rel_item;
 
-        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+        public MyViewHolder(View convertView) {
             initView(convertView);
         }
 
-        private void initView(BaseRecyclerViewHolder convertView) {
+        private void initView(View convertView) {
             iv_avatar = (ImageView) convertView.findViewById(R.id.mydefriend_item_avatar);
             iv_vip = (ImageView) convertView.findViewById(R.id.mydefriend_item_vip_state);
 

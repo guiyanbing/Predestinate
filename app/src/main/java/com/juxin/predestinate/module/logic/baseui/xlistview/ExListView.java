@@ -361,6 +361,12 @@ public class ExListView extends ListView implements OnScrollListener {
         mHeaderView.setHeaderStr(normalStr, refreshingStr);
     }
 
+    public void setHeaderHintType(int type) {
+        if (mHeaderView != null) {
+            mHeaderView.setHeaderHintType(type);
+        }
+    }
+
     public void setXListViewListener(IXListViewListener l) {
         mListViewListener = l;
     }
