@@ -12,6 +12,7 @@ import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
+import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.bean.start.PhoneVerifyResult;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
@@ -33,9 +34,9 @@ public enum UrlParam {
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
-    serviceQQ("user/serviceQQ", null, false),//请求在线客服QQ
     statistics(Hosts.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
+    reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
 
     //============================== 设置页相关接口 =============================
     reqReqVerifyCode("Public/sendSMSM", false),//获取手机验证码
@@ -135,14 +136,10 @@ public enum UrlParam {
     getFollowing("MoneyTree/getFollowing", true),
     // 关注我的列表
     getFollowers("MoneyTree/getFollowers", true),
-    // 取消关注某某
-    unfollow("follow/unfollow", true),
-    // 关注某某
-    follow("follow/follow", true),
     // 上传身份证照片
     uploadIdCard("User/uploadIdCard", true),
     // 获取最近礼物列表
-    lastGiftList("gift/lastgiftlist", GiftMessageList.class,false),
+    lastGiftList("gift/lastgiftlist", GiftMessageList.class, false),
 
     //================= 发现 ===========
     //举报

@@ -2,34 +2,31 @@ package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
+import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.juxin.predestinate.module.logic.application.App.getActivity;
 
 /**
  * 我的好友
  * Created by zhang on 2017/5/4.
  */
 
-public class MyFriendsAct extends BaseActivity implements XRecyclerView.LoadingListener, RequestComplete {
+public class MyFriendsAct extends BaseActivity implements RequestComplete, ExListView.IXListViewListener {
 
-    private CustomRecyclerView customRecyclerView;
-    private XRecyclerView xRecyclerView;
+    private CustomStatusListView customStatusListView;
+    private ExListView exListView;
 
     private MyFriendsAdapter adapter;
     private List<UserInfoLightweight> data = new ArrayList<>();
@@ -57,24 +54,22 @@ public class MyFriendsAct extends BaseActivity implements XRecyclerView.LoadingL
     }
 
     private void initView() {
-        customRecyclerView = (CustomRecyclerView) findViewById(R.id.myfriend_list);
-        xRecyclerView = customRecyclerView.getXRecyclerView();
-        xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        xRecyclerView.setLoadingListener(this);
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingMoreEnabled(true);
+        customStatusListView = (CustomStatusListView) findViewById(R.id.myfriend_list);
+        exListView = customStatusListView.getExListView();
+        exListView.setXListViewListener(this);
+        exListView.setPullRefreshEnable(true);
+        exListView.setPullLoadEnable(true);
 
-        adapter = new MyFriendsAdapter(this);
-        adapter.setList(data);
-        xRecyclerView.setAdapter(adapter);
+        adapter = new MyFriendsAdapter(this, data);
+        exListView.setAdapter(adapter);
 
-        customRecyclerView.showLoading();
+        customStatusListView.showLoading();
     }
 
     @Override
     public void onRefresh() {
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingMoreEnabled(true);
+        exListView.setPullRefreshEnable(true);
+        exListView.setPullLoadEnable(true);
         page = 1;
         ModuleMgr.getCommonMgr().getMyFriends(page, this);
     }
@@ -99,33 +94,32 @@ public class MyFriendsAct extends BaseActivity implements XRecyclerView.LoadingL
                         }
                     }
                     data.addAll(lightweightList.getUserInfos());
-                    customRecyclerView.showXrecyclerView();
+                    customStatusListView.showExListView();
                     adapter.notifyDataSetChanged();
                 } else {
                     if (page == 1) {
-                        customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
+                        customStatusListView.showNoData(getString(R.string.my_friend_nodata), "去添加", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                customRecyclerView.showLoading();
-                                onRefresh();
+                                back();
                             }
                         });
                     } else {
-                        xRecyclerView.setLoadingMoreEnabled(false);
+                        exListView.setPullLoadEnable(false);
                     }
                 }
 
                 if (page == 1) {
-                    xRecyclerView.refreshComplete();
+                    exListView.stopRefresh();
                 } else {
-                    xRecyclerView.loadMoreComplete();
+                    exListView.stopLoadMore();
                 }
             }
         } else {
-            customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
+            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    customRecyclerView.showLoading();
+                    customStatusListView.showLoading();
                     onRefresh();
                 }
             });

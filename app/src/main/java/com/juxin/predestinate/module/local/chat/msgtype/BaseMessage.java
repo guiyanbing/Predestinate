@@ -642,43 +642,39 @@ public class BaseMessage implements IBaseMessage {
      * @return
      */
     public static String getContent(BaseMessage msg) {
-        String str = "";
+        String result = "";
         BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
         if (messageType == null) {
-            return str;
+            return result;
         }
         switch (messageType) {
             case hi:
                 String content = msg.getMsgDesc();
                 if (TextUtils.isEmpty(content)) {
-                    str = "[打招呼]";
+                    result = "[打招呼]";
                 } else {
-                    str = content;
+                    result = content;
                 }
                 break;
             case common:
-                str = msg.getMsgDesc();
+                result = msg.getMsgDesc();
                 break;
             case hint:
             case html://html消息
-                str = msg.getMsgDesc();
+                result = msg.getMsgDesc();
                 break;
             case gift:
             case wantGiftTwo:
-                str = msg.getMsgDesc();
+                result = msg.getMsgDesc();
                 break;
             case video: {
                 VideoMessage videoMessage = (VideoMessage) msg;
-                if (videoMessage.getVideoTp() != 3) {
-                    str = "通话结束";
-                } else {
-                    str = videoMessage.isSender() ? "[未接通]" : "[未接来电]";
-                }
+                result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
+                        TimeUtil.getCurrentTime(videoMessage.getTime()), videoMessage.isSender());
                 break;
             }
-            default:
-                break;
+
         }
-        return str;
+        return result;
     }
 }

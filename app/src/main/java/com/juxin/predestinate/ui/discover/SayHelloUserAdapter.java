@@ -3,11 +3,11 @@ package com.juxin.predestinate.ui.discover;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
+import com.juxin.predestinate.ui.mail.base.CustomLetterMailItem;
 
 import java.util.List;
 
@@ -15,13 +15,12 @@ import java.util.List;
  * Created by zhang on 2017/5/22.
  */
 
-public class SayHelloUserAdapter extends ExBaseAdapter<String> {
+public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
 
 
-    public SayHelloUserAdapter(Context context, List<String> datas) {
+    public SayHelloUserAdapter(Context context, List<BaseMessage> datas) {
         super(context, datas);
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -34,39 +33,22 @@ public class SayHelloUserAdapter extends ExBaseAdapter<String> {
             vh = (MyViewHolder) convertView.getTag();
         }
 
-        int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        vh.test_tv.measure(width, height);
-        setItemHeight(vh.test_tv.getMeasuredHeight() + 1);
-
-        vh.test_tv.setText(getItem(position).toString());
-        if (position == 3) {
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) vh.test_tv.getLayoutParams();
-            layoutParams.setMargins(0, 35, 0, 0);
-            vh.test_tv.setLayoutParams(layoutParams);
-        } else {
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) vh.test_tv.getLayoutParams();
-            layoutParams.setMargins(0, 0, 0, 0);
-            vh.test_tv.setLayoutParams(layoutParams);
-        }
+        vh.letterMailItem.showData(getItem(position), false);
         return convertView;
     }
 
-    private class MyViewHolder {
-        TextView test_tv;
+    class MyViewHolder {
+
+        CustomLetterMailItem letterMailItem;
 
         public MyViewHolder(View convertView) {
-            test_tv = (TextView) convertView.findViewById(R.id.test_tv_view);
+            initView(convertView);
         }
-    }
 
-    private int itemHeight;
+        private void initView(View convertView) {
+            letterMailItem = (CustomLetterMailItem) convertView.findViewById(R.id.say_hello_users_item);
+            letterMailItem.init();
+        }
 
-    public void setItemHeight(int itemHeight) {
-        this.itemHeight = itemHeight;
-    }
-
-    public int getItemHeight() {
-        return itemHeight;
     }
 }

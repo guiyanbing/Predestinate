@@ -10,6 +10,10 @@ public class HtmlMessage extends BaseMessage {
 
     private String htm;
 
+    public HtmlMessage() {
+        super();
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);

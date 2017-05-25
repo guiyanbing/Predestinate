@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,8 +21,8 @@ public class XListViewHeaderExt extends LinearLayout {
 
     private LinearLayout mContainer;
     private TextView mHintTextView;
-    //    private FrameLayout mHeartContainer;
-//    private FrameLayout mHeartContainerExt;
+    private FrameLayout mHeartContainer;
+    private FrameLayout mHeartContainerExt;
     private RelativeLayout mContent;
     private String mNormalStr, mRefeshingStr;
 
@@ -78,21 +80,21 @@ public class XListViewHeaderExt extends LinearLayout {
         setGravity(Gravity.BOTTOM);
 
         mHintTextView = (TextView) findViewById(R.id.xlistview_header_hint_textview);
-//        mHeartContainer = (FrameLayout) findViewById(R.id.xlistview_header_heart_container);
-//        mHeartContainerExt = (FrameLayout) findViewById(R.id.xlistview_header_heart_ext);
+        mHeartContainer = (FrameLayout) findViewById(R.id.xlistview_header_heart_container);
+        mHeartContainerExt = (FrameLayout) findViewById(R.id.xlistview_header_heart_ext);
         mContent = (RelativeLayout) findViewById(R.id.xlistview_header_content);
     }
 
     public void setState(int state) {
-        if (state == mState) return;
+//        if (state == mState) return;
 
-//        if (state == STATE_REFRESHING) {
-//            mHeartContainer.setVisibility(View.INVISIBLE);
-//            mHeartContainerExt.setVisibility(View.VISIBLE);
-//        } else {
-//            mHeartContainer.setVisibility(View.VISIBLE);
-//            mHeartContainerExt.setVisibility(View.INVISIBLE);
-//        }
+        if (state == STATE_REFRESHING) {
+            mHeartContainer.setVisibility(View.INVISIBLE);
+            mHeartContainerExt.setVisibility(View.VISIBLE);
+        } else {
+            mHeartContainer.setVisibility(View.VISIBLE);
+            mHeartContainerExt.setVisibility(View.INVISIBLE);
+        }
 
         switch (state) {
             case STATE_NORMAL:
@@ -136,16 +138,16 @@ public class XListViewHeaderExt extends LinearLayout {
         lp.height = height;
         mContainer.setLayoutParams(lp);
 
-//        height = (int) (height / 1.5);
-//        RelativeLayout.LayoutParams rrlp = (RelativeLayout.LayoutParams) mHeartContainer.getLayoutParams();
-//        if (height <= mContainerBoundary && height > 0) {
-//            rrlp.width = (int) (mContainerWidth - height);
-//            rrlp.height = (int) (mContainerHeight - height);
-//        } else if (height > mContainerBoundary) {
-//            rrlp.width = (int) (mContainerWidth - mContainerBoundary);
-//            rrlp.height = (int) (mContainerHeight - mContainerBoundary);
-//        }
-//        mHeartContainer.setLayoutParams(rrlp);
+        height = (int) (height / 1.5);
+        RelativeLayout.LayoutParams rrlp = (RelativeLayout.LayoutParams) mHeartContainer.getLayoutParams();
+        if (height <= mContainerBoundary && height > 0) {
+            rrlp.width = (int) (mContainerWidth - height);
+            rrlp.height = (int) (mContainerHeight - height);
+        } else if (height > mContainerBoundary) {
+            rrlp.width = (int) (mContainerWidth - mContainerBoundary);
+            rrlp.height = (int) (mContainerHeight - mContainerBoundary);
+        }
+        mHeartContainer.setLayoutParams(rrlp);
     }
 
     public int getVisiableHeight() {

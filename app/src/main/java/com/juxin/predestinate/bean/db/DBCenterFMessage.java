@@ -9,9 +9,8 @@ import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.logic.config.UrlParam;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -55,7 +54,7 @@ public class DBCenterFMessage {
      */
     public long insertMsg(BaseMessage baseMessage) {
         if (baseMessage == null) {
-            return DBConstant.ERROR;
+            return MessageConstant.ERROR;
         }
 
         try {
@@ -83,7 +82,7 @@ public class DBCenterFMessage {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     /**
@@ -93,7 +92,7 @@ public class DBCenterFMessage {
      */
     public int updateMsg(BaseMessage baseMessage){
         if(baseMessage == null){
-            return DBConstant.ERROR;
+            return MessageConstant.ERROR;
         }
 
         try {
@@ -133,13 +132,13 @@ public class DBCenterFMessage {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     public long updateToReadAll(){
         ContentValues values = new ContentValues();
-        values.put(FMessage.COLUMN_STATUS, String.valueOf(DBConstant.READ_STATUS));
-        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(DBConstant.UNREAD_STATUS));
+        values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
     }
     /**
      * 更新已读消息
@@ -153,22 +152,22 @@ public class DBCenterFMessage {
             String[] str;
             if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
                 sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-                str = new String[]{channelID, userID, String.valueOf(DBConstant.UNREAD_STATUS)};
+                str = new String[]{channelID, userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
             } else if (!TextUtils.isEmpty(channelID)) {
                 sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-                str = new String[]{channelID, String.valueOf(DBConstant.UNREAD_STATUS)};
+                str = new String[]{channelID, String.valueOf(MessageConstant.UNREAD_STATUS)};
             } else {
                 sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-                str = new String[]{userID, String.valueOf(DBConstant.UNREAD_STATUS)};
+                str = new String[]{userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
             }
 
             ContentValues values = new ContentValues();
-            values.put(FMessage.COLUMN_STATUS, String.valueOf(DBConstant.READ_STATUS));
+            values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
             return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     public long updateToReadVoice(long msgID) {
@@ -183,22 +182,22 @@ public class DBCenterFMessage {
 //            String[] str;
 //            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
 //                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ? " + FMessage.COLUMN_TYPE + " = ?";
-//                str = new String[]{channelID, userID, String.valueOf(DBConstant.UNREAD_STATUS)};
+//                str = new String[]{channelID, userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
 //            } else if (!TextUtils.isEmpty(channelID)) {
 //                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-//                str = new String[]{channelID, String.valueOf(DBConstant.UNREAD_STATUS)};
+//                str = new String[]{channelID, String.valueOf(MessageConstant.UNREAD_STATUS)};
 //            } else {
 //                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-//                str = new String[]{userID, String.valueOf(DBConstant.UNREAD_STATUS)};
+//                str = new String[]{userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
 //            }
 //
 //            ContentValues values = new ContentValues();
-//            values.put(FMessage.COLUMN_STATUS, String.valueOf(DBConstant.READ_STATUS));
+//            values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
 //            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-//        return DBConstant.ERROR;
+//        return MessageConstant.ERROR;
 //
 //
 //        Cursor cursor = null;
@@ -265,7 +264,6 @@ public class DBCenterFMessage {
      * @return
      */
     public Observable<List<BaseMessage>> queryBySqlFmessage(String sql) {
-        PLogger.printObject("convert==" + "111111111");
         return mDatabase.createQuery(FMessage.FMESSAGE_TABLE, sql)
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override

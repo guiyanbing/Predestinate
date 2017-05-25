@@ -5,11 +5,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
@@ -64,10 +64,9 @@ public class DBCenterFLetter {
      */
     public long insertLetter(BaseMessage baseMessage) {
         if (baseMessage == null) {
-            return DBConstant.ERROR;
+            return MessageConstant.ERROR;
         }
 
-        PLogger.d("Fl=== + insertLetter");
         try {
             final ContentValues values = new ContentValues();
             values.put(FLetter.COLUMN_USERID, baseMessage.getWhisperID());
@@ -90,14 +89,13 @@ public class DBCenterFLetter {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     public int updateLetter(BaseMessage baseMessage){
         if(baseMessage == null){
-            return DBConstant.ERROR;
+            return MessageConstant.ERROR;
         }
-        PLogger.d("Fl=== + updateLetter");
         try {
             final ContentValues values = new ContentValues();
             if (baseMessage.getStatus() != -1)
@@ -117,7 +115,7 @@ public class DBCenterFLetter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     public boolean updateUserInfoLightList(List<UserInfoLightweight> lightweights){
@@ -147,10 +145,10 @@ public class DBCenterFLetter {
      */
     public long updateUserInfoLight(UserInfoLightweight lightweight){
         if(lightweight == null){
-            return DBConstant.ERROR;
+            return MessageConstant.ERROR;
         }
         try {
-            if (!isExist(String.valueOf(lightweight.getUid()))) return DBConstant.ERROR;//没有数据
+            if (!isExist(String.valueOf(lightweight.getUid()))) return MessageConstant.ERROR;//没有数据
 
             final ContentValues values = new ContentValues();
             if (lightweight.getInfoJson() != null)
@@ -160,7 +158,7 @@ public class DBCenterFLetter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
 
@@ -168,10 +166,7 @@ public class DBCenterFLetter {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
                 .append(" WHERE ")
                 .append(FLetter.COLUMN_USERID + " = ?");
-               // .append(userid);
-        PLogger.printObject("isExist-onStart");
         Cursor cursor = mDatabase.query(sql.toString(), userid);
-        PLogger.printObject("isExist-onEnd");
         if (cursor != null && cursor.moveToFirst()) {
             cursor.close();
             return true;
@@ -179,6 +174,34 @@ public class DBCenterFLetter {
             if (cursor != null) cursor.close();
             return false;
         }
+    }
+
+
+    public Observable<Boolean> isHaveMsg(String userid) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
+                .append(" WHERE ")
+                .append(FLetter.COLUMN_USERID + " = ")
+                .append(userid);
+
+        return mDatabase.createQuery(FLetter.COLUMN_USERID, sql.toString())
+                .map(new Func1<SqlBrite.Query, Boolean>() {
+                    @Override
+                    public Boolean call(SqlBrite.Query query) {
+                        Cursor cursor = null;
+                        try {
+                            cursor = query.run();
+                            if (cursor != null && cursor.moveToFirst()) {
+                                cursor.close();
+                                return true;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            CloseUtil.close(cursor);
+                        }
+                        return false;
+                    }
+                });
     }
 
     /**

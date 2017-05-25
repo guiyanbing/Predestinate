@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -79,7 +79,7 @@ public class DBCacheCenter {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     /**
@@ -159,7 +159,7 @@ public class DBCacheCenter {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
 
     }
 

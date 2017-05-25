@@ -184,7 +184,9 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                     });
             FloatingMgr.getInstance().addPanel(floatingPanelChat);
         } else {//在后台，桌面悬浮窗
-            if (ModuleMgr.getAppMgr().isForeground() || !LockScreenMgr.getInstance().isTip()) {
+            if (ModuleMgr.getAppMgr().isForeground()
+                    || !LockScreenMgr.getInstance().isTip()
+                    || BaseUtil.isRunningForegroundMe(App.context)) {
                 //应用在前台/(应用在退出状态且应用设置为退出不提示)：不进行应用外弹框
                 PLogger.d("------>应用外弹框，return");
                 return;

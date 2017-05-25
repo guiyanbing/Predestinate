@@ -44,7 +44,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     }
 
     @Override
-    public void showData(BaseMessage msgData) {
+    public void showData(BaseMessage msgData, boolean isSlideLoading) {
         if (!TextUtils.isEmpty(msgData.getAvatar())) {
             ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
         } else {
@@ -63,26 +63,6 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
         }
 
         item_last_msg.setText(msgData.getAboutme());
-//        String conStr;
-//        MailMsgID mailMsgID = MailMsgID.getMailMsgID(msgData.getLWhisperID());
-//        if (mailMsgID != null) {
-//            switch (mailMsgID) {
-//                case WhoAttentionMe_Msg://最近来访
-//                    if (msgData.getNum() > 0) {
-//                        conStr = "你有" + msgData.getNum() + "个新的来访";
-//                    } else {
-//                        conStr = "";
-//                    }
-//                    break;
-//                default:
-//                    conStr = msgData.getAboutme();
-//                    break;
-//            }
-//        } else {
-//            conStr = BaseMessage.getContent(msgData);
-//        }
-//
-//        item_last_msg.setText(conStr);
         setUnreadnum(msgData);
     }
 }

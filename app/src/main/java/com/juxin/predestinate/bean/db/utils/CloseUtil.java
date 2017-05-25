@@ -13,14 +13,13 @@ public class CloseUtil {
     }
 
     public static void close(Closeable... params) {
-        if (null != params) {
-            try {
-                for (Closeable closeable : params) {
-                    if (closeable != null) closeable.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (null == params) return;
+        try {
+            for (Closeable closeable : params) {
+                if (closeable != null) closeable.close();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

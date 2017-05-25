@@ -16,14 +16,9 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
-import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
-import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 /**
  * Created by Kind on 2017/5/9.

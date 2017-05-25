@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,7 +15,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.center.user.others.UserRemark;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -262,7 +261,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
             @Override
             public void onSubmit() {
                 long ret = ModuleMgr.getChatListMgr().deleteFmessage(userDetail.getUid());
-                if (ret != DBConstant.ERROR) {
+                if (ret != MessageConstant.ERROR) {
                     PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
                     return;
                 }

@@ -1,7 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +13,7 @@ import org.json.JSONObject;
  * Created by Kind on 2017/4/18.
  */
 
-public class CommonMessage extends BaseMessage{
+public class CommonMessage extends BaseMessage {
 
     //图片
     private String img;
@@ -35,8 +37,10 @@ public class CommonMessage extends BaseMessage{
     public CommonMessage() {
         super();
     }
+
     /**
      * 文本消息
+     *
      * @param whisperID
      * @param content
      */
@@ -48,6 +52,7 @@ public class CommonMessage extends BaseMessage{
 
     /**
      * 图片消息
+     *
      * @param channelID
      * @param whisperID
      * @param img
@@ -60,6 +65,7 @@ public class CommonMessage extends BaseMessage{
 
     /**
      * 语音消息
+     *
      * @param channelID
      * @param whisperID
      * @param url
@@ -96,41 +102,41 @@ public class CommonMessage extends BaseMessage{
             json.put("mt", message.getTime());
             json.put("d", message.getMsgID());
 
-            if(!TextUtils.isEmpty(message.getMsgDesc())){
+            if (!TextUtils.isEmpty(message.getMsgDesc())) {
                 json.put("mct", message.getMsgDesc());
             }
 
-            String img = ((CommonMessage)message).getImg();
-            String localImg = ((CommonMessage)message).getLocalImg();
-            if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){
+            String img = ((CommonMessage) message).getImg();
+            String localImg = ((CommonMessage) message).getLocalImg();
+            if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {
                 json.put("img", img);
                 json.put("localImgUrl", localImg);
             }
 
             //语音
-            String videoUrl = ((CommonMessage)message).getVideoUrl();
-            String localVideoUrl = ((CommonMessage)message).getLocalVideoUrl();
-            if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){
+            String videoUrl = ((CommonMessage) message).getVideoUrl();
+            String localVideoUrl = ((CommonMessage) message).getLocalVideoUrl();
+            if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {
                 JSONObject tmpVideo = new JSONObject();
-                    tmpVideo.put("url", videoUrl);
-                    tmpVideo.put("localUrl", localVideoUrl);
-                    tmpVideo.put("len", ((CommonMessage) message).getVoiceLen());
-                    tmpVideo.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
+                tmpVideo.put("url", videoUrl);
+                tmpVideo.put("localUrl", localVideoUrl);
+                tmpVideo.put("len", ((CommonMessage) message).getVoiceLen());
+                tmpVideo.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
                 json.put("voice", tmpVideo);
             }
 
             //视频
-            String voiceUrl = ((CommonMessage)message).getVoiceUrl();
-            String localVoiceUrl = ((CommonMessage)message).getLocalVoiceUrl();
-            if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){
+            String voiceUrl = ((CommonMessage) message).getVoiceUrl();
+            String localVoiceUrl = ((CommonMessage) message).getLocalVoiceUrl();
+            if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {
                 JSONObject tmpVideo = new JSONObject();
-                    tmpVideo.put("url", videoUrl);
-                    tmpVideo.put("localUrl", localVideoUrl);
-                    tmpVideo.put("len", ((CommonMessage) message).getVideoLen());
-                    tmpVideo.put("size", ((CommonMessage) message).getVideoSize());
-                    tmpVideo.put("thumb", ((CommonMessage) message).getVideoThumb());
-                    tmpVideo.put("width", ((CommonMessage) message).getVideoWidth());
-                    tmpVideo.put("height", ((CommonMessage) message).getVideoHeight());
+                tmpVideo.put("url", videoUrl);
+                tmpVideo.put("localUrl", localVideoUrl);
+                tmpVideo.put("len", ((CommonMessage) message).getVideoLen());
+                tmpVideo.put("size", ((CommonMessage) message).getVideoSize());
+                tmpVideo.put("thumb", ((CommonMessage) message).getVideoThumb());
+                tmpVideo.put("width", ((CommonMessage) message).getVideoWidth());
+                tmpVideo.put("height", ((CommonMessage) message).getVideoHeight());
                 json.put("video", tmpVideo);
             }
             return json.toString();
@@ -269,15 +275,15 @@ public class CommonMessage extends BaseMessage{
         parseCommonJson(object);
     }
 
-    private void parseCommonJson(JSONObject object){
-        if(!object.isNull("voice")){
+    private void parseCommonJson(JSONObject object) {
+        if (!object.isNull("voice")) {
             JSONObject voiceJSON = object.optJSONObject("voice");
             this.setVoiceUrl(voiceJSON.optString("url"));
             this.setVoiceLen(voiceJSON.optInt("len"));
             this.setVoiceUserid(voiceJSON.optLong("voice_userid"));
         }
 
-        if(!object.isNull("video")){
+        if (!object.isNull("video")) {
             JSONObject videoJSON = object.optJSONObject("video");
             this.setVideoUrl(videoJSON.optString("url"));
             this.setVideoLen(videoJSON.optInt("len"));
@@ -286,24 +292,5 @@ public class CommonMessage extends BaseMessage{
             this.setVideoWidth(videoJSON.optInt("width"));
             this.setVideoHeight(videoJSON.optInt("height"));
         }
-    }
-
-    @Override
-    public String toString() {
-        return "CommonMessage{" +
-                "img='" + img + '\'' +
-                ", localImg='" + localImg + '\'' +
-                ", voiceUrl='" + voiceUrl + '\'' +
-                ", localVoiceUrl='" + localVoiceUrl + '\'' +
-                ", voiceLen=" + voiceLen +
-                ", voiceUserid=" + voiceUserid +
-                ", videoUrl='" + videoUrl + '\'' +
-                ", localVideoUrl='" + localVideoUrl + '\'' +
-                ", videoLen=" + videoLen +
-                ", videoSize=" + videoSize +
-                ", videoThumb='" + videoThumb + '\'' +
-                ", videoWidth=" + videoWidth +
-                ", videoHeight=" + videoHeight +
-                '}';
     }
 }

@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -20,7 +22,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
@@ -29,6 +30,8 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,7 @@ import java.util.List;
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
         SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
 
+    private CheckIntervalTimeUtil timeUtil;
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
     private View mail_bottom;
@@ -98,6 +102,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
+        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
         //   View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
 
@@ -217,6 +222,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         UIShow.showMyFriendsAct(getActivity());
                         break;
                     case Greet_Msg://打招呼的人
+                        UIShow.showSayHelloUserAct(getActivity());
                         break;
                 }
             } else {
@@ -243,8 +249,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (mailFragmentAdapter.mailItemOrdinarySize() > 0) {
             listMail.smoothOpenChooseView();
         } else {
-//            mAAMainAct.main_top_left_bt.setVisibility(View.GONE);
-//            mAAMainAct.main_top_left.setVisibility(View.GONE);
+            setTitleLeftContainerRemoveAll();
             PToast.showCenterShort("没有可编辑选项");
         }
     }
@@ -255,6 +260,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Friend_Num_Notice:
+                PLogger.printObject("xxxxxxxxxxxxxxx");
                 mailFragmentAdapter.updateAllData();
                 break;
             default:
@@ -291,38 +297,38 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     /**
      * 检测个人资料
+     *
      * @param view
      */
-    private void detectInfo(AbsListView view){
+    private void detectInfo(AbsListView view) {
+        if (!timeUtil.check(10 * 1000)) {
+            return;
+        }
         List<Long> stringList = new ArrayList<>();
         stringList.clear();
         int firs = view.getFirstVisiblePosition();
         int last = view.getLastVisiblePosition();
 
-        PLogger.printObject("Position===11111=" + firs + "====" + last);
-        for(int i = firs; i < last; i++){
+        for (int i = firs; i < last; i++) {
             BaseMessage message = mailFragmentAdapter.getItem(i);
-            PLogger.printObject("Position===for=" + message);
-
-            if(message == null ||  MailMsgID.getMailMsgID(message.getLWhisperID()) != null){
+            if (message == null || MailMsgID.getMailMsgID(message.getLWhisperID()) != null) {
                 continue;
             }
 
-            if(message.getTime() <= 0 || ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)){
+            if (TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())) {
                 stringList.add(message.getLWhisperID());
-                PLogger.printObject("Position===for2222=" + message.getType() + message.getAvatar() + message.getName());
             }
         }
 
-        if(stringList.size() > 0){
+        if (stringList.size() > 0) {
             ModuleMgr.getChatMgr().getProFile(stringList);
         }
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch (scrollState){
-            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:{//停止滚动
+        switch (scrollState) {
+            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
                 detectInfo(view);
@@ -333,7 +339,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 mailFragmentAdapter.setScrollState(true);
                 break;
             }
-            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:{//正在滚动
+            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL: {//正在滚动
                 //设置为正在滚动
                 mailFragmentAdapter.setScrollState(true);
                 break;
@@ -342,5 +348,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
 }

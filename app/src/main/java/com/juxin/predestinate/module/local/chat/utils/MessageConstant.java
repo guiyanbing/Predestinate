@@ -25,4 +25,18 @@ public class MessageConstant {
     public static int Great_Weight = 100;//大权重
     public static int In_Weight = 50;//中等权重
     public static int Small_Weight = 1;//小权重
+
+
+
+    public static final int ERROR = -1; //失败
+    public static final int OK = 1;//成功
+
+    public static final int NumNo = -1;// 数据库数字不修改
+
+    public static final int OK_STATUS = 1;//发送成功
+    public static final int FAIL_STATUS = 2;//发送失败
+    public static final int SENDING_STATUS = 3;//发送中
+    public static final int UNREAD_STATUS = 10;//未读
+    public static final int READ_STATUS = 11;//对方已读
+    public static final int LOCAL_READ_STATUS = 13;//本地已读
 }

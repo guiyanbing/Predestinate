@@ -2,19 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/test_tv_view"
+    <com.juxin.predestinate.ui.mail.base.CustomLetterMailItem
+        android:id="@+id/say_hello_users_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/px30_dp"
-        android:text="ceshi"
-        android:textColor="@color/read_near" />
-
-    <View style="@style/divider_line_horizontal" />
+        android:orientation="vertical" />
 
 </LinearLayout>

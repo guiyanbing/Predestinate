@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.discover;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,12 +15,13 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+
+import java.util.List;
 
 
 /**
@@ -27,25 +29,26 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
  * Created by zhang on 2017/4/21.
  */
 
-public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight> {
+public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
 
-    private Context context;
 
-    public DiscoverAdapter(Context context) {
-        super();
-        this.context = context;
+    public DiscoverAdapter(Context context, List<UserInfoLightweight> datas) {
+        super(context, datas);
     }
 
     @Override
-    public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_discover_item};
-    }
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        MyViewHolder holder;
+        if (convertView == null) {
+            convertView = inflate(R.layout.f1_discover_item);
+            holder = new MyViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (MyViewHolder) convertView.getTag();
+        }
 
-    @Override
-    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
-        MyViewHolder holder = new MyViewHolder(viewHolder);
         final UserInfoLightweight userInfo = getItem(position);
-        ImageLoader.loadRoundCorners(context, userInfo.getAvatar(), 8, holder.iv_avatar);
+        ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
@@ -53,11 +56,11 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             holder.lin_ranking.setVisibility(View.VISIBLE);
             if (userInfo.isMan()) {
                 holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-                holder.tv_ranking_type.setText(context.getString(R.string.top_type_man));
+                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_man));
                 holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
             } else {
                 holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-                holder.tv_ranking_type.setText(context.getString(R.string.top_type_woman));
+                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_woman));
                 holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
             }
         } else {
@@ -114,22 +117,22 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (ModuleMgr.getCenterMgr().isCanSayHi(context)) {
+                    if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
                         ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
-                                context.getString(R.string.say_hello_txt),
+                                getContext().getString(R.string.say_hello_txt),
                                 userInfo.getKf_id(),
                                 ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
                                         Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
                                     @Override
                                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                        PToast.showShort(context.getString(R.string.user_info_hi_suc));
+                                        PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
                                         getItem(position).setSayHello(true);
                                         notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onSendFailed(NetData data) {
-                                        PToast.showShort(context.getString(R.string.user_info_hi_fail));
+                                        PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
                                     }
                                 });
                     }
@@ -140,22 +143,19 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
             }
         });
 
         holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
             }
         });
+        return convertView;
     }
 
-    @Override
-    public int getRecycleViewItemType(int position) {
-        return 0;
-    }
 
     class MyViewHolder {
         private ImageView iv_avatar, iv_vip;
@@ -166,11 +166,11 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
         private RelativeLayout rel_item;
         private View point;
 
-        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+        public MyViewHolder(View convertView) {
             initView(convertView);
         }
 
-        private void initView(BaseRecyclerViewHolder convertView) {
+        private void initView(View convertView) {
             iv_avatar = (ImageView) convertView.findViewById(R.id.discover_item_avatar);
             iv_vip = (ImageView) convertView.findViewById(R.id.discover_item_vip_state);
 
@@ -178,8 +178,8 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             iv_video = (Button) convertView.findViewById(R.id.discover_item_video);
             iv_call = (Button) convertView.findViewById(R.id.discover_item_call);
 
-            tv_name = convertView.findViewById(R.id.discover_item_name);
-            tv_age = convertView.findViewById(R.id.discover_item_age);
+            tv_name = (TextView) convertView.findViewById(R.id.discover_item_name);
+            tv_age = (TextView) convertView.findViewById(R.id.discover_item_age);
             tv_height = (TextView) convertView.findViewById(R.id.discover_item_height);
             tv_distance = (TextView) convertView.findViewById(R.id.discover_item_distance);
 

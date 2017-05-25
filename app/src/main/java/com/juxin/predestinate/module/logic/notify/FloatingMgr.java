@@ -66,7 +66,6 @@ public class FloatingMgr implements Handler.Callback {
             if (!ModuleMgr.getAppMgr().isForeground()) return false;//如果应用在后台，返回false
 
             getWindowManager();
-
             if (floatingBasePanel.isFixed()) {
                 fixedPanels.add(floatingBasePanel);
             } else {
@@ -192,7 +191,6 @@ public class FloatingMgr implements Handler.Callback {
                 handler.removeMessages(FLOATING_Countdown_Id);
                 handler.sendEmptyMessageDelayed(FLOATING_Countdown_Id, FLOATING_Countdown);
             }
-
             tempViewGroup = autoViewGroup;
         }
 
@@ -205,7 +203,6 @@ public class FloatingMgr implements Handler.Callback {
         layout.startAnimation(animation);
 
         addView();
-
         removeAutoMorePanel();
     }
 
@@ -226,25 +223,21 @@ public class FloatingMgr implements Handler.Callback {
     private void removeView(FloatingBasePanel floatingBasePanel) {
         View view = floatingBasePanel.getContentView();
         InterceptTouchLinearLayout layout = views.remove(view);
-
-        if (layout == null) {
-            return;
-        }
+        if (layout == null) return;
 
         Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_out);
+        animation.setInterpolator(new LinearInterpolator());
         animation.setFillAfter(true);
         layout.setInterceptTouchEvent(true);
         layout.startAnimation(animation);
 
         if (handler != null) {
             Message msg;
-
             if (floatingBasePanel.isFixed()) {
                 msg = handler.obtainMessage(FLOATING_Remove_View_Id, 1, 0, layout);
             } else {
                 msg = handler.obtainMessage(FLOATING_Remove_View_Id, 2, 0, layout);
             }
-
             handler.sendMessageDelayed(msg, 500);
         }
     }
@@ -335,8 +328,10 @@ public class FloatingMgr implements Handler.Callback {
             case FLOATING_Remove_Ani_Id:
 //                 msg.obj
                 break;
-        }
 
+            default:
+                break;
+        }
         return true;
     }
 }

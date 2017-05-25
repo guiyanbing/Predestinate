@@ -25,11 +25,13 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.utils.Common;
 import com.juxin.predestinate.ui.utils.DownloadPluginFragment;
 
@@ -96,15 +98,26 @@ public class VideoAudioChatHelper{
      * @param dstUid  对方UID
      * @param type    {@link TYPE_VIDEO_CHAT,TYPE_AUDIO_CHAT}   1为视频，2为音频
      */
-    public void inviteVAChat(Activity context, long dstUid, int type) {
+    public void inviteVAChat(final Activity context, long dstUid, int type) {
         lastOpt = OPT_INVITE;
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) >= ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
-//            int leastDiamond = type == TYPE_AUDIO_CHAT ? AppCfg.ASet.getVoice_cost_per_minute():AppCfg.ASet.getVideo_cost_per_minute();
-//            if(AppModel.getInstance().getUserDetail().getDiamondsSum() < leastDiamond){
-//                T.showShort(context,"钻石余额不足");
-//                UIHelper.showDiamondsDlg(context, String.valueOf(dstUid), "1", leastDiamond - AppModel.getInstance().getUserDetail().getDiamondsSum(),true,true);
-//                return;
-//            }
+            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+            if(userDetail.getGender() == 1){
+                if((type == TYPE_VIDEO_CHAT && ModuleMgr.getCommonMgr().getCommonConfig().isVideoCallNeedVip() && !userDetail.isVip())
+                        ||(type == TYPE_AUDIO_CHAT && ModuleMgr.getCommonMgr().getCommonConfig().isAudioCallNeedVip() && !userDetail.isVip())){
+                    PickerDialogUtil.showSimpleTipDialogExt((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
+                        }
+
+                        @Override
+                        public void onSubmit() {
+                            UIShow.showOpenVipActivity(context);
+                        }
+                    }, context.getResources().getString(R.string.dlg_need_vip), "", context.getResources().getString(R.string.cancel), context.getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
+                }
+                return;
+            }
             executeInviteChat(context, dstUid, type);
         } else {
             downloadVideoPlugin(context);

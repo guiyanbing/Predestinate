@@ -19,6 +19,10 @@ public class TextMessage extends BaseMessage {
     //关注状态1为关注2为取消关注
     private int gz;
 
+    public TextMessage() {
+        super();
+    }
+
     /**
      * 打招呼
      * @param whisperID

@@ -111,7 +111,6 @@ public class MsgType {
      */
     public static final String MT_User_List_Msg_Change = "MT_User_List_Msg_Change";
 
-
     /**
      * 能否聊天
      */

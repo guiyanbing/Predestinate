@@ -37,6 +37,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
@@ -238,11 +239,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             initHeadView();
             initFollow();
         }
+
+        //状态栏 + 标题 +（关注TA、查看手机）+ 滚动条 高度
+        PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight() + UIUtil.getStatusHeight(this));
         //标题、（关注TA、查看手机）、滚动条 高度
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1)
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight());
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight() + UIUtil.getStatusHeight(this));
         else
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight());
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + UIUtil.getStatusHeight(this));
     }
 
     private void initFollow() {

@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import com.juxin.predestinate.module.util.TimeUtil;
+
 import org.json.JSONObject;
 
 /**
@@ -15,6 +17,18 @@ public class VideoMessage extends BaseMessage {
     private int videoVcEscCode;//拒绝或取消 只在vc_tp=3 时生效 1未接通，对方无应答 2接收方拒绝 3发送方取消
     private long videoVcTalkTime;//聊天耗时 单位秒 只在  vc_tp=4挂断时有效
     private String vc_channel_key;
+
+    private EmLastStatus emLastStatus;
+
+
+    public enum EmLastStatus {
+        none, timeout, refuse, cancel, connect
+    }
+
+
+    public VideoMessage() {
+        super();
+    }
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -85,9 +99,16 @@ public class VideoMessage extends BaseMessage {
         this.vc_channel_key = vc_channel_key;
     }
 
+    public EmLastStatus getEmLastStatus() {
+        return emLastStatus;
+    }
+
+    public void setEmLastStatus(EmLastStatus emLastStatus) {
+        this.emLastStatus = emLastStatus;
+    }
 
     public VideoMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
+                        int type, int status, int fStatus, long time, String jsonStr) {
         super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
         convertJSON(getJsonStr());
     }
@@ -114,5 +135,64 @@ public class VideoMessage extends BaseMessage {
         this.setVideoVcEscCode(object.optInt("vc_esc_code"));
         this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
         this.setVc_channel_key(object.optString("vc_channel_key"));
+
+        this.setEmLastStatus(getLastStatus(getVideoTp(), getVideoVcEscCode()));
+    }
+
+    //最后一次视频、语音状态
+    public static EmLastStatus getLastStatus(int vc_tp, int vc_esc_code) {
+        switch (vc_tp) {
+            case 3:
+                switch (vc_esc_code) {
+                    case 1:
+                        return EmLastStatus.timeout;
+                    case 2:
+                        return EmLastStatus.refuse;
+                    case 3:
+                        return EmLastStatus.cancel;
+                    default:
+                        return EmLastStatus.none;
+                }
+            case 4:
+                return EmLastStatus.connect;
+            default:
+                return EmLastStatus.none;
+        }
+    }
+
+    public static String transLastStatusText(EmLastStatus status, String sendTime, boolean isSender) {
+        String result;
+        switch (status) {
+            case timeout:
+            case cancel:
+                result = "<font color='#ffac0c'>" + (isSender ? "[未接通]" : "[未接来电]") + "</font>";
+                break;
+            case refuse:
+                result = "<font color='#ffac0c'>[未接通]</font>";
+                break;
+            case connect:
+                result = "[通话结束]";
+                break;
+            default:
+                result = "";
+        }
+        return result + sendTime;
+    }
+
+
+    public static String getVideoChatContent(EmLastStatus status, long talk_time, boolean isSender) {
+        switch (status) {
+            case timeout:
+                return isSender ? "对方无应答" : "未接来电";
+            case refuse:
+                return isSender ? "对方已拒绝" : "已拒绝";
+            case cancel:
+                return isSender ? "已取消" : "对方已取消";
+            case connect:
+                return "聊天时长" + TimeUtil.formatTimeLong(talk_time);
+            case none:
+            default:
+                return "";
+        }
     }
 }
