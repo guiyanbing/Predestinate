@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/px60_dp"
                 android:text="@string/txt_authstatus_authno"
-                android:textColor="@color/gray_text"
+                android:textColor="@color/color_D1D1D1"
                 android:textSize="14sp" />
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/px60_dp"
                 android:text="@string/txt_authstatus_authno"
-                android:textColor="@color/gray_text"
+                android:textColor="@color/color_D1D1D1"
                 android:textSize="14sp" />
 
             <TextView
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/px60_dp"
                 android:text="@string/txt_authstatus_authno"
-                android:textColor="@color/gray_text"
+                android:textColor="@color/color_D1D1D1"
                 android:textSize="14sp" />
 
             <TextView
