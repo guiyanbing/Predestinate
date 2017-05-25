@@ -125,7 +125,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         connectionExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                socket.disconnect(false);
+                socket.disconnect(true);
             }
         });
         this.token = null;
