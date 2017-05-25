@@ -16,7 +16,8 @@ import com.juxin.predestinate.R;
 public class PointsView extends LinearLayout implements ViewPager.OnPageChangeListener{
 
     private int totalNum = 0;
-    private int selectIndex = 0;
+    public int selectIndex = 0;
+    private boolean firstShow = true;
     private int layoutId = R.layout.common_point;
 
     public PointsView(Context context) {
@@ -40,7 +41,8 @@ public class PointsView extends LinearLayout implements ViewPager.OnPageChangeLi
         CustomFrameLayout view = null;
 
         clearFocus();
-        setVisibility(totalNum >= 1 ? View.VISIBLE : View.INVISIBLE);
+//        setVisibility(totalNum > 1 ? View.VISIBLE : View.INVISIBLE);
+        setVisibility(firstShow ? View.VISIBLE : View.INVISIBLE);
         for (int i = 0; i < totalNum; ++i) {
             view = (CustomFrameLayout) inflate(getContext(), layoutId, null);
             view.showOfIndex(0);
@@ -63,12 +65,13 @@ public class PointsView extends LinearLayout implements ViewPager.OnPageChangeLi
      *
      * @param totalNum
      */
-    public void setTotalPoints(int totalNum) {
+    public void setTotalPoints(int totalNum, boolean firstShow) {
         if (this.totalNum == totalNum) {
             return;
         }
 
         this.totalNum = totalNum;
+        this.firstShow = firstShow;
         reset();
     }
 

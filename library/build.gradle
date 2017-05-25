@@ -47,6 +47,7 @@ dependencies {
     //okhttp:[https://github.com/square/okhttp]
     compile "com.squareup.okhttp3:okhttp:$rootProject.versions.libOkhttp"
     compile "com.squareup.okhttp3:logging-interceptor:$rootProject.versions.libOkhttp"
+    compile 'com.squareup.okio:okio:1.13.0'
 
     //rxJava:[https://github.com/ReactiveX/RxJava],rxAndroid:[https://github.com/ReactiveX/RxAndroid]
     compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"

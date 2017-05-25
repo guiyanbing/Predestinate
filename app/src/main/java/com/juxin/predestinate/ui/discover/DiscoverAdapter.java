@@ -50,7 +50,7 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         final UserInfoLightweight userInfo = getItem(position);
         ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
-        holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
+        holder.iv_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(userInfo.getGroup()) ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {
             holder.lin_ranking.setVisibility(View.VISIBLE);
@@ -95,50 +95,73 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             holder.point.setVisibility(View.GONE);
         }
 
-
-        if (userInfo.isVideo_available() || userInfo.isAudio_available()) {
-            if (userInfo.isVideo_busy()) {
-                holder.iv_calling.setVisibility(View.VISIBLE);
-                holder.iv_call.setVisibility(View.GONE);
-                holder.iv_video.setVisibility(View.GONE);
+        if (userInfo.isVideo_busy()) {
+            holder.iv_calling.setVisibility(View.VISIBLE);
+            holder.lin_call_state.setVisibility(View.GONE);
+            holder.lin_video_state.setVisibility(View.GONE);
+        } else {
+            if (userInfo.isVideo_available() && userInfo.isAudio_available()) {
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.GONE);
+                holder.lin_video_state.setVisibility(View.VISIBLE);
+                holder.iv_video.setEnabled(userInfo.isVideo_available());
+            } else if (userInfo.isVideo_available() && !userInfo.isAudio_available()) {
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.GONE);
+                holder.lin_video_state.setVisibility(View.VISIBLE);
+                holder.iv_video.setEnabled(userInfo.isVideo_available());
+            } else if (!userInfo.isVideo_available() && userInfo.isAudio_available()) {
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.VISIBLE);
+                holder.lin_video_state.setVisibility(View.GONE);
+                holder.iv_call.setEnabled(userInfo.isVideo_available());
+                holder.tv_call.setVisibility(View.VISIBLE);
             } else {
                 holder.iv_calling.setVisibility(View.GONE);
-                holder.iv_call.setEnabled(userInfo.isAudio_available());
-                holder.iv_video.setEnabled(userInfo.isVideo_available());
+                holder.lin_call_state.setVisibility(View.VISIBLE);
+                holder.lin_video_state.setVisibility(View.GONE);
+                holder.iv_call.setEnabled(userInfo.isVideo_available());
+                holder.tv_call.setVisibility(View.GONE);
             }
+        }
+
+
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            holder.btn_sayhi.setVisibility(View.GONE);
+            holder.tv_online_state.setVisibility(View.VISIBLE);
+            holder.tv_online_state.setText(userInfo.isOnline() ? "在线" : userInfo.getLast_onLine());
         } else {
-            holder.iv_calling.setVisibility(View.GONE);
-            holder.iv_call.setEnabled(userInfo.isAudio_available());
-            holder.iv_video.setEnabled(userInfo.isVideo_available());
-        }
+            holder.tv_online_state.setVisibility(View.GONE);
+            holder.btn_sayhi.setVisibility(View.VISIBLE);
+            holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
+            if (!userInfo.isSayHello()) {
+                holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
+                            ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
+                                    getContext().getString(R.string.say_hello_txt),
+                                    userInfo.getKf_id(),
+                                    ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
+                                            Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                                        @Override
+                                        public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                                            PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
+                                            getItem(position).setSayHello(true);
+                                            notifyDataSetChanged();
+                                        }
 
-        holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
-        if (!userInfo.isSayHello()) {
-            holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
-                        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
-                                getContext().getString(R.string.say_hello_txt),
-                                userInfo.getKf_id(),
-                                ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                        Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
-                                    @Override
-                                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                        PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
-                                        getItem(position).setSayHello(true);
-                                        notifyDataSetChanged();
-                                    }
-
-                                    @Override
-                                    public void onSendFailed(NetData data) {
-                                        PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
-                                    }
-                                });
+                                        @Override
+                                        public void onSendFailed(NetData data) {
+                                            PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
+                                        }
+                                    });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
+
 
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,9 +185,11 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         private Button iv_video, iv_call;
         private TextView tv_name, tv_age, tv_height, tv_distance, tv_ranking_type, tv_ranking_level;
         private Button btn_sayhi;
-        private LinearLayout lin_ranking, iv_calling;
+        private LinearLayout lin_ranking, iv_calling, lin_video_state, lin_call_state;
         private RelativeLayout rel_item;
         private View point;
+
+        private TextView tv_online_state, tv_call;
 
         public MyViewHolder(View convertView) {
             initView(convertView);
@@ -192,6 +217,11 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             rel_item = (RelativeLayout) convertView.findViewById(R.id.discover_item);
 
             point = convertView.findViewById(R.id.discover_item_point);
+
+            tv_online_state = (TextView) convertView.findViewById(R.id.discover_item_online_state);
+            lin_video_state = (LinearLayout) convertView.findViewById(R.id.discover_item_video_state);
+            lin_call_state = (LinearLayout) convertView.findViewById(R.id.discover_item_call_state);
+            tv_call = (TextView) convertView.findViewById(R.id.discover_item_call_tv);
         }
 
     }

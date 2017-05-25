@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 /**
  * 发现
  * Created by zhang on 2017/4/20.
@@ -82,7 +84,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     private void initView() {
         groupSayhiBtn = (Button) findViewById(R.id.discover_group_sayhi_btn);
         groupSayhiBtn.setOnClickListener(this);
-        groupSayhiBtn.setVisibility(View.GONE);
+        setGroupSayhiBtn(false);
 
         customStatusListView = (CustomStatusListView) findViewById(R.id.discover_content);
         View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
@@ -127,7 +129,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 switch (position) {
                     case Look_All: //查看全部
                         isNearPage = false;
-                        groupSayhiBtn.setVisibility(View.GONE);
+                        setGroupSayhiBtn(false);
                         onRefresh();
                         dialog.dismiss();
                         break;
@@ -222,7 +224,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     infos.addAll(lightweightList.getUserInfos());
                     adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
-                    groupSayhiBtn.setVisibility(View.VISIBLE);
+                    setGroupSayhiBtn(true);
                 } else {
                     customStatusListView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
@@ -231,9 +233,21 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                             getNearData();
                         }
                     });
-                    groupSayhiBtn.setVisibility(View.GONE);
+                    groupSayhiBtn.setVisibility(GONE);
                 }
                 exListView.stopRefresh();
+            } else {
+                UserInfoLightweightList lightweightList = new UserInfoLightweightList();
+                lightweightList.parseJson(response.getResponseString());
+                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                    if (infos.size() != 0) {
+                        infos.clear();
+                    }
+                    infos.addAll(lightweightList.getUserInfos());
+                    customStatusListView.showExListView();
+                    adapter.notifyDataSetChanged();
+                    setGroupSayhiBtn(true);
+                }
             }
         } else {
             customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
@@ -243,7 +257,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     getNearData();
                 }
             });
-            groupSayhiBtn.setVisibility(View.GONE);
+            setGroupSayhiBtn(false);
         }
     }
 
@@ -261,16 +275,19 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     }
 
     private void doGroupSayHi() {
-        if (ModuleMgr.getCenterMgr().isCanGroupSayHi(getActivity())) {
-            if (isHasNoSayHi()) {
+        if (isHasNoSayHi()) {
+            if (ModuleMgr.getCenterMgr().isCanGroupSayHi(getActivity())) {
                 LoadingDialog.show(getActivity());
                 handler.sendEmptyMessage(Group_sayHai_Msg);
-            } else {
-                PToast.showShort(getString(R.string.say_hi_group_refresh));
             }
+        } else {
+            PToast.showShort(getString(R.string.say_hi_group_refresh));
         }
     }
 
+    /**
+     *
+     */
     private void doSayHi() {
         Iterator<UserInfoLightweight> userInfos = infos.iterator();
         while (userInfos.hasNext()) {
@@ -291,6 +308,10 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         }
     }
 
+    /**
+     * 刷新打招呼的状态
+     * @param uid
+     */
     private void notifyAdapter(long uid) {
         for (UserInfoLightweight info : infos) {
             if (info.getUid() == uid) {
@@ -312,6 +333,11 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         }
     };
 
+    /**
+     * 当前列表内有没有还未打招呼的人
+     *
+     * @return true有 false没有
+     */
     private boolean isHasNoSayHi() {
         if (infos.size() != 0) {
             for (UserInfoLightweight info : infos) {
@@ -328,7 +354,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
-            case MsgType.MT_Say_Hello_Notice:
+            case MsgType.MT_Say_Hello_Notice: //一键打招呼完成后 当前列表内有一键打招呼的人的数据的时候 更新列表
                 List<UserInfoLightweight> data = (List<UserInfoLightweight>) value;
                 for (int i = 0; i < data.size(); i++) {
                     notifyAdapter(data.get(i).getUid());
@@ -338,4 +364,27 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 break;
         }
     }
+
+    /**
+     * 是否显示群打招呼
+     *
+     * @param isCanShow 状态更新是否显示（该参数控制在数据未加载的时候 不显示群打招呼） 默认传false
+     */
+    private void setGroupSayhiBtn(boolean isCanShow) {
+        //我是VIP的时候不显示
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            groupSayhiBtn.setVisibility(View.GONE);
+        } else {  //非VIP附近的人显示
+            if (!isNearPage) {
+                groupSayhiBtn.setVisibility(View.GONE);
+            } else {
+                if (isCanShow) {
+                    groupSayhiBtn.setVisibility(View.VISIBLE);
+                } else {
+                    groupSayhiBtn.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
 }

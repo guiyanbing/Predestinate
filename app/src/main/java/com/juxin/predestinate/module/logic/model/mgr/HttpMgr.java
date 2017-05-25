@@ -101,4 +101,8 @@ public interface HttpMgr extends ModuleBase {
      * @return HTCallBack
      */
     HTCallBack download(String url, String filePath, DownloadListener downloadListener);
+
+
+
+    HTCallBack download(String url, DownloadListener downloadListener);
 }

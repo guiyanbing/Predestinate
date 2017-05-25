@@ -115,10 +115,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
             return;
         }
 
-        String[] split = filePath.split("/");//切出网址url中视频在服务器的名称，以便使用名称进行缓存
-        String fileNameNoEx = FileUtil.getFileNameNoEx(split[split.length - 1]);
-
-        ModuleMgr.getHttpMgr().download(filePath, fileNameNoEx, new DownloadListener() {
+        ModuleMgr.getHttpMgr().download(filePath, new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {}
 

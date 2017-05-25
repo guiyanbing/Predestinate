@@ -152,17 +152,52 @@
                         android:textSize="@dimen/px30_sp" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/discover_item_video"
-                    style="@style/icon_small"
-                    android:layout_marginLeft="@dimen/px15_dp"
-                    android:background="@drawable/f1_video_state_ico" />
+                <LinearLayout
+                    android:id="@+id/discover_item_video_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/discover_item_call"
-                    style="@style/icon_small"
-                    android:layout_marginLeft="@dimen/px15_dp"
-                    android:background="@drawable/f1_call_state_ico" />
+                    <Button
+                        android:id="@+id/discover_item_video"
+                        style="@style/icon_small"
+                        android:layout_marginLeft="@dimen/px15_dp"
+                        android:background="@drawable/f1_video_state_ico" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px5_dp"
+                        android:text="可视频"
+                        android:textColor="@color/color_6dcca3"
+                        android:textSize="@dimen/px30_sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/discover_item_call_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/discover_item_call"
+                        style="@style/icon_small"
+                        android:layout_marginLeft="@dimen/px15_dp"
+                        android:background="@drawable/f1_call_state_ico" />
+
+                    <TextView
+                        android:id="@+id/discover_item_call_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px5_dp"
+                        android:text="可语音"
+                        android:textColor="@color/color_6dcca3"
+                        android:textSize="@dimen/px30_sp" />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
 
@@ -173,7 +208,20 @@
             android:layout_centerVertical="true"
             android:layout_gravity="right"
             android:background="@drawable/f1_sayhellow_btn_bg"
-            android:enabled="false" />
+            android:enabled="false"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/discover_item_online_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/px38_dp"
+            android:paddingRight="@dimen/px38_dp"
+            android:textColor="@color/color_ciyao"
+            android:textSize="@dimen/big_font_40"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

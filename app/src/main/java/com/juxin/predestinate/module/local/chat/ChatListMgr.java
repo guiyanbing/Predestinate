@@ -97,7 +97,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
                 PLogger.printObject("是否熟人==" + tmp.getRu());
-                if (tmp.isRu()) {
+                if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);

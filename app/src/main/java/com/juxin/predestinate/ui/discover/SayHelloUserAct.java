@@ -2,9 +2,7 @@ package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -20,7 +18,7 @@ import java.util.List;
  * Created by zhang on 2017/5/22.
  */
 
-public class SayHelloUserAct extends BaseActivity implements View.OnScrollChangeListener, ExListView.IXListViewListener {
+public class SayHelloUserAct extends BaseActivity implements ExListView.IXListViewListener {
 
     private CustomStatusListView customStatusListView;
     private ExListView exListView;
@@ -45,7 +43,6 @@ public class SayHelloUserAct extends BaseActivity implements View.OnScrollChange
         exListView.setPullLoadEnable(true);
         exListView.setPullLoadEnable(false);
         exListView.setXListViewListener(this);
-        exListView.setOnScrollChangeListener(this);
         adapter = new SayHelloUserAdapter(this, data);
         exListView.setAdapter(adapter);
         customStatusListView.showLoading();
@@ -73,10 +70,5 @@ public class SayHelloUserAct extends BaseActivity implements View.OnScrollChange
     @Override
     public void onLoadMore() {
 
-    }
-
-    @Override
-    public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-        PLogger.d("onScrollChange -- data == " + data.size() + " adapter item size == " + adapter.getCount());
     }
 }

@@ -20,6 +20,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
@@ -35,6 +36,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.discover.DiscoverFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
@@ -73,7 +75,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initData() {
-        ModuleMgr.getCommonMgr().requestVideochatConfig();//获取设置音视频配置
+        ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (!response.isOk())
+                    return;
+                ModuleMgr.getCommonMgr().setVideoVerify((VideoVerifyBean) response.getBaseData());
+                VideoAudioChatHelper.getInstance().checkDownloadPlugin(MainActivity.this);
+            }
+        });
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
         ModuleMgr.getCommonMgr().showSayHelloDialog(this);
