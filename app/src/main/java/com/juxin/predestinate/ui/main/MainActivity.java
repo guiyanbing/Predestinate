@@ -295,7 +295,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     // ------------------------ 离线消息处理 暂时放在这 Start--------------------------
     private NetReceiver netReceiver = new NetReceiver();
-    private static Map<Integer, Map<String, Object>> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
+    private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
 
     /**
      * 注册网络变化监听广播
@@ -360,21 +360,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
             long vc_id = bean.getVc_id();
             if (lastOfflineAVMap.get(vc_id) == null) {
-//                lastOfflineAVMap.put(vc_id, msgMap);
+                lastOfflineAVMap.put(vc_id, bean);
             } else {
                 lastOfflineAVMap.remove(vc_id);
             }
             return;
         }
-
-        // TODO 按照推送消息派发离线消息
-//        NetData data = new NetData(msgMap.get("tid").toString(), bean.getMtp(), null, bean.getD());
-//        data.setContent(msgJson);
-//        com.lflibrary.android.designpattern.observer.Message msg = com.lflibrary.android.designpattern.observer.Message.obtain();
-//        msg.type = ChatMgr.CHAT_NOTIFY + 100 + data.getMsgType();
-//        msg.status = 0;
-//        msg.data = data;
-//        MessageMgr.getInstance().sendMessage(msg);
+        ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
     }
 
     /**
@@ -387,40 +379,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (BaseUtil.isScreenLock(App.context))
             return;
 
-        Map<String, Object> msgMap = null;
+        OfflineBean bean = null;
         long mt = 0;
 
-        for (Map.Entry<Integer, Map<String, Object>> entry : lastOfflineAVMap.entrySet()) {
-            Map<String, Object> map = entry.getValue();
-            if (map == null)
-                return;
-            int vc_tp = Integer.parseInt(map.get("vc_tp").toString());
-            if (vc_tp == 1) {
-                long t = Long.parseLong(map.get("mt").toString());
+        for (Map.Entry<Long, OfflineBean> entry : lastOfflineAVMap.entrySet()) {
+            OfflineBean msgBean = entry.getValue();
+            if (msgBean == null) return;
+
+            // 邀请加入聊天, 过滤最新一条
+            if (msgBean.getVc_tp() == 1) {
+                long t = msgBean.getMt();   // 最新时间戳
                 if (t > mt) {
                     mt = t;
-                    msgMap = map;
+                    bean = msgBean;
                 }
             }
         }
-
         lastOfflineAVMap.clear();
-
-        if (msgMap != null) {
-            if (msgMap.get("rawMsg") == null)
-                return;
-            int mtp = Integer.parseInt(msgMap.get("mtp").toString());
-            long msgId = Long.parseLong(msgMap.get("d").toString());
-
-            
-            // TODO 按照推送消息派发离线消息
-//            NetData data = new NetData(msgMap.get("tid").toString(), mtp, null, msgId);
-//            data.setContent(msgMap.get("rawMsg").toString());
-//            com.lflibrary.android.designpattern.observer.Message msg = com.lflibrary.android.designpattern.observer.Message.obtain();
-//            msg.type = ChatMgr.CHAT_NOTIFY + 100 + data.getMsgType();
-//            msg.status = 0;
-//            msg.data = data;
-//            MessageMgr.getInstance().sendMessage(msg);
-        }
+        ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
     }
 }

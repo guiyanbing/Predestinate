@@ -1,5 +1,6 @@
 package com.juxin.predestinate.bean.start;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.application.App;
 
@@ -10,6 +11,8 @@ import org.json.JSONObject;
  * Created by Su on 2017/5/25.
  */
 public class OfflineBean extends BaseData {
+    private String jsonStr;     // json串
+
     private long tid;           // 发给谁ID
     private long fid;           // 发消息人ID
     private int mtp;            // 消息类型
@@ -31,7 +34,9 @@ public class OfflineBean extends BaseData {
     @Override
     public void parseJson(String jsonStr) {
         JSONObject object = getJsonObject(jsonStr);
+        PLogger.d("offlineMsg:  " + jsonStr);
 
+        this.jsonStr = jsonStr;
         long t_id = object.optLong("tid");
         this.tid = t_id == 0 ? App.uid : t_id;
         this.fid = object.optLong("fid");
@@ -48,6 +53,10 @@ public class OfflineBean extends BaseData {
         this.vc_esc_code = object.optInt("vc_esc_code");
         this.vc_talk_time = object.optInt("vc_talk_time");
         this.vc_channel_key = object.optString("vc_channel_key");
+    }
+
+    public String getJsonStr() {
+        return jsonStr;
     }
 
     public long getTid() {
