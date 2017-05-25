@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,6 +24,9 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.user.my.view.AddPhotoView;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zm on 2017/5/16
@@ -97,6 +101,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
             eitOpenBank.setText(mIdCardVerifyStatusInfo.getBank());
             eitBankBranch.setText(mIdCardVerifyStatusInfo.getSubbank());
             eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
+            eitBankCardId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
             eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(21)});
             eitBankCardId.setHint(R.string.input_your_bank_card_id);
             paytype = 1;
@@ -151,12 +156,20 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                             return;
                         }
                     }
-                    if (TextUtils.isEmpty(cardNum)) {
+                    if (paytype == 1 && TextUtils.isEmpty(cardNum)) {
                         PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
                         return;
                     }
-                    if (paytype == 1 && bankCardForm(cardNum)){
+                    if (paytype == 2 && TextUtils.isEmpty(cardNum)) {
+                        PToast.showShort(getString(R.string.zhi_card_cannot_be_empty));
+                        return;
+                    }
+                    if (paytype == 1 && !bankCardForm(cardNum)) {
                         PToast.showShort(getString(R.string.bank_card_number_format_is_wrong));
+                        return;
+                    }
+                    if (paytype == 2 && !checkMobileNumber(cardNum) && !checkEmail(cardNum)) {
+                        PToast.showShort(getString(R.string.zhi_card_number_format_is_wrong));
                         return;
                     }
 
@@ -187,7 +200,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     }
 
     //身份证校验
-    public static boolean idCardForm(String num) {
+    public boolean idCardForm(String num) {
         String reg = "^\\d{15}$|^\\d{17}[0-9Xx]$";
         if (!num.matches(reg)) {
             System.out.println("Format Error!");
@@ -197,13 +210,42 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     }
 
     //银行卡号校验
-    public static boolean bankCardForm(String num) {
+    public boolean bankCardForm(String num) {
         String reg = "^\\d{16}$|^\\d{18,21}$";
         if (!num.matches(reg)) {
             System.out.println("Format Error!");
             return false;
         }
         return true;
+    }
+
+    // 验证手机号码
+    public boolean checkMobileNumber(String mobileNumber){
+//        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(14[57])|(17[0])|(17[6-8])|(18[0,0-9]))\\d{8}$");
+        boolean flag = false;
+        try{
+            Pattern regex = Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
+            Matcher matcher = regex.matcher(mobileNumber);
+            flag = matcher.matches();
+        }catch(Exception e){
+            flag = false;
+        }
+        return flag;
+    }
+
+    //验证邮箱
+    public boolean checkEmail(String email){
+//        "[a-zA-Z_]{1,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";"\\w+(\\.\\w)*+[@,＠]()+\\w+(\\.\\w{2,3}){1,3}"
+        boolean flag = false;
+        try{
+            String check = "\\w+(\\.\\w)*[@,＠]\\w+(\\.\\w{2,3}){1,3}";
+            Pattern regex = Pattern.compile(check);
+            Matcher matcher = regex.matcher(email);
+            flag = matcher.matches();
+        }catch(Exception e){
+            flag = false;
+        }
+        return flag;
     }
 
     @Override
@@ -219,7 +261,8 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 tvTitleInfo.setText(getString(R.string.id_card_tips_zhi));
                 tvBankCardId.setText(R.string.zhi_fu_id);
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_TEXT);
-                eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
+//                eitBankCardId.setKeyListener(DigitsKeyListener.getInstance("0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ@.＠"));
+                eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
                 eitBankCardId.setHint(R.string.input_your_zhifubao_id);
                 paytype = 2;
                 break;
@@ -230,6 +273,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                 tvTitleInfo.setText(getString(R.string.id_card_tips_bank));
                 tvBankCardId.setText(getString(R.string.bank_id));
                 eitBankCardId.setInputType(InputType.TYPE_CLASS_NUMBER);
+                eitBankCardId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
                 eitBankCardId.setFilters(new InputFilter[]{new InputFilter.LengthFilter(21)});
                 eitBankCardId.setHint(R.string.input_your_bank_card_id);
                 paytype = 1;
