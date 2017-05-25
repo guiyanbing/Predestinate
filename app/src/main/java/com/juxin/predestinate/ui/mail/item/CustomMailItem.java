@@ -84,7 +84,6 @@ public class CustomMailItem extends LinearLayout {
      * @return
      */
     CustomOtherMailItem customActMailItem;
-
     public CustomBaseMailItem getItemActView() {
         customActMailItem = (CustomOtherMailItem) customFrameLayout.findViewById(R.id.chat_fragment_item_act);
         customActMailItem.init();
