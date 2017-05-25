@@ -896,10 +896,17 @@ public class TimeUtil extends TimeBaseUtil {
         return formatter.format(curDate);
     }
 
-    public static String getCurrentTime(Long l) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date curDate = new Date(l);// 获取当前时间
-        return formatter.format(curDate);
+    public static String getFormatTimeChatTip(long time) {
+        String ret = "";
+
+        try {
+            SimpleDateFormat e = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            ret = e.format(new Date(time));
+        } catch (Exception e) {
+            PLogger.printObject(e);
+        }
+
+        return ret;
     }
 
     public static String formatTimeLong(Long l) {

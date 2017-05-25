@@ -109,7 +109,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return whisperId;
     }
 
-    public Long getLWhisperId() {
+    public long getLWhisperId() {
         return TypeConvertUtil.toLong(whisperId);
     }
 

@@ -670,7 +670,7 @@ public class BaseMessage implements IBaseMessage {
             case video: {
                 VideoMessage videoMessage = (VideoMessage) msg;
                 result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
-                        TimeUtil.getCurrentTime(videoMessage.getTime()), videoMessage.isSender());
+                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
                 break;
             }
 

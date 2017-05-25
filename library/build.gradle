@@ -47,7 +47,6 @@ dependencies {
     //okhttp:[https://github.com/square/okhttp]
     compile "com.squareup.okhttp3:okhttp:$rootProject.versions.libOkhttp"
     compile "com.squareup.okhttp3:logging-interceptor:$rootProject.versions.libOkhttp"
-    compile 'com.squareup.okio:okio:1.13.0'
 
     //rxJava:[https://github.com/ReactiveX/RxJava],rxAndroid:[https://github.com/ReactiveX/RxAndroid]
     compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"
@@ -58,7 +57,7 @@ dependencies {
     //日志打印库:[https://github.com/elvishew/XLog]
     compile "com.elvishew:xlog:$rootProject.versions.libXLog"
     //图片缩放查看控件:[https://github.com/chrisbanes/PhotoView]
-    compile 'com.github.chrisbanes:PhotoView:1.3.0'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     //viewanimator动画库:[https://github.com/florent37/ViewAnimator]
     compile("com.github.florent37:viewanimator:$rootProject.versions.libAnimator") {
         exclude group: 'com.android.support', module: 'appcompat-v7'

@@ -20,9 +20,9 @@ public class ChatBaseSmilePanel extends ChatViewPanel {
         super(context, chatInstance);
     }
 
-    public void initPointsView(ViewPager vp, int totalNum) {
+    public void initPointsView(ViewPager vp, int totalNum, boolean firstShow) {
         pointsView = (PointsView) findViewById(R.id.chat_points);
-        pointsView.setTotalPoints(totalNum);
+        pointsView.setTotalPoints(totalNum, firstShow);
         vp.setCurrentItem(pointsView.selectIndex);
         vp.setOnPageChangeListener(pointsView);
     }

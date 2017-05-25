@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.juxin.predestinate.R;
@@ -55,11 +56,12 @@ public class MyFriendsAct extends BaseActivity implements RequestComplete, ExLis
 
     private void initView() {
         customStatusListView = (CustomStatusListView) findViewById(R.id.myfriend_list);
+        View mViewTop = LayoutInflater.from(this).inflate(R.layout.layout_margintop, null);
         exListView = customStatusListView.getExListView();
         exListView.setXListViewListener(this);
         exListView.setPullRefreshEnable(true);
         exListView.setPullLoadEnable(true);
-
+        exListView.addHeaderView(mViewTop);
         adapter = new MyFriendsAdapter(this, data);
         exListView.setAdapter(adapter);
 
