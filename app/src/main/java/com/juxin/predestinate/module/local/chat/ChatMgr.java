@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -30,18 +29,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -82,9 +77,9 @@ public class ChatMgr implements ModuleBase {
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
 
-        // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
+       // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
 
-        // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
+       // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
     public long updateToReadVoice(long msgID) {
@@ -116,19 +111,20 @@ public class ChatMgr implements ModuleBase {
                 messageRet.parseJson(contents);
                 if (!messageRet.isOk() || !messageRet.isS()) return;
 
+
                 Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
                 observable.subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        if (aBoolean) {
-                            if (dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR) {
-                                return;
+                        if(aBoolean){
+                            if(dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR){
+                               return;
                             }
-                            ModuleMgr.getChatListMgr().getWhisperList();
+                       //     ModuleMgr.getChatListMgr().getWhisperList();
                         }
                         dbCenter.getCenterFMessage().insertMsg(textMessage);
                     }
-                });
+                }).unsubscribe();
             }
 
             @Override
@@ -414,8 +410,8 @@ public class ChatMgr implements ModuleBase {
             });
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-            if (ret != MessageConstant.ERROR) {
-                ModuleMgr.getChatListMgr().getWhisperList();
+            if(ret != MessageConstant.ERROR){
+            //    ModuleMgr.getChatListMgr().getWhisperList();
             }
 //            updateLocalReadStatus(channelID, whisperID, last_msgid);
         }
@@ -681,8 +677,8 @@ public class ChatMgr implements ModuleBase {
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                     boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
-                    if (ret) {
-                        ModuleMgr.getChatListMgr().getWhisperList();
+                    if(ret){
+                 //       ModuleMgr.getChatListMgr().getWhisperList();
                     }
                 }
             }
