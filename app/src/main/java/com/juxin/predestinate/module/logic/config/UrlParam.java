@@ -33,7 +33,6 @@ public enum UrlParam {
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
-    serviceQQ("user/serviceQQ", null, false),//请求在线客服QQ
     statistics(Hosts.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
     reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
