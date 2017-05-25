@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
@@ -30,6 +31,7 @@ import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -57,7 +59,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private TextView base_title_title, cus_top_title_txt;
     private View cus_top_title_view;
     private LMarqueeView lmvMeassages;
-    private  LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
+    private LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
 
     private LinearLayout privatechat_head;
     private RelativeLayout llTitleRight;
@@ -236,6 +238,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             initHeadView();
         }
         initFollow();
+        //标题、（关注TA、查看手机）、滚动条 高度
+        PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight());
     }
 
     private void initFollow() {

@@ -10,8 +10,9 @@ public class CenterConstant {
     public static final String USER_CHECK_INFO_KEY = "check_info";       // 查看资料区分TAG
     public static final String USER_CHECK_OTHER_KEY = "check_other_info";// 查看TA人资料
 
-    public static final int USER_CHECK_INFO_OWN = 0x11;    // 查看自己资料
-    public static final int USER_CHECK_INFO_OTHER = 0x12;  // 查看TA人资料
+    public static final int USER_CHECK_INFO_OWN = 0x11;      // 查看自己资料
+    public static final int USER_CHECK_INFO_OTHER = 0x12;    // 查看TA人资料
+    public static final int USER_CHECK_CONNECT_OTHER = 0x13; // 查看TA人资料 联系方式
 
     // 资料设置页跳转来源
     public static final String USER_SET_KEY = "user_set_key";   // 资料设置

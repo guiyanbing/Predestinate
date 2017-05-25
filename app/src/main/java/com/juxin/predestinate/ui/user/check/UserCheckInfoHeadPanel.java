@@ -1,6 +1,8 @@
 package com.juxin.predestinate.ui.user.check;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,9 +15,11 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -30,7 +34,6 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
     private ImageView iv_follow;  // 关注星标
     private int followType = 1;   // 关注、取消关注
 
-    private String distance, online;
     private int follow;
 
     public UserCheckInfoHeadPanel(Context context, int channel, UserDetail userProfile) {
@@ -46,8 +49,6 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
     private void initData() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-            distance = "5km以内";
-            online = getContext().getString(R.string.user_online);
             return;
         }
 
@@ -55,8 +56,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
             PToast.showShort(getContext().getString(R.string.user_other_info_req_fail));
             return;
         }
-        distance = userDetail.getDistance() + "km";
-        online = userDetail.getOnline_text();
+        getContext().getString(R.string.user_info_distance_near);
         follow = userDetail.getFollowmecount();
     }
 
@@ -72,10 +72,11 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         FrameLayout fl_topN = (FrameLayout) findViewById(R.id.fl_top_n);
         TextView tv_topN = (TextView) findViewById(R.id.tv_top_n);
         ImageView iv_vip = (ImageView) findViewById(R.id.iv_vip);
+        img_header.setOnClickListener(listener);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
         iv_follow = (ImageView) findViewById(R.id.iv_guanzhu);
 
-        if (channel == CenterConstant.USER_CHECK_INFO_OTHER) {
+        if (channel != CenterConstant.USER_CHECK_INFO_OWN) {
             findViewById(R.id.ll_guanzhu).setOnClickListener(listener);
             if (userDetail != null) {
                 if (userDetail.isFollow())
@@ -91,8 +92,10 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
         user_id.setText("ID:" + userDetail.getUid());
         user_height.setText(userDetail.getHeight() + "cm");
-        user_distance.setText(distance);
-        user_online_time.setText(online);
+        user_online_time.setText(!TextUtils.isEmpty(userDetail.getOnline_text()) ? userDetail.getOnline_text() :
+                getContext().getString(R.string.user_online));
+        user_distance.setText(userDetail.getDistance() > 5 ? getContext().getString(R.string.user_info_distance_far) :
+                getContext().getString(R.string.user_info_distance_near));
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
         fl_topN.setVisibility(userDetail.getTopN() <= 0 ? View.GONE : View.VISIBLE);
@@ -103,6 +106,11 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
+                case R.id.img_header:
+                    if (TextUtils.isEmpty(userDetail.getAvatar())) return;
+                    UIShow.showPhotoOfBigImg((FragmentActivity) App.getActivity(), userDetail.getAvatar());
+                    break;
+
                 case R.id.ll_guanzhu:       // 关注星标
                     handleFollow();
                     break;

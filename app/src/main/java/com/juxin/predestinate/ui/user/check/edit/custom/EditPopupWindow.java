@@ -3,7 +3,9 @@ package com.juxin.predestinate.ui.user.check.edit.custom;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -129,10 +130,18 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
     /**
      * 显示该popupWindow
      */
-    public void showPopupWindow() {
+    public void showPopupWindow(View v) {
         txt.setVisibility(View.INVISIBLE);
-        int offSet = UIUtil.dp2px(35);
-        this.showAsDropDown(txt, 0, -offSet);
+        // 适配 android 7.0
+        if (Build.VERSION.SDK_INT < 24) {
+            int offSet = UIUtil.dp2px(35);
+            this.showAsDropDown(txt, 0, -offSet);
+        } else {
+            int[] location = new int[2];
+            v.getLocationOnScreen(location);
+            int y = location[1];
+            this.showAtLocation(txt, Gravity.NO_GRAVITY, 0, y + getHeight());
+        }
     }
 
     @Override
@@ -165,7 +174,7 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
         // 设置备注
         if (editKey.equals(EditKey.s_key_remark_name)) {
             String remark = txt.getText().toString();
-            if (!editText.equals(remark) && !TextUtils.isEmpty(editText)) {
+            if (!editText.equals(remark)) {
                 if (listener != null)
                     listener.editFinish(editText);
             }

@@ -25,6 +25,7 @@ import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
@@ -58,6 +59,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         initView();
 
         MsgMgr.getInstance().attach(this);
+        ModuleMgr.getCommonMgr().getFriendsSize();
         return getContentView();
     }
 
@@ -111,6 +113,12 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         mailFragmentAdapter = new MailFragmentAdapter(getContext(), null);
         listMail.setAdapter(mailFragmentAdapter);
         mailFragmentAdapter.updateAllData();
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                detectInfo(listMail);
+            }
+        }, 800);
 
         listMail.setPullLoadEnable(false);
         listMail.setMenuCreator(new SwipeMenuCreator() {
@@ -125,8 +133,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 menu.setTitleColor(Color.WHITE);
                 menu.setViewHeight(mailFragmentAdapter.getItemHeight());
             }
-
-
         });
 
         listMail.setPullLoadEnable(false);
@@ -181,6 +187,9 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     case MyFriend_Msg:
 
                         break;
+                    case Greet_Msg:
+
+                        break;
                 }
             } else {
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
@@ -206,6 +215,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());
+                        break;
+                    case Greet_Msg://打招呼的人
                         break;
                 }
             } else {
@@ -243,8 +254,10 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (mailFragmentAdapter == null) return;
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
+            case MsgType.MT_Friend_Num_Notice:
                 mailFragmentAdapter.updateAllData();
-                detectInfo(listMail);
+                break;
+            default:
                 break;
         }
     }
@@ -290,10 +303,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         for(int i = firs; i < last; i++){
             BaseMessage message = mailFragmentAdapter.getItem(i);
             PLogger.printObject("Position===for=" + message);
-            if(message != null && ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)){
+
+            if(message == null ||  MailMsgID.getMailMsgID(message.getLWhisperID()) != null){
+                continue;
+            }
+
+            if(message.getTime() <= 0 || ModuleMgr.getAppMgr().getTime() > (message.getTime() + Constant.TWO_HOUR_TIME)){
                 stringList.add(message.getLWhisperID());
                 PLogger.printObject("Position===for2222=" + message.getType() + message.getAvatar() + message.getName());
-
             }
         }
 

@@ -19,6 +19,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
@@ -81,6 +82,11 @@ public class ChatMgr implements ModuleBase {
        // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
+    public long updateToReadVoice(long msgID) {
+        return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
+    }
+
+
     /**
      * 打招呼
      *
@@ -93,7 +99,7 @@ public class ChatMgr implements ModuleBase {
         TextMessage textMessage = new TextMessage(whisperID, content, kf, sayHelloType);
         textMessage.setStatus(DBConstant.SENDING_STATUS);
         textMessage.setJsonStr(textMessage.getJson(textMessage));
-
+        textMessage.setRu(MessageConstant.Ru_Friend);
         long ret = dbCenter.insertMsg(textMessage);
 
         boolean b = ret != DBConstant.ERROR;
@@ -116,6 +122,7 @@ public class ChatMgr implements ModuleBase {
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+        commonMessage.setRu(MessageConstant.Ru_Friend);
 
         long ret = dbCenter.insertMsg(commonMessage);
 
@@ -143,6 +150,7 @@ public class ChatMgr implements ModuleBase {
         commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url, DirType.getImageDir()));
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+        commonMessage.setRu(MessageConstant.Ru_Friend);
 
         long ret = dbCenter.insertMsg(commonMessage);
 
@@ -176,6 +184,7 @@ public class ChatMgr implements ModuleBase {
         commonMessage.setVoiceUrl(url);
         commonMessage.setStatus(DBConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+        commonMessage.setRu(MessageConstant.Ru_Friend);
 
         long ret = dbCenter.insertMsg(commonMessage);
 
@@ -216,6 +225,7 @@ public class ChatMgr implements ModuleBase {
         GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount, giftLogID);
         giftMessage.setStatus(DBConstant.OK_STATUS);
         giftMessage.setJsonStr(giftMessage.getJson(giftMessage));
+        giftMessage.setRu(MessageConstant.Ru_Friend);
 
         long ret = dbCenter.insertMsg(giftMessage);
         onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), ret != DBConstant.ERROR, giftMessage);

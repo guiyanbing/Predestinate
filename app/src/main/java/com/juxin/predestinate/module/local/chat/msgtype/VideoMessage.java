@@ -23,12 +23,8 @@ public class VideoMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
-        this.setVideoID(object.optInt("vc_id"));
-        this.setVideoTp(object.optInt("vc_tp"));
-        this.setVideoMediaTp(object.optInt("media_tp"));
-        this.setVideoVcEscCode(object.optInt("vc_esc_code"));
-        this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
-        this.setVc_channel_key(object.optString("vc_channel_key"));
+        this.setRu(object.optInt("ru"));
+        parseVideoJson(object);
         return this;
     }
 
@@ -87,5 +83,36 @@ public class VideoMessage extends BaseMessage {
 
     public void setVc_channel_key(String vc_channel_key) {
         this.vc_channel_key = vc_channel_key;
+    }
+
+
+    public VideoMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
+                       int type, int status, int fStatus, long time, String jsonStr) {
+        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+        convertJSON(getJsonStr());
+    }
+
+    //私聊列表
+    public VideoMessage(long id, String userID, String infoJson, int type, int kfID,
+                       int status, int ru, long time, String content, int num) {
+        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+        convertJSON(getJsonStr());
+    }
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        parseVideoJson(object);
+    }
+
+    private void parseVideoJson(JSONObject object) {
+        this.setVideoID(object.optInt("vc_id"));
+        this.setVideoTp(object.optInt("vc_tp"));
+        this.setVideoMediaTp(object.optInt("media_tp"));
+        this.setVideoVcEscCode(object.optInt("vc_esc_code"));
+        this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
+        this.setVc_channel_key(object.optString("vc_channel_key"));
     }
 }

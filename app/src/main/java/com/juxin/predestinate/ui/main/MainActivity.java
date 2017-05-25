@@ -11,6 +11,9 @@ import android.view.View;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
@@ -20,6 +23,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.discover.DiscoverFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
@@ -28,7 +32,7 @@ import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener, PObserver {
 
     private FragmentManager fragmentManager;
     private DiscoverFragment discoverFragment;
@@ -66,6 +70,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * 初始化监听与请求
      */
     private void initListenerAndRequest() {
+        MsgMgr.getInstance().attach(this);
         onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
         ChatSpecialMgr.getChatSpecialMgr().attachWhisperListener(this);
     }
@@ -242,5 +247,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void onMsgNum(int num) {
         mail_num.setText(ModuleMgr.getChatListMgr().getUnreadTotalNum(num));
         mail_num.setVisibility(num > 0 ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_User_List_Msg_Change:
+                TimerUtil.beginTime(new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
+                    }
+                }, 200);
+                break;
+            default:
+                break;
+        }
     }
 }

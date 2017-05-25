@@ -38,7 +38,7 @@ public enum UrlParam {
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
 
     //============================== 设置页相关接口 =============================
-    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
+    reqReqVerifyCode("Public/sendSMSM", false),//获取手机验证码
     mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
     modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("user/feedback"),//意见反馈

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 public class UserOtherSetAct extends BaseActivity implements RequestComplete {
     private TextView user_nick, user_id, user_remark;
     private ImageView user_head;
+    private View edit_top;
 
     // 音视频配置
     private VideoSetting videoSetting;
@@ -60,6 +62,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
     private void initView() {
         initSeekBar();
+        edit_top = findViewById(R.id.edit_top);
         user_head = (ImageView) findViewById(R.id.user_head);
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
@@ -101,7 +104,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
                 case R.id.user_remark:
                     EditPopupWindow popupWindow = new EditPopupWindow(UserOtherSetAct.this, EditKey.s_key_remark_name, user_remark);
-                    popupWindow.showPopupWindow();
+                    popupWindow.showPopupWindow(edit_top);
                     popupWindow.setEditPopupWindowListener(new EditPopupWindow.EditPopupWindowListener() {
                         @Override
                         public void editFinish(String text) {

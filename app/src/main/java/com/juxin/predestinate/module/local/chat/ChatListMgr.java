@@ -93,34 +93,40 @@ public class ChatListMgr implements ModuleBase, PObserver {
         msgList.clear();
         greetList.clear();
         if (messages != null && messages.size() > 0) {
-            msgList.addAll(messages);
             for (BaseMessage tmp : messages) {
-                if(!tmp.isRu()){
+                PLogger.printObject("tmp===dd=" + tmp.getRu());
+                if(tmp.isRu()){
+                    msgList.add(tmp);
+                }else {
                     greetList.add(tmp);
                 }
                 unreadNum += tmp.getNum();
             }
         }
             unreadNum += getFollowNum();//关注
-//            List<FriendInfo> friendInfos = ModuleMgr.getMsgCommonMgr().getFriendsData().getFriendData();
-//            if (messages != null) {
-//                for (BaseMessage tmp : messages) {
-//                    boolean isB = MailSpecialID.getMailSpecialID(tmp.getLWhisperID());
-//                    if (isB) {
-//                        friendsList.add(tmp);
-//                    } else {
-//                        MMLog.autoDebug("friendInfos=" + friendInfos.size());
-//                        if (ModuleMgr.getMsgCommonMgr().getFriendsData().isContains(tmp.getLWhisperID())) {
-//                            friendsList.add(tmp);
-//                        } else {
-//                            newFriendListUnreadNum += tmp.getNum();
-//                            newFriendList.add(tmp);
-//                        }
-//                    }
-//                }
-//            }
+
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
         // updateBasicUserInfo();
+    }
+
+    /**
+     * 截取语音
+     *
+     * @param url
+     * @return
+     */
+    public String subStringAmr(String url) {
+        return url.contains(".amr") ? (url.replace(".amr", "")) : url;
+    }
+
+    /**
+     * 拼接
+     *
+     * @param url
+     * @return
+     */
+    public String spliceStringAmr(String url) {
+        return url.contains(".amr") ? url : (url + ".amr");
     }
 
     /**
@@ -265,6 +271,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 .appModule(new AppModule((Application) App.getContext()))
                 .dBModule(new DBModule(App.uid))
                 .build();
+
+        MsgMgr.getInstance().sendMsg(MsgType.MT_DB_Init_Ok, null);
     }
 
 

@@ -1,17 +1,16 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,21 +70,6 @@ public class BaseMessage implements IBaseMessage {
         }
     }
 
-    //数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟
-    public static int ONE = 1;
-    public static int TWO = 2;
-    public static int THREE = 3;
-    public static int FOUR = 4;
-
-    public final static int NumDefault = 0;//数字默认值
-    public final static String StrDefault = "";//字符默认值
-
-    //显示权重
-    public static int Max_Weight = 1000;//最大权重
-    public static int Great_Weight = 100;//大权重
-    public static int In_Weight = 50;//中等权重
-    public static int Small_Weight = 1;//小权重
-
     /**
      * 消息类型，进行未读消息比对
      */
@@ -135,7 +119,7 @@ public class BaseMessage implements IBaseMessage {
     private boolean isResending = false;//是否重发中
     private boolean isValid = false;//是否有效当前消息,用于五分钟内重发用
     private String msgDesc;//消息描述 mct
-    private long ru;
+    private long ru = 0;//如果为1则为熟人消息，否则为0
 
     private boolean isRead = false;//未读消息（true已经是读过了）//这个字段专门给数据库用的，不是给界面用的
     private boolean isSave;//是否保存
@@ -149,12 +133,10 @@ public class BaseMessage implements IBaseMessage {
     private int localAvatar;// 本地头像
     private int top;
     private String aboutme;// 内心读白
-    private int isMonth;//包月
     private int isVip;
-    private int isOnline;//是否在线
     private int kfID;//是否是机器人
     private int num;//私聊列表专用字段
-    private int Weight = Small_Weight;//Item的权重
+    private int Weight = MessageConstant.Small_Weight;//Item的权重
     private int MailItemStyle = MailItemType.Mail_Item_Ordinary.type;//私聊列表样式
 
     public int getMailItemStyle() {
@@ -283,14 +265,6 @@ public class BaseMessage implements IBaseMessage {
 
     public void setIsVip(int isVip) {
         this.isVip = isVip;
-    }
-
-    public int getIsMonth() {
-        return isMonth;
-    }
-
-    public void setIsMonth(int isMonth) {
-        this.isMonth = isMonth;
     }
 
     public long getTime() {
@@ -437,18 +411,6 @@ public class BaseMessage implements IBaseMessage {
         this.isRead = isRead;
     }
 
-    public int getIsOnline() {
-        return isOnline;
-    }
-
-//    public boolean isOnline() {
-//        return ModuleMgr.getCenterMgr().isOnline(isOnline);
-//    }
-
-    public void setIsOnline(int isOnline) {
-        this.isOnline = isOnline;
-    }
-
     public int getKfID() {
         return kfID;
     }
@@ -511,11 +473,10 @@ public class BaseMessage implements IBaseMessage {
 
     /**
      * true 如果为1则为熟人消息，否则为0
-     *
      * @return
      */
     public boolean isRu() {
-        return ru == 1;
+        return ru == MessageConstant.Ru_Friend;
     }
 
     public void setRu(long ru) {
@@ -530,7 +491,6 @@ public class BaseMessage implements IBaseMessage {
         } catch (JSONException var3) {
             PLogger.printThrowable(var3);
         }
-
         return new JSONObject();
     }
 
@@ -582,6 +542,17 @@ public class BaseMessage implements IBaseMessage {
         this.setJsonStr(content);
     }
 
+
+    /**
+     * 转换JSON 转子类的时候用
+     *
+     * @param jsonStr
+     */
+    public void convertJSON(String jsonStr) {
+        if (TextUtils.isEmpty(jsonStr)) return;
+        this.setJsonStr(jsonStr);
+    }
+
     /**
      * 解析
      *
@@ -594,8 +565,8 @@ public class BaseMessage implements IBaseMessage {
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
         this.setName(object.optString("nickname"));
-        this.setIsMonth(object.optInt("ismonth"));
-        this.setIsVip(object.optInt("isVip"));
+        this.setIsVip(object.optInt("group"));
+        this.setTop(object.optInt("top"));
     }
 
     /**
@@ -620,7 +591,11 @@ public class BaseMessage implements IBaseMessage {
             case wantGiftTwo:
                 message = new GiftMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
                 break;
+            case video:
+                message = new VideoMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                break;
             default:
+                message = new BaseMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
                 break;
         }
         return message;
@@ -648,6 +623,10 @@ public class BaseMessage implements IBaseMessage {
             case gift:
             case wantGiftTwo:
                 message = new GiftMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
+                        type, status, fStatus, time, jsonStr);
+                break;
+            case video:
+                message = new VideoMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
                         type, status, fStatus, time, jsonStr);
                 break;
             default:

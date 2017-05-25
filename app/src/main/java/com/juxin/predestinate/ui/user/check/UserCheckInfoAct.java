@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
@@ -22,6 +23,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
@@ -36,6 +38,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private int channel;  // 查看用户资料区分Tag，默认查看自己个人资料
     private UserDetail userDetail;   // 用户资料
 
+    private ScrollView scrollLayout;
     private TextView tv_sayhi;
     private LinearLayout container, videoBottom, voiceBottom, sayHibottom;
 
@@ -67,6 +70,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private void initView() {
         initTitle();
         MsgMgr.getInstance().attach(this);
+        scrollLayout = (ScrollView) findViewById(R.id.layout_scroll);
         container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail);
         container.addView(headPanel.getContentView());
@@ -78,9 +82,12 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     }
 
     private void initTitle() {
-        setTitleBackground(R.color.transparent);
-        setTitleLeftImg(R.drawable.p1_back_white_btn, listener);
-        if (channel == CenterConstant.USER_CHECK_INFO_OTHER)
+        setBackView(userDetail.getNickname());
+        findViewById(R.id.cut_line).setVisibility(View.GONE);
+        if (userDetail.isMan()) {
+            setTitleBackground(R.color.picker_blue_color);
+        }
+        if (channel != CenterConstant.USER_CHECK_INFO_OWN)
             setTitleRightImg(R.drawable.f1_more_vertical_dot, listener);
     }
 
@@ -114,10 +121,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.base_title_left_view:     // 标题左侧退出按钮
-                    back();
-                    break;
-
                 case R.id.base_title_right_img_container:// 标题右侧按钮
                     UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userDetail.getUid(), userDetail, CenterConstant.USER_SET_FROM_CHECK);
                     break;
@@ -134,11 +137,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
-                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this,userDetail.getUid(),VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音
-                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this,userDetail.getUid(),VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
@@ -183,6 +186,25 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                         PToast.showShort(getString(R.string.user_info_hi_fail));
                     }
                 });
+    }
+
+    /**
+     * 滚动到底部
+     */
+    private void scrollToBottom() {
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                scrollLayout.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        }, 100);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (channel == CenterConstant.USER_CHECK_CONNECT_OTHER)
+            scrollToBottom();
     }
 
     @Override

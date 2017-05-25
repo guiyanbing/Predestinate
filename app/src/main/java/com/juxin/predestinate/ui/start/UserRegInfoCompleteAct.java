@@ -80,7 +80,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
-        ifUpHead = ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1;
+        ifUpHead = getIntent().getIntExtra("gender",1) == 1;
     }
 
     private void initView() {

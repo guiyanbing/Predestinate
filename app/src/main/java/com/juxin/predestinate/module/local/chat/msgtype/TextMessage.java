@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import com.juxin.library.log.PLogger;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +42,7 @@ public class TextMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setRu(object.optInt("ru"));
         return this;
     }
 
@@ -73,7 +73,6 @@ public class TextMessage extends BaseMessage {
         return null;
     }
 
-
     public int getKf() {
         return kf;
     }
@@ -90,18 +89,22 @@ public class TextMessage extends BaseMessage {
         this.sayHelloType = sayHelloType;
     }
 
-
     public TextMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
                        int type, int status, int fStatus, long time, String jsonStr) {
         super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
-        parseJson(getJsonStr());
+        convertJSON(getJsonStr());
     }
 
     //私聊列表
     public TextMessage(long id, String userID, String infoJson, int type, int kfID,
                        int status, int ru, long time, String content, int num) {
         super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
-        parseJson(getJsonStr());
+        convertJSON(getJsonStr());
     }
 
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        this.setMsgDesc(getJsonObject(jsonStr).optString("mct")); //消息内容
+    }
 }

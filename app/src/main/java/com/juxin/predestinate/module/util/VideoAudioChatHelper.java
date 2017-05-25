@@ -278,7 +278,7 @@ public class VideoAudioChatHelper{
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("tuid", dstUid);
         postParams.put("vtype", type);
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.inviteVideoChat, postParams, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.inviteVideoChat, postParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 handleInviteChat(context, response.getResponseString(), dstUid, type);
@@ -336,7 +336,7 @@ public class VideoAudioChatHelper{
             } else {
                 int code = jo.optInt("code");
                 if(code == 3003) {
-                    UIShow.showGoodsDiamondAct(context);
+                    UIShow.showGoodsDiamondDialog(context);
 //                    int leastDiamond = type == TYPE_AUDIO_CHAT ? AppCfg.ASet.getVoice_cost_per_minute() : AppCfg.ASet.getVideo_cost_per_minute();
 //                    if (AppModel.getInstance().getUserDetail().getDiamondsSum() < leastDiamond) {
 //                        UIHelper.showDiamondsDlg((Activity) context, String.valueOf(dstUid), "1", leastDiamond - AppModel.getInstance().getUserDetail().getDiamondsSum(), true, true);
