@@ -98,7 +98,9 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                 case R.id.ll_edit:
                     if (channel == CenterConstant.USER_SET_FROM_CHAT) {
                         UIShow.showCheckOtherInfoAct(UserOtherSetAct.this, userDetail);
+                        return;
                     }
+                    finish();
                     break;
 
                 case R.id.user_remark:
