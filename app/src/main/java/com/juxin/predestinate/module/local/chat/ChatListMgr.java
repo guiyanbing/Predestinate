@@ -239,6 +239,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         ModuleMgr.getChatMgr().inject();
                         PLogger.d("uid=======" + App.uid);
                         getWhisperList();
+                        ModuleMgr.getChatMgr().deleteMessageKFIDHour(24);
                     }
                 } else {
                     logout();

@@ -13,6 +13,7 @@ import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
 import rx.Scheduler;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -164,7 +166,6 @@ public class DBCenterFLetter {
         return MessageConstant.ERROR;
     }
 
-
     private boolean isExist(String userid) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
                 .append(" WHERE ")
@@ -178,7 +179,6 @@ public class DBCenterFLetter {
             return false;
         }
     }
-
 
     public Observable<Boolean> isHaveMsg(String userid) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
@@ -273,5 +273,73 @@ public class DBCenterFLetter {
      */
     public int delete(long whisperID){
         return mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
+    }
+
+    /**
+     * 更新成内容
+     * @param userid
+     * @return
+     */
+    public long updateContent(String userid){
+        ContentValues values = new ContentValues();
+        values.put(FLetter.COLUMN_CONTENT, new byte[0]);
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", userid);
+    }
+
+    public Observable<List<BaseMessage>> deleteCommon(long delTime){
+        final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
+                .append(" WHERE ")
+                .append(FLetter.COLUMN_TIME + " < ")
+                .append(delTime);
+
+        return mDatabase.createQuery(FLetter.FLETTER_TABLE, sql.toString())
+                .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
+                    @Override
+                    public List<BaseMessage> call(SqlBrite.Query query) {
+                        return convertFletter(query.run());
+                    }
+                }).unsubscribeOn(Schedulers.io());
+    }
+
+    public Observable<List<BaseMessage>> deleteKFID(){
+            final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
+                    .append(" WHERE ")
+                    .append(FLetter.COLUMN_KFID + " = ")
+                    .append(MessageConstant.KF_ID)
+                    .append(" AND ")
+                    .append(FLetter.COLUMN_USERID + " <> ")
+                    .append(MessageConstant.Fate_Small_Secretary);
+
+        return mDatabase.createQuery(FLetter.FLETTER_TABLE, sql.toString())
+                .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
+                    @Override
+                    public List<BaseMessage> call(SqlBrite.Query query) {
+                        return convertFletter(query.run());
+                    }
+                }).unsubscribeOn(Schedulers.io());
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private List<BaseMessage> convertFletter(Cursor cursor) {
+        if (null == cursor) {
+            return null;
+        }
+        ArrayList<BaseMessage> result = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()) {
+                BaseMessage message = new BaseMessage();
+                message.setWhisperID(CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
+                message.setKfID(CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
+                message.setTime(CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
+                result.add(message);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.close(cursor);
+        }
+        return result;
     }
 }

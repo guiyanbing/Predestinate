@@ -284,11 +284,9 @@ public class DBCenterFMessage {
         if (null == cursor) {
             return null;
         }
-        PLogger.printObject("convert==" + "222222222");
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
-                PLogger.printObject("convert==" + "333333333");
                 Bundle bundle = new Bundle();
                 bundle.putLong(FMessage._ID,  CursorUtil.getLong(cursor, FMessage._ID));
                 bundle.putString(FMessage.COLUMN_CHANNELID,  CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID));
@@ -304,22 +302,7 @@ public class DBCenterFMessage {
                 bundle.putString(FMessage.COLUMN_CONTENT,  CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
 
                 result.add(BaseMessage.parseToBaseMessage(bundle));
-
-//                result.add(BaseMessage.parseToBaseMessage(
-//                        CursorUtil.getLong(cursor, FMessage._ID),
-//                        CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
-//                        CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
-//                        CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),
-//                        CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID),
-//                        CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID),
-//                        CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID),
-//                        CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE),
-//                        CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
-//                        CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
-//                        CursorUtil.getLong(cursor, FMessage.COLUMN_TIME),
-//                        CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)));
             }
-            PLogger.printObject("convert==" + "4444444");
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -336,5 +319,10 @@ public class DBCenterFMessage {
      */
     public int delete(long whisperID){
         return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
+    }
+
+    public int delete(long whisperID, long time){
+        return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? AND " +
+                FMessage.COLUMN_TIME + " = ? ", String.valueOf(whisperID), String.valueOf(time));
     }
 }
