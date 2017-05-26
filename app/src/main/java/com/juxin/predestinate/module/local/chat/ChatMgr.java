@@ -352,6 +352,14 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(baseMessage.getChannelID(), baseMessage.getWhisperID(), upRet != MessageConstant.ERROR, baseMessage);
     }
 
+    /**
+     * 更新小红点
+     * @param msgID
+     */
+    public long updateMsgFStatus(long msgID) {
+        return dbCenter.getCenterFMessage().updateMsgFStatus(msgID);
+    }
+
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack) {
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.getJsonStr()), new IMProxy.SendCallBack() {
             @Override

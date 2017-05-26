@@ -140,6 +140,12 @@ public class DBCenterFMessage {
         return MessageConstant.ERROR;
     }
 
+    public long updateMsgFStatus(long msgID){
+        ContentValues values = new ContentValues();
+        values.put(FMessage.COLUMN_FSTATUS, String.valueOf(MessageConstant.NumDefault));
+        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+    }
+
     public long updateToReadAll(){
         ContentValues values = new ContentValues();
         values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));

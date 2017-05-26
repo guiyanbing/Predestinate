@@ -3,21 +3,15 @@ package com.juxin.predestinate.bean.db.cache;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -70,13 +64,14 @@ public class DBCacheCenter {
      * @return
      */
     public void storageProfileData(final UserInfoLightweight lightweight) {
-        Observable<Boolean> observable = isProfileExist(lightweight.getUid());
+        final long uid = lightweight.getUid();
+        Observable<Boolean> observable = isProfileExist(uid);
         observable.subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
                 try {
                     final ContentValues values = new ContentValues();
-                    values.put(FProfileCache.COLUMN_USERID, lightweight.getUid());
+                    values.put(FProfileCache.COLUMN_USERID, uid);
                     values.put(FProfileCache.COLUMN_TIME, lightweight.getTime());
 
                     if (lightweight.getInfoJson() != null)
@@ -85,7 +80,7 @@ public class DBCacheCenter {
                     if (!aBoolean) {
                         mDatabase.insert(FProfileCache.FPROFILE_TABLE, values);
                     } else {
-                        mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", String.valueOf(lightweight.getUid()));
+                        mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", String.valueOf(uid));
                     }
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
