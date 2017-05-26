@@ -49,11 +49,6 @@ public class UpLoadResult extends BaseData implements Parcelable{
 			this.setMp3(jsonObject.optString("mp3"));
 		}
 
-		// 图片
-		if(!jsonObject.isNull("pic")){
-			this.setHttpPathPic(jsonObject.optString("pic"));
-		}
-
 		// 视频
 		if(!jsonObject.isNull("thumb")){
 			this.setThumb(jsonObject.optString("thumb"));
@@ -85,14 +80,6 @@ public class UpLoadResult extends BaseData implements Parcelable{
 
 	public void setFile_md5(String file_md5) {
 		this.file_md5 = file_md5;
-	}
-
-	public String getHttpPathPic() {
-		return httpPathPic;
-	}
-
-	public void setHttpPathPic(String httpPathPic) {
-		this.httpPathPic = httpPathPic;
 	}
 
 	public String getAmr() {

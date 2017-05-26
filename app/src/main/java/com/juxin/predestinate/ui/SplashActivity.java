@@ -12,8 +12,9 @@ import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.start.NavUserAct;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
  * 闪屏页面
@@ -69,18 +70,22 @@ public class SplashActivity extends BaseActivity {
     private void skipLogic() {
         Intent intent = null;
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
-            if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey()) && !checkUserIsUploadAvatar()) {
-//TODO                UIShow.showNoHeadActToMain(this);
-//                finish();
+            if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey())&&!checkUserIsUploadAvatar()) {
+                int avatar_status = ModuleMgr.getCenterMgr().getMyInfo().getAvatar_status();
+                if (avatar_status == CenterConstant.USER_AVATAR_NO_PASS)
+                    UIShow.showNoHeadUploadActToMain(SplashActivity.this);//更新
+                if (avatar_status == 3)
+                    UIShow.showRegHeadUploadActToMain(SplashActivity.this);
+                finish();
             } else {
-                intent = new Intent(SplashActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                UIShow.showMainClearTask(SplashActivity.this);
             }
         } else {
             intent = new Intent(SplashActivity.this, NavUserAct.class);
+            startActivity(intent);
+            finish();
         }
-        startActivity(intent);
-        finish();
+
     }
 
     /**
@@ -94,12 +99,9 @@ public class SplashActivity extends BaseActivity {
      * 判断了是否上传了用户头像
      */
     private boolean checkUserIsUploadAvatar() {
-        //TODO 待替换
-//        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-//        String avatar = userDetail.getAvatar();
-//        // 判断用户头像是否正常
-//        return !(TextUtils.isEmpty(avatar) || userDetail.getAvatar_status() == 2);
-        return true;
+        int avatar_status = ModuleMgr.getCenterMgr().getMyInfo().getAvatar_status();
+        // 判断用户头像是否正常(未上传／未通过时跳转上传头像)
+        return !(avatar_status == CenterConstant.USER_AVATAR_NO_PASS || avatar_status == 3);
     }
 
     @Override

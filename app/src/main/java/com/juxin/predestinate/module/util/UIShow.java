@@ -1155,6 +1155,17 @@ public class UIShow {
     }
 
     /**
+     * 打开上传头像界面 完成后跳转到主页
+     *
+     * @param context
+     */
+    public static void showRegHeadUploadActToMain(Context context) {
+        Intent intent = new Intent(context, UserRegHeadUploadAct.class);
+        intent.putExtra("type", 0);
+        context.startActivity(intent);
+    }
+
+    /**
      * 打开头像更新界面
      *
      * @param context
@@ -1164,8 +1175,22 @@ public class UIShow {
         context.startActivity(intent);
     }
 
+
+    /**
+     * 打开头像更新界面 完成后跳转到主页
+     *
+     * @param context
+     */
+    public static void showNoHeadUploadActToMain(Context context) {
+        Intent intent = new Intent(context, UserNoHeadUploadAct.class);
+        intent.putExtra("type", 0);
+        context.startActivity(intent);
+    }
+
+
     /**
      * 打开打招呼的人界面
+     *
      * @param context
      */
     public static void showSayHelloUserAct(Context context) {
