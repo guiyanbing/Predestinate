@@ -25,6 +25,8 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
@@ -175,13 +177,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
         for (BaseMessage temp : messageList) {
             dbCenter.deleteMessage(temp.getLWhisperID());
         }
-        getWhisperList();
+      //  getWhisperList();
     }
 
     public long deleteMessage(long userID) {
         long ret = dbCenter.deleteMessage(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+          //  getWhisperList();
         }
         return ret;
     }
@@ -195,7 +197,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long deleteFmessage(long userID) {
         long ret = dbCenter.getCenterFMessage().delete(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+        //    getWhisperList();
         }
         return ret;
     }
@@ -206,7 +208,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
         if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+        //    getWhisperList();
         }
     }
 
@@ -215,10 +217,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void getWhisperList() {
+        PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
+                PLogger.printObject("getWhisperList====1" + baseMessages.size());
                 updateListMsg(baseMessages);
             }
         });

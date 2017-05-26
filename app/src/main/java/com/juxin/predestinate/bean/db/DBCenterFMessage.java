@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * fmessage 处理
@@ -270,7 +271,7 @@ public class DBCenterFMessage {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convert(query.run());
                     }
-                });
+                }).unsubscribeOn(Schedulers.io());
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
