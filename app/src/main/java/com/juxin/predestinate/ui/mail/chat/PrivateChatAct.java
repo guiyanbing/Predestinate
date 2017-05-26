@@ -366,7 +366,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
 
             case MsgType.MT_SEND_GIFT_FLAG:
-                if (!(Boolean) value) return;
+                if(!Constant.GIFT_CHAT.equals((String) value)) return;
                 PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false);
                 privateChat.mGiftTipsContainerV.setVisibility(View.GONE);
                 break;

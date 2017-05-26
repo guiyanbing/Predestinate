@@ -255,8 +255,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                 footPanel.refreshView(userDetail);
                 break;
 
-            case MsgType.MT_INFO_SEND_GIFT_FLAG:
-                if (!(Boolean) value) return;
+            case MsgType.MT_SEND_GIFT_FLAG:
+                if(!Constant.GIFT_INFO.equals((String) value)) return;
                 PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, false);
                 mGiftTipsContainerV.setVisibility(View.GONE);
                 break;
