@@ -424,7 +424,7 @@ public class CommonMgr implements ModuleBase {
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
-        if (checkDate(getSayHelloKey())) {
+        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
 
             getSayHiList(new RequestComplete() {
                 @Override
