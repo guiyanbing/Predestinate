@@ -8,16 +8,19 @@ import android.widget.TextView;
 import com.juxin.library.view.roadlights.LMarqueeFactory;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftMessageList;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 
 /**
  * Created by zm on 2017/1/8
  */
 public class GiftMessageInforView extends LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> {
-    private int mGender;
-    public GiftMessageInforView(Context mContext, int gender) {
+
+    private int mGender = 1;
+
+    public GiftMessageInforView(Context mContext) {
         super(mContext);
-        this.mGender = gender;
+        this.mGender = ModuleMgr.getCenterMgr().getMyInfo().getGender();
     }
 
     @Override

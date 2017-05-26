@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.my;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
@@ -25,6 +28,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
@@ -57,12 +62,17 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private int onePageCount = 0;
     private GiftPopView gpvPop;
     private int num;
+    private Context mContext;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
         setGravity(Gravity.BOTTOM);
         setDialogSizeRatio(-2, -2);
         setCancelable(true);
+    }
+
+    public void setCtx(Context context) {
+        this.mContext = context;
     }
 
     @Override
@@ -245,6 +255,14 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
         ModuleMgr.getChatMgr().sendGiftMsg(null, uid + "", arrGifts.get(position).getId(),num,0);
         PToast.showShort(info.getMsg()+"");
+
+        if(response.isOk()) {
+            if(mContext instanceof PrivateChatAct) {
+                MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, true);
+            }else if(mContext instanceof  UserCheckInfoAct) {
+                MsgMgr.getInstance().sendMsg(MsgType.MT_INFO_SEND_GIFT_FLAG, true);
+            }
+        }
     }
     private CharSequence temp;
     private int selectionStart;

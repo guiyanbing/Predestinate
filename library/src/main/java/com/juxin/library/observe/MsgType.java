@@ -126,6 +126,16 @@ public class MsgType {
      */
     public static final String MT_ADD_CUSTOM_SMILE = "MT_ADD_CUSTOM_SMILE";
 
+    /**
+     * 聊天页发送礼物是否成功
+     */
+    public static final String MT_SEND_GIFT_FLAG = "MT_SEND_GIFT_FLAG";
+
+    /**
+     * 资料页发送礼物是否成功
+     */
+    public static final String MT_INFO_SEND_GIFT_FLAG = "MT_INFO_SEND_GIFT_FLAG";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**

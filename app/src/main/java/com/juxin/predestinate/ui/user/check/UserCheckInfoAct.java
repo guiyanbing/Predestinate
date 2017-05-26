@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -19,6 +20,7 @@ import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -41,11 +43,9 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     private ScrollView scrollLayout;
     private TextView tv_sayhi;
-    private LinearLayout container, videoBottom, voiceBottom, sayHibottom;
+    private LinearLayout container, videoBottom, voiceBottom, sayHibottom, mGiftTipsContainerV;
 
-    /**********
-     * panel
-     ***********/
+    /* *********  panel **********/
     private UserCheckInfoHeadPanel headPanel;
     private UserCheckInfoFootPanel footPanel;
 
@@ -75,6 +75,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail);
         container.addView(headPanel.getContentView());
+        mGiftTipsContainerV = (LinearLayout) findViewById(R.id.ll_chat_greeting_tips_container);
 
         footPanel = new UserCheckInfoFootPanel(this, channel, userDetail);
         footPanel.setSlideIgnoreView(this);
@@ -131,9 +132,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    if (userDetail.isSayHello()) {
-                        return;
-                    }
+                    if (userDetail.isSayHello()) return;
                     handleSayHi();
                     break;
 
@@ -254,6 +253,15 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             case MsgType.MT_MyInfo_Change:
                 userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 footPanel.refreshView(userDetail);
+                break;
+
+            case MsgType.MT_INFO_SEND_GIFT_FLAG:
+                if (!(Boolean) value) return;
+                PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, false);
+                mGiftTipsContainerV.setVisibility(View.GONE);
+                break;
+
+            default:
                 break;
         }
     }

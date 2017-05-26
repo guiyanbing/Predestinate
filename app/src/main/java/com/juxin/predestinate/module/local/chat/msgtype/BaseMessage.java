@@ -31,7 +31,7 @@ public class BaseMessage implements IBaseMessage {
         hi(TextMessage.class, 3),//打招呼
         gift(GiftMessage.class, 10),//礼物消息
         hint(TextMessage.class, 14),//小提示消息
-        html(HtmlMessage.class, 19),//html消息
+        html(TextMessage.class, 19),//html消息
         wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息
         htmlText(TextMessage.class, 25),//HTML文本消息
@@ -381,7 +381,7 @@ public class BaseMessage implements IBaseMessage {
     }
 
     public boolean isCustomMsgPanel() {
-        return ChatPanelType.CPT_Custome == msgPanelType;
+        return ChatPanelType.CPT_Custom == msgPanelType;
     }
 
     public void setMsgPanelType(ChatPanelType msgPanelType) {
@@ -576,7 +576,7 @@ public class BaseMessage implements IBaseMessage {
      */
     public static BaseMessage parseToLetterMessage(Bundle bundle) {
         BaseMessage message = new BaseMessage();
-        if(bundle == null){
+        if (bundle == null) {
             return message;
         }
         BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(bundle.getInt(FLetter.COLUMN_TYPE));
@@ -608,7 +608,7 @@ public class BaseMessage implements IBaseMessage {
     //内容表
     public static BaseMessage parseToBaseMessage(Bundle bundle) {
         BaseMessage message = new BaseMessage();
-        if(bundle == null){
+        if (bundle == null) {
             return message;
         }
 
@@ -661,7 +661,7 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case common:
                 result = msg.getMsgDesc();
-                if(TextUtils.isEmpty(result)){
+                if (TextUtils.isEmpty(result)) {
                     CommonMessage commonMessage = (CommonMessage) msg;
 
                     String videoUrl = commonMessage.getVideoUrl();

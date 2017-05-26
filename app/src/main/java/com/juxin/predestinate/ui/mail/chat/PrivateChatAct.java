@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -56,7 +57,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private boolean isFollow = false;
     private int kf_id;
     private ChatViewLayout privateChat = null;
-    private ImageView cus_top_title_img,cus_top_img_phone;
+    private ImageView cus_top_title_img, cus_top_img_phone;
     private TextView base_title_title, cus_top_title_txt;
     private View cus_top_title_view;
     private LMarqueeView lmvMeassages;
@@ -113,10 +114,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         ModuleMgr.getCommonMgr().lastGiftList(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()){
+                if (response.isOk()) {
                     GiftMessageList list = (GiftMessageList) response.getBaseData();
                     List<GiftMessageList.GiftMessageInfo> lastGiftMessages = list.getGiftMessageList();
-                    if (lastGiftMessages != null && !lastGiftMessages.isEmpty()){
+                    if (lastGiftMessages != null && !lastGiftMessages.isEmpty()) {
                         lmvMeassages.setVisibility(View.VISIBLE);
                         marqueeView.setData(lastGiftMessages);
                         lmvMeassages.setAnimInAndOut(R.anim.top_in, R.anim.bottom_out);
@@ -161,9 +162,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         cus_top_img_phone.setOnClickListener(this);
 
 
-
-
-
         setNickName(name);
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//小友客服
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
@@ -201,7 +199,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
         privateChat.getChatAdapter().setWhisperId(whisperID);
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
-        marqueeView = new GiftMessageInforView(this, ModuleMgr.getCenterMgr().getMyInfo().getGender());
+        marqueeView = new GiftMessageInforView(this);
 
         // if (IS_REPLY) {//是否是首次回复的消息
         //     privateChat.getChatAdapter().setNewMsg(true);
@@ -235,9 +233,15 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1){
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             initHeadView();
             initFollow();
+        }
+
+        //VIP男用户展示浮动提示
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip() && ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1
+                && PSP.getInstance().getBoolean(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false)) {
+            privateChat.mGiftTipsContainerV.setVisibility(View.VISIBLE);
         }
 
         //状态栏 + 标题 +（关注TA、查看手机）+ 滚动条 高度
@@ -255,10 +259,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 UserDetail userDetail = (UserDetail) response.getBaseData();
                 isFollow = userDetail.isFollow();
                 kf_id = userDetail.getKf_id();
-                if(isFollow){
+                if (isFollow) {
                     chat_title_attention_name.setText("已关注");
                     chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
-                }else {
+                } else {
                     chat_title_attention_name.setText("关注她");
                     chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
                 }
@@ -288,7 +292,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             case R.id.chat_title_attention: {//关注
                 String content = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
                 if (!TextUtils.isEmpty(content) && !"null".equals(content))
-                    content =  "[" + content + "]"+getString(R.string.just_looking_for_you);
+                    content = "[" + content + "]" + getString(R.string.just_looking_for_you);
                 else
                     content = getString(R.string.just_looking_for_you);
                 ModuleMgr.getChatMgr().sendAttentionMsg(whisperID, content, kf_id, isFollow ? 2 : 1, new IMProxy.SendCallBack() {
@@ -298,14 +302,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         messageRet.parseJson(contents);
                         if (messageRet.isOk() && messageRet.isS()) {
                             isFollow = !isFollow;
-                            if(isFollow){
+                            if (isFollow) {
                                 chat_title_attention_name.setText("已关注");
                                 chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
-                            }else {
+                            } else {
                                 chat_title_attention_name.setText("关注她");
                                 chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
                             }
-                        }else {
+                        } else {
                             PToast.showShort(isFollow ? "取消关注失败！" : "关注失败！");
                         }
                     }
@@ -359,6 +363,15 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         privateChat.getChatAdapter().showIsCanChat(false);
                     }
                 }
+                break;
+
+            case MsgType.MT_SEND_GIFT_FLAG:
+                if (!(Boolean) value) return;
+                PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false);
+                privateChat.mGiftTipsContainerV.setVisibility(View.GONE);
+                break;
+
+            default:
                 break;
         }
     }

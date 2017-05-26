@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -23,8 +23,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
-import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
-import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -79,8 +77,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (!response.isOk())
-                    return;
+                if (!response.isOk()) return;
                 ModuleMgr.getCommonMgr().setVideoVerify((VideoVerifyBean) response.getBaseData());
                 VideoAudioChatHelper.getInstance().checkDownloadPlugin(MainActivity.this);
             }
@@ -88,6 +85,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
         ModuleMgr.getCommonMgr().showSayHelloDialog(this);
+
+        //初始化显示打招呼送礼提示，每次进入应用的时候重置
+        PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, true);
+        PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, true);
     }
 
     /**
@@ -356,8 +357,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * 把离线消息按推送消息来派发
      */
     private static void dispatchOfflineMsg(OfflineBean bean) {
-        if (bean.getD() == 0)
-            return;
+        if (bean.getD() == 0) return;
 
         // 音视频消息
         if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
@@ -376,11 +376,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * 处理最新的音视频离线消息
      */
     public static void dispatchlastOfflineAVMap() {
-        if (lastOfflineAVMap.size() == 0)
-            return;
-
-        if (BaseUtil.isScreenLock(App.context))
-            return;
+        if (lastOfflineAVMap.size() == 0) return;
+        if (BaseUtil.isScreenLock(App.context)) return;
 
         OfflineBean bean = null;
         long mt = 0;
@@ -402,6 +399,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (bean != null) {
             ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
         }
-
     }
 }

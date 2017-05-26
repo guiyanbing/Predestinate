@@ -114,6 +114,13 @@ public class PayWX extends BaseData implements Serializable {
                     }
                     break;
             }
+            return;
+        }
+        if (!jsonObject.isNull("param")) {
+            this.setOK(true);
+            this.setContent(jsonObject.optString("content"));
+            this.setParam(jsonObject.optString("param"));
+            this.setCupPayType(jsonObject.optInt("payType"));
         }
     }
 
