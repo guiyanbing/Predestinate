@@ -75,6 +75,15 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
         viewPager.setAdapter(viewPagerAdapter);
         initPointsView(viewPager, viewPagerAdapter.getCount(), true);
+        if(null != items) {
+            if(items.size() == 1) {
+                mOutDelTv.setVisibility(View.GONE);
+            }else {
+                mOutDelTv.setVisibility(View.VISIBLE);
+            }
+        }else {
+            mOutDelTv.setVisibility(View.GONE);
+        }
     }
 
     private List<View> getAllViews() {
