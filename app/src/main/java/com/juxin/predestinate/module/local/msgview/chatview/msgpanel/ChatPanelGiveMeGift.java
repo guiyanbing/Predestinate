@@ -1,18 +1,17 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -21,34 +20,28 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
 
 /**
- * 礼物消息
+ * 索要礼物消息，只能出现在发送左侧
  * Created by Kind on 2017/5/10.
  */
-
 public class ChatPanelGiveMeGift extends ChatPanel {
-    private ImageView imgThumb;
-    private TextView tvMsg, tvInfo, tvSendGift;
+
+    private ImageView iv_gift_img;
+    private TextView tv_gift_hello, tv_gift_content;
 
     public ChatPanelGiveMeGift(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
         super(context, chatInstance, R.layout.f1_chat_item_panel_give_me_gift, sender);
+        setShowParentBg(false);
     }
 
     @Override
     public void initView() {
-        imgThumb = (ImageView) findViewById(R.id.chat_item_give_thumb_img);
-        tvMsg = (TextView) findViewById(R.id.chat_item_give_tvMsg);
-        tvInfo = (TextView) findViewById(R.id.chat_item_give_tvInfo);
-        tvSendGift = (TextView) findViewById(R.id.chat_item_give_tvSendGift);
-
-        if (isSender()) {
-            tvMsg.setTextColor(Color.parseColor("#ffffff"));
-            tvInfo.setTextColor(Color.parseColor("#eeeeee"));
-        }else {
-            tvMsg.setTextColor(Color.parseColor("#040000"));
-            tvInfo.setTextColor(Color.parseColor("#777777"));
-            tvSendGift.setTextColor(Color.parseColor("#ea5514"));
-      //      parent.setBackgroundResource(R.drawable.chat_item_left_dialog2);
-       ///     parent.setPadding(BaseUtil.dip2px(mContext, 8), 0, 0, 0);
+        iv_gift_img = (ImageView) findViewById(R.id.iv_gift_img);
+        tv_gift_hello = (TextView) findViewById(R.id.tv_gift_hello);
+        tv_gift_content = (TextView) findViewById(R.id.tv_gift_content);
+        if (isSender()) {//防止数据库出错，索要礼物消息展示在右侧的情况
+            View ll_container = findViewById(R.id.ll_container);
+            ll_container.setBackgroundResource(R.drawable.y1_talk_box_24x24_me);
+            ll_container.setPadding(0, 0, 0, 0);
         }
     }
 
@@ -57,31 +50,19 @@ public class ChatPanelGiveMeGift extends ChatPanel {
         if (msgData == null || !(msgData instanceof GiftMessage)) return false;
 
         GiftMessage msg = (GiftMessage) msgData;
-
         GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(msg.getGiftID());
-        if(giftInfo == null){
+        if (giftInfo == null) {
+            PLogger.d("------>gift list is empty or gift list doesn't have this gift_id.");
             return false;
         }
 
-        tvMsg.setText(Html.fromHtml(giftInfo.getName() + ""));
-        tvInfo.setText(Html.fromHtml(giftInfo.getGif() + ""));
-
-        ImageLoader.loadAvatar(context, giftInfo.getPic(), imgThumb);
-
-
-
-//        if (giveMeGiftBean != null && giveMeGiftBean.sGiftName != null){
-//            basePanel.setTag(giveMeGiftBean);
-//            this.listener = listener;
-//            tvSendGift.setVisibility(View.VISIBLE);
-//        } else {
-//            tvSendGift.setVisibility(View.GONE);
-//            this.listener = null;
-//            basePanel.setTag(null);
-//        }
-
-
-
+        ImageLoader.loadAvatar(context, giftInfo.getPic(), iv_gift_img);
+        tv_gift_hello.setText(ModuleMgr.getCenterMgr().getMyInfo().isMan() ?
+                getContext().getString(R.string.chat_gift_hello_man)
+                : getContext().getString(R.string.chat_gift_hello_woman));
+        tv_gift_content.setText(Html.fromHtml("想要<font color='#FD698C'>"
+                + (msg.getGiftCount() == 0 ? 1 : msg.getGiftCount()) +
+                "个" + giftInfo.getName() + "</font>"));
         return true;
     }
 

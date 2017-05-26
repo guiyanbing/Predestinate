@@ -101,28 +101,41 @@ public class VideoAudioChatHelper{
      */
     public void inviteVAChat(final Activity context, long dstUid, int type) {
         lastOpt = OPT_INVITE;
-        if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) >= ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
-            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-            if(userDetail.getGender() == 1){
-                if((type == TYPE_VIDEO_CHAT && ModuleMgr.getCommonMgr().getCommonConfig().isVideoCallNeedVip() && !userDetail.isVip())
-                        ||(type == TYPE_AUDIO_CHAT && ModuleMgr.getCommonMgr().getCommonConfig().isAudioCallNeedVip() && !userDetail.isVip())){
-                    PickerDialogUtil.showSimpleTipDialogExt((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
-                        @Override
-                        public void onCancel() {
-                        }
+        if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
+            downloadVideoPlugin(context);
+            return;
+        }
 
-                        @Override
-                        public void onSubmit() {
-                            UIShow.showOpenVipActivity(context);
-                        }
-                    }, context.getResources().getString(R.string.dlg_need_vip), "", context.getResources().getString(R.string.cancel), context.getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
-                }
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        if(userDetail.getGender() == 1){
+            boolean isTip = false;
+            switch (type) {
+                case TYPE_VIDEO_CHAT:
+                    isTip = ModuleMgr.getCommonMgr().getCommonConfig().isVideoCallNeedVip() && !userDetail.isVip();
+                    break;
+                case TYPE_AUDIO_CHAT:
+                    isTip = ModuleMgr.getCommonMgr().getCommonConfig().isAudioCallNeedVip() && !userDetail.isVip();
+                    break;
+                default:
+                    break;
+            }
+
+            if (isTip) {
+                PickerDialogUtil.showSimpleTipDialogExt((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
+                    @Override
+                    public void onCancel() {
+                    }
+
+                    @Override
+                    public void onSubmit() {
+                        UIShow.showOpenVipActivity(context);
+                    }
+                }, context.getResources().getString(R.string.dlg_need_vip), "", context.getResources().getString(R.string.cancel), context.getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
                 return;
             }
-            executeInviteChat(context, dstUid, type);
-        } else {
-            downloadVideoPlugin(context);
+
         }
+        executeInviteChat(context, dstUid, type);
     }
 //    private void createTipsVipDialog(final Activity activity,String title, String btnok, String btncancel,final int go) {
 //        final Dialog dialog = new Dialog(activity, R.style.dialog);

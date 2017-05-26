@@ -470,6 +470,11 @@
     <string name="message_replay">回复</string>
     <string name="message_empty_warn">消息不能为空</string>
 
+    <string name="chat_gift_hello_man">HI,帅哥</string>
+    <string name="chat_gift_hello_woman">HI,美女</string>
+    <string name="chat_click_receive_gift">点击收礼</string>
+    <string name="chat_click_send_gift">点击赠送</string>
+
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>
     <string name="intimate_member">亲密成员</string>

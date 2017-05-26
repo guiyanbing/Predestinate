@@ -2,10 +2,6 @@ package com.juxin.predestinate.module.local.msgview;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
-import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.HtmlMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCommon;
@@ -22,32 +18,15 @@ import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBas
  */
 public enum ChatMsgType {
 
-     // 基本消息类型
-     CMT_2(ChatPanelCommon.class, "普通消息"),
-
-     CMT_3(ChatPanelText.class, "打招呼消息"),
-
-     CMT_10(ChatPanelGift.class, "礼物消息"),
-
-     CMT_14(ChatPanelCustomHint.class, "小提示消息"),
-
-     CMT_20(ChatPanelGiveMeGift.class, "礼物消息"),
-
+    // 基本消息类型
+    CMT_2(ChatPanelCommon.class, "普通消息"),
+    CMT_3(ChatPanelText.class, "打招呼消息"),
+    CMT_10(ChatPanelGift.class, "礼物消息"),
+    CMT_14(ChatPanelCustomHint.class, "小提示消息"),
+    CMT_19(ChatPanelCustomHint.class, "HTML小提示消息"),
+    CMT_20(ChatPanelGiveMeGift.class, "索要礼物消息"),
     CMT_24(ChatPanelVideo.class, "音视频消息"),
-
-//    wantGift(TextMessage.class, 15),//索要礼物消息
-//    html(HtmlMessage.class, 19),//html消息
-
-
-    // 特殊类型消息
-    //   CMT_del_msg("删除消息"),
-    // 特殊类型消息
-  //  CMT_7("已读消息"),
-
-    // 客户端自定义类型，不经过消息层
-  //  CMT_custom_simple(ChatPanelCustomSimple.class, ChatPanelType.CPT_Custome, "客户端自定义类型"),
-    //CMT_pic_invalid(ChatPanelCustomSimpleTip.class, ChatPanelType.CPT_Custome, "图片审核失败通知"),
-//    CMT_9(ChatPanelCustomHint.class, ChatPanelType.CPT_Custome, "小提示"),
+    CMT_25(ChatPanelText.class, "HTML文本消息"),
 
     // 非有效类型
     CMT_Invalid(null, "非有效类型");

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
@@ -21,6 +22,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
@@ -211,8 +213,12 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         if (path == null || TextUtils.isEmpty(path)) {
             return;
         }
-        if (FileUtil.isExist(path)) {
-            uploadAuthPic(path);
+
+        //移过来的时候少了代码，需要缩略图，注意
+        String sSmallPath = BitmapUtil.getSmallBitmapAndSave(path, DirType.getImageDir());
+
+        if (FileUtil.isExist(sSmallPath)) {
+            uploadAuthPic(sSmallPath);
         }
 
     }

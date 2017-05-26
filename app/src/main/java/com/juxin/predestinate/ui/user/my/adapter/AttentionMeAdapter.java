@@ -2,7 +2,6 @@ package com.juxin.predestinate.ui.user.my.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -26,39 +26,35 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+
+import java.util.List;
+
 
 /**
  * 关注我的适配器
  * Created by zm on 2017/4/13.
  */
-public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDetail> implements RequestComplete, BaseRecyclerViewHolder.OnItemClickListener {
+public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> implements RequestComplete {
 
-    private Context mContext;
     private int postion;
     private MyViewHolder vh;
     private int followType = 1;   // 关注、取消关注
 
-    public AttentionMeAdapter(Context mContext) {
-        this.mContext = mContext;
-        this.setOnItemClickListener(this);
+    public AttentionMeAdapter(Context context, List<AttentionUserDetail> datas) {
+        super(context, datas);
     }
 
     @Override
-    public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_attention_panel_list_item};
-    }
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final MyViewHolder mHolder;
+        if (convertView == null) {
+            convertView = inflate(R.layout.f1_attention_panel_list_item);
+            mHolder = new MyViewHolder(convertView);
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return super.onCreateViewHolder(parent, viewType);
-    }
-
-    @Override
-    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
-
-        final MyViewHolder mHolder = new MyViewHolder(viewHolder);//初始化MyViewHolder
+            convertView.setTag(mHolder);
+        } else {
+            mHolder = (MyViewHolder) convertView.getTag();
+        }
         final AttentionUserDetail info = getItem(position);
         mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);//头像
         checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
@@ -66,15 +62,22 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
         if (info.getAge() <= 0)
             mHolder.tvAge.setText(R.string.loading);
-        else
-            mHolder.tvAge.setText(info.getAge() + mContext.getString(R.string.age));//年龄
+        else mHolder.tvAge.setText(info.getAge() + getContext().getString(R.string.age));//年龄
         checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);//地区
-        mHolder.tvpiccount.setText(info.getPhotoNum() + mContext.getString(R.string.check_info_album));
-        if (info.getType() == 0){
+        mHolder.tvpiccount.setText(info.getPhotoNum() + getContext().getString(R.string.check_info_album));
+        if (info.getType() == 0) {
             mHolder.tvconcern.setText(R.string.attention_ta);
-        }else {
+        } else {
             mHolder.tvconcern.setText(R.string.cancel_the_attention);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClick(view, position);
+            }
+        });
+
         mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -85,18 +88,18 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 if (userDetail != null) {
                     if (userDetail.getGender() != 2) {//不是女生需要开通vip
                         if (!userDetail.isVip()) {
-                            createOpenVipDialog(mContext.getString(R.string.open_the_vip_can_be_operation));//提示开通vip
+                            createOpenVipDialog(getContext().getString(R.string.open_the_vip_can_be_operation));//提示开通vip
                             return;
                         }
                     }
                 }
-                if (!NetworkUtils.isConnected(mContext)) {//未联网返回
-                    PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
+                if (!NetworkUtils.isConnected(getContext())) {//未联网返回
+                    PToast.showShort(getContext().getString(R.string.net_error_check_your_net));
                     return;
                 }
                 // 执行关注Class
 //                LoadingDialog.show((FragmentActivity) mContext);
-                followType = info.getType()+1;
+                followType = info.getType() + 1;
 //                if (info.getType() == 0) { //未关注他时
 //                    ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);//关注他
 //                    return;
@@ -104,7 +107,7 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
 //                ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);//已关注时取消关注
                 String content;
                 if (!TextUtils.isEmpty(info.getNickname()) && !"null".equals(info.getNickname()))
-                    content =  "[" + info.getNickname() + "]刚刚关注了你";
+                    content = "[" + info.getNickname() + "]刚刚关注了你";
                 else
                     content = "刚刚关注了你";
                 ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), content, info.getKf_id(), followType, new IMProxy.SendCallBack() {
@@ -114,18 +117,14 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                         messageRet.parseJson(contents);
                         if (messageRet.getS() == 0) {
                             int mPosition = getPosition(info);
-                            if (getList().get(mPosition).getType() ==1){
-                                vh.tvconcern.setText(mContext.getString(R.string.attention_ta));
+                            if (getList().get(mPosition).getType() == 1) {
+                                vh.tvconcern.setText(getContext().getString(R.string.attention_ta));
                                 getList().get(mPosition).setType(0);
-                            }else {
-                                vh.tvconcern.setText(mContext.getString(R.string.privatechat_title_unsubscribe));
+                            } else {
+                                vh.tvconcern.setText(getContext().getString(R.string.privatechat_title_unsubscribe));
                                 getList().get(mPosition).setType(1);
                             }
-                            if (mPosition != 0) {
-                                notifyItemChanged(mPosition);
-                            }else {
-                                notifyDataSetChanged();
-                            }
+                            notifyDataSetChanged();
                         } else {
                             handleFollowFail();
                         }
@@ -139,18 +138,19 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 });
             }
         });
+        return convertView;
     }
 
     /**
      * 获取信息的准确位置（加锁）
      *
-     * @param   info 某一条具体的信息
-     * @return  返回 info 在list中的position
+     * @param info 某一条具体的信息
+     * @return 返回 info 在list中的position
      */
-    private synchronized int getPosition(AttentionUserDetail info){
-        int size = getListSize();
-        for (int i = 0 ;i < size;i++){
-            if (info.getUid() == getList().get(i).getUid()){
+    private synchronized int getPosition(AttentionUserDetail info) {
+        int size = getList().size();
+        for (int i = 0; i < size; i++) {
+            if (info.getUid() == getList().get(i).getUid()) {
                 return i;
             }
         }
@@ -161,19 +161,19 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         String msg = "";
         switch (followType) {
             case 1:
-                msg = mContext.getResources().getString(R.string.user_info_follow_fail);
+                msg = getContext().getResources().getString(R.string.user_info_follow_fail);
                 break;
 
             case 2:
-                msg = mContext.getResources().getString(R.string.user_info_unfollow_fail);
+                msg = getContext().getResources().getString(R.string.user_info_unfollow_fail);
                 break;
         }
         PToast.showShort(msg);
     }
 
     private void createOpenVipDialog(String str) {//vip弹框
-        final Dialog dialog = new Dialog(mContext, R.style.dialog);
-        View view = LayoutInflater.from(mContext).inflate(R.layout.f1_app_tips_dialog, null);
+        final Dialog dialog = new Dialog(getContext(), R.style.dialog);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.f1_app_tips_dialog, null);
         TextView txt_update_info = (TextView) view.findViewById(R.id.txt_update_info);
         txt_update_info.setText(str);
         TextView txt_update_submit = (TextView) view.findViewById(R.id.txt_update_submit);
@@ -189,7 +189,7 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
             public void onClick(View v) {
                 dialog.dismiss();
                 //跳转到我的y币界面
-                UIShow.showBuyCoinActivity(mContext);
+                UIShow.showBuyCoinActivity(getContext());
             }
         });
         dialog.setContentView(view);
@@ -202,13 +202,13 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
                 img.setImageResource(R.drawable.f1_otheruserheadpic_shenhezhong);
                 break;
             case 1:// 审核通过
-                ImageLoader.loadAvatar(mContext, avatar, img);
+                ImageLoader.loadAvatar(getContext(), avatar, img);
                 break;
             case 2:// 未通过
                 img.setImageResource(R.drawable.f1_otheruserheadpic_weitongguo);
                 break;
             default:
-                ImageLoader.loadAvatar(mContext, avatar, img);
+                ImageLoader.loadAvatar(getContext(), avatar, img);
                 break;
         }
     }
@@ -216,10 +216,10 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
     private void checkAndShowVipStatus(Boolean isVip, ImageView imgVipStatus, TextView tvNickName) {
         if (isVip) {
             imgVipStatus.setVisibility(View.VISIBLE);
-            tvNickName.setTextColor(mContext.getResources().getColor(R.color.color_F36D8E));
+            tvNickName.setTextColor(getContext().getResources().getColor(R.color.color_F36D8E));
         } else {
             imgVipStatus.setVisibility(View.GONE);
-            tvNickName.setTextColor(mContext.getResources().getColor(R.color.usersnickname));
+            tvNickName.setTextColor(getContext().getResources().getColor(R.color.usersnickname));
         }
     }
 
@@ -232,45 +232,32 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
     }
 
     @Override
-    public int getRecycleViewItemType(int position) {
-        return 0;
-    }
-
-    @Override
     public void onRequestComplete(HttpResponse response) {
         LoadingDialog.closeLoadingDialog();
         try {
             if (response.isOk()) {//返回成功
                 if (getList().get(postion).getType() == 0) {
-                    vh.tvconcern.setText(mContext.getString(R.string.privatechat_title_unsubscribe));
+                    vh.tvconcern.setText(getContext().getString(R.string.privatechat_title_unsubscribe));
                     getList().get(postion).setType(1);
-                    if (postion != 0) {
-                        notifyItemChanged(postion);
-                        return;
-                    }
                     notifyDataSetChanged();
                     return;
                 }
-                vh.tvconcern.setText(mContext.getString(R.string.attention_ta));
+                vh.tvconcern.setText(getContext().getString(R.string.attention_ta));
                 getList().get(postion).setType(0);
-                if (postion != 0) {
-                    notifyItemChanged(postion);
-                    return;
-                }
                 notifyDataSetChanged();
             } else {
-                PToast.showShort(mContext.getString(R.string.toast_commit_suggest_error));
+                PToast.showShort(getContext().getString(R.string.toast_commit_suggest_error));
             }
         } catch (Exception e) {
-            PLogger.e("AttentionMeAdapter_________"+e.toString());
+            PLogger.e("AttentionMeAdapter_________" + e.toString());
         }
     }
 
-    @Override
     public void onItemClick(View convertView, int position) {
         //跳转他人资料页
-        UIShow.showCheckOtherInfoAct(mContext, getItem(position).getUid());
+        UIShow.showCheckOtherInfoAct(getContext(), getItem(position).getUid());
     }
+
 
     class MyViewHolder {
 
@@ -289,18 +276,18 @@ public class AttentionMeAdapter extends BaseRecyclerViewAdapter<AttentionUserDet
         // VIP角标
         public ImageView imVipState;
 
-        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+        public MyViewHolder(View convertView) {
             initView(convertView);
         }
 
-        private void initView(BaseRecyclerViewHolder convertView) {
-            imgHead = convertView.findViewById(R.id.concern_list_item_head);
-            tvAge = convertView.findViewById(R.id.concern_list_item_age);
-            tvDiqu = convertView.findViewById(R.id.concern_list_item_diqu);
-            tvNickname = convertView.findViewById(R.id.concern_list_item_nickname);
-            tvpiccount = convertView.findViewById(R.id.concern_list_item_piccount);
-            tvconcern = convertView.findViewById(R.id.concern_list_item_btnconcern);
-            imVipState = convertView.findViewById(R.id.concern_list_item_img_vipState);
+        private void initView(View convertView) {
+            imgHead = (ImageView) convertView.findViewById(R.id.concern_list_item_head);
+            tvAge = (TextView) convertView.findViewById(R.id.concern_list_item_age);
+            tvDiqu = (TextView) convertView.findViewById(R.id.concern_list_item_diqu);
+            tvNickname = (TextView) convertView.findViewById(R.id.concern_list_item_nickname);
+            tvpiccount = (TextView) convertView.findViewById(R.id.concern_list_item_piccount);
+            tvconcern = (TextView) convertView.findViewById(R.id.concern_list_item_btnconcern);
+            imVipState = (ImageView) convertView.findViewById(R.id.concern_list_item_img_vipState);
         }
     }
 }

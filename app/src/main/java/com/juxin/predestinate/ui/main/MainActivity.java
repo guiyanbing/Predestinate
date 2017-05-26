@@ -408,6 +408,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
         lastOfflineAVMap.clear();
-        ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
+        if (bean != null) {
+            ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
+        }
+
     }
 }
