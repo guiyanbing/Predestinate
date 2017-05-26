@@ -17,7 +17,7 @@ public class UserVideo extends BaseData implements Parcelable {
     private int cost;               // 价格（钻石）
     private String create_time;     // 视频创建时间
     private int duration;           // 时长（秒）
-    private long giftid;            // 礼物id
+    private int giftid;             // 礼物id
     private int giftnum;            // 礼物数量
     private long id;                // 视频id
     private int open;               // 是否可看  1 不可看 2 可看
@@ -34,7 +34,7 @@ public class UserVideo extends BaseData implements Parcelable {
         this.cost = jsonObject.optInt("cost");
         this.create_time = jsonObject.optString("create_time");
         this.duration = jsonObject.optInt("duration");
-        this.giftid = jsonObject.optLong("giftid");
+        this.giftid = jsonObject.optInt("giftid");
         this.giftnum = jsonObject.optInt("giftnum");
         this.id = jsonObject.optLong("id");
         this.open = jsonObject.optInt("open");
@@ -43,6 +43,13 @@ public class UserVideo extends BaseData implements Parcelable {
         this.uid = jsonObject.optLong("uid");
         this.video = jsonObject.optString("video");
         this.viewTimes = jsonObject.optInt("viewtimes");
+    }
+
+    /**
+     * 是否可查看视频
+     */
+    public boolean isCanView() {
+        return open == 2;
     }
 
     public String getContent() {
@@ -61,7 +68,7 @@ public class UserVideo extends BaseData implements Parcelable {
         return duration;
     }
 
-    public long getGiftid() {
+    public int getGiftid() {
         return giftid;
     }
 
@@ -108,7 +115,7 @@ public class UserVideo extends BaseData implements Parcelable {
         dest.writeInt(this.cost);
         dest.writeString(this.create_time);
         dest.writeInt(this.duration);
-        dest.writeLong(this.giftid);
+        dest.writeInt(this.giftid);
         dest.writeInt(this.giftnum);
         dest.writeLong(this.id);
         dest.writeInt(this.open);
@@ -127,7 +134,7 @@ public class UserVideo extends BaseData implements Parcelable {
         this.cost = in.readInt();
         this.create_time = in.readString();
         this.duration = in.readInt();
-        this.giftid = in.readLong();
+        this.giftid = in.readInt();
         this.giftnum = in.readInt();
         this.id = in.readLong();
         this.open = in.readInt();

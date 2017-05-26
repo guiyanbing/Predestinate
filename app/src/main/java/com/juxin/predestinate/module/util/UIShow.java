@@ -1283,9 +1283,9 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context, UserDetail userDetail) {
+    public static void showSecretGiftDlg(Context context, UserVideo userVideo) {
         Intent intent = new Intent(context, SecretGiftDlg.class);
-        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userDetail);
+        intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
         context.startActivity(intent);
     }
 
