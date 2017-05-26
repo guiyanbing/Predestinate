@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
@@ -19,11 +20,12 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+
 import java.io.IOException;
 
 /**
  * 只处理聊天内容部分的信息
- *
+ * <p>
  * Created by Kind on 2017/3/30.
  */
 public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.OnClickChatItemListener {
@@ -50,7 +52,8 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
     /**
      * 主动初始化 目前只有语音在用,做自动播的,别地方没有特殊需求不要用
      */
-    public void setInit(BaseMessage msgData){}
+    public void setInit(BaseMessage msgData) {
+    }
 
     /**
      * 判断当前Panel是显示在左侧还是右侧。
@@ -79,7 +82,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
     /**
      * 用消息数据重新初始化显示View。
      *
-     * @param msgData           最新的消息数据。
+     * @param msgData         最新的消息数据。
      * @param infoLightweight 对应用户的基本信息。
      * @return 如果返回false，表示界面没有完全的被初始化。
      */
@@ -101,7 +104,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
         }
 
         if (ChatAdapter.isSender(msgData.getSendID())) {
-         //   UIShow.showMyInfoActivity(getChatInstance().context);
+            //   UIShow.showMyInfoActivity(getChatInstance().context);
             return true;
         }
 
@@ -119,8 +122,8 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 //            }
 //        }
 
-        if(MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()){
-            UIShow.showUserOtherSetAct((FragmentActivity) getChatInstance().context,msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
+        if (MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()) {
+            UIShow.showUserOtherSetAct((FragmentActivity) getChatInstance().context, msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
         }
         return true;
     }
@@ -163,6 +166,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 
     /**
      * 消息重发
+     *
      * @param msgData
      * @return
      */
@@ -179,13 +183,24 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
         return true;
     }
 
+    private boolean isShowParentBg = true;
+
+    /**
+     * 设置是否显示父布局的背景
+     *
+     * @param isShowParentBg 是否显示父布局的背景
+     */
+    public void setShowParentBg(boolean isShowParentBg) {
+        this.isShowParentBg = isShowParentBg;
+    }
+
     /**
      * 是否显示parent的背景。
      *
      * @return
      */
     public boolean isShowParentLayout() {
-        return true;
+        return isShowParentBg;
     }
 
     /**
@@ -278,7 +293,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
                 new SimpleTipDialog.ConfirmListener() {
                     @Override
                     public void onCancel() {
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onCancel();
                         }
                     }
@@ -286,7 +301,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
                     @Override
                     public void onSubmit() {
                         ModuleMgr.getChatMgr().resendMsg(msgData);
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onSubmit();
                         }
                     }

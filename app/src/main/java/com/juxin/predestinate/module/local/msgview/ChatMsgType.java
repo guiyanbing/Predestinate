@@ -8,6 +8,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCo
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomHint;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomSimple;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGift;
+import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGiveMeGift;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelText;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelVideo;
 import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBasePanel;
@@ -23,7 +24,7 @@ public enum ChatMsgType {
     CMT_10(ChatPanelGift.class, "礼物消息"),
     CMT_14(ChatPanelCustomHint.class, "小提示消息"),
     CMT_19(ChatPanelCustomHint.class, "HTML小提示消息"),
-    CMT_20(ChatPanelGift.class, "礼物消息"),
+    CMT_20(ChatPanelGiveMeGift.class, "索要礼物消息"),
     CMT_24(ChatPanelVideo.class, "音视频消息"),
     CMT_25(ChatPanelText.class, "HTML文本消息"),
 
