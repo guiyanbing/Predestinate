@@ -115,7 +115,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
             return;
         }
 
-        ModuleMgr.getHttpMgr().download(filePath, new DownloadListener() {
+        ModuleMgr.getHttpMgr().downloadVoice(filePath, new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {}
 
