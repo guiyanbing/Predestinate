@@ -123,7 +123,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_auth_phone://手机认证页
-                if (!userDetail.isVerifyCellphone()) {
+                if (!ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {
                     UIShow.showPhoneVerifyAct(MyAuthenticationAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(), AUTHENTICSTION_REQUESTCODE);
                 } else {//手机认证完成页
                     UIShow.showPhoneVerifyCompleteAct(MyAuthenticationAct.this, AUTHENTICSTION_REQUESTCODE);
