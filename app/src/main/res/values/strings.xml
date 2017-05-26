@@ -491,6 +491,7 @@
     <string name="pay_errcode_deny">支付被拒绝</string>
     <string name="pay_errcode_unknown">支付出错</string>
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
+    <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>

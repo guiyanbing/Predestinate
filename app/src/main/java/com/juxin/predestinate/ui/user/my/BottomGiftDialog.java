@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
@@ -245,6 +247,10 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
         ModuleMgr.getChatMgr().sendGiftMsg(null, uid + "", arrGifts.get(position).getId(),num,0);
         PToast.showShort(info.getMsg()+"");
+
+        if(response.isOk()) {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, true);
+        }
     }
     private CharSequence temp;
     private int selectionStart;

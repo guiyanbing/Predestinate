@@ -33,6 +33,8 @@ public class Constant {
     public static final String SETTING_VOICE = "setting_voice";                 //是否进行新消息声音提示，存储key及默认值
     public static final boolean SETTING_VOICE_DEFAULT = true;
     public static final String SETTING_SLEEP_MESSAGE = "setting_sleep_message"; //是否睡眠免打扰，存储key及默认值
+    public static final String SP_USER_INFO_SHOW_GIFT_GREETING_TIPS = "user_info_show_gift_tips"; //是否在用户资料显示送礼打招呼
+    public static final String SP_CHAT_SHOW_GIFT_GREETING_TIPS = "chat_show_gift_tips";     //是否在聊天界面显示送礼打招呼
     public static final boolean SETTING_SLEEP_MESSAGE_DEFAULT = true;
 
     public static final String SETTING_VIDEO_CHAT = "setting_video_chat";
