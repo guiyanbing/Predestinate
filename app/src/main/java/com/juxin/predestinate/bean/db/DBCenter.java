@@ -96,10 +96,9 @@ public class DBCenter {
                     return;
                 }
                 for (BaseMessage temp : baseMessages) {
-                    if (temp.getTime() > delTime) {
-                        continue;
+                    if (temp.getTime() < delTime) {
+                        centerFLetter.updateContent(temp.getWhisperID());
                     }
-                    centerFLetter.updateContent(temp.getWhisperID());
                     centerFmessage.delete(temp.getLWhisperID(), delTime);
 
                 }
@@ -123,10 +122,10 @@ public class DBCenter {
                     return;
                 }
                 for (BaseMessage temp : baseMessages) {
-                    if (temp.getTime() > delTime) {
-                        continue;
+                    if (temp.getTime() < delTime) {
+                        centerFLetter.updateContent(temp.getWhisperID());
                     }
-                    centerFLetter.updateContent(temp.getWhisperID());
+
                     centerFmessage.delete(temp.getLWhisperID());
 
                 }
