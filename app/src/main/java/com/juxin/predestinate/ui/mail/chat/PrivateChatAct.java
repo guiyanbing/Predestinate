@@ -201,7 +201,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
         privateChat.getChatAdapter().setWhisperId(whisperID);
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
-        marqueeView = new GiftMessageInforView(this, ModuleMgr.getCenterMgr().getMyInfo().getGender());
+        marqueeView = new GiftMessageInforView(this);
 
         // if (IS_REPLY) {//是否是首次回复的消息
         //     privateChat.getChatAdapter().setNewMsg(true);
