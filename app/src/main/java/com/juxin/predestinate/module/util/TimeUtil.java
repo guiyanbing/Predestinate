@@ -883,6 +883,15 @@ public class TimeUtil extends TimeBaseUtil {
         return format.format(calendar.getTime());
     }
 
+    /**
+     * 返回 分钟:秒格 这种格式的文本
+     */
+    public static String getLongToMinuteTime(Long l) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(l);
+        SimpleDateFormat format = new SimpleDateFormat("mm:ss");
+        return format.format(calendar.getTime());
+    }
 
     public static String getData() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

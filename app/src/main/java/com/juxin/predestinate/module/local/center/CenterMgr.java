@@ -361,8 +361,6 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取他人音视频开关配置
      */
     public void reqVideoChatConfig(long uid, RequestComplete complete) {
-        PLogger.d("videoConfig: " + uid);
-
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("uid", uid);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqVideoChatConfig, post_param, complete);
@@ -429,15 +427,6 @@ public class CenterMgr implements ModuleBase, PObserver {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("tuid", uid);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRemoveBlack, postParams, complete);
-    }
-
-    /**
-     * 私密视频： 视频列表
-     */
-    public void reqGetVideoList(long uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", uid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqGetVideoList, getParams, complete);
     }
 
     /**
