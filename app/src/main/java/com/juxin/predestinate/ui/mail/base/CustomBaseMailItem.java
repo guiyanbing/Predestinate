@@ -112,8 +112,12 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //            item_certification.setVisibility(VISIBLE);
 //            item_certification.setText("官方");
 //        }
+        if(msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()){
+            item_last_msg.setText(BaseMessage.getContent(msgData));
+        }else {
+            item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
+        }
 
-        item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
         long time = msgData.getTime();
         if (time > 0) {
             item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));
