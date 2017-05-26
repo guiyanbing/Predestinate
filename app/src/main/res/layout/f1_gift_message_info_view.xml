@@ -11,7 +11,6 @@
         android:id="@+id/txt_info_one"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px100_dp"
-        android:layout_marginLeft="@dimen/px60_dp"
         android:gravity="center_vertical"
         android:textSize="@dimen/px40_sp"
         android:textColor="@color/color_62BFDE"
