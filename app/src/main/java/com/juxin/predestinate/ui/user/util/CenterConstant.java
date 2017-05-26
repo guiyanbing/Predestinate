@@ -18,6 +18,8 @@ public class CenterConstant {
     public static final String USER_SET_KEY = "user_set_key";   // 资料设置
     public static final int USER_SET_FROM_CHAT = 0x13;          // 聊天页跳转
     public static final int USER_SET_FROM_CHECK = 0x14;         // 个人主页跳转
+    public static final int USER_SET_REQUEST_CODE = 0x15;       // 请求码
+    public static final int USER_SET_RESULT_CODE = 0x16;        // 返回码
 
     // 头像审核状态码
     public static final int USER_AVATAR_CHECKING = 0;  // 审核中

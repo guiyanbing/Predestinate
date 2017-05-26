@@ -101,22 +101,26 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             holder.lin_video_state.setVisibility(View.GONE);
         } else {
             if (userInfo.isVideo_available() && userInfo.isAudio_available()) {
+                //可语音可视频显示可视频
                 holder.iv_calling.setVisibility(View.GONE);
                 holder.lin_call_state.setVisibility(View.GONE);
                 holder.lin_video_state.setVisibility(View.VISIBLE);
                 holder.iv_video.setEnabled(userInfo.isVideo_available());
             } else if (userInfo.isVideo_available() && !userInfo.isAudio_available()) {
+                // 可视频不可语音显示可视频
                 holder.iv_calling.setVisibility(View.GONE);
                 holder.lin_call_state.setVisibility(View.GONE);
                 holder.lin_video_state.setVisibility(View.VISIBLE);
                 holder.iv_video.setEnabled(userInfo.isVideo_available());
             } else if (!userInfo.isVideo_available() && userInfo.isAudio_available()) {
+                //可语音不可视频显示可语音
                 holder.iv_calling.setVisibility(View.GONE);
                 holder.lin_call_state.setVisibility(View.VISIBLE);
                 holder.lin_video_state.setVisibility(View.GONE);
-                holder.iv_call.setEnabled(userInfo.isVideo_available());
+                holder.iv_call.setEnabled(userInfo.isAudio_available());
                 holder.tv_call.setVisibility(View.VISIBLE);
             } else {
+                //不可语音不可视频显示灰色语音图标
                 holder.iv_calling.setVisibility(View.GONE);
                 holder.lin_call_state.setVisibility(View.VISIBLE);
                 holder.lin_video_state.setVisibility(View.GONE);
