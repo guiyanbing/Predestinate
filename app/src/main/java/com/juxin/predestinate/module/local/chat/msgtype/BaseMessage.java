@@ -119,7 +119,7 @@ public class BaseMessage implements IBaseMessage {
     private boolean isResending = false;//是否重发中
     private boolean isValid = false;//是否有效当前消息,用于五分钟内重发用
     private String msgDesc;//消息描述 mct
-    private long ru = 0;//如果为1则为熟人消息，否则为0
+    private long ru = 1;//如果为1则为熟人消息，否则为0
 
     private boolean isRead = false;//未读消息（true已经是读过了）//这个字段专门给数据库用的，不是给界面用的
     private boolean isSave;//是否保存
