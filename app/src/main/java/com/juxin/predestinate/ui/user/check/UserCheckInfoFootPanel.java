@@ -31,7 +31,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
     private UserInfoPanel infoPanel; // 资料列表
 
     private LinearLayout albumLayout, videoLayout, chatLayout;
-    private TextView tv_album, tv_video_price, tv_audio_price;
+    private TextView tv_album, tv_video, tv_video_price, tv_audio_price;
     private AlbumHorizontalPanel albumPanel, videoPanel;
     private ImageView iv_auth_photo, iv_auth_phone, iv_auth_video; // 认证
 
@@ -57,6 +57,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
         LinearLayout ll_secret_album = (LinearLayout) findViewById(R.id.ll_secret_album);
         LinearLayout ll_secret_video = (LinearLayout) findViewById(R.id.ll_secret_video);
         tv_album = (TextView) findViewById(R.id.album_num);
+        tv_video = (TextView) findViewById(R.id.video_num);
         chatLayout = (LinearLayout) findViewById(R.id.item_chat);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
         tv_audio_price = (TextView) findViewById(R.id.tv_audio_price);
@@ -79,6 +80,9 @@ public class UserCheckInfoFootPanel extends BasePanel {
         // 视频列表
         if (userDetail.getUserVideos().size() > 0) {
             ll_secret_video.setVisibility(View.VISIBLE);
+            videoPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_VIDEO, (Serializable) userDetail.getUserVideos());
+            videoLayout.addView(videoPanel.getContentView());
+            tv_video.setText(String.valueOf(userDetail.getUserVideos().size()));
         }
 
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {

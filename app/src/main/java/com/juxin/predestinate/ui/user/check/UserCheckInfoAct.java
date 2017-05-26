@@ -211,19 +211,23 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PLogger.d("ksjdkjkjk----111");
+        super.onActivityResult(requestCode, resultCode, data);
+        PLogger.d("ksjdkjkjk----111" + requestCode +", " + resultCode);
 
         // 更新备注名
-        if (requestCode == CenterConstant.USER_SET_REQUEST_CODE && resultCode == CenterConstant.USER_SET_RESULT_CODE) {
-            String remark = data.getStringExtra("remark");
-            if (TextUtils.isEmpty(remark)) return;
+        if (requestCode ==CenterConstant.USER_SET_REQUEST_CODE ) {
+            switch (resultCode){
+                case CenterConstant.USER_SET_RESULT_CODE:
+                    String remark = data.getStringExtra("remark");
+                    if (TextUtils.isEmpty(remark)) return;
 
-            PLogger.d("ksjdkjkjk----" + remark);
-            setTitle(remark);
-            userDetail.setRemark(remark);
-            footPanel.refreshView(userDetail);
+                    PLogger.d("ksjdkjkjk----" + remark);
+                    setTitle(remark);
+                    userDetail.setRemark(remark);
+                    footPanel.refreshView(userDetail);
+                    break;
+            }
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
