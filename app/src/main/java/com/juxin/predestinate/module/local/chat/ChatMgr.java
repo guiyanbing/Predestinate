@@ -188,7 +188,7 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                    commonMessage.setImg(upLoadResult.getHttpPathPic());
+                    commonMessage.setImg(upLoadResult.getFile_http_path());
                     commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
                     long upRet = dbCenter.updateFmessage(commonMessage);
                     if (upRet == MessageConstant.ERROR) {
@@ -222,7 +222,7 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                    commonMessage.setVoiceUrl(upLoadResult.getHttpPathPic());
+                    commonMessage.setVoiceUrl(upLoadResult.getFile_http_path());
                     commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
                     long upRet = dbCenter.updateFmessage(commonMessage);
                     if (upRet == MessageConstant.ERROR) {
@@ -278,7 +278,7 @@ public class ChatMgr implements ModuleBase {
                     updateOk(message, messageRet);
                 }
 
-                PLogger.d("isMsgOK=" + message.getType()+ "="  + contents);
+                PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
             }
 
             @Override
@@ -296,7 +296,7 @@ public class ChatMgr implements ModuleBase {
      * 消息内部处理,如果失败之类等等
      */
     private void onInternalPro(MessageRet messageRet) {
-        if (messageRet.isOk()){
+        if (messageRet.isOk()) {
             PLogger.printObject("s=" + messageRet.getS());
             switch (messageRet.getS()) {
                 case MessageRet.MSG_CODE_BALANCE_INSUFFICIENT: {//-1 余额不足或者不是VIP
@@ -621,7 +621,7 @@ public class ChatMgr implements ModuleBase {
                 public void call(UserInfoLightweight lightweight) {
                     PLogger.printObject("lightweight==222==" + lightweight);
                     long infoTime = lightweight.getTime();
-                    if (lightweight.getUid()  > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+                    if (lightweight.getUid() > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
                         removeInfoComplete(true, true, uid, lightweight);
                     } else {
                         removeInfoComplete(false, false, uid, lightweight);
@@ -641,7 +641,7 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 PLogger.printObject("re=====" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
-                if(!response.isOk()){
+                if (!response.isOk()) {
                     removeInfoComplete(true, false, userID, temp);
                     return;
                 }
@@ -667,7 +667,7 @@ public class ChatMgr implements ModuleBase {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 PLogger.printObject("response==File==" + response.getResponseString());
-                if(!response.isOk()){
+                if (!response.isOk()) {
                     return;
                 }
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
@@ -707,7 +707,7 @@ public class ChatMgr implements ModuleBase {
     }
 
     //离线消息
-    public void offlineMessage(String str){
+    public void offlineMessage(String str) {
         try {
             JSONObject tmp = new JSONObject(str);
             long from_id = tmp.optLong("fid");//发送者ID
@@ -731,7 +731,7 @@ public class ChatMgr implements ModuleBase {
             message.setChannelID(null);
 
             ModuleMgr.getChatMgr().onReceiving(message);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
