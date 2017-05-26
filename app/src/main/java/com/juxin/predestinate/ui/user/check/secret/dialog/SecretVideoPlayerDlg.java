@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.view.DownloadProgressView;
@@ -17,6 +16,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -64,8 +64,8 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
      * 下载小视频
      */
     private void downloadVideo() {
-        PLogger.d("dowmsmiii---" + userVideo.getVideo());
-        ModuleMgr.getHttpMgr().download(userVideo.getVideo(), new DownloadListener() {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".mp4";
+        ModuleMgr.getHttpMgr().download(userVideo.getVideo(), filePath, new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {
                 progress_bar.setVisibility(View.VISIBLE);

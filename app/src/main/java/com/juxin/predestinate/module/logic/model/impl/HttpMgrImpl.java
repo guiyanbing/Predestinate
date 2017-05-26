@@ -102,7 +102,9 @@ public class HttpMgrImpl implements HttpMgr {
         return reqHttp(urlParam, null, file_param, null, post_param, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
     }
 
-
+    /**
+     * 必须指定filePath, 这个接口不能用
+     */
     @Override
     public HTCallBack download(String url, DownloadListener downloadListener) {
         return download(url, "", downloadListener);
