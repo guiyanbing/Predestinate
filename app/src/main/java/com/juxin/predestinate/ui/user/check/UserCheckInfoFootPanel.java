@@ -27,7 +27,8 @@ import java.io.Serializable;
 public class UserCheckInfoFootPanel extends BasePanel {
 
     private final int channel;
-    private UserDetail userDetail;  // 用户资料
+    private UserDetail userDetail;   // 用户资料
+    private UserInfoPanel infoPanel; // 资料列表
 
     private LinearLayout albumLayout, videoLayout, chatLayout;
     private TextView tv_album, tv_video_price, tv_audio_price;
@@ -88,7 +89,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
 
         // TA人详细信息列表
         info_container.setVisibility(View.VISIBLE);
-        UserInfoPanel infoPanel = new UserInfoPanel(getContext(), userDetail);
+        infoPanel = new UserInfoPanel(getContext(), userDetail);
         info_container.addView(infoPanel.getContentView());
     }
 
@@ -119,7 +120,9 @@ public class UserCheckInfoFootPanel extends BasePanel {
             tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
             albumPanel.refresh(userDetail);
             refreshAuth();
+            return;
         }
+        infoPanel.refreshView(userDetail);
     }
 
     /**

@@ -66,19 +66,14 @@ public class UserFragmentFunctionPanel extends BasePanel {
         iv_vip_privilege.setEnabled(!userDetail.isVip());
 
         // 真人认证
-        boolean isImmortalVerify = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo()
-                && ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()
-                && ModuleMgr.getCenterMgr().getMyInfo().isVerifyIdcard();
-
-        tv_immortal_status.setText(isImmortalVerify ?
+        tv_immortal_status.setText(userDetail.isVerifyAll() ?
                 getContext().getResources().getString(R.string.center_phone_has_verify) :
                 getContext().getResources().getString(R.string.center_video_to_verify));
-        tv_immortal_status.setTextColor(isImmortalVerify ? getContext().getResources().getColor(R.color.color_D4D4D4) :
+        tv_immortal_status.setTextColor(userDetail.isVerifyAll() ? getContext().getResources().getColor(R.color.color_D4D4D4) :
                 getContext().getResources().getColor(R.color.color_83A0EC));
-        tv_immortal_title.setTextColor(isImmortalVerify ? getContext().getResources().getColor(R.color.color_83A0EC) :
+        tv_immortal_title.setTextColor(userDetail.isVerifyAll() ? getContext().getResources().getColor(R.color.color_83A0EC) :
                 getContext().getResources().getColor(R.color.color_D4D4D4));
-        iv_immortal_verify.setEnabled(!isImmortalVerify);
-
+        iv_immortal_verify.setEnabled(!userDetail.isVerifyAll());
     }
 
     private final NoDoubleClickListener clickListener = new NoDoubleClickListener() {

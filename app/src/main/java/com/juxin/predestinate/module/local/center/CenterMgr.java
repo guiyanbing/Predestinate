@@ -405,17 +405,6 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
-     * 获取他人备注名
-     *
-     * @param toUid 对方UID
-     */
-    public void reqGetRemarkName(long toUid, RequestComplete complete) {
-        HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("hisuid", toUid);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqGetRemarkName, post_param, complete);
-    }
-
-    /**
      * 用户是否处于黑名单
      */
     public void reqIsBlack(long uid, RequestComplete complete) {
