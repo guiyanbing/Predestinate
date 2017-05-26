@@ -240,6 +240,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             initFollow();
         }
 
+        //VIP男用户展示浮动提示
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()&& ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1
+                && PSP.getInstance().getBoolean(Constant.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false)) {
+            privateChat.mGiftTipsContainerV.setVisibility(View.VISIBLE);
+        }
+
         //状态栏 + 标题 +（关注TA、查看手机）+ 滚动条 高度
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1)
             PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight() + UIUtil.getStatusHeight(this));
@@ -359,6 +365,17 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         privateChat.getChatAdapter().showIsCanChat(false);
                     }
                 }
+                break;
+
+            case MsgType.MT_SEND_GIFT_FLAG:
+
+                if(!(Boolean) value)
+                    return;
+                PSP.getInstance().put(Constant.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false);
+                privateChat.mGiftTipsContainerV.setVisibility(View.GONE);
+                break;
+
+            default:
                 break;
         }
     }

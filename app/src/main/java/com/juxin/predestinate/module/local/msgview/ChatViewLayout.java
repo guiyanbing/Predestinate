@@ -36,6 +36,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
     private ImageView input_giftview;
+    public LinearLayout mGiftTipsContainerV;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -73,6 +74,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         chatFixedTip = (ViewGroup) contentView.findViewById(R.id.chat_fixed_tip);
         chatFloatTip = (ViewGroup) contentView.findViewById(R.id.chat_float_tip);
         input_giftview = (ImageView) contentView.findViewById(R.id.input_giftview);
+        mGiftTipsContainerV = (LinearLayout) contentView.findViewById(R.id.ll_chat_greeting_tips_container);
 
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);

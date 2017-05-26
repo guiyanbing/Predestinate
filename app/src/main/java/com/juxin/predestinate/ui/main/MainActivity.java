@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -30,6 +31,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -127,6 +129,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         mail_num = (BadgeView) findViewById(R.id.mail_number);
         layout_main_bottom = findViewById(R.id.layout_main_bottom);
+
+        //初始化显示打招呼送礼提示，每次进入应用的时候重置
+        PSP.getInstance().put(Constant.SP_CHAT_SHOW_GIFT_GREETING_TIPS, true);
+        PSP.getInstance().put(Constant.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, true);
     }
 
     /**
