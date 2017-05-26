@@ -171,10 +171,11 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onSwipeChooseChecked(int position, boolean isChecked) {
-        int index = position - mailFragmentAdapter.mailItemOtherSize();
-        if (index < 0 || index >= mailFragmentAdapter.getList().size())
+        int size = mailFragmentAdapter.getList().size();
+        if(size <= 0 || position >= size){
             return;
-        BaseMessage message = mailFragmentAdapter.getItem(index);
+        }
+        BaseMessage message = mailFragmentAdapter.getItem(position);
         if (isChecked) {
             mailDelInfoList.add(message);
         } else {
@@ -198,7 +199,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
                         break;
                     case Greet_Msg:
-
+                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
                         break;
                 }
             } else {
@@ -230,8 +231,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         }
     }
 
+    // 全选
     public void selectAll() {
-        // 全选
         mail_delete.setEnabled(true);
         mailDelInfoList.addAll(mailFragmentAdapter.mailItemOrdinary());
         listMail.selectAllChooseView();
@@ -316,6 +317,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 continue;
             }
 
+            PLogger.printObject("message===="+ (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID(): message.getName()));
             if (TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())) {
                 stringList.add(message.getLWhisperID());
             }

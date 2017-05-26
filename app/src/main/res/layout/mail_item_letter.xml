@@ -86,8 +86,7 @@
                     style="@style/icon_middle_center"
                     android:layout_width="@dimen/px140_dp"
                     android:layout_height="@dimen/px50_dp"
-                    android:layout_marginLeft="@dimen/px35_dp"
-                    android:layout_marginRight="@dimen/px15_dp"
+                    android:layout_marginLeft="@dimen/px24_dp"
                     android:background="@drawable/f1_ranking_bg_w"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -119,8 +118,7 @@
                 <ImageView
                     android:id="@+id/mail_item_vip"
                     style="@style/icon_middle"
-                    android:layout_marginLeft="@dimen/px15_dp"
-                    android:layout_marginRight="@dimen/px15_dp"
+                    android:layout_marginLeft="@dimen/px24_dp"
                     android:src="@drawable/f1_vip_icon"
                     android:visibility="gone" />
 
