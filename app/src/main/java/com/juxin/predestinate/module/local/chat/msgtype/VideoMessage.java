@@ -113,9 +113,8 @@ public class VideoMessage extends BaseMessage {
     }
 
     //私聊列表
-    public VideoMessage(long id, String userID, String infoJson, int type, int kfID,
-                       int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+    public VideoMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
         convertJSON(getJsonStr());
     }
 

@@ -255,7 +255,6 @@ public class CommonMessage extends BaseMessage {
     /**
      * 转换类 fmessage
      */
-
     public CommonMessage(Bundle bundle) {
         super(bundle);
         convertJSON(getJsonStr());
@@ -263,9 +262,8 @@ public class CommonMessage extends BaseMessage {
         PLogger.printObject("xxxxx==="+ toString());
     }
 
-    public CommonMessage(long id, String userID, String infoJson, int type, int kfID,
-                         int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+    public CommonMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
         convertJSON(getJsonStr());
     }
 

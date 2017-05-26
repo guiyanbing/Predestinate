@@ -70,9 +70,8 @@ public class GiftMessage extends BaseMessage {
         return null;
     }
 
-    public GiftMessage(long id, String userID, String infoJson, int type, int kfID,
-                       int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+    public GiftMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
         parseJson(getJsonStr());
     }
 

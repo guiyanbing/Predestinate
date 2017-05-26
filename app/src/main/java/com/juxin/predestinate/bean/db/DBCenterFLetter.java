@@ -243,32 +243,19 @@ public class DBCenterFLetter {
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
-//                Bundle bundle = new Bundle();
-//                bundle.putLong(FLetter._ID,  CursorUtil.getLong(cursor, FMessage._ID));
-//                bundle.putString(FLetter.COLUMN_USERID,  CursorUtil.getString(cursor, FMessage.COLUMN_USERID));
-//                bundle.putString(FLetter.COLUMN_WHISPERID,  CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID));
-//                bundle.putLong(FLetter.COLUMN_SENDID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID));
-//                bundle.putLong(FLetter.COLUMN_MSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID));
-//                bundle.putLong(FMessage.COLUMN_CMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID));
-//                bundle.putLong(FMessage.COLUMN_SPECIALMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID));
-//                bundle.putInt(FMessage.COLUMN_TYPE,  CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE));
-//                bundle.putInt(FMessage.COLUMN_STATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS));
-//                bundle.putInt(FMessage.COLUMN_FSTATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS));
-//                bundle.putLong(FMessage.COLUMN_TIME,  CursorUtil.getLong(cursor, FMessage.COLUMN_TIME));
-//                bundle.putString(FMessage.COLUMN_CONTENT,  CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
+                Bundle bundle = new Bundle();
+                bundle.putLong(FLetter._ID, CursorUtil.getLong(cursor, FMessage._ID));
+                bundle.putString(FLetter.COLUMN_USERID, CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
+                bundle.putString(FLetter.COLUMN_INFOJSON, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON));
+                bundle.putInt(FLetter.COLUMN_TYPE, CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
+                bundle.putInt(FLetter.COLUMN_KFID, CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
+                bundle.putInt(FLetter.COLUMN_STATUS, CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
+                bundle.putInt(FLetter.COLUMN_RU, CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
+                bundle.putLong(FLetter.COLUMN_TIME, CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
+                bundle.putString(FLetter.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                bundle.putInt(FLetter.Num, CursorUtil.getInt(cursor, FLetter.Num));
 
-                result.add(BaseMessage.parseToBaseMessage(
-                        CursorUtil.getLong(cursor, FLetter._ID),
-                        CursorUtil.getString(cursor, FLetter.COLUMN_USERID),
-                        CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_KFID),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_RU),
-                        CursorUtil.getLong(cursor, FLetter.COLUMN_TIME),
-                        CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT),
-                        CursorUtil.getInt(cursor, FLetter.Num)
-                ));
+                result.add(BaseMessage.parseToLetterMessage(bundle));
             }
             return result;
         } catch (Exception e) {
