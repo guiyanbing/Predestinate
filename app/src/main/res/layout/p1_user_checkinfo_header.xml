@@ -29,9 +29,8 @@
             <!-- 头像 -->
             <ImageView
                 android:id="@+id/img_header"
-                android:layout_width="@dimen/px240_dp"
-                android:layout_height="@dimen/px240_dp"
-                android:layout_marginTop="@dimen/px100_dp"
+                android:layout_width="@dimen/px255_dp"
+                android:layout_height="@dimen/px255_dp"
                 android:src="@drawable/default_head" />
 
             <LinearLayout
