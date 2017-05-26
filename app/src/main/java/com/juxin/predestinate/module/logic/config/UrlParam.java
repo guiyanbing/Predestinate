@@ -14,7 +14,6 @@ import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
-import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 
 import java.util.Map;
@@ -75,9 +74,6 @@ public enum UrlParam {
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值
     reqSetViewTime("video2/setviewtime"),    // 设置私密视频观看次数
     reqUnlockVideo("video2/unlockvideo"),    // 解锁视频
-    reqGetVideoList("video2/getvideolist", UserVideoInfo.class),  // 获取用户私密视频列表(暂时，后续可能在用户资料里返回)
-    reqGetGiftList("gift/getUserGiftList"),  // 获取用户礼物列表(暂时，后续可能在用户资料里返回)
-
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),

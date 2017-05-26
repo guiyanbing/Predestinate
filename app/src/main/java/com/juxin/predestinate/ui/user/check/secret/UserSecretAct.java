@@ -12,27 +12,23 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
  * 私密相册/视频页
  * Created by Su on 2017/3/29.
  */
-public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolder.OnItemClickListener, RequestComplete {
+public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolder.OnItemClickListener {
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
     private static final int SECRET_SHOW_COLUMN = 3; // 列数
     private int channel = CenterConstant.USER_CHECK_INFO_OWN; // 默认查看自己
 
     private UserDetail userDetail;       // 用户资料
-    private UserVideoInfo userVideoInfo; // 用户视频信息
-
     private RecyclerView recyclerView;
     private UserSecretAdapter secretAdapter;
     private TextView tv_hot;
@@ -42,8 +38,8 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_user_secret_act);
 
-        initView();
         initData();
+        initView();
     }
 
     private void initData() {
@@ -52,14 +48,12 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             setBackView(getString(R.string.user_info_own_video));
-            ModuleMgr.getCenterMgr().reqGetVideoList(userDetail.getUid(), this);
             return;
         }
 
         userDetail = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
         if (userDetail == null) return;
         setBackView(getString(R.string.user_info_other_video, userDetail.getNickname()));
-        ModuleMgr.getCenterMgr().reqGetVideoList(userDetail.getUid(), this);
         ModuleMgr.getCenterMgr().reqSetPopnum(userDetail.getUid(), null);
     }
 
@@ -73,12 +67,13 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         secretAdapter = new UserSecretAdapter();
         secretAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(secretAdapter);
+        secretAdapter.setList(userDetail.getUserVideos());
     }
 
     @Override
     public void onItemClick(View convertView, int position) {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-            UIShow.showSecretVideoPlayerDlg(this);
+            UIShow.showSecretVideoPlayerDlg(this, userDetail.getUserVideos().get(position));
             return;
         }
 
@@ -87,7 +82,7 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
 //            UIShow.showSecretGiftDlg(this, userProfile);
 //            return;
 //        }
-        UIShow.showSecretVideoPlayerDlg(this);
+        UIShow.showSecretVideoPlayerDlg(this, userDetail.getUserVideos().get(position));
         reqSetViewTime();
     }
 
@@ -102,19 +97,6 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
             public void onRequestComplete(HttpResponse response) {
             }
         });
-    }
-
-    @Override
-    public void onRequestComplete(HttpResponse response) {
-        if (response.getUrlParam() == UrlParam.reqGetVideoList) {
-            if (response.isOk()) {
-                userVideoInfo = (UserVideoInfo) response.getBaseData();
-
-                if (userVideoInfo == null) return;
-                secretAdapter.setList(userVideoInfo.getVideoList());
-                tv_hot.setText(String.valueOf(userVideoInfo.getPopNum()));
-            }
-        }
     }
 
     // RecyclerView margin

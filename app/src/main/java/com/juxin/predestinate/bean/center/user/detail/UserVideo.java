@@ -14,13 +14,13 @@ import org.json.JSONObject;
 
 public class UserVideo extends BaseData implements Parcelable {
     private String content;         // 文本
-    private int cost;               // 话费
+    private int cost;               // 价格（钻石）
     private String create_time;     // 视频创建时间
-    private int duration;           // 持续时间
+    private int duration;           // 时长（秒）
     private long giftid;            // 礼物id
     private int giftnum;            // 礼物数量
     private long id;                // 视频id
-    private int open;               // 是否可打开
+    private int open;               // 是否可看  1 不可看 2 可看
     private String pic;             // 封面图片
     private int status;             // 视频状态
     private long uid;               // 用户id
