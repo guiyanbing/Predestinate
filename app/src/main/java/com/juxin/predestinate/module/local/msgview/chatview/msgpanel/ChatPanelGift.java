@@ -16,6 +16,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -91,7 +92,7 @@ public class ChatPanelGift extends ChatPanel {
                     // 往数据库插一条14提示消息，标识已接受礼物
                     TextMessage textMessage = new TextMessage();
                     textMessage.setWhisperID(msgData.getWhisperID());
-                    textMessage.setSendID(msgData.getSendID());
+                    textMessage.setSendID(App.uid);
                     textMessage.setMsgDesc(getContext().getString(R.string.chat_gift_has_received));
                     textMessage.setcMsgID(BaseMessage.getCMsgID());
                     textMessage.setType(BaseMessage.BaseMessageType.hint.getMsgType());
