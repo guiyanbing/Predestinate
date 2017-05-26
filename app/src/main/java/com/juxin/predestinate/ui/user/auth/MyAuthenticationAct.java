@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -92,7 +93,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
     private void initVideoAuth() {
         tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_isnull));
 
-        switch (videoVerifyBean.getStatus()) {
+        switch (ModuleMgr.getCommonMgr().getVideoVerify().getStatus()) {
             case 0:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authno));
                 break;
