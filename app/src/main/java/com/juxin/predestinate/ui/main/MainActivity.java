@@ -48,7 +48,7 @@ import com.juxin.predestinate.ui.web.WebFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener, PObserver {
+public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
     private FragmentManager fragmentManager;
     private DiscoverFragment discoverFragment;
@@ -96,7 +96,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void initListenerAndRequest() {
         MsgMgr.getInstance().attach(this);
         onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
-        ChatSpecialMgr.getChatSpecialMgr().attachWhisperListener(this);
     }
 
     private void initFragment() {
@@ -259,14 +258,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     public void onGoneBottom(boolean isGone) {
         layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void onUpdateWhisper(BaseMessage message) {
-        if (!TextUtils.isEmpty(message.getWhisperID())) {
-            PLogger.printObject("message====" + message);
-            //    ModuleMgr.getChatListMgr().getWhisperList();
-        }
     }
 
     private void onMsgNum(int num) {

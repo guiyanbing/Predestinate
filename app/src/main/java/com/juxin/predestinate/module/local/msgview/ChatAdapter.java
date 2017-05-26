@@ -237,7 +237,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * @return 返回用户信息，如果没有则返回null。
      */
     public synchronized UserInfoLightweight getUserInfo(long uid) {
-        PLogger.printObject("userInfos====" + userInfos.size());
         UserInfoLightweight userInfo = userInfos.get(uid);
         if (userInfo == null) {
             if (uid == App.uid) {
