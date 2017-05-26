@@ -14,7 +14,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.util.BaseUtil;
@@ -22,6 +21,8 @@ import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.main.MainActivity;
 
 import org.json.JSONObject;
 
@@ -160,6 +161,12 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * @param content    消息提示内容
      */
     private void viewPrivacy(final UserInfoLightweight simpleData, final String whisperID, final int type, final String content) {
+        boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
+        if (!instanceOfChat) {
+            playSound();
+            vibrator();
+        }
+
         //锁屏状态，锁屏弹窗
         if (BaseUtil.isScreenLock(App.context)) {
             LockScreenMgr.getInstance().setChatData(simpleData, content);
@@ -169,8 +176,10 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
 
         //解锁状态
         if (CommonUtil.isForeground() && ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
-            if (App.getActivity() instanceof BaseActivity &&
-                    !((BaseActivity) App.getActivity()).isCanNotify()) return;
+//            if (App.getActivity() instanceof BaseActivity &&
+//                    !((BaseActivity) App.getActivity()).isCanNotify()) return;
+            boolean instanceOfMain = App.getActivity() instanceof MainActivity;
+            if (!instanceOfMain) return;// 缘分吧1.0逻辑，只有主页面弹出浮动提示框
 
             final CustomFloatingPanel floatingPanelChat = new CustomFloatingPanel(App.context);
             floatingPanelChat.initView();
@@ -193,8 +202,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
             }
             UIShow.showUserMailNotifyAct(type, simpleData, content);
         }
-        playSound();
-        vibrator();
     }
 
     //------------------新消息通知end--------------------

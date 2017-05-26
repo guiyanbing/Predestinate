@@ -31,6 +31,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
@@ -155,6 +156,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
+        FloatingMgr.getInstance().setCanNotify(fragment != mailFragment);
         if (fragment == discoverFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.discovery_layout);
         } else if (fragment == mailFragment) {
@@ -263,7 +265,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onUpdateWhisper(BaseMessage message) {
         if (!TextUtils.isEmpty(message.getWhisperID())) {
             PLogger.printObject("message====" + message);
-        //    ModuleMgr.getChatListMgr().getWhisperList();
+            //    ModuleMgr.getChatListMgr().getWhisperList();
         }
     }
 

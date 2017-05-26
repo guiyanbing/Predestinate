@@ -37,7 +37,9 @@ public class UserFragmentFunctionPanel extends BasePanel {
         tv_immortal_status = (TextView) findViewById(R.id.tv_immortal_status);
 
         refreshBadge();
-        findViewById(R.id.ll_vip_privilege).setOnClickListener(clickListener);
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            findViewById(R.id.ll_vip_privilege).setOnClickListener(clickListener);
+        }
         findViewById(R.id.ll_immortal_verify).setOnClickListener(clickListener);
     }
 
@@ -84,7 +86,6 @@ public class UserFragmentFunctionPanel extends BasePanel {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_vip_privilege: // 开通vip
-                    if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) return;
                     UIShow.showOpenVipActivity(getContext());
                     break;
 
