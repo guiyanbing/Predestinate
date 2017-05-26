@@ -12,14 +12,10 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.self.info.UserInfoPanel;
 import com.juxin.predestinate.ui.user.util.AlbumHorizontalPanel;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
-import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
-
-import java.io.Serializable;
 
 /**
  * 查看他人资料底部panel
@@ -31,7 +27,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
     private UserInfoPanel infoPanel; // 资料列表
 
     private LinearLayout albumLayout, videoLayout, chatLayout;
-    private TextView tv_album, tv_video_price, tv_audio_price;
+    private TextView tv_album, tv_video, tv_video_price, tv_audio_price;
     private AlbumHorizontalPanel albumPanel, videoPanel;
     private ImageView iv_auth_photo, iv_auth_phone, iv_auth_video; // 认证
 
@@ -57,6 +53,7 @@ public class UserCheckInfoFootPanel extends BasePanel {
         LinearLayout ll_secret_album = (LinearLayout) findViewById(R.id.ll_secret_album);
         LinearLayout ll_secret_video = (LinearLayout) findViewById(R.id.ll_secret_video);
         tv_album = (TextView) findViewById(R.id.album_num);
+        tv_video = (TextView) findViewById(R.id.video_num);
         chatLayout = (LinearLayout) findViewById(R.id.item_chat);
         tv_video_price = (TextView) findViewById(R.id.tv_video_price);
         tv_audio_price = (TextView) findViewById(R.id.tv_audio_price);
@@ -65,13 +62,12 @@ public class UserCheckInfoFootPanel extends BasePanel {
         iv_auth_photo = (ImageView) findViewById(R.id.iv_auth_photo);
         iv_auth_phone = (ImageView) findViewById(R.id.iv_auth_phone);
         iv_auth_video = (ImageView) findViewById(R.id.iv_auth_video);
-        findViewById(R.id.ll_video).setOnClickListener(listener);
         refreshAuth();  // 认证状态
 
         // 照片列表
         if (userDetail.getUserPhotos().size() > 0) {
             ll_secret_album.setVisibility(View.VISIBLE);
-            albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, (Serializable) userDetail.getUserPhotos());
+            albumPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM, userDetail);
             albumLayout.addView(albumPanel.getContentView());
             tv_album.setText(String.valueOf(userDetail.getUserPhotos().size()));
         }
@@ -79,6 +75,9 @@ public class UserCheckInfoFootPanel extends BasePanel {
         // 视频列表
         if (userDetail.getUserVideos().size() > 0) {
             ll_secret_video.setVisibility(View.VISIBLE);
+            videoPanel = new AlbumHorizontalPanel(getContext(), channel, AlbumHorizontalPanel.EX_HORIZONTAL_VIDEO, userDetail);
+            videoLayout.addView(videoPanel.getContentView());
+            tv_video.setText(String.valueOf(userDetail.getUserVideos().size()));
         }
 
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
@@ -136,15 +135,4 @@ public class UserCheckInfoFootPanel extends BasePanel {
         tv_audio_price.setText(getContext().getString(R.string.user_info_chat_voice, config.getAudioPrice()));
         iv_auth_video.setVisibility(config.isVerifyVideo() ? View.VISIBLE : View.GONE);
     }
-
-    private final NoDoubleClickListener listener = new NoDoubleClickListener() {
-        @Override
-        public void onNoDoubleClick(View v) {
-            switch (v.getId()) {
-                case R.id.ll_video:
-                    UIShow.showUserSecretAct(getContext(), userDetail);
-                    break;
-            }
-        }
-    };
 }

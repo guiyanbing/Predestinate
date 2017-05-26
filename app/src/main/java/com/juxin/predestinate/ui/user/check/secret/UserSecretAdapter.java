@@ -4,14 +4,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.user.check.secret.bean.VideoPreviewBean;
 
 /**
- * 私密相册/视频页adapter
+ * 私密视频页adapter
  * Created by Su on 2017/3/30.
  */
 
@@ -30,14 +33,16 @@ public class UserSecretAdapter extends BaseRecyclerViewAdapter {
 
     @Override
     public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
-        VideoPreviewBean data = (VideoPreviewBean) getItem(position);
+        UserVideo data = (UserVideo) getItem(position);
 
         ImageView img_preview = viewHolder.findViewById(R.id.iv_video_preview);
         TextView tv_hot = viewHolder.findViewById(R.id.tv_hot_value);
         TextView tv_time = viewHolder.findViewById(R.id.tv_video_time);
         img_preview.setLayoutParams(new RelativeLayout.LayoutParams(params, params));
 
-//        ImageLoader.loadCenterCrop(App.context, data.getCoverUrl(), img_media);
+        ImageLoader.loadBlurImg(App.context, data.getPic(), 8, img_preview);
+        tv_hot.setText(String.valueOf(data.getViewTimes()));
+        tv_time.setText(TimeUtil.getLongToMinuteTime(data.getDuration() * 1000l));
     }
 
     @Override

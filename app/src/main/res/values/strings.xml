@@ -102,6 +102,7 @@
     <string name="user_info_check_video_send">立即送她</string>
     <string name="user_info_check_video_pay">查看该视频需要：</string>
     <string name="user_info_check_video_price">%d朵玫瑰：</string>
+    <string name="user_info_check_video_fail">视频加载失败</string>
     <string name="user_info_require">正在获取个人资料...</string>
     <string name="user_info_follow_suc">关注成功</string>
     <string name="user_info_follow_fail">关注失败</string>
@@ -468,6 +469,11 @@
     <string name="message_close">关闭</string>
     <string name="message_replay">回复</string>
     <string name="message_empty_warn">消息不能为空</string>
+
+    <string name="chat_gift_hello_man">HI,帅哥</string>
+    <string name="chat_gift_hello_woman">HI,美女</string>
+    <string name="chat_click_receive_gift">点击收礼</string>
+    <string name="chat_click_send_gift">点击赠送</string>
 
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>

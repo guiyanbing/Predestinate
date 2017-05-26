@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
@@ -14,6 +15,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,10 +31,10 @@ public class BaseMessage implements IBaseMessage {
         hi(TextMessage.class, 3),//打招呼
         gift(GiftMessage.class, 10),//礼物消息
         hint(TextMessage.class, 14),//小提示消息
-        wantGift(TextMessage.class, 15),//索要礼物消息
         html(HtmlMessage.class, 19),//html消息
-        wantGiftTwo(GiftMessage.class, 20),//索要礼物消息第二版
+        wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息
+        htmlText(TextMessage.class, 25),//HTML文本消息
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
@@ -476,6 +478,7 @@ public class BaseMessage implements IBaseMessage {
 
     /**
      * true 如果为1则为熟人消息，否则为0
+     *
      * @return
      */
     public boolean isRu() {
@@ -534,7 +537,7 @@ public class BaseMessage implements IBaseMessage {
         this.setWhisperID(bundle.getString(FLetter.COLUMN_USERID));
         this.setInfoJson(bundle.getString(FLetter.COLUMN_INFOJSON));
         this.setType(bundle.getInt(FLetter.COLUMN_TYPE));
-        paseInfoJson(this.getInfoJson());
+        parseInfoJson(this.getInfoJson());
         this.setKfID(bundle.getInt(FLetter.COLUMN_KFID));
         this.setStatus(bundle.getInt(FLetter.COLUMN_STATUS));
         this.setRu(bundle.getInt(FLetter.COLUMN_RU));
@@ -558,7 +561,7 @@ public class BaseMessage implements IBaseMessage {
      *
      * @param jsonStr
      */
-    private void paseInfoJson(String jsonStr) {
+    private void parseInfoJson(String jsonStr) {
         if (TextUtils.isEmpty(jsonStr)) return;
         PLogger.printObject("jsonStr=" + jsonStr);
         JSONObject object = getJsonObject(jsonStr);
@@ -589,7 +592,7 @@ public class BaseMessage implements IBaseMessage {
                 message = new CommonMessage(bundle, true);
                 break;
             case gift:
-            case wantGiftTwo:
+            case wantGift:
                 message = new GiftMessage(bundle, true);
                 break;
             case video:
@@ -622,7 +625,7 @@ public class BaseMessage implements IBaseMessage {
                 message = new CommonMessage(bundle);
                 break;
             case gift:
-            case wantGiftTwo:
+            case wantGift:
                 message = new GiftMessage(bundle);
                 break;
             case video:
@@ -634,7 +637,6 @@ public class BaseMessage implements IBaseMessage {
         }
         return message;
     }
-
 
     /**
      * 列表显示转换
@@ -682,16 +684,16 @@ public class BaseMessage implements IBaseMessage {
                 result = msg.getMsgDesc();
                 break;
             case gift:
-            case wantGiftTwo:
+            case wantGift:
                 result = msg.getMsgDesc();
                 break;
-            case video: {
+            case video:
                 VideoMessage videoMessage = (VideoMessage) msg;
                 result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
                         TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
                 break;
-            }
-
+            default:
+                break;
         }
         return result;
     }

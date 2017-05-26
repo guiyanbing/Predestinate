@@ -84,6 +84,17 @@ var MyGift = MyGift || (function ($) {
         var giftSendTotal = document.getElementById('giftSendTotal');
         giftRecieveTotal.innerText = _giftNum;
         giftSendTotal.innerText = _giftNum;
+        if (tabindex === 0) {
+          var table = document.body.querySelector('#scroll1 .mui-scroll .mui-table-view');
+          var cells = document.body.querySelectorAll('.mui-table-view-cell');
+        }else {
+          var table = document.body.querySelector('#scroll2 .mui-scroll .mui-table-view');
+          var cells = document.body.querySelectorAll('.mui-table-view-cell');
+        }
+
+        for (var j = 0;j <cells.length;j++) {
+          table.removeChild(cells[j]);
+        }
         for (var i = 0;i < _dataList.length;i++) {
           var data = _dataList[i];
           var name = data.name;
@@ -94,7 +105,6 @@ var MyGift = MyGift || (function ($) {
           li.innerHTML = '<a href="">\
             <img class="mui-media-object mui-pull-left" src="'+img+'" alt="">\
             <div class="mui-media-body" style="line-height: 46px">'+ name +'<p class="mui-ellipsis mui-pull-right">X'+  num+'</p>\</div></a>';
-          var table = document.body.querySelector('.mui-scroll .mui-table-view');
           table.appendChild(li);
         };
 

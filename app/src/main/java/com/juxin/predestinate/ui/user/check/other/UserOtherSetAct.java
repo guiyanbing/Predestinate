@@ -286,6 +286,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                 PToast.showShort(getString(R.string.user_info_set_fail));
                 return;
             }
+            setResult();
             userDetail.setRemark(tempRemark);
             user_remark.setText(TextUtils.isEmpty(tempRemark) ? "" : tempRemark);
         }
@@ -314,7 +315,6 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
     protected void onDestroy() {
         //reqSetVideoSetting();
         reqAddOrRemoveBlack();
-        setResult();
         super.onDestroy();
     }
 }
