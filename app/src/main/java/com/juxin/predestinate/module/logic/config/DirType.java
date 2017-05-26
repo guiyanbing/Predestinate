@@ -1,10 +1,12 @@
 package com.juxin.predestinate.module.logic.config;
 
+import android.content.Context;
 import android.os.Environment;
 
 import com.juxin.library.utils.DirUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.util.SDCardUtil;
 
 import java.io.File;
 
@@ -122,7 +124,7 @@ public class DirType {
      * @return 获取格式化的缓存大小
      */
     public static String getFormatCacheSize() {
-        long dirSize = DirUtils.getDirSize(new File(getRootDir()));
+        long dirSize = DirUtils.getDirSize(new File(getCacheDir()));
         if (dirSize < 1024 * 1024) return App.getResource().getString(R.string.cache_state_good);
         if (dirSize < 1024 * 1024 * 1024 && ((double) dirSize / (1024 * 1024)) < 50)
             return App.getResource().getString(R.string.cache_state_little);
@@ -130,13 +132,52 @@ public class DirType {
     }
 
     /**
+     * 获取总缓存大小
+     * @return
+     */
+    public static String getCacheSize() {
+        // 计算缓存大小
+        long fileSize = 0;
+        String cacheSize = "0KB";
+        File filesDir = App.context.getFilesDir();
+        File cacheDir = App.context.getCacheDir();
+
+        fileSize += SDCardUtil.getDirSize(filesDir);
+        fileSize += SDCardUtil.getDirSize(cacheDir);
+        // 2.2版本才有将应用缓存转移到sd卡的功能
+        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+            File externalCacheDir = getExternalCacheDir(App.context);
+            fileSize += SDCardUtil.getDirSize(externalCacheDir);
+        }
+        long dirSize = DirUtils.getDirSize(new File(getCacheDir()));
+        fileSize+=dirSize;
+        if (fileSize > 0)
+            cacheSize = SDCardUtil.formatFileSize(fileSize);
+        return cacheSize;
+    }
+
+    /**
      * 清除缓存
      */
     public static void clearCache() {
         DirUtils.delAllFile(getCacheDir(), false);
-        DirUtils.delAllFile(getVideoDir(), false);
-        DirUtils.delAllFile(getVoiceDir(), false);
-        DirUtils.delAllFile(getImageDir(), false);
+        SDCardUtil.clearCacheFolder(App.context.getFilesDir(), System.currentTimeMillis());
+        SDCardUtil.clearCacheFolder(App.context.getCacheDir(), System.currentTimeMillis());
+        // 2.2版本才有将应用缓存转移到sd卡的功能
+        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+            SDCardUtil.clearCacheFolder(getExternalCacheDir(App.context), System.currentTimeMillis());
+        }
         // TODO: 2017/5/19 删除数据库缓存
+    }
+
+    /**
+     * 判断当前版本是否兼容目标版本的方法
+     */
+    private static boolean isMethodsCompat(int VersionCode) {
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        return currentVersion >= VersionCode;
+    }
+    private static File getExternalCacheDir(Context context) {
+        return context.getExternalCacheDir();
     }
 }

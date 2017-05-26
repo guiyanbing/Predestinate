@@ -256,6 +256,11 @@
 
     <!--认证-->
     <color name="authentication_txt_bg">#43cd67</color>
+    <color name="txt_auth_status_complete">#75cd81</color>
+    <color name="txt_auth_status_isnull">#d1d1d1</color>
+    <color name="txt_auth_status_ing">#ffc333</color>
+    <color name="txt_auth_status_error">#ff4e4e</color>
+
     <color name="user_text_gray_top">#bbbbbb</color>
     <color name="user_text_blue">#83a0ec</color>
     <color name="user_text_gray_bottom">#d4d4d4</color>

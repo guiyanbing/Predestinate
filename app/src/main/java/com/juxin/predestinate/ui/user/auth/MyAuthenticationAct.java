@@ -53,13 +53,13 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         tv_txt_auth_id = (TextView) findViewById(R.id.txt_auth_id);
         if (userDetail.isVerifyCellphone()) {
             tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authok));
-            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
+            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_complete));
         } else {
             tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authno));
-            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
+            tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_isnull));
         }
         tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authno));
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_isnull));
         initVideoAuth();
         initIdCardAuth();
         initConfig();
@@ -67,7 +67,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
 
 
     private void initIdCardAuth() {
-        tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
+        tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_isnull));
 
         switch (mIdCardVerifyStatusInfo.getStatus()) {
             case 0:
@@ -75,22 +75,22 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 1:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authing));
-                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.txt_authing));
+                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_ing));
                 break;
             case 2:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_authok));
-                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.color_75CD81));
+                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_complete));
                 break;
             case 3:
             case 4:
                 tv_txt_auth_id.setText(getResources().getString(R.string.txt_authstatus_autherror));
-                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
+                tv_txt_auth_id.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_error));
                 break;
         }
     }
 
     private void initVideoAuth() {
-        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.color_D1D1D1));
+        tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_isnull));
 
         switch (videoVerifyBean.getStatus()) {
             case 0:
@@ -98,15 +98,15 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 break;
             case 1:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authing));
-                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_authing));
+                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_ing));
                 break;
             case 2:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_autherror));
-                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
+                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_error));
                 break;
             case 3:
                 tv_txt_auth_video.setText(getResources().getString(R.string.txt_authstatus_authok));
-                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.color_75CD81));
+                tv_txt_auth_video.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_complete));
                 break;
             default:
                 break;
@@ -148,7 +148,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
         if (requestCode == AUTHENTICSTION_REQUESTCODE) {
             if (userDetail.isVerifyCellphone()) {
                 tv_txt_auth_phone.setText(getResources().getString(R.string.txt_authstatus_authok));
-                tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.authentication_txt_bg));
+                tv_txt_auth_phone.setTextColor(ContextCompat.getColor(this, R.color.txt_auth_status_complete));
             }
             if (resultCode == Constant.EXITLOGIN_RESULTCODE) {
                 setResult(Constant.EXITLOGIN_RESULTCODE);

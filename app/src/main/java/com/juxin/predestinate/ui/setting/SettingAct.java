@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.setting;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,27 +11,19 @@ import android.widget.ToggleButton;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
-import com.juxin.library.request.DownloadListener;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
-import com.juxin.predestinate.bean.settting.Setting;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.module.util.SDCardUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.ui.user.update.DownloadingDialog;
-import com.juxin.predestinate.ui.utils.Common;
 
-import java.io.File;
-import java.util.Date;
 
 
 /**
@@ -98,7 +89,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             setting_account.setVisibility(View.VISIBLE);
         }
 
-        String cacheSize = Show_Cache();
+        String cacheSize = DirType.getCacheSize();
         setting_clear_cache_tv.setText(cacheSize);
     }
 
@@ -351,8 +342,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             public void run() {
                 Message msg = new Message();
                 try {
-                    clearCache();
-                    clearDB();
+                    DirType.clearCache();
                     msg.what = 1;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -361,51 +351,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 handler.sendMessage(msg);
             }
         }.start();
-    }
-
-    private String Show_Cache() {
-        // 计算缓存大小
-        long fileSize = 0;
-        String cacheSize = "0KB";
-        File filesDir = App.context.getFilesDir();
-        File cacheDir = App.context.getCacheDir();
-
-        fileSize += SDCardUtil.getDirSize(filesDir);
-        fileSize += SDCardUtil.getDirSize(cacheDir);
-        // 2.2版本才有将应用缓存转移到sd卡的功能
-        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
-            File externalCacheDir = getExternalCacheDir(App.context);
-            fileSize += SDCardUtil.getDirSize(externalCacheDir);
-        }
-        if (fileSize > 0)
-            cacheSize = SDCardUtil.formatFileSize(fileSize);
-        return cacheSize;
-    }
-
-    private void clearCache() {
-        SDCardUtil.clearCacheFolder(App.context.getFilesDir(), System.currentTimeMillis());
-        SDCardUtil.clearCacheFolder(App.context.getCacheDir(), System.currentTimeMillis());
-        // 2.2版本才有将应用缓存转移到sd卡的功能
-        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
-            SDCardUtil.clearCacheFolder(getExternalCacheDir(App.context), System.currentTimeMillis());
-        }
-    }
-
-
-    private void clearDB() {
-//        DataCenter.getInstance().delete_User_Message_List_MoreThanNHour_2(AppCtx.getUid(), 48);
-    }
-
-    /**
-     * 判断当前版本是否兼容目标版本的方法
-     */
-    public boolean isMethodsCompat(int VersionCode) {
-        int currentVersion = android.os.Build.VERSION.SDK_INT;
-        return currentVersion >= VersionCode;
-    }
-
-    public File getExternalCacheDir(Context context) {
-        return context.getExternalCacheDir();
     }
 
 
