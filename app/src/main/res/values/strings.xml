@@ -472,6 +472,7 @@
 
     <string name="chat_gift_hello_man">HI,帅哥</string>
     <string name="chat_gift_hello_woman">HI,美女</string>
+    <string name="chat_gift_has_received">礼物已折现，已放入钱包！</string>
     <string name="chat_click_receive_gift">点击收礼</string>
     <string name="chat_click_send_gift">点击赠送</string>
 
