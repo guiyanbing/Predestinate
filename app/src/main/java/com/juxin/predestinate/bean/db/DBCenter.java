@@ -7,9 +7,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
-
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -100,7 +98,6 @@ public class DBCenter {
                         centerFLetter.updateContent(temp.getWhisperID());
                     }
                     centerFmessage.delete(temp.getLWhisperID(), delTime);
-
                 }
             }
         });
@@ -125,9 +122,7 @@ public class DBCenter {
                     if (temp.getTime() < delTime) {
                         centerFLetter.updateContent(temp.getWhisperID());
                     }
-
                     centerFmessage.delete(temp.getLWhisperID());
-
                 }
             }
         });
