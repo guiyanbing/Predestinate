@@ -1,8 +1,11 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.bean.db.FMessage;
+import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
@@ -510,20 +513,19 @@ public class BaseMessage implements IBaseMessage {
     }
 
     //fmessage
-    public BaseMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
-        this.id = id;
-        this.channelID = channelID;
-        this.whisperID = whisperID;
-        this.sendID = sendID;
-        this.msgID = msgID;
-        this.cMsgID = cMsgID;
-        this.specialMsgID = specialMsgID;
-        this.type = type;
-        this.status = status;
-        this.fStatus = fStatus;
-        this.time = time;
-        this.jsonStr = jsonStr;
+    public BaseMessage(Bundle bundle) {
+        this.setId(bundle.getLong(FMessage._ID));
+        this.setChannelID(bundle.getString(FMessage.COLUMN_CHANNELID));
+        this.setWhisperID(bundle.getString(FMessage.COLUMN_WHISPERID));
+        this.setSendID(bundle.getLong(FMessage.COLUMN_SENDID));
+        this.setMsgID(bundle.getLong(FMessage.COLUMN_MSGID));
+        this.setcMsgID(bundle.getLong(FMessage.COLUMN_CMSGID));
+        this.setSpecialMsgID(bundle.getLong(FMessage.COLUMN_SPECIALMSGID));
+        this.setType(bundle.getInt(FMessage.COLUMN_TYPE));
+        this.setStatus(bundle.getInt(FMessage.COLUMN_STATUS));
+        this.setfStatus(bundle.getInt(FMessage.COLUMN_FSTATUS));
+        this.setTime(bundle.getLong(FMessage.COLUMN_TIME));
+        this.setJsonStr(bundle.getString(FMessage.COLUMN_CONTENT));
     }
 
     //私聊列表
@@ -601,39 +603,38 @@ public class BaseMessage implements IBaseMessage {
         return message;
     }
 
-    public static BaseMessage parseToBaseMessage(long id, String channelID, String whisperID,
-                                                 long sendID, long msgID, long cMsgID, long specialMsgID, int type, int status,
-                                                 int fStatus, long time, String jsonStr) {
+    //内容表
+    public static BaseMessage parseToBaseMessage(Bundle bundle) {
         BaseMessage message = new BaseMessage();
-        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
+        if(bundle == null){
+            return message;
+        }
+
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(bundle.getInt(FMessage.COLUMN_TYPE));
         if (messageType == null) {
-            message = new BaseMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type,
-                    status, fStatus, time, jsonStr);
+            message = new BaseMessage(bundle);
             return message;
         }
         switch (messageType) {
             case hi:
-                message = new TextMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
-                        type, status, fStatus, time, jsonStr);
+                message = new TextMessage(bundle);
                 break;
             case common:
-                message = new CommonMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
-                        type, status, fStatus, time, jsonStr);
+                message = new CommonMessage(bundle);
                 break;
             case gift:
             case wantGiftTwo:
-                message = new GiftMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
-                        type, status, fStatus, time, jsonStr);
+                message = new GiftMessage(bundle);
                 break;
             case video:
-                message = new VideoMessage(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID,
-                        type, status, fStatus, time, jsonStr);
+                message = new VideoMessage(bundle);
                 break;
             default:
                 break;
         }
         return message;
     }
+
 
     /**
      * 列表显示转换

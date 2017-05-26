@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
@@ -242,6 +243,20 @@ public class DBCenterFLetter {
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
+//                Bundle bundle = new Bundle();
+//                bundle.putLong(FLetter._ID,  CursorUtil.getLong(cursor, FMessage._ID));
+//                bundle.putString(FLetter.COLUMN_USERID,  CursorUtil.getString(cursor, FMessage.COLUMN_USERID));
+//                bundle.putString(FLetter.COLUMN_WHISPERID,  CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID));
+//                bundle.putLong(FLetter.COLUMN_SENDID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID));
+//                bundle.putLong(FLetter.COLUMN_MSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID));
+//                bundle.putLong(FMessage.COLUMN_CMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID));
+//                bundle.putLong(FMessage.COLUMN_SPECIALMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID));
+//                bundle.putInt(FMessage.COLUMN_TYPE,  CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE));
+//                bundle.putInt(FMessage.COLUMN_STATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS));
+//                bundle.putInt(FMessage.COLUMN_FSTATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS));
+//                bundle.putLong(FMessage.COLUMN_TIME,  CursorUtil.getLong(cursor, FMessage.COLUMN_TIME));
+//                bundle.putString(FMessage.COLUMN_CONTENT,  CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
+
                 result.add(BaseMessage.parseToBaseMessage(
                         CursorUtil.getLong(cursor, FLetter._ID),
                         CursorUtil.getString(cursor, FLetter.COLUMN_USERID),

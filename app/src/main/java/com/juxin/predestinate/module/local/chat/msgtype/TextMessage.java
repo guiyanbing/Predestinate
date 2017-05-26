@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
+
 import com.juxin.library.log.PLogger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,11 +95,11 @@ public class TextMessage extends BaseMessage {
         this.sayHelloType = sayHelloType;
     }
 
-    public TextMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
-        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+    public TextMessage(Bundle bundle) {
+        super(bundle);
         convertJSON(getJsonStr());
     }
+
 
     //私聊列表
     public TextMessage(long id, String userID, String infoJson, int type, int kfID,
