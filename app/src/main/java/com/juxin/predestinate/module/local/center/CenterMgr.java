@@ -533,7 +533,7 @@ public class CenterMgr implements ModuleBase, PObserver {
             PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
             return false;
         }
-        PLogger.d("isCanGroupSayHi------ " + ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey()));
+        PLogger.d("isCanGroupSayHi------ key = " + getGroupSayHiDayKey() + " bool = " + ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey()));
         //判断是否达到第二天
         if (ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey())) {
             //判断群打招呼次数
@@ -559,7 +559,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      *
      * @return
      */
-    private String getGroupSayHiDayKey() {
+    public String getGroupSayHiDayKey() {
         return "GroupSayHiDayKey" + getMyInfo().getUid();
     }
 
