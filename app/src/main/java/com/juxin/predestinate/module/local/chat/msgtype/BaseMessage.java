@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
@@ -15,7 +14,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -124,12 +122,11 @@ public class BaseMessage implements IBaseMessage {
     private boolean isResending = false;//是否重发中
     private boolean isValid = false;//是否有效当前消息,用于五分钟内重发用
     private String msgDesc;//消息描述 mct
-    private long ru = 1;//如果为1则为熟人消息，否则为0
+    private long ru = MessageConstant.Ru_Friend;//如果为1则为熟人消息，否则为0
 
     private boolean isRead = false;//未读消息（true已经是读过了）//这个字段专门给数据库用的，不是给界面用的
     private boolean isSave;//是否保存
     private boolean isAutoplay = false;//是否自动播放
-
 
     //这几个字段 目前基本是给私聊用的
     private String infoJson;//个人资料json
@@ -476,11 +473,7 @@ public class BaseMessage implements IBaseMessage {
         return ru;
     }
 
-    /**
-     * true 如果为1则为熟人消息，否则为0
-     *
-     * @return
-     */
+    // true 如果为1则为熟人消息，否则为0
     public boolean isRu() {
         return ru == MessageConstant.Ru_Friend;
     }
@@ -586,6 +579,9 @@ public class BaseMessage implements IBaseMessage {
         }
         switch (messageType) {
             case hi:
+            case html:
+            case hint:
+            case htmlText:
                 message = new TextMessage(bundle, true);
                 break;
             case common:
@@ -619,6 +615,9 @@ public class BaseMessage implements IBaseMessage {
         }
         switch (messageType) {
             case hi:
+            case html:
+            case hint:
+            case htmlText:
                 message = new TextMessage(bundle);
                 break;
             case common:
@@ -679,20 +678,22 @@ public class BaseMessage implements IBaseMessage {
                     }
                 }
                 break;
+            case video:{
+                VideoMessage videoMessage = (VideoMessage) msg;
+                result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
+                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
+                PLogger.printObject("videoMessage===" + videoMessage.toString());
+                break;
+            }
             case hint:
             case html://html消息
-                result = msg.getMsgDesc();
-                break;
+            case htmlText:
             case gift:
             case wantGift:
                 result = msg.getMsgDesc();
                 break;
-            case video:
-                VideoMessage videoMessage = (VideoMessage) msg;
-                result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
-                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
-                break;
             default:
+                result = msg.getMsgDesc();
                 break;
         }
         return result;

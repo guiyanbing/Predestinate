@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.juxin.predestinate.R;
 
 public class SwipeMenuView extends LinearLayout implements OnClickListener {
