@@ -211,6 +211,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
+    public void updateToBatchRead(List<BaseMessage> greetList){
+        if(greetList == null || greetList.size() <= 0){
+            return;
+        }
+        for(BaseMessage temp : greetList){
+            updateToRead(temp.getLWhisperID());
+        }
+    }
+    public long updateToRead(long userID){
+        return dbCenter.getCenterFMessage().updateToRead(userID);
+    }
+
     public void updateToRead(String channelID, String userID) {
         dbCenter.updateToRead(channelID, userID);
     }
@@ -239,7 +251,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         ModuleMgr.getChatMgr().inject();
                         PLogger.d("uid=======" + App.uid);
                         getWhisperList();
-                        ModuleMgr.getChatMgr().deleteMessageKFIDHour(24);
+                        ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
                     }
                 } else {
                     logout();

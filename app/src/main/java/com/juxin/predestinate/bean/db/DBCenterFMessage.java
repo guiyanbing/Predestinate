@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -146,6 +145,13 @@ public class DBCenterFMessage {
         values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
     }
+
+    public long updateToRead(long userID){
+        ContentValues values = new ContentValues();
+        values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_WHISPERID + " = ?", String.valueOf(userID));
+    }
+
     /**
      * 更新已读消息
      * @param channelID

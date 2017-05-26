@@ -202,13 +202,24 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 }
             }
         } else {
-            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customStatusListView.showLoading();
-                    onRefresh();
+            if (infos.size() != 0) {
+                customStatusListView.showExListView();
+                adapter.notifyDataSetChanged();
+                if (page == 1) {
+                    exListView.stopRefresh();
+                } else {
+                    exListView.stopLoadMore();
                 }
-            });
+            } else {
+                customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customStatusListView.showLoading();
+                        onRefresh();
+                    }
+                });
+            }
+
         }
     }
 
@@ -250,14 +261,21 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 }
             }
         } else {
-            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customStatusListView.showLoading();
-                    getNearData();
-                }
-            });
-            setGroupSayhiBtn(false);
+            if (infos.size() != 0) {
+                adapter.notifyDataSetChanged();
+                customStatusListView.showExListView();
+                setGroupSayhiBtn(true);
+                exListView.stopRefresh();
+            } else {
+                customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customStatusListView.showLoading();
+                        getNearData();
+                    }
+                });
+                setGroupSayhiBtn(false);
+            }
         }
     }
 
@@ -310,6 +328,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
 
     /**
      * 刷新打招呼的状态
+     *
      * @param uid
      */
     private void notifyAdapter(long uid) {
