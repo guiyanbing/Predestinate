@@ -138,7 +138,7 @@ public class VideoMessage extends BaseMessage {
     }
 
     //最后一次视频、语音状态
-    public static EmLastStatus getLastStatus(int vc_tp, int vc_esc_code) {
+    private EmLastStatus getLastStatus(int vc_tp, int vc_esc_code) {
         switch (vc_tp) {
             case 3:
                 switch (vc_esc_code) {
