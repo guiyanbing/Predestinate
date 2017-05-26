@@ -24,27 +24,32 @@ interface RequestAPI {
 
     // =============get请求============
 
+    @Headers({"User-Agent: "})
     @GET
     Call<ResponseBody> executeGetCall(@HeaderMap Map<String, String> headerMap, @Url String url, @QueryMap Map<String, Object> maps);
 
+    @Headers({"User-Agent: "})
     @GET
     Call<ResponseBody> executeGetCall(@HeaderMap Map<String, String> headerMap, @Url String url);
 
     // =============post请求============
 
-    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @Headers({"Content-Type: application/json", "Accept: application/json", "User-Agent: "})
     @POST
     Call<ResponseBody> executePostCall(@HeaderMap Map<String, String> headerMap, @Url String url, @Body RequestBody str);
 
+    @Headers({"User-Agent: "})
     @FormUrlEncoded
     @POST
     Call<ResponseBody> executePostCall(@HeaderMap Map<String, String> headerMap, @Url String url, @FieldMap Map<String, Object> maps);
 
+    @Headers({"User-Agent: "})
     @POST
     Call<ResponseBody> executePostCall(@HeaderMap Map<String, String> headerMap, @Url String url);
 
     // =============文件请求============
 
+    @Headers({"User-Agent: "})
     @POST
     Call<ResponseBody> executePostCallUploadCall(@HeaderMap Map<String, String> headerMap, @Url String url, @Body MultipartBody multipartBody);
 }

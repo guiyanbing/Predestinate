@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
@@ -197,9 +197,9 @@ public class FloatingMgr implements Handler.Callback {
         View view = lastBasePanel.getContentView();
         InterceptTouchLinearLayout layout = createLayout(view);
         layout.addView(view, params);
-        Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_in);
         tempViewGroup.addView(layout);
-        animation.setInterpolator(new LinearInterpolator());
+        Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_in);
+        animation.setInterpolator(new OvershootInterpolator());
         layout.startAnimation(animation);
 
         addView();
@@ -226,7 +226,7 @@ public class FloatingMgr implements Handler.Callback {
         if (layout == null) return;
 
         Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_out);
-        animation.setInterpolator(new LinearInterpolator());
+        animation.setInterpolator(new OvershootInterpolator());
         animation.setFillAfter(true);
         layout.setInterceptTouchEvent(true);
         layout.startAnimation(animation);
