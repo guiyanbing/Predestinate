@@ -93,4 +93,11 @@ public class SearchTestActivity extends BaseActivity {
             PToast.showShort("数据库文件不存在或复制失败");
         }
     }
+
+    /**
+     * 切换服务器地址
+     */
+    public void switchServer(View v) {
+        // TODO: 2017/5/25
+    }
 }
