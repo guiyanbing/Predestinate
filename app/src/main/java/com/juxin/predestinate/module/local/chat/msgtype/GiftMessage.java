@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 
 import org.json.JSONArray;
@@ -117,10 +118,13 @@ public class GiftMessage extends BaseMessage {
         parseCommonJson(object);
     }
 
+    /**
+     * 礼物消息数据解析
+     */
     private void parseCommonJson(JSONObject object) {
-        if (getType() == 20) {
+        if (getType() == BaseMessageType.wantGift.getMsgType()) {//索要礼物
             this.setGiftID(object.optInt("gift_id"));
-        } else {//10
+        } else {//收到礼物
             if (!object.isNull("gift")) {
                 JSONObject giftJSON = object.optJSONObject("gift");
                 this.setGiftCount(giftJSON.optInt("count"));
