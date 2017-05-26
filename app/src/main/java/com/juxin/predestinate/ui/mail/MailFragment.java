@@ -274,6 +274,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 mail_delete.setEnabled(false);
                 ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList);
                 mailDelInfoList.clear();
+                setTitleLeftContainerRemoveAll();
                 listMail.smoothCloseChooseView();
                 break;
             case R.id.mail_all_ignore:
