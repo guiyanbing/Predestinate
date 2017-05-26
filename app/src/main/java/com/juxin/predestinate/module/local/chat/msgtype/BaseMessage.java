@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.FMessage;
-import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
@@ -529,21 +529,19 @@ public class BaseMessage implements IBaseMessage {
     }
 
     //私聊列表
-    public BaseMessage(long id, String userID, String infoJson, int type, int kfID,
-                       int status, int ru, long time, String content, int num) {
-        this.setId(id);
-        this.setWhisperID(userID);
-        this.setInfoJson(infoJson);
-        this.setType(type);
+    public BaseMessage(Bundle bundle, boolean fletter) {
+        this.setId(bundle.getLong(FLetter._ID));
+        this.setWhisperID(bundle.getString(FLetter.COLUMN_USERID));
+        this.setInfoJson(bundle.getString(FLetter.COLUMN_INFOJSON));
+        this.setType(bundle.getInt(FLetter.COLUMN_TYPE));
         paseInfoJson(this.getInfoJson());
-        this.setKfID(kfID);
-        this.setStatus(status);
-        this.setRu(ru);
-        this.setTime(time);
-        this.setNum(num);
-        this.setJsonStr(content);
+        this.setKfID(bundle.getInt(FLetter.COLUMN_KFID));
+        this.setStatus(bundle.getInt(FLetter.COLUMN_STATUS));
+        this.setRu(bundle.getInt(FLetter.COLUMN_RU));
+        this.setTime(bundle.getLong(FLetter.COLUMN_TIME));
+        this.setJsonStr(bundle.getString(FLetter.COLUMN_CONTENT));
+        this.setNum(bundle.getInt(FLetter.Num));
     }
-
 
     /**
      * 转换JSON 转子类的时候用
@@ -574,30 +572,32 @@ public class BaseMessage implements IBaseMessage {
     /**
      * 私聊列表
      */
-    public static BaseMessage parseToBaseMessage(long id, String userID, String infoJson, int type, int kfID,
-                                                 int status, int ru, long time, String content, int num) {
+    public static BaseMessage parseToLetterMessage(Bundle bundle) {
         BaseMessage message = new BaseMessage();
-        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
+        if(bundle == null){
+            return message;
+        }
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(bundle.getInt(FLetter.COLUMN_TYPE));
         if (messageType == null) {
-            message = new BaseMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+            message = new BaseMessage(bundle, true);
             return message;
         }
         switch (messageType) {
             case hi:
-                message = new TextMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                message = new TextMessage(bundle, true);
                 break;
             case common:
-                message = new CommonMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                message = new CommonMessage(bundle, true);
                 break;
             case gift:
             case wantGiftTwo:
-                message = new GiftMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                message = new GiftMessage(bundle, true);
                 break;
             case video:
-                message = new VideoMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                message = new VideoMessage(bundle, true);
                 break;
             default:
-                message = new BaseMessage(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+                message = new BaseMessage(bundle, true);
                 break;
         }
         return message;
@@ -630,6 +630,7 @@ public class BaseMessage implements IBaseMessage {
                 message = new VideoMessage(bundle);
                 break;
             default:
+                message = new BaseMessage(bundle);
                 break;
         }
         return message;
@@ -659,6 +660,23 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case common:
                 result = msg.getMsgDesc();
+                if(TextUtils.isEmpty(result)){
+                    CommonMessage commonMessage = (CommonMessage) msg;
+
+                    String videoUrl = commonMessage.getVideoUrl();
+                    String localVideoUrl = commonMessage.getLocalVideoUrl();
+                    String voiceUrl = commonMessage.getVoiceUrl();
+                    String localVoiceUrl = commonMessage.getLocalVoiceUrl();
+                    String img = commonMessage.getImg();
+                    String localImg = commonMessage.getLocalImg();
+                    if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
+                        result = "[视频消息]";
+                    } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
+                        result = "[语音消息]";
+                    } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
+                        result = "[图片消息]";
+                    }
+                }
                 break;
             case hint:
             case html://html消息
