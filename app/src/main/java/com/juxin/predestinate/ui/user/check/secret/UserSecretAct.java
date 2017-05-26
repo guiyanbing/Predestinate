@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -72,31 +71,28 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
 
     @Override
     public void onItemClick(View convertView, int position) {
+        UserVideo userVideo = userDetail.getUserVideos().get(position);
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-            UIShow.showSecretVideoPlayerDlg(this, userDetail.getUserVideos().get(position));
+            UIShow.showSecretVideoPlayerDlg(this, userVideo);
             return;
         }
 
-        // TODO 判断当前选择视频解锁状态，未解锁礼物弹框，解锁直接进入播放弹框
-//        if () {
-//            UIShow.showSecretGiftDlg(this, userProfile);
-//            return;
-//        }
-        UIShow.showSecretVideoPlayerDlg(this, userDetail.getUserVideos().get(position));
-        reqSetViewTime();
+        // 判断当前选择视频解锁状态，未解锁礼物弹框，解锁直接进入播放弹框
+        if (!userVideo.isCanView()) {
+            UIShow.showSecretGiftDlg(this, userVideo);
+            return;
+        }
+        UIShow.showSecretVideoPlayerDlg(this, userVideo);
+        reqSetViewTime(userVideo);
     }
 
     /**
      * 设置视频播放次数
      */
-    private void reqSetViewTime() {
+    private void reqSetViewTime(UserVideo userVideo) {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
-        ModuleMgr.getCenterMgr().reqSetViewTime(userDetail.getUid(), 0, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-            }
-        });
+        ModuleMgr.getCenterMgr().reqSetViewTime(userDetail.getUid(), userVideo.getId(), null);
     }
 
     // RecyclerView margin
