@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
@@ -242,18 +243,19 @@ public class DBCenterFLetter {
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
-                result.add(BaseMessage.parseToBaseMessage(
-                        CursorUtil.getLong(cursor, FLetter._ID),
-                        CursorUtil.getString(cursor, FLetter.COLUMN_USERID),
-                        CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_KFID),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS),
-                        CursorUtil.getInt(cursor, FLetter.COLUMN_RU),
-                        CursorUtil.getLong(cursor, FLetter.COLUMN_TIME),
-                        CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT),
-                        CursorUtil.getInt(cursor, FLetter.Num)
-                ));
+                Bundle bundle = new Bundle();
+                bundle.putLong(FLetter._ID, CursorUtil.getLong(cursor, FMessage._ID));
+                bundle.putString(FLetter.COLUMN_USERID, CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
+                bundle.putString(FLetter.COLUMN_INFOJSON, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON));
+                bundle.putInt(FLetter.COLUMN_TYPE, CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
+                bundle.putInt(FLetter.COLUMN_KFID, CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
+                bundle.putInt(FLetter.COLUMN_STATUS, CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
+                bundle.putInt(FLetter.COLUMN_RU, CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
+                bundle.putLong(FLetter.COLUMN_TIME, CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
+                bundle.putString(FLetter.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                bundle.putInt(FLetter.Num, CursorUtil.getInt(cursor, FLetter.Num));
+
+                result.add(BaseMessage.parseToLetterMessage(bundle));
             }
             return result;
         } catch (Exception e) {

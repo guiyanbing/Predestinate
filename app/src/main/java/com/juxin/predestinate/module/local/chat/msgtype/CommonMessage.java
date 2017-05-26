@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
@@ -254,23 +255,24 @@ public class CommonMessage extends BaseMessage {
     /**
      * 转换类 fmessage
      */
-    public CommonMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                         int type, int status, int fStatus, long time, String jsonStr) {
-        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+    public CommonMessage(Bundle bundle) {
+        super(bundle);
         convertJSON(getJsonStr());
+
+        PLogger.printObject("xxxxx==="+ toString());
     }
 
-    public CommonMessage(long id, String userID, String infoJson, int type, int kfID,
-                         int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+    public CommonMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
         convertJSON(getJsonStr());
     }
-
 
     @Override
     public void convertJSON(String jsonStr) {
         super.convertJSON(jsonStr);
         JSONObject object = getJsonObject(jsonStr);
+
+        this.setImg(object.optString("img"));
         this.setMsgDesc(object.optString("mct")); //消息内容
         parseCommonJson(object);
     }

@@ -1,7 +1,7 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
 import com.juxin.predestinate.module.util.TimeUtil;
-
 import org.json.JSONObject;
 
 /**
@@ -107,16 +107,14 @@ public class VideoMessage extends BaseMessage {
         this.emLastStatus = emLastStatus;
     }
 
-    public VideoMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                        int type, int status, int fStatus, long time, String jsonStr) {
-        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+    public VideoMessage(Bundle bundle) {
+        super(bundle);
         convertJSON(getJsonStr());
     }
 
     //私聊列表
-    public VideoMessage(long id, String userID, String infoJson, int type, int kfID,
-                       int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+    public VideoMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
         convertJSON(getJsonStr());
     }
 

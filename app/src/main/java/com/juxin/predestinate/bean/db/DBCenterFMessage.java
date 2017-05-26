@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
@@ -77,6 +78,10 @@ public class DBCenterFMessage {
             values.put(FMessage.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
             values.put(FMessage.COLUMN_FSTATUS, 1);// 默认为1插入的时候
             values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
+
+
+
+            PLogger.printObject("yyyyy==="+ baseMessage.getJsonStr());
             values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
             return mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
@@ -284,19 +289,35 @@ public class DBCenterFMessage {
         try {
             while (cursor.moveToNext()) {
                 PLogger.printObject("convert==" + "333333333");
-                result.add(BaseMessage.parseToBaseMessage(
-                        CursorUtil.getLong(cursor, FMessage._ID),
-                        CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
-                        CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
-                        CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),
-                        CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID),
-                        CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID),
-                        CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID),
-                        CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE),
-                        CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
-                        CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
-                        CursorUtil.getLong(cursor, FMessage.COLUMN_TIME),
-                        CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)));
+                Bundle bundle = new Bundle();
+                bundle.putLong(FMessage._ID,  CursorUtil.getLong(cursor, FMessage._ID));
+                bundle.putString(FMessage.COLUMN_CHANNELID,  CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID));
+                bundle.putString(FMessage.COLUMN_WHISPERID,  CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID));
+                bundle.putLong(FMessage.COLUMN_SENDID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID));
+                bundle.putLong(FMessage.COLUMN_MSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID));
+                bundle.putLong(FMessage.COLUMN_CMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID));
+                bundle.putLong(FMessage.COLUMN_SPECIALMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID));
+                bundle.putInt(FMessage.COLUMN_TYPE,  CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE));
+                bundle.putInt(FMessage.COLUMN_STATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS));
+                bundle.putInt(FMessage.COLUMN_FSTATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS));
+                bundle.putLong(FMessage.COLUMN_TIME,  CursorUtil.getLong(cursor, FMessage.COLUMN_TIME));
+                bundle.putString(FMessage.COLUMN_CONTENT,  CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
+
+                result.add(BaseMessage.parseToBaseMessage(bundle));
+
+//                result.add(BaseMessage.parseToBaseMessage(
+//                        CursorUtil.getLong(cursor, FMessage._ID),
+//                        CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID),
+//                        CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID),
+//                        CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID),
+//                        CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID),
+//                        CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID),
+//                        CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID),
+//                        CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE),
+//                        CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS),
+//                        CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS),
+//                        CursorUtil.getLong(cursor, FMessage.COLUMN_TIME),
+//                        CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT)));
             }
             PLogger.printObject("convert==" + "4444444");
             return result;

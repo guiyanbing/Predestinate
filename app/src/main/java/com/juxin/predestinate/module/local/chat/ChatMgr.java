@@ -8,6 +8,7 @@ import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -137,6 +138,86 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
+    /*****************
+     * 重发消息
+     *********************/
+    public void resendMsg(BaseMessage message) {
+        BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(message.getType());
+        if (messageType != null) {
+            message.setStatus(MessageConstant.SENDING_STATUS);
+            onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
+
+            switch (messageType) {
+                case common:{
+                    final CommonMessage commonMessage = (CommonMessage) message;
+
+                    String voiceUrl = commonMessage.getVoiceUrl();
+                    String localVoiceUrl = commonMessage.getLocalVoiceUrl();
+                    String img = commonMessage.getImg();
+                    String localImg = commonMessage.getLocalImg();
+                    if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
+
+                        if(!TextUtils.isEmpty(voiceUrl) && !FileUtil.isURL(voiceUrl)){
+                            sendMessage(commonMessage, null);
+                        }else {
+                            if(TextUtils.isEmpty(voiceUrl)){
+                                voiceUrl = localVoiceUrl;
+                            }
+
+                            sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, voiceUrl, new RequestComplete() {
+                                @Override
+                                public void onRequestComplete(HttpResponse response) {
+                                    if (response.isOk()) {
+                                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                                        commonMessage.setVoiceUrl(upLoadResult.getFile_http_path());
+                                        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                                        long upRet = dbCenter.updateFmessage(commonMessage);
+                                        if (upRet == MessageConstant.ERROR) {
+                                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
+                                            return;
+                                        }
+                                        sendMessage(commonMessage, null);
+                                    }
+                                }
+                            });
+                        }
+                    } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
+                        if(!TextUtils.isEmpty(img) && !FileUtil.isURL(img)){
+                            sendMessage(commonMessage, null);
+                        }else {
+                            if(TextUtils.isEmpty(img)){
+                                img = localImg;
+                            }
+
+                            sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img, new RequestComplete() {
+                                @Override
+                                public void onRequestComplete(HttpResponse response) {
+                                    if (response.isOk()) {
+                                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                                        commonMessage.setImg(upLoadResult.getFile_http_path());
+                                        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                                        long upRet = dbCenter.updateFmessage(commonMessage);
+                                        if (upRet == MessageConstant.ERROR) {
+                                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
+                                            return;
+                                        }
+                                        sendMessage(commonMessage, null);
+                                    }
+                                }
+                            });
+                        }
+                    } else {//文字
+                         sendMessage(commonMessage, null);
+                    }
+
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+
     /**
      * 文字消息
      *
@@ -183,7 +264,7 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
         if (!b) return;
-        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, img_url, new RequestComplete() {
+        sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
@@ -196,8 +277,6 @@ public class ChatMgr implements ModuleBase {
                         return;
                     }
                     sendMessage(commonMessage, null);
-                } else {
-                    updateFail(commonMessage, null);
                 }
             }
         });
@@ -217,7 +296,7 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
         if (!b) return;
-        ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VOICE, url, new RequestComplete() {
+        sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
@@ -230,9 +309,20 @@ public class ChatMgr implements ModuleBase {
                         return;
                     }
                     sendMessage(commonMessage, null);
-                } else {
-                    updateFail(commonMessage, null);
                 }
+            }
+        });
+    }
+
+    private void sendHttpFile(String uploadType, final BaseMessage message, String url, final RequestComplete complete){
+        ModuleMgr.getMediaMgr().sendHttpFile(uploadType, url, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (!response.isOk()) {
+                    updateFail(message, null);
+                  return;
+                }
+                complete.onRequestComplete(response);
             }
         });
     }

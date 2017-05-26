@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 
@@ -69,18 +70,16 @@ public class GiftMessage extends BaseMessage {
         return null;
     }
 
-    public GiftMessage(long id, String userID, String infoJson, int type, int kfID,
-                       int status, int ru, long time, String content, int num) {
-        super(id, userID, infoJson, type, kfID, status, ru, time, content, num);
+    public GiftMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
         parseJson(getJsonStr());
     }
 
     /**
      * 转换类 fmessage
      */
-    public GiftMessage(long id, String channelID, String whisperID, long sendID, long msgID, long cMsgID, long specialMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
-        super(id, channelID, whisperID, sendID, msgID, cMsgID, specialMsgID, type, status, fStatus, time, jsonStr);
+    public GiftMessage(Bundle bundle) {
+        super(bundle);
         parseJson(getJsonStr());
     }
 
