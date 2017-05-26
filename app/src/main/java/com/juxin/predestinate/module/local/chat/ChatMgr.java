@@ -450,8 +450,25 @@ public class ChatMgr implements ModuleBase {
         message.setStatus(MessageConstant.FAIL_STATUS);
         long upRet = dbCenter.updateFmessage(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
-
     }
+
+    /**
+     * 删除多少个小时以前的消息
+     * @param hour
+     * @return
+     */
+    public void deleteMessageHour(int hour) {
+        dbCenter.deleteMessageHour(hour);
+    }
+
+    /**
+     * 删除机器人多少小时以前的消息
+     * @param hour
+     */
+    public void deleteMessageKFIDHour(int hour) {
+        dbCenter.deleteMessageKFIDHour(hour);
+    }
+
 
     /**
      * 接收消息

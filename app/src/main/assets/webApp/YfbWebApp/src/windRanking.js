@@ -25,13 +25,17 @@ var Ranking = Ranking || (function ($) {
     $.ready(function () {
       //循环初始化所有下拉刷新，上拉加载。
       $('.mui-scroll-wrapper').scroll();
-
+      var weekType = _weekRank.now;
       _listener.on('onWatchCommand', function (jcmd, data) {
         console.log(' test456 ', jcmd, JSON.stringify(data));
         if (jcmd !== 'ranking_btn_click') {
           return;
         }
         var windWeekType = data.type;
+        if(windWeekType === weekType){
+          return;
+        }
+        weekType = windWeekType;
         switch (windWeekType) {
           case _weekRank.now:
             _w = '';

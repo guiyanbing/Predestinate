@@ -435,17 +435,13 @@ public class UIShow {
      * @param uid     他人用户id，无详细资料UserProfile对象时，传递uid, UserProfile传递null
      * @param channel 跳转来源渠道{@link CenterConstant}
      */
-    public static void showUserOtherSetAct(final Context context, long uid, UserDetail userDetail, final int channel) {
-        final Intent intent = new Intent(context, UserOtherSetAct.class);
-
+    public static void showUserOtherSetAct(final FragmentActivity context, long uid, UserDetail userDetail, final int channel) {
         if (userDetail != null) {
-            intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userDetail);
-            intent.putExtra(CenterConstant.USER_SET_KEY, channel);
-            context.startActivity(intent);
+            skipUserOtherSetAct(context, userDetail, channel);
             return;
         }
 
-        LoadingDialog.show((FragmentActivity) context, context.getString(R.string.user_info_require));
+        LoadingDialog.show(context, context.getString(R.string.user_info_require));
         ModuleMgr.getCenterMgr().reqOtherInfo(uid, new RequestComplete() {
             @Override
             public void onRequestComplete(final HttpResponse response) {
@@ -460,13 +456,18 @@ public class UIShow {
                         UserDetail userProfile = (UserDetail) response.getBaseData();
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
-                        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-                        intent.putExtra(CenterConstant.USER_SET_KEY, channel);
-                        context.startActivity(intent);
+                        skipUserOtherSetAct(context, userProfile, channel);
                     }
                 });
             }
         });
+    }
+
+    private static void skipUserOtherSetAct(FragmentActivity context, UserDetail userDetail, int channel) {
+        Intent intent = new Intent(context, UserOtherSetAct.class);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userDetail);
+        intent.putExtra(CenterConstant.USER_SET_KEY, channel);
+        context.startActivityForResult(intent, CenterConstant.USER_SET_REQUEST_CODE);
     }
 
     /**

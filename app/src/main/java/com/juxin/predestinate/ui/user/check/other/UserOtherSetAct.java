@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.check.other;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -14,7 +15,6 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
-import com.juxin.predestinate.bean.center.user.others.UserRemark;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -76,6 +76,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         ImageLoader.loadRoundCorners(this, userDetail.getAvatar(), 8, user_head);
         user_nick.setText(userDetail.getNickname());
         user_id.setText("ID: " + userDetail.getUid());
+        user_remark.setText(userDetail.getRemark());
     }
 
     private void initData() {
@@ -86,7 +87,6 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
             return;
         }
 
-        ModuleMgr.getCenterMgr().reqGetRemarkName(userDetail.getUid(), this);            // 请求用户备注
         ModuleMgr.getCenterMgr().reqIsBlack(userDetail.getUid(), this);                  // 用户是否处于黑名单
         //ModuleMgr.getCenterMgr().reqGetOpposingVideoSetting(userProfile.getUid(), this);  // 请求用户接受音视频配置
     }
@@ -272,23 +272,22 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         }, getString(R.string.user_other_set_chat_del), R.color.text_zhuyao_black, "");
     }
 
+    private void setResult() {
+        Intent data = new Intent();
+        data.putExtra("remark", tempRemark);
+        setResult(CenterConstant.USER_SET_RESULT_CODE, data);
+    }
+
     @Override
     public void onRequestComplete(HttpResponse response) {
-        // 获取备注
-        if (response.getUrlParam() == UrlParam.reqGetRemarkName) {
-            if (!response.isOk()) {
-                return;
-            }
-            UserRemark userRemark = (UserRemark) response.getBaseData();
-            user_remark.setText(TextUtils.isEmpty(userRemark.getRemarkName()) ? "" : userRemark.getRemarkName());
-        }
-
         // 设置备注
         if (response.getUrlParam() == UrlParam.reqSetRemarkName) {
             if (!response.isOk()) {
                 PToast.showShort(getString(R.string.user_info_set_fail));
                 return;
             }
+            setResult();
+            userDetail.setRemark(tempRemark);
             user_remark.setText(TextUtils.isEmpty(tempRemark) ? "" : tempRemark);
         }
 

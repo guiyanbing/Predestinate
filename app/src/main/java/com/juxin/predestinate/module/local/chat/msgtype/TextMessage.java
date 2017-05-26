@@ -17,6 +17,7 @@ public class TextMessage extends BaseMessage {
     //打招呼
     private int kf;
     private int sayHelloType;
+    private String htm;//HTM文字
 
     //关注状态1为关注2为取消关注
     private int gz;
@@ -49,6 +50,7 @@ public class TextMessage extends BaseMessage {
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setRu(object.optInt("ru"));
+        this.setHtm(object.optString("htm"));
         return this;
     }
 
@@ -93,6 +95,14 @@ public class TextMessage extends BaseMessage {
 
     public void setSayHelloType(int sayHelloType) {
         this.sayHelloType = sayHelloType;
+    }
+
+    public String getHtm() {
+        return htm;
+    }
+
+    public void setHtm(String htm) {
+        this.htm = htm;
     }
 
     public TextMessage(Bundle bundle) {

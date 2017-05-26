@@ -6,6 +6,7 @@ import android.os.Environment;
 import com.juxin.library.utils.DirUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.SDCardUtil;
 
 import java.io.File;
@@ -167,7 +168,9 @@ public class DirType {
         if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
             SDCardUtil.clearCacheFolder(getExternalCacheDir(App.context), System.currentTimeMillis());
         }
-        // TODO: 2017/5/19 删除数据库缓存
+        //删除48小时后的真人聊天消息数据库缓存
+        ModuleMgr.getChatMgr().deleteMessageHour(48);
+
     }
 
     /**

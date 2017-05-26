@@ -85,7 +85,7 @@ public class UserDetail extends UserInfo {
     protected UserDetail(Parcel in) {
         super(in);
         this.userPhotos = in.createTypedArrayList(UserPhoto.CREATOR);
-        this.userVideos = new ArrayList<UserVideo>();
+        this.userVideos = new ArrayList<>();
         in.readList(this.userVideos, UserVideo.class.getClassLoader());
         this.voice = in.readInt();
     }

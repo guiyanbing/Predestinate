@@ -28,6 +28,7 @@ public class UserInfo extends UserBasic {
     private int ycoin = 0;          // Y币
     private int topN;               // 用户排行
     private int group;              // 1 普通用户  2,3包月用户
+    private int validation_status;  // 用户认证状态  1 通过 0 未通过
 
     // --------------- 自己字段 -----------------------
     private String complete;        // 资料完整度(%)
@@ -45,6 +46,7 @@ public class UserInfo extends UserBasic {
     private int isfollow;           // 是否已关注该用户
     private String online_text;     // 在线时间 "七天前在线"
     private boolean isSayHello;     // 是否已打招呼
+    private String remark;          // 备注名
 
     // 个人空间
     private String datingfor;       // 目的，交友意向
@@ -110,6 +112,7 @@ public class UserInfo extends UserBasic {
         // R
         this.setRedbagsum(detailObject.optDouble("redbagsum"));
         this.setReasons(detailObject.optString("reasons"));
+        this.setRemark(detailObject.optString("remark"));
 
         // S
         this.setShareCode(detailObject.optString("shareCode"));
@@ -122,6 +125,7 @@ public class UserInfo extends UserBasic {
 
         // V
         this.setVideoAuth(detailObject.optInt("video_auth"));
+        this.setValidation_status(detailObject.optInt("validation_status"));
 
         // W
         this.setWeChat(detailObject.optString("wechat"));
@@ -129,6 +133,13 @@ public class UserInfo extends UserBasic {
 
         // Y
         this.setYcoin(detailObject.optInt("ycoin"));
+    }
+
+    /**
+     * 是否通过全部认证
+     */
+    public boolean isVerifyAll() {
+        return validation_status == 1;
     }
 
     /**
@@ -189,6 +200,18 @@ public class UserInfo extends UserBasic {
             return;
         }
         mobile_validation = 0;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public void setValidation_status(int validation_status) {
+        this.validation_status = validation_status;
     }
 
     public String getDatingfor() {
@@ -496,6 +519,7 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.ycoin);
         dest.writeInt(this.topN);
         dest.writeInt(this.group);
+        dest.writeInt(this.validation_status);
         dest.writeString(this.complete);
         dest.writeString(this.idcard);
         dest.writeDouble(this.redbagsum);
@@ -509,6 +533,7 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.isfollow);
         dest.writeString(this.online_text);
         dest.writeByte(this.isSayHello ? (byte) 1 : (byte) 0);
+        dest.writeString(this.remark);
         dest.writeString(this.datingfor);
         dest.writeString(this.concept);
         dest.writeString(this.favplace);
@@ -537,6 +562,7 @@ public class UserInfo extends UserBasic {
         this.ycoin = in.readInt();
         this.topN = in.readInt();
         this.group = in.readInt();
+        this.validation_status = in.readInt();
         this.complete = in.readString();
         this.idcard = in.readString();
         this.redbagsum = in.readDouble();
@@ -550,6 +576,7 @@ public class UserInfo extends UserBasic {
         this.isfollow = in.readInt();
         this.online_text = in.readString();
         this.isSayHello = in.readByte() != 0;
+        this.remark = in.readString();
         this.datingfor = in.readString();
         this.concept = in.readString();
         this.favplace = in.readString();

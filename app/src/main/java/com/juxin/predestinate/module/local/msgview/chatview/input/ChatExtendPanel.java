@@ -44,14 +44,22 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
     }
 
     public void initView() {
-        // 请求音视频开关配置
-        ModuleMgr.getCenterMgr().reqVideoChatConfig(getChatInstance().chatAdapter.getLWhisperId(), this);
         vp = (ViewPager) findViewById(R.id.chat_panel_viewpager);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
         vp.setAdapter(viewPagerAdapter);
 
         show(false);
+    }
+
+    // 延迟请求音视频开关配置
+    private void reqVideoChatConfig() {
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                ModuleMgr.getCenterMgr().reqVideoChatConfig(getChatInstance().chatAdapter.getLWhisperId(), ChatExtendPanel.this);
+            }
+        }, 200);
     }
 
     private List<View> getAllViews() {
@@ -67,6 +75,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
     }
 
     private View getChildView(int index) {
+        reqVideoChatConfig();
         List<CommonGridBtnPanel.BTN_KEY> listTemp = chatExtend.getPageExtend(index);
 
         if (listTemp == null || listTemp.isEmpty()) {
