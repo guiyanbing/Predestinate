@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
@@ -34,7 +33,6 @@ import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -173,21 +171,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         } else {
             onTextDisplayContent(msg);
         }
-
-
-//        text.setMovementMethod(LinkMovementMethod.getInstance());
-//        CharSequence linkContent = text.getText();
-//        if (linkContent instanceof Spannable) {
-//            int end = linkContent.length();
-//            Spannable sp = (Spannable) linkContent;
-//            URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
-//            SpannableStringBuilder style = new SpannableStringBuilder(linkContent);
-//            style.clearSpans();
-//            for (int i = 0; i < urls.length; i++) {
-//                style.setSpan(new Hyperlinks(urls[i].getURL()), sp.getSpanStart(urls[i]), sp.getSpanEnd(urls[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            }
-//            text.setText(style);
-//        }
 
         return true;
     }
@@ -432,5 +415,14 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         } else {
             img.setImageResource(R.drawable.y1_talk_sound_l);
         }
+    }
+
+    @Override
+    public boolean onClickErrorResend(BaseMessage msgData) {
+        if (msgData == null || !(msgData instanceof CommonMessage)) {
+            return false;
+        }
+        setDialog(msgData, null);
+        return true;
     }
 }

@@ -13,6 +13,7 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -119,7 +120,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 //        }
 
         if(MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()){
-            UIShow.showUserOtherSetAct(getChatInstance().context,msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
+            UIShow.showUserOtherSetAct((FragmentActivity) getChatInstance().context,msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
         }
         return true;
     }
@@ -284,7 +285,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 
                     @Override
                     public void onSubmit() {
-                     //   ModuleMgr.getChatMgr().resendMsg(msgData);
+                        ModuleMgr.getChatMgr().resendMsg(msgData);
                         if(listener != null){
                             listener.onSubmit();
                         }

@@ -74,6 +74,12 @@ public class UserInfoPanel extends BasePanel {
         userInfoAdapter.setList(userInfoList);
     }
 
+    public void refreshView(UserDetail userDetail) {
+        this.userDetail = userDetail;
+        fillBaseValue();
+        userInfoAdapter.setList(userInfoList);
+    }
+
     // 填充个人空间
     private void fillZoneValue() {
         String online = TextUtils.isEmpty(userDetail.getOnline_text()) ? secretStr : userDetail.getOnline_text();
@@ -99,7 +105,7 @@ public class UserInfoPanel extends BasePanel {
         String income = TextUtils.isEmpty(userDetail.getIncome()) ? notFill : userDetail.getIncome();
         String marry = TextUtils.isEmpty(userDetail.getMarry()) ? notFill : userDetail.getMarry();
         String age = userDetail.getAge() == 0 ? notFill : getContext().getString(R.string.user_info_age, userDetail.getAge());
-        String nickName = userDetail.getNickname();
+        String nickName = TextUtils.isEmpty(userDetail.getRemark()) ? userDetail.getNickname() : userDetail.getRemark();
         String[] baseValues = new String[]{nickName, gender, age, address, height, income, marry};
         int count = zoneDatas.length;
         for (int i = count; i < baseDatas.length + count; i++) {

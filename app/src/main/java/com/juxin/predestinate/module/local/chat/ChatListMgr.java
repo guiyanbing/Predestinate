@@ -25,8 +25,6 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
@@ -174,6 +172,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param messageList
      */
     public void deleteBatchMessage(List<BaseMessage> messageList) {
+        PLogger.printObject("messageList===" + messageList.size());
         for (BaseMessage temp : messageList) {
             dbCenter.deleteMessage(temp.getLWhisperID());
         }
@@ -240,6 +239,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         ModuleMgr.getChatMgr().inject();
                         PLogger.d("uid=======" + App.uid);
                         getWhisperList();
+                        ModuleMgr.getChatMgr().deleteMessageKFIDHour(24);
                     }
                 } else {
                     logout();

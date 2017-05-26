@@ -3,11 +3,13 @@ package com.juxin.predestinate.ui.user.check;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -82,7 +84,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     }
 
     private void initTitle() {
-        setBackView(userDetail.getNickname());
+        setBackView(TextUtils.isEmpty(userDetail.getRemark()) ? userDetail.getNickname() : userDetail.getRemark());
         findViewById(R.id.cut_line).setVisibility(View.GONE);
         if (userDetail.isMan()) {
             setTitleBackground(R.color.picker_blue_color);
@@ -210,6 +212,22 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        PLogger.d("ksjdkjkjk----111" + requestCode +", " + resultCode);
+
+        // 更新备注名
+        if (requestCode ==CenterConstant.USER_SET_REQUEST_CODE ) {
+            switch (resultCode){
+                case CenterConstant.USER_SET_RESULT_CODE:
+                    String remark = data.getStringExtra("remark");
+                    if (TextUtils.isEmpty(remark)) return;
+
+                    PLogger.d("ksjdkjkjk----" + remark);
+                    setTitle(remark);
+                    userDetail.setRemark(remark);
+                    footPanel.refreshView(userDetail);
+                    break;
+            }
+        }
     }
 
     @Override
