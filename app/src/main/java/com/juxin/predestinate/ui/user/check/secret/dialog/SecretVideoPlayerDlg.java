@@ -16,7 +16,6 @@ import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
-import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -59,13 +58,11 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         tv_video_time.setText(TimeUtil.getLongToMinuteTime(userVideo.getDuration() * 1000l));
     }
 
-
     /**
      * 下载小视频
      */
     private void downloadVideo() {
-        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".mp4";
-        ModuleMgr.getHttpMgr().download(userVideo.getVideo(), filePath, new DownloadListener() {
+        ModuleMgr.getHttpMgr().downloadVideo(userVideo.getVideo(), new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {
                 progress_bar.setVisibility(View.VISIBLE);
