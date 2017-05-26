@@ -98,9 +98,9 @@
 }
 
 # okhttp
--dontwarn com.squareup.okhttp.**
--keep class com.squareup.okhttp.** { *;}
 -dontwarn okio.**
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
 
 # retrofit2
 -dontwarn retrofit2.**

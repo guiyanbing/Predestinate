@@ -18,7 +18,9 @@ import com.squareup.sqlbrite.SqlBrite;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
+import rx.Scheduler;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * fletter 处理
@@ -201,7 +203,7 @@ public class DBCenterFLetter {
                         }
                         return false;
                     }
-                });
+                }).unsubscribeOn(Schedulers.io());
     }
 
     /**

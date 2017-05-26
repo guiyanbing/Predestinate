@@ -97,8 +97,8 @@ public class CenterMgr implements ModuleBase, PObserver {
     public void reqVerifyCodeEx(String mobile, RequestComplete complete) {
         HashMap<String, Object> getparam = new HashMap<>();
         getparam.put("cellPhone", mobile);
-        getparam.put("sign",App.context.getResources().getString(R.string.app_name));
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode,getparam,complete);
+        getparam.put("sign", App.context.getResources().getString(R.string.app_name));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode, getparam, complete);
     }
 
 
@@ -361,6 +361,8 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取他人音视频开关配置
      */
     public void reqVideoChatConfig(long uid, RequestComplete complete) {
+        PLogger.d("videoConfig: " + uid);
+
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("uid", uid);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqVideoChatConfig, post_param, complete);
