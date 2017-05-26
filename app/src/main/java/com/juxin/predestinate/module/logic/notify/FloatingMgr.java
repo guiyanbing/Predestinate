@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
@@ -47,6 +47,17 @@ public class FloatingMgr implements Handler.Callback {
         }
     }
 
+    private boolean canNotify = true;
+
+    /**
+     * 设置是否允许弹出floating提示，特殊情况使用
+     *
+     * @param canNotify 是否允许
+     */
+    public void setCanNotify(boolean canNotify) {
+        this.canNotify = canNotify;
+    }
+
     /**
      * 对外功能。
      */
@@ -60,6 +71,7 @@ public class FloatingMgr implements Handler.Callback {
      * @return 添加成功返回true。
      */
     public boolean addPanel(FloatingBasePanel floatingBasePanel) {
+        if (!canNotify) return false;
         if (floatingBasePanel == null) return false;
 
         synchronized (this) {
@@ -199,7 +211,7 @@ public class FloatingMgr implements Handler.Callback {
         layout.addView(view, params);
         tempViewGroup.addView(layout);
         Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_in);
-        animation.setInterpolator(new OvershootInterpolator());
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
         layout.startAnimation(animation);
 
         addView();
@@ -226,7 +238,7 @@ public class FloatingMgr implements Handler.Callback {
         if (layout == null) return;
 
         Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_out);
-        animation.setInterpolator(new OvershootInterpolator());
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
         animation.setFillAfter(true);
         layout.setInterceptTouchEvent(true);
         layout.startAnimation(animation);
