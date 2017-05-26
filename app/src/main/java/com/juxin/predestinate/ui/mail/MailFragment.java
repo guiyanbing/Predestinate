@@ -17,6 +17,8 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -39,7 +41,7 @@ import java.util.List;
  */
 
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
-        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
+        SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener, ChatMsgInterface.WhisperMsgListener {
 
     private CheckIntervalTimeUtil timeUtil;
     private MailFragmentAdapter mailFragmentAdapter;
@@ -59,12 +61,17 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         setTitle(getResources().getString(R.string.main_btn_mail));
         onTitleRight();
         initView();
+        initListenerAndRequest();
 
-        MsgMgr.getInstance().attach(this);
-        ModuleMgr.getCommonMgr().getFriendsSize();
         return getContentView();
     }
 
+
+    private void initListenerAndRequest() {
+        MsgMgr.getInstance().attach(this);
+        ChatSpecialMgr.getChatSpecialMgr().attachWhisperListener(this);
+        ModuleMgr.getCommonMgr().getFriendsSize();
+    }
     private void onTitleRight() {
         setTitleRightImgGone();
         View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
@@ -347,5 +354,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
+
+    @Override
+    public void onUpdateWhisper(BaseMessage message) {
+        if (!TextUtils.isEmpty(message.getWhisperID())) {
+            detectInfo(listMail);
+            PLogger.printObject("message====" + message);
+            //    ModuleMgr.getChatListMgr().getWhisperList();
+        }
     }
 }
