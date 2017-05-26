@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CircularCoverView;
 import com.juxin.library.view.CustomFrameLayout;
@@ -155,7 +154,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String localVoiceUrl = msg.getLocalVoiceUrl();
         String img = msg.getImg();
         String localImg = msg.getLocalImg();
-        PLogger.printObject("图片消==" + msg.toString());
         if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
 
             onVideoDisplayContent(msg);
@@ -197,7 +195,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             url = msg.getImg();
         }
 
-        PLogger.d("url====" + url + ",  " + msg.getImg());
         ImageLoader.loadRoundCorners(getContext(), url, chat_item_img);
 
 //        if (FileUtil.isURL(url)) {
@@ -270,7 +267,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
     private void onVideoClickContent(CommonMessage msg) {
         String url = msg.getLocalVideoUrl();
         if (TextUtils.isEmpty(url)) url = msg.getVideoUrl();
-        PLogger.d("video click content url：" + url);
 
         //视频播放
         preview_play.setVisibility(View.GONE);
@@ -297,8 +293,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         if (TextUtils.isEmpty(url)) {
             url = msg.getVoiceUrl();
         }
-
-        PLogger.printObject(url);
 
         ChatMediaPlayer.getInstance().togglePlayVoice(ModuleMgr.getChatListMgr().spliceStringAmr(url), this);
 
@@ -343,7 +337,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         preview_surface.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                PLogger.d("------> mediaPlayer is error");
                 resetPlay();
                 return true;
             }
@@ -364,8 +357,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             palySound = false;
             MediaNotifyUtils.playSound(getContext(), R.raw.play_voice_after);
         }
-
-        PLogger.d(filePath);
 
         if (msgData != null) {
             try {

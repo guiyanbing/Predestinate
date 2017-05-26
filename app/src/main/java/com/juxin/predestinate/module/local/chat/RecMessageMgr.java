@@ -1,6 +1,8 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -90,6 +92,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
 
             if (isSave) {//是否保存
+                message.setInfoJson(null);
                 ModuleMgr.getChatMgr().onReceiving(message);
             } else {
                 ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);

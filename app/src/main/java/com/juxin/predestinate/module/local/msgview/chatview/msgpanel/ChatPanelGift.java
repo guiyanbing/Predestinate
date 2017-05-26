@@ -94,6 +94,7 @@ public class ChatPanelGift extends ChatPanel {
                    public void onRequestComplete(HttpResponse response) {
                        if (response.isOk()){
                            // TODO: 2017/5/26 往数据库插一条hint提示消息，标识已接受礼物
+                         //   ModuleMgr.getChatMgr().onLocalReceiving(message);
                        }
                    }
                });
