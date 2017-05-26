@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -41,7 +42,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     private ScrollView scrollLayout;
     private TextView tv_sayhi;
-    private LinearLayout container, videoBottom, voiceBottom, sayHibottom;
+    private LinearLayout container, videoBottom, voiceBottom, sayHibottom, mGiftTipsContainerV;
 
     /**********
      * panel
@@ -75,6 +76,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail);
         container.addView(headPanel.getContentView());
+        mGiftTipsContainerV = (LinearLayout) findViewById(R.id.ll_chat_greeting_tips_container);
 
         footPanel = new UserCheckInfoFootPanel(this, channel, userDetail);
         footPanel.setSlideIgnoreView(this);
@@ -254,6 +256,17 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             case MsgType.MT_MyInfo_Change:
                 userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 footPanel.refreshView(userDetail);
+                break;
+
+            case MsgType.MT_INFO_SEND_GIFT_FLAG:
+
+                if(!(Boolean) value)
+                    return;
+                PSP.getInstance().put(Constant.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, false);
+                mGiftTipsContainerV.setVisibility(View.GONE);
+                break;
+
+            default:
                 break;
         }
     }

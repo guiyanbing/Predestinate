@@ -131,6 +131,11 @@ public class MsgType {
      */
     public static final String MT_SEND_GIFT_FLAG = "MT_SEND_GIFT_FLAG";
 
+    /**
+     * 发送礼物是否成功
+     */
+    public static final String MT_INFO_SEND_GIFT_FLAG = "MT_INFO_SEND_GIFT_FLAG";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**
