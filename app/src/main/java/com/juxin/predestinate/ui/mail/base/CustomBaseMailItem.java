@@ -79,7 +79,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_last_time = (TextView) contentView.findViewById(R.id.mail_item_last_time);
         item_last_status = (TextView) contentView.findViewById(R.id.mail_item_last_status);
         item_headpic.setOnClickListener(this);
-        // mail_item_letter.setOnClickListener(this);
 
         item_ranking_state = (LinearLayout) contentView.findViewById(R.id.mail_item_ranking_state);
         item_ranking_type = (TextView) contentView.findViewById(R.id.mail_item_ranking_type);
@@ -97,7 +96,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     public void showData(BaseMessage msgData, boolean isSlideLoading) {
-        PLogger.printObject("msgData==" + msgData.getAvatar() + "===" + msgData.getName());
+        PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
         ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();

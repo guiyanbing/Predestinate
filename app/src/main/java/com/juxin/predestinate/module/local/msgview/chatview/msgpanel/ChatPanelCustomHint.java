@@ -14,6 +14,8 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.ui.utils.MyURLSpan;
 
 /**
  * 小提示消息
@@ -37,20 +39,17 @@ public class ChatPanelCustomHint extends ChatPanel {
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !(msgData instanceof TextMessage)) {
-            return false;
-        }
+        if (msgData == null || !(msgData instanceof TextMessage)) return false;
 
-        TextMessage hintMessage = (TextMessage) msgData;
-        String hintContent = hintMessage.getMsgDesc();
-        if(TextUtils.isEmpty(hintContent)){
+        String hintContent = TextUtils.isEmpty(msgData.getMsgDesc()) ?
+                ((TextMessage) msgData).getHtm() : msgData.getMsgDesc();
+        if (TextUtils.isEmpty(hintContent)) {
             getContentView().setVisibility(View.GONE);
-        }else {
+        } else {
             text.setText(Html.fromHtml(hintContent));
         }
-
+        MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), text, hintContent);
         text.setMovementMethod(LinkMovementMethod.getInstance());
-        viewGroup.removeAllViews();
         return true;
     }
 }

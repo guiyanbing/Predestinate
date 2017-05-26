@@ -472,6 +472,7 @@
 
     <string name="chat_gift_hello_man">HI,帅哥</string>
     <string name="chat_gift_hello_woman">HI,美女</string>
+    <string name="chat_gift_has_received">礼物已折现，已放入钱包！</string>
     <string name="chat_click_receive_gift">点击收礼</string>
     <string name="chat_click_send_gift">点击赠送</string>
 
@@ -592,7 +593,10 @@
     <string name="open_the_vip_can_be_operation">开通VIP才可以操作!</string>
     <string name="cancel_the_attention">取消关注</string>
     <string name="just_looking_for_you">刚刚关注了你</string>
-    <string name="just_now">刚刚给</string>
+    <string name="just_now">刚刚送给</string>
+    <string name="just_now_get">刚刚获得</string>
+    <string name="very_rich">,真土豪</string>
+    <string name="very_greater">,太赞了</string>
     <string name="sent">送了</string>
     <string name="ge">个</string>
 

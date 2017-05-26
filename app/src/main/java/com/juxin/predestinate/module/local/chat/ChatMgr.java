@@ -121,7 +121,7 @@ public class ChatMgr implements ModuleBase {
                             if(dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR){
                                return;
                             }
-                       //     ModuleMgr.getChatListMgr().getWhisperList();
+                          //  ModuleMgr.getChatListMgr().getWhisperList();
                         }
                         dbCenter.getCenterFMessage().insertMsg(textMessage);
                     }
@@ -481,6 +481,16 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 本地模拟消息
+     * @param message
+     */
+    public void onLocalReceiving(BaseMessage message) {
+        message.setDataSource(MessageConstant.FOUR);
+        message.setStatus(MessageConstant.READ_STATUS);
+        pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
+    }
+
+    /**
      * 获取历史聊天记录
      *
      * @param channelID 频道ID
@@ -518,12 +528,11 @@ public class ChatMgr implements ModuleBase {
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if(ret != MessageConstant.ERROR){
-            //    ModuleMgr.getChatListMgr().getWhisperList();
+               // ModuleMgr.getChatListMgr().getWhisperList();
             }
 //            updateLocalReadStatus(channelID, whisperID, last_msgid);
         }
     }
-
 
     private void pushMsg(boolean ret, BaseMessage message) {
         if (message == null) return;
@@ -782,11 +791,13 @@ public class ChatMgr implements ModuleBase {
 
                 if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
-                    dbCenter.getCacheCenter().storageProfileData(infoLightweights);
+
                     boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
                     if(ret){
                  //       ModuleMgr.getChatListMgr().getWhisperList();
                     }
+
+                    dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                 }
             }
         });

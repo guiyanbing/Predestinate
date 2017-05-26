@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.view.DownloadProgressView;
@@ -59,13 +58,11 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         tv_video_time.setText(TimeUtil.getLongToMinuteTime(userVideo.getDuration() * 1000l));
     }
 
-
     /**
      * 下载小视频
      */
     private void downloadVideo() {
-        PLogger.d("dowmsmiii---" + userVideo.getVideo());
-        ModuleMgr.getHttpMgr().download(userVideo.getVideo(), new DownloadListener() {
+        ModuleMgr.getHttpMgr().downloadVideo(userVideo.getVideo(), new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {
                 progress_bar.setVisibility(View.VISIBLE);
