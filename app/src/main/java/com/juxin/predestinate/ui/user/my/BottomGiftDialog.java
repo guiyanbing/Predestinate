@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.my;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -27,6 +28,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
@@ -59,12 +62,17 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private int onePageCount = 0;
     private GiftPopView gpvPop;
     private int num;
+    private Context mContext;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
         setGravity(Gravity.BOTTOM);
         setDialogSizeRatio(-2, -2);
         setCancelable(true);
+    }
+
+    public void setCtx(Context context) {
+        this.mContext = context;
     }
 
     @Override
@@ -249,7 +257,11 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         PToast.showShort(info.getMsg()+"");
 
         if(response.isOk()) {
-            MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, true);
+            if(mContext instanceof PrivateChatAct) {
+                MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, true);
+            }else if(mContext instanceof  UserCheckInfoAct) {
+                MsgMgr.getInstance().sendMsg(MsgType.MT_INFO_SEND_GIFT_FLAG, true);
+            }
         }
     }
     private CharSequence temp;

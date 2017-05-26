@@ -973,6 +973,7 @@ public class UIShow {
         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
             dialog = new BottomGiftDialog();
             dialog.setToId(to_id);
+            dialog.setCtx(context);
             dialog.showDialog((FragmentActivity) context);
         } else {
             LoadingDialog.show((FragmentActivity) context);
