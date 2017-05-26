@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/f1_chat_item_left_dialog"
+        android:paddingBottom="1px"
+        android:paddingLeft="9dp"
+        android:paddingRight="1px"
+        android:paddingTop="1px">
+
+        <ImageView
+            android:id="@+id/iv_gift_img"
+            android:layout_width="@dimen/px185_dp"
+            android:layout_height="@dimen/px185_dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/default_pic" />
+
+        <LinearLayout
+            android:id="@+id/ll_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_gift_img"
+            android:orientation="vertical"
+            android:padding="@dimen/px15_dp">
+
+            <TextView
+                android:id="@+id/tv_gift_hello"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HI，女神"
+                android:textColor="@color/color_040000"
+                android:textSize="@dimen/px45_sp" />
+
+            <TextView
+                android:id="@+id/tv_gift_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px30_dp"
+                android:text="送你棒棒糖一个"
+                android:textColor="@color/color_777777"
+                android:textSize="@dimen/px42_sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_gift_me"
+            android:layout_width="@dimen/px160_dp"
+            android:layout_height="@dimen/px160_dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/f1_give_me_flag" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px70_dp"
+            android:layout_below="@+id/iv_gift_img"
+            android:background="@drawable/f1_chat_gift_ask_gift_bg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/px20_dp"
+            android:text="@string/chat_click_send_gift"
+            android:textColor="#ea5514"
+            android:textSize="@dimen/px42_sp" />
+    </RelativeLayout>
+</LinearLayout>
