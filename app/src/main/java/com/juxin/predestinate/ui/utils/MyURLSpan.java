@@ -69,7 +69,7 @@ public class MyURLSpan extends ClickableSpan {
                 sUrl = sUrl.replace("downex1://", "http://");
                 sUrl = sUrl.replace("downex2://", "ftp://");
                 sUrl = sUrl.replace("downex3://", "https://");
-                ModuleMgr.getHttpMgr().download(sUrl, new DownloadListener() {
+                ModuleMgr.getHttpMgr().downloadApk(sUrl, new DownloadListener() {
                     @Override
                     public void onStart(String url, String filePath) {
 

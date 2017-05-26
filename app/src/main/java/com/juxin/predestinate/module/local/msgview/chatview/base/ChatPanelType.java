@@ -13,7 +13,7 @@ public enum ChatPanelType {
     /**
      * 标示聊天消息中出现的面板是否用来显示自定义格式，默认没有头像和状态。
      */
-    CPT_Custome,
+    CPT_Custom,
 
     /**
      * 右上角位置固定提示。

@@ -103,6 +103,23 @@ public interface HttpMgr extends ModuleBase {
     HTCallBack download(String url, String filePath, DownloadListener downloadListener);
 
 
+    /**
+     * 下载视频文件
+     */
+    HTCallBack downloadVideo(String url, DownloadListener downloadListener);
 
-    HTCallBack download(String url, DownloadListener downloadListener);
+    /**
+     * 下载图片文件
+     */
+    HTCallBack downloadPic(String url, DownloadListener downloadListener);
+
+    /**
+     * 下载音频文件
+     */
+    HTCallBack downloadVoice(String url, DownloadListener downloadListener);
+
+    /**
+     * 下载Apk文件
+     */
+    HTCallBack downloadApk(String url, DownloadListener downloadListener);
 }

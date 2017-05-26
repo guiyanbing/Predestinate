@@ -17,6 +17,7 @@ import com.juxin.library.utils.APKUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
@@ -419,12 +420,9 @@ public class UIShow {
      *
      * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context, UserDetail userProfile) {
+    public static void showUserSecretAct(Context context, int channel, UserDetail userProfile) {
         Intent intent = new Intent(context, UserSecretAct.class);
-        if (userProfile != null) {
-            intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
-        }
-
+        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, channel);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
         context.startActivity(intent);
     }
@@ -1301,8 +1299,10 @@ public class UIShow {
     /**
      * 查看视频：视频播放页
      */
-    public static void showSecretVideoPlayerDlg(FragmentActivity context) {
-        context.startActivity(new Intent(context, SecretVideoPlayerDlg.class));
+    public static void showSecretVideoPlayerDlg(FragmentActivity context, UserVideo userVideo) {
+        Intent intent = new Intent(context, SecretVideoPlayerDlg.class);
+        intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
+        context.startActivity(intent);
     }
 
     /**

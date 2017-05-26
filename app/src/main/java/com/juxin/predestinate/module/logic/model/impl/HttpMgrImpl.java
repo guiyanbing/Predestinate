@@ -11,6 +11,7 @@ import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
@@ -102,10 +103,28 @@ public class HttpMgrImpl implements HttpMgr {
         return reqHttp(urlParam, null, file_param, null, post_param, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
     }
 
+    @Override
+    public HTCallBack downloadVideo(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".mp4";
+        return download(url, filePath, downloadListener);
+    }
 
     @Override
-    public HTCallBack download(String url, DownloadListener downloadListener) {
-        return download(url, "", downloadListener);
+    public HTCallBack downloadPic(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".jpg";
+        return download(url, filePath, downloadListener);
+    }
+
+    @Override
+    public HTCallBack downloadVoice(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".wav";
+        return download(url, filePath, downloadListener);
+    }
+
+    @Override
+    public HTCallBack downloadApk(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".apk";
+        return download(url, filePath, downloadListener);
     }
 
     @Override

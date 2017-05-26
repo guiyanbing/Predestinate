@@ -5,72 +5,88 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PToast;
+import com.juxin.library.request.DownloadListener;
 import com.juxin.library.view.DownloadProgressView;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
+import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
  * 私密视频播放页
  * Created by Su on 2017/5/17.
  */
-
 public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickListener {
     private TextureVideoView tvv_player;
     private ImageView iv_pic, iv_start;
+    private TextView tv_video_time;
     private DownloadProgressView progress_bar;
-    private String mp4Path = "";
-    private String picPath = "";
+    private UserVideo userVideo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_secret_video_player);
-
         initView();
     }
 
-
     private void initView() {
-        iv_pic = (ImageView) findViewById(R.id.iv_photo_video_pic);
-        iv_start = (ImageView) findViewById(R.id.iv_photo_video_start);
-        tvv_player = (TextureVideoView) findViewById(R.id.tvv_photo_video_player);
-        progress_bar = (DownloadProgressView) findViewById(R.id.progress_bar_photo_view);
-        iv_pic.setVisibility(View.VISIBLE);
+        userVideo = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_VIDEO_KEY);
+        if (userVideo == null) {
+            PToast.showShort(getString(R.string.user_info_check_video_fail));
+            return;
+        }
+
+        iv_pic = (ImageView) findViewById(R.id.iv_cover);
+        iv_start = (ImageView) findViewById(R.id.btn_start);
+        tvv_player = (TextureVideoView) findViewById(R.id.tvv_player);
+        progress_bar = (DownloadProgressView) findViewById(R.id.progress_bar);
+        tv_video_time = (TextView) findViewById(R.id.tv_video_time);
 
         iv_start.setOnClickListener(this);
-        findViewById(R.id.iv_photo_view_back).setOnClickListener(this);
+        findViewById(R.id.btn_back).setOnClickListener(this);
 
-        ImageLoader.loadFitCenter(this, picPath, iv_pic);
+        ImageLoader.loadFitCenter(this, userVideo.getPic(), iv_pic);
+        tv_video_time.setText(TimeUtil.getLongToMinuteTime(userVideo.getDuration() * 1000l));
     }
-
 
     /**
      * 下载小视频
      */
-    private void downloadVideo(String url) {
-//        ModuleMgr.getHttpMgr().reqVideo(url, new NetInterface.OnTransmissionListener() {
-//            @Override
-//            public void onProcess(String s, int i, long l) {
-//                progress_bar.setProgress(i);
-//            }
-//
-//            @Override
-//            public void onStart(String s, String s1) {
-//                progress_bar.setVisibility(View.VISIBLE);
-//                progress_bar.setProgress(0);
-//            }
-//
-//            @Override
-//            public void onStop(String s, String s1, int i) {
-//                progress_bar.setVisibility(View.GONE);
-//                playLocalVideo(s1);
-//            }
-//
-//        });
+    private void downloadVideo() {
+        ModuleMgr.getHttpMgr().downloadVideo(userVideo.getVideo(), new DownloadListener() {
+            @Override
+            public void onStart(String url, String filePath) {
+                progress_bar.setVisibility(View.VISIBLE);
+                progress_bar.setProgress(0);
+            }
+
+            @Override
+            public void onProcess(String url, int process, long size) {
+                progress_bar.setProgress(process);
+            }
+
+            @Override
+            public void onSuccess(String url, String filePath) {
+                progress_bar.setVisibility(View.GONE);
+                playLocalVideo(filePath);
+            }
+
+            @Override
+            public void onFail(String url, Throwable throwable) {
+                progress_bar.setVisibility(View.GONE);
+                resetPlay();
+                PToast.showShort(getString(R.string.user_info_check_video_fail));
+            }
+        });
     }
 
     /**
@@ -120,14 +136,13 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         iv_start.setVisibility(View.VISIBLE);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_photo_video_start:
+            case R.id.btn_start:
                 onViewStart();
                 break;
-            case R.id.iv_photo_view_back:
+            case R.id.btn_back:
                 finish();
                 break;
         }
@@ -136,6 +151,6 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
     private void onViewStart() {
         iv_start.setVisibility(View.GONE);
         iv_pic.setVisibility(View.GONE);
-        downloadVideo(mp4Path);
+        downloadVideo();
     }
 }

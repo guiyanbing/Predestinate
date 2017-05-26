@@ -48,7 +48,7 @@ import com.juxin.predestinate.ui.web.WebFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, ChatMsgInterface.WhisperMsgListener, PObserver {
+public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
     private FragmentManager fragmentManager;
     private DiscoverFragment discoverFragment;
@@ -96,7 +96,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void initListenerAndRequest() {
         MsgMgr.getInstance().attach(this);
         onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
-        ChatSpecialMgr.getChatSpecialMgr().attachWhisperListener(this);
     }
 
     private void initFragment() {
@@ -261,14 +260,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         layout_main_bottom.setVisibility(isGone ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    public void onUpdateWhisper(BaseMessage message) {
-        if (!TextUtils.isEmpty(message.getWhisperID())) {
-            PLogger.printObject("message====" + message);
-            //    ModuleMgr.getChatListMgr().getWhisperList();
-        }
-    }
-
     private void onMsgNum(int num) {
         mail_num.setText(ModuleMgr.getChatListMgr().getUnreadTotalNum(num));
         mail_num.setVisibility(num > 0 ? View.VISIBLE : View.GONE);
@@ -408,6 +399,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
         lastOfflineAVMap.clear();
-        ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
+        if (bean != null) {
+            ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
+        }
+
     }
 }
