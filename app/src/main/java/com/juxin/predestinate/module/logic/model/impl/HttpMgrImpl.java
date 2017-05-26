@@ -69,7 +69,7 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack reqPostNoCacheNoEncHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
-        return reqPostHttp(urlParam, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, true, requestCallback);
+        return reqPostHttp(urlParam, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
     }
 
     @Override

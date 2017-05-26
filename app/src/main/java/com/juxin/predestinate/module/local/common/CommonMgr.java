@@ -823,7 +823,7 @@ public class CommonMgr implements ModuleBase {
         if (payCType > -1) {
             postParms.put("payCType", payCType);
         }
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWX, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqWX, postParms, complete);
     }
 
     /**
@@ -844,8 +844,8 @@ public class CommonMgr implements ModuleBase {
         postParms.put("productid", payID);
         postParms.put("total_fee", payMoney);
         postParms.put("payCType", 1000);
-
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParms, complete);
+        postParms.put("user_client_type", 2);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(urlParam, postParms, complete);
     }
 
     /**
@@ -871,18 +871,18 @@ public class CommonMgr implements ModuleBase {
         postParms.put("sn", sn);// 充值卡号
         postParms.put("password", password);// 充值卡密码
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqPhoneCard, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqPhoneCard, postParms, complete);
     }
 
     public void reqSearchPhoneCardMethod(String orderNo, RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("orderNo", orderNo);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSearchPhoneCard, getParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqSearchPhoneCard, getParams, complete);
     }
 
     public void reqangelPayF(RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayF, getParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqangelPayF, getParams, complete);
     }
 
     public void reqAngelPay(String name, int payID, int total_fee, String pan, String mobile, String idcard, String nickname, RequestComplete complete) {
@@ -896,7 +896,7 @@ public class CommonMgr implements ModuleBase {
         postParms.put("idcard", idcard);// 身份证
         postParms.put("realname", nickname);//名称
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPay, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqangelPay, postParms, complete);
     }
 
     public void reqAngelPayB(String name, int payID, int total_fee, String mobile, String nickname, RequestComplete complete) {
@@ -908,12 +908,12 @@ public class CommonMgr implements ModuleBase {
         postParms.put("mobile", mobile);//电话
         postParms.put("realname", nickname);//名称
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayB, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqangelPayB, postParms, complete);
     }
 
     public void reqAnglePayQuery(RequestComplete complete) {
         HashMap<String, Object> getParms = new HashMap<>();
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqAnglePayQuery, getParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqAnglePayQuery, getParms, complete);
     }
 
     //================ 发现 start =========================\\

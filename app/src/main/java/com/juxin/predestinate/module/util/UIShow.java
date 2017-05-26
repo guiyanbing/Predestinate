@@ -715,7 +715,7 @@ public class UIShow {
      *
      * @param activity
      */
-    public static void showPayListAct(final FragmentActivity activity, int orderID) {
+    public static void showPayListAct(final FragmentActivity activity, final int orderID) {
         LoadingDialog.show(activity, "生成订单中");
         ModuleMgr.getCommonMgr().reqGenerateOrders(orderID, new RequestComplete() {
             @Override
@@ -726,6 +726,7 @@ public class UIShow {
                     public void call() {
                         PayGood payGood = new PayGood(response.getResponseString());
                         if (payGood.isOK()) {
+                            payGood.setPay_id(orderID);
                             Intent intent = new Intent(activity, PayListAct.class);
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
