@@ -136,6 +136,7 @@
     </LinearLayout>
 
     <!-- 礼物悬框 -->
+
     <ImageView
         android:id="@+id/iv_gift"
         android:layout_width="@dimen/px135_dp"
@@ -151,12 +152,12 @@
         android:id="@+id/ll_chat_greeting_tips_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/input_giftview"
-        android:layout_alignRight="@id/input_giftview"
+        android:layout_above="@id/iv_gift"
+        android:layout_alignRight="@id/iv_gift"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_chat_greeting_tips"
