@@ -7,6 +7,9 @@ package com.juxin.predestinate.module.local.chat.utils;
 
 public class MessageConstant {
 
+    public static int KF_ID = 1;//机器人ID
+    public static int Fate_Small_Secretary = 9999;//缘分小秘书
+
     public static int Ru_Friend = 1;//1则为熟人消息，否则为0
     public static int Ru_Stranger = 0;//1则为熟人消息，否则为0
 
