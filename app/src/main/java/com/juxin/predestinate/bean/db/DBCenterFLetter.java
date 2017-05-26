@@ -112,8 +112,9 @@ public class DBCenterFLetter {
             if (baseMessage.getTime() != -1)
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
 
-            if (baseMessage.getJsonStr() != null)
+            if (baseMessage.getInfoJson() != null)
                 values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
+
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
             return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", baseMessage.getWhisperID());

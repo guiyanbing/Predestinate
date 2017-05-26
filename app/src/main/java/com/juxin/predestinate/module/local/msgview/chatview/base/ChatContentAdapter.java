@@ -212,10 +212,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         public void reset(boolean sender, BaseMessage msgData, BaseMessage preMsgData) {
             if (msgData == null) return;
-            PLogger.printObject("time==msgData==" + TimeUtil.onPad(msgData.getTime()));
             String tipTime = "";
             if (preMsgData != null) {
-
                 long tmp = TimeUtil.onPad(msgData.getTime());
                 long temp = TimeUtil.onPad(preMsgData.getTime());
                 if (tmp - temp > Constant.CHAT_SHOW_TIP_TIME_Interval) {

@@ -15,7 +15,6 @@ import com.juxin.library.utils.InputUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
-import com.juxin.predestinate.module.local.msgview.utils.EggUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
@@ -384,19 +383,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      */
     private void onClickChatSend() {
         try {
-            String context = chatTextEdit.getText().toString();
-
-            if ("         ".equals(context)) {
-                if (EggUtil.getInstance().showEgg(getChatInstance().chatAdapter)) {
-                    return;
-                }
-            }
-
-            context = context.trim();
-
-            if (TextUtils.isEmpty(context)) {
-                return;
-            }
+            String context = chatTextEdit.getText().toString().trim();
+            if (TextUtils.isEmpty(context)) return;
 
             if (context.length() > Constant.CHAT_TEXT_LIMIT) {
                 PToast.showShort("字数超出限制,请分条发送.");
