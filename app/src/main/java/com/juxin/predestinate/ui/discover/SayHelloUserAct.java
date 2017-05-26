@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -23,7 +26,7 @@ import java.util.List;
  * Created by zhang on 2017/5/22.
  */
 
-public class SayHelloUserAct extends BaseActivity implements ExListView.IXListViewListener, AdapterView.OnItemClickListener {
+public class SayHelloUserAct extends BaseActivity implements ExListView.IXListViewListener, AdapterView.OnItemClickListener, PObserver {
 
     private CustomStatusListView customStatusListView;
     private ExListView exListView;
@@ -38,6 +41,7 @@ public class SayHelloUserAct extends BaseActivity implements ExListView.IXListVi
         setContentView(R.layout.f1_say_hello_user_act);
         initView();
         initData();
+        MsgMgr.getInstance().attach(this);
     }
 
     private void initView() {
@@ -88,6 +92,17 @@ public class SayHelloUserAct extends BaseActivity implements ExListView.IXListVi
             if (mailMsgID == null) {
                 UIShow.showPrivateChatAct(this, message.getLWhisperID(), message.getName(), message.getKfID());
             }
+        }
+    }
+
+    @Override
+    public void onMessage(String key, Object value) {
+        switch (key) {
+            case MsgType.MT_User_List_Msg_Change:
+                initData();
+                break;
+            default:
+                break;
         }
     }
 }
