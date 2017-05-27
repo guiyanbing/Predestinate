@@ -285,6 +285,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
                     @Override
                     public void onSubmit() {
+                        setTitleLeftContainerRemoveAll();
                         ModuleMgr.getChatListMgr().updateToReadAll();
                         listMail.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");

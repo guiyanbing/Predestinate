@@ -172,7 +172,7 @@ public class DBCenterFMessage {
 
             if (videoMessage.getJsonStr() != null)
                 values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(videoMessage.getJsonStr()));
-            return mDatabase.update(FMessage.FMESSAGE_TABLE,  values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getVideoID()));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getVideoID()));
         } catch (Exception e) {
             e.printStackTrace();
         }
