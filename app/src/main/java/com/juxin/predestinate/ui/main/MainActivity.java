@@ -84,7 +84,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
-        ModuleMgr.getCommonMgr().showSayHelloDialog(this);
 
         //初始化显示打招呼送礼提示，每次进入应用的时候重置
         PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, true);
@@ -276,6 +275,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
                     }
                 }, 200);
+                break;
+            case MsgType.MT_MyInfo_Change:
+                ModuleMgr.getCommonMgr().showSayHelloDialog(this);
                 break;
             default:
                 break;
