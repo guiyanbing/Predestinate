@@ -7,9 +7,6 @@ import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Singleton;
 
 import rx.functions.Action1;
@@ -19,6 +16,20 @@ import rx.functions.Action1;
  */
 
 public class OldDBModule {
+    public static final String MESSAGE_LIST_TABLE = "message_list";
+
+    public static final int INDEX_ID = 0;
+    public static final int INDEX_COLUMN_LOGIN_ID = 1;
+    public static final int INDEX_COLUMN_MSG_ID = 2;
+    public static final int INDEX_COLUMN_OTHER_ID = 3;
+
+    public static final int INDEX_COLUMN_CONTENT = 4;
+    public static final int INDEX_COLUMN_TIME = 5;
+    public static final int INDEX_COLUMN_RECEIVE_SEND_STATUS = 6;
+    public static final int INDEX_COLUMN_STATUS = 7;
+    //	public static final int INDEX_COLUMN_CONTENT_ID = 8;
+    public static final int INDEX_COLUMN_MSG_TYPE = 9;
+
     @Singleton
     private BriteDatabase provideDB(Context context) {
         final SqlBrite.Builder builder = new SqlBrite.Builder();
@@ -27,23 +38,31 @@ public class OldDBModule {
         return db;
     }
 
-    public void getMsgData() {
-        BriteDatabase db = provideDB();
-        QueryObservable query = db.createQuery(DBHelper.USERTABLE, "SELECT * FROM " + DBHelper.USERTABLE, null);
+    public void getMsgData(Context context) {
+        BriteDatabase db = provideDB(context);
+        QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM ?", MESSAGE_LIST_TABLE);
         query.subscribe(new Action1<SqlBrite.Query>() {
             @Override
             public void call(SqlBrite.Query query) {
                 Cursor cursor = query.run();
-//                List<String> list = new ArrayList<String>();
-//                while (cursor.moveToNext()) {
-//                    String username = cursor.getString(cursor.getColumnIndex("USERNAME"));
-//                    String id = cursor.getString(cursor.getColumnIndex("_id"));
-//                    String nickname = cursor.getString(cursor.getColumnIndex("NICKNAME"));
-//                    list.add(id + "--" + username + "--" + nickname);
-//                }
-//                cursor.close();
-//                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, list);
-//                lv.setAdapter(adapter);
+
+                try {
+                    while (cursor.moveToNext()) {
+//                message.setLogin_id(cursor.getString(INDEX_COLUMN_LOGIN_ID));
+//                message.setMsg_id(cursor.getLong(INDEX_COLUMN_MSG_ID));
+//                message.setOther_id(cursor.getString(INDEX_COLUMN_OTHER_ID));
+//                message.setContent(cursor.getString(INDEX_COLUMN_CONTENT));
+//                message.setTime(cursor.getString(INDEX_COLUMN_TIME));
+//                message.setReceive_send_status(cursor.getInt(INDEX_COLUMN_RECEIVE_SEND_STATUS));
+//                message.setMsg_status(cursor.getInt(INDEX_COLUMN_STATUS));
+//                message.setMsg_type(cursor.getInt(INDEX_COLUMN_MSG_TYPE));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null)
+                        cursor.close();
+                }
             }
         });
     }

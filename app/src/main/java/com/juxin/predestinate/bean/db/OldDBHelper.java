@@ -14,8 +14,6 @@ public class OldDBHelper extends SQLiteOpenHelper {
     private static final String DBNAME = "weshot.db";
     private static final int VERSION = 9;
 
-//    private static final String DBNAME = "weshot.db";
-
     public OldDBHelper(Context context) {
         super(context, Common.getCahceDir() + DBNAME + ".bak", null, VERSION);
     }
