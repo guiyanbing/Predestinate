@@ -5,6 +5,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
@@ -81,12 +82,16 @@ public class ChatPanelGift extends ChatPanel {
         //别人给你发的礼物
         final GiftMessage msg = (GiftMessage) msgData;
         GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(msg.getGiftID());
+        if (giftInfo == null) {
+            PLogger.d("------>gift list is empty or gift list doesn't have this gift_id.");
+            return false;
+        }
         ModuleMgr.getCommonMgr().receiveGift(msg.getGiftLogID(), giftInfo.getName(), msg.getGiftID(), new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     long ret = ModuleMgr.getChatMgr().updateMsgFStatus(msg.getMsgID());
-                    if(ret == MessageConstant.OK){
+                    if (ret == MessageConstant.OK) {
                         tv_gift_status.setText("已领取");
                     }
                     // 往数据库插一条14提示消息，标识已接受礼物
