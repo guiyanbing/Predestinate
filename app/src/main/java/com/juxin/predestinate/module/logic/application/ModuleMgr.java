@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.logic.application;
 import android.content.Context;
 import android.os.Process;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -84,6 +85,7 @@ public final class ModuleMgr {
         PToast.init(context);                       //初始化toast提示
         PSP.getInstance().init(context);            //初始化sharedPreferences存储
         RequestHelper.getInstance().init(context);  //初始化网络请求
+        ImageLoader.init(context);                  //初始化图片加载
 
         initTBSX5(context);
         initUM(context);

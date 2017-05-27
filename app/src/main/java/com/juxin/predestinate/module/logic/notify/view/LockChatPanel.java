@@ -12,6 +12,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.utils.InputUtils;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
 import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
 
@@ -20,20 +22,23 @@ import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
  */
 public class LockChatPanel extends BasePanel implements OnClickListener {
 
+    private View ll_reply_container;
     private TextView wake_lock_nickname, wake_lock_message;
     private EditText wake_lock_content;
-    private long uid;
 
-    public LockChatPanel(Context context, long uid, String avatar, String user_name, String content) {
+    private UserInfoLightweight userInfo;
+    private BaseMessage baseMessage;
+
+    public LockChatPanel(Context context, UserInfoLightweight userInfo, BaseMessage baseMessage, String content) {
         super(context);
         setContentView(R.layout.common_wake_lockact);
-
         initView();
 
-        refresh(uid, avatar, user_name, content);
+        refresh(userInfo, baseMessage, content);
     }
 
     private void initView() {
+        ll_reply_container = findViewById(R.id.ll_reply_container);
         wake_lock_nickname = (TextView) findViewById(R.id.wake_lock_nickname);
         wake_lock_message = (TextView) findViewById(R.id.wake_lock_message);
         wake_lock_content = (EditText) findViewById(R.id.wake_lock_content);
@@ -47,16 +52,22 @@ public class LockChatPanel extends BasePanel implements OnClickListener {
     /**
      * 刷新锁屏聊天信息
      *
-     * @param uid       用户uid
-     * @param avatar    用户头像：暂时无用
-     * @param user_name 用户昵称
-     * @param content   聊天内容
+     * @param userInfo    轻量级用户资料
+     * @param baseMessage 预先传递消息内容，以处理特殊的情况
+     * @param content     聊天内容
      */
-    public void refresh(long uid, String avatar, String user_name, String content) {
-        this.uid = uid;
-        wake_lock_nickname.setText(TextUtils.isEmpty(user_name) ? String.valueOf(uid) : user_name);
+    public void refresh(UserInfoLightweight userInfo, BaseMessage baseMessage, String content) {
+        this.userInfo = userInfo;
+        this.baseMessage = baseMessage;
+
+        wake_lock_nickname.setText(TextUtils.isEmpty(userInfo.getNickname()) ?
+                String.valueOf(userInfo.getUid()) : userInfo.getNickname());
         wake_lock_message.setText(Html.fromHtml(content));
-        wake_lock_content.setText("");
+
+        // 现阶段设计锁屏弹窗无回复逻辑
+//        ll_reply_container.setVisibility(BaseMessage.BaseMessageType.video.getMsgType() == baseMessage.getType()
+//                ? View.GONE : View.VISIBLE);
+//        wake_lock_content.setText("");
     }
 
     @Override
@@ -71,13 +82,17 @@ public class LockChatPanel extends BasePanel implements OnClickListener {
                 } else {
                     InputUtils.forceClose(wake_lock_content);
                     LockScreenMgr.getInstance().closeLockNotify();
-                    Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + uid + ",\"reply\":" + wake_lock_content.getText().toString() + "}");
+                    Invoker.getInstance().doInApp(null, "cmd_open_chat",
+                            "{\"uid\":" + userInfo.getUid() + ",\"reply\":" +
+                                    wake_lock_content.getText().toString() + "}");
                 }
                 break;
             case R.id.wake_lock_message:
             case R.id.wake_lock_nickname:
                 LockScreenMgr.getInstance().closeLockNotify();
-                Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + uid + "}");
+                // 音视频消息不用打开私聊页面，先进行处理
+                if (BaseMessage.BaseMessageType.video.getMsgType() != baseMessage.getType())
+                    Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + userInfo.getUid() + "}");
                 break;
             default:
                 break;

@@ -85,7 +85,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         checkReply();
 
 
-        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//小友客服
+        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
             privateChat.getChatAdapter().showIsCanChat(true);//显示输入框
         } else {
@@ -149,7 +149,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
 
         setNickName(name);
-        if (MailSpecialID.customerService.getSpecialID() != whisperID) {//小友客服
+        if (MailSpecialID.customerService.getSpecialID() != whisperID) {//缘分小秘书
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -256,7 +256,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     private void isShowTopPhone() {
-        ModuleMgr.getChatMgr().getNoCacheUserInfo(whisperID, new ChatMsgInterface.InfoComplete(){
+        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete(){
             @Override
             public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
                 if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&

@@ -89,6 +89,7 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
         ModuleMgr.getCenterMgr().reqUnlockVideo(userDetail.getUid(), userVideo.getId(), new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
                 if (response.isOk()) {
                     PToast.showShort(getString(R.string.user_secret_media_lock_suc));
                     try {
@@ -98,6 +99,7 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
                         e.printStackTrace();
                     }
                     UIShow.showSecretVideoPlayerDlg(SecretGiftDlg.this, userVideo);
+                    finish();
                     return;
                 }
                 PToast.showShort(getString(R.string.user_secret_media_lock_fail));

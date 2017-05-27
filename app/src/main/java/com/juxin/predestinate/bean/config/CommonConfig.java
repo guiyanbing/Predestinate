@@ -28,6 +28,7 @@ public class CommonConfig extends BaseData {
     private int videochat_minute_cost;  //视频通话每分钟费用
     private String video_chat_apk_url;  //视频插件地址
     private int checkYellow;            //鉴黄检测间隔时间,单位秒
+    private int checkYellowFirst = 5; //鉴黄首次截图时间，单位秒
     private boolean isVideoCallNeedVip; //发起视频聊天是否需要VIP
     private boolean isAudioCallNeedVip; //发起音频聊天是否需要VIP
 
@@ -61,6 +62,7 @@ public class CommonConfig extends BaseData {
         checkYellow = jsonObject.optInt("check_yellow");
         isVideoCallNeedVip = jsonObject.optInt("videochat_call_vip") == 1;
         isAudioCallNeedVip = jsonObject.optInt("audiochat_call_vip") == 1;
+        checkYellowFirst = jsonObject.optInt("frist_screenshot");
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
@@ -128,6 +130,10 @@ public class CommonConfig extends BaseData {
 
     public PayTypeList getPayTypeList() {
         return payTypeList;
+    }
+
+    public int getCheckYellowFirst() {
+        return checkYellowFirst;
     }
 
     @Override

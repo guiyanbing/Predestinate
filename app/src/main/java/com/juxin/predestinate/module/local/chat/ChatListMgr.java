@@ -91,6 +91,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void updateListMsg(List<BaseMessage> messages) {
+        PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
         greetList.clear();
@@ -105,8 +106,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 unreadNum += tmp.getNum();
             }
         }
-
-        PLogger.printObject("List=1111=" + msgList.size());
         unreadNum += getFollowNum();//关注
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
     }

@@ -6,6 +6,7 @@ import android.text.Spannable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmile;
 import com.juxin.predestinate.module.util.UIUtil;

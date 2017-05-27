@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/list_item_selector"
     android:orientation="vertical">
 
     <View style="@style/divider_line" />
@@ -40,7 +41,8 @@
                 <LinearLayout
                     android:id="@+id/mydefriend_item_ranking_state"
                     style="@style/icon_middle_center"
-                    android:layout_width="@dimen/px190_dp"
+                    android:layout_width="@dimen/px140_dp"
+                    android:layout_height="@dimen/px50_dp"
                     android:layout_marginLeft="@dimen/px35_dp"
                     android:background="@drawable/f1_ranking_bg_w"
                     android:gravity="center_vertical"
@@ -48,24 +50,24 @@
 
                     <TextView
                         android:id="@+id/mydefriend_item_ranking_type"
-                        android:layout_width="@dimen/px50_dp"
-                        android:layout_height="@dimen/px50_dp"
+                        android:layout_width="@dimen/px35_dp"
+                        android:layout_height="@dimen/px35_dp"
                         android:layout_marginLeft="@dimen/px10_dp"
                         android:background="@drawable/f1_round_text_bg"
                         android:gravity="center"
                         android:text="魅"
                         android:textColor="@color/color_ff4d79"
-                        android:textSize="@dimen/px32_sp" />
+                        android:textSize="@dimen/px22_sp" />
 
                     <TextView
                         android:id="@+id/mydefriend_item_ranking_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px10_dp"
+                        android:layout_marginLeft="@dimen/px5_dp"
                         android:singleLine="true"
-                        android:text="TOP01"
+                        android:text="TOP 01"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/px32_sp" />
+                        android:textSize="@dimen/px22_sp" />
                 </LinearLayout>
 
                 <ImageView

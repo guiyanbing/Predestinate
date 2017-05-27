@@ -103,6 +103,14 @@ public class DBCenterFLetter {
         }
         try {
             final ContentValues values = new ContentValues();
+            values.put(FLetter.COLUMN_USERID, baseMessage.getWhisperID());
+
+            if (baseMessage.getInfoJson() != null)
+                values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
+
+            if (baseMessage.getType() != -1)
+                values.put(FLetter.COLUMN_TYPE, baseMessage.getType());
+
             if (baseMessage.getStatus() != -1)
                 values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
 
@@ -112,11 +120,7 @@ public class DBCenterFLetter {
             if (baseMessage.getTime() != -1)
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
 
-            if (baseMessage.getInfoJson() != null)
-                values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
-
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
-
             return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", baseMessage.getWhisperID());
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,7 +209,7 @@ public class DBCenterFLetter {
                         }
                         return false;
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     /**
@@ -299,7 +303,7 @@ public class DBCenterFLetter {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convertFletter(query.run());
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     public Observable<List<BaseMessage>> deleteKFID(){
@@ -317,7 +321,7 @@ public class DBCenterFLetter {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convertFletter(query.run());
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
 

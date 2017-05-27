@@ -423,6 +423,7 @@ public class CommonMgr implements ModuleBase {
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
+        PLogger.d("showSayHelloDialog === isVip = " + ModuleMgr.getCenterMgr().getMyInfo().isVip());
         if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
 
             getSayHiList(new RequestComplete() {

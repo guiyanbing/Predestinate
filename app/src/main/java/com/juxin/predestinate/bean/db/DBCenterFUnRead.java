@@ -3,7 +3,6 @@ package com.juxin.predestinate.bean.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -14,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import rx.Observable;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * funread 处理
@@ -163,7 +161,7 @@ public class DBCenterFUnRead {
                 }
                 return null;
             }
-        }).unsubscribeOn(Schedulers.io());
+        });
     }
 
     /**
