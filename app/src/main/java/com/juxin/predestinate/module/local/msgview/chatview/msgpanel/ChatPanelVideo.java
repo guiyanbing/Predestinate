@@ -44,7 +44,7 @@ public class ChatPanelVideo extends ChatPanel {
                 ? (isSender() ? R.drawable.f1_chat_video_right : R.drawable.f1_chat_video_left)
                 : (isSender() ? R.drawable.f1_chat_voice_right : R.drawable.f1_chat_voice_left));
         chat_item_video_text.setText(VideoMessage.getVideoChatContent(
-                videoMessage.getEmLastStatus(), videoMessage.getTime(), videoMessage.isSender()));
+                videoMessage.getEmLastStatus(), videoMessage.getVideoVcTalkTime(), videoMessage.isSender()));
         return true;
     }
 
