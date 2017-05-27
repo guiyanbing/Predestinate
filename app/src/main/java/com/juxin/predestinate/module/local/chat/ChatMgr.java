@@ -504,6 +504,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void onReceiving(BaseMessage message) {
         message.setStatus(MessageConstant.UNREAD_STATUS);
+        PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
     }
 
