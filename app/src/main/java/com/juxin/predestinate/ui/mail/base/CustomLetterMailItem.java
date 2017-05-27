@@ -51,7 +51,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
                 break;
             case R.id.mail_item_right_icon:
                 if (msgData == null || !(msgData instanceof VideoMessage)) {
-                    return;
+                    break;
                 }
                 VideoMessage videoMessage = (VideoMessage) msgData;
                 if (videoMessage.isVideoMediaTp()) {
@@ -59,6 +59,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
                 } else {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
+                break;
             default:
                 break;
         }
