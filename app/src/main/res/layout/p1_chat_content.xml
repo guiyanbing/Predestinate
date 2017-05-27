@@ -69,8 +69,8 @@
                         android:textSize="10sp" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/px60_dp"
+                        android:layout_height="@dimen/px30_dp"
                         android:layout_gravity="right"
                         android:layout_marginRight="15dp"
                         android:src="@drawable/f1_pink_reverse_triangle" />

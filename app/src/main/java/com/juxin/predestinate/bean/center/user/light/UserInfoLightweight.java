@@ -135,17 +135,19 @@ public class UserInfoLightweight extends UserBasic {
         this.setGroup(jsonObject.optInt("group"));
         this.setOnline(jsonObject.optBoolean("isOnline"));
 
-        if (!jsonObject.isNull("video_available")) {
-            this.setVideo_available(jsonObject.optInt("video_available") == 1);
-        } else {
-            this.setVideo_available(jsonObject.optInt("videochat") == 1);
+        if(!jsonObject.isNull("videochatConfig")) {
+            JSONObject configJsonObj = jsonObject.optJSONObject("videochatConfig");
+            if (!configJsonObj.isNull("video_available")) {
+                this.setVideo_available(configJsonObj.optInt("video_available") == 1);
+            } else {
+                this.setVideo_available(configJsonObj.optInt("videochat") == 1);
+            }
+            if (!configJsonObj.isNull("audio_available")) {
+                this.setAudio_available(configJsonObj.optInt("audio_available") == 1);
+            } else {
+                this.setAudio_available(configJsonObj.optInt("audiochat") == 1);
+            }
         }
-        if (!jsonObject.isNull("audio_available")) {
-            this.setAudio_available(jsonObject.optInt("audio_available") == 1);
-        } else {
-            this.setAudio_available(jsonObject.optInt("audiochat") == 1);
-        }
-
     }
 
 
