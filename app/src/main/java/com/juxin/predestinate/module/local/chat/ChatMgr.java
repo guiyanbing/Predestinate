@@ -816,10 +816,10 @@ public class ChatMgr implements ModuleBase {
                     temp.setTime(getTime());
                     dbCenter.getCacheCenter().storageProfileData(temp);
                     dbCenter.getCenterFLetter().updateUserInfoLight(temp);
-                }
 
-                temp.setUid(userID);
-                removeInfoComplete(true, true, userID, temp);
+                    temp.setUid(userID);
+                    removeInfoComplete(true, true, userID, temp);
+                }
             }
         });
     }

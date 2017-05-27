@@ -58,13 +58,14 @@ public class UserInfoLightweight extends UserBasic {
         this.time = time;
     }
 
-    public void parseUserInfoLightweight(UserDetail userInfo) {
-        if (userInfo == null) return;
-        this.setUid(userInfo.getUid());
-        this.setNickname(userInfo.getNickname());
-        this.setRemark(userInfo.getRemark());
-        this.setGender(userInfo.getGender());
-        this.setAvatar(userInfo.getAvatar());
+
+    public UserInfoLightweight(UserDetail userDetail) {
+        if (userDetail == null) return;
+        this.setUid(userDetail.getUid());
+        this.setNickname(userDetail.getNickname());
+        this.setRemark(userDetail.getRemark());
+        this.setGender(userDetail.getGender());
+        this.setAvatar(userDetail.getAvatar());
     }
 
     /**
