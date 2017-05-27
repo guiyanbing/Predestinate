@@ -8,6 +8,8 @@ public enum UnreadReceiveMsgType {
 
     // 谁关注我消息类型
     follow_msgType(5),
+    // 聊天红包消息类型
+    chatRed_msgType(12),
     // 红包余额变动消息
     wallet_msgType(17),
     ;

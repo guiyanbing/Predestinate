@@ -75,8 +75,12 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
             case BaseMessage.Follow_MsgType://谁关注我消息
                 getUnreadMgr().addNumUnread(FOLLOW_ME);
                 break;
+            case BaseMessage.TalkRed_MsgType://聊天随机红包
             case BaseMessage.RedEnvelopesBalance_MsgType://钱包余额变更消息
                 getUnreadMgr().addNumUnread(MY_WALLET);
+
+                // 更新个人资料中红包数额
+                MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                 break;
             default:
                 break;
