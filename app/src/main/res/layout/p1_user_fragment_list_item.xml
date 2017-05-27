@@ -24,6 +24,7 @@
             android:id="@+id/item_badge"
             style="@style/badge_num_big"
             android:layout_toRightOf="@id/item_icon"
+            android:layout_marginTop="@dimen/px43_dp"
             android:text="10"/>
 
         <TextView
