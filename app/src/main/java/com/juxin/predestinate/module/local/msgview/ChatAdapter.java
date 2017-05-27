@@ -3,13 +3,17 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.chat.ChatMgr;
+import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -25,7 +29,10 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +42,7 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener,ChatMgr.OnUpdateDataListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
@@ -129,6 +136,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
             chatInstance.chatInputPanel.showSendBtn();
             page = 0;
+            PSP.getInstance().put("whisperId",whisperId);
+            ModuleMgr.getChatMgr().setOnUpdateDataListener(this);
             attach();
         } catch (Exception e) {
             PLogger.printThrowable(e);
@@ -188,6 +197,33 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }
+    }
+
+    @Override
+    public void onUpdateDate(String channelID, String whisperID, String sendID) {
+//        Log.e("TTTTTTTTTTLLL", "刷新界面" + getChatInstance().chatListView + "||");
+        if (getChatInstance().chatListView == null) {
+            return;
+        }
+        getChatInstance().chatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
+                int size = messages.size();
+                if (size > 0)
+                    PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
+                for (int i = size - 1; i >= 0; i--) {
+                    if (messages.get(i).getStatus() == 11) {
+                        break;
+                    }
+                    messages.get(i).setStatus(11);
+                }
+                //        getChatInstance().chatContentAdapter.notifyDataSetChanged();
+                chatInstance.chatContentAdapter.setList(messages);
+                moveToBottom();
+//                Log.e("TTTTTTTTTTLLL", "刷新界面");
+            }
+        });
     }
 
     /**
@@ -390,6 +426,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 反注册消息模块，解除绑定。
      */
     public void detach() {
+        ModuleMgr.getChatMgr().updateOtherSideRead("", whisperId, App.uid + "");
+        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
         ModuleMgr.getChatMgr().detachChatListener(this);
         ChatMediaPlayer.getInstance().stopPlayVoice();
 
@@ -462,6 +500,25 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
+
+//                Log.e("TTTTTTTTTTTTTTLLL", message.getId() + "||" + message.getInfoJson() + "|||" + message.getClass() + "||" + message.getSendID() + "|||" + message.getSSendID());
+                if (message.getSendID() != App.uid)
+                ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId), new IMProxy.SendCallBack() {
+                    @Override
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+//                        Log.e("TTTTTTTTTTLLLL11177", "执行||||成功" + messageRet.getS());
+                        if (messageRet.getS() == 0) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+//                        Log.e("TTTTTTTTTTLLLL222", "执行||||失败");
+                    }
+                });
             } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {

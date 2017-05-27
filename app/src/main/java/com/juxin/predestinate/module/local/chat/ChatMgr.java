@@ -94,8 +94,35 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID);
     }
 
+    private String whisperID;
+    private String sendID;
+    /**
+     * 对方已读
+     * @param channelID
+     * @param whisperID
+     * @param sendID
+     */
+    public void updateOtherRead(String channelID, String whisperID, String sendID) {
+        this.whisperID = whisperID;
+        this.sendID = sendID;
+        String whisperId = PSP.getInstance().getString("whisperId","-1");
+//        Log.e("TTTTTTTTYYY",channelID+"||"+whisperId+"|||"+whisperID+"|||"+sendID+"|||"+mOnUpdateDataListener);
+        if (!whisperId.equalsIgnoreCase(whisperID)){
+            updateOtherSideRead(channelID,whisperID,sendID);
+        }else {
+            if (mOnUpdateDataListener != null)
+                mOnUpdateDataListener.onUpdateDate(channelID,whisperID,sendID);
+        }
+    }
+
+
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
+    }
+//    setOnClickChatItemListener
+    private OnUpdateDataListener mOnUpdateDataListener;
+    public void setOnUpdateDataListener(OnUpdateDataListener mOnUpdateDataListener){
+        this.mOnUpdateDataListener = mOnUpdateDataListener;
     }
 
     /**
@@ -110,6 +137,9 @@ public class ChatMgr implements ModuleBase {
 
     }
 
+    public interface OnUpdateDataListener{
+        void onUpdateDate(String channelID, String whisperID, String sendID);
+    }
 
     /**
      * 打招呼
@@ -272,6 +302,16 @@ public class ChatMgr implements ModuleBase {
     public void sendAttentionMsg(long userID, String content, int kf, int gz, IMProxy.SendCallBack sendCallBack) {
         OrdinaryMessage message = new OrdinaryMessage(userID, content, kf, gz);
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toFllowJson()), sendCallBack);
+    }
+
+    /**
+     * 发送已读
+     *
+     * @param userID
+     */
+    public void sendMailReadedMsg(String channelID,long userID,IMProxy.SendCallBack sendCallBack) {
+        MailReadedMessage message = new MailReadedMessage(channelID,userID);
+        IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toMailReadedJson()), sendCallBack);
     }
 
     public void sendImgMsg(String channelID, String whisperID, String img_url) {
@@ -533,9 +573,9 @@ public class ChatMgr implements ModuleBase {
         observable.subscribe(new Action1<BaseMessage>() {
             @Override
             public void call(BaseMessage baseMessage) {
-                if(baseMessage == null){
+                if (baseMessage == null) {
                     pushMsg(dbCenter.getCenterFMessage().insertMsg(videoMessage) != MessageConstant.ERROR, videoMessage);
-                }else {
+                } else {
                     pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
                 }
             }
@@ -589,6 +629,24 @@ public class ChatMgr implements ModuleBase {
             }).unsubscribe();
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+//            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
+            if (ret > 0 && !TextUtils.isEmpty(whisperID))
+                sendMailReadedMsg(channelID,Long.valueOf(whisperID), new IMProxy.SendCallBack() {
+                    @Override
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+//                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
+                        if (messageRet.getS() == 0) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+//                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
+                    }
+                });
             if(ret != MessageConstant.ERROR){
                 ModuleMgr.getChatListMgr().getWhisperList();
             }

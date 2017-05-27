@@ -172,7 +172,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
     }
 
     private String testData(){
-        String str = "/*{\n" +
+        String str = "{\n" +
                 "  \"status\": \"ok\",\n" +
                 "  \"total\": \"20\",\n" +
                 "  \"result\":[{\n" +
@@ -194,7 +194,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
                 "        \"type\":\"3\",\n" +
                 "        \"rank\":0\n" +
                 "  }]\n" +
-                "}*/";
+                "}";
         return str;
     }
 }

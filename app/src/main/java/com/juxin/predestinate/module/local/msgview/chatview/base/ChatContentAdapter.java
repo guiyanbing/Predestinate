@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -23,6 +25,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,6 +202,23 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         BaseMessage msgData = getItem(position);
         vh.reset(ChatAdapter.isSender(msgData.getSendID()), msgData, getItem(position - 1));
         return convertView;
+    }
+
+    @Override
+    public void setList(List<BaseMessage> datas) {
+        if (datas.size()>0){
+            int size = datas.size();
+            long id = PSP.getInstance().getLong("xiaoxi"+datas.get(0).getWhisperID()+datas.get(0).getChannelID(),0);
+//            Log.e("TTTTTTTGGG",id+"||");
+            for (int i = size-1;i>=0;i--){
+                if (datas.get(i).getStatus()== 11) {
+                    break;
+                }
+                if (id >= datas.get(i).getMsgID())
+                    datas.get(i).setStatus(11);
+            }
+        }
+        super.setList(datas);
     }
 
     /**

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -11,7 +12,6 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.view.BasePanel;
-import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -29,7 +29,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
 
     private UserDetail userDetail;
 
-    private CircleImageView img_header;
+    private ImageView img_header;
     private RelativeLayout rl_header;
     private TextView user_id, user_gender, user_age, user_height, user_province;
 
@@ -43,7 +43,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
 
     public void initView() {
         rl_header = (RelativeLayout) findViewById(R.id.edit_header);
-        img_header = (CircleImageView) findViewById(R.id.img_header);
+        img_header = (ImageView) findViewById(R.id.img_header);
         user_id = (TextView) findViewById(R.id.user_id);
         user_gender = (TextView) findViewById(R.id.user_gender);
         user_age = (TextView) findViewById(R.id.user_age);
@@ -56,7 +56,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
     public void initData() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
-        ImageLoader.loadAvatar(getContext(), userDetail.getAvatar(), img_header);
+        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header);
         user_id.setText("ID: " + userDetail.getUid());
         user_gender.setText(userDetail.isMan() ? "男" : "女");
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
@@ -70,7 +70,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
 
     public void refreshView() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadAvatar(getContext(), userDetail.getAvatar(), img_header);
+        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header);
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {

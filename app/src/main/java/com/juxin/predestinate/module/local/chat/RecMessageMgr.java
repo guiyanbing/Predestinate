@@ -88,6 +88,9 @@ public class RecMessageMgr implements IMProxy.IMListener {
             if(BaseMessage.TalkRed_MsgType == message.getType()){//红包消息不保存，也不通知上层
                 return;
             }
+            if(BaseMessage.System_MsgType == message.getType()){
+                return;
+            }
             if(BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()){
                 isSave = false;
             }

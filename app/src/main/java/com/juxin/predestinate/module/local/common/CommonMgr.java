@@ -689,10 +689,10 @@ public class CommonMgr implements ModuleBase {
     public void reqAddredTotal(long uid, double money, long redbagid, int type, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", uid);
-        postParams.put("money", money);
+        postParams.put("money",money);
         postParams.put("redbagid", redbagid);
         postParams.put("type", type);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAddredTotal, postParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqAddredTotal, postParams, complete);
     }
 
     /**
