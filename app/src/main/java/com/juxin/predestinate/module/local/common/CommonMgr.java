@@ -204,10 +204,6 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
     }
 
-    public void setGiftLists(GiftsList giftLists) {
-        this.giftLists = giftLists;
-    }
-
     /**
      * 请求礼物列表
      */
