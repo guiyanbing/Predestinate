@@ -100,8 +100,8 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
 //            Log.e("TTTTTTTT", response.getResponseString()+"|||"+response.isOk());
             RedbagList redbagList = new RedbagList();
 
-            redbagList.parseJson(testData());
-//            redbagList.parseJson(response.getResponseString());
+//            redbagList.parseJson(testData());
+            redbagList.parseJson(response.getResponseString());
             if (response.isOk()){
                 ((RedBoxRecordAct)context).refreshView(redbagList.getTotal());
                 mRedbagInfos = redbagList.getRedbagLists();
