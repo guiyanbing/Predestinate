@@ -108,7 +108,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
 //                                            return;
 //                                        }
                                     //TODO 发送图片
-                                    ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
+                                    ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0], false);
                                 }
                             }
                         });
