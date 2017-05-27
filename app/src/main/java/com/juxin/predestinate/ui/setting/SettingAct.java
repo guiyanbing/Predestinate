@@ -25,7 +25,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
 
-
 /**
  * 设置页面
  *
@@ -232,7 +231,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setVideochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus,audioStatus);
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus);
                 }
                 break;
             }
@@ -247,7 +246,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setAudiochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus,audioStatus);
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus);
                 }
                 break;
             }
@@ -322,7 +321,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     public static void clearUserInfo() {
         // 清除当前登录的用户信息
         ModuleMgr.getLoginMgr().logout();
-
+        ModuleMgr.getCenterMgr().clearUserInfo();
         PSP.getInstance().put("addMsgToUserDate", null);
         PSP.getInstance().put("recommendDate", null);
     }
