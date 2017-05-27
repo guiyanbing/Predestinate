@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CircularCoverView;
 import com.juxin.library.view.CustomFrameLayout;
@@ -64,7 +65,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
     public ChatPanelCommon(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
         super(context, chatInstance, R.layout.f1_chat_item_panel_common, sender);
-
     }
 
     @Override
@@ -174,6 +174,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
     }
 
     private void onVoiceDisplayContent(CommonMessage msg) {
+        PLogger.printObject("CommonMessage===" + msg.toString());
         chat_item_customFrameLayout.show(R.id.chat_item_panel_voice);
 
         time.setText("" + msg.getVoiceLen() + "''");

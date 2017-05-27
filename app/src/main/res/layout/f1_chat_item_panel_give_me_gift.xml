@@ -49,6 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/px30_dp"
+                    android:singleLine="true"
                     android:text="送你棒棒糖一个"
                     android:textColor="@color/color_777777"
                     android:textSize="@dimen/px39_sp" />

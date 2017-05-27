@@ -58,13 +58,14 @@ public class UserInfoLightweight extends UserBasic {
         this.time = time;
     }
 
-    public void parseUserInfoLightweight(UserDetail userInfo) {
-        if (userInfo == null) return;
-        this.setUid(userInfo.getUid());
-        this.setNickname(userInfo.getNickname());
-        this.setRemark(userInfo.getRemark());
-        this.setGender(userInfo.getGender());
-        this.setAvatar(userInfo.getAvatar());
+
+    public UserInfoLightweight(UserDetail userDetail) {
+        if (userDetail == null) return;
+        this.setUid(userDetail.getUid());
+        this.setNickname(userDetail.getNickname());
+        this.setRemark(userDetail.getRemark());
+        this.setGender(userDetail.getGender());
+        this.setAvatar(userDetail.getAvatar());
     }
 
     /**
@@ -134,6 +135,20 @@ public class UserInfoLightweight extends UserBasic {
         this.setChannel_uid(jsonObject.optInt("channel_uid"));
         this.setGroup(jsonObject.optInt("group"));
         this.setOnline(jsonObject.optBoolean("isOnline"));
+
+        if(!jsonObject.isNull("videochatConfig")) {
+            JSONObject configJsonObj = jsonObject.optJSONObject("videochatConfig");
+            if (!configJsonObj.isNull("video_available")) {
+                this.setVideo_available(configJsonObj.optInt("video_available") == 1);
+            } else {
+                this.setVideo_available(configJsonObj.optInt("videochat") == 1);
+            }
+            if (!configJsonObj.isNull("audio_available")) {
+                this.setAudio_available(configJsonObj.optInt("audio_available") == 1);
+            } else {
+                this.setAudio_available(configJsonObj.optInt("audiochat") == 1);
+            }
+        }
     }
 
 

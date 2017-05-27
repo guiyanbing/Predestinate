@@ -246,12 +246,12 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (uid == App.uid) {
                 UserDetail temp = ModuleMgr.getCenterMgr().getMyInfo();
                 if (temp != null) {
-                    UserInfoLightweight infoLightweight = new UserInfoLightweight();
-                    infoLightweight.parseUserInfoLightweight(temp);
+                    UserInfoLightweight infoLightweight = new UserInfoLightweight(temp);
                     userInfos.put(uid, infoLightweight);
                     return infoLightweight;
                 }
             }
+            PLogger.printObject("111111111111111");
             ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
 
                 @Override
@@ -263,6 +263,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             });
         } else {
             if (TextUtils.isEmpty(userInfo.getNickname()) && TextUtils.isEmpty(userInfo.getAvatar())) {
+                PLogger.printObject("22222222222");
                 ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
 
                     @Override
@@ -283,9 +284,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * @param userInfo 用户信息。
      */
     public synchronized void addUserInfo(final UserInfoLightweight userInfo) {
-        if (userInfo == null) {
-            return;
-        }
+        if (userInfo == null) return;
 
         final UserInfoLightweight temp = userInfos.get(userInfo.getUid());
 

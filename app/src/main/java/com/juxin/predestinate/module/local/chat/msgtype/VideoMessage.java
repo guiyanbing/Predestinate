@@ -12,6 +12,7 @@ import org.json.JSONObject;
 public class VideoMessage extends BaseMessage {
 
     private int videoID;//视频聊天ID，一次视频聊天过程的唯一标识
+    // 3,4存本地
     private int videoTp;//请求类型，1邀请加入聊天，2同意加入  3拒绝或取消 4挂断（挂断可能会收到不止一次）
     private int videoMediaTp;//现在所有消息都会包含此字段 1视频, 2语音
     private int videoVcEscCode;//拒绝或取消 只在vc_tp=3 时生效 1未接通，对方无应答 2接收方拒绝 3发送方取消
@@ -21,7 +22,7 @@ public class VideoMessage extends BaseMessage {
     private EmLastStatus emLastStatus;
 
 
-    public enum EmLastStatus {
+    private enum EmLastStatus {
         none, timeout, refuse, cancel, connect
     }
 

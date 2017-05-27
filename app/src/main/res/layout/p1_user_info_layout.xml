@@ -146,7 +146,7 @@
         android:layout_marginBottom="@dimen/px30_dp"
         android:layout_marginRight="@dimen/px60_dp"
         android:background="@drawable/f1_user_check_info_gift"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll_chat_greeting_tips_container"

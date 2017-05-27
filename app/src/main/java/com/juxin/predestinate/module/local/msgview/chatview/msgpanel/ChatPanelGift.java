@@ -65,9 +65,13 @@ public class ChatPanelGift extends ChatPanel {
         }
         tv_gift_status.setText(msgData.getfStatus() == 0 ? "已领取" : "点击收礼");
         ImageLoader.loadAvatar(context, giftInfo.getPic(), iv_gift_img);
-        tv_gift_hello.setText(isSender() ? (ModuleMgr.getCenterMgr().getMyInfo().isMan() ?
-                getContext().getString(R.string.chat_gift_hello_woman) :
-                getContext().getString(R.string.chat_gift_hello_man)) : Html.fromHtml(msg.getMsgDesc()));
+        tv_gift_hello.setText(isSender()
+                ? (ModuleMgr.getCenterMgr().getMyInfo().isMan()
+                ? getContext().getString(R.string.chat_gift_hello_woman)
+                : getContext().getString(R.string.chat_gift_hello_man))
+                : (ModuleMgr.getCenterMgr().getMyInfo().isMan()
+                ? getContext().getString(R.string.chat_gift_hello_man)
+                : getContext().getString(R.string.chat_gift_hello_woman)));
         tv_gift_content.setText(Html.fromHtml("送你<font color='#FD698C'>"
                 + (msg.getGiftCount() == 0 ? 1 : msg.getGiftCount()) +
                 "个" + giftInfo.getName() + "</font>"));

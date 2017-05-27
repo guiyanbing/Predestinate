@@ -70,9 +70,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 //                    reqSetting();//请求设置信息
                 } else {
                     IMProxy.getInstance().logout();//退出登录的时候退出socket
-                    userDetail = null;
-                    setMyInfo(null);
-                    putSettingPsp(null);
+                    clearUserInfo();
                 }
                 break;
             case MsgType.MT_App_CoreService://socket已连接，登录
@@ -86,6 +84,15 @@ public class CenterMgr implements ModuleBase, PObserver {
             default:
                 break;
         }
+    }
+
+    /**
+     * 清除用户信息
+     */
+    public void clearUserInfo() {
+        userDetail = null;
+        setMyInfo(null);
+        putSettingPsp(null);
     }
 
     /**
