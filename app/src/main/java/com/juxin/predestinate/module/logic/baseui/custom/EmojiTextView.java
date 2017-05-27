@@ -84,8 +84,6 @@ public class EmojiTextView extends TextView {
             span = ChatSmile.getSmiledText(getContext(), text, emojiSize);
         }
 
-        PLogger.printObject("span====" + span);
-
         setText(span, BufferType.SPANNABLE);
     }
 }
