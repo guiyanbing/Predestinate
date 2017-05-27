@@ -62,6 +62,7 @@ public class CommonConfig extends BaseData {
         checkYellow = jsonObject.optInt("check_yellow");
         isVideoCallNeedVip = jsonObject.optInt("videochat_call_vip") == 1;
         isAudioCallNeedVip = jsonObject.optInt("audiochat_call_vip") == 1;
+        checkYellowFirst = jsonObject.optInt("frist_screenshot");
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
