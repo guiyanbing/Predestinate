@@ -229,9 +229,7 @@
 
         <activity
             android:name=".ui.user.check.secret.dialog.SecretVideoPlayerDlg"
-            android:configChanges="screenSize|keyboard|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/No_Background" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.paygoods.vip.GoodsVipAct"

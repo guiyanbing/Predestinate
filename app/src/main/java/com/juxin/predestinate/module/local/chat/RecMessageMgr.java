@@ -91,7 +91,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
             if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()){
                 VideoMessage videoMessage = (VideoMessage) message;
-                if(videoMessage.getVideoTp() == 1 && videoMessage.getVideoTp() == 2) {
+                if(videoMessage.getVideoTp() == 1 || videoMessage.getVideoTp() == 2) {
                     isSave = false;
                 }
             }
@@ -103,8 +103,6 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 }else {
                     ModuleMgr.getChatMgr().onReceiving(message);
                 }
-
-
             } else {
                 ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
             }
