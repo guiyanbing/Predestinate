@@ -61,7 +61,7 @@ public class PhotoDisplayFragment extends BaseFragment {
                     }
                 });
             } else {
-                ImageLoader.localLocalImg(getContext(), R.drawable.default_pic, image);
+                ImageLoader.loadCenterCrop(getContext(), R.drawable.default_pic, image);
                 progress.setVisibility(View.GONE);
             }
         }
