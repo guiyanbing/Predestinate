@@ -176,7 +176,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                 }
             });
         } else {
-            ModuleMgr.getChatMgr().sendImgMsg(null, getChatInstance().chatAdapter.getWhisperId(), item.getPic(), true);
+            ModuleMgr.getChatMgr().sendImgMsg(null, getChatInstance().chatAdapter.getWhisperId(), item.getPic());
         }
     }
 

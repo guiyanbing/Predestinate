@@ -265,7 +265,7 @@ public class ChatMgr implements ModuleBase {
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toFllowJson()), sendCallBack);
     }
 
-    public void sendImgMsg(String channelID, String whisperID, String img_url, boolean isNetWorkImg) {
+    public void sendImgMsg(String channelID, String whisperID, String img_url) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
         commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url, DirType.getImageDir()));
         commonMessage.setStatus(MessageConstant.SENDING_STATUS);
@@ -278,7 +278,10 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
         if (!b) return;
-        if(!isNetWorkImg){
+
+        if (FileUtil.isURL(img_url)) {
+            sendMessage(commonMessage, null);
+        }else {
             sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
@@ -295,8 +298,6 @@ public class ChatMgr implements ModuleBase {
                     }
                 }
             });
-        }else {
-            sendMessage(commonMessage, null);
         }
     }
 
