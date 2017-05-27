@@ -366,6 +366,10 @@
             android:name=".ui.discover.SayHelloUserAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.pay.wepayother.h5.PayWebActivity"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
         <!-- ============= service =============== -->
         <service
             android:name=".module.logic.socket.CoreService"

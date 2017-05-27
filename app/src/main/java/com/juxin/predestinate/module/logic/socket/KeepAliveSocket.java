@@ -132,6 +132,14 @@ public class KeepAliveSocket {
     }
 
     public void disconnect(boolean instant) {
+        if(state == SocketState.CONNECTING){
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         socketStateLock.lock();
         if (state != SocketState.CONNECTED_SUCCESS) {
             socketStateLock.unlock();

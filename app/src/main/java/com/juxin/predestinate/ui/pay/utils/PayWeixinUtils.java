@@ -125,6 +125,9 @@ public class PayWeixinUtils {
             case 10:
                 ZFWechatPay.Pay(context, payWX.getJsonParamPost());
                 break;
+            case 11:
+                UIShow.showWePayForH5(context,payWX.getPayData());
+                break;
             default:
                 PToast.showShort("不支持的支付类型！");
                 break;
