@@ -98,9 +98,9 @@
 }
 
 # okhttp
--dontwarn com.squareup.okhttp.**
--keep class com.squareup.okhttp.** { *;}
 -dontwarn okio.**
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
 
 # retrofit2
 -dontwarn retrofit2.**
@@ -183,3 +183,67 @@ public static java.lang.String TABLENAME;
 -keep class eposp.wtf_library.** { *; }
 
 # ==============支付 end================
+# ==============第三方支付================
+#保持某包下所有类不混淆
+
+-keep class com.activity.**{*;}
+-keep class bfb.weixin.pay.**{*;}
+
+
+-dontwarn com.gather.flood.system.*
+-dontwarn com.switfpass.pay.activity.*
+-dontwarn com.gather.flood.phone.*
+-dontwarn com.switfpass.pay.activity.zxing.decoding.*
+-dontwarn com.gather.flood.system.*
+-dontwarn com.switfpass.pay.utils.*
+-dontwarn com.alipay.android.phone.mrpc.core.*
+-dontwarn com.switfpass.pay.activity.zxing.*
+-dontwarn com.switfpass.pay.service.*
+-dontwarn com.switfpass.pay.activity.zxing.camera.*
+-dontwarn com.tm.pay.*
+
+-keep class com.gather.flood.system.**{*;}
+-keep class com.switfpass.pay.activity.**{*;}
+-keep class com.gather.flood.phone.**{*;}
+-keep class com.switfpass.pay.activity.zxing.decoding.**{*;}
+-keep class com.gather.flood.system.**{*;}
+-keep class com.switfpass.pay.utils.**{*;}
+-keep class com.alipay.android.phone.mrpc.core.**{*;}
+-keep class com.switfpass.pay.activity.zxing.**{*;}
+-keep class com.switfpass.pay.service.**{*;}
+-keep class com.switfpass.pay.activity.zxing.camera.**{*;}
+-keep class com.tm.pay.**{*;}
+
+-dontwarn com.tm.plugin.alipay.*
+-keep class com.tm.plugin.alipay.**{*;}
+
+-keep class com.tencent.** { *;}
+-dontwarn com.tencent.*
+
+
+-keepclasseswithmembers,allowshrinking class * {
+    public <init>(android.content.Context,android.util.AttributeSet);
+}
+
+-keepclasseswithmembers,allowshrinking class * {
+    public <init>(android.content.Context,android.util.AttributeSet,int);
+}
+
+
+-keepclassmembers enum  * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+
+-keepclasseswithmembers,allowshrinking class * {
+    native <methods>;
+}
+
+
+-dontwarn com.sun.crypto.provider.*
+-keep class com.sun.crypto.provider.**{*;}
+
+-dontwarn com.third.wa5.sdk.*
+-keep class com.third.wa5.sdk.**{*;}
+# ==============第三方支付 end================

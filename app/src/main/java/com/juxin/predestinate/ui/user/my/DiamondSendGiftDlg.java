@@ -88,13 +88,13 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
                     //            if (null != iGiftSend) {
                     //                iGiftSend.onSend(giftBean);
                     //            }
-                    ModuleMgr.getCommonMgr().sendGift(otherId,giftBean.getId()+"",this);
+                    ModuleMgr.getCommonMgr().sendGift(otherId, giftBean.getId() + "",1,3, this);
                 } else {
                     //            if (null != iGiftSend) {
                     //                iGiftSend.onSendToPay(giftBean);
                     //            }
                     //            UIHelper.showDiamondsNormalDlg((Activity) mContext, otherId, channelId, Math.abs(dec));
-                    UIShow.showGoodsDiamondDialog(mContext);
+                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec));
                 }
                 dismiss();
                 break;
@@ -105,6 +105,8 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
     public void onRequestComplete(HttpResponse response) {
         SendGiftResultInfo info = new SendGiftResultInfo();
         info.parseJson(response.getResponseString());
+        ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
+        ModuleMgr.getChatMgr().sendGiftMsg(null, otherId + "", gifId, 1, 0);
         PToast.showShort(info.getMsg()+"");
     }
 

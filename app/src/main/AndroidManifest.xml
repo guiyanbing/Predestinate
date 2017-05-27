@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.juxin.predestinate"
-    android:versionCode="10200108"
-    android:versionName="3.0.8">
+    android:versionCode="10230300"
+    android:versionName="3.3.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- 百度定位所需权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -77,10 +78,7 @@
             android:name=".ui.user.check.other.UserBlockAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.PhoneVerifyAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.setting.UsersSetAct"
+            android:name=".ui.user.auth.PhoneVerifyAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.setting.SettingAct"
@@ -95,20 +93,7 @@
             android:name=".ui.setting.UserModifyPwdAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.recommend.RecommendAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.recommend.RecommendFilterAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.setting.FeedBackAct"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.setting.SuggestAct"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.check.self.info.UserInfoAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
@@ -133,7 +118,6 @@
 
         <activity
             android:name=".ui.user.check.other.UserOtherSetAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
@@ -154,9 +138,6 @@
         <!-- ============= 小友模块start ============= -->
         <activity
             android:name=".ui.user.my.GiftDiamondPayDlg"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.my.NearVisitorAct"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.my.MyAttentionAct"
@@ -181,6 +162,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.my.RedBoxPhoneVerifyAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.auth.IDCardAuthenticationAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.auth.IDCardAuthenticationSucceedAct"
             android:screenOrientation="portrait" />
 
         <activity
@@ -242,9 +229,7 @@
 
         <activity
             android:name=".ui.user.check.secret.dialog.SecretVideoPlayerDlg"
-            android:configChanges="screenSize|keyboard|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/No_Background" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.paygoods.vip.GoodsVipAct"
@@ -254,7 +239,10 @@
             android:name=".ui.mail.chat.PrivateChatAct"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
+        <activity
+            android:name=".ui.mail.popup.RandomRedBoxActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog" />
         <activity
             android:name=".ui.pay.PayListAct"
             android:configChanges="screenSize|keyboard|orientation"
@@ -321,7 +309,7 @@
             android:name=".ui.start.FindPwdAct"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.start.PhoneVerifyCompleteAct"
+            android:name=".ui.user.auth.PhoneVerifyCompleteAct"
             android:screenOrientation="portrait" />
 
         <!-- ============= 锁屏弹窗 ============= -->
@@ -374,6 +362,10 @@
             android:name=".ui.discover.UserRegHeadUploadAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.discover.SayHelloUserAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
         <!-- ============= service =============== -->
         <service
             android:name=".module.logic.socket.CoreService"
@@ -389,6 +381,50 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
+        <!-- ============== 微信其它支付 ==================== -->
+        <!-- ============== 二维码支付 ==================== -->
+        <activity
+            android:name=".ui.pay.wepayother.qrcode.WepayQRCodeAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <!-- ============== 二维码支付结束 ==================== -->
+        <!--杰莘公众号-->
+        <activity
+            android:name="com.switfpass.pay.activity.QQWapPayWebView"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--杰莘公众号end-->
+        <!--掌付公众号-->
+        <activity
+            android:name="com.third.wa5.sdk.ThirdActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent" />
+        <!--掌付公众号end-->
+        <activity
+            android:name="com.switfpass.pay.activity.PayResultActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <!-- ============== 微信其它支付结束 ==================== -->
+
+        <!-- 支付宝 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" />
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind" />
+
+        <!-- 微信支付 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/No_Background" />
     </application>
 
 </manifest>

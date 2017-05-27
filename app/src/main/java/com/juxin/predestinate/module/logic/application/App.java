@@ -2,6 +2,9 @@ package com.juxin.predestinate.module.logic.application;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
 
 /**
@@ -26,11 +29,13 @@ public class App extends MultiDexApplication {
      */
     public static boolean isLogin = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
         registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
+        //  initAppComponent();
 
         ModuleMgr.initModule(context);
     }
@@ -45,4 +50,29 @@ public class App extends MultiDexApplication {
     public static Context getContext() {
         return context;
     }
+
+    /**
+     * @return 获取资源读取对象
+     */
+    public static Resources getResource() {
+        return context.getResources();
+    }
+
+    // -----------------------------------------------------
+
+//    private static CacheComponent cacheComponent;
+//
+//    public static CacheComponent getCacheComponent() {
+//        return cacheComponent;
+//    }
+//
+//    /**
+//     * 缓存初始化
+//     */
+//    private void initAppComponent() {
+//        cacheComponent = DaggerCacheComponent.builder()
+//                .cacheModule(new CacheModule((Application) getContext()))
+//                .dBCache(new DBCache())
+//                .build();
+//    }
 }

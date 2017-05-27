@@ -14,7 +14,7 @@ import dagger.Provides;
  * Created by Kind on 2017/3/27.
  */
 @Module
-public final class DBModule {
+public class DBModule {
 
     private long uid = 0;
 

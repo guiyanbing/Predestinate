@@ -67,7 +67,7 @@ public class UserModifyPwdAct extends BaseActivity implements OnClickListener{
 			return true;
 		}
 		newpwd = edtTxt_modify_newpwd.getText().toString();
-		if (TextUtils.isEmpty(newpwd) || newpwd.length() < 6 || newpwd.length() > 20) {
+		if (TextUtils.isEmpty(newpwd) || newpwd.length() < 8 || newpwd.length() > 20) {
 			PToast.showShort(getResources().getString(R.string.toast_pwd_error));
 			return true;
 		}

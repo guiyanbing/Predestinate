@@ -7,7 +7,10 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
@@ -15,17 +18,19 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
-import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
+import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -41,6 +46,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,15 +58,16 @@ public class CommonMgr implements ModuleBase {
     private CommonConfig commonConfig;//服务器静态配置
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
+    private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
+
+    private int friendNum = 0;
 
     @Override
     public void init() {
-        requestServerQQ();
     }
 
     @Override
     public void release() {
-
     }
 
     /**
@@ -108,6 +115,7 @@ public class CommonMgr implements ModuleBase {
     public void requestStaticConfig() {
         requestConfig();
         requestGiftList(null);
+        getVerifyStatus(null);
         AttentionUtil.initUserDetails();
     }
 
@@ -134,6 +142,16 @@ public class CommonMgr implements ModuleBase {
         return commonConfig == null ? new CommonConfig() : commonConfig;
     }
 
+    /**
+     * 获取离线消息
+     */
+    public void reqOfflineMsg(RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", App.uid);
+        getParams.put("count", 50);
+
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
+    }
 
     /**
      * 获取自己的音频、视频开关配置
@@ -142,7 +160,8 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                videoVerify = (VideoVerifyBean) response.getBaseData();
+                if (response.isOk())
+                    videoVerify = (VideoVerifyBean) response.getBaseData();
             }
         });
     }
@@ -157,14 +176,20 @@ public class CommonMgr implements ModuleBase {
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig() {
+    public void setVideochatConfig(boolean videoStatus, boolean audioStatus) {
         HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("videochat", videoVerify.getVideochat());
-        post_param.put("audiochat", videoVerify.getAudiochat());
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.setVideochatConfig, null, null, post_param, RequestParam.CacheType.CT_Cache_No, true, false, new RequestComplete() {
+        post_param.put("videochat", videoStatus ? 1 : 0);
+        post_param.put("audiochat", audioStatus ? 1 : 0);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.setVideochatConfig, post_param, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-
+                if (response.isOk()) {
+                    requestVideochatConfig();
+                    return;
+                }
+                JSONObject json = response.getResponseJson();
+                if (json != null)
+                    PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
             }
         });
     }
@@ -177,23 +202,6 @@ public class CommonMgr implements ModuleBase {
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
-    }
-
-    /**
-     * 请求在线QQ配置
-     */
-    private void requestServerQQ() {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.serviceQQ, null, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                String serviceQQ = response.getResponseJson().optString("content");
-                PSP.getInstance().put(FinalKey.CONFIG_SERVICE_QQ, serviceQQ);
-            }
-        });
-    }
-
-    public void setGiftLists(GiftsList giftLists) {
-        this.giftLists = giftLists;
     }
 
     /**
@@ -225,6 +233,15 @@ public class CommonMgr implements ModuleBase {
         return giftLists;
     }
 
+    /**
+     * @return 返回认证消息对象
+     */
+    public IdCardVerifyStatusInfo getIdCardVerifyStatusInfo() {
+        if (mIdCardVerifyStatusInfo == null)
+            mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+        return mIdCardVerifyStatusInfo;
+    }
+
     public VideoVerifyBean getVideoVerify() {
         return videoVerify != null ? videoVerify : new VideoVerifyBean();
     }
@@ -247,6 +264,33 @@ public class CommonMgr implements ModuleBase {
             }
         }
         return false;
+    }
+
+    /**
+     * 判断是否到达第二天
+     *
+     * @return true 达到第二天
+     */
+    public boolean checkDate(String key) {
+        String recommendDate = PSP.getInstance().getString(key, "-1");
+        if (key.equals(ModuleMgr.getCenterMgr().getGroupSayHiDayKey())) {
+            PLogger.d("checkDate ==+>  recommendDate = " + recommendDate + " TimeUtil.getCurrentData() == " + TimeUtil.getCurrentData());
+        }
+        if (recommendDate != null) {
+            if (!recommendDate.equals(TimeUtil.getCurrentData())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 保存达到第二天的状态
+     *
+     * @param key
+     */
+    public void saveDateState(String key) {
+        PSP.getInstance().put(key, TimeUtil.getCurrentData() + "");
     }
 
     // ---------------------------- 软件升级 start ------------------------------
@@ -272,7 +316,8 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkUpdate, getParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (isShowTip) LoadingDialog.closeLoadingDialog(300);
+                if (isShowTip)
+                    LoadingDialog.closeLoadingDialog(300);
                 AppUpdate appUpdate = new AppUpdate();
                 appUpdate.parseJson(response.getResponseString());
                 UIShow.showUpdateDialog(activity, appUpdate, isShowTip);
@@ -292,20 +337,23 @@ public class CommonMgr implements ModuleBase {
         upMap.put("versionCode", versionCode);
         upMap.put("user", PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null));
 
-        if (DirType.isFolderExists(UPDATE_CACHE_PATH)) {
-            File file = new File(UPDATE_CACHE_PATH + "user_cache");
-            OutputStreamWriter out = null;
+        // 如果文件夹创建失败，直接跳出
+        if (DirType.isFolderExists(UPDATE_CACHE_PATH)) return;
+
+        // 文件写入
+        File file = new File(UPDATE_CACHE_PATH + "user_cache");
+        OutputStreamWriter out = null;
+        try {
+            out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
+            out.write(new Gson().toJson(upMap));//向文件写入内容
+            out.flush();
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        } finally {
             try {
-                out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
-                out.write(new Gson().toJson(upMap));//向文件写入内容
+                if (out != null) out.close();// 关闭输出流
             } catch (Exception e) {
                 PLogger.printThrowable(e);
-            } finally {
-                try {
-                    if (out != null) out.close();// 关闭输出流
-                } catch (Exception e) {
-                    PLogger.printThrowable(e);
-                }
             }
         }
     }
@@ -319,21 +367,23 @@ public class CommonMgr implements ModuleBase {
             JSONObject cacheObject = JsonUtil.getJsonObject(key);
             String packageName = cacheObject.optString("packageName");
             int versionCode = cacheObject.optInt("versionCode");
-            if (ModuleMgr.getAppMgr().getPackageName().equalsIgnoreCase(packageName) &&
-                    ModuleMgr.getAppMgr().getVerCode() == versionCode) {
-                JSONArray jsonArray = cacheObject.optJSONArray("user");
-                for (int i = 0; jsonArray != null && i < jsonArray.length(); i++) {
-                    JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
-                    try {
-                        ModuleMgr.getLoginMgr().addLoginUser(
-                                Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
-                                EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
-                    } catch (Exception e) {
-                        PLogger.printThrowable(e);
-                    }
+            // 如果当前包名或版本号不等于目标包名或版本号，才进行处理
+            if (!ModuleMgr.getAppMgr().getPackageName().equalsIgnoreCase(packageName) ||
+                    ModuleMgr.getAppMgr().getVerCode() != versionCode) return;
+
+            // 读取旧版本用户数据
+            JSONArray jsonArray = cacheObject.optJSONArray("user");
+            for (int i = 0; jsonArray != null && i < jsonArray.length(); i++) {
+                JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
+                try {
+                    ModuleMgr.getLoginMgr().addLoginUser(
+                            Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
+                            EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
+                } catch (Exception e) {
+                    PLogger.printThrowable(e);
                 }
-                FileUtil.deleteFile(UPDATE_CACHE_PATH + "user_cache");
             }
+            FileUtil.deleteFile(UPDATE_CACHE_PATH + "user_cache");
         }
     }
     // ---------------------------- 软件升级 end ------------------------------
@@ -363,7 +413,7 @@ public class CommonMgr implements ModuleBase {
      *
      * @return
      */
-    private String getSayHelloKey() {
+    public String getSayHelloKey() {
         return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
@@ -373,51 +423,100 @@ public class CommonMgr implements ModuleBase {
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
-//        if (checkDateAndSave(getSayHelloKey())) {
+        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
 
-        getSayHiList(new RequestComplete() {
+            getSayHiList(new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
+                    if (response.isOk()) {
+                        UserInfoLightweightList list = new UserInfoLightweightList();
+                        list.parseJsonSayhi(response.getResponseString());
+                        SayHelloDialog sayHelloDialog = new SayHelloDialog();
+                        sayHelloDialog.showDialog(context);
+                        sayHelloDialog.setData(list.getLightweightLists());
+                    }
+                }
+            });
+        }
+    }
+
+
+    /**
+     * 请求好友数据  发出更新好友条数通知
+     */
+    public void getFriendsSize() {
+        getMyFriends(1, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
                 if (response.isOk()) {
-                    UserInfoLightweightList list = new UserInfoLightweightList();
-                    list.parseJsonSayhi(response.getResponseString());
-                    SayHelloDialog sayHelloDialog = new SayHelloDialog();
-                    sayHelloDialog.showDialog(context);
-                    sayHelloDialog.setData(list.getLightweightLists());
+                    if (!response.isCache()) {
+                        UserInfoLightweightList lightweightList = new UserInfoLightweightList();
+                        lightweightList.parseJsonFriends(response.getResponseString());
+                        setFriendNum(lightweightList.getTotalcnt());
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice, getFriendNum());
+                    }
                 }
             }
         });
-
-
-//        }
     }
 
     /**
-     * 推荐的人
+     * 获取好友数量
      *
-     * @param complete
+     * @return
      */
-    public void sysRecommend(RequestComplete complete, final int cur, HashMap<String, Object> post_param) {
-        post_param.put("page", cur);
-        post_param.put("limit", 10);
-        post_param.put("tm", ServerTime.getServerTime().getTimeInMillis());
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysRecommend, post_param, complete);
+    public int getFriendNum() {
+        return friendNum;
     }
 
-    /**
-     * 系统标签
-     *
-     * @param complete
-     */
-    public void sysTags(RequestComplete complete) {
-        HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("page", 1);
-        post_param.put("limit", 20);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.sysTags, post_param, complete);
+    public void setFriendNum(int friendNum) {
+        this.friendNum = friendNum;
     }
+
 
     //============================== 小友模块相关接口 =============================
+
+    /**
+     * 获取最近礼物列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void lastGiftList(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.lastGiftList, null, complete);
+    }
+
+    /**
+     * 上传身份证照片
+     *
+     * @param url      图片本地地址
+     * @param complete 上传完成回调
+     */
+    public void uploadIdCard(final String url, final RequestComplete complete) {
+        if (FileUtil.isExist(url)) {
+            Map<String, File> fileParams = new HashMap<>();
+            fileParams.put("userfile", new File(url));
+
+            long uid = ModuleMgr.getLoginMgr().getUserList().get(0).getUid();
+            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw().trim();
+
+            Map<String, Object> postParams = new HashMap<>();
+            postParams.put("uid", uid);
+            postParams.put("code", EncryptUtil.md5(uid + EncryptUtil.md5(password)));
+
+            ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadIdCard, null, fileParams, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (complete != null)
+                        complete.onRequestComplete(response);
+                }
+            });
+
+        } else {
+            LoadingDialog.closeLoadingDialog();
+            PToast.showShort("图片地址无效");
+        }
+    }
 
     /**
      * 我关注的列表
@@ -438,30 +537,6 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 取消关注
-     *
-     * @param to_uid   关注者id
-     * @param complete 请求完成后回调
-     */
-    public void unfollow(Long to_uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("to_uid", to_uid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.unfollow, getParams, complete);
-    }
-
-    /**
-     * 关注
-     *
-     * @param to_uid   关注者id
-     * @param complete 请求完成后回调
-     */
-    public void follow(Long to_uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("to_uid", to_uid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.follow, getParams, complete);
-    }
-
-    /**
      * 手机验证
      *
      * @param phoneNum 手机号
@@ -472,6 +547,54 @@ public class CommonMgr implements ModuleBase {
         getParams.put("cellPhone", phoneNum);
         getParams.put("verifyCode", code);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.bindCellPhone, getParams, complete);
+    }
+
+    /**
+     * 用户身份认证提交
+     *
+     * @param id_num       身份证号码
+     * @param accountname  真实姓名
+     * @param accountnum   银行账号/支付宝账户
+     * @param bank         银行
+     * @param subbank      支行
+     * @param id_front_img 身份证正面照URL
+     * @param id_back_img  身份证背面照URL
+     * @param face_img     手持身份证照URL
+     * @param paytype      支付类型 1银行 2支付宝 (默认支付宝)
+     * @param complete     请求完成后回调
+     */
+    public void userVerify(String id_num, String accountname, String accountnum, String bank, String subbank, String id_front_img,
+                           String id_back_img, String face_img, int paytype, RequestComplete complete) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("id_num", id_num);
+        getParams.put("accountname", accountname);
+        getParams.put("accountnum", accountnum);
+        getParams.put("bank", bank);
+        getParams.put("subbank", subbank);
+        getParams.put("id_front_img", id_front_img);
+        getParams.put("id_back_img", id_back_img);
+        getParams.put("face_img", face_img);
+        getParams.put("paytype", paytype);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.userVerify, getParams, complete);
+    }
+
+    /**
+     * 获取用户验证信息(密)
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getVerifyStatus(final RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getVerifyStatus, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    mIdCardVerifyStatusInfo = new IdCardVerifyStatusInfo();
+                    mIdCardVerifyStatusInfo.parseJson(response.getResponseString());
+                }
+                if (complete != null)
+                    complete.onRequestComplete(response);
+            }
+        });
     }
 
     /**
@@ -520,28 +643,19 @@ public class CommonMgr implements ModuleBase {
      *
      * @param touid    赠送对象UId
      * @param giftid   礼物Id
+     * @param giftnum  礼物数量（不填为1）
+     * @param gtype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
      *                 //     * @param begid     索要Id
-     *                 //     * @param giftnum   礼物数量（不填为1）
-     *                 //     * @param ftype     礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid/*,int begid,int giftnum,int gtype*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
-//        getParams.put("begid", begid);
-//        getParams.put("giftnum", giftnum);
-//        getParams.put("gtype", gtype);
+        getParams.put("giftnum", giftnum);
+        getParams.put("gtype", gtype);
+        //        getParams.put("begid", begid);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.sendGift, getParams, complete);
-    }
-
-    /**
-     * 最近来访
-     *
-     * @param complete 请求完成后回调
-     */
-    public void viewMeList(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.viewMeList, null, complete);
     }
 
     /**
@@ -605,16 +719,17 @@ public class CommonMgr implements ModuleBase {
      * 红包记录--提现申请
      *
      * @param money       提现金额(分)
+     * @param paytype     支付方式(1或为空 银行卡, 2 支付宝)
      * @param accountname 帐户姓名
      * @param accountnum  银行卡号/支付宝账号
      * @param bank        开户行/支付类型
      * @param subbank     开户支行
      * @param complete    请求完成后回调
      */
-    public void reqWithdraw(String money, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
+    public void reqWithdraw(String money, int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
         postParams.put("money", (Float.parseFloat(money) * 100) + "");
+        postParams.put("paytype", paytype);
         postParams.put("accountname", accountname);
         postParams.put("accountnum", accountnum);
         postParams.put("bank", bank);
@@ -628,24 +743,24 @@ public class CommonMgr implements ModuleBase {
      * @param complete 请求完成后回调
      */
     public void reqWithdrawAddress(RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, postParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWithdrawAddress, null, complete);
     }
 
     /**
      * 红包记录--提现申请修改地址
      *
-     * @param accountname 请求完成后回调
-     * @param accountnum  请求完成后回调
-     * @param bank        请求完成后回调
-     * @param subbank     请求完成后回调
+     * @param money       提现金额(分)
+     * @param paytype     支付方式(1或为空 银行卡, 2 支付宝)
+     * @param accountname 帐户姓名
+     * @param accountnum  银行卡号/支付宝账号
+     * @param bank        开户行/支付类型
+     * @param subbank     开户支行
      * @param complete    请求完成后回调
      */
-    public void reqWithdrawModify(int id, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
+    public void reqWithdrawModify(String money, int paytype, String accountname, String accountnum, String bank, String subbank, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        postParams.put("id", id);
+        postParams.put("money", (Float.parseFloat(money) * 100) + "");
+        postParams.put("paytype", paytype);
         postParams.put("accountname", accountname);
         postParams.put("accountnum", accountnum);
         postParams.put("bank", bank);
@@ -660,12 +775,9 @@ public class CommonMgr implements ModuleBase {
      * @param complete
      */
     public void getUserSimpleList(ArrayList<String> userLists, RequestComplete complete) {
-//        Gson gson = new Gson();
-//        String uidlist = gson.toJson(userLists);
         String[] uidlist = userLists.toArray(new String[userLists.size()]);
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uidlist", uidlist);// uids
-//        Log.e("TTTTTNNN", uidlist + "");
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserSimpleList, postParams, complete);
     }
 
@@ -710,7 +822,7 @@ public class CommonMgr implements ModuleBase {
         if (payCType > -1) {
             postParms.put("payCType", payCType);
         }
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqWX, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqWX, postParms, complete);
     }
 
     /**
@@ -731,8 +843,8 @@ public class CommonMgr implements ModuleBase {
         postParms.put("productid", payID);
         postParms.put("total_fee", payMoney);
         postParms.put("payCType", 1000);
-
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(urlParam, postParms, complete);
+        postParms.put("user_client_type", 2);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(urlParam, postParms, complete);
     }
 
     /**
@@ -758,18 +870,18 @@ public class CommonMgr implements ModuleBase {
         postParms.put("sn", sn);// 充值卡号
         postParms.put("password", password);// 充值卡密码
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqPhoneCard, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqPhoneCard, postParms, complete);
     }
 
     public void reqSearchPhoneCardMethod(String orderNo, RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("orderNo", orderNo);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqSearchPhoneCard, getParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqSearchPhoneCard, getParams, complete);
     }
 
     public void reqangelPayF(RequestComplete complete) {
         HashMap<String, Object> getParams = new HashMap<>();
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayF, getParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqangelPayF, getParams, complete);
     }
 
     public void reqAngelPay(String name, int payID, int total_fee, String pan, String mobile, String idcard, String nickname, RequestComplete complete) {
@@ -783,7 +895,7 @@ public class CommonMgr implements ModuleBase {
         postParms.put("idcard", idcard);// 身份证
         postParms.put("realname", nickname);//名称
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPay, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqangelPay, postParms, complete);
     }
 
     public void reqAngelPayB(String name, int payID, int total_fee, String mobile, String nickname, RequestComplete complete) {
@@ -795,12 +907,12 @@ public class CommonMgr implements ModuleBase {
         postParms.put("mobile", mobile);//电话
         postParms.put("realname", nickname);//名称
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqangelPayB, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqangelPayB, postParms, complete);
     }
 
     public void reqAnglePayQuery(RequestComplete complete) {
         HashMap<String, Object> getParms = new HashMap<>();
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqAnglePayQuery, getParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqAnglePayQuery, getParms, complete);
     }
 
     //================ 发现 start =========================\\
@@ -891,6 +1003,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 获取自定义表情列表
+     *
      * @param complete
      */
     public void reqCustomFace(RequestComplete complete) {
@@ -899,6 +1012,7 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * add自定义表情
+     *
      * @param url
      * @param complete
      */
@@ -906,5 +1020,23 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> postParms = new HashMap<>();
         postParms.put("url", url);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
+    }
+
+    /**
+     * del自定义表情
+     *
+     * @param url
+     * @param complete
+     */
+    public void delCustomFace(String url, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("url", url);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.delCustomFace, postParms, complete);
+    }
+
+    public void reqUserInfoSummary(List<Long> uids, RequestComplete complete) {
+        HashMap<String, Object> postParms = new HashMap<>();
+        postParms.put("uids", uids.toArray(new Long[uids.size()]));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserInfoSummary, postParms, complete);
     }
 }

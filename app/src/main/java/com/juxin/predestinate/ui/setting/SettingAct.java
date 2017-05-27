@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.setting;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,24 +14,21 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.module.util.SDCardUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
-import java.io.File;
-
 
 /**
- * 设置页面`
+ * 设置页面
  *
- * @author Kind
+ * @author xy
  */
 public class SettingAct extends BaseActivity implements OnClickListener {
 
@@ -92,7 +88,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             setting_account.setVisibility(View.VISIBLE);
         }
 
-        String cacheSize = Show_Cache();
+        String cacheSize = DirType.getCacheSize();
         setting_clear_cache_tv.setText(cacheSize);
     }
 
@@ -222,9 +218,9 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         exitLogin();
                     }
-                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_submit), true);
+                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.cancel), getResources().getString(R.string.ok), true);
                 break;
-            case R.id.setting_video_switch: {
+            case R.id.setting_video_switch: {//视频通话开关
                 if (validChange()) {
                     if (videoStatus) {
                         videoStatus = false;
@@ -235,11 +231,11 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setVideochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig();
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus);
                 }
                 break;
             }
-            case R.id.setting_audio_switch: {
+            case R.id.setting_audio_switch: {//语音通话开关
                 if (validChange()) {
                     if (audioStatus) {
                         audioStatus = false;
@@ -250,7 +246,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setAudiochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig();
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus);
                 }
                 break;
             }
@@ -265,8 +261,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     public boolean validChange() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         //开启音、视频通话时，男性用户判断是否VIP
-        if (userDetail.getGender() == 1
-                && !userDetail.isMonthMail()) {
+        if (userDetail.getGender() == 1 && !userDetail.isVip()) {
 
             PickerDialogUtil.showSimpleTipDialogExt(SettingAct.this, new SimpleTipDialog.ConfirmListener() {
                 @Override
@@ -277,7 +272,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 public void onSubmit() {
                     UIShow.showOpenVipActivity(SettingAct.this);
                 }
-            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
+            }, getResources().getString(R.string.dal_vip_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_vip_open), true, R.color.text_zhuyao_black);
             return false;
         }
         //开启音、视频通话时，女性用户判断是否视频认证
@@ -293,22 +288,21 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                     public void onSubmit() {
                         UIShow.showMyAuthenticationVideoAct(SettingAct.this, 0);
                     }
-                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.dal_cancle), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
+                }, getResources().getString(R.string.dal_auth_content), "", getResources().getString(R.string.cancel), getResources().getString(R.string.dal_auth_open), true, R.color.text_zhuyao_black);
                 return false;
             } else if (videoVerifyBean.getStatus() == 1) {
                 PToast.showShort(getResources().getString(R.string.toast_under_review));
                 return false;
             }
         }
-//        chatType = type;
-//        lastOpt = OPT_TOGGLE;
         if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) == ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
-//            executeVaConfig(context, type);
+            return true;
         } else {
-//            downloadVideoPlugin(context);
+            VideoAudioChatHelper.getInstance().downloadVideoPlugin(SettingAct.this);
         }
         return true;
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -327,7 +321,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     public static void clearUserInfo() {
         // 清除当前登录的用户信息
         ModuleMgr.getLoginMgr().logout();
-
+        ModuleMgr.getCenterMgr().clearUserInfo();
         PSP.getInstance().put("addMsgToUserDate", null);
         PSP.getInstance().put("recommendDate", null);
     }
@@ -347,8 +341,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             public void run() {
                 Message msg = new Message();
                 try {
-                    clearCache();
-                    clearDB();
+                    DirType.clearCache();
                     msg.what = 1;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -357,51 +350,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 handler.sendMessage(msg);
             }
         }.start();
-    }
-
-    private String Show_Cache() {
-        // 计算缓存大小
-        long fileSize = 0;
-        String cacheSize = "0KB";
-        File filesDir = App.context.getFilesDir();
-        File cacheDir = App.context.getCacheDir();
-
-        fileSize += SDCardUtil.getDirSize(filesDir);
-        fileSize += SDCardUtil.getDirSize(cacheDir);
-        // 2.2版本才有将应用缓存转移到sd卡的功能
-        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
-            File externalCacheDir = getExternalCacheDir(App.context);
-            fileSize += SDCardUtil.getDirSize(externalCacheDir);
-        }
-        if (fileSize > 0)
-            cacheSize = SDCardUtil.formatFileSize(fileSize);
-        return cacheSize;
-    }
-
-    private void clearCache() {
-        SDCardUtil.clearCacheFolder(App.context.getFilesDir(), System.currentTimeMillis());
-        SDCardUtil.clearCacheFolder(App.context.getCacheDir(), System.currentTimeMillis());
-        // 2.2版本才有将应用缓存转移到sd卡的功能
-        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
-            SDCardUtil.clearCacheFolder(getExternalCacheDir(App.context), System.currentTimeMillis());
-        }
-    }
-
-
-    private void clearDB() {
-//        DataCenter.getInstance().delete_User_Message_List_MoreThanNHour_2(AppCtx.getUid(), 48);
-    }
-
-    /**
-     * 判断当前版本是否兼容目标版本的方法
-     */
-    public boolean isMethodsCompat(int VersionCode) {
-        int currentVersion = android.os.Build.VERSION.SDK_INT;
-        return currentVersion >= VersionCode;
-    }
-
-    public File getExternalCacheDir(Context context) {
-        return context.getExternalCacheDir();
     }
 
 

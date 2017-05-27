@@ -20,15 +20,10 @@ import java.util.List;
  * Created by Su on 2017/5/12.
  */
 public class HorizontalAdapter extends ExBaseAdapter<UserPhoto> {
-    private int showType = AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM;
     private int params;
 
-    // data
-    private String url;
-
-    public HorizontalAdapter(Context context, int showType, int params, List<UserPhoto> datas) {
+    public HorizontalAdapter(Context context, int params, List<UserPhoto> datas) {
         super(context, datas);
-        this.showType = showType;
         this.params = params;
     }
 
@@ -52,15 +47,8 @@ public class HorizontalAdapter extends ExBaseAdapter<UserPhoto> {
             mHolder = (ViewHolder) convertView.getTag();
         }
 
-        // 展示相册
-        if (showType == AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM) {
-            UserPhoto userPhoto = getItem(position);
-            url = userPhoto.getThumb();
-        }
-
-        ImageLoader.loadCenterCrop(App.context, url, mHolder.img_media);
-        if (showType == AlbumHorizontalPanel.EX_HORIZONTAL_VIDEO)
-            mHolder.img_shade.setImageResource(R.drawable.p1_user_check_video_lock);
+        UserPhoto userPhoto = getItem(position);
+        ImageLoader.loadCenterCrop(App.context, userPhoto.getThumb(), mHolder.img_media);
         return convertView;
     }
 

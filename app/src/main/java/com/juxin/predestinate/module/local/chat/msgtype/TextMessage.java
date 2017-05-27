@@ -1,6 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
-import com.juxin.mumu.bean.log.MMLog;
+import android.os.Bundle;
+
+import com.juxin.library.log.PLogger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +17,7 @@ public class TextMessage extends BaseMessage {
     //打招呼
     private int kf;
     private int sayHelloType;
+    private String htm;//HTM文字
 
     //关注状态1为关注2为取消关注
     private int gz;
@@ -37,37 +41,6 @@ public class TextMessage extends BaseMessage {
         this.setSayHelloType(sayHelloType);
     }
 
-
-    /**
-     * 构造文本消息
-     *
-     * @param channelID 频道ID
-     * @param whisperID 私聊ID
-     * @param content
-     * @return
-     */
-//    public TextMessage(String channelID, String whisperID, String content) {
-//        super(channelID, whisperID);
-//        this.setMsgDesc(content);
-//        this.setType(BaseMessageType.text.getMsgType());
-//    }
-
-    /**
-     * 机器人专用
-     * @param whisperID
-     * @param content
-     */
-//    public TextMessage(long whisperID, String content) {
-//        super();
-//        this.setChannelID(null);
-//        this.setWhisperID(String.valueOf(whisperID));
-//        this.setSendID(whisperID);
-//        this.setTime(getCurrentTime());
-//        this.setcMsgid(getCMsgID());
-//        this.setMsgDesc(content);
-//        this.setType(BaseMessageType.text.getMsgType());
-//    }
-
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
@@ -76,6 +49,8 @@ public class TextMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setRu(object.optInt("ru"));
+        this.setHtm(object.optString("htm"));
         return this;
     }
 
@@ -83,7 +58,7 @@ public class TextMessage extends BaseMessage {
     public String getJson(BaseMessage message) {
         JSONObject json = new JSONObject();
         try {
-            json.put("tid", message.getWhisperID());
+            json.put("tid", new JSONArray().put(message.getWhisperID()));
             json.put("mtp", message.getType());
             json.put("mct", message.getMsgDesc());
             json.put("mt", getCurrentTime());
@@ -101,27 +76,10 @@ public class TextMessage extends BaseMessage {
 
             return json.toString();
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return null;
     }
-
-//    public TextMessage(Map<String, Object> map, int type) {
-//        super(map, type);
-//        convertJSON(map);
-//    }
-//
-//    public TextMessage(int type, Map<String, Object> map) {
-//        super(type, map);
-//        convertJSON(map);
-//    }
-
-//    @Override
-//    public void convertJSON(Map<String, Object> map) {
-//        super.convertJSON(map);
-//        this.setMsgDesc(getJsonObject(getJsonStr()).optString("mct"));
-//    }
-
 
     public int getKf() {
         return kf;
@@ -139,9 +97,28 @@ public class TextMessage extends BaseMessage {
         this.sayHelloType = sayHelloType;
     }
 
-    public TextMessage(BaseMessage message) {
-        super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
-                message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
-        parseJson(getJsonStr());
+    public String getHtm() {
+        return htm;
+    }
+
+    public void setHtm(String htm) {
+        this.htm = htm;
+    }
+
+    public TextMessage(Bundle bundle) {
+        super(bundle);
+        convertJSON(getJsonStr());
+    }
+
+    //私聊列表
+    public TextMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
+        convertJSON(getJsonStr());
+    }
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        this.setMsgDesc(getJsonObject(jsonStr).optString("mct")); //消息内容
     }
 }

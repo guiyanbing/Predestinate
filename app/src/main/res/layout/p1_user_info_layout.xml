@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
+
+    <include layout="@layout/base_title" />
 
     <ScrollView
+        android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/base_title"
         android:fadingEdge="none"
         android:overScrollMode="always"
         android:scrollbars="none">
@@ -13,7 +18,7 @@
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" />
 
     </ScrollView>
@@ -130,9 +135,8 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <include layout="@layout/base_title" />
-
     <!-- 礼物悬框 -->
+
     <ImageView
         android:id="@+id/iv_gift"
         android:layout_width="@dimen/px135_dp"
@@ -142,6 +146,37 @@
         android:layout_marginBottom="@dimen/px30_dp"
         android:layout_marginRight="@dimen/px60_dp"
         android:background="@drawable/f1_user_check_info_gift"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/ll_chat_greeting_tips_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/iv_gift"
+        android:layout_alignRight="@id/iv_gift"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_chat_greeting_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_half_circle_pink"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="@string/msg_send_gift_greeting_male_tips"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/f1_pink_reverse_triangle" />
+    </LinearLayout>
 </RelativeLayout>

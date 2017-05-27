@@ -1,22 +1,16 @@
 package com.juxin.predestinate.module.local.msgview;
 
-import android.text.TextUtils;
-
+import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.predestinate.module.local.msgview.smile.AllSmilePacks;
 import com.juxin.predestinate.module.local.msgview.smile.FastInputItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePacks;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 表情
@@ -121,7 +115,7 @@ public class PhizMgr implements ModuleBase {
                 }
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
 
         return null;

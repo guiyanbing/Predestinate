@@ -109,4 +109,10 @@
         </attr>
         <attr name="stl_drawDecorationAfterTab" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="MarqueeView">
+        <attr format="integer" name="marqueeInterval" />
+        <attr format="integer" name="marqueeAnimDuration" />
+        <attr format="reference" name="marqueeAnimIn" />
+        <attr format="reference" name="marqueeAnimOut" />
+    </declare-styleable>
 </resources>

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -46,6 +47,17 @@ public class FloatingMgr implements Handler.Callback {
         }
     }
 
+    private boolean canNotify = true;
+
+    /**
+     * 设置是否允许弹出floating提示，特殊情况使用
+     *
+     * @param canNotify 是否允许
+     */
+    public void setCanNotify(boolean canNotify) {
+        this.canNotify = canNotify;
+    }
+
     /**
      * 对外功能。
      */
@@ -59,13 +71,13 @@ public class FloatingMgr implements Handler.Callback {
      * @return 添加成功返回true。
      */
     public boolean addPanel(FloatingBasePanel floatingBasePanel) {
+        if (!canNotify) return false;
         if (floatingBasePanel == null) return false;
 
         synchronized (this) {
             if (!ModuleMgr.getAppMgr().isForeground()) return false;//如果应用在后台，返回false
 
             getWindowManager();
-
             if (floatingBasePanel.isFixed()) {
                 fixedPanels.add(floatingBasePanel);
             } else {
@@ -153,7 +165,8 @@ public class FloatingMgr implements Handler.Callback {
                     PixelFormat.TRANSPARENT);
             layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 
-            layoutParams.y = ModuleMgr.getAppMgr().getStatusBarHeight();
+            layoutParams.y = ModuleMgr.getAppMgr().getStatusBarHeight() +
+                    App.getResource().getDimensionPixelSize(R.dimen.title_footer_height);
 
             parentView = LayoutInflater.from(App.context).inflate(R.layout.common_floating_window, null);
             fixedViewGroup = (ViewGroup) parentView.findViewById(R.id.floating_fixed_layout);
@@ -190,19 +203,18 @@ public class FloatingMgr implements Handler.Callback {
                 handler.removeMessages(FLOATING_Countdown_Id);
                 handler.sendEmptyMessageDelayed(FLOATING_Countdown_Id, FLOATING_Countdown);
             }
-
             tempViewGroup = autoViewGroup;
         }
 
         View view = lastBasePanel.getContentView();
         InterceptTouchLinearLayout layout = createLayout(view);
         layout.addView(view, params);
-        Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_in);
         tempViewGroup.addView(layout);
+        Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_in);
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
         layout.startAnimation(animation);
 
         addView();
-
         removeAutoMorePanel();
     }
 
@@ -223,25 +235,21 @@ public class FloatingMgr implements Handler.Callback {
     private void removeView(FloatingBasePanel floatingBasePanel) {
         View view = floatingBasePanel.getContentView();
         InterceptTouchLinearLayout layout = views.remove(view);
-
-        if (layout == null) {
-            return;
-        }
+        if (layout == null) return;
 
         Animation animation = AnimationUtils.loadAnimation(App.context, R.anim.floating_top_out);
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
         animation.setFillAfter(true);
         layout.setInterceptTouchEvent(true);
         layout.startAnimation(animation);
 
         if (handler != null) {
             Message msg;
-
             if (floatingBasePanel.isFixed()) {
                 msg = handler.obtainMessage(FLOATING_Remove_View_Id, 1, 0, layout);
             } else {
                 msg = handler.obtainMessage(FLOATING_Remove_View_Id, 2, 0, layout);
             }
-
             handler.sendMessageDelayed(msg, 500);
         }
     }
@@ -332,8 +340,10 @@ public class FloatingMgr implements Handler.Callback {
             case FLOATING_Remove_Ani_Id:
 //                 msg.obj
                 break;
-        }
 
+            default:
+                break;
+        }
         return true;
     }
 }

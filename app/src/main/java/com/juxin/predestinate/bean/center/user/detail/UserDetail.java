@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
+import android.os.Parcel;
+
 import com.juxin.library.log.PSP;
 
 import org.json.JSONObject;
@@ -13,13 +15,13 @@ import java.util.List;
 public class UserDetail extends UserInfo {
 
     private List<UserPhoto> userPhotos = new ArrayList<>();
-    private UserRequire userRequire = new UserRequire();
-
+    private List<UserVideo> userVideos = new ArrayList<>();
     private int voice = 1;  //1为开启语音，0为关闭
 
     @Override
     public void parseJson(String s) {
-        JSONObject jsonObject = getJsonObject(s);
+        String jsonData = getJsonObject(s).optString("res");
+        JSONObject jsonObject = getJsonObject(jsonData);
 
         // 详细信息
         if (!jsonObject.isNull("userDetail")) {
@@ -32,16 +34,20 @@ public class UserDetail extends UserInfo {
             this.userPhotos = (List<UserPhoto>) getBaseDataList(jsonObject.optJSONArray("myPhoto"), UserPhoto.class);
         }
 
-        // 用户交友需求
-        if (!jsonObject.isNull("user_require")) {
-            String json = jsonObject.optString("user_require");
-            userRequire.parseJson(json);
-        }
-
         // 开启语音状态
         if (!jsonObject.isNull("voice")) {
             this.voice = jsonObject.optInt("voice");
         }
+
+        // -------- 他人 -----
+        // 视频列表
+        if (!jsonObject.isNull("videolist")) {
+            this.userVideos = (List<UserVideo>) getBaseDataList(jsonObject.optJSONArray("videolist"), UserVideo.class);
+        }
+    }
+
+    public List<UserVideo> getUserVideos() {
+        return userVideos;
     }
 
     public List<UserPhoto> getUserPhotos() {
@@ -52,10 +58,6 @@ public class UserDetail extends UserInfo {
         return voice;
     }
 
-    public UserRequire getUserRequire() {
-        return userRequire;
-    }
-
     public int getDiamondsSum() {
         return PSP.getInstance().getInt("diamondsSum" + uid, 0);
     }
@@ -63,4 +65,40 @@ public class UserDetail extends UserInfo {
     public void setDiamondsSum(int diamondsSum) {
         PSP.getInstance().put("diamondsSum" + uid, diamondsSum);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeTypedList(this.userPhotos);
+        dest.writeList(this.userVideos);
+        dest.writeInt(this.voice);
+    }
+
+    public UserDetail() {
+    }
+
+    protected UserDetail(Parcel in) {
+        super(in);
+        this.userPhotos = in.createTypedArrayList(UserPhoto.CREATOR);
+        this.userVideos = new ArrayList<>();
+        in.readList(this.userVideos, UserVideo.class.getClassLoader());
+        this.voice = in.readInt();
+    }
+
+    public static final Creator<UserDetail> CREATOR = new Creator<UserDetail>() {
+        @Override
+        public UserDetail createFromParcel(Parcel source) {
+            return new UserDetail(source);
+        }
+
+        @Override
+        public UserDetail[] newArray(int size) {
+            return new UserDetail[size];
+        }
+    };
 }

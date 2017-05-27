@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px70_dp"
+        android:layout_marginTop="@dimen/px130_dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="10dp"
@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/f1_phoneverify_ok" />
 
             <View
                 android:layout_width="0dp"
@@ -80,19 +80,20 @@
                 android:id="@+id/bt_return_authact"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginRight="@dimen/px20_dp"
+                android:layout_weight="1"
                 android:background="@drawable/f1_btn_phoneverify_complete_bg"
-                android:text="返回首页"
+                android:text="@string/bt_return_authact"
                 android:textColor="@color/text_zhuyao_black" />
+
             <Button
-                android:layout_marginLeft="@dimen/px20_dp"
                 android:id="@+id/bt_return_loginact"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/px20_dp"
                 android:layout_weight="1"
                 android:background="@drawable/f1_btn_phoneverify_complete_bg"
-                android:text="手机号登录"
+                android:text="@string/bt_return_loginact"
                 android:textColor="@color/text_zhuyao_black" />
 
         </LinearLayout>

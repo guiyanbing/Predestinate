@@ -362,13 +362,14 @@ public class FileUtil {
      * @param path     文件拷贝路径
      * @return 是否拷贝成功
      */
-    public static boolean copyApkFromAssets(Context context, String fileName, String path) {
+    public static boolean copyFileFromAssets(Context context, String fileName, String path) {
         boolean copyIsFinish = false;
         InputStream is = null;
         FileOutputStream fos = null;
         try {
             is = context.getAssets().open(fileName);
             File file = new File(path);
+            if (file.exists()) file.delete();
             file.createNewFile();
             fos = new FileOutputStream(file);
             byte[] temp = new byte[1024];

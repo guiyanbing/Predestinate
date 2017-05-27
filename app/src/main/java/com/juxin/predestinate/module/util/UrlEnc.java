@@ -70,6 +70,7 @@ public class UrlEnc {
      * @return 加密之后的请求url
      */
     public static String appendUrl(String url, Map<String, Object> getParams, Map<String, Object> postParams, boolean isDes) {
+
         getParams = getSplitMap(url, getParams);
         getParams.put("ts", TimeUtil.getCurrentTimeMil());
         // 服务器要求用C++代码加密的参数，此处的hash值只对ts进行hash算法  2016/12/19

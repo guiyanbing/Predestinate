@@ -3,7 +3,8 @@ package com.juxin.predestinate.ui.pay.cupvoice;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import com.juxin.mumu.bean.utils.MMToast;
+
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -46,7 +47,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 if (!IsPay) {
-                    MMToast.showShort("支付中，请等待");
+                    PToast.showShort("支付中，请等待");
                 } else if (isSuccess) {
                     PayCupVoiceOkAct.this.setResult(Constant.PAY_VOICE_OK);
                     back();
@@ -91,7 +92,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
     @Override
     public void onBackPressed() {
         if (!IsPay) {
-            MMToast.showShort("支付中，请等待");
+            PToast.showShort("支付中，请等待");
         } else if (isSuccess) {
             this.setResult(Constant.PAY_VOICE_OK);
             this.finish();
@@ -114,7 +115,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
                     isSuccess = false;
                 }
                 IsPay = true;
-                MMToast.showShort(payWX.getPayContent());
+                PToast.showShort(payWX.getPayContent());
             }
         });
     }
@@ -132,7 +133,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
                     isSuccess = false;
                 }
                 IsPay = true;
-                MMToast.showShort(payWX.getPayContent());
+                PToast.showShort(payWX.getPayContent());
             }
         });
     }
@@ -155,7 +156,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
                 }
 
                 if ("1".equals(payWX.getResult())) {
-                    MMToast.showShort(payWX.getPayContent());
+                    PToast.showShort(payWX.getPayContent());
                     if(isButton){
                         updateInfo();// 更新信息
                     }
@@ -164,7 +165,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
                 }else {
                     isButton = false;
                     isSuccess = false;
-                    MMToast.showShort(payWX.getPayContent());
+                    PToast.showShort(payWX.getPayContent());
                 }
                 IsPay = true;
             }
@@ -179,7 +180,7 @@ public class PayCupVoiceOkAct extends BaseActivity implements View.OnClickListen
                 LoadingDialog.closeLoadingDialog();
                 JSONObject jsonObject = response.getResponseJson();
                 if(!jsonObject.isNull("userDetail")){
-                    MMToast.showShort("更新失败!");
+                    PToast.showShort("更新失败!");
                 }
                 PayCupVoiceOkAct.this.setResult(Constant.PAY_VOICE_OK);
                 PayCupVoiceOkAct.this.finish();

@@ -115,7 +115,7 @@ public class RecordVideoAct extends FragmentActivity {
         try {
             camera = Camera.open(camIdx);
         } catch (Exception e) {
-            PToast.showShort("相机打开失败，请检查权限");
+            PToast.showShort(getResources().getString(R.string.toast_camera_error));
             goToAppSetting();
             finish();
             Log.i(TAG, "open camera exception");
@@ -190,6 +190,8 @@ public class RecordVideoAct extends FragmentActivity {
             case Surface.ROTATION_270:
                 degree = 180;
                 break;
+            default:
+                break;
         }
         return degree;
     }
@@ -205,7 +207,7 @@ public class RecordVideoAct extends FragmentActivity {
         if (!Environment.getExternalStorageState().equals(
                 android.os.Environment.MEDIA_MOUNTED)) {
             Toast.makeText(RecordVideoAct.this
-                    , "SD卡不存在，请插入SD卡！"
+                    , getResources().getString(R.string.toast_sdcard_isnull)
                     , Toast.LENGTH_SHORT).show();
             return;
         }
@@ -312,7 +314,7 @@ public class RecordVideoAct extends FragmentActivity {
             try {
                 Thread.sleep(500);
                 tvHintRecord.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                tvHintRecord.setText("请保持正面录制5秒钟");
+                tvHintRecord.setText(getResources().getString(R.string.txt_record_time_desc));
                 cdt.cancel();
                 mediaRecorder.setOnInfoListener(null);
                 mediaRecorder.setOnInfoListener(null);

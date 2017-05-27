@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Created by Kind on 2017/4/25.
  */
 
-public class PayWX extends BaseData implements Serializable{
+public class PayWX extends BaseData implements Serializable {
 
     private boolean isOK = false;//是否正常
 
@@ -37,6 +37,10 @@ public class PayWX extends BaseData implements Serializable{
     private String prepay_id;
     private String mch_id;
     private String app_id;
+    private String qrcode_url;
+    private int qrcode_time;
+    private String uri;
+    private JSONObject jsonParamPost;
 
     @Override
     public void parseJson(String jsonStr) {
@@ -48,7 +52,7 @@ public class PayWX extends BaseData implements Serializable{
     }
 
     public PayWX(String jsonStr, int cup) {
-        if(TextUtils.isEmpty(jsonStr)){
+        if (TextUtils.isEmpty(jsonStr)) {
             return;
         }
         JSONObject jsonObject = getJsonObject(jsonStr);
@@ -61,9 +65,10 @@ public class PayWX extends BaseData implements Serializable{
             this.setCupPayType(jsonObject.optInt("payType"));
         }
     }
+
     //微信
     public PayWX(String jsonStr) {
-        if(TextUtils.isEmpty(jsonStr)){
+        if (TextUtils.isEmpty(jsonStr)) {
             return;
         }
         JSONObject jsonObject = getJsonObject(jsonStr);
@@ -75,7 +80,7 @@ public class PayWX extends BaseData implements Serializable{
             switch (getPayType()) {
                 case 1:
                     if (!jsonObject.isNull("payData")) {
-                        JSONObject jsoC =  getJsonObject(jsonObject.optString("payData"));
+                        JSONObject jsoC = getJsonObject(jsonObject.optString("payData"));
                         if (("SUCCESS".equals(jsoC.optString("return_code"))) &&
                                 ("SUCCESS".equals(jsoC.optString("result_code")))) {
                             this.setPrepay_id(jsoC.optString("prepay_id"));
@@ -84,12 +89,44 @@ public class PayWX extends BaseData implements Serializable{
                         }
                     }
                     break;
+                case 8:
+                    JSONObject jo = getJsonObject(jsonObject.optString("payData"));
+                    if (null == jo)
+                        return;
+                    this.setQrcode_url(jo.optString("code_img_url"));
+                    this.setQrcode_time(jo.optInt("expire"));
+                    this.setUri(jo.optString("code_url"));
+                    break;
+                case 9:
+                    if (!jsonObject.isNull("payData")) {
+                        JSONObject jsoC = getJsonObject(jsonObject.optString("payData"));
+                        if (null == jsoC)
+                            return;
+                        this.setJsonParamPost(jsoC.optJSONObject("param_post"));
+                        this.setPayData(jsoC.optString("payurl"));
+                        this.setApp_id(jsoC.optString("appid"));
+                    }
+                    break;
+                case 10:
+                    if (!jsonObject.isNull("payData")) {
+                        JSONObject jsoC = getJsonObject(jsonObject.optString("payData"));
+                        this.setJsonParamPost(jsoC.optJSONObject("param_post"));
+                    }
+                    break;
             }
+            return;
+        }
+        if (!jsonObject.isNull("param")) {
+            this.setOK(true);
+            this.setContent(jsonObject.optString("content"));
+            this.setParam(jsonObject.optString("param"));
+            this.setCupPayType(jsonObject.optInt("payType"));
         }
     }
 
     /**
      * 手机卡
+     *
      * @param jsonStr
      */
     public void onPayPhoneCard(String jsonStr) {
@@ -99,7 +136,7 @@ public class PayWX extends BaseData implements Serializable{
     }
 
     public void onPayAngelPayF(String jsonStr) {
-        if(TextUtils.isEmpty(jsonStr)){
+        if (TextUtils.isEmpty(jsonStr)) {
             return;
         }
         JSONObject jsonObject = getJsonObject(jsonStr);
@@ -247,5 +284,37 @@ public class PayWX extends BaseData implements Serializable{
 
     public void setIdcard(String idcard) {
         this.idcard = idcard;
+    }
+
+    public String getQrcode_url() {
+        return qrcode_url;
+    }
+
+    public void setQrcode_url(String qrcode_url) {
+        this.qrcode_url = qrcode_url;
+    }
+
+    public int getQrcode_time() {
+        return qrcode_time;
+    }
+
+    public void setQrcode_time(int qrcode_time) {
+        this.qrcode_time = qrcode_time;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public JSONObject getJsonParamPost() {
+        return jsonParamPost;
+    }
+
+    public void setJsonParamPost(JSONObject jsonParamPost) {
+        this.jsonParamPost = jsonParamPost;
     }
 }

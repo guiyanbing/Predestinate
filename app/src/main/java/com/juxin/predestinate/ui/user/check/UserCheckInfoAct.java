@@ -3,27 +3,32 @@ package com.juxin.predestinate.ui.user.check;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -34,15 +39,13 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
  */
 public class UserCheckInfoAct extends BaseActivity implements PObserver, RequestComplete {
     private int channel;  // 查看用户资料区分Tag，默认查看自己个人资料
-    private UserDetail userDetail;   // 自己资料
-    private UserProfile userProfile; // TA人资料
+    private UserDetail userDetail;   // 用户资料
 
+    private ScrollView scrollLayout;
     private TextView tv_sayhi;
-    private LinearLayout container, videoBottom, voiceBottom, sayHibottom;
+    private LinearLayout container, videoBottom, voiceBottom, sayHibottom, mGiftTipsContainerV;
 
-    /**********
-     * panel
-     ***********/
+    /* *********  panel **********/
     private UserCheckInfoHeadPanel headPanel;
     private UserCheckInfoFootPanel footPanel;
 
@@ -62,26 +65,31 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             return;
         }
-        userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        userDetail = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
     }
 
     private void initView() {
         initTitle();
         MsgMgr.getInstance().attach(this);
+        scrollLayout = (ScrollView) findViewById(R.id.layout_scroll);
         container = (LinearLayout) findViewById(R.id.container);
-        headPanel = new UserCheckInfoHeadPanel(this, channel, userProfile);
+        headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail);
         container.addView(headPanel.getContentView());
+        mGiftTipsContainerV = (LinearLayout) findViewById(R.id.ll_chat_greeting_tips_container);
 
-        footPanel = new UserCheckInfoFootPanel(this, channel, userProfile);
+        footPanel = new UserCheckInfoFootPanel(this, channel, userDetail);
         footPanel.setSlideIgnoreView(this);
         container.addView(footPanel.getContentView());
         initBottom();
     }
 
     private void initTitle() {
-        setTitleBackground(R.color.transparent);
-        setTitleLeftImg(R.drawable.p1_back_white_btn, listener);
-        if (channel == CenterConstant.USER_CHECK_INFO_OTHER)
+        setBackView(userDetail.getShowName());
+        findViewById(R.id.cut_line).setVisibility(View.GONE);
+        if (userDetail.isMan()) {
+            setTitleBackground(R.color.picker_blue_color);
+        }
+        if (channel != CenterConstant.USER_CHECK_INFO_OWN)
             setTitleRightImg(R.drawable.f1_more_vertical_dot, listener);
     }
 
@@ -89,7 +97,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private void initBottom() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
-        ModuleMgr.getCenterMgr().reqVideoChatConfig(userProfile.getUid(), this); // 请求音视频开关配置
+        ModuleMgr.getCenterMgr().reqVideoChatConfig(userDetail.getUid(), this); // 请求音视频开关配置
         videoBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_video);
         voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
         sayHibottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_hi);
@@ -102,8 +110,9 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         findViewById(R.id.userinfo_bottom).setVisibility(View.VISIBLE);
         findViewById(R.id.ll_userinfo_bottom_send).setOnClickListener(listener);
 
-        if (userProfile == null) return;
-        if (userProfile.isSayHello()) {   // 已打招呼
+        if (userDetail == null) return;
+
+        if (userDetail.isSayHello()) {   // 已打招呼
             initSayHi();
         } else {
             sayHibottom.setOnClickListener(listener);
@@ -114,33 +123,29 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         @Override
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.base_title_left_view:     // 标题左侧退出按钮
-                    back();
-                    break;
-
                 case R.id.base_title_right_img_container:// 标题右侧按钮
-                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userProfile.getUid(), userProfile, CenterConstant.USER_SET_FROM_CHECK);
+                    UIShow.showUserOtherSetAct(UserCheckInfoAct.this, userDetail.getUid(), userDetail, CenterConstant.USER_SET_FROM_CHECK);
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
-                    UIShow.showPrivateChatAct(UserCheckInfoAct.this, userProfile.getUid(), null);
+                    UIShow.showPrivateChatAct(UserCheckInfoAct.this, userDetail.getUid(), null);
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    if (userProfile.isSayHello()) {
-                        return;
-                    }
+                    if (userDetail.isSayHello()) return;
                     handleSayHi();
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
-                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userProfile.getUid());
+                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userDetail.getUid());
                     break;
             }
         }
@@ -157,10 +162,10 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
      * 底部已打招呼处理
      */
     private void handleSayHi() {
-        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userProfile.getUid()),
+        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userDetail.getUid()),
                 getString(R.string.say_hello_txt),
-                userProfile.getKf_id(),
-                ModuleMgr.getCenterMgr().isRobot(userProfile.getKf_id()) ?
+                userDetail.getKf_id(),
+                ModuleMgr.getCenterMgr().isRobot(userDetail.getKf_id()) ?
                         Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -183,9 +188,41 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                 });
     }
 
+    /**
+     * 滚动到底部
+     */
+    private void scrollToBottom() {
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                scrollLayout.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        }, 100);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (channel == CenterConstant.USER_CHECK_CONNECT_OTHER)
+            scrollToBottom();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // 更新备注名
+        if (requestCode == CenterConstant.USER_SET_REQUEST_CODE) {
+            switch (resultCode) {
+                case CenterConstant.USER_SET_RESULT_CODE:
+                    String remark = data.getStringExtra("remark");
+                    if (TextUtils.isEmpty(remark)) return;
+                    setTitle(remark);
+                    userDetail.setRemark(remark);
+                    footPanel.refreshView(userDetail);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -216,6 +253,15 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             case MsgType.MT_MyInfo_Change:
                 userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 footPanel.refreshView(userDetail);
+                break;
+
+            case MsgType.MT_SEND_GIFT_FLAG:
+                if(!Constant.GIFT_INFO.equals((String) value)) return;
+                PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, false);
+                mGiftTipsContainerV.setVisibility(View.GONE);
+                break;
+
+            default:
                 break;
         }
     }

@@ -72,7 +72,18 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
     @Override
     public void onUpdateUnread(BaseMessage message) {
         switch (message.getType()) {//比对抛出的未读类型消息，进行角标的添加
-            //TODO 聊天红包消息
+            case BaseMessage.Follow_MsgType://谁关注我消息
+                getUnreadMgr().addNumUnread(FOLLOW_ME);
+                break;
+            case BaseMessage.TalkRed_MsgType://聊天随机红包
+            case BaseMessage.RedEnvelopesBalance_MsgType://钱包余额变更消息
+                getUnreadMgr().addNumUnread(MY_WALLET);
+
+                // 更新个人资料中红包数额
+                MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+                break;
+            default:
+                break;
         }
     }
 
@@ -88,27 +99,26 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
-            case MsgType.MT_App_Login:
-                if ((Boolean) value) {// 登录成功
-                    // 注入dagger组件
-                    ModuleMgr.getChatListMgr().getAppComponent().inject(this);
+            case MsgType.MT_DB_Init_Ok:
+                // 注入dagger组件
+                ModuleMgr.getChatListMgr().getAppComponent().inject(this);
 
-                    // 初始化角标数据
-                    Observable<String> observable = dbCenter.queryUnRead(getStoreTag());
-                    observable.subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String storeString) {
-                            getUnreadMgr().init(storeString, parentMap);
-                        }
-                    });
-                    // 角标变更监听，每次变更之后更新数据库
-                    getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
-                        @Override
-                        public void onUnreadChange(String key, boolean isAdd, String storeString) {
-                            dbCenter.insertUnRead(getStoreTag(), storeString);
-                        }
-                    });
-                }
+                // 初始化角标数据
+                Observable<String> observable = dbCenter.getCenterFUnRead().queryUnRead(getStoreTag());
+                observable.subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String storeString) {
+                        getUnreadMgr().init(storeString, parentMap);
+                    }
+                });
+                // 角标变更监听，每次变更之后更新数据库
+                getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
+                    @Override
+                    public void onUnreadChange(String key, boolean isAdd, String storeString) {
+                        dbCenter.insertUnRead(getStoreTag(), storeString);
+                    }
+                });
+            default:
                 break;
         }
     }

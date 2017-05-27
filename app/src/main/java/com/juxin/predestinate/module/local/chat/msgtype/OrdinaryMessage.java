@@ -1,8 +1,10 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +29,7 @@ public class OrdinaryMessage{
      */
     public OrdinaryMessage(long userID, String content, int kf, int gz) {
         this.setUserID(userID);
-        this.setType(BaseMessage.follow_MsgType);
+        this.setType(BaseMessage.Follow_MsgType);
         this.setcMsgID(MsgIDUtils.getMsgIDUtils().getMsgID());
         this.setContent(content);
         this.setKf(kf);
@@ -38,7 +40,7 @@ public class OrdinaryMessage{
     public String toFllowJson() {
         JSONObject json = new JSONObject();
         try {
-            json.put("tid", this.getUserID());
+            json.put("tid", new JSONArray().put(String.valueOf(this.getUserID())));
             json.put("mtp", this.getType());
             json.put("mct", this.getContent());
             json.put("mt", ModuleMgr.getAppMgr().getTime());
@@ -56,7 +58,7 @@ public class OrdinaryMessage{
 
             return json.toString();
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return null;
     }

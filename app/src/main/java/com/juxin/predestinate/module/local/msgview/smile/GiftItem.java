@@ -1,13 +1,13 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 
 /**
+ * 礼物实体类
  * Created by Kind on 2017/3/31.
  */
-
 public class GiftItem extends BaseData {
 
     private int gid;
@@ -18,7 +18,6 @@ public class GiftItem extends BaseData {
     private int price;
     private int earn;
     private int level;
-
 
     @Override
     public void parseJson(String s) {

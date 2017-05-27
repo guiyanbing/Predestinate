@@ -2,7 +2,6 @@ package com.juxin.predestinate.bean.center.user.detail;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
@@ -14,21 +13,20 @@ import org.json.JSONObject;
  * 用户信息基类
  */
 public class UserBasic extends BaseData implements Parcelable {
-    public long uid;             // 用户Id
-    private String username;     // 用户名：返回值同uid
-    private String nickname;     // 昵称
+    private int age;             // 年龄
     private String avatar;       // 头像
     private int avatar_status;   // 头像状态 -1:没有数据  0:正在审核 1:审核通过 2:未通过 3:未上传（老版本） 4：好 5：很好 6待复审 7 新版未审核
+    private String nickname;     // 昵称
+    public long uid;             // 用户Id
     private int gender;          // 性别 1男2女
-    private int age;             // 年龄
-    private String birthday;     // 生日
-    private int height;          // 身高
     private String weight;       // 体重
-    private String star;         // 星座
     private String edu;          // 学历  1:初中及以下 2：高中及中专 3，大专 4 ，本科 5：硕士及以上
     private String income;       // 收入情况
     private String job;          // 工作情况
     private String marry;        // 情感状态  1:单身， 2:恋爱中， 3:已婚， 4:保密
+    private int height;          // 身高
+    private String star;         // 星座
+    private String birthday;     // 生日
 
     // 地址
     private String province;      // 完整省份
@@ -43,20 +41,17 @@ public class UserBasic extends BaseData implements Parcelable {
         InfoConfig infoConfig = InfoConfig.getInstance();
         JSONObject detailObject = getJsonObject(s);
 
-        this.setUid(detailObject.optLong("uid"));
-        this.setUsername(detailObject.optString("username"));
-        this.setNickname(detailObject.optString("nickname"));
-        this.setAvatar(detailObject.isNull("avatar") ? null : detailObject.optString("avatar"));
-        this.setAvatar_status(detailObject.optInt("avatar_status"));
-        this.setGender(detailObject.optInt("gender"));
         this.setAge(detailObject.optInt("age"));
+        this.setAvatar(detailObject.optString("avatar"));
+        this.setAvatar_status(detailObject.optInt("avatarstatus"));
+        this.setUid(detailObject.optLong("uid"));
+        this.setNickname(detailObject.optString("nickname"));
+        this.setGender(detailObject.optInt("gender"));
         this.setBirthday(detailObject.optString("birthday"));
         this.setHeight(detailObject.optInt("height"));
 
-        String weight = detailObject.optString("weight");
-        String star = detailObject.optString("star");
-        this.setWeight(infoConfig.getWeight().getShowWithSubmit(TextUtils.isEmpty(weight) || weight == "null" ? 0 : Integer.valueOf(weight)));
-        this.setStar(infoConfig.getStar().getShowWithSubmit(TextUtils.isEmpty(star) || star == "null" ? 0 : Integer.valueOf(star)));
+        this.setWeight(infoConfig.getWeight().getShowWithSubmit(detailObject.optInt("weight")));
+        this.setStar(infoConfig.getStar().getShowWithSubmit(detailObject.optInt("star")));
         this.setEdu(infoConfig.getEdu().getShowWithSubmit(detailObject.optInt("edu")));
         this.setJob(infoConfig.getJob().getShowWithSubmit(detailObject.optInt("job")));
         this.setIncome(infoConfig.getIncome().getShowWithSubmit(detailObject.optInt("income")));
@@ -125,14 +120,6 @@ public class UserBasic extends BaseData implements Parcelable {
 
     public void setUid(long uid) {
         this.uid = uid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getNickname() {
@@ -271,7 +258,6 @@ public class UserBasic extends BaseData implements Parcelable {
         this.sprovince = sprovince;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -279,21 +265,20 @@ public class UserBasic extends BaseData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.uid);
-        dest.writeString(this.username);
-        dest.writeString(this.nickname);
+        dest.writeInt(this.age);
         dest.writeString(this.avatar);
         dest.writeInt(this.avatar_status);
+        dest.writeString(this.nickname);
+        dest.writeLong(this.uid);
         dest.writeInt(this.gender);
-        dest.writeInt(this.age);
-        dest.writeString(this.birthday);
-        dest.writeInt(this.height);
         dest.writeString(this.weight);
-        dest.writeString(this.star);
         dest.writeString(this.edu);
         dest.writeString(this.income);
         dest.writeString(this.job);
         dest.writeString(this.marry);
+        dest.writeInt(this.height);
+        dest.writeString(this.star);
+        dest.writeString(this.birthday);
         dest.writeString(this.province);
         dest.writeString(this.city);
         dest.writeString(this.provinceName);
@@ -306,21 +291,20 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     protected UserBasic(Parcel in) {
-        this.uid = in.readLong();
-        this.username = in.readString();
-        this.nickname = in.readString();
+        this.age = in.readInt();
         this.avatar = in.readString();
         this.avatar_status = in.readInt();
+        this.nickname = in.readString();
+        this.uid = in.readLong();
         this.gender = in.readInt();
-        this.age = in.readInt();
-        this.birthday = in.readString();
-        this.height = in.readInt();
         this.weight = in.readString();
-        this.star = in.readString();
         this.edu = in.readString();
         this.income = in.readString();
         this.job = in.readString();
         this.marry = in.readString();
+        this.height = in.readInt();
+        this.star = in.readString();
+        this.birthday = in.readString();
         this.province = in.readString();
         this.city = in.readString();
         this.provinceName = in.readString();
@@ -329,4 +313,15 @@ public class UserBasic extends BaseData implements Parcelable {
         this.sprovince = in.readInt();
     }
 
+    public static final Creator<UserBasic> CREATOR = new Creator<UserBasic>() {
+        @Override
+        public UserBasic createFromParcel(Parcel source) {
+            return new UserBasic(source);
+        }
+
+        @Override
+        public UserBasic[] newArray(int size) {
+            return new UserBasic[size];
+        }
+    };
 }

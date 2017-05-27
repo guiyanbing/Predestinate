@@ -11,12 +11,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.DirUtils;
-import com.juxin.mumu.bean.utils.FileUtil;
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.TimeUtil;
 
 import java.io.File;
@@ -78,7 +77,7 @@ public class ChatMediaRecord implements Handler.Callback{
             @Override
             public void onStatus(int status) {
                 if (status == MEDIA_RECORDER_EVENT_Error || status == MEDIA_RECORDER_EVENT_Stop) {
-                    MMLog.autoDebug("------>requestPermission：" + status);
+                    PLogger.d("------>requestPermission：" + status);
                     FileUtil.deleteFile(getVoiceFileName());
                 }
             }
@@ -93,7 +92,7 @@ public class ChatMediaRecord implements Handler.Callback{
 
             @Override
             public void onProgressMax() {
-                MMLog.autoDebug("------>requestPermission：onProgressMax");
+                PLogger.d("------>requestPermission：onProgressMax");
                 FileUtil.deleteFile(getVoiceFileName());
             }
         });
@@ -116,15 +115,14 @@ public class ChatMediaRecord implements Handler.Callback{
         this.countdown = countdown;
 
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            MMToast.showShort("SD卡不存在，请插入SD卡！");
+            PToast.showShort("SD卡不存在，请插入SD卡！");
             if (onRecordListener != null) onRecordListener.onStatus(MEDIA_RECORDER_EVENT_Error);
             return false;
         }
 
         try {
             // 创建保存录音的音频文件
-            String dir = DirUtils.getDir(DirUtils.DirType.DT_SD_EXT_Cache_Voice);
-            soundFile = new File(dir + TimeUtil.getFormatTimeFileName() + ".amr");
+            soundFile = new File(DirType.getVoiceDir() + TimeUtil.getFormatTimeFileName() + ".amr");
 
             mediaRecorder = new MediaRecorder();
             // 设置录音的声音来源
@@ -146,9 +144,9 @@ public class ChatMediaRecord implements Handler.Callback{
             if (onRecordListener != null) onRecordListener.onStatus(MEDIA_RECORDER_EVENT_Start);
             if (handler != null) handler.sendEmptyMessage(MEDIA_RECORDER_EVENT_Start);
 
-            MMLog.autoDebug("countdown: " + this.countdown);
+            PLogger.d("countdown: " + this.countdown);
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
 
             if (onRecordListener != null) {
                 onRecordListener.onStatus(MEDIA_RECORDER_EVENT_Error);
@@ -164,7 +162,7 @@ public class ChatMediaRecord implements Handler.Callback{
     public void stopRecordVoice() {
         if (!recording) return;
         if (handler != null) handler.sendEmptyMessage(MEDIA_RECORDER_EVENT_Stop);
-        MMLog.autoDebug("length(毫秒): " + getVoiceDuration() + "; size(字节): " + soundFile.length() + "; file: " + getVoiceFileName());
+        PLogger.d("length(毫秒): " + getVoiceDuration() + "; size(字节): " + soundFile.length() + "; file: " + getVoiceFileName());
 
         try {
             recording = false;
@@ -177,7 +175,7 @@ public class ChatMediaRecord implements Handler.Callback{
             mediaRecorder.release();
             mediaRecorder = null;
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
 
         if (onRecordListener != null) onRecordListener.onStatus(MEDIA_RECORDER_EVENT_Stop);
@@ -239,7 +237,7 @@ public class ChatMediaRecord implements Handler.Callback{
                 mp.release();
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
 
         return duration;
@@ -258,7 +256,7 @@ public class ChatMediaRecord implements Handler.Callback{
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 

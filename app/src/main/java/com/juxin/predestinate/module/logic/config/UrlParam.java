@@ -2,20 +2,18 @@ package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
-import com.juxin.predestinate.bean.center.user.others.UserRemark;
+import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.my.GiftMessageList;
 import com.juxin.predestinate.bean.my.RedOneKeyList;
 import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.bean.net.BaseData;
-import com.juxin.predestinate.bean.recommend.RecommendPeopleList;
-import com.juxin.predestinate.bean.recommend.TagInfoList;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
-import com.juxin.predestinate.bean.start.PhoneVerifyResult;
+import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
-import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 
 import java.util.Map;
@@ -28,55 +26,54 @@ public enum UrlParam {
     reqRegister("pubtest/quickReg", null, false),//注册接口
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
-    reqForgotsms("Public/forgotsms", PhoneVerifyResult.class, false),//找回密码发送验证码
-
-    sysRecommend("s/reco/SysRecommend", RecommendPeopleList.class, true),//推荐的人
-    sysTags("s/reco/SysTags", TagInfoList.class),//推荐的人标签
-
+    reqForgotsms("Public/forgotsms", false),//找回密码发送验证码
     //================================ 配置项 ==================================
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
-    serviceQQ("user/serviceQQ", null, false),//请求在线客服QQ
     statistics(Hosts.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
+    reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
 
     //============================== 设置页相关接口 =============================
-    reqReqVerifyCode("public/sendSMS", PhoneVerifyResult.class, false),//获取手机验证码
-    mobileAuth("user/bindCellPhone", PhoneVerifyResult.class, true),//手机认证
+    reqReqVerifyCode("Public/sendSMSM", false),//获取手机验证码
+    mobileAuth("user/bindCellPhone",true),//手机认证
     modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("user/feedback"),//意见反馈
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
     updateSetting("s/uinfo/UpdateSetting", true),//设置信息修改
     //获取自己的音频、视频开关配置
-    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig", VideoVerifyBean.class, true),
+    reqMyVideochatConfig(Hosts.FATE_IT_GO, "xs/message/MyVideochatConfig2", VideoVerifyBean.class, true),
     //音视频开关修改
     setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
     addVideoVerify(Hosts.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
+    //邀请视频、音频聊天
+    inviteVideoChat(Hosts.FATE_IT_GO, "xs/message/InviteVideoChat", null, true),
+    // 用户身份认证提交
+    userVerify("User/Verify", true),
+    // 获取用户验证信息(密)
+    getVerifyStatus("User/getVerifyStatus", true),
 
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
-    reqMyInfo("user/detail", UserDetail.class, true),         // 获取个人资料
-    reqOtherInfo("user/otherdetail", UserDetail.class, true), // 获取他人资料
+    reqMyInfo(Hosts.FATE_IT_GO, "xs/userinfo/MyDetail", UserDetail.class, true),         // 获取个人资料
+    reqOtherInfo(Hosts.FATE_IT_GO, "xs/userinfo/OtherDetail", UserDetail.class, true), // 获取他人资料
     updateMyInfo("user/modifyUserData"),                      // 修改用户个人信息
-    reqYCoinInfo("ycoin/checkycoin"),                         // 用户Y币信息
-    reqRedbagSum("fruit/redbagsum"),                          // 红包记录--红包总额
+    reqIsBlack(Hosts.FATE_IT_GO, "xs/userrelation/IsMyBlack", UserBlack.class, true), // 查询某用户是否处于黑名单中
     reqAddBlack(Hosts.FATE_IT_GO, "xs/userrelation/AddBlack", null, true),          // 拉黑某用户
     reqRemoveBlack(Hosts.FATE_IT_GO, "xs/userrelation/RemoveBlack", null, true),    // 拉黑列表移除某用户
     reqSetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/SetRemakName", null, true),             // 设置用户备注名
-    reqGetRemarkName(Hosts.FATE_IT_GO, "xs/userrelation/GetRemakName", UserRemark.class, true), // 获取用户备注名
     reqVideoChatConfig(Hosts.FATE_IT_GO, "xs/message/GetVideochatConfig", VideoConfig.class, true), // 获取他人音视频开关配置
     reqGetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/GetOpposingVideoSetting", VideoSetting.class, true), // 获取接受他人音视频配置
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
+
+    reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
 
     // 私密视频相关
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值
     reqSetViewTime("video2/setviewtime"),    // 设置私密视频观看次数
     reqUnlockVideo("video2/unlockvideo"),    // 解锁视频
-    reqGetVideoList("video2/getvideolist", UserVideoInfo.class),  // 获取用户私密视频列表(暂时，后续可能在用户资料里返回)
-    reqGetGiftList("gift/getUserGiftList"),  // 获取用户礼物列表(暂时，后续可能在用户资料里返回)
-
 
     //批量获取用户简略信息
     reqUserSimpleList("s/uinfo/USimple", UserInfoLightweightList.class, true),
@@ -103,13 +100,13 @@ public enum UrlParam {
     // 红包记录--红包入袋 -- 一键入袋(24不能提现)
     reqAddredonekey("fruit/addredonekey", RedOneKeyList.class, true),
     // 客户端请求用户提现列表
-    reqWithdrawlist("fruit/withdrawlist", true),
+    reqWithdrawlist("fruit/withdrawlistNew", true),
     // 红包记录--提现申请
-    reqWithdraw("fruit/withdraw", true),
+    reqWithdraw("fruit/withdrawNew", true),
     // 红包记录--提现申请获取地址
-    reqWithdrawAddress("fruit/withdrawaddress", true),
+    reqWithdrawAddress("fruit/withdrawaddressNew", true),
     // 红包记录--提现申请修改地址
-    reqWithdrawModify("fruit/withdrawmodify", true),
+    reqWithdrawModify("fruit/withdrawmodifyNew", true),
     // 获取礼物列表
     getGiftLists("gift/getGifts", true),
     // 获取钻石余额
@@ -122,8 +119,6 @@ public enum UrlParam {
     sendSMS("public/sendSMS", true),
     // 手机验证
     bindCellPhone("user/bindCellPhone", true),
-    // 最近来访
-    viewMeList("user/viewMeList", true),
     // 索要礼物群发
     qunFa(Hosts.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
     // 索要礼物群发
@@ -134,10 +129,10 @@ public enum UrlParam {
     getFollowing("MoneyTree/getFollowing", true),
     // 关注我的列表
     getFollowers("MoneyTree/getFollowers", true),
-    // 取消关注某某
-    unfollow("follow/unfollow", true),
-    // 关注某某
-    follow("follow/follow", true),
+    // 上传身份证照片
+    uploadIdCard("User/uploadIdCard", true),
+    // 获取最近礼物列表
+    lastGiftList("gift/lastgiftlist", GiftMessageList.class, false),
 
     //================= 发现 ===========
     //举报

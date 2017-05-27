@@ -19,17 +19,17 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 import java.io.IOException;
-import pl.droidsonroids.gif.GifDrawable;
 
 /**
  * 只处理聊天内容部分的信息
- *
+ * <p>
  * Created by Kind on 2017/3/30.
  */
-
 public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.OnClickChatItemListener {
+
     private boolean isSender = true;
     protected ChatContentAdapter.ChatItemHolder chatItemHolder = null;
 
@@ -52,7 +52,8 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
     /**
      * 主动初始化 目前只有语音在用,做自动播的,别地方没有特殊需求不要用
      */
-    public void setInit(BaseMessage msgData){}
+    public void setInit(BaseMessage msgData) {
+    }
 
     /**
      * 判断当前Panel是显示在左侧还是右侧。
@@ -81,7 +82,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
     /**
      * 用消息数据重新初始化显示View。
      *
-     * @param msgData           最新的消息数据。
+     * @param msgData         最新的消息数据。
      * @param infoLightweight 对应用户的基本信息。
      * @return 如果返回false，表示界面没有完全的被初始化。
      */
@@ -102,10 +103,10 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             return true;
         }
 
-//        if (ChatAdapter.isSender(msgData.getSendID()) || MailSpecialID.smallSecretary.getSpecialID() == msgData.getLWhisperID()) {
-//         //   UIShow.showMyInfoActivity(getChatInstance().context);
-//            return true;
-//        }
+        if (ChatAdapter.isSender(msgData.getSendID())) {
+            //   UIShow.showMyInfoActivity(getChatInstance().context);
+            return true;
+        }
 
         if (ChatAdapter.isSender(msgData.getSendID())) {
             //   UIShow.showMyInfoActivity(getChatInstance().context);
@@ -121,12 +122,8 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 //            }
 //        }
 
-        if(MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()){
-            if (getChatInstance().chatAdapter.isGroup()) {
-              //  UIShow.showUserInfo((FragmentActivity) getChatInstance().context,msgData.getLWhisperID());
-            } else {
-              //  UIShow.showUserInfo((FragmentActivity) getChatInstance().context,msgData.getLWhisperID());
-            }
+        if (MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()) {
+            UIShow.showUserOtherSetAct((FragmentActivity) getChatInstance().context, msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);
         }
         return true;
     }
@@ -169,6 +166,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
 
     /**
      * 消息重发
+     *
      * @param msgData
      * @return
      */
@@ -185,13 +183,24 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
         return true;
     }
 
+    private boolean isShowParentBg = true;
+
+    /**
+     * 设置是否显示父布局的背景
+     *
+     * @param isShowParentBg 是否显示父布局的背景
+     */
+    public void setShowParentBg(boolean isShowParentBg) {
+        this.isShowParentBg = isShowParentBg;
+    }
+
     /**
      * 是否显示parent的背景。
      *
      * @return
      */
     public boolean isShowParentLayout() {
-        return true;
+        return isShowParentBg;
     }
 
     /**
@@ -220,15 +229,16 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             return;
         }
 
-        GifDrawable drawable = null;
-
-        try {
-            drawable = new GifDrawable(fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setImg(img, drawable, key);
+        // TODO: 2017/5/24 替换使用glide进行gif加载
+//        GifDrawable drawable = null;
+//
+//        try {
+//            drawable = new GifDrawable(fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        setImg(img, drawable, key);
     }
 
     protected void setAssetsGiftImg(ImageView img, String fileName) {
@@ -236,15 +246,16 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             return;
         }
 
-        GifDrawable drawable = null;
-
-        try {
-            drawable = new GifDrawable(getContext().getAssets(), fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setImg(img, drawable, fileName);
+        // TODO: 2017/5/24 替换使用glide进行gif加载
+//        GifDrawable drawable = null;
+//
+//        try {
+//            drawable = new GifDrawable(getContext().getAssets(), fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        setImg(img, drawable, fileName);
     }
 
     protected void setAssetsImg(ImageView img, String fileName) {
@@ -282,15 +293,15 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
                 new SimpleTipDialog.ConfirmListener() {
                     @Override
                     public void onCancel() {
-                        if(listener != null){
+                        if (listener != null) {
                             listener.onCancel();
                         }
                     }
 
                     @Override
                     public void onSubmit() {
-                     //   ModuleMgr.getChatMgr().resendMsg(msgData);
-                        if(listener != null){
+                        ModuleMgr.getChatMgr().resendMsg(msgData);
+                        if (listener != null) {
                             listener.onSubmit();
                         }
                     }

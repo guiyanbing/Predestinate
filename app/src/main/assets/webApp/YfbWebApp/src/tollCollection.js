@@ -2,12 +2,12 @@
  * Created by bikuili on 17/5/5.
  */
 var tollCollection = tollCollection || (function () {
-    let that = {};
-    let clock = null;
-    let nums = 60;
-    let btn;
-    let _serverReqFlag = false;
-    let _mobileNum = null;
+    var that = {};
+    var clock = null;
+    var nums = 60;
+    var btn;
+    var _serverReqFlag = false;
+    var _mobileNum = null;
     that.loadPage = function () {
       btn = document.getElementById('clibtn');
       window.platform.getBindPhoneNum(function (resp) {
@@ -50,12 +50,13 @@ var tollCollection = tollCollection || (function () {
         nums = 60;
       }
     };
+
     //验证码倒计时
     that.sendCode = function () {
       // if (_serverReqFlag) {
       //   return;
       // }
-      let phoneNum = that.checkPhoneNum();
+      var phoneNum = that.checkPhoneNum();
       if (!phoneNum) {
         return;
       }
@@ -65,7 +66,7 @@ var tollCollection = tollCollection || (function () {
         cellPhone: phoneNum,
         type: 1
       };
-      window.platform.normalRequest("Get", web.urlConfig.agentURL + web.urlMethod.GetPhoneSMS, params, {}, function (resp) {
+      window.platform.normalRequestNoUrl('Get',web.urlType.Php,web.urlMethod.GetPhoneSMS,params,{},function (resp) {
         console.log('验证码resp' + JSON.stringify(resp))
         if (resp.result == 'error' || resp.respCode === 'error') {
           mui.toast("请求异常，稍后重试");
@@ -85,7 +86,7 @@ var tollCollection = tollCollection || (function () {
     };
     //按钮动作
     that.getPhoneCash = function () {
-      let phoneNum = that.checkPhoneNum();
+      var phoneNum = that.checkPhoneNum();
       if (_mobileNum == 'null') {
         if (!phoneNum) {
           return;
@@ -106,11 +107,11 @@ var tollCollection = tollCollection || (function () {
         return;
       }
       ;
-      let phoneNum = that.checkPhoneNum();
+      var phoneNum = that.checkPhoneNum();
       if (!phoneNum) {
         return;
       };
-      let vCode = that.checkVerifyCode();
+      var vCode = that.checkVerifyCode();
       if (!vCode) {
         return;
       }
@@ -118,7 +119,7 @@ var tollCollection = tollCollection || (function () {
         cellPhone: phoneNum,
         verifyCode: vCode
       }
-      window.platform.normalRequest('Get', web.urlConfig.agentURL + web.urlMethod.CheckPhoneNum, params, {}, function (resp) {
+      window.platform.normalRequestNoUrl('Get', web.urlType.Php, web.urlMethod.CheckPhoneNum, params, {}, function (resp) {
         console.log('手机验证resp' + JSON.stringify(resp));
         if (resp.result == 'error' || resp.respCode === 'error') {
           mui.toast('验证失败，请重试');
@@ -132,7 +133,7 @@ var tollCollection = tollCollection || (function () {
     };
     //获取客服qq
     that.getServiceQQ = function () {
-      window.platform.normalRequest('Get', web.urlConfig.agentURL + web.urlMethod.QQServiceNum, {}, {}, function (resp) {
+      window.platform.normalRequestNoUrl('Get', web.urlType.Php,web.urlMethod.QQServiceNum, {}, {}, function (resp) {
         var qqService = document.getElementById('qqService');
         qqService.innerHTML = resp.content
         console.log('获取客服qq' + JSON.stringify(resp));
@@ -140,19 +141,20 @@ var tollCollection = tollCollection || (function () {
     };
     //话费领取记录
     that.phoneCashRecord = function () {
-      window.platform.safeRequest('Get', web.urlConfig.agentURL + web.urlMethod.GetActivity, {"id": 1}, {}, function (resp) {
+      window.platform.normalRequestNoUrl('Get', web.urlType.Php, web.urlMethod.GetActivity, {"id": 1}, {}, function (resp) {
         console.log('领取话费记录' + JSON.stringify(resp));
         if (resp.item == '') {
           console.log('啥也没有啊');
           var noneList = document.getElementById('noneList');
           noneList.style.display = 'block';
         }else{
-          let dataList = resp.item;
+          var dataList = resp.item;
           for (var i = 0;i < dataList.length;i++) {
-            let name = dataList[i].name;
-            let date = dataList[i].date;
-            let status = dataList[i].status;
-            let li = document.createElement('li');
+
+            var name = dataList[i].name;
+            var date = dataList[i].date;
+            var status = dataList[i].status;
+            var li = document.createElement('li');
             li.className = 'mui-table-view-cell mui-row';
             li.innerHTML = '<span class="mui-col-xs-4 mui-col-sm-4">'+name+'</span>\
                             <span class="mui-col-xs-4 mui-col-sm-4">'+date+'</span>\
@@ -165,7 +167,7 @@ var tollCollection = tollCollection || (function () {
     };
     //领取话费
     that.getCash = function () {
-      window.platform.normalRequest('Get', web.urlConfig.agentURL + web.urlMethod.ReceiveActivity, {}, {}, function (resp) {
+      window.platform.normalRequestNoUrl('Get', web.urlType.Php,web.urlMethod.ReceiveActivity, {}, {}, function (resp) {
         console.log('领取话费resp'+JSON.stringify(resp));
         if (resp.result === 'error') {
           mui.alert(resp.content, '', '确定');

@@ -1,5 +1,10 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
+import android.text.TextUtils;
+import com.juxin.library.log.PLogger;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -13,6 +18,18 @@ public class GiftMessage extends BaseMessage {
     private int giftCount;
     private long giftLogID;
 
+    public GiftMessage() {
+        super();
+    }
+
+    public GiftMessage(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
+        super(channelID, whisperID);
+        this.setGiftID(giftID);
+        this.setGiftCount(giftCount);
+        this.setGiftLogID(giftLogID);
+        this.setType(BaseMessageType.gift.getMsgType());
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
@@ -20,25 +37,50 @@ public class GiftMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setRu(object.optInt("ru"));
 
-        if(getType() == 20){
-            this.setGiftID(object.optInt("gift_id"));
-        }else {
-            if(!object.isNull("gift")){
-                JSONObject giftJSON = object.optJSONObject("gift");
-                this.setGiftCount(giftJSON.optInt("count"));
-                this.setGiftID(giftJSON.optInt("gift_id"));
-                this.setGiftLogID(giftJSON.optLong("gift_log_id"));
-            }
-        }
+        parseCommonJson(object);
         return this;
     }
 
     @Override
     public String getJson(BaseMessage message) {
-        return super.getJson(message);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("tid", new JSONArray().put(message.getWhisperID()));
+            json.put("mtp", message.getType());
+            json.put("mt", message.getTime());
+            json.put("d", message.getMsgID());
+
+            if (!TextUtils.isEmpty(message.getMsgDesc())) {
+                json.put("mct", message.getMsgDesc());
+            }
+
+            JSONObject tmpGift = new JSONObject();
+            tmpGift.put("count", ((GiftMessage) message).getGiftCount());
+            tmpGift.put("gift_id", ((GiftMessage) message).getGiftID());
+            tmpGift.put("gift_log_id", ((GiftMessage) message).getGiftLogID());
+            json.put("gift", tmpGift);
+
+            return json.toString();
+        } catch (JSONException e) {
+            PLogger.printThrowable(e);
+        }
+        return null;
     }
 
+    public GiftMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
+        convertJSON(getJsonStr());
+    }
+
+    /**
+     * 转换类 fmessage
+     */
+    public GiftMessage(Bundle bundle) {
+        super(bundle);
+        convertJSON(getJsonStr());
+    }
 
     public int getGiftCount() {
         return giftCount;
@@ -62,5 +104,30 @@ public class GiftMessage extends BaseMessage {
 
     public void setGiftLogID(long giftLogID) {
         this.giftLogID = giftLogID;
+    }
+
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setMsgDesc(object.optString("mct")); //消息内容
+
+        parseCommonJson(object);
+    }
+
+    /**
+     * 礼物消息数据解析
+     */
+    private void parseCommonJson(JSONObject object) {
+        //索要礼物
+        if (object.has("gift_id")) this.setGiftID(object.optInt("gift_id"));
+        //收到礼物
+        if (object.has("gift")) {
+            JSONObject giftJSON = object.optJSONObject("gift");
+            this.setGiftCount(giftJSON.optInt("count"));
+            this.setGiftID(giftJSON.optInt("gift_id"));
+            this.setGiftLogID(giftJSON.optLong("gift_log_id"));
+        }
     }
 }

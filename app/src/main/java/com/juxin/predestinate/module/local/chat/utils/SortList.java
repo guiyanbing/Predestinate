@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat.utils;
 
 import android.annotation.SuppressLint;
-
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import java.util.Collections;
 import java.util.Comparator;

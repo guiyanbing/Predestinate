@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/list_item_selector"
     android:orientation="vertical">
 
     <View style="@style/divider_line" />
@@ -40,7 +41,8 @@
                 <LinearLayout
                     android:id="@+id/discover_item_ranking_state"
                     style="@style/icon_middle_center"
-                    android:layout_width="@dimen/px190_dp"
+                    android:layout_width="@dimen/px140_dp"
+                    android:layout_height="@dimen/px50_dp"
                     android:layout_marginLeft="@dimen/px35_dp"
                     android:background="@drawable/f1_ranking_bg_w"
                     android:gravity="center_vertical"
@@ -48,29 +50,30 @@
 
                     <TextView
                         android:id="@+id/discover_item_ranking_type"
-                        android:layout_width="@dimen/px50_dp"
-                        android:layout_height="@dimen/px50_dp"
+                        android:layout_width="@dimen/px35_dp"
+                        android:layout_height="@dimen/px35_dp"
                         android:layout_marginLeft="@dimen/px10_dp"
                         android:background="@drawable/f1_round_text_bg"
                         android:gravity="center"
                         android:text="魅"
                         android:textColor="@color/color_ff4d79"
-                        android:textSize="@dimen/px32_sp" />
+                        android:textSize="@dimen/px22_sp" />
 
                     <TextView
                         android:id="@+id/discover_item_ranking_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px10_dp"
+                        android:layout_marginLeft="@dimen/px5_dp"
                         android:singleLine="true"
-                        android:text="TOP01"
+                        android:text="TOP 01"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/px32_sp" />
+                        android:textSize="@dimen/px22_sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/discover_item_vip_state"
                     style="@style/icon_middle"
+                    android:layout_marginLeft="@dimen/px5_dp"
                     android:src="@drawable/f1_vip_icon"
                     android:visibility="visible" />
             </LinearLayout>
@@ -149,17 +152,52 @@
                         android:textSize="@dimen/px30_sp" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/discover_item_video"
-                    style="@style/icon_small"
-                    android:layout_marginLeft="@dimen/px15_dp"
-                    android:background="@drawable/f1_video_state_ico" />
+                <LinearLayout
+                    android:id="@+id/discover_item_video_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/discover_item_call"
-                    style="@style/icon_small"
-                    android:layout_marginLeft="@dimen/px15_dp"
-                    android:background="@drawable/f1_call_state_ico" />
+                    <Button
+                        android:id="@+id/discover_item_video"
+                        style="@style/icon_small"
+                        android:layout_marginLeft="@dimen/px15_dp"
+                        android:background="@drawable/f1_video_state_ico" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px5_dp"
+                        android:text="可视频"
+                        android:textColor="@color/color_6dcca3"
+                        android:textSize="@dimen/px30_sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/discover_item_call_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/discover_item_call"
+                        style="@style/icon_small"
+                        android:layout_marginLeft="@dimen/px15_dp"
+                        android:background="@drawable/f1_call_state_ico" />
+
+                    <TextView
+                        android:id="@+id/discover_item_call_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/px5_dp"
+                        android:text="可语音"
+                        android:textColor="@color/color_6dcca3"
+                        android:textSize="@dimen/px30_sp" />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
 
@@ -170,7 +208,20 @@
             android:layout_centerVertical="true"
             android:layout_gravity="right"
             android:background="@drawable/f1_sayhellow_btn_bg"
-            android:enabled="false" />
+            android:enabled="false"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/discover_item_online_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/px38_dp"
+            android:paddingRight="@dimen/px38_dp"
+            android:textColor="@color/color_ciyao"
+            android:textSize="@dimen/big_font_40"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

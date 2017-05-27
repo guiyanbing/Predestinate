@@ -4,20 +4,19 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
+import com.juxin.library.view.BasePanel;
 import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -29,12 +28,12 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 /**
  * 个人中心条目头部
  */
-public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
+public class UserFragmentHeadPanel extends BasePanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
 
     private CircleImageView user_head, user_head_vip, user_head_status;
-    private TextView user_nick, user_id, iv_invite_code,tv_video_title,tv_video_status;
-    private ImageView iv_video_verify;
+    private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
+    private View edit_top;
 
     private UserDetail myInfo;
 
@@ -47,14 +46,13 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
     }
 
     private void initView() {
+        edit_top = findViewById(R.id.edit_top);
         user_head = (CircleImageView) findViewById(R.id.user_head);
         user_head_vip = (CircleImageView) findViewById(R.id.user_head_vip);
         user_head_status = (CircleImageView) findViewById(R.id.user_head_status);
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
-
-
 
         //根据屏幕分辨率设置最大显示长度
         user_nick.setMaxEms(App.context.getResources().getDisplayMetrics().density <= 1.5 ? 5 : 7);
@@ -66,11 +64,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
         functionPanel = new UserFragmentFunctionPanel(getContext());
         function_container.addView(functionPanel.getContentView());
-
-        tv_video_title = (TextView) function_container.findViewById(R.id.tv_video_title);
-        tv_video_status = (TextView) function_container.findViewById(R.id.tv_video_status);
-        iv_video_verify = (ImageView) function_container.findViewById(R.id.iv_video_verify);
-        initVideoAuthView();
     }
 
     /**
@@ -125,7 +118,7 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
                 break;
             case R.id.user_nick://修改昵称
                 EditPopupWindow popupWindow = new EditPopupWindow(getContext(), EditKey.s_key_nickName, user_nick);
-                popupWindow.showPopupWindow();
+                popupWindow.showPopupWindow(edit_top);
                 break;
             case R.id.iv_code_copy://复制邀请码
                 ChineseFilter.copyString(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getShareCode());
@@ -138,31 +131,6 @@ public class UserFragmentHeadPanel extends BaseViewPanel implements View.OnClick
         if (requestCode == 101) {
             refreshView();
         }
-        if (requestCode == 103 && resultCode == 203) {
-            initVideoAuthView();
-        }
-    }
-
-    public void initVideoAuthView() {
-        int authStatus = ModuleMgr.getCommonMgr().getVideoVerify().getStatus();
-        if (authStatus == 3&&ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//TODO
-            showVerify();
-        } else {
-            showUnVerify();
-        }
-    }
-    public void showUnVerify() {
-        tv_video_title.setTextColor(getContext().getResources().getColor(R.color.user_text_gray_top));
-        tv_video_status.setTextColor(getContext().getResources().getColor(R.color.user_text_blue));
-        tv_video_status.setText("我的认证");
-        iv_video_verify.setEnabled(true);
-    }
-
-    public void showVerify() {
-        tv_video_title.setTextColor(getContext().getResources().getColor(R.color.user_text_blue));
-        tv_video_status.setTextColor(getContext().getResources().getColor(R.color.user_text_gray_bottom));
-        tv_video_status.setText("已认证");
-        iv_video_verify.setEnabled(false);
     }
 
     @Override

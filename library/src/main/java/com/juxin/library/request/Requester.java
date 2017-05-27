@@ -2,17 +2,13 @@ package com.juxin.library.request;
 
 import android.content.Context;
 
-import com.juxin.library.utils.NetworkUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -25,8 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class Requester {
 
-    private static final int CONNECT_TIMEOUT = 20;  //请求超时时间，单位：s
-    private static final int RW_TIMEOUT = 20;       //读写超时时间，单位：s
+    private static final int CONNECT_TIMEOUT = 5;  //请求超时时间，单位：min
+    private static final int RW_TIMEOUT = 5;       //读写超时时间，单位：min
 
     private static OkHttpClient.Builder builder;
 
@@ -37,44 +33,13 @@ public class Requester {
         builder = new OkHttpClient.Builder();
         if (isDebug) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
             builder.addInterceptor(loggingInterceptor);
         }
 
         //配置缓存选项
         File cacheFile = new File(context.getCacheDir(), "responses");
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);// 50 MiB
-        Interceptor cacheInterceptor = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();
-                if (!NetworkUtils.isConnected(context)) {
-                    request = request.newBuilder()
-                            .cacheControl(CacheControl.FORCE_CACHE)
-                            .build();
-                }
-                Response response = chain.proceed(request);
-                if (NetworkUtils.isConnected(context)) {
-                    int maxAge = 0;
-                    // 有网络时, 不缓存, 最大保存时长为0
-                    response.newBuilder()
-                            .header("Cache-Control", "public, max-age=" + maxAge)
-                            .removeHeader("Pragma")
-                            .build();
-                } else {
-                    // 无网络时，设置超时为4周
-                    int maxStale = 60 * 60 * 24 * 28;
-                    response.newBuilder()
-                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                            .removeHeader("Pragma")
-                            .build();
-                }
-                return response;
-            }
-        };
-        //设置缓存
-        builder.addNetworkInterceptor(cacheInterceptor);
-        builder.addInterceptor(cacheInterceptor);
         builder.cache(cache);
         //设置文件下载监听
         builder.addInterceptor(new Interceptor() {
@@ -87,22 +52,10 @@ public class Requester {
                         .build();
             }
         });
-        //User-Agent拦截器，过滤掉本地header的User-Agent
-        builder.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                final Request originalRequest = chain.request();
-                final Request requestWithUserAgent = originalRequest.newBuilder()
-                        .removeHeader("User-Agent")
-                        .addHeader("User-Agent", "")
-                        .build();
-                return chain.proceed(requestWithUserAgent);
-            }
-        });
         //设置超时
-        builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS);
-        builder.readTimeout(RW_TIMEOUT, TimeUnit.SECONDS);
-        builder.writeTimeout(RW_TIMEOUT, TimeUnit.SECONDS);
+        builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.MINUTES);
+        builder.readTimeout(RW_TIMEOUT, TimeUnit.MINUTES);
+        builder.writeTimeout(RW_TIMEOUT, TimeUnit.MINUTES);
         //错误重连
         builder.retryOnConnectionFailure(true);
     }

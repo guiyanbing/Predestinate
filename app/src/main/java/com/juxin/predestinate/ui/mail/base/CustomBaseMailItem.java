@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail.base;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -11,11 +12,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.juxin.library.view.CircleImageView;
+import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
+import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 /**
  * item基类
@@ -52,19 +57,21 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
     }
 
-    public View getContentView(){
+    public View getContentView() {
         return contentView;
     }
 
-    public LinearLayout mail_item_letter;
-    public ImageView item_headpic;
-    public TextView item_nickname, item_unreadnum, item_last_time, item_online, item_last_status, item_certification;
+    public LinearLayout mail_item_letter, item_ranking_state;
+    public ImageView item_headpic, item_vip;
+    public TextView item_nickname, item_last_time, item_online, item_last_status,
+            item_certification, item_ranking_type, item_ranking_level;
     public EmojiTextView item_last_msg;
+    public BadgeView item_unreadnum;
 
     public void onCreateView(View contentView) {
-        mail_item_letter = (LinearLayout) findViewById(R.id.mail_item_letter);
+        mail_item_letter = (LinearLayout) contentView.findViewById(R.id.mail_item_letter);
         item_headpic = (ImageView) contentView.findViewById(R.id.mail_item_headpic);
-        item_unreadnum = (TextView) contentView.findViewById(R.id.mail_item_unreadnum);
+        item_unreadnum = (BadgeView) contentView.findViewById(R.id.mail_item_unreadnum);
         item_online = (TextView) contentView.findViewById(R.id.mail_item_online);
         item_nickname = (TextView) contentView.findViewById(R.id.mail_item_nickname);
         item_certification = (TextView) contentView.findViewById(R.id.mail_item_certification);
@@ -72,10 +79,14 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_last_time = (TextView) contentView.findViewById(R.id.mail_item_last_time);
         item_last_status = (TextView) contentView.findViewById(R.id.mail_item_last_status);
         item_headpic.setOnClickListener(this);
-        // mail_item_letter.setOnClickListener(this);
+
+        item_ranking_state = (LinearLayout) contentView.findViewById(R.id.mail_item_ranking_state);
+        item_ranking_type = (TextView) contentView.findViewById(R.id.mail_item_ranking_type);
+        item_ranking_level = (TextView) contentView.findViewById(R.id.mail_item_ranking_level);
+        item_vip = (ImageView) contentView.findViewById(R.id.mail_item_vip);
     }
 
-    public void showGap(){
+    public void showGap() {
         findViewById(R.id.gap_item).setVisibility(VISIBLE);
     }
 
@@ -84,13 +95,13 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      *
      * @param msgData
      */
-    public void showData(BaseMessage msgData) {
-      //  ModuleMgr.getHttpMgr().reqBigUserHeadImage(item_headpic, msgData.getAvatar());
+    public void showData(BaseMessage msgData, boolean isSlideLoading) {
+        PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
+        ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
         if (!TextUtils.isEmpty(nickname)) {
-          //  item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
-            item_nickname.setText(nickname);
+            item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
         } else {
             item_nickname.setText(String.valueOf(msgData.getLWhisperID()));
         }
@@ -100,11 +111,15 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //            item_certification.setVisibility(VISIBLE);
 //            item_certification.setText("官方");
 //        }
+        if(msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()){
+            item_last_msg.setText(BaseMessage.getContent(msgData));
+        }else {
+            item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
+        }
 
-        item_last_msg.setText(BaseMessage.getContent(msgData));
         long time = msgData.getTime();
         if (time > 0) {
-     //       item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));
+            item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));
         } else {
             item_last_time.setText("");
         }
@@ -116,8 +131,15 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //        }
         setUnreadnum(msgData);
         setStatus(msgData);
+
+        setRanking(msgData);
     }
 
+    /**
+     * 角标
+     *
+     * @param msgData
+     */
     protected void setUnreadnum(BaseMessage msgData) {
         item_unreadnum.setVisibility(View.GONE);
         if (msgData.getNum() > 0) {
@@ -126,8 +148,13 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
     }
 
+    /**
+     * 状态
+     *
+     * @param msgData
+     */
     protected void setStatus(BaseMessage msgData) {
-        if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType()) {
+        if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType() || msgData.getLWhisperID() == MailMsgID.Greet_Msg.type) {
             item_last_status.setVisibility(View.GONE);
             return;
         }
@@ -138,6 +165,31 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
     }
 
+    /**
+     * vip角标
+     * @param msgData
+     */
+    protected void setRanking(BaseMessage msgData) {
+        item_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(msgData.getIsVip()) ? View.VISIBLE : View.GONE);
+
+        if (!msgData.isTop()) {
+            item_ranking_state.setVisibility(View.GONE);
+            return;
+        }
+
+        item_ranking_state.setVisibility(View.VISIBLE);
+        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            item_ranking_state.setBackgroundResource(R.drawable.f1_ranking_bg_m);
+            item_ranking_type.setText(context.getString(R.string.top_type_man));
+            item_ranking_level.setText("TOP " + msgData.getTop());
+        } else {
+            item_ranking_state.setBackgroundResource(R.drawable.f1_ranking_bg_w);
+            item_ranking_type.setText(context.getString(R.string.top_type_woman));
+            item_ranking_level.setText("TOP " + msgData.getTop());
+        }
+    }
+
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 }

@@ -3,6 +3,11 @@
     <string name="app_storage_name">xiaou</string>
 
     <!-- 全局提示语 -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="tip">提示</string>
+    <string name="exit">退出</string>
+    <string name="send">发送</string>
     <string name="request_error">请求出错!</string>
 
     <!-- 主页Fragment -->
@@ -55,15 +60,12 @@
     <string name="toast_under_review">审核中，请稍后再试</string>
     <string name="button_version">版本</string>
     <string name="button_help">帮助</string>
-    <string name="button_send">发送</string>
     <string name="contact_kefu">联系客服</string>
     <string name="toast_update_ok">修改成功</string>
     <string name="dal_exit_content">确定退出登录吗</string>
     <string name="dal_vip_content">您非VIP会员，无法开启此功能</string>
     <string name="dal_auth_content">开启视频、音频功能，需要通过自拍认证</string>
     <string name="dal_exit_title">退出登录</string>
-    <string name="dal_cancle">取消</string>
-    <string name="dal_submit">确定</string>
     <string name="dal_vip_open">去开通</string>
     <string name="dal_auth_open">去认证</string>
     <string name="txt_set_topuid_desc">当前账号：</string>
@@ -100,6 +102,7 @@
     <string name="user_info_check_video_send">立即送她</string>
     <string name="user_info_check_video_pay">查看该视频需要：</string>
     <string name="user_info_check_video_price">%d朵玫瑰：</string>
+    <string name="user_info_check_video_fail">视频加载失败</string>
     <string name="user_info_require">正在获取个人资料...</string>
     <string name="user_info_follow_suc">关注成功</string>
     <string name="user_info_follow_fail">关注失败</string>
@@ -108,6 +111,7 @@
 
     <string name="user_info_last_week_video_hot">最近1周私密视频总人气：</string>
 
+    <string name="user_edit_zone_info">个人空间</string>
     <string name="user_edit_base_info">基本信息</string>
     <string name="user_edit_info_contact">联系方式</string>
     <string name="user_edit_info_detail_info">详细资料</string>
@@ -173,16 +177,16 @@
     <string name="txt_activity_about">活动相关</string>
     <string name="txt_app_about">关于</string>
     <string name="txt_clear_cache">清除缓存</string>
-    <string name="bt_exit">退出</string>
     <string name="toast_clearcache_ok">缓存清除成功</string>
     <string name="toast_clearcache_error">缓存清除失败</string>
     <string name="toast_oldpwd_isnull">请输入您的旧密码</string>
-    <string name="toast_pwd_error">请输入6至20位数字或字符的新密码</string>
+    <string name="toast_pwd_error">请输入8至20位数字或字符的新密码</string>
     <string name="toast_pwd_next_error">两次输入的密码不一致，请检查后重新输入</string>
     <string name="toast_suggest_isnull">请先填写意见再提交</string>
     <string name="toast_contactr_isnull">请留下您的联系方式</string>
     <string name="toast_commit_suggest_error">操作失败，请稍候再试</string>
     <string name="toast_commit_suggest_ok">提交成功</string>
+    <string name="toast_down_plugin">开始下载插件</string>
     <string name="txt_logname">缘份吧</string>
     <string name="txt_vers_def">V1.0.0</string>
     <string name="txt_email">jiaoyoukf@126.com</string>
@@ -193,7 +197,7 @@
     <string name="txt_oldpwd_desc">原密码</string>
     <string name="ext_oldpwd_hit">请输入您的原密码</string>
     <string name="txt_newpwd_desc">新密码</string>
-    <string name="ext_newpwd_hit">支持英文和数字，6至20位</string>
+    <string name="ext_newpwd_hit">支持英文和数字，8至20位</string>
     <string name="txt_replacepwd_desc">确认密码</string>
     <string name="ext_replacepwd_hit">再次填入新密码</string>
     <string name="qq_not_install">QQ未安装</string>
@@ -234,6 +238,8 @@
     <string name="toast_height_isnull">请选择您的身高</string>
     <string name="toast_marry_isnull">请选择您的婚姻状态</string>
     <string name="toast_head_isnull">请您上传真实照片做为头像</string>
+    <string name="toast_head_error">头像上传失败，请重试</string>
+    <string name="toast_picpath_error">图片地址无效</string>
     <string name="txt_gender_tip">注册成功后，性别不可以修改</string>
     <string name="txt_boy">男</string>
     <string name="txt_girl">女</string>
@@ -261,6 +267,8 @@
     <string name="loading_reg">正在自动注册，请稍后</string>
     <string name="loading_reg_update">正在修改数据，请稍后</string>
     <string name="loading_reg_update_error">注册失败，请稍候再试</string>
+    <string name="loading_pushpic">正在上传照片</string>
+
 
     <!-- 用户资料 -->
     <string name="user_center_fragment">我的</string>
@@ -302,13 +310,15 @@
     <string name="check_info_chat_pay">聊天</string>
     <string name="user_info_chat_video">%d钻石/分钟</string>
     <string name="user_info_chat_voice">%d钻石/分钟</string>
+    <string name="user_info_distance_near">5km以内</string>
+    <string name="user_info_distance_far">5km以外</string>
     <string name="user_other_info_set">资料设置</string>
     <string name="user_other_remark_name">备注名</string>
     <string name="user_other_set_chat_voice">为TA设置语音接听</string>
     <string name="user_other_set_chat_video">为TA设置视频接听</string>
     <string name="user_other_set_chat_video_accept">接受对方视频</string>
     <string name="user_other_set_chat_voice_accept">接受对方语音</string>
-    <string name="user_other_set_chat_price">钻石/分</string>
+    <string name="user_other_set_chat_price">%d钻石/分</string>
     <string name="user_other_set_chat_stick">消息置顶</string>
     <string name="user_other_set_chat_disturb">消息免打扰</string>
     <string name="user_other_set_chat_clear">清空聊天记录</string>
@@ -320,6 +330,8 @@
     <string name="user_other_label">标签</string>
     <string name="user_other_label_often">常用标签</string>
     <string name="user_other_info_req_fail">资料请求出错！</string>
+    <string name="user_other_not_video_chat">对方未开启视频聊天</string>
+    <string name="user_other_not_voice_chat">对方未开启语音聊天</string>
     <string name="user_online">在线</string>
     <string name="user_secret_media_unlock">正在解锁</string>
     <string name="user_secret_media_lock_suc">解锁成功</string>
@@ -331,6 +343,7 @@
 
     <string name="goods_price">%d元</string>
     <string name="goods_diamond_title">钻石充值</string>
+    <string name="goods_diamond_need">%d钻石</string>
     <string name="goods_diamond_remain">余额</string>
     <string name="goods_diamond_lack">余额不足</string>
     <string name="goods_diamond_type">请选择购买金额</string>
@@ -392,6 +405,8 @@
     <string name="choose_pic">选择</string>
     <string name="choose_no_pick">你还没有选择任何图片</string>
 
+    <!-- 计时样式 -->
+    <string name="count_default_format">%1$s:%2$s</string>
     <!-- EditText输入规范 -->
     <string name="phone_digits">1234567890</string>
     <string name="user_modify_pwd_input_digits">1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
@@ -443,15 +458,32 @@
     <string name="toast_chosen_repeat">标签不可以重复哦</string>
 
     <!-- 消息 -->
-    <string name="message_xiaou">小友消息</string>
+    <string name="video">视频</string>
+    <string name="audio">语音</string>
+    <string name="photo">图片</string>
+
+    <string name="notify_normal">给您发了一条消息，请查收！</string>
+    <string name="notify_video">有一条新%s通话，立即接听！</string>
+    <string name="notify_gift">送你一个礼物，请查收！</string>
+    <string name="notify_media">给您发了一条%s消息，请查收！</string>
+
+    <string name="message_xiaou">缘分吧消息</string>
     <string name="message_close">关闭</string>
     <string name="message_replay">回复</string>
+    <string name="message_empty_warn">消息不能为空</string>
+
+    <string name="chat_gift_hello_man">HI,帅哥</string>
+    <string name="chat_gift_hello_woman">HI,美女</string>
+    <string name="chat_gift_has_received">礼物已折现，已放入钱包！</string>
+    <string name="chat_click_receive_gift">点击收礼</string>
+    <string name="chat_click_send_gift">点击赠送</string>
 
     <string name="all_friends">全部好友</string>
-    <string name="ok">确定</string>
     <string name="level">亲密等级</string>
     <string name="intimate_member">亲密成员</string>
 
+    <string name="congratulations_to_you">恭喜你</string>
+    <string name="get_a_random_red_box">获得一个随机红包奖励</string>
 
     <string name="help_footer_explain"> 1、银行卡充值已经准确的填写了相关信息，还是失败怎么办?\n&#160;&#160; 您选择的银行卡手机支付,失败原因可能有多种：\n1>您的银行卡号,身份证号、 姓名等信息输入有误；\n2>您没有在银行预留网上支付的手机号码；\n3>您的银行卡暂不被支持；如信息正确的情况下，尝试3次依然失败，请更换其他银行卡重试；或购买全国通用的移动、联通、电信充值卡在手机充值卡支付页面上进行充值。\n\n2、银行卡支付时，卡号和身份证需要是同一个人吗？\n&#160;&#160;是的，银行卡充值卡号和身份证姓名必须一致，否则支付不会成功。\n\n3、手机号需要和开户时候预留的手机号码一致吗？\n&#160;&#160;建议最好和银行预留手机号码一致，如果忘记号码，请咨询银行修改。\n\n4、手机号码填写正确，为什么还是不能完成支付？\n&#160;&#160;进行网上支付必须要在银行预留过手机号码才能正常完成支付交易；预留的手机号码是用户进行网上支付，保障账户资金安全使用的；与您银行账户金额变动的短信提醒预留的手机号码不是一回事；但两者可以是同一号码。请您在支付填写手机号码时，确认您填写的是预留手机号码。\n\n5、没有银行卡怎么充值？\n&#160;&#160;您可以选择充值卡充值或者信用卡充值，充值卡需要购买全国通用的移动或者联通充值卡，到支付页面填写卡面上的序列号和密码即可。\n\n6、可以用两张50元的充值卡充值100元的业务吗？\n&#160;&#160;您好，不可以，我们软件不支持合并充值，请您根据服务选择相应面额充值卡进行充值。\n\n7、充值卡充值失败怎么办?\n&#160;&#160;请确认您的充值卡是全国通用的移动、联通或电信充值卡，如果提示您卡密已失效还未获得服务，请联系缘份吧QQ人工客服核查原因。</string>
     <string name="help_explain">亲爱的用户，您在支付过程中，有任何疑惑或者疑难，欢迎在线咨询，客服妹妹会在第一时间回复并帮助解决您的问题。</string>
@@ -461,7 +493,7 @@
     <string name="pay_errcode_deny">支付被拒绝</string>
     <string name="pay_errcode_unknown">支付出错</string>
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
-    <color name="homeUserSay">#ff333333</color>
+    <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>
@@ -483,10 +515,20 @@
     <string name="service_QQ">客服QQ:131333</string>
     <string name="withdrawal_page">提现页面</string>
     <string name="name_cannot_be_empty">真实姓名不能为空</string>
+    <string name="idcard_cannot_be_empty">身份证号不能为空</string>
+    <string name="id_card_number_format_is_wrong">身份证号格式有误</string>
+    <string name="bank_card_number_format_is_wrong">银行卡号格式有误</string>
+    <string name="zhi_card_number_format_is_wrong">支付宝帐号格式有误</string>
     <string name="bank_cannot_be_empty">开户银行不能为空</string>
     <string name="branch_cannot_be_empty">开户支行不能为空</string>
     <string name="bank_card_cannot_be_empty">银行卡号不能为空</string>
+    <string name="zhi_card_cannot_be_empty">支付宝帐号不能为空</string>
+    <string name="please_upload_the_idcard_front">请上传身份证正面照</string>
+    <string name="please_upload_the_idcard_tail">请上传身份证背面照</string>
+    <string name="please_upload_the_idcard_handle">请上传手持身份证照片</string>
     <string name="money_cannot_be_empty">提现金额不能为空</string>
+    <string name="please_complete_the_information">请完整填写信息</string>
+    <string name="please_upload_the_relevant_pictures">请上传相关照片</string>
     <string name="withdraw_tips">提现金额需要大于</string>
     <string name="not_beyond">提现不能超出您的金额</string>
     <string name="delay_contact_qq">若有延迟，请联系客服QQ：</string>
@@ -519,7 +561,6 @@
     <string name="hour_into_the_bag">条，其余24小时后才能点击入袋</string>
     <string name="net_error">网络异常</string>
     <string name="want_bag_tips">施展魅力，索要礼物</string>
-    <string name="askfor_send">发送</string>
     <string name="dlg_send_ok">立即赠送</string>
     <string name="dlg_send_gift_je">充值金额</string>
     <!-- 个人中心-我的礼品 -->
@@ -554,6 +595,13 @@
     <string name="attention_ta">关注TA</string>
     <string name="open_the_vip_can_be_operation">开通VIP才可以操作!</string>
     <string name="cancel_the_attention">取消关注</string>
+    <string name="just_looking_for_you">刚刚关注了你</string>
+    <string name="just_now">刚刚送给</string>
+    <string name="just_now_get">刚刚获得</string>
+    <string name="very_rich">,真土豪</string>
+    <string name="very_greater">,太赞了</string>
+    <string name="sent">送了</string>
+    <string name="ge">个</string>
 
 
     <!--发现start-->
@@ -567,8 +615,10 @@
     <string name="defriend_sure_dialog_surebtn">知道了</string>
 
     <string name="my_friend_title">我的好友</string>
+    <string name="my_friend_nodata">暂无好友，赠送礼物即可成为好友</string>
     <string name="my_friend_righ_title">黑名单</string>
     <string name="my_defriend_title">黑名单</string>
+    <string name="my_defriend_nodata">您未加任何好友进黑名单</string>
     <string name="send_gift">赠送该礼物需要</string>
     <string name="my_attention">我的关注</string>
 
@@ -581,10 +631,16 @@
 
     <string name="top_type_man">豪</string>
     <string name="top_type_woman">魅</string>
+    <string name="say_hi_avatar_fail">您的头像被拒绝，请重新上传头像，通过审核后才能继续打招呼</string>
+    <string name="say_hi_group_num_state">群发功能每天只能使用三次！</string>
+    <string name="say_hi_group_refresh">请先刷新列表再打招呼</string>
+    <string name="say_hello_user_act_title">打招呼的人</string>
+
+    "
     <!--发现end-->
 
 
-    <string name="privatechat_title_attention">关注她</string>
+    <string name="privatechat_title_attention">关注TA</string>
     <string name="privatechat_title_unsubscribe">取消关注</string>
     <string name="privatechat_title_phone">查看手机</string>
     <string name="privatechat_title_wx">查看微信</string>
@@ -596,6 +652,7 @@
 
 
     <!--认证-->
+    <string name="txt_submit">提交</string>
     <string name="txt_cancel">取消</string>
     <string name="txt_record_title">视频录制认证</string>
     <string name="txt_record_desc">请保持正面录制5秒钟</string>
@@ -605,8 +662,18 @@
     <string name="the_current_diamond">当前钻石：</string>
     <string name="second">秒</string>
 
+    <string name="toast_local_video_isnull">获取录制视频失败</string>
+    <string name="toast_down_error">下载失败,请稍后再试</string>
     <string name="toast_camera_isnull">没有前置摄像头</string>
+    <string name="toast_sdcard_isnull">SD卡不存在，请插入SD卡</string>
+    <string name="toast_camera_error">相机打开失败，请检查权限</string>
+    <string name="toast_pic_deal_error">照片处理失败请重试</string>
+    <string name="toast_video_deal_error">视频处理失败请重试</string>
+    <string name="toast_authentication_invalid">必须完成照片和视频的上传</string>
+    <string name="toast_auth_submit_error">提交失败，请稍后重试</string>
+    <string name="toast_auth_submit_ok">提交成功，请等待审核</string>
     <string name="txt_authstatus_authing">审核中</string>
+    <string name="txt_authstatus_auth_success">审核通过</string>
     <string name="txt_authstatus_authno">未认证</string>
     <string name="txt_authstatus_authok">已完成</string>
     <string name="txt_authstatus_autherror">审核未通过</string>
@@ -615,5 +682,48 @@
     <string name="txt_authtype_face">自拍认证</string>
     <string name="txt_phoneverify_ok">认证成功</string>
     <string name="txt_verify_complete_desc">你可以用手机号登录，密码为:</string>
+    <string name="bank_id">银行卡号</string>
+    <string name="zhi_fu_id">支付宝账号</string>
+    <string name="id_card_tips_zhi">请填写与本人身份证一致的支付宝帐号信息</string>
+    <string name="id_card_tips_bank">请填写与本人身份证一致的银行卡信息</string>
+    <string name="real_name">真实姓名</string>
+    <string name="input_real_name">输入真实姓名</string>
+    <string name="id_card">身份证号</string>
+    <string name="bank_card">银行卡</string>
+    <string name="bank_of_deposit">开户行</string>
+    <string name="bankbranch_of_deposit">开户支行</string>
+    <string name="bank_branch_such_as">如：北京市，朝阳支行</string>
+    <string name="input_your_bank_of_deposit">输入您的开户行</string>
+    <string name="input_your_bank_card_id">输入您的银行卡号</string>
+    <string name="upload_id">上传身份证</string>
+    <string name="id_front">身份证正面</string>
+    <string name="id_tail">身份证背面</string>
+    <string name="id_hand">上传手持身份证照片</string>
+    <string name="the_certification_audit">认证审核中</string>
+    <string name="the_identity_certification_audit">身份认证审核中</string>
+    <string name="input_your_zhifubao_id">输入您的支付宝帐号</string>
+    <string name="money_cout_be_0">提现金额不能为0</string>
 
+    <string name="txt_record_time_desc">请保持正面录制5秒钟</string>
+    <string name="txt_getpic">拍摄照片</string>
+    <string name="txt_getpic_desc">建议在网络良好的状态下上传，注意照片反光</string>
+    <string name="txt_getvideo">视频</string>
+    <string name="txt_getvideo_desc">保持正面，拍摄5秒</string>
+    <string name="bt_return_authact">返回首页</string>
+    <string name="bt_return_loginact">手机号登录</string>
+
+    <!-- =================软件升级 start================= -->
+    <string name="update_server_error">没有检测到新版本信息</string>
+    <string name="update_has_install">检测到新版已安装，请点击跳转</string>
+    <string name="update_already_new">您当前的版本为最新的</string>
+    <string name="update_download_error">安装包下载失败，请重试</string>
+    <string name="update_find_new">发现新版本 </string>
+    <!-- =================软件升级 end================= -->
+
+    <!-- =================缓存数据 start================= -->
+    <string name="cache_state_good">缓存状态良好</string>
+    <string name="cache_state_little">有少量缓存，可以清理</string>
+    <string name="cache_state_huge">有大量缓存，建议清除</string>
+    <!-- =================缓存数据 end================= -->
+    <string name="dlg_need_vip">您非VIP会员，不可以直接发起视频和语音通话</string>
 </resources>

@@ -1,29 +1,33 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.app.Activity;
 import android.app.Application;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
+import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * Created by Kind on 2017/4/13.
@@ -33,7 +37,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
-
+    private List<BaseMessage> greetList = new ArrayList<>(); //好友列表
 
     @Inject
     DBCenter dbCenter;
@@ -58,6 +62,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public String getUnreadNum(int unreadNum) {
+        return unreadNum <= 9 ? String.valueOf(unreadNum) : "9+";
+    }
+
+    public String getUnreadTotalNum(int unreadNum) {
         return unreadNum <= 99 ? String.valueOf(unreadNum) : "99+";
     }
 
@@ -69,74 +77,150 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public void updateListMsg(List<BaseMessage> messages) {
-            unreadNum = 0;
-            msgList.clear();
-            if (messages != null && messages.size() > 0) {
-                msgList.addAll(messages);
-                for (BaseMessage tmp : messages) {
-                    unreadNum += tmp.getNum();
-                }
-            }
-//            unreadNum += getVisitNum();//最近访客
-//            List<FriendInfo> friendInfos = ModuleMgr.getMsgCommonMgr().getFriendsData().getFriendData();
-//            if (messages != null) {
-//                for (BaseMessage tmp : messages) {
-//                    boolean isB = MailSpecialID.getMailSpecialID(tmp.getLWhisperID());
-//                    if (isB) {
-//                        friendsList.add(tmp);
-//                    } else {
-//                        MMLog.autoDebug("friendInfos=" + friendInfos.size());
-//                        if (ModuleMgr.getMsgCommonMgr().getFriendsData().isContains(tmp.getLWhisperID())) {
-//                            friendsList.add(tmp);
-//                        } else {
-//                            newFriendListUnreadNum += tmp.getNum();
-//                            newFriendList.add(tmp);
-//                        }
-//                    }
-//                }
-//            }
-        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-           // updateBasicUserInfo();
+    /**
+     * 陌生人列表
+     *
+     * @return
+     */
+    public List<BaseMessage> getGeetList() {
+        List<BaseMessage> tempList = new ArrayList<>();
+        synchronized (greetList) {
+            tempList.addAll(greetList);
+            return tempList;
+        }
     }
+
+    public void updateListMsg(List<BaseMessage> messages) {
+        unreadNum = 0;
+        msgList.clear();
+        greetList.clear();
+        if (messages != null && messages.size() > 0) {
+            for (BaseMessage tmp : messages) {
+
+                if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
+                    msgList.add(tmp);
+                } else {
+                    greetList.add(tmp);
+                }
+                unreadNum += tmp.getNum();
+            }
+        }
+
+        PLogger.printObject("List=1111=" + msgList.size());
+        unreadNum += getFollowNum();//关注
+        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+    }
+
+    /**
+     * 截取语音
+     *
+     * @param url
+     * @return
+     */
+    public String subStringAmr(String url) {
+        return url.contains(".amr") ? (url.replace(".amr", "")) : url;
+    }
+
+    /**
+     * 拼接
+     *
+     * @param url
+     * @return
+     */
+    public String spliceStringAmr(String url) {
+        return url.contains(".amr") ? url : (url + ".amr");
+    }
+
+    /**
+     * 关注
+     *
+     * @return
+     */
+    public int getFollowNum() {
+        return ModuleMgr.getUnreadMgr().getUnreadNumByKey(UnreadMgrImpl.FOLLOW_ME);
+    }
+
+    public void updateFollow() {
+        ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.FOLLOW_ME);
+    }
+
+
+    //是否能聊天
+    private String getIsTodayChatKey() {//是否显示问题反馈第一句KEY
+        return "isTodayChat" + App.uid;
+    }
+
+    public void setTodayChatShow(boolean b) {//隐藏，显示私聊列表
+        PSP.getInstance().put(getIsTodayChatKey(), TimeUtil.getCurrentData());
+    }
+
+    /**
+     * 当前时否可以聊天
+     *
+     * @return true是可以发信的，false不可以发信
+     */
+    public boolean getTodayChatShow() {
+        String currentData = TimeUtil.getCurrentData();
+        String isTodayChat = PSP.getInstance().getString(getIsTodayChatKey(), "");
+        return isTodayChat.equals("") || !isTodayChat.equals(currentData);
+    }
+
 
     /**
      * 批量删除消息
+     *
      * @param messageList
      */
     public void deleteBatchMessage(List<BaseMessage> messageList) {
-        for (BaseMessage temp : messageList){
-            deleteMessage(temp.getLWhisperID());
+        PLogger.printObject("messageList===" + messageList.size());
+        for (BaseMessage temp : messageList) {
+            dbCenter.deleteMessage(temp.getLWhisperID());
         }
-        getWhisperList();
+      //  getWhisperList();
     }
 
     public long deleteMessage(long userID) {
-        return dbCenter.deleteMessage(userID);
-    }
-
-    /**
-     * 删除聊天记录
-     * @param userID
-     * @return
-     */
-    public long deleteFmessage(long userID) {
-        long ret =dbCenter.deleteFmessage(userID);
-        if(ret != DBConstant.ERROR){
-            getWhisperList();
+        long ret = dbCenter.deleteMessage(userID);
+        if (ret != MessageConstant.ERROR) {
+          //  getWhisperList();
         }
         return ret;
     }
 
+    /**
+     * 删除聊天记录
+     *
+     * @param userID
+     * @return
+     */
+    public long deleteFmessage(long userID) {
+        long ret = dbCenter.getCenterFMessage().delete(userID);
+        if (ret != MessageConstant.ERROR) {
+        //    getWhisperList();
+        }
+        return ret;
+    }
 
     /**
      * 更新已读
      */
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
-        if(ret != DBConstant.ERROR){
-            getWhisperList();
+        if (ret != MessageConstant.ERROR) {
+        //    getWhisperList();
         }
+    }
+
+    public void updateToBatchRead(List<BaseMessage> greetList){
+        if(greetList == null || greetList.size() <= 0){
+            return;
+        }
+        for(BaseMessage temp : greetList){
+            updateToRead(temp.getLWhisperID());
+        }
+    }
+    public long updateToRead(long userID){
+        return dbCenter.getCenterFMessage().updateToRead(userID);
     }
 
     public void updateToRead(String channelID, String userID) {
@@ -144,10 +228,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void getWhisperList() {
-        Observable<List<BaseMessage>> listObservable = dbCenter.queryLetterList();
+        PLogger.printObject("getWhisperList====1" + "11111");
+        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
+                PLogger.printObject("getWhisperList====1" + baseMessages.size());
                 updateListMsg(baseMessages);
             }
         });
@@ -163,35 +249,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         initAppComponent();
                         getAppComponent().inject(this);
                         ModuleMgr.getChatMgr().inject();
-                        MMLog.autoDebug("uid=======" + App.uid);
+                        PLogger.d("uid=======" + App.uid);
                         getWhisperList();
-
-//                        dbCenter.insertUnRead("1", "11111");
-//                        dbCenter.insertUnRead("2", "11111");
-//                        dbCenter.insertUnRead("3", "11111");
-//                        dbCenter.insertUnRead("4", "11111");
-//                        dbCenter.insertUnRead("5", "11111");
-//                        dbCenter.insertUnRead("6", "11111");
-//                        dbCenter.insertUnRead("7", "11111");
-//
-//                        Observable<String> observable = dbCenter.queryUnRead("key");
-//                        observable.subscribe(new Action1<String>() {
-//
-//                            @Override
-//                            public void call(String str) {
-//                            }
-//                        });
-//
-//
-//                        Observable<Map<String, String>> observable = dbCenter.queryUnReadList();
-//                        observable.subscribe(new Action1<Map<String,String>>() {
-//
-//                            @Override
-//                            public void call(Map<String, String> stringMap) {
-//                                PLogger.printObject("stringMap.size()" + stringMap.size());
-//                            }
-//                        });
-
+                        ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
                     }
                 } else {
                     logout();
@@ -200,9 +260,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    private void logout(){
+    private void logout() {
         mAppComponent = null;
         msgList.clear();
+        greetList.clear();
         unreadNum = 0;
     }
 
@@ -227,5 +288,63 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 .appModule(new AppModule((Application) App.getContext()))
                 .dBModule(new DBModule(App.uid))
                 .build();
+    }
+
+    /**
+     * 处理特殊消息
+     * 例如 系统消息，心动消息
+     *
+     * @param message
+     */
+    public void setSpecialMsg(BaseMessage message) {
+        switch (message.getType()) {
+            case BaseMessage.TalkRed_MsgType://红包消息
+                setTalkMsg(message);
+                break;
+            case BaseMessage.video_MsgType://视频消息
+                setVideoMsg(message);
+                break;
+            case BaseMessage.System_MsgType://系统消息
+                setSystemMsg(message);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 视频消息
+     *
+     * @param message
+     */
+    private void setVideoMsg(BaseMessage message) {
+        if (message == null) return;
+        VideoMessage videoMessage = (VideoMessage) message;
+        PLogger.printObject("setVideoMsg==="+videoMessage.toString());
+        if (videoMessage.getVideoTp() == 1) {
+            VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
+                    videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
+        } else {
+            UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
+        }
+    }
+
+    /**
+     * 红包消息
+     *
+     * @param message
+     */
+    private void setTalkMsg(BaseMessage message) {
+        if (message == null) return;
+
+        JSONObject jsonObject = message.getJsonObj();
+        if (jsonObject == null) return;
+
+        String content = jsonObject.optString("mct");
+        UIShow.showChatRedBoxDialog((Activity) App.getActivity(), content);
+    }
+
+    private void setSystemMsg(BaseMessage message) {
+
     }
 }

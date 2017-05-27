@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * Created by Su on 2017/5/3.
  */
 
-public class VideoConfig extends BaseData implements Parcelable{
+public class VideoConfig extends BaseData implements Parcelable {
     private int videoChat;      // 视频开关 1：开启 0：关闭
     private int voiceChat;      // 音频开关 1：开启 0：关闭
     private int videoVertify;   // 视频认证 1：未通过 3：通过
@@ -36,6 +36,20 @@ public class VideoConfig extends BaseData implements Parcelable{
      */
     public boolean isVerifyVideo() {
         return videoVertify == 3;
+    }
+
+    /**
+     * 是否可视频
+     */
+    public boolean isVideoChat() {
+        return videoChat == 1;
+    }
+
+    /**
+     * 是否可音频
+     */
+    public boolean isVoiceChat() {
+        return voiceChat == 1;
     }
 
     public int getVideoPrice() {

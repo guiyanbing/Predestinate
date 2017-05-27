@@ -1,32 +1,31 @@
 package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
-
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.Msg;
-import com.juxin.mumu.bean.message.MsgMgr;
-import com.juxin.mumu.bean.message.MsgType;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.Msg;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatExtendPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatInputPanel;
+import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatRecordPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,15 +35,9 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/30.
  */
-
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, MsgMgr.IObserver {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
-
-    /**
-     * 私聊还是群聊。
-     */
-    private boolean group = false;
 
     /**
      * 频道Id（群聊的），私聊时聊天对象的uid；群聊时是群聊Id。
@@ -55,16 +48,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 频道Id（私聊的），私聊时聊天对象的uid；群聊时是群聊Id。
      */
     private String whisperId = "";
-
-    /**
-     * 群创建者uid。私聊没啥用。
-     */
-    private long creatorId = 0;
-
-    /**
-     * 是否已经注册监听消息。
-     */
-    private boolean attach = false;
 
     /**
      * 是否显示扩展功能按钮。
@@ -80,11 +63,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 当用户信息变化时回调。
      */
     private ChatInterface.OnUserInfoListener onUserInfoListener = null;
-
-    /**
-     * 聊天类型。
-     */
-  //  private ChatListMgr.Folder folder = ChatListMgr.Folder.whisper;
 
     /**
      * 是否是客服消息。
@@ -113,19 +91,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         this.isKF_ID = isKF_ID;
     }
 
-//    public ChatListMgr.Folder getFolder() {
-//        return folder;
-//    }
-//
-//    public void setFolder(ChatListMgr.Folder folder) {
-//        if (folder == null || folder == this.folder) {
-//            return;
-//        }
-//
-//        this.folder = folder;
-//        getChatInstance().chatSmilePanel.resetSmilePackages();
-//    }
-
     /**
      * 判断消息发出者是否是当前用户自己。
      *
@@ -136,10 +101,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return App.uid == uid;
     }
 
-    public boolean isGroup() {
-        return group;
-    }
-
     public String getChannelId() {
         return channelId;
     }
@@ -148,12 +109,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return whisperId;
     }
 
-    public Long getLWhisperId() {
-        return TypeConvUtil.toLong(whisperId);
-    }
-
-    public long getCreatorId() {
-        return creatorId;
+    public long getLWhisperId() {
+        return TypeConvertUtil.toLong(whisperId);
     }
 
     public boolean isShowExtend() {
@@ -164,67 +121,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         this.showExtend = showExtend;
     }
 
-    /**
-     * 设置聊天频道Id。会自动注册消息监听。
-     *
-     * @param group     群聊还是私聊。true为群聊。
-     * @param channelId 聊天频道Id。
-     * @param creatorId 群的创建者Id。
-     */
-    public void setChannelId(boolean group, String channelId, long creatorId) {
-        this.group = group;
-        this.creatorId = creatorId;
-
-        if (group) {
-            this.channelId = channelId;
-            this.whisperId = null;
-        } else {
-            this.channelId = null;
-            this.whisperId = channelId;
-            getUserInfo(getLWhisperId());
-        }
-
-        chatInstance.chatInputPanel.showSendBtn();
-        page = 0;
-        attach();
-    }
-
-    /**
-     * 设置群聊频道。
-     *
-     * @param channelId 频道Id。
-     * @param creatorId 群的创建者Id。
-     */
-    public void setGroupId(String channelId, long creatorId) {
-        setChannelId(true, channelId, creatorId);
-    }
-
-    /**
-     * 设置群聊频道。
-     *
-     * @param channelId 频道Id。
-     */
-    public void setGroupId(String channelId) {
-        setGroupId(channelId, 0);
-    }
-
-    /**
-     * 设置私聊频道。
-     *
-     * @param whisperID 频道Id（用户uid）。
-     */
-    public void setWhisperId(String whisperID) {
-        setChannelId(false, whisperID, 0);
-    }
-
     public void setWhisperId(long whisperID) {
         try {
-            setWhisperId(String.valueOf(whisperID));
+            this.channelId = null;
+            this.whisperId = String.valueOf(whisperID);
+            getUserInfo(getLWhisperId());
+
+            chatInstance.chatInputPanel.showSendBtn();
+            page = 0;
+            attach();
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
-
 
     public ChatInterface.OnClickChatItemListener getOnClickChatItemListener() {
         return onClickChatItemListener;
@@ -254,7 +163,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 //        try {
 //            getChatInstance().chatContentAdapter.updateData(customMessage);
 //        } catch (Exception e) {
-//            MMLog.printThrowable(e);
+//            PLogger.printThrowable(e);
 //        }
 //    }
 
@@ -277,7 +186,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         try {
             getChatInstance().chatContentAdapter.updateData(msg);
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -333,30 +242,33 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (uid == App.uid) {
                 UserDetail temp = ModuleMgr.getCenterMgr().getMyInfo();
                 if (temp != null) {
-                    UserInfoLightweight infoLightweight = new UserInfoLightweight();
-                    infoLightweight.parseUserInfoLightweight(temp);
+                    UserInfoLightweight infoLightweight = new UserInfoLightweight(temp);
                     userInfos.put(uid, infoLightweight);
                     return infoLightweight;
                 }
             }
-//            ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-//                @Override
-//                public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-//                    if (ret) {
-//                        addUserInfo(infoLightweight);
-//                    }
-//                }
-//            });
+            PLogger.printObject("111111111111111");
+            ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
+
+                @Override
+                public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
+                    if (ret) {
+                        addUserInfo(infoLightweight);
+                    }
+                }
+            });
         } else {
             if (TextUtils.isEmpty(userInfo.getNickname()) && TextUtils.isEmpty(userInfo.getAvatar())) {
-//                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-//                    @Override
-//                    public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-//                        if (ret) {
-//                            addUserInfo(infoLightweight);
-//                        }
-//                    }
-//                });
+                PLogger.printObject("22222222222");
+                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
+
+                    @Override
+                    public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
+                        if (ret) {
+                            addUserInfo(infoLightweight);
+                        }
+                    }
+                });
             }
         }
         return userInfo;
@@ -368,17 +280,15 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * @param userInfo 用户信息。
      */
     public synchronized void addUserInfo(final UserInfoLightweight userInfo) {
-        if (userInfo == null) {
-            return;
-        }
+        if (userInfo == null) return;
 
         final UserInfoLightweight temp = userInfos.get(userInfo.getUid());
 
         if (temp == null) {
-            MMLog.autoDebug(userInfo);
+            PLogger.printObject(userInfo);
             userInfos.put(userInfo.getUid(), userInfo);
 
-            MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (msgPanelPair != null) {
@@ -470,18 +380,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 注册到消息管理模块，接收消息的更新。
      */
     private void attach() {
-        MMLog.autoDebug(MMLog.printObjectFields(this));
-        if (TextUtils.isEmpty(channelId)) {
-            ModuleMgr.getChatMgr().attachChatListener(whisperId, this);
-        } else {
-            ModuleMgr.getChatMgr().attachChatListener(channelId, this);
-        }
-
-        attach = true;
-
-        if (isGroup()) {
-            MsgMgr.getInstance().attach(MsgType.MT_App_IMStatus, this);
-        }
+        PLogger.printObject(this);
+        ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
     }
@@ -490,28 +390,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 反注册消息模块，解除绑定。
      */
     public void detach() {
-        if (attach) {
-            attach = false;
+        ModuleMgr.getChatMgr().detachChatListener(this);
+        ChatMediaPlayer.getInstance().stopPlayVoice();
 
-            if (isGroup()) {
-                MsgMgr.getInstance().detach(this);
-            }
-
-            ModuleMgr.getChatMgr().detachChatListener(this);
-        //    ChatMediaPlayer.getInstance().stopPlayVoice();
-
-            //关闭页面的时候查看是否下在输入中
-            if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
-                getChatInstance().chatInputPanel.sendSystemMsgCancelInput();
-            }
+        //关闭页面的时候查看是否下在输入中
+        if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
+            getChatInstance().chatInputPanel.sendSystemMsgCancelInput();
         }
     }
 
     @Override
     public void onChatRecently(boolean ret, List<BaseMessage> baseMessages) {
-        MMLog.autoDebug(MMLog.printObjectFields(baseMessages));
-
-        List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+        PLogger.printObject(baseMessages);
+        List<BaseMessage> listTemp = new ArrayList<>();
 
         if (ret) {
             for (BaseMessage baseMessage : baseMessages) {
@@ -521,23 +412,13 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             }
         }
 
-        if (listTemp.size() < 5) {
-            long uid = 0;
-
-            if (isGroup()) {
-                uid = getCreatorId();
-            } else {
-                uid = getLWhisperId();
-            }
-        }
-
         chatInstance.chatContentAdapter.setList(listTemp);
         moveToBottom();
     }
 
     @Override
     public void onChatHistory(boolean ret, List<BaseMessage> baseMessages) {
-        MMLog.autoDebug(MMLog.printObjectFields(baseMessages));
+        PLogger.printObject(baseMessages);
         chatInstance.chatListView.stopRefresh();
 
         if (ret) {
@@ -564,22 +445,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
-        MMLog.autoDebug(MMLog.printObjectFields(message));
+        PLogger.printObject(message);
         boolean show = false;
         boolean isUpdate = true;
-
-        try {
-            ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
-//            if (ChatMsgType.CMT_give_present == msgType) {
-//                if (ret) {
-//                    if (message.getMsgid() != 0) {
-//                        LoadingDialog.closeLoadingDialog();
-//                    }
-//                } else {
-//                    LoadingDialog.closeLoadingDialog();
-//                }
-//            }
-        } catch (Exception e) {}
 
         if (ret) {
             if (message.getTime() == 0) {
@@ -615,57 +483,39 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
              * 本地模拟消息
              * 接收的网络消息
              */
-//            if ((message.getcMsgid() == 0 && isUpdate) || message.getDataSource() == BaseMessage.FOUR
-//                    || (message.getDataSource() == BaseMessage.TWO && show)) {
-//                ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgid());
-//            }
+            if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
+                    || (message.getDataSource() == MessageConstant.TWO && show)) {
+                ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
+            }
         }
-    }
-
-    private boolean onDetectHeart() {
-//        List<MutualHeartUnList.MutualHeartUn> mutualHeartUns = ModuleMgr.getCfgMgr().getMutualHeartUn();
-//        for (MutualHeartUnList.MutualHeartUn tmp : mutualHeartUns) {
-//            if (getLWhisperId() == tmp.getUid() && tmp.getSendtime() <= 0) {
-//                ModuleMgr.getCfgMgr().modifyMutualHeartUn(getLWhisperId());
-//                Msg msg = new Msg();
-//                msg.setData(false);
-//                MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
-//                return false;
-//            }
-//        }
-        return true;
     }
 
     /**
      * 聊天权限处理
+     *
      * @param message
      */
     private void checkPermissions(BaseMessage message) {
-//        if (MailSpecialID.customerService.getSpecialID() == message.getLWhisperID()) return;
-//        UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
-//        /**
-//         * 如果是男的，而且非包月用户，而且是自己发送的消息，而且是发送成功的消息
-//         */
-//        if (user.isMan() && !user.isVip() && message.isSender() && message.getMsgid() > 0) {//男 没有开通包月
-//            /**
-//             * 文本消息,语音消息,图片消息, 大表情类型, 小游戏消息
-//             * 只能免费发送一条消息
-//             */
-//            if (message.getType() == BaseMessage.BaseMessageType.text.msgType
-//                    || message.getType() == BaseMessage.BaseMessageType.voice.msgType
-//                    || message.getType() == BaseMessage.BaseMessageType.img.msgType
-//                    || message.getType() == BaseMessage.BaseMessageType.videoSmall.msgType) {
-//                if (onDetectHeart()) {
-//                    if (ModuleMgr.getChatListMgr().getTodayChatShow()) {
-//                        //更新时间
-//                        ModuleMgr.getChatListMgr().setTodayChatShow(true);
-//                        Msg msg = new Msg();
-//                        msg.setData(false);
-//                        MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
-//                    }
-//                }
-//            }
-//        }
+        if (MailSpecialID.customerService.getSpecialID() == message.getLWhisperID()) return;
+        UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
+        /**
+         * 如果是男的，而且非包月用户，而且是自己发送的消息，而且是发送成功的消息
+         */
+        if (user.isMan() && !user.isVip() && message.isSender() && message.getMsgID() > 0) {//男 没有开通包月
+            /**
+             * 文本消息,语音消息,图片消息
+             * 只能免费发送一条消息
+             */
+            if (message.getType() == BaseMessage.BaseMessageType.common.msgType) {
+                if (ModuleMgr.getChatListMgr().getTodayChatShow()) {
+                    //更新时间
+                    ModuleMgr.getChatListMgr().setTodayChatShow(true);
+                    Msg msg = new Msg();
+                    msg.setData(false);
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+                }
+            }
+        }
     }
 
     public boolean isShowMsg(BaseMessage baseMsg) {
@@ -724,7 +574,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             return;
         }
 
-        msgPanelPair = new Pair<BaseMessage, ChatPanel>(baseMessage, chatPanel);
+        msgPanelPair = new Pair<>(baseMessage, chatPanel);
         UserInfoLightweight infoLightweight = getUserInfo(baseMessage.getSendID());
 
         if (chatPanel.reset(baseMessage, infoLightweight)) {
@@ -769,23 +619,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return false;
     }
 
-    /**
-     * 处理在群聊中的时候，断线重连后。自动重新加入群。<br>
-     *
-     * @param msgType 消息类型。
-     * @param msg     消息内容。
-     */
-    @Override
-    public void onMessage(MsgType msgType, Msg msg) {
-        Bundle bundle = (Bundle) msg.getData();
-
-        int type = bundle.getInt("type");
-
-        if (type == 0) {
-            MMLog.autoDebug("" + attach);
-        }
-    }
-
     private int page = 0;
 
     @Override
@@ -795,7 +628,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onLoadMore() {}
+    public void onLoadMore() {
+    }
 
     /**
      * 是否可以聊天

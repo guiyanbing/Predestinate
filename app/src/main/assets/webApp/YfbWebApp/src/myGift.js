@@ -2,7 +2,7 @@
  * Created by bikuili on 17/5/2.
  */
 var MyGift = MyGift || (function ($) {
-    let that = {};
+    var that = {};
 
     //阻尼系数
     var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -65,37 +65,46 @@ var MyGift = MyGift || (function ($) {
           dataUrl = web.urlMethod.MySendGifts;
           console.log('Sgifturl =' + dataUrl)
         };
-        window.platform.normalRequest("get", web.urlConfig.agentURL + dataUrl, {}, {},function (resp) {
-
+        window.platform.normalRequestNoUrl('Get',web.urlType.Php,dataUrl,{},{},function (resp) {
           if (resp.status !== 'ok') {
             mui.toast(resp.msg);
           } else {
             console.log('giftData' + JSON.stringify(resp));
             render(tabindex,resp);
           }
-        })
+        });
       };
 
       var render = function (tabindex,data) {
         console.log('rendertab' + tabindex);
-        let _dataList = data.list;
-        let _giftNum = data.num;
+        var _dataList = data.list;
+        var _giftNum = data.num;
         console.log('_giftnum ='+_giftNum);
         var giftRecieveTotal = document.getElementById('giftRecieveTotal');
         var giftSendTotal = document.getElementById('giftSendTotal');
         giftRecieveTotal.innerText = _giftNum;
         giftSendTotal.innerText = _giftNum;
+        if (tabindex === 0) {
+          var table = document.body.querySelector('#scroll1 .mui-scroll .mui-table-view');
+          var cells = document.body.querySelectorAll('.mui-table-view-cell');
+        }else {
+          var table = document.body.querySelector('#scroll2 .mui-scroll .mui-table-view');
+          var cells = document.body.querySelectorAll('.mui-table-view-cell');
+        }
+
+        for (var j = 0;j <cells.length;j++) {
+          table.removeChild(cells[j]);
+        }
         for (var i = 0;i < _dataList.length;i++) {
-          let data = _dataList[i];
-          let name = data.name;
-          let img = data.img;
-          let num = data.num;
+          var data = _dataList[i];
+          var name = data.name;
+          var img = data.img;
+          var num = data.num;
           var li = document.createElement('li');
           li.className = 'mui-table-view-cell mui-media';
           li.innerHTML = '<a href="">\
             <img class="mui-media-object mui-pull-left" src="'+img+'" alt="">\
             <div class="mui-media-body" style="line-height: 46px">'+ name +'<p class="mui-ellipsis mui-pull-right">X'+  num+'</p>\</div></a>';
-          var table = document.body.querySelector('.mui-scroll .mui-table-view');
           table.appendChild(li);
         };
 

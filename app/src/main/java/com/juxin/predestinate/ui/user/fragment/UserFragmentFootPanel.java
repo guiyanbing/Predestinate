@@ -7,17 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +20,7 @@ import java.util.List;
 /**
  * 个人中心的list布局panel
  */
-public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecyclerViewHolder.OnItemClickListener {
+public class UserFragmentFootPanel extends BasePanel implements BaseRecyclerViewHolder.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private UserAuthAdapter userAuthAdapter;
@@ -35,7 +30,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         setContentView(R.layout.p1_user_fragment_footer);
 
         initData();
-        reqData();
     }
 
     // 初始化条目数据
@@ -60,26 +54,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
         userAuthAdapter.setOnItemClickListener(this);
     }
 
-    private void reqData() {
-        // 红包总额
-        ModuleMgr.getCenterMgr().reqRedbagSum(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(response.getResponseString());
-                    String status = jsonObject.optString("status");
-                    if ("ok".equals(status)) {
-                        ModuleMgr.getCenterMgr().getMyInfo().setRedbagsum(jsonObject.optDouble("total"));
-                        refreshView();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     /**
      * 刷新list
      */
@@ -102,7 +76,6 @@ public class UserFragmentFootPanel extends BaseViewPanel implements BaseRecycler
     public void onItemClick(View convertView, int position) {
         switch (position) {
             case CenterItemID.i_Center_item_1: // 我的主页
-//                UIShow.showCheckOtherInfoAct(getContext(), 110871663);
                 UIShow.showCheckOwnInfoAct(getContext());
                 break;
 

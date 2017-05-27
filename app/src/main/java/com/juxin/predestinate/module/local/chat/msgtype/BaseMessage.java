@@ -1,9 +1,13 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
 import android.text.TextUtils;
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.TypeConvUtil;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.bean.db.FLetter;
+import com.juxin.predestinate.bean.db.FMessage;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.logic.application.App;
@@ -13,33 +17,22 @@ import com.juxin.predestinate.ui.mail.item.MailItemType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
+ * [消息类型处理](http://doc.dev.yuanfenba.net/pkg/yuanfen/common/msg_data/)
  * Created by Kind on 2017/3/17.
  */
-
 public class BaseMessage implements IBaseMessage {
-
 
     public enum BaseMessageType {
 
         common(CommonMessage.class, 2),//文本消息
         hi(TextMessage.class, 3),//打招呼
-        readMe(TextMessage.class, 4),//谁看过我
-        concern(ConcernMessage.class, 5),//关注
-        system(SystemMessage.class, 7),//系统消息
         gift(GiftMessage.class, 10),//礼物消息
-        redEnvelopes(RedEnvelopesMessage.class, 12),//聊天红包
         hint(TextMessage.class, 14),//小提示消息
-        wantGift(TextMessage.class, 15),//索要礼物消息
-        redEnvelopesBalance(TextMessage.class, 17),//红包余额变动消息
-        html(HtmlMessage.class, 19),//html消息
-        wantGiftTwo(GiftMessage.class, 20),//索要礼物消息第二版
+        html(TextMessage.class, 19),//html消息
+        wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息
+        htmlText(TextMessage.class, 25),//HTML文本消息
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
@@ -48,15 +41,6 @@ public class BaseMessage implements IBaseMessage {
         BaseMessageType(Class<? extends BaseMessage> msgClass, int msgType) {
             this.msgClass = msgClass;
             this.msgType = msgType;
-        }
-
-        public static BaseMessageType getBaseMessageByType(String str) {
-            for (BaseMessageType messageType : BaseMessageType.values()) {
-                if (messageType.toString().equals(str)) {
-                    return messageType;
-                }
-            }
-            return null;
         }
 
         public static BaseMessageType valueOf(int msgType) {
@@ -79,7 +63,7 @@ public class BaseMessage implements IBaseMessage {
                 BaseMessageType messageType = BaseMessageType.valueOf("Msg_" + type);
                 return messageType.msgClass;
             } catch (Exception e) {
-                MMLog.autoDebug(type);
+                PLogger.d("Msg_" + type);
             }
             return null;
         }
@@ -89,43 +73,18 @@ public class BaseMessage implements IBaseMessage {
         }
     }
 
-
-
-
-
-
-    //数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟
-    public static int ONE = 1;
-    public static int TWO = 2;
-    public static int THREE = 3;
-    public static int FOUR = 4;
-
-    public final static int NumDefault = 0;//数字默认值
-    public final static String StrDefault = "";//字符默认值
-
-    //显示权重
-    public static int Max_Weight = 1000;//最大权重
-    public static int Great_Weight = 100;//大权重
-    public static int In_Weight = 50;//中等权重
-    public static int Small_Weight = 1;//小权重
-
     /**
      * 消息类型，进行未读消息比对
      */
-    public static final int look_MsgType = 4;//谁看过我
-    public static final int follow_MsgType = 5;//谁关注了我
-    public static final int system_MsgType = 7;//系统消息
-    public static final int heart_MsgType = 8;//心动消息
-
-    public static final int addFriend_MsgType = 14;//加好友消息
-    public static final int game_MsgType = 15;//游戏交互消息
-    public static final int envelopes_MsgType = 16;//红包消息
-    public static final int thumbs_MsgType = 18;//棒棒糖点赞消息
-
+    public static final int Follow_MsgType = 5;//关注
+    public static final int System_MsgType = 7;//系统消息
+    public static final int TalkRed_MsgType = 12;//聊天红包
+    public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
+    public static final int video_MsgType = 24;//视频消息
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
-        MMLog.autoDebug(jsonStr);
+        PLogger.d(jsonStr);
         this.setJsonStr(jsonStr);
         return null;
     }
@@ -133,13 +92,6 @@ public class BaseMessage implements IBaseMessage {
     @Override
     public String getJson(BaseMessage message) {
         return null;
-    }
-
-    /**
-     * 判断是否为群私聊
-     */
-    public boolean isWhisper() {
-        return !TextUtils.isEmpty(getChannelID()) && !TextUtils.isEmpty(getWhisperID());
     }
 
     /**
@@ -156,37 +108,37 @@ public class BaseMessage implements IBaseMessage {
     private String whisperID;//私聊ID
     private long sendID;// 发送ID
     private long msgID = -1;//服务器消息ID
-    private long cMsgID;//客户端消息ID
+    private long cMsgID = -1;//客户端消息ID
+    private long specialMsgID = -1;//客户端消息ID
     private long time;
     private String content;//具体内容
     private String jsonStr;//json串
     private int status;//1.发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过   私聊列表中是最后一条消息的状态
-    private int fStatus = 1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
+    private int fStatus = -1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
     private int type;//消息类型
     private int dataSource = 1;//数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟消息
     private String customtype;//自定义类型
-    private int version = 4;//版本
+    private int version = 1;//版本
     private boolean isResending = false;//是否重发中
     private boolean isValid = false;//是否有效当前消息,用于五分钟内重发用
     private String msgDesc;//消息描述 mct
+    private long ru = MessageConstant.Ru_Friend;//如果为1则为熟人消息，否则为0
 
     private boolean isRead = false;//未读消息（true已经是读过了）//这个字段专门给数据库用的，不是给界面用的
     private boolean isSave;//是否保存
     private boolean isAutoplay = false;//是否自动播放
-
 
     //这几个字段 目前基本是给私聊用的
     private String infoJson;//个人资料json
     private String name;// 名称
     private String avatar;// 头像
     private int localAvatar;// 本地头像
+    private int top;
     private String aboutme;// 内心读白
-    private int isMonth;//包月
     private int isVip;
-    private int isOnline;//是否在线
     private int kfID;//是否是机器人
     private int num;//私聊列表专用字段
-    private int Weight = Small_Weight;//Item的权重
+    private int Weight = MessageConstant.Small_Weight;//Item的权重
     private int MailItemStyle = MailItemType.Mail_Item_Ordinary.type;//私聊列表样式
 
     public int getMailItemStyle() {
@@ -211,6 +163,18 @@ public class BaseMessage implements IBaseMessage {
 
     public void setLocalAvatar(int localAvatar) {
         this.localAvatar = localAvatar;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public boolean isTop() {
+        return top != 0;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
     }
 
     /***********************/
@@ -246,7 +210,7 @@ public class BaseMessage implements IBaseMessage {
 
     //转成LONG型
     public long getLWhisperID() {
-        return TypeConvUtil.toLong(whisperID);
+        return TypeConvertUtil.toLong(whisperID);
     }
 
     public void setWhisperID(String whisperID) {
@@ -303,14 +267,6 @@ public class BaseMessage implements IBaseMessage {
 
     public void setIsVip(int isVip) {
         this.isVip = isVip;
-    }
-
-    public int getIsMonth() {
-        return isMonth;
-    }
-
-    public void setIsMonth(int isMonth) {
-        this.isMonth = isMonth;
     }
 
     public long getTime() {
@@ -373,6 +329,14 @@ public class BaseMessage implements IBaseMessage {
         this.cMsgID = cMsgID;
     }
 
+    public long getSpecialMsgID() {
+        return specialMsgID;
+    }
+
+    public void setSpecialMsgID(long specialMsgID) {
+        this.specialMsgID = specialMsgID;
+    }
+
     public int getType() {
         return type;
     }
@@ -414,7 +378,7 @@ public class BaseMessage implements IBaseMessage {
     }
 
     public boolean isCustomMsgPanel() {
-        return ChatPanelType.CPT_Custome == msgPanelType;
+        return ChatPanelType.CPT_Custom == msgPanelType;
     }
 
     public void setMsgPanelType(ChatPanelType msgPanelType) {
@@ -449,18 +413,6 @@ public class BaseMessage implements IBaseMessage {
         this.isRead = isRead;
     }
 
-    public int getIsOnline() {
-        return isOnline;
-    }
-
-//    public boolean isOnline() {
-//        return ModuleMgr.getCenterMgr().isOnline(isOnline);
-//    }
-
-    public void setIsOnline(int isOnline) {
-        this.isOnline = isOnline;
-    }
-
     public int getKfID() {
         return kfID;
     }
@@ -471,12 +423,12 @@ public class BaseMessage implements IBaseMessage {
 
     /**
      * 是否是机器人
+     *
      * @return ture是机器人
      */
 //    public boolean isKF_ID() {
 //        return ModuleMgr.getCenterMgr().isRobot(getKf_id());
 //    }
-
     public int getVersion() {
         return version;
     }
@@ -517,15 +469,27 @@ public class BaseMessage implements IBaseMessage {
         this.content = content;
     }
 
+    public long getRu() {
+        return ru;
+    }
+
+    // true 如果为1则为熟人消息，否则为0
+    public boolean isRu() {
+        return ru == MessageConstant.Ru_Friend;
+    }
+
+    public void setRu(long ru) {
+        this.ru = ru;
+    }
+
     public JSONObject getJsonObject(String str) {
         try {
             if (!TextUtils.isEmpty(str)) {
                 return new JSONObject(str);
             }
         } catch (JSONException var3) {
-            MMLog.printThrowable(var3);
+            PLogger.printThrowable(var3);
         }
-
         return new JSONObject();
     }
 
@@ -541,65 +505,48 @@ public class BaseMessage implements IBaseMessage {
         this.setTime(getCurrentTime());
         this.setcMsgID(getCMsgID());
         this.setMsgID(getcMsgID());
-        MMLog.autoDebug("getCMsgID()=" + getcMsgID() + "");
+        PLogger.d("getCMsgID()=" + getcMsgID() + "");
     }
-
 
     //fmessage
-    public BaseMessage(String channelID, String whisperID, long sendID, long msgID, long cMsgID,
-                       int type, int status, int fStatus, long time, String jsonStr) {
-        this.channelID = channelID;
-        this.whisperID = whisperID;
-        this.sendID = sendID;
-        this.msgID = msgID;
-        this.cMsgID = cMsgID;
-        this.type = type;
-        this.status = status;
-        this.fStatus = fStatus;
-        this.time = time;
-        this.jsonStr = jsonStr;
-    }
-
-    //内容表
-    public BaseMessage(Map<String, Object> map, int type) {
-        this.setId(Long.parseLong(map.get("id").toString()));
-        this.setChannelID(map.get("channelId") == null ? StrDefault : map.get("channelId").toString());
-        this.setWhisperID(map.get("whisperID") == null ? StrDefault : map.get("whisperID").toString());
-        this.setSendID(map.get("sendId") == null ? NumDefault : TypeConvUtil.toLong(map.get("sendId").toString()));
-        this.setMsgID(map.get("msgid") == null ? NumDefault : TypeConvUtil.toLong(map.get("msgid").toString()));
-        this.setcMsgID(map.get("cMsgid") == null ? NumDefault : TypeConvUtil.toLong(map.get("cMsgid").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvUtil.toInt(map.get("status").toString()));
-        this.setfStatus(map.get("f_status") == null ? NumDefault : TypeConvUtil.toInt(map.get("f_status").toString()));
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvUtil.toLong(map.get("time").toString()));
-        this.setType(type);
+    public BaseMessage(Bundle bundle) {
+        this.setId(bundle.getLong(FMessage._ID));
+        this.setChannelID(bundle.getString(FMessage.COLUMN_CHANNELID));
+        this.setWhisperID(bundle.getString(FMessage.COLUMN_WHISPERID));
+        this.setSendID(bundle.getLong(FMessage.COLUMN_SENDID));
+        this.setMsgID(bundle.getLong(FMessage.COLUMN_MSGID));
+        this.setcMsgID(bundle.getLong(FMessage.COLUMN_CMSGID));
+        this.setSpecialMsgID(bundle.getLong(FMessage.COLUMN_SPECIALMSGID));
+        this.setType(bundle.getInt(FMessage.COLUMN_TYPE));
+        this.setStatus(bundle.getInt(FMessage.COLUMN_STATUS));
+        this.setfStatus(bundle.getInt(FMessage.COLUMN_FSTATUS));
+        this.setTime(bundle.getLong(FMessage.COLUMN_TIME));
+        this.setJsonStr(bundle.getString(FMessage.COLUMN_CONTENT));
     }
 
     //私聊列表
-    public BaseMessage(long id, String userID, String infoJson, int type, int kfID, int status, long time, String content, int num) {
-        this.setId(id);
-        this.setWhisperID(userID);
-        this.setInfoJson(infoJson);
-        this.setType(type);
-        paseInfoJson(this.getInfoJson());
-        this.setKfID(kfID);
-        this.setStatus(status);
-        this.setTime(time);
-        this.setNum(num);
+    public BaseMessage(Bundle bundle, boolean fletter) {
+        this.setId(bundle.getLong(FLetter._ID));
+        this.setWhisperID(bundle.getString(FLetter.COLUMN_USERID));
+        this.setInfoJson(bundle.getString(FLetter.COLUMN_INFOJSON));
+        this.setType(bundle.getInt(FLetter.COLUMN_TYPE));
+        parseInfoJson(this.getInfoJson());
+        this.setKfID(bundle.getInt(FLetter.COLUMN_KFID));
+        this.setStatus(bundle.getInt(FLetter.COLUMN_STATUS));
+        this.setRu(bundle.getInt(FLetter.COLUMN_RU));
+        this.setTime(bundle.getLong(FLetter.COLUMN_TIME));
+        this.setJsonStr(bundle.getString(FLetter.COLUMN_CONTENT));
+        this.setNum(bundle.getInt(FLetter.Num));
     }
 
-    //私聊列表
-    public BaseMessage(int type, Map<String, Object> map) {
-        this.setId(Long.parseLong(map.get("id").toString()));
-        this.setWhisperID(map.get("userid") == null ? StrDefault : map.get("userid").toString());
-        this.setIsOnline(map.get("isOnline") == null ? NumDefault : TypeConvUtil.toInt(map.get("isOnline").toString()));
-        this.setKfID(map.get("kf_id") == null ? NumDefault : TypeConvUtil.toInt(map.get("kf_id").toString()));
-        this.setInfoJson(map.get("infoJson") == null ? StrDefault : map.get("infoJson").toString());
-        paseInfoJson(this.getInfoJson());
-        this.setTime(map.get("time") == null ? NumDefault : TypeConvUtil.toLong(map.get("time").toString()));
-        this.setStatus(map.get("status") == null ? NumDefault : TypeConvUtil.toInt(map.get("status").toString()));
-
-        this.setNum(map.get("num") == null ? NumDefault : TypeConvUtil.toInt(map.get("num").toString()));
-        this.setType(type);
+    /**
+     * 转换JSON 转子类的时候用
+     *
+     * @param jsonStr
+     */
+    public void convertJSON(String jsonStr) {
+        if (TextUtils.isEmpty(jsonStr)) return;
+        this.setJsonStr(jsonStr);
     }
 
     /**
@@ -607,55 +554,88 @@ public class BaseMessage implements IBaseMessage {
      *
      * @param jsonStr
      */
-    private void paseInfoJson(String jsonStr) {
+    private void parseInfoJson(String jsonStr) {
         if (TextUtils.isEmpty(jsonStr)) return;
-
+        PLogger.printObject("jsonStr=" + jsonStr);
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
         this.setName(object.optString("nickname"));
-        this.setIsMonth(object.optInt("ismonth"));
-        this.setIsVip(object.optInt("isVip"));
+        this.setIsVip(object.optInt("group"));
+        this.setTop(object.optInt("top"));
     }
 
     /**
-     * 转换JSON 转子类的时候用
-     *
-     * @param map
+     * 私聊列表
      */
-    public void convertJSON(Map<String, Object> map) {
-        String jsonStr = map.get("content") == null ? StrDefault : map.get("content").toString();
-        if (TextUtils.isEmpty(jsonStr)) return;
-        this.setJsonStr(jsonStr);
+    public static BaseMessage parseToLetterMessage(Bundle bundle) {
+        BaseMessage message = new BaseMessage();
+        if (bundle == null) {
+            return message;
+        }
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(bundle.getInt(FLetter.COLUMN_TYPE));
+        if (messageType == null) {
+            message = new BaseMessage(bundle, true);
+            return message;
+        }
+        switch (messageType) {
+            case hi:
+            case html:
+            case hint:
+            case htmlText:
+                message = new TextMessage(bundle, true);
+                break;
+            case common:
+                message = new CommonMessage(bundle, true);
+                break;
+            case gift:
+            case wantGift:
+                message = new GiftMessage(bundle, true);
+                break;
+            case video:
+                message = new VideoMessage(bundle, true);
+                break;
+            default:
+                message = new BaseMessage(bundle, true);
+                break;
+        }
+        return message;
     }
 
-
-
-
-    public static List<BaseMessage> conversionListMsg(List<BaseMessage> cMessages) {
-        List<BaseMessage> baseMessages = new ArrayList<BaseMessage>();
-        if (cMessages == null || cMessages.size() <= 0) {
-            return baseMessages;
+    //内容表
+    public static BaseMessage parseToBaseMessage(Bundle bundle) {
+        BaseMessage message = new BaseMessage();
+        if (bundle == null) {
+            return message;
         }
 
-        for(BaseMessage tmp : cMessages){
-            BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(tmp.getType());
-            if (messageType == null) {
-                baseMessages.add(tmp);
-               continue;
-            }
-            switch (messageType) {
-                case hi:
-                    baseMessages.add(new TextMessage(tmp));
-                    break;
-                case common:
-                    baseMessages.add(new CommonMessage(tmp));
-                    break;
-
-            }
+        BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(bundle.getInt(FMessage.COLUMN_TYPE));
+        if (messageType == null) {
+            message = new BaseMessage(bundle);
+            return message;
         }
-        return baseMessages;
+        switch (messageType) {
+            case hi:
+            case html:
+            case hint:
+            case htmlText:
+                message = new TextMessage(bundle);
+                break;
+            case common:
+                message = new CommonMessage(bundle);
+                break;
+            case gift:
+            case wantGift:
+                message = new GiftMessage(bundle);
+                break;
+            case video:
+                message = new VideoMessage(bundle);
+                break;
+            default:
+                message = new BaseMessage(bundle);
+                break;
+        }
+        return message;
     }
-
 
     /**
      * 列表显示转换
@@ -664,30 +644,58 @@ public class BaseMessage implements IBaseMessage {
      * @return
      */
     public static String getContent(BaseMessage msg) {
-        String str = "";
+        String result = "";
         BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
         if (messageType == null) {
-            return str;
+            return result;
         }
         switch (messageType) {
             case hi:
                 String content = msg.getMsgDesc();
                 if (TextUtils.isEmpty(content)) {
-                    str = "[打招呼]";
+                    result = "[打招呼]";
                 } else {
-                    str = content;
+                    result = content;
                 }
                 break;
             case common:
-                str = msg.getMsgDesc();
+                result = msg.getMsgDesc();
+                if (TextUtils.isEmpty(result)) {
+                    CommonMessage commonMessage = (CommonMessage) msg;
+
+                    String videoUrl = commonMessage.getVideoUrl();
+                    String localVideoUrl = commonMessage.getLocalVideoUrl();
+                    String voiceUrl = commonMessage.getVoiceUrl();
+                    String localVoiceUrl = commonMessage.getLocalVoiceUrl();
+                    String img = commonMessage.getImg();
+                    String localImg = commonMessage.getLocalImg();
+                    if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
+                        result = "[视频消息]";
+                    } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
+                        result = "[语音消息]";
+                    } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
+                        result = "[图片消息]";
+                    }
+                }
                 break;
-            //case hint:
+            case video:{
+                VideoMessage videoMessage = (VideoMessage) msg;
+                result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
+                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
+                PLogger.printObject("videoMessage===" + videoMessage.toString());
+                break;
+            }
+            case hint:
             case html://html消息
-                str = msg.getMsgDesc();
+            case htmlText:
+            case gift:
+            case wantGift:
+                result = msg.getMsgDesc();
                 break;
             default:
+                result = msg.getMsgDesc();
                 break;
         }
-        return str;
+        return result;
     }
 }

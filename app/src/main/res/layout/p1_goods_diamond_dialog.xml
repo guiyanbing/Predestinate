@@ -37,27 +37,35 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/ll_diamond_tips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="本次送礼还差"
-                android:textColor="@color/black"
-                android:textSize="@dimen/px39_sp" />
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/dlg_diamond_tv_decdiamod"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10钻石"
-                android:textColor="#ff4582"
-                android:textSize="@dimen/px39_sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="本次送礼还差"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/px39_sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=",快去充值吧"
-                android:textColor="@color/black"
-                android:textSize="@dimen/px39_sp" />
+                <TextView
+                    android:id="@+id/tv_decdiamod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10钻石"
+                    android:textColor="#ff4582"
+                    android:textSize="@dimen/px39_sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=",快去充值吧"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/px39_sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- 商品列表 / 支付方式容器 -->

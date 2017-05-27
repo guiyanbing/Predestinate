@@ -10,31 +10,24 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.config.UrlParam;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-import com.juxin.predestinate.ui.user.check.secret.bean.UserVideoInfo;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
  * 私密相册/视频页
  * Created by Su on 2017/3/29.
  */
-public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolder.OnItemClickListener, RequestComplete {
+public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolder.OnItemClickListener {
     private float toDpMutliple = 1; //根据屏幕密度获取屏幕转换倍数
     private static final int SECRET_SHOW_COLUMN = 3; // 列数
     private int channel = CenterConstant.USER_CHECK_INFO_OWN; // 默认查看自己
 
-    private UserDetail userDetail;   // 自己
-    private UserProfile userProfile; // 他人
-    private UserVideoInfo userVideoInfo; // 用户视频信息
-
+    private UserDetail userDetail;       // 用户资料
     private RecyclerView recyclerView;
     private UserSecretAdapter secretAdapter;
     private TextView tv_hot;
@@ -44,27 +37,23 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_user_secret_act);
 
-        initView();
         initData();
+        initView();
     }
 
     private void initData() {
         channel = getIntent().getIntExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OWN);
-        userProfile = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        }
-
-        if (userDetail != null) {
             setBackView(getString(R.string.user_info_own_video));
-            ModuleMgr.getCenterMgr().reqGetVideoList(userDetail.getUid(), this);
             return;
         }
 
-        if (userProfile == null) return;
-        setBackView(getString(R.string.user_info_other_video, userProfile.getNickname()));
-        ModuleMgr.getCenterMgr().reqGetVideoList(userProfile.getUid(), this);
-        ModuleMgr.getCenterMgr().reqSetPopnum(userProfile.getUid(), null);
+        userDetail = getIntent().getParcelableExtra(CenterConstant.USER_CHECK_OTHER_KEY);
+        if (userDetail == null) return;
+        setBackView(getString(R.string.user_info_other_video, userDetail.getNickname()));
+        ModuleMgr.getCenterMgr().reqSetPopnum(userDetail.getUid(), null);
     }
 
     private void initView() {
@@ -77,48 +66,33 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         secretAdapter = new UserSecretAdapter();
         secretAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(secretAdapter);
+        secretAdapter.setList(userDetail.getUserVideos());
     }
 
     @Override
     public void onItemClick(View convertView, int position) {
+        UserVideo userVideo = userDetail.getUserVideos().get(position);
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-            UIShow.showSecretVideoPlayerDlg(this);
+            UIShow.showSecretVideoPlayerDlg(this, userVideo);
             return;
         }
 
-        // TODO 判断当前选择视频解锁状态，未解锁礼物弹框，解锁直接进入播放弹框
-//        if () {
-//            UIShow.showSecretGiftDlg(this, userProfile);
-//            return;
-//        }
-        UIShow.showSecretVideoPlayerDlg(this);
-        reqSetViewTime();
+        // 判断当前选择视频解锁状态，未解锁礼物弹框，解锁直接进入播放弹框
+        if (!userVideo.isCanView()) {
+            UIShow.showSecretGiftDlg(this, userVideo);
+            return;
+        }
+        UIShow.showSecretVideoPlayerDlg(this, userVideo);
+        reqSetViewTime(userVideo);
     }
 
     /**
      * 设置视频播放次数
      */
-    private void reqSetViewTime() {
-        if (userProfile == null) return;
+    private void reqSetViewTime(UserVideo userVideo) {
+        if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
-        ModuleMgr.getCenterMgr().reqSetViewTime(userProfile.getUid(), 0, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-            }
-        });
-    }
-
-    @Override
-    public void onRequestComplete(HttpResponse response) {
-        if (response.getUrlParam() == UrlParam.reqGetVideoList) {
-            if (response.isOk()) {
-                userVideoInfo = (UserVideoInfo) response.getBaseData();
-
-                if (userVideoInfo == null) return;
-                secretAdapter.setList(userVideoInfo.getVideoList());
-                tv_hot.setText(String.valueOf(userVideoInfo.getPopNum()));
-            }
-        }
+        ModuleMgr.getCenterMgr().reqSetViewTime(userDetail.getUid(), userVideo.getId(), null);
     }
 
     // RecyclerView margin

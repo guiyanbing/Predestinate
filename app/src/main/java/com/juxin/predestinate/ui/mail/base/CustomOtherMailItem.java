@@ -5,14 +5,14 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.juxin.library.view.CircleImageView;
+import com.juxin.library.image.ImageLoader;
+import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
-import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 /**
- * 目前，活动，最近来访问，关注在用
+ * 目前，关注, 好友在用
  * Created by Kind on 16/2/3.
  */
 public class CustomOtherMailItem extends CustomBaseMailItem {
@@ -32,7 +32,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     public void init() {
         super.init(R.layout.p1_mail_item_act);
         item_headpic = (ImageView) getContentView().findViewById(R.id.mail_item_headpic);
-        item_unreadnum = (TextView) getContentView().findViewById(R.id.mail_item_unreadnum);
+        item_unreadnum = (BadgeView) getContentView().findViewById(R.id.mail_item_unreadnum);
         item_nickname = (TextView) getContentView().findViewById(R.id.mail_item_nickname);
         item_last_msg = (EmojiTextView) getContentView().findViewById(R.id.mail_item_last_msg);
         item_headpic.setOnClickListener(this);
@@ -44,9 +44,9 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     }
 
     @Override
-    public void showData(BaseMessage msgData) {
+    public void showData(BaseMessage msgData, boolean isSlideLoading) {
         if (!TextUtils.isEmpty(msgData.getAvatar())) {
-      //      ModuleMgr.httpMgr.reqBigUserHeadImage(item_headpic, msgData.getAvatar());
+            ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
         } else {
             item_headpic.setImageResource(msgData.getLocalAvatar());
         }
@@ -59,29 +59,10 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
                 item_nickname.setText(nickname);
             }
         } else {
-            item_nickname.setText(String.valueOf(msgData.getLWhisperID()));
+            item_nickname.setText(msgData.getWhisperID());
         }
 
-        String conStr;
-        MailMsgID mailMsgID = MailMsgID.getMailMsgID(msgData.getLWhisperID());
-        if (mailMsgID != null) {
-            switch (mailMsgID) {
-                case WhoAttentionMe_Msg://最近来访
-                    if (msgData.getNum() > 0) {
-                        conStr = "你有" + msgData.getNum() + "个新的来访";
-                    } else {
-                        conStr = "";
-                    }
-                    break;
-                default:
-                    conStr = msgData.getAboutme();
-                    break;
-            }
-        } else {
-            conStr = BaseMessage.getContent(msgData);
-        }
-
-        item_last_msg.setText(conStr);
+        item_last_msg.setText(msgData.getAboutme());
         setUnreadnum(msgData);
     }
 }

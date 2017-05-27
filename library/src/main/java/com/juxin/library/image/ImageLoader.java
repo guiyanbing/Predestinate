@@ -65,6 +65,9 @@ public class ImageLoader {
         loadPic(context, url, view, defResImg, errResImg, bitmapFitCenter);
     }
 
+    public static void loadRoundCorners(Context context, String url, ImageView view) {
+        loadRoundCorners(context, url, 8, view);
+    }
     /**
      * 图片圆角处理: 默认全角处理，其他需求自行重载方法
      *
@@ -92,7 +95,15 @@ public class ImageLoader {
         BlurImage blurImage = new BlurImage(context, level);
         loadPic(context, localResImg, view, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop, blurImage);
     }
-
+    /**
+     * 图片圆角处理: 默认全角处理，其他需求自行重载方法(本地图片圆角处理)
+     *
+     * @param roundPx 圆角弧度
+     */
+    public static void localRoundCorners (Context context, int localResImg, int roundPx, ImageView view) {
+        RoundedCorners roundedCorners = new RoundedCorners(context, roundPx, 0, RoundedCorners.CornerType.ALL);
+        loadPic(context, localResImg, view, R.drawable.default_pic, R.drawable.default_pic, bitmapFitCenter, roundedCorners);
+    }
     /**
      * 本地图片
      */
@@ -130,46 +141,13 @@ public class ImageLoader {
                 .into(view);
     }
 
-
-    /**
-     * 网络图片处理
-     */
-//    private static void loadPic(Context context, String url, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
-//        if (TextUtils.isEmpty(url)) return;
-//        Uri uri = null;
-//        if (!FileUtil.isURL(url)) {
-//            uri = Uri.fromFile(new File(url));
-//        }
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
-//                context instanceof Activity && ((Activity) context).isDestroyed()) return;
-//
-//        GlideUrl glideUrl = new GlideUrl(url);
-//        Glide.with(context)
-//                .load(uri == null ? glideUrl : uri)
-//                .dontAnimate()
-//                .placeholder(defResImg)
-//                .error(errResImg)
-//                .bitmapTransform(transformation)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(view);
-//    }
-
-
     /**
      * 网络图片处理: 回调
      */
     private static void loadPicWithCallback(Context context, String url, final GlideCallback callback, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
-//        if (TextUtils.isEmpty(url)) return;
-//        Uri uri = null;
-//        if (!FileUtil.isURL(url)) {
-//            uri = Uri.fromFile(new File(url));
-//        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
                 context instanceof Activity && ((Activity) context).isDestroyed()) return;
 
-//        GlideUrl glideUrl = new GlideUrl(url);
         Glide.with(context)
                 .load(url)
                 .dontAnimate()
@@ -184,25 +162,7 @@ public class ImageLoader {
                     }
                 });
     }
-
-
-    /**
-     * 本地图片处理
-     */
-//    private static void localPic(Context context, int localResImg, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
-//                context instanceof Activity && ((Activity) context).isDestroyed()) return;
-//
-//        Glide.with(context)
-//                .load(localResImg)
-//                .dontAnimate()
-//                .placeholder(defResImg)
-//                .error(errResImg)
-//                .bitmapTransform(transformation)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(view);
-//    }
-
+    
     // 请求回调
     public interface GlideCallback {
         void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation);

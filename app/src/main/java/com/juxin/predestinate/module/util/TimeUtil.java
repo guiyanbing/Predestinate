@@ -11,6 +11,7 @@ import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -882,6 +883,15 @@ public class TimeUtil extends TimeBaseUtil {
         return format.format(calendar.getTime());
     }
 
+    /**
+     * 返回 分钟:秒格 这种格式的文本
+     */
+    public static String getLongToMinuteTime(Long l) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(l);
+        SimpleDateFormat format = new SimpleDateFormat("mm:ss");
+        return format.format(calendar.getTime());
+    }
 
     public static String getData() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -893,5 +903,24 @@ public class TimeUtil extends TimeBaseUtil {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
+    }
+
+    public static String getFormatTimeChatTip(long time) {
+        String ret = "";
+
+        try {
+            SimpleDateFormat e = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            ret = e.format(new Date(time));
+        } catch (Exception e) {
+            PLogger.printObject(e);
+        }
+
+        return ret;
+    }
+
+    public static String formatTimeLong(Long l) {
+        DecimalFormat f = new DecimalFormat();
+        f.applyPattern("00");
+        return f.format(l / 60) + ':' + f.format(l % 60);
     }
 }

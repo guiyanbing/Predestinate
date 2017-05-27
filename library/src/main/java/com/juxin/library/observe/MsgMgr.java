@@ -5,7 +5,10 @@ import com.juxin.library.log.PLogger;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -75,6 +78,34 @@ public class MsgMgr {
                 if (runnable != null) runnable.run();
             }
         });
+    }
+
+    /**
+     * 延迟执行任务，默认在主进程执行
+     *
+     * @param runnable  延迟执行的任务
+     * @param delayTime 延迟时间，ms级
+     */
+    public void delay(Runnable runnable, long delayTime) {
+        delay(runnable, delayTime, true);
+    }
+
+    /**
+     * 延迟执行任务
+     *
+     * @param runnable   延迟执行的任务
+     * @param delayTime  延迟时间，ms级
+     * @param mainThread 是否在主进程执行
+     */
+    public void delay(final Runnable runnable, long delayTime, boolean mainThread) {
+        Observable.timer(delayTime, TimeUnit.MILLISECONDS)
+                .observeOn(mainThread ? AndroidSchedulers.mainThread() : Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (runnable != null) runnable.run();
+                    }
+                });
     }
 
     /**

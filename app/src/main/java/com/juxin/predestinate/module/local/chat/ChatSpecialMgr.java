@@ -1,7 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.message.MsgMgr;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import java.util.LinkedHashSet;
@@ -28,8 +28,8 @@ public class ChatSpecialMgr {
 
 	/*********私聊消息************/	
 	public void onWhisperMsgUpdate(final BaseMessage message) {
-		MMLog.autoDebug(message);
-		MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+		PLogger.printObject(message);
+		MsgMgr.getInstance().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for (ChatMsgInterface.WhisperMsgListener whisperMsgListener1 : whisperMsgListener) {
@@ -69,8 +69,8 @@ public class ChatSpecialMgr {
 	private Set<ChatMsgInterface.UnreadReceiveMsgListener> receiveMsgListeners = new LinkedHashSet<ChatMsgInterface.UnreadReceiveMsgListener>();
 
 	public void updateUnreadMsg(final BaseMessage message) {
-		MMLog.autoDebug(message);
-		MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+		PLogger.printObject(message);
+		MsgMgr.getInstance().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for (ChatMsgInterface.UnreadReceiveMsgListener tmp : receiveMsgListeners) {
@@ -108,8 +108,8 @@ public class ChatSpecialMgr {
 	private Set<ChatMsgInterface.SystemMsgListener> systemMsgListeners = new LinkedHashSet<ChatMsgInterface.SystemMsgListener>();
 
 	public void setSystemMsg(final BaseMessage message) {
-		MMLog.autoDebug(message);
-		MsgMgr.getInstance().sendMsgToUI(new Runnable() {
+		PLogger.printObject(message);
+		MsgMgr.getInstance().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for (ChatMsgInterface.SystemMsgListener tmp : systemMsgListeners) {

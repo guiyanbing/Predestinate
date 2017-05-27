@@ -2,33 +2,31 @@ package com.juxin.predestinate.ui.discover;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
+import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.juxin.predestinate.module.logic.application.App.getActivity;
 
 /**
  * 黑名单列表
  * Created by zhang on 2017/5/4.
  */
 
-public class MyDefriendAct extends BaseActivity implements XRecyclerView.LoadingListener, RequestComplete {
+public class MyDefriendAct extends BaseActivity implements RequestComplete, ExListView.IXListViewListener {
 
-    private CustomRecyclerView customRecyclerView;
-    private XRecyclerView xRecyclerView;
+    private CustomStatusListView customStatusListView;
+    private ExListView exListView;
 
     private MyDefriendAdapter adapter;
     private List<UserInfoLightweight> data = new ArrayList<>();
@@ -48,19 +46,17 @@ public class MyDefriendAct extends BaseActivity implements XRecyclerView.Loading
     }
 
     private void initView() {
-        customRecyclerView = (CustomRecyclerView) findViewById(R.id.myfriend_list);
-        xRecyclerView = customRecyclerView.getXRecyclerView();
-        xRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        xRecyclerView.setLoadingListener(this);
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingMoreEnabled(false);
+        customStatusListView = (CustomStatusListView) findViewById(R.id.myfriend_list);
+        View mViewTop = LayoutInflater.from(this).inflate(R.layout.layout_margintop, null);
+        exListView = customStatusListView.getExListView();
+        exListView.setXListViewListener(this);
+        exListView.setPullRefreshEnable(true);
+        exListView.setPullLoadEnable(false);
+        exListView.addHeaderView(mViewTop);
+        adapter = new MyDefriendAdapter(this, data);
+        exListView.setAdapter(adapter);
 
-
-        adapter = new MyDefriendAdapter(this);
-        adapter.setList(data);
-        xRecyclerView.setAdapter(adapter);
-
-        customRecyclerView.showLoading();
+        customStatusListView.showLoading();
     }
 
     @Override
@@ -85,21 +81,22 @@ public class MyDefriendAct extends BaseActivity implements XRecyclerView.Loading
                     }
                     data.addAll(lightweightList.getUserInfos());
                     adapter.notifyDataSetChanged();
-                    customRecyclerView.showXrecyclerView();
+                    customStatusListView.showExListView();
                 } else {
-                    customRecyclerView.showNoData("暂无数据", "重试", new View.OnClickListener() {
+                    customStatusListView.showNoData(getString(R.string.my_defriend_nodata), "关闭", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            onRefresh();
+                            back();
                         }
                     });
                 }
-                xRecyclerView.refreshComplete();
+                exListView.stopRefresh();
             }
         } else {
-            customRecyclerView.showNoData("请求出错", "重试", new View.OnClickListener() {
+            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    customStatusListView.showLoading();
                     onRefresh();
                 }
             });

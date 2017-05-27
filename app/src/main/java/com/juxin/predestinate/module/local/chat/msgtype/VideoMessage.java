@@ -1,5 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
+
+import com.juxin.predestinate.module.util.TimeUtil;
+
 import org.json.JSONObject;
 
 /**
@@ -9,11 +13,23 @@ import org.json.JSONObject;
 
 public class VideoMessage extends BaseMessage {
 
-    private long videoID;//视频聊天ID，一次视频聊天过程的唯一标识
+    private int videoID;//视频聊天ID，一次视频聊天过程的唯一标识
+    // 3,4存本地
     private int videoTp;//请求类型，1邀请加入聊天，2同意加入  3拒绝或取消 4挂断（挂断可能会收到不止一次）
     private int videoMediaTp;//现在所有消息都会包含此字段 1视频, 2语音
     private int videoVcEscCode;//拒绝或取消 只在vc_tp=3 时生效 1未接通，对方无应答 2接收方拒绝 3发送方取消
     private long videoVcTalkTime;//聊天耗时 单位秒 只在  vc_tp=4挂断时有效
+    private String vc_channel_key;
+
+    private EmLastStatus emLastStatus;
+
+    private enum EmLastStatus {
+        none, timeout, refuse, cancel, connect
+    }
+
+    public VideoMessage() {
+        super();
+    }
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -22,11 +38,8 @@ public class VideoMessage extends BaseMessage {
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
-        this.setVideoID(object.optLong("vc_id"));
-        this.setVideoTp(object.optInt("vc_tp"));
-        this.setVideoMediaTp(object.optInt("media_tp"));
-        this.setVideoVcEscCode(object.optInt("vc_esc_code"));
-        this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
+        this.setRu(object.optInt("ru"));
+        parseVideoJson(object);
         return this;
     }
 
@@ -35,11 +48,11 @@ public class VideoMessage extends BaseMessage {
         return super.getJson(message);
     }
 
-    public long getVideoID() {
+    public int getVideoID() {
         return videoID;
     }
 
-    public void setVideoID(long videoID) {
+    public void setVideoID(int videoID) {
         this.videoID = videoID;
     }
 
@@ -53,6 +66,10 @@ public class VideoMessage extends BaseMessage {
 
     public int getVideoMediaTp() {
         return videoMediaTp;
+    }
+
+    public boolean isVideoMediaTp() {
+        return videoMediaTp == 1;
     }
 
     public void setVideoMediaTp(int videoMediaTp) {
@@ -73,5 +90,136 @@ public class VideoMessage extends BaseMessage {
 
     public void setVideoVcTalkTime(long videoVcTalkTime) {
         this.videoVcTalkTime = videoVcTalkTime;
+    }
+
+    public String getVc_channel_key() {
+        return vc_channel_key;
+    }
+
+    public void setVc_channel_key(String vc_channel_key) {
+        this.vc_channel_key = vc_channel_key;
+    }
+
+    public EmLastStatus getEmLastStatus() {
+        return emLastStatus;
+    }
+
+    public void setEmLastStatus(EmLastStatus emLastStatus) {
+        this.emLastStatus = emLastStatus;
+    }
+
+    public VideoMessage(Bundle bundle) {
+        super(bundle);
+        convertJSON(getJsonStr());
+    }
+
+    //私聊列表
+    public VideoMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
+        convertJSON(getJsonStr());
+    }
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        parseVideoJson(object);
+    }
+
+    private void parseVideoJson(JSONObject object) {
+        this.setVideoID(object.optInt("vc_id"));
+        this.setVideoTp(object.optInt("vc_tp"));
+        this.setVideoMediaTp(object.optInt("media_tp"));
+        this.setVideoVcEscCode(object.optInt("vc_esc_code"));
+        this.setVideoVcTalkTime(object.optLong("vc_talk_time"));
+        this.setVc_channel_key(object.optString("vc_channel_key"));
+
+        this.setEmLastStatus(getLastStatus(getVideoTp(), getVideoVcEscCode()));
+    }
+
+    //最后一次视频、语音状态
+    private EmLastStatus getLastStatus(int vc_tp, int vc_esc_code) {
+        switch (vc_tp) {
+            case 3:
+                switch (vc_esc_code) {
+                    case 1:
+                        return EmLastStatus.timeout;
+                    case 2:
+                        return EmLastStatus.refuse;
+                    case 3:
+                        return EmLastStatus.cancel;
+                    default:
+                        return EmLastStatus.none;
+                }
+            case 4:
+                return EmLastStatus.connect;
+            default:
+                return EmLastStatus.none;
+        }
+    }
+
+    /**
+     * 获取音视频消息聊天列表item展示状态
+     *
+     * @param status   当前音视频状态
+     * @param sendTime 消息接收时间
+     * @param isSender 是否是发送者
+     * @return 转换之后的展示字符串
+     */
+    public static String transLastStatusText(EmLastStatus status, String sendTime, boolean isSender) {
+        String result;
+        switch (status) {
+            case timeout:
+            case cancel:
+                result = "<font color='#ffac0c'>" + (isSender ? "[未接通]" : "[未接来电]") + "</font>";
+                break;
+            case refuse:
+                result = "<font color='#ffac0c'>[未接通]</font>";
+                break;
+            case connect:
+                result = "[通话结束]";
+                break;
+            default:
+                result = "";
+        }
+        return result + " " + sendTime;
+    }
+
+    /**
+     * 转换聊天窗口音视频消息展示内容
+     *
+     * @param status    当前音视频状态
+     * @param talk_time 通话时长，仅在挂断状态时有效
+     * @param isSender  是否是发送者
+     * @return 转换之后的展示字符串
+     */
+    public static String getVideoChatContent(EmLastStatus status, long talk_time, boolean isSender) {
+        switch (status) {
+            case timeout:
+                return isSender ? "对方无应答" : "未接来电";
+            case refuse:
+                return isSender ? "对方已拒绝" : "已拒绝";
+            case cancel:
+                return isSender ? "已取消" : "对方已取消";
+            case connect:
+                return "聊天时长 " + TimeUtil.formatTimeLong(talk_time);
+            case none:
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "VideoMessage{" +
+                "videoID=" + videoID +
+                ", videoTp=" + videoTp +
+                ", videoMediaTp=" + videoMediaTp +
+                ", videoVcEscCode=" + videoVcEscCode +
+                ", videoVcTalkTime=" + videoVcTalkTime +
+                ", vc_channel_key='" + vc_channel_key + '\'' +
+                ", emLastStatus=" + emLastStatus +
+                '}';
     }
 }

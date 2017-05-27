@@ -1,7 +1,11 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
 import android.text.TextUtils;
-import com.juxin.mumu.bean.log.MMLog;
+
+import com.juxin.library.log.PLogger;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +14,7 @@ import org.json.JSONObject;
  * Created by Kind on 2017/4/18.
  */
 
-public class CommonMessage extends BaseMessage{
+public class CommonMessage extends BaseMessage {
 
     //图片
     private String img;
@@ -34,8 +38,10 @@ public class CommonMessage extends BaseMessage{
     public CommonMessage() {
         super();
     }
+
     /**
      * 文本消息
+     *
      * @param whisperID
      * @param content
      */
@@ -47,6 +53,7 @@ public class CommonMessage extends BaseMessage{
 
     /**
      * 图片消息
+     *
      * @param channelID
      * @param whisperID
      * @param img
@@ -57,21 +64,19 @@ public class CommonMessage extends BaseMessage{
         this.setType(BaseMessageType.common.getMsgType());
     }
 
+    /**
+     * 语音消息
+     *
+     * @param channelID
+     * @param whisperID
+     * @param url
+     * @param length
+     */
     public CommonMessage(String channelID, String whisperID, String url, int length) {
         super(channelID, whisperID);
-        this.setVideoUrl(url);
-        this.setVideoSize(length);
+        this.setVoiceUrl(url);
+        this.setVoiceLen(length);
         this.setType(BaseMessageType.common.getMsgType());
-    }
-
-    /**
-     * 转换类 fmessage
-     * @param message
-     */
-    public CommonMessage(BaseMessage message) {
-     super(message.getChannelID(), message.getWhisperID(), message.getSendID(), message.getMsgID(), message.getcMsgID(),
-            message.getType(),message.getStatus(), message.getfStatus(), message.getTime(), message.getJsonStr());
-        parseJson(getJsonStr());
     }
 
     @Override
@@ -83,22 +88,9 @@ public class CommonMessage extends BaseMessage{
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setImg(object.optString("img"));
-        if(!object.isNull("voice")){
-            JSONObject voiceJSON = object.optJSONObject("voice");
-            this.setVoiceUrl(voiceJSON.optString("url"));
-            this.setVoiceLen(voiceJSON.optInt("len"));
-            this.setVoiceUserid(voiceJSON.optLong("voice_userid"));
-        }
+        this.setRu(object.optInt("ru"));
 
-        if(!object.isNull("video")){
-            JSONObject videoJSON = object.optJSONObject("video");
-            this.setVideoUrl(videoJSON.optString("url"));
-            this.setVideoLen(videoJSON.optInt("len"));
-            this.setVideoSize(videoJSON.optInt("size"));
-            this.setVideoThumb(videoJSON.optString("thumb"));
-            this.setVideoWidth(videoJSON.optInt("width"));
-            this.setVideoHeight(videoJSON.optInt("height"));
-        }
+        parseCommonJson(object);
         return this;
     }
 
@@ -106,51 +98,51 @@ public class CommonMessage extends BaseMessage{
     public String getJson(BaseMessage message) {
         JSONObject json = new JSONObject();
         try {
-            json.put("tid", message.getWhisperID());
+            json.put("tid", new JSONArray().put(message.getWhisperID()));
             json.put("mtp", message.getType());
             json.put("mt", message.getTime());
             json.put("d", message.getMsgID());
 
-            if(!TextUtils.isEmpty(message.getMsgDesc())){
+            if (!TextUtils.isEmpty(message.getMsgDesc())) {
                 json.put("mct", message.getMsgDesc());
             }
 
-            String img = ((CommonMessage)message).getImg();
-            String localImg = ((CommonMessage)message).getLocalImg();
-            if(!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)){
+            String img = ((CommonMessage) message).getImg();
+            String localImg = ((CommonMessage) message).getLocalImg();
+            if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {
                 json.put("img", img);
                 json.put("localImgUrl", localImg);
             }
 
             //语音
-            String videoUrl = ((CommonMessage)message).getVideoUrl();
-            String localVideoUrl = ((CommonMessage)message).getLocalVideoUrl();
-            if(!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)){
+            String videoUrl = ((CommonMessage) message).getVideoUrl();
+            String localVideoUrl = ((CommonMessage) message).getLocalVideoUrl();
+            if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {
                 JSONObject tmpVideo = new JSONObject();
-                    tmpVideo.put("url", videoUrl);
-                    tmpVideo.put("localUrl", localVideoUrl);
-                    tmpVideo.put("len", ((CommonMessage) message).getVoiceLen());
-                    tmpVideo.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
+                tmpVideo.put("url", videoUrl);
+                tmpVideo.put("localUrl", localVideoUrl);
+                tmpVideo.put("len", ((CommonMessage) message).getVoiceLen());
+                tmpVideo.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
                 json.put("voice", tmpVideo);
             }
 
             //视频
-            String voiceUrl = ((CommonMessage)message).getVoiceUrl();
-            String localVoiceUrl = ((CommonMessage)message).getLocalVoiceUrl();
-            if(!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)){
+            String voiceUrl = ((CommonMessage) message).getVoiceUrl();
+            String localVoiceUrl = ((CommonMessage) message).getLocalVoiceUrl();
+            if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {
                 JSONObject tmpVideo = new JSONObject();
-                    tmpVideo.put("url", videoUrl);
-                    tmpVideo.put("localUrl", localVideoUrl);
-                    tmpVideo.put("len", ((CommonMessage) message).getVideoLen());
-                    tmpVideo.put("size", ((CommonMessage) message).getVideoSize());
-                    tmpVideo.put("thumb", ((CommonMessage) message).getVideoThumb());
-                    tmpVideo.put("width", ((CommonMessage) message).getVideoWidth());
-                    tmpVideo.put("height", ((CommonMessage) message).getVideoHeight());
+                tmpVideo.put("url", videoUrl);
+                tmpVideo.put("localUrl", localVideoUrl);
+                tmpVideo.put("len", ((CommonMessage) message).getVideoLen());
+                tmpVideo.put("size", ((CommonMessage) message).getVideoSize());
+                tmpVideo.put("thumb", ((CommonMessage) message).getVideoThumb());
+                tmpVideo.put("width", ((CommonMessage) message).getVideoWidth());
+                tmpVideo.put("height", ((CommonMessage) message).getVideoHeight());
                 json.put("video", tmpVideo);
             }
             return json.toString();
         } catch (JSONException e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
         return null;
     }
@@ -257,5 +249,67 @@ public class CommonMessage extends BaseMessage{
 
     public void setVideoHeight(int videoHeight) {
         this.videoHeight = videoHeight;
+    }
+
+
+    /**
+     * 转换类 fmessage
+     */
+    public CommonMessage(Bundle bundle) {
+        super(bundle);
+        convertJSON(getJsonStr());
+    }
+
+    public CommonMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
+        convertJSON(getJsonStr());
+    }
+
+    @Override
+    public void convertJSON(String jsonStr) {
+        super.convertJSON(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+
+        this.setImg(object.optString("img"));
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        parseCommonJson(object);
+    }
+
+    private void parseCommonJson(JSONObject object) {
+        if (!object.isNull("voice")) {
+            JSONObject voiceJSON = object.optJSONObject("voice");
+            this.setVoiceUrl(voiceJSON.optString("url"));
+            this.setVoiceLen(voiceJSON.optInt("len"));
+            this.setVoiceUserid(voiceJSON.optLong("voice_userid"));
+        }
+
+        if (!object.isNull("video")) {
+            JSONObject videoJSON = object.optJSONObject("video");
+            this.setVideoUrl(videoJSON.optString("url"));
+            this.setVideoLen(videoJSON.optInt("len"));
+            this.setVideoSize(videoJSON.optInt("size"));
+            this.setVideoThumb(videoJSON.optString("thumb"));
+            this.setVideoWidth(videoJSON.optInt("width"));
+            this.setVideoHeight(videoJSON.optInt("height"));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "CommonMessage{" +
+                "img='" + img + '\'' +
+                ", localImg='" + localImg + '\'' +
+                ", voiceUrl='" + voiceUrl + '\'' +
+                ", localVoiceUrl='" + localVoiceUrl + '\'' +
+                ", voiceLen=" + voiceLen +
+                ", voiceUserid=" + voiceUserid +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", localVideoUrl='" + localVideoUrl + '\'' +
+                ", videoLen=" + videoLen +
+                ", videoSize=" + videoSize +
+                ", videoThumb='" + videoThumb + '\'' +
+                ", videoWidth=" + videoWidth +
+                ", videoHeight=" + videoHeight +
+                '}';
     }
 }

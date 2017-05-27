@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.discover;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,12 +15,13 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
+
+import java.util.List;
 
 
 /**
@@ -27,37 +29,38 @@ import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
  * Created by zhang on 2017/4/21.
  */
 
-public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight> {
+public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
 
-    private Context context;
 
-    public DiscoverAdapter(Context context) {
-        super();
-        this.context = context;
+    public DiscoverAdapter(Context context, List<UserInfoLightweight> datas) {
+        super(context, datas);
     }
 
     @Override
-    public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_discover_item};
-    }
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        MyViewHolder holder;
+        if (convertView == null) {
+            convertView = inflate(R.layout.f1_discover_item);
+            holder = new MyViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (MyViewHolder) convertView.getTag();
+        }
 
-    @Override
-    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
-        MyViewHolder holder = new MyViewHolder(viewHolder);
         final UserInfoLightweight userInfo = getItem(position);
-        ImageLoader.loadRoundCorners(context, userInfo.getAvatar(), 8, holder.iv_avatar);
+        ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
-        holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
+        holder.iv_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(userInfo.getGroup()) ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {
             holder.lin_ranking.setVisibility(View.VISIBLE);
             if (userInfo.isMan()) {
                 holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-                holder.tv_ranking_type.setText(context.getString(R.string.top_type_man));
+                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_man));
                 holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
             } else {
                 holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-                holder.tv_ranking_type.setText(context.getString(R.string.top_type_woman));
+                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_woman));
                 holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
             }
         } else {
@@ -92,83 +95,111 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             holder.point.setVisibility(View.GONE);
         }
 
-
-        if (userInfo.isVideo_available() || userInfo.isAudio_available()) {
-            if (userInfo.isVideo_busy()) {
-                holder.iv_calling.setVisibility(View.VISIBLE);
-                holder.iv_call.setVisibility(View.GONE);
-                holder.iv_video.setVisibility(View.GONE);
-            } else {
-                holder.iv_calling.setVisibility(View.GONE);
-                holder.iv_call.setEnabled(userInfo.isAudio_available());
-                holder.iv_video.setEnabled(userInfo.isVideo_available());
-            }
+        if (userInfo.isVideo_busy()) {
+            holder.iv_calling.setVisibility(View.VISIBLE);
+            holder.lin_call_state.setVisibility(View.GONE);
+            holder.lin_video_state.setVisibility(View.GONE);
         } else {
-            holder.iv_calling.setVisibility(View.GONE);
-            holder.iv_call.setEnabled(userInfo.isAudio_available());
-            holder.iv_video.setEnabled(userInfo.isVideo_available());
+            if (userInfo.isVideo_available() && userInfo.isAudio_available()) {
+                //可语音可视频显示可视频
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.GONE);
+                holder.lin_video_state.setVisibility(View.VISIBLE);
+                holder.iv_video.setEnabled(userInfo.isVideo_available());
+            } else if (userInfo.isVideo_available() && !userInfo.isAudio_available()) {
+                // 可视频不可语音显示可视频
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.GONE);
+                holder.lin_video_state.setVisibility(View.VISIBLE);
+                holder.iv_video.setEnabled(userInfo.isVideo_available());
+            } else if (!userInfo.isVideo_available() && userInfo.isAudio_available()) {
+                //可语音不可视频显示可语音
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.VISIBLE);
+                holder.lin_video_state.setVisibility(View.GONE);
+                holder.iv_call.setEnabled(userInfo.isAudio_available());
+                holder.tv_call.setVisibility(View.VISIBLE);
+            } else {
+                //不可语音不可视频显示灰色语音图标
+                holder.iv_calling.setVisibility(View.GONE);
+                holder.lin_call_state.setVisibility(View.VISIBLE);
+                holder.lin_video_state.setVisibility(View.GONE);
+                holder.iv_call.setEnabled(userInfo.isVideo_available());
+                holder.tv_call.setVisibility(View.GONE);
+            }
         }
 
-        holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
-        if (!userInfo.isSayHello()) {
-            holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
-                            context.getString(R.string.say_hello_txt),
-                            userInfo.getKf_id(),
-                            ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                    Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
-                                @Override
-                                public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                    PToast.showShort(context.getString(R.string.user_info_hi_suc));
-                                }
 
-                                @Override
-                                public void onSendFailed(NetData data) {
-                                    PToast.showShort(context.getString(R.string.user_info_hi_fail));
-                                }
-                            });
-                    getItem(position).setSayHello(true);
-                    notifyDataSetChanged();
-                }
-            });
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            holder.btn_sayhi.setVisibility(View.GONE);
+            holder.tv_online_state.setVisibility(View.VISIBLE);
+            holder.tv_online_state.setText(userInfo.isOnline() ? "在线" : userInfo.getLast_onLine());
+        } else {
+            holder.tv_online_state.setVisibility(View.GONE);
+            holder.btn_sayhi.setVisibility(View.VISIBLE);
+            holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
+            if (!userInfo.isSayHello()) {
+                holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
+                            ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
+                                    getContext().getString(R.string.say_hello_txt),
+                                    userInfo.getKf_id(),
+                                    ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
+                                            Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                                        @Override
+                                        public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                                            PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
+                                            getItem(position).setSayHello(true);
+                                            notifyDataSetChanged();
+                                        }
+
+                                        @Override
+                                        public void onSendFailed(NetData data) {
+                                            PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
+                                        }
+                                    });
+                        }
+                    }
+                });
+            }
         }
+
 
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
             }
         });
 
         holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(context, userInfo.getUid());
+                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
             }
         });
+        return convertView;
     }
 
-    @Override
-    public int getRecycleViewItemType(int position) {
-        return 0;
-    }
 
     class MyViewHolder {
         private ImageView iv_avatar, iv_vip;
         private Button iv_video, iv_call;
         private TextView tv_name, tv_age, tv_height, tv_distance, tv_ranking_type, tv_ranking_level;
         private Button btn_sayhi;
-        private LinearLayout lin_ranking, iv_calling;
+        private LinearLayout lin_ranking, iv_calling, lin_video_state, lin_call_state;
         private RelativeLayout rel_item;
         private View point;
 
-        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+        private TextView tv_online_state, tv_call;
+
+        public MyViewHolder(View convertView) {
             initView(convertView);
         }
 
-        private void initView(BaseRecyclerViewHolder convertView) {
+        private void initView(View convertView) {
             iv_avatar = (ImageView) convertView.findViewById(R.id.discover_item_avatar);
             iv_vip = (ImageView) convertView.findViewById(R.id.discover_item_vip_state);
 
@@ -190,6 +221,11 @@ public class DiscoverAdapter extends BaseRecyclerViewAdapter<UserInfoLightweight
             rel_item = (RelativeLayout) convertView.findViewById(R.id.discover_item);
 
             point = convertView.findViewById(R.id.discover_item_point);
+
+            tv_online_state = (TextView) convertView.findViewById(R.id.discover_item_online_state);
+            lin_video_state = (LinearLayout) convertView.findViewById(R.id.discover_item_video_state);
+            lin_call_state = (LinearLayout) convertView.findViewById(R.id.discover_item_call_state);
+            tv_call = (TextView) convertView.findViewById(R.id.discover_item_call_tv);
         }
 
     }

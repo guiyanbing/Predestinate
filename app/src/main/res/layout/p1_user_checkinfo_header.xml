@@ -29,9 +29,8 @@
             <!-- 头像 -->
             <ImageView
                 android:id="@+id/img_header"
-                android:layout_width="@dimen/px240_dp"
-                android:layout_height="@dimen/px240_dp"
-                android:layout_marginTop="@dimen/px100_dp"
+                android:layout_width="@dimen/px255_dp"
+                android:layout_height="@dimen/px255_dp"
                 android:src="@drawable/default_head" />
 
             <LinearLayout
@@ -120,12 +119,14 @@
                     tools:text="165cm" />
 
                 <FrameLayout
+                    android:id="@+id/fl_top_n"
                     android:layout_width="@dimen/px116_dp"
-                    android:layout_height="@dimen/px49_dp"
+                    android:layout_height="@dimen/px51_dp"
                     android:layout_marginLeft="@dimen/px15_dp"
                     android:background="@drawable/f1_user_check_info_rank">
 
                     <TextView
+                        android:id="@+id/tv_top_n"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -137,9 +138,9 @@
 
                 <ImageView
                     android:id="@+id/iv_vip"
-                    android:layout_width="@dimen/px116_dp"
-                    android:layout_height="@dimen/px49_dp"
-                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:layout_width="@dimen/px118_dp"
+                    android:layout_height="@dimen/px52_dp"
+                    android:layout_marginLeft="@dimen/px6_dp"
                     android:src="@drawable/f1_vip_icon"/>
 
             </LinearLayout>

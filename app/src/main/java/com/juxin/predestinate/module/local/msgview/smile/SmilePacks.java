@@ -1,6 +1,6 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
-import com.juxin.mumu.bean.log.MMLog;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -14,7 +14,6 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/4/17.
  */
-
 public class SmilePacks {
 
     private int ver = 0;
@@ -51,12 +50,12 @@ public class SmilePacks {
                 if(response.isOk()){
                     try {
                         finalSmilePackage.parseJsonSmileItem(response.getResponseString());
-                        MMLog.autoDebug("xxxxxxxxxx---------");
+                        PLogger.d("xxxxxxxxxx---------");
                     }catch (JSONException e){
                         e.printStackTrace();
                     }
                 }
-                MMLog.autoDebug(response.getResponseJson());
+                PLogger.printObject(response.getResponseJson());
              //   {"res":{"list":null},"status":"ok","tm":1494927495}
             }
         });

@@ -97,7 +97,7 @@ public class MediaMgr implements ModuleBase {
                 public void onRequestComplete(HttpResponse response) {
                     if (response.isOk()) {
                         UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                        String pic = upLoadResult.getHttpPathPic();
+                        String pic = upLoadResult.getFile_http_path();
                         if (!TextUtils.isEmpty(pic)) {
                             String post_url = ModuleMgr.getCenterMgr().getInterceptUrl(pic);
                             mediaUrls.add(post_url);

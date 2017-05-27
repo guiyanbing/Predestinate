@@ -2,7 +2,7 @@
  * Created by yinhua on 2017/5/2.
  */
 var Ranking = Ranking || (function ($) {
-    let that = {};
+    var that = {};
     var _typeUrl = '';
     var _w = '';
     var _tabIndex = 0;
@@ -25,13 +25,17 @@ var Ranking = Ranking || (function ($) {
     $.ready(function () {
       //循环初始化所有下拉刷新，上拉加载。
       $('.mui-scroll-wrapper').scroll();
-
+      var weekType = _weekRank.now;
       _listener.on('onWatchCommand', function (jcmd, data) {
         console.log(' test456 ', jcmd, JSON.stringify(data));
         if (jcmd !== 'ranking_btn_click') {
           return;
         }
         var windWeekType = data.type;
+        if(windWeekType === weekType){
+          return;
+        }
+        weekType = windWeekType;
         switch (windWeekType) {
           case _weekRank.now:
             _w = '';
@@ -150,7 +154,7 @@ var Ranking = Ranking || (function ($) {
         var ul = scroll.querySelector('.mui-scroll .ranking-list');
         var html = '';
         for (var i = 3; i < dataList.length; i++) {
-          let data = dataList[i];
+          var data = dataList[i];
           html += _listsHtml(data, i)
         }
         ul.innerHTML = html;
@@ -183,7 +187,7 @@ var Ranking = Ranking || (function ($) {
         div.innerHTML = _noDataHtml();
       }
 
-      var _getWindRankData = function (cb) {
+      var  _getWindRankData = function (cb) {
         _resetPageRefresh();
         _rankRequest(function (data) {
           console.log('top three data : = ' + JSON.stringify(data));
@@ -216,27 +220,28 @@ var Ranking = Ranking || (function ($) {
          return;*/
         _showLoading(true);
         window.platform.getUserSelfDetail(function (data) {
-          let params = {
-            x: data.longitude,
-            y: data.latitude,
-            w: _w
-          }
-          if (_tabIndex == 0) {
-            _typeUrl = 'MostGetList'
-          } else {
-            _typeUrl = 'MostSendList'
-          }
-          window.platform.normalRequest("Get", web.urlConfig.agentURL + web.urlMethod[_typeUrl], params, {}, function (resp) {
-            _showLoading(false);
-            if (resp.result === 'error') {
-              mui.toast(resp.content);
-              return;
+            var params = {
+                x: data.longitude,
+                y: data.latitude,
+                w: _w
             }
-            if (cb) {
-              cb(resp);
+            if (_tabIndex == 0) {
+                _typeUrl = 'MostGetList'
+            } else {
+                _typeUrl = 'MostSendList'
             }
-          });
+            window.platform.normalRequestNoUrl("Get", web.urlType.Php, web.urlMethod[_typeUrl], params, {}, function (resp) {
+                _showLoading(false);
+                if (resp.result === 'error') {
+                    mui.toast(resp.content);
+                    return;
+                }
+                if (cb) {
+                    cb(resp);
+                }
+            });
         });
+
       };
       _getWindRankData();
     });

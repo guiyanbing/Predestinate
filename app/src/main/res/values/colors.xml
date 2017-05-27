@@ -50,6 +50,7 @@
     <color name="color_FO426B">#F0426B</color>
     <color name="color_FC5D61">#FC5D61</color>
     <color name="color_E0E0E0">#E0E0E0</color>
+    <color name="color_E68C49">#E68C49</color>
     <color name="color_F0426B">#F0426B</color>
     <color name="color_FFE27F">#FFE27F</color>
     <color name="color_F1897F">#F1897F</color>
@@ -63,6 +64,7 @@
     <color name="color_C3C3C3">#C3C3C3</color>
     <color name="color_D4D4D4">#D4D4D4</color>
     <color name="color_83A0EC">#83a0ec</color>
+    <color name="color_FAE0B5">#FAE0B5</color>
     <color name="color_FCFCFC">#fcfcfc</color>
     <color name="color_FFA6A6">#ffa6a6</color>
     <color name="color_9CD3F2">#9cd3f2</color>
@@ -88,9 +90,11 @@
     <color name="color_9FA0A0">#9FA0A0</color>
     <color name="color_E36D87">#E36D87</color>
     <color name="color_EA6684">#EA6684</color>
+    <color name="color_DD3A37">#DD3A37</color>
     <color name="color_DDDEDE">#DDDEDE</color>
     <color name="color_FFCB02">#FFCB02</color>
     <color name="color_F25D71">#F25D71</color>
+    <color name="color_F5E37C">#F5E37C</color>
     <color name="color_F64051">#F64051</color>
     <color name="color_FFFDE4">#FFFDE4</color>
     <color name="color_E4E4E4">#E4E4E4</color>
@@ -130,6 +134,13 @@
     <color name="color_afc0ee">#afc0ee</color>
     <color name="color_fe9b05">#fe9b05</color>
     <color name="color_5b5b5b">#5b5b5b</color>
+    <color name="color_CCCCCC">#CCCCCC</color>
+    <color name="color_F8F8F8">#F8F8F8</color>
+    <color name="color_D5D5D5">#D5D5D5</color>
+    <color name="color_FFF2E2">#FFF2E2</color>
+    <color name="color_62BFDE">#62BFDE</color>
+    <color name="color_D1D1D1">#D1D1D1</color>
+    <color name="color_75CD81">#75CD81</color>
 
     <color name="color_ff4d79">#ff4d79</color>
     <color name="color_e6c2aa">#e6c2aa</color>
@@ -137,6 +148,7 @@
     <color name="color_ee3434">#ee3434</color>
     <color name="color_ffaa24">#FFAA24</color>
     <color name="color_f2f2f2">#F2F2F2</color>
+    <color name="color_ff6a91">#FF6A91</color>
 
     <!-- ============预设色值=========== -->
     <color name="transparent">#00ffffff</color>
@@ -148,6 +160,7 @@
     <color name="black">#000000</color>
     <color name="black_per30">#4D000000</color>
     <color name="read_near">#ffff4a76</color>
+    <color name="half_trans_black">#99000000</color>
 
     <!-- ============引用色值=========== -->
     <color name="colorPrimary">@color/color_009688</color>
@@ -245,9 +258,22 @@
 
     <!--认证-->
     <color name="authentication_txt_bg">#43cd67</color>
+    <color name="txt_auth_status_complete">#75cd81</color>
+    <color name="txt_auth_status_isnull">#d1d1d1</color>
+    <color name="txt_auth_status_ing">#ffc333</color>
+    <color name="txt_auth_status_error">#ff4e4e</color>
+
     <color name="user_text_gray_top">#bbbbbb</color>
     <color name="user_text_blue">#83a0ec</color>
     <color name="user_text_gray_bottom">#d4d4d4</color>
     <color name="txt_authing">#FFC333</color>
+
+    <!--聊天顶部跑马灯, 男默认字体是白色，女黑色-->
+    <color name="lmarquee_boy_bg">#f87da7</color>
+    <color name="lmarquee_boy_nick">#fff999</color>
+    <color name="lmarquee_boy_gift">#c30d23</color>
+
+    <color name="lmarquee_girl_bg">#fce5e7</color>
+    <color name="lmarquee_girl_nick_gift">#fd698c</color>
 </resources>
 

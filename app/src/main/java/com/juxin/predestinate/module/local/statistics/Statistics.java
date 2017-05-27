@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.statistics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -47,7 +48,9 @@ public class Statistics {
         ClickViewAlbum,         //点击相册
         ClickFocus,             //点击关注
         ClickViewQQWechat,      //点击QQ微信
-        ClickSendMessage        //点击发信
+        ClickSendMessage,       //点击发信
+        Startup,                //APP启动日志:用户每启动一次APP,就发送一次最新的数据
+        Shutdown                //APP关闭事件日志
     }
 
     private static final String BEHAVIOR_CACHE_KEY = "BEHAVIOR_CACHE_KEY";//用户行为缓存key
@@ -168,15 +171,25 @@ public class Statistics {
      * @param sendPoint 用户行为发送点
      */
     public static void sendBehaviorStatistics(SendPoint sendPoint, HashMap<String, Object> singleMap) {
+        if (singleMap == null) singleMap = new HashMap<>();
+        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
+        singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
+        singleMap.put("client_type", "2");//客户端类型
+        singleMap.put("channel_id", ModuleMgr.getAppMgr().getUMChannel());//渠道编号<主渠道>_<子渠道>
+        singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
+        singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
+        singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串
+        singleMap.put("client_ip", NetworkUtils.getIpAddressString());//客户端IP
+        singleMap.put("device_model", android.os.Build.MODEL);//手机型号
+        singleMap.put("device_os_version", android.os.Build.DISPLAY);//手机操作系统版本
+        singleMap.put("sex", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
+        singleMap.put("path", getBehaviorPath().toArray());//页面层级
+
         final HashMap<String, Object> postParams = new HashMap<>();
-        singleMap.put("time", System.currentTimeMillis());
-        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        //[此处两个版本号信息文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
-        singleMap.put("version", Constant.SUB_VERSION + "");
-        singleMap.put("client_type", "2");
-        singleMap.put("path", getBehaviorPath().toArray());
-        postParams.put("topic", sendPoint.toString());
-        postParams.put("message", singleMap);
+        postParams.put("topic", sendPoint.toString());//统计项名称
+        postParams.put("message", singleMap);//统计项数据内容
 
         LinkedList<HashMap<String, Object>> cachedList = gson.fromJson(PCache.getInstance().getCache(BEHAVIOR_CACHE_KEY),
                 new TypeToken<LinkedList<HashMap<String, Object>>>() {

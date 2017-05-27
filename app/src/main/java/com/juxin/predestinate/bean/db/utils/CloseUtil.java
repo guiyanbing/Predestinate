@@ -9,17 +9,17 @@ import java.io.IOException;
 @SuppressWarnings("WeakerAccess")
 public class CloseUtil {
 
-    private CloseUtil() { }
+    private CloseUtil() {
+    }
 
     public static void close(Closeable... params) {
-        if (null != params) {
-            try {
-                for (Closeable closeable : params) {
-                    closeable.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (null == params) return;
+        try {
+            for (Closeable closeable : params) {
+                if (closeable != null) closeable.close();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

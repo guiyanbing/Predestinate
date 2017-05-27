@@ -6,10 +6,13 @@ package com.juxin.predestinate.ui.mail.item;
 public enum MailMsgID {
 
 	/**谁关注我**/
-	WhoAttentionMe_Msg(1),
+	Follow_Msg(1),
 
 	/**我的好友**/
 	MyFriend_Msg(2),
+
+	/**打招呼的人**/
+	Greet_Msg(3),
 
 	;
 

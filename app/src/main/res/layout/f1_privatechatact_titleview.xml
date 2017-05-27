@@ -3,41 +3,48 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/cus_top_title_view"
+        android:layout_width="@dimen/px130_dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/cus_top_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:paddingLeft="@dimen/px55_dp"
-        android:paddingRight="@dimen/px55_dp"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/px22_dp"
+        android:paddingRight="@dimen/px22_dp"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLength="9"
         android:maxLines="1"
         android:text="别；是；中国国"
+        android:layout_toRightOf="@+id/cus_top_title_view"
         android:textColor="@color/white"
         android:textSize="@dimen/px52_sp" />
 
     <RelativeLayout
+        android:id="@+id/cus_top_title_ll"
         android:layout_width="@dimen/px130_dp"
         android:layout_height="@dimen/px53_dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/px35_dp"
         android:paddingTop="@dimen/px3_dp"
-        android:layout_toRightOf="@+id/cus_top_title">
+        android:layout_toRightOf="@+id/cus_top_title"
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/cus_top_title_right_img"
+            android:id="@+id/cus_top_title_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/f1_top01" />
+            android:background="@drawable/f1_top01" />
 
         <TextView
-            android:id="@+id/cus_top_title_right_txt"
+            android:id="@+id/cus_top_title_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/cus_top_title_right_img"
-            android:layout_alignRight="@+id/cus_top_title_right_img"
+            android:layout_alignEnd="@+id/cus_top_title_img"
+            android:layout_alignRight="@+id/cus_top_title_img"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="6dp"

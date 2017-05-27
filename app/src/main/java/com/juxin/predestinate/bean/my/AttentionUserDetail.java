@@ -1,7 +1,8 @@
 package com.juxin.predestinate.bean.my;
 
-
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONObject;
 
@@ -14,7 +15,7 @@ public class AttentionUserDetail extends BaseData {
     private String login_id;
     private String other_id;
     private long follow_time;
-    private String city;
+    private int city;
     private String nickname;
     private int age;
     private int photoNum;
@@ -36,14 +37,42 @@ public class AttentionUserDetail extends BaseData {
         this.setAge(jsonObject.optInt("age"));
         this.setAvatar(jsonObject.optString("avatar"));
         this.setAvatar_status(jsonObject.optInt("avatar_status"));
-        this.setCity(jsonObject.optInt("city") + "");
+        this.setCity(jsonObject.optInt("city"));
         this.setGender(jsonObject.optInt("gender"));
         this.setIs_vip(jsonObject.optBoolean("is_vip"));
         this.setNickname(jsonObject.optString("nickname"));
         this.setPhotoNum(jsonObject.optInt("photoNum"));
         this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
-//        UserDetail detail ;
-//        detail.isVip()
+        //        UserDetail detail ;
+        //        detail.isVip()
+
+    }
+
+    public void parse(UserDetail info) {
+        this.setUid(info.getUid());
+        this.setAge(info.getAge());
+        this.setAvatar(info.getAvatar());
+        this.setAvatar_status(info.getAvatar_status());
+        this.setCity(info.getScity());
+        this.setGender(info.getGender());
+        this.setIs_vip(info.isVip());
+        this.setNickname(info.getNickname());
+        if (info.getUserPhotos() != null)
+            this.setPhotoNum(info.getUserPhotos().size());
+        this.setKf_id(info.getKf_id());
+    }
+
+    public void parseJs(UserInfoLightweight info) {
+        this.setUid(info.getUid());
+        this.setAge(info.getAge());
+        this.setAvatar(info.getAvatar());
+        this.setAvatar_status(info.getAvatar_status());
+        this.setCity(info.getScity());
+        this.setGender(info.getGender());
+        this.setIs_vip(info.isVip());
+        this.setNickname(info.getNickname());
+        this.setPhotoNum(info.getPhotoNum());
+        this.setKf_id(info.getKf_id());
     }
 
     public int getKf_id() {
@@ -86,11 +115,11 @@ public class AttentionUserDetail extends BaseData {
         this.follow_time = follow_time;
     }
 
-    public String getCity() {
+    public int getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(int city) {
         this.city = city;
     }
 

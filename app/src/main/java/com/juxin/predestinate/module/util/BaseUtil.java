@@ -8,12 +8,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -21,9 +21,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.EditText;
 
-
-import com.shuisili.android.library.FFLibrary;
-import com.shuisili.android.library.app.AppUtils;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -32,12 +31,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -476,69 +473,67 @@ public class BaseUtil {
     }
 
     /**
-     * 判断应用是否在后台，考虑到应用在后台但是弹框展示在前面的情况，其余普通判断不适用
+     * 判断应用是否在前台，考虑到应用在后台但是弹框展示在前面的情况，其余普通判断不适用
      *
-     * @param context
-     * @return 在后台：true，在前台：false
+     * @return 在前台：true
      */
-    //TODO d
-//    public static boolean IsRunningForegroundMe(Context context) {
-//        if (!BaseUtil.isTopActivy(App.context, UserMailNotifyAct.class.getName()) &&
-//                GetAppRunStatus(context, context.getPackageName()) == 1) {
-//            return true;
-//        }
-//        return false;
-//    }
+    public static boolean isRunningForegroundMe(Context context) {
+        return isTopProcess(context,
+                context.getPackageName(),
+                "com.juxin.predestinate.assist"
+        ) || BaseUtil.isTopActivity(App.context,
+                UserMailNotifyAct.class.getName(),
+                "com.juxin.predestinate.assist.ui.video.RtcVideoActivity",
+                "com.juxin.predestinate.assist.ui.RtcInitActivity");
+    }
 
     /**
-     * App 现在的运行状态 -1,异常 0，没运行，1前台，2后台
+     * 判断指定包名的进程是否在顶部
+     *
+     * @param sPkgNames applicationId
+     * @return true-顶部进程
      */
-    public static int GetAppRunStatus(Context context, String sPkgName) {
-        try {
-            ActivityManager activityManager = (ActivityManager) context
-                    .getSystemService(Context.ACTIVITY_SERVICE);
-            List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
-                    .getRunningAppProcesses();
+    public static boolean isTopProcess(Context context, String... sPkgNames) {
+        String packageName = "";
+        ActivityManager manager = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
 
-            if ((sPkgName + "").equals("")) {
-                sPkgName = context.getPackageName();
+        if (Build.VERSION.SDK_INT >= 21) {
+            List<ActivityManager.RunningAppProcessInfo> pis = manager.getRunningAppProcesses();
+            ActivityManager.RunningAppProcessInfo topAppProcess = pis.get(0);
+            if (topAppProcess != null && topAppProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                packageName = topAppProcess.processName;
             }
-            for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-                if (appProcess.processName.equals(sPkgName)) {
-                    if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                        return 2;
-                    } else {
-                        if (sPkgName.equals(activityManager.getRunningTasks(1).get(0).topActivity.getPackageName())) {
-                            return 1;
-                        } else {
-                            return 2;
-                        }
-                    }
-                }
-            }
-            return 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            List localList = manager.getRunningTasks(1);
+            ActivityManager.RunningTaskInfo localRunningTaskInfo = (ActivityManager.RunningTaskInfo) localList.get(0);
+            packageName = localRunningTaskInfo.topActivity.getPackageName();
         }
-        return -1;
+
+        if (!TextUtils.isEmpty(packageName)) {
+            for (String sPkgName : sPkgNames) {
+                if (packageName.equals(sPkgName)) return true;
+            }
+        }
+        return false;
     }
 
     /**
      * 检测某ActivityUpdate是否在当前Task的栈顶
      */
-    public static boolean isTopActivy(Context context, String cmdName) {
+    public static boolean isTopActivity(Context context, String... actNames) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+        List<ActivityManager.RunningTaskInfo> runningTasks = manager.getRunningTasks(1);
         String cmpNameTemp = null;
 
-        if (null != runningTaskInfos) {
-            cmpNameTemp = runningTaskInfos.get(0).topActivity.getClassName();
+        if (null != runningTasks) {
+            cmpNameTemp = runningTasks.get(0).topActivity.getClassName();
         }
+        if (null == cmpNameTemp) return false;
 
-        if (null == cmpNameTemp)
-            return false;
-
-        return cmpNameTemp.equals(cmdName);
+        for (String actName : actNames) {
+            if (cmpNameTemp.equals(actName)) return true;
+        }
+        return false;
     }
 
     public static boolean isScreenLock(Context context) {
@@ -564,14 +559,11 @@ public class BaseUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return result;
     }
 
     /**
-     * 获取当前cpu型号
-     *
-     * @return
+     * @return 获取当前cpu型号
      */
     public static String getMachineCpu() {
         String jvmName = System.getProperty("java.vm.name", "").toLowerCase();
@@ -601,53 +593,4 @@ public class BaseUtil {
         }
         return osName + "-" + osArch;
     }
-
-    public static String sha1(String string) {
-        try {
-            byte[] hash;
-            try {
-                hash = MessageDigest.getInstance("SHA-1").digest(string.getBytes("UTF-8"));
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException("Huh, MD5 should be supported?", e);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException("Huh, UTF-8 should be supported?", e);
-            }
-
-            StringBuilder hex = new StringBuilder(hash.length * 2);
-            for (byte b : hash) {
-                if ((b & 0xFF) < 0x10) hex.append("0");
-                hex.append(Integer.toHexString(b & 0xFF));
-            }
-            return hex.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    /**
-     * 获取签名
-     *
-     * @return
-     */
-    public static String getInstallPackageSignature() {
-        try {
-            PackageManager pm = FFLibrary.mContext.getPackageManager();
-            List<PackageInfo> apps = pm
-                    .getInstalledPackages(PackageManager.GET_SIGNATURES);
-
-            Iterator<PackageInfo> iter = apps.iterator();
-            while (iter.hasNext()) {
-                PackageInfo packageinfo = iter.next();
-                String thisName = packageinfo.packageName;
-                if (thisName.equals(AppUtils.getPackageName())) {
-                    return packageinfo.signatures[0].toCharsString();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

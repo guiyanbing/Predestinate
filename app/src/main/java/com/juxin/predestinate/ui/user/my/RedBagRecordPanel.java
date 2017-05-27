@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -26,12 +26,11 @@ import com.switfpass.pay.utils.Util;
 
 import java.util.List;
 
-
 /**
  * 收入详情
  * Created by zm on 2017/4/25
  */
-public class RedBagRecordPanel extends BaseViewPanel implements RequestComplete,XRecyclerView.LoadingListener,View.OnClickListener{
+public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRecyclerView.LoadingListener,View.OnClickListener{
 
     private Context mContext;
     //有关控件

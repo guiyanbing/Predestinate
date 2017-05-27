@@ -1,15 +1,14 @@
 package com.juxin.predestinate.module.logic.socket;
 
+import com.juxin.predestinate.module.logic.config.Hosts;
+
 /**
  * socket长连接中一些常用的常量
  */
 public class TCPConstant {
 
-    // socket正式服连接地址
-//    public static final String HOST = "sc.app.yuanfenba.net";//socket连接IP地址
-
-    // socket测试服连接地址
-    public static final String HOST = "123.59.187.33";      //socket连接IP地址
+    // socket连接地址
+    public static final String HOST = Hosts.FATE_IT_TCP;    //socket连接IP地址
     public static final int PORT = 8823;                    //socket连接端口
 
     // --------------socket常量----------------

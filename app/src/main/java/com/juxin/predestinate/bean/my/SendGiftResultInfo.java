@@ -15,6 +15,7 @@ public class SendGiftResultInfo extends BaseData {
     private String info1;
     private String info2;
     private String msg;
+    private String redbagid;
 
     @Override
     public void parseJson(String jsonStr) {
@@ -24,6 +25,7 @@ public class SendGiftResultInfo extends BaseData {
         this.setInfo1(jsonObject.optString("info1"));
         this.setInfo2(jsonObject.optString("info2"));
         this.setMsg(jsonObject.optString("msg"));
+        this.setRedbagid("redbagid");
     }
 
     public int getDiamand() {
@@ -56,6 +58,14 @@ public class SendGiftResultInfo extends BaseData {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getRedbagid() {
+        return redbagid;
+    }
+
+    public void setRedbagid(String redbagid) {
+        this.redbagid = redbagid;
     }
 
     @Override

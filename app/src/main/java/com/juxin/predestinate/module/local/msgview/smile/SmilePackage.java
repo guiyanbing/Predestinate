@@ -1,6 +1,6 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
-import com.juxin.mumu.bean.net.BaseData;
+import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +12,7 @@ import java.util.List;
  * Created by Kind on 2017/3/31.
  */
 public class SmilePackage extends BaseData {
+
     private int id = 0;
     private String type = null;//表情类型 smallface customface minigame gift 暂时有四种 smallface的列表需要从资源中另外填充
     private String name = null;

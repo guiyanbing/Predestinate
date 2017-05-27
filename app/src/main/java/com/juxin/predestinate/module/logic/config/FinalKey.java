@@ -14,8 +14,10 @@ public class FinalKey {
 
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";  //保存当前登录过的账号信息
 
-    public static final String CONFIG_SERVICE_QQ = "CONFIG_SERVICE_QQ";//在线客服QQ本地保存key
     public static final String TESTING_WEB_STORE = "TESTING_WEB_STORE";//测试彩蛋url存储地址
+
+    public static final String SP_USER_INFO_SHOW_GIFT_GREETING_TIPS = "user_info_show_gift_tips"; //是否在用户资料显示送礼打招呼
+    public static final String SP_CHAT_SHOW_GIFT_GREETING_TIPS = "chat_show_gift_tips";     //是否在聊天界面显示送礼打招呼
 
     // 首页tab标记，从左到右依次为1-5
     public static final int MAIN_TAB_1 = 0x01;

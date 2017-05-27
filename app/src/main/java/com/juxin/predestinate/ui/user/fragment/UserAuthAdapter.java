@@ -8,6 +8,7 @@ import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.fragment.bean.UserAuth;
@@ -49,7 +50,6 @@ public class UserAuthAdapter extends BaseRecyclerViewAdapter {
         }
 
         //角标提示
-        item_badge.setVisibility(View.GONE);
         item_hint.setVisibility(View.GONE);
 
         if (!userAuth.isShow()) {
@@ -61,10 +61,16 @@ public class UserAuthAdapter extends BaseRecyclerViewAdapter {
         item_text.setText(userAuth.getName());
 
         // 各条目展示逻辑
+        if (userAuth.getId() == CenterItemID.i_Center_item_2) {  // 谁关注我
+            ModuleMgr.getUnreadMgr().registerBadge(item_badge, true, UnreadMgrImpl.FOLLOW_ME);
+        }
+
         if (userAuth.getId() == CenterItemID.i_Center_item_3) {  // 我的钱包
             String num = String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getRedbagsum() / 100f);
             item_hint.setVisibility(View.VISIBLE);
             item_hint.setText(App.context.getString(R.string.user_info_redbag_num, num));
+
+            ModuleMgr.getUnreadMgr().registerBadge(item_badge, true, UnreadMgrImpl.MY_WALLET);
         }
 
         if (userAuth.getId() == CenterItemID.i_Center_item_4) {  // 我要赚红包

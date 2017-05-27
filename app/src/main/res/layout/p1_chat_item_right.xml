@@ -19,6 +19,7 @@
         android:layout_marginRight="@dimen/px25_dp"
         android:layout_marginTop="@dimen/px5_dp"
         android:layout_toLeftOf="@+id/chat_item_head"
+        android:visibility="gone"
         android:text="xiaoyou" />
 
     <LinearLayout

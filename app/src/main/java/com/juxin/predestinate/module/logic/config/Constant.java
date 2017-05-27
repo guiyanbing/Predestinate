@@ -22,7 +22,7 @@ public class Constant {
     public final static String WEIXIN_App_Key = "xCNyzKceB8szwWmUqT4laGqK5SapQn5L";
 
     // -------------------------K-V---------------------------
-
+    public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
     public static final String SETTING_QUIT_MESSAGE = "setting_quit_message";   //是否进行锁屏弹窗，存储key及默认值
     public static final boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
@@ -39,6 +39,9 @@ public class Constant {
     public static final boolean SETTING_VIDEO_CHAT_DEFAULT = true;
     public static final String SETTING_AUDIO_CHAT = "setting_audio_chat";
     public static final boolean SETTING_AUDIO_CHAT_DEFAULT = true;
+
+    public static final String GIFT_CHAT = "GIFT_CHAT";
+    public static final String GIFT_INFO = "GIFT_INFO";
 
     public static final String ASET_DATA = "getASet_Flag";
     // 图片
@@ -58,6 +61,7 @@ public class Constant {
     public static final long CHAT_RESEND_TIME = 5 * 60 * 1000;              //5分钟内重发消息
     public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
     public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
+    public static final long TWO_HOUR_TIME = 2 * 60 * 60 * 1000;              //2小时
 
     // ------ 文件长存储/短存储 start --------
     public static final String STR_SHORT_TAG = "oss";    // 短存储图片截取标志

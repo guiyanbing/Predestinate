@@ -9,6 +9,7 @@ android {
         targetSdkVersion rootProject.versions.targetSDK
         versionCode 1
         versionName "1.0"
+        ndk { abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86" }//让64位的操作系统可以兼容32位的库文件
     }
 
     buildTypes {
@@ -51,10 +52,12 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.versions.libRxAndroid"
 
+    //gif文件加载
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     //日志打印库:[https://github.com/elvishew/XLog]
     compile "com.elvishew:xlog:$rootProject.versions.libXLog"
     //图片缩放查看控件:[https://github.com/chrisbanes/PhotoView]
-    compile 'com.github.chrisbanes:PhotoView:1.3.0'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     //viewanimator动画库:[https://github.com/florent37/ViewAnimator]
     compile("com.github.florent37:viewanimator:$rootProject.versions.libAnimator") {
         exclude group: 'com.android.support', module: 'appcompat-v7'

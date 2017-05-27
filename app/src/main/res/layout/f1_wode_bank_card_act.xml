@@ -2,182 +2,135 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_F0F2F2"
+    android:background="@color/bg_color"
     android:orientation="vertical">
     <include layout="@layout/base_title"/>
+    <include layout="@layout/layout_margintop"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        style="@style/id_card_ll"
+        android:background="@color/white">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.8"
-            android:text="提现金额"
-            android:textColor="@color/black"
-            android:textSize="@dimen/px48_sp"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_tv"
+            android:text="提现金额"/>
 
         <EditText
             android:id="@+id/bank_card_et_money"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7.2"
-            android:background="@color/white"
             android:hint="请输入您的提现金额"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textSize="@dimen/px45_sp"
-            android:enabled="false"
-            android:textColorHint="@color/color_C9CACA"
-            android:textColor="@color/black"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_eit"
+            android:textColor="@color/color_FD7194"
+            android:focusable="false"
+            android:clickable="false"/>
     </LinearLayout>
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px30_dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/px1_dp"
+        android:background="@color/color_E4E4E4"
+        style="@style/id_card_content"/>
+    <LinearLayout
+        style="@style/id_card_ll"
+        android:background="@color/white">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.8"
-            android:text="真实姓名"
-            android:textColor="@color/black"
-            android:textSize="@dimen/px48_sp"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_tv"
+            android:text="真实姓名"/>
 
         <EditText
             android:id="@+id/bank_card_et_card_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7.2"
-            android:background="@color/white"
             android:hint="请输入与您银行卡一致的真实姓名"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textSize="@dimen/px45_sp"
-            android:textColorHint="@color/color_C9CACA"
-            android:textColor="@color/black"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
+            android:focusable="false"
+            android:clickable="false"/>
     </LinearLayout>
-
-    <LinearLayout
+    <View
+        android:id="@+id/bank_card_view_bank"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px30_dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/px1_dp"
+        android:background="@color/color_E4E4E4"
+        style="@style/id_card_content"/>
+    <LinearLayout
+        android:id="@+id/bank_card_ll_open_bank"
+        style="@style/id_card_ll"
+        android:background="@color/white">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.8"
-            android:text="开户银行"
-            android:textColor="@color/black"
-            android:textSize="@dimen/px48_sp"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_tv"
+            android:text="开户银行" />
 
         <EditText
             android:id="@+id/bank_card_et_card_local"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7.2"
-            android:background="@color/white"
-            android:hint="请输入您的开户行，如：工商银行"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textSize="@dimen/px45_sp"
-            android:textColorHint="@color/color_C9CACA"
-            android:textColor="@color/black"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="请输入您的开户行，如：工商银行"/>
     </LinearLayout>
-
-    <LinearLayout
+    <View
+        android:id="@+id/bank_card_view_bank_branch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px30_dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/px1_dp"
+        android:background="@color/color_E4E4E4"
+        style="@style/id_card_content"/>
+    <LinearLayout
+        android:id="@+id/bank_card_ll_open_bank_branch"
+        style="@style/id_card_ll"
+        android:background="@color/white">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.8"
-            android:text="开户支行"
-            android:textColor="@color/black"
-            android:textSize="@dimen/px48_sp"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_tv"
+            android:text="@string/bankbranch_of_deposit" />
 
         <EditText
             android:id="@+id/bank_card_et_card_local_branch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7.2"
-            android:background="@color/white"
-            android:hint="如：北京市，朝阳支行"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textSize="@dimen/px45_sp"
-            android:textColorHint="@color/color_C9CACA"
-            android:textColor="@color/black"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="如：北京市，朝阳支行"/>
     </LinearLayout>
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px30_dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/px1_dp"
+        android:background="@color/color_E4E4E4"
+        style="@style/id_card_content"/>
+    <LinearLayout
+        style="@style/id_card_ll"
+        android:background="@color/white">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.8"
-            android:text="银行卡号"
-            android:textColor="@color/black"
-            android:textSize="@dimen/px48_sp"
-            android:padding="@dimen/px30_dp" />
+            android:id="@+id/bank_card_tv_card"
+            style="@style/id_card_tv"
+            android:text="银行卡号"/>
 
         <EditText
             android:id="@+id/bank_card_et_card_num"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7.2"
-            android:background="@color/white"
-            android:hint="请输入您的储蓄卡银行卡号"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textSize="@dimen/px45_sp"
-            android:textColorHint="@color/color_C9CACA"
-            android:textColor="@color/black"
-            android:padding="@dimen/px30_dp" />
+            style="@style/id_card_eit"
+            android:textColor="@color/color_D5D5D5"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="请输入您的储蓄卡银行卡号"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="请准确填写您的个人信息，以便我们客服人员能及时的给您审核款项并打入您的账户，提现时间为72小时到账"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/px60_dp"
+        android:text="提现时间为72小时到账"
         android:textSize="@dimen/px42_sp"
         android:textColor="@color/color_C7C8C8"/>
 
     <Button
         android:id="@+id/bank_card_btn_next"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px114_dp"
-        android:layout_marginLeft="@dimen/px30_dp"
-        android:layout_marginRight="@dimen/px30_dp"
-        android:layout_marginTop="@dimen/px30_dp"
+        android:layout_height="@dimen/px150_dp"
+        android:layout_marginLeft="@dimen/px60_dp"
+        android:layout_marginRight="@dimen/px60_dp"
+        android:layout_marginTop="@dimen/px10_dp"
         android:background="@drawable/f1_btn_phoneverify_selector"
         android:text="立即提现"
         android:textColor="@color/white"
-        android:textSize="@dimen/px48_sp" />
+        android:textSize="@dimen/px52_sp" />
 </LinearLayout>

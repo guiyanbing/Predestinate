@@ -7,7 +7,8 @@ import android.text.method.NumberKeyListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.juxin.mumu.bean.utils.MMToast;
+
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -108,22 +109,22 @@ public class PayCupVoiceDetailAct  extends BaseActivity implements View.OnClickL
 
     private void getData(String number, String phone, String nickname, String bank_id) {
         if(TextUtils.isEmpty(number)){
-            MMToast.showShort("请输入正确的卡号");
+            PToast.showShort("请输入正确的卡号");
             return;
         }
 
         if(TextUtils.isEmpty(phone)){ // || !BaseUtil.isMobileNO(phone)
-            MMToast.showShort("请输入正确的手机号");
+            PToast.showShort("请输入正确的手机号");
             return;
         }
 
         if(TextUtils.isEmpty(nickname)){
-            MMToast.showShort("请输入正确的名称");
+            PToast.showShort("请输入正确的名称");
             return;
         }
 
         if(TextUtils.isEmpty(bank_id)){
-            MMToast.showShort("请输入正确的身份证号");
+            PToast.showShort("请输入正确的身份证号");
             return;
         }
 

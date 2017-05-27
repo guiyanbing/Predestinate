@@ -22,7 +22,6 @@
         <item>摇钱树红包</item>
         <item>好友邀请</item>
         <item>好友邀请</item>
-        <item>语聊</item>
         <item>视频通话</item>
         <item>语音通话</item>
     </string-array>
@@ -55,6 +54,13 @@
     <!-- ================个人中心条目配置end================== -->
 
     <!-- ================个人资料列表配置start================== -->
+    <string-array name="zone_data">
+        <item>最近上线时间</item>
+        <item>交友目的</item>
+        <item>恋爱观念</item>
+        <item>首次见面希望</item>
+        <item>喜欢约会的地点</item>
+    </string-array>
     <string-array name="base_data">
         <item>昵称</item>
         <item>性别</item>

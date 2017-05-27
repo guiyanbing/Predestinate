@@ -20,8 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
-import com.juxin.mumu.bean.log.MMLog;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
@@ -144,7 +144,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                     if (timeCount == 0 || System.currentTimeMillis() - timeCount > 500) {
                         recordPanel.onTouch(action, 0f);
                     } else {
-                        MMLog.autoDebug("---ChatInputPanel--->点击间隔<500ms，过于频繁");
+                        PLogger.d("---ChatInputPanel--->点击间隔<500ms，过于频繁");
                     }
 
                     btn_voice.setText(R.string.loosen_the_end);
@@ -434,7 +434,7 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                     PToast.showShort(mContext.getString(R.string.send_suceed));
                     return;
                 }
-                PToast.showShort(mContext.getString(R.string.send_error_try_again));
+                PToast.showShort(response.getMsg());
             }
         });
         dismiss();

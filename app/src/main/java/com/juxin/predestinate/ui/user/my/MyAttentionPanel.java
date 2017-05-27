@@ -1,23 +1,23 @@
 package com.juxin.predestinate.ui.user.my;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
+import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
-import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
-import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.MyAttentionAdapter;
 
 import java.util.ArrayList;
@@ -28,16 +28,15 @@ import java.util.List;
  * 我关注的
  * Created by zm on 2017/4/25
  */
-public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,XRecyclerView.LoadingListener{
+public class MyAttentionPanel extends BasePanel implements RequestComplete, ExListView.IXListViewListener {
 
     private Context mContext;
     //有关控件
-    private CustomRecyclerView crvView;
-    private XRecyclerView rvList;
+    private CustomStatusListView crvView;
+    private ExListView rvList;
     //数据相关
     private List<AttentionUserDetail> mUserDetails = new ArrayList<>();
     private MyAttentionAdapter mAttentionMeAdapter;
-    private int count;
 
     public MyAttentionPanel(Context context) {
         super(context);
@@ -46,33 +45,30 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
         initView();
         reqData();
     }
+
     //请求数据
     private void reqData() {
         ModuleMgr.getCommonMgr().getFollowing(this);
     }
 
-    private void initView(){
-        crvView = (CustomRecyclerView) findViewById(R.id.my_attention_panel_crlv_list);
-        rvList = crvView.getXRecyclerView();
-        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
-        mAttentionMeAdapter = new MyAttentionAdapter(mContext);
+    private void initView() {
+        crvView = (CustomStatusListView) findViewById(R.id.my_attention_panel_crlv_list);
+        rvList = crvView.getExListView();
+        mAttentionMeAdapter = new MyAttentionAdapter(mContext, mUserDetails);
         rvList.setAdapter(mAttentionMeAdapter);
-        mAttentionMeAdapter.setOnItemClickListener(mAttentionMeAdapter);
-        rvList.setLoadingMoreEnabled(false);
-        rvList.setLoadingListener(this);
+        rvList.setPullLoadEnable(false);
+        rvList.setXListViewListener(this);
     }
 
     //请求数据返回
     @Override
     public void onRequestComplete(HttpResponse response) {
-        rvList.refreshComplete();
-        rvList.loadMoreComplete();
+        rvList.stopRefresh();
+        rvList.stopLoadMore();
 //        Log.e("TTTTTTTTTTFF", response.getResponseString() + "|||" + response.isOk());
-        crvView.showXrecyclerView();
-        if (response.getUrlParam() == UrlParam.getFollowing){
-            if (response.isOk()){
+        crvView.showExListView();
+        if (response.getUrlParam() == UrlParam.getFollowing) {
+            if (response.isOk()) {
                 mUserDetails.clear();
                 AttentionList lists = new AttentionList();
                 lists.parseJson(response.getResponseString());
@@ -80,19 +76,20 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
                 mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos, AttentionUtil.MYATTENTION));
-                for (int i = 0 ;i < mUserDetails.size();i++){
+                for (int i = 0; i < mUserDetails.size(); i++) {
                     mUserDetails.get(i).setType(1);
                 }
-                if (infos != null && !infos.isEmpty()){
+                if (infos != null && !infos.isEmpty()) {
+                    List<Long> userIds = new ArrayList<>();
                     int size = infos.size();
-                    count = size;
-                    for (int i = 0 ;i < size;i++){
-                        ModuleMgr.getCenterMgr().reqOtherInfo(infos.get(i).getUid(),this);
+                    for (int i = 0; i < size; i++) {
+                        userIds.add(infos.get(i).getUid());
                     }
+                    ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, this);//批量获取用户信息
                     return;
                 }
                 mAttentionMeAdapter.setList(mUserDetails);
-                if (mUserDetails.size()<=0){
+                if (mUserDetails.size() <= 0) {
                     crvView.showNoData(mContext.getString(R.string.tip_data_empty), mContext.getString(R.string.tip_click_refresh), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -102,7 +99,7 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
                 }
                 return;
             }
-            if (mUserDetails.size()<=0){
+            if (mUserDetails.size() <= 0) {
                 crvView.showNetError(mContext.getString(R.string.tip_click_refresh), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -114,21 +111,27 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
             PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
             return;
         }
-        count--;
-        if (JsonUtil.getJsonObject(response.getResponseString()).has("uid")){
+        UserInfoLightweightList userInfos = new UserInfoLightweightList();
+        userInfos.parseJsonSummary(JsonUtil.getJsonObject(response.getResponseString()));
+        List<UserInfoLightweight> userList = userInfos.getLightweightLists();
+        int size = userList.size();
+//        Log.e("TTTTTTTTTTTGG", response.getResponseString() + "|||" + size);
+        for (int i = 0; i < size; i++) {
             AttentionUserDetail userDetail = new AttentionUserDetail();
-            userDetail.parseJson(response.getResponseString());
+            userDetail.parseJs(userList.get(i));
             userDetail.setType(1);
-            mUserDetails.add(userDetail);
-            AttentionUtil.addUser(userDetail);
-            if (count <= 0){
-                AttentionUtil.saveUserDetails();
+            mUserDetails.add(userDetail);//添加到数据列表
+            AttentionUtil.addUser(userDetail);//添加到缓存列表
+            if (i == size - 1) {
+//                Log.e("TTTTTTTTTTTTT000",count+"|||");
+                AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
     }
+
     //刷新界面
-    public void reFreshUI(){
+    public void reFreshUI() {
         mAttentionMeAdapter.notifyDataSetChanged();
     }
 
@@ -142,8 +145,8 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
 
     }
 
-    private String testData(){
-        String str = "/*{\n" +
+    private String testData() {
+        String str = "{\n" +
                 "    \"result\": \"success\",\n" +
                 "    \"item\": [\n" +
                 "        {\n" +
@@ -159,7 +162,7 @@ public class MyAttentionPanel extends BaseViewPanel implements RequestComplete,X
                 "            \"time\": 1423042627\n" +
                 "        }\n" +
                 "    ]\n" +
-                "}*/";
+                "}";
         return str;
     }
 

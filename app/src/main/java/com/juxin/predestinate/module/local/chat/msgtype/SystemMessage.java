@@ -10,6 +10,10 @@ public class SystemMessage extends BaseMessage {
 
     private int xtType;//系统消息类型（3为已读通知，5为正在输入，6为取消正在输入）
 
+    public SystemMessage() {
+        super();
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);

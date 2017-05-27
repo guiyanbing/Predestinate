@@ -3,10 +3,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
@@ -15,12 +11,15 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.ui.utils.MyURLSpan;
 
 /**
+ * 文字及html文字类型消息展示panel
  * Created by Kind on 2017/5/12.
  */
-
 public class ChatPanelText extends ChatPanel {
+
     private TextView chat_item_text;
 
     public ChatPanelText(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
@@ -41,22 +40,13 @@ public class ChatPanelText extends ChatPanel {
         TextMessage msg = (TextMessage) msgData;
         chat_item_text.setTextColor(isSender() ? Color.WHITE : context.getResources().getColor(R.color.text_zhuyao_black));
 
-        chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()));
+        chat_item_text.setText(
+                msg.getType() == BaseMessage.BaseMessageType.htmlText.getMsgType()
+                        ? Html.fromHtml(msg.getHtm())
+                        : Html.fromHtml(msg.getMsgDesc()));
 
-//        chat_item_text.setMovementMethod(LinkMovementMethod.getInstance());
-//        CharSequence linkContent = chat_item_text.getText();
-//        if (linkContent instanceof Spannable) {
-//            int end = linkContent.length();
-//            Spannable sp = (Spannable) linkContent;
-//            URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
-//            SpannableStringBuilder style = new SpannableStringBuilder(linkContent);
-//            style.clearSpans();
-//            for (int i = 0; i < urls.length; i++) {
-//                Hyperlinks hyperlinks = new Hyperlinks(urls[i].getURL());
-//                style.setSpan(hyperlinks, sp.getSpanStart(urls[i]), sp.getSpanEnd(urls[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            }
-//            hi.setText(style);
-//        }
+        MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), chat_item_text, msg.getMsgDesc());
+
         return true;
     }
 }

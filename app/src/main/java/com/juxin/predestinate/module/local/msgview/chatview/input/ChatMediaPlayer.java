@@ -12,9 +12,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.juxin.mumu.bean.log.MMLog;
-import com.juxin.mumu.bean.utils.FileUtil;
-import com.juxin.mumu.bean.utils.MMToast;
+import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PToast;
+import com.juxin.library.request.DownloadListener;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
@@ -22,7 +23,6 @@ import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
 /**
  * Created by Kind on 2017/5/9.
  */
-
 public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
 
     private boolean playing = false;            //视频或音频是否正在播放
@@ -104,7 +104,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
         this.oriFilePath = filePath;
         this.onPlayListener = onPlayListener;
 
-        MMLog.autoDebug(filePath);
+        PLogger.d(filePath);
 
         if (TextUtils.isEmpty(filePath)) {
             return;
@@ -114,6 +114,26 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
             playVoice(filePath, mute);
             return;
         }
+
+        ModuleMgr.getHttpMgr().downloadVoice(filePath, new DownloadListener() {
+            @Override
+            public void onStart(String url, String filePath) {}
+
+            @Override
+            public void onProcess(String url, int process, long size) {}
+
+            @Override
+            public void onSuccess(String url, String filePath) {
+                if (oriFilePath != null && oriFilePath.equals(filePath)) {
+                    ChatMediaPlayer.getInstance().playVoice(filePath, mute);
+                }
+            }
+
+            @Override
+            public void onFail(String url, Throwable throwable) {
+
+            }
+        });
 
 //        ModuleMgr.getChatMgr().reqVoice(filePath, null, new HttpMgr.IReqComplete() {
 //            @Override
@@ -134,7 +154,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
      * @param mute     静音播放。
      */
     private void playVoice(final String filePath, boolean mute) {
-        MMLog.autoDebug("mute: " + mute + "; file: " + filePath);
+        PLogger.d("mute: " + mute + "; file: " + filePath);
 
         if (TextUtils.isEmpty(filePath)) {
             return;
@@ -188,7 +208,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
 
             playing = true;
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
 
             try {
                 mediaPlayer.release();
@@ -297,7 +317,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         try {
             f_proximiny = event.values[0];
-            MMLog.autoDebug("" + f_proximiny + " | " + mProximiny.getMaximumRange());
+            PLogger.d("" + f_proximiny + " | " + mProximiny.getMaximumRange());
 
             AudioManager audioManager = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
 
@@ -309,7 +329,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
                 audioManager.setMode(AudioManager.MODE_IN_CALL);
             }
         } catch (Exception e) {
-            MMLog.printThrowable(e);
+            PLogger.printThrowable(e);
         }
     }
 
@@ -328,7 +348,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
      * @param filePath         视频文件
      */
     public synchronized void playVideo(final boolean mute, final TextureVideoView textureVideoView, final String filePath) {
-        MMLog.autoDebug("filePath:" + filePath);
+        PLogger.d("filePath:" + filePath);
         if (TextUtils.isEmpty(filePath)) return;
 
         if (!FileUtil.isURL(filePath)) {
@@ -360,7 +380,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
      * 播放视频
      */
     public void playLocalVideo(boolean mute, final TextureVideoView textureVideoView, String filePath) {
-        MMLog.autoDebug("filePath:" + filePath);
+        PLogger.d("filePath:" + filePath);
         if (TextUtils.isEmpty(filePath)) return;
 
         textureVideoView.setVideoPath(filePath);
@@ -374,7 +394,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
         textureVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                MMToast.showShort("视频播放异常");
+                PToast.showShort("视频播放异常");
                 return true;
             }
         });

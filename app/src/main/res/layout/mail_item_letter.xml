@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/common_gap_item"/>
+    <include layout="@layout/common_gap_item" />
 
     <LinearLayout
         android:id="@+id/mail_item_letter"
@@ -36,20 +36,41 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="@dimen/px50_dp"
                 android:layout_marginRight="@dimen/px42_dp"
+                android:visibility="gone" />
+
+            <com.juxin.library.unread.BadgeView
+                android:id="@+id/mail_item_unreadnum"
+                style="@style/badge_num_big"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="@dimen/px15_dp"
+                android:layout_marginTop="@dimen/px15_dp"
+                android:text="1"
                 android:visibility="visible" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/mail_item_unreadnum"-->
+            <!--style="@style/badge_num_big"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_marginRight="@dimen/px15_dp"-->
+            <!--android:layout_marginTop="@dimen/px15_dp"-->
+            <!--android:visibility="visible" />-->
 
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -60,28 +81,69 @@
                     android:textColor="@color/color_333333"
                     android:textSize="@dimen/px45_sp" />
 
+                <LinearLayout
+                    android:id="@+id/mail_item_ranking_state"
+                    style="@style/icon_middle_center"
+                    android:layout_width="@dimen/px140_dp"
+                    android:layout_height="@dimen/px50_dp"
+                    android:layout_marginLeft="@dimen/px24_dp"
+                    android:background="@drawable/f1_ranking_bg_w"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/mail_item_ranking_type"
+                        android:layout_width="@dimen/px35_dp"
+                        android:layout_height="@dimen/px35_dp"
+                        android:layout_marginLeft="@dimen/px10_dp"
+                        android:background="@drawable/f1_round_text_bg"
+                        android:gravity="center"
+                        android:text="魅"
+                        android:textColor="@color/color_ff4d79"
+                        android:textSize="@dimen/px22_sp" />
+
+                    <TextView
+                        android:id="@+id/mail_item_ranking_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/px10_dp"
+                        android:singleLine="true"
+                        android:text="TOP01"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/px22_sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/mail_item_vip"
+                    style="@style/icon_middle"
+                    android:layout_marginLeft="@dimen/px24_dp"
+                    android:src="@drawable/f1_vip_icon"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/mail_item_certification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginLeft="@dimen/px12_dp"
-                    android:paddingTop="@dimen/px3_dp"
-                    android:paddingBottom="@dimen/px9_dp"
-                    android:paddingRight="@dimen/px12_dp"
-                    android:paddingLeft="@dimen/px12_dp"
                     android:background="@color/color_56aff3"
-                    android:visibility="invisible"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/px9_dp"
+                    android:paddingLeft="@dimen/px12_dp"
+                    android:paddingRight="@dimen/px12_dp"
+                    android:paddingTop="@dimen/px3_dp"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/px36_sp" />
+                    android:textSize="@dimen/px36_sp"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/mail_item_last_time"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/px35_dp"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginLeft="@dimen/px35_dp"
                     android:textColor="@color/color_aaaaaa"
                     android:textSize="@dimen/px36_sp" />
             </LinearLayout>
@@ -92,19 +154,19 @@
                 android:layout_marginLeft="@dimen/px2_dp"
                 android:layout_marginTop="@dimen/px25_dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:lines="1">
+                android:lines="1"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/mail_item_last_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/px8_dp"
+                    android:background="@drawable/bg_mail_status_shibai"
+                    android:lines="1"
                     android:paddingLeft="@dimen/px6_dp"
                     android:paddingRight="@dimen/px6_dp"
-                    android:layout_marginRight="@dimen/px8_dp"
-                    android:lines="1"
-                    android:background="@drawable/bg_mail_status_shibai"
                     android:textColor="@color/white"
                     android:textSize="@dimen/px36_sp"
                     android:visibility="gone" />
@@ -116,20 +178,24 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:ellipsize="end"
+                    android:lines="1"
                     android:maxLines="1"
                     android:maxWidth="200dp"
-                    android:lines="1"
                     android:textColor="@color/color_aaaaaa"
                     android:textSize="@dimen/px39_sp" />
-                <TextView
-                    android:id="@+id/mail_item_unreadnum"
-                    style="@style/badge_num_big"
-                    android:layout_marginLeft="@dimen/px30_dp"
-                    android:layout_marginBottom="@dimen/px4_dp"
-                    android:visibility="visible" />
+
 
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/mail_item_right_icon"
+            style="@style/icon_small"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/px15_dp"
+            android:layout_marginLeft="@dimen/px15_dp"
+            android:background="@drawable/f1_call_state_ico"
+            android:visibility="gone" />
     </LinearLayout>
 
     <View style="@style/divider_line_horizontal" />

@@ -14,10 +14,9 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.utils.EncryptUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.StringUtils;
-import com.juxin.mumu.bean.utils.FileUtil;
-import com.juxin.mumu.bean.utils.MD5;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
@@ -33,7 +32,6 @@ import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
-import com.juxin.predestinate.ui.user.fragment.bean.YCoin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,9 +70,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 //                    reqSetting();//请求设置信息
                 } else {
                     IMProxy.getInstance().logout();//退出登录的时候退出socket
-                    userDetail = null;
-                    setMyInfo(null);
-                    putSettingPsp(null);
+                    clearUserInfo();
                 }
                 break;
             case MsgType.MT_App_CoreService://socket已连接，登录
@@ -84,7 +80,19 @@ public class CenterMgr implements ModuleBase, PObserver {
             case MsgType.MT_Update_MyInfo:
                 reqMyInfo();
                 break;
+
+            default:
+                break;
         }
+    }
+
+    /**
+     * 清除用户信息
+     */
+    public void clearUserInfo() {
+        userDetail = null;
+        setMyInfo(null);
+        putSettingPsp(null);
     }
 
     /**
@@ -96,8 +104,8 @@ public class CenterMgr implements ModuleBase, PObserver {
     public void reqVerifyCodeEx(String mobile, RequestComplete complete) {
         HashMap<String, Object> getparam = new HashMap<>();
         getparam.put("cellPhone", mobile);
-        getparam.put("type", "1");
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqReqVerifyCode, null, getparam, RequestParam.CacheType.CT_Cache_Url, true, complete);
+        getparam.put("sign", App.context.getResources().getString(R.string.app_name));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqReqVerifyCode, getparam, complete);
     }
 
 
@@ -236,19 +244,15 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取自己的个人资料
      */
     public void reqMyInfo(final RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("ver", Constant.SUB_VERSION);
-
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqMyInfo, getParams, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (complete != null) {
                     complete.onRequestComplete(response);
                 }
-                String responseStr = response.getResponseString();
-                if (userDetail == null) userDetail = new UserDetail();
-                userDetail.parseJson(responseStr);
-                setMyInfo(responseStr);         // 保存到SP
+
+                userDetail = (UserDetail) response.getBaseData();
+                setMyInfo(response.getResponseString());         // 保存到SP
                 if (!response.isCache()) {
                     MsgMgr.getInstance().sendMsg(MsgType.MT_MyInfo_Change, null);
                 }
@@ -289,7 +293,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 
             Map<String, Object> postParams = new HashMap<>();
             postParams.put("uid", uid);
-            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+            postParams.put("code", EncryptUtil.md5(uid + EncryptUtil.md5(password)));
 
             ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadAvatar, postParams, fileParams, new RequestComplete() {
                 @Override
@@ -302,7 +306,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 
         } else {
             LoadingDialog.closeLoadingDialog();
-            MMToast.showShort("图片地址无效");
+            PToast.showShort("图片地址无效");
         }
     }
 
@@ -319,13 +323,13 @@ public class CenterMgr implements ModuleBase, PObserver {
 
             Map<String, Object> postParams = new HashMap<>();
             postParams.put("uid", uid);
-            postParams.put("code", MD5.encode(uid + MD5.encode(password)));
+            postParams.put("code", EncryptUtil.md5(uid + EncryptUtil.md5(password)));
 
             ModuleMgr.getHttpMgr().uploadFile(UrlParam.uploadPhoto, postParams, fileParams, complete);
 
         } else {
             LoadingDialog.closeLoadingDialog();
-            MMToast.showShort("图片地址无效");
+            PToast.showShort("图片地址无效");
         }
     }
 
@@ -339,51 +343,16 @@ public class CenterMgr implements ModuleBase, PObserver {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.deletePhoto, getParams, complete);
     }
 
-    /**
-     * 获取用户Y币情况: 个人资料里可直接拿用户Y币金额
-     */
-    public void reqYCoinInfo(final RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", App.uid);
-
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqYCoinInfo, getParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (complete != null) complete.onRequestComplete(response);
-                YCoin yCoin = new YCoin();
-                getMyInfo().setYCoinInfo(yCoin);
-
-            }
-        });
-    }
-
-    /**
-     * 获取用户红包总额
-     */
-    public void reqRedbagSum(final RequestComplete complete) {
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("uid", App.uid);
-
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRedbagSum, postParams, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (complete != null) complete.onRequestComplete(response);
-            }
-        });
-    }
-
-
     // ------------------------- 他人 ----------------------
 
     /**
      * 获取他人用户详细信息
      */
     public void reqOtherInfo(final long uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", uid);
-        getParams.put("ver", Constant.SUB_VERSION);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("hisuid", uid);
 
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOtherInfo, getParams, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOtherInfo, postParams, complete);
     }
 
     /**
@@ -441,14 +410,12 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
 
     /**
-     * 获取他人备注名
-     *
-     * @param toUid 对方UID
+     * 用户是否处于黑名单
      */
-    public void reqGetRemarkName(long toUid, RequestComplete complete) {
-        HashMap<String, Object> post_param = new HashMap<>();
-        post_param.put("hisuid", toUid);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqGetRemarkName, post_param, complete);
+    public void reqIsBlack(long uid, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqIsBlack, postParams, complete);
     }
 
     /**
@@ -467,15 +434,6 @@ public class CenterMgr implements ModuleBase, PObserver {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("tuid", uid);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRemoveBlack, postParams, complete);
-    }
-
-    /**
-     * 私密视频： 视频列表
-     */
-    public void reqGetVideoList(long uid, RequestComplete complete) {
-        Map<String, Object> getParams = new HashMap<>();
-        getParams.put("uid", uid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqGetVideoList, getParams, complete);
     }
 
     /**
@@ -542,6 +500,86 @@ public class CenterMgr implements ModuleBase, PObserver {
     public boolean isRobot(int kf_id) {
         return kf_id != 0;
     }
+
+    /**
+     * 是否是包月vip用户
+     *
+     * @param group 1 普通用户  2,3包月用户
+     * @return true 是vip
+     */
+    public boolean isVip(int group) {
+        return group == 2 || group == 3;
+    }
+
+    /**
+     * 是否可以打招呼
+     * 头像未审核通过不准打招呼
+     *
+     * @param context
+     * @return true可以打招呼 false不可以打招呼
+     */
+    public boolean isCanSayHi(Context context) {
+        if (getMyInfo().getAvatar_status() == 2) {
+            PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * 是否可以进行群打招呼
+     *
+     * @param context
+     * @return
+     */
+    public boolean isCanGroupSayHi(Context context) {
+        //头像状态是否是未通过审核状态
+        if (getMyInfo().getAvatar_status() == 2) {
+            PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
+            return false;
+        }
+        PLogger.d("isCanGroupSayHi------ key = " + getGroupSayHiDayKey() + " bool = " + ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey()));
+        //判断是否达到第二天
+        if (ModuleMgr.getCommonMgr().checkDate(getGroupSayHiDayKey())) {
+            //判断群打招呼次数
+            int num = PSP.getInstance().getInt(getGroupSayHiNumKey(), 0);
+            PLogger.d("isCanGroupSayHi ----- num == " + num);
+            if (num > 2) { //如果达到第三次重置 是否达到第二天的状态 并清除打招呼次数
+                ModuleMgr.getCommonMgr().saveDateState(getGroupSayHiDayKey());
+                PSP.getInstance().put(getGroupSayHiNumKey(), 0);
+                PToast.showShort(context.getString(R.string.say_hi_group_num_state));
+                return false;
+            } else { //如果没有达到第三次 则更新群打招呼次数
+                PSP.getInstance().put(getGroupSayHiNumKey(), num + 1);
+                return true;
+            }
+        } else { //群打招呼用完了 第二天的状态已经被重置 直接返回false
+            PToast.showShort(context.getString(R.string.say_hi_group_num_state));
+            return false;
+        }
+    }
+
+    /**
+     * 群打招呼是否达到第二天状态key
+     *
+     * @return
+     */
+    public String getGroupSayHiDayKey() {
+        return "GroupSayHiDayKey" + getMyInfo().getUid();
+    }
+
+    /**
+     * 群打招呼次数key
+     *
+     * @return
+     */
+    private String getGroupSayHiNumKey() {
+        return "GroupSayHiNumKey" + getMyInfo().getUid();
+    }
+
+
 
     /*设置信息*/
 

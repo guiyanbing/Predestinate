@@ -111,6 +111,26 @@ public class MsgType {
      */
     public static final String MT_User_List_Msg_Change = "MT_User_List_Msg_Change";
 
+    /**
+     * 能否聊天
+     */
+    public static final String MT_Chat_Can = "MT_Chat_Can";
+
+    /**
+     * 数据库初始化完成
+     */
+    public static final String MT_DB_Init_Ok = "MT_DB_Init_Ok";
+
+    /**
+     * 添加自定义表情
+     */
+    public static final String MT_ADD_CUSTOM_SMILE = "MT_ADD_CUSTOM_SMILE";
+
+    /**
+     * 礼物按钮发送礼物是否成功
+     */
+    public static final String MT_SEND_GIFT_FLAG = "MT_SEND_GIFT_FLAG";
+
     // -----------------------------socket相关 start---------------------------------
 
     /**
@@ -134,5 +154,11 @@ public class MsgType {
      * 一键打招呼完成后回调用
      */
     public static final String MT_Say_Hello_Notice = "MT_Say_Hello_Notice";
+
+    /**
+     * 好友条数通知
+     */
+    public static final String MT_Friend_Num_Notice = "MT_Friend_Num_Notice";
+
 
 }

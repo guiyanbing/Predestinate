@@ -11,6 +11,7 @@ import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.request.HTCallBack;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -36,6 +39,8 @@ import retrofit2.Response;
  * Created by ZRP on 2016/12/29.
  */
 public class HttpMgrImpl implements HttpMgr {
+
+    private Lock lock = new ReentrantLock();
 
     @Override
     public void init() {
@@ -65,7 +70,7 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack reqPostNoCacheNoEncHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
-        return reqPostHttp(urlParam, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, true, requestCallback);
+        return reqPostHttp(urlParam, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
     }
 
     @Override
@@ -96,6 +101,30 @@ public class HttpMgrImpl implements HttpMgr {
     @Override
     public HTCallBack uploadFile(UrlParam urlParam, Map<String, Object> post_param, Map<String, File> file_param, RequestComplete requestCallback) {
         return reqHttp(urlParam, null, file_param, null, post_param, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
+    }
+
+    @Override
+    public HTCallBack downloadVideo(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".mp4";
+        return download(url, filePath, downloadListener);
+    }
+
+    @Override
+    public HTCallBack downloadPic(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".jpg";
+        return download(url, filePath, downloadListener);
+    }
+
+    @Override
+    public HTCallBack downloadVoice(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".wav";
+        return download(url, filePath, downloadListener);
+    }
+
+    @Override
+    public HTCallBack downloadApk(String url, DownloadListener downloadListener) {
+        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".apk";
+        return download(url, filePath, downloadListener);
     }
 
     @Override
@@ -221,6 +250,9 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
+
+        lock.lock();
+
         final UrlParam urlParam = requestParam.getUrlParam();
         final Map<String, String> headerMap = requestParam.getHead_param();
         final Map<String, Object> get_param = requestParam.getGet_param();
@@ -279,7 +311,8 @@ public class HttpMgrImpl implements HttpMgr {
         final String finalCacheUrl = cacheUrl;
         Call<ResponseBody> httpResultCall = RequestHelper.getInstance().reqHttpCallUrl(
                 requestHeaderMap, urlParam.getFinalUrl(), get_param, post_param, file_param, isEncrypt, isJsonRequest);
-        httpResultCall.enqueue(new Callback<ResponseBody>() {
+
+        Callback<ResponseBody> rb = new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // Headers与Raw双重保证Cookie的成功获取
@@ -320,7 +353,8 @@ public class HttpMgrImpl implements HttpMgr {
                         result.setServerResponse();
                         result.setError();//设置失败
                         result.setCache(false);
-                        if (requestCallback != null) requestCallback.onRequestComplete(result);
+                        if (requestCallback != null)
+                            requestCallback.onRequestComplete(result);
                         return;
                     }
                 }
@@ -348,8 +382,12 @@ public class HttpMgrImpl implements HttpMgr {
                 result.setCache(false);
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
+        };
 
-        });
+
+        httpResultCall.enqueue(rb);
+        lock.unlock();
+
         return new HTCallBack(httpResultCall);
     }
 }

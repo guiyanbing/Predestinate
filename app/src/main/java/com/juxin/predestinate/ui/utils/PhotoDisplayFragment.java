@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.juxin.library.image.ImageLoader;
-import com.juxin.mumu.bean.utils.FileUtil;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;

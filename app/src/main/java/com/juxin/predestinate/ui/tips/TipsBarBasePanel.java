@@ -5,7 +5,7 @@ import android.content.Context;
 import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.module.logic.tips.TipsBarMgr;
 import com.juxin.predestinate.module.logic.tips.TipsBarType;
 
@@ -19,22 +19,23 @@ import java.util.Map;
  * Created by Kind on 2016/11/16.
  */
 
-public abstract class TipsBarBasePanel extends BaseViewPanel {
+public abstract class TipsBarBasePanel extends BasePanel {
 
     private JSONObject jsonObject;
 
     /**
      * 初始化
      */
-    public void init(Context context, JSONObject jsonObject) {
-        this.context = context;
+    public void init(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
     }
 
-    public TipsBarBasePanel() {}
+    public TipsBarBasePanel(Context context) {
+        super(context);
+    }
 
     public JSONObject getJsonObject() {
-        if(jsonObject == null){
+        if (jsonObject == null) {
             jsonObject = new JSONObject();
         }
         return jsonObject;
@@ -46,8 +47,9 @@ public abstract class TipsBarBasePanel extends BaseViewPanel {
 
     /**
      * 发送消息
-     * @param tipsMgrTag 返回类型
-     * @param tipsMgrType 返回提示条的类型
+     *
+     * @param tipsMgrTag    返回类型
+     * @param tipsMgrType   返回提示条的类型
      * @param tipsMgrIsShow 是否显示
      */
     public void sendSuspensionNoticeMsg(String tipsMgrTag, TipsBarType tipsMgrType, String tipsMgrIsShow) {

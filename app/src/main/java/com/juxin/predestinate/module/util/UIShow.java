@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.util;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,16 +12,15 @@ import android.text.TextUtils;
 import android.view.WindowManager;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.center.user.others.UserProfile;
 import com.juxin.predestinate.bean.config.CommonConfig;
-import com.juxin.predestinate.bean.recommend.TagInfoList;
+import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.App;
@@ -31,6 +31,7 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.Hosts;
+import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.notify.view.LockScreenActivity;
 import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -40,34 +41,40 @@ import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.discover.MyDefriendAct;
 import com.juxin.predestinate.ui.discover.MyFriendsAct;
+import com.juxin.predestinate.ui.discover.SayHelloUserAct;
 import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
 import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.mail.popup.RandomRedBoxActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.pay.BasePayPannel;
 import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.pay.PayWebAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
 import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
+import com.juxin.predestinate.ui.pay.utils.PayAlipayUtils;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
+import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
+import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
+import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
-import com.juxin.predestinate.ui.recommend.RecommendAct;
-import com.juxin.predestinate.ui.recommend.RecommendFilterAct;
 import com.juxin.predestinate.ui.setting.AboutAct;
-import com.juxin.predestinate.ui.setting.FeedBackAct;
 import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.start.FindPwdAct;
 import com.juxin.predestinate.ui.start.NavUserAct;
-import com.juxin.predestinate.ui.start.PhoneVerifyAct;
-import com.juxin.predestinate.ui.start.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.start.UserLoginExtAct;
 import com.juxin.predestinate.ui.start.UserRegInfoAct;
 import com.juxin.predestinate.ui.start.UserRegInfoCompleteAct;
+import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationAct;
+import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationSucceedAct;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationVideoAct;
+import com.juxin.predestinate.ui.user.auth.PhoneVerifyAct;
+import com.juxin.predestinate.ui.user.auth.PhoneVerifyCompleteAct;
 import com.juxin.predestinate.ui.user.auth.RecordVideoAct;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 import com.juxin.predestinate.ui.user.check.edit.EditContentAct;
@@ -81,7 +88,6 @@ import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerDlg;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
-import com.juxin.predestinate.ui.user.check.self.info.UserInfoAct;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
@@ -89,7 +95,6 @@ import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
 import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
-import com.juxin.predestinate.ui.user.my.NearVisitorAct;
 import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
 import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
@@ -108,6 +113,7 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.PhotoDisplayAct;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -116,6 +122,12 @@ import java.util.Map;
  * Created by ZRP on 2016/12/9.
  */
 public class UIShow {
+
+    // ----------------------------activity跳转码------------------------------
+
+    public static final int FROM_RANDOM_RED_BOX = 1000;//聊天随机红包activity result code
+
+    // ---------------------------应用内弹出及跳转------------------------------
 
     public static void show(Context context, Intent intent) {
         context.startActivity(intent);
@@ -232,9 +244,12 @@ public class UIShow {
 
     /**
      * 打开资料完善页
+     *
+     * @param gender 性别
      */
-    public static void showUserInfoCompleteAct(Context activity) {
+    public static void showUserInfoCompleteAct(Context activity, int gender) {
         Intent intent = new Intent(activity, UserRegInfoCompleteAct.class);
+        intent.putExtra("gender", gender);
         activity.startActivity(intent);
     }
 
@@ -248,15 +263,6 @@ public class UIShow {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
         intent.putExtra("isVerify", isVerify);
         activity.startActivityForResult(intent, requestCode);
-    }
-
-    /**
-     * 打开意见反馈页面
-     *
-     * @param activity
-     */
-    public static void showFeedBackAct(FragmentActivity activity) {
-        activity.startActivity(new Intent(activity, FeedBackAct.class));
     }
 
     /**
@@ -299,41 +305,6 @@ public class UIShow {
     }
 
     /**
-     * 打开推荐的人页面
-     */
-    public static void showRecommendAct(FragmentActivity activity) {
-        Intent intent = new Intent(activity, RecommendAct.class);
-        activity.startActivity(intent);
-    }
-
-    /**
-     * 打开推荐的人筛选页面
-     */
-    public static void showRecommendFilterAct(final FragmentActivity activity) {
-        LoadingDialog.show(activity, activity.getResources().getString(R.string.tip_is_loading));
-        ModuleMgr.getCommonMgr().sysTags(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                LoadingDialog.closeLoadingDialog();
-                if (response.isOk()) {
-                    Intent intent = new Intent(activity, RecommendFilterAct.class);
-                    intent.putExtra("tags", (TagInfoList) response.getBaseData());
-                    activity.startActivityForResult(intent, 100);
-                } else {
-                    PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
-                }
-            }
-        });
-    }
-
-    /**
-     * 打开个人信息页
-     */
-    public static void showUserInfoAct(Context context) {
-        context.startActivity(new Intent(context, UserInfoAct.class));
-    }
-
-    /**
      * 打开个人信息页
      */
     public static void showUserPhotoAct(Context context) {
@@ -350,23 +321,30 @@ public class UIShow {
     /**
      * 打开TA人资料查看页
      */
-    public static void showCheckOtherInfoAct(final Context context, UserProfile userProfile) {
-        showCheckOtherInfoAct(context, userProfile.getUid(), userProfile);
+    public static void showCheckOtherInfoAct(final Context context, UserDetail userProfile) {
+        showCheckOtherInfoAct(context, userProfile.getUid(), CenterConstant.USER_CHECK_INFO_OTHER, userProfile);
     }
 
     /**
      * 打开TA人资料查看页
      */
     public static void showCheckOtherInfoAct(final Context context, long uid) {
-        showCheckOtherInfoAct(context, uid, null);
+        showCheckOtherInfoAct(context, uid, CenterConstant.USER_CHECK_INFO_OTHER, null);
+    }
+
+    /**
+     * 打开TA人资料查看页: 查看联系方式
+     */
+    public static void showCheckOtherContactAct(final Context context, long uid) {
+        showCheckOtherInfoAct(context, uid, CenterConstant.USER_CHECK_CONNECT_OTHER, null);
     }
 
     /**
      * 打开TA人资料查看页
      */
-    private static void showCheckOtherInfoAct(final Context context, long uid, UserProfile userProfile) {
+    private static void showCheckOtherInfoAct(final Context context, long uid, final int channel, UserDetail userProfile) {
         if (userProfile != null) {
-            skipCheckOtherInfoAct(context, userProfile);
+            skipCheckOtherInfoAct(context, channel, userProfile);
             return;
         }
 
@@ -377,25 +355,31 @@ public class UIShow {
                 LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        UserProfile userProfile = new UserProfile();
-                        userProfile.parseJson(response.getResponseString());
-
-                        if ("error".equals(userProfile.getResult())) {
+                        if (!response.isOk()) {
                             PToast.showShort(context.getString(R.string.request_error));
                             return;
                         }
+
+                        UserDetail userProfile = (UserDetail) response.getBaseData();
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
-                        skipCheckOtherInfoAct(context, userProfile);
+                        skipCheckOtherInfoAct(context, channel, userProfile);
                     }
                 });
             }
         });
     }
 
-    private static void skipCheckOtherInfoAct(Context context, UserProfile userProfile) {
+    private static void skipCheckOtherInfoAct(Context context, int channel, UserDetail userProfile) {
+        if (userProfile == null) return;
+
+        if (!userProfile.isUserNormal()) {
+            showUserBlockAct(context);
+            return;
+        }
+
         Intent intent = new Intent(context, UserCheckInfoAct.class);
-        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
+        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, channel);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
         context.startActivity(intent);
     }
@@ -436,12 +420,9 @@ public class UIShow {
      *
      * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context, UserProfile userProfile) {
+    public static void showUserSecretAct(Context context, int channel, UserDetail userProfile) {
         Intent intent = new Intent(context, UserSecretAct.class);
-        if (userProfile != null) {
-            intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OTHER);
-        }
-
+        intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, channel);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
         context.startActivity(intent);
     }
@@ -452,39 +433,39 @@ public class UIShow {
      * @param uid     他人用户id，无详细资料UserProfile对象时，传递uid, UserProfile传递null
      * @param channel 跳转来源渠道{@link CenterConstant}
      */
-    public static void showUserOtherSetAct(final Context context, long uid, UserProfile userProfile, final int channel) {
-        final Intent intent = new Intent(context, UserOtherSetAct.class);
-
-        if (userProfile != null) {
-            intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-            intent.putExtra(CenterConstant.USER_SET_KEY, channel);
-            context.startActivity(intent);
+    public static void showUserOtherSetAct(final FragmentActivity context, long uid, UserDetail userDetail, final int channel) {
+        if (userDetail != null) {
+            skipUserOtherSetAct(context, userDetail, channel);
             return;
         }
 
-        LoadingDialog.show((FragmentActivity) context, context.getString(R.string.user_info_require));
+        LoadingDialog.show(context, context.getString(R.string.user_info_require));
         ModuleMgr.getCenterMgr().reqOtherInfo(uid, new RequestComplete() {
             @Override
             public void onRequestComplete(final HttpResponse response) {
                 LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        UserProfile userProfile = new UserProfile();
-                        userProfile.parseJson(response.getResponseString());
-
-                        if ("error".equals(userProfile.getResult())) {
+                        if (!response.isOk()) {
                             PToast.showShort(context.getString(R.string.request_error));
                             return;
                         }
+
+                        UserDetail userProfile = (UserDetail) response.getBaseData();
                         //更新缓存
                         AttentionUtil.updateUserDetails(response.getResponseString());
-                        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-                        intent.putExtra(CenterConstant.USER_SET_KEY, channel);
-                        context.startActivity(intent);
+                        skipUserOtherSetAct(context, userProfile, channel);
                     }
                 });
             }
         });
+    }
+
+    private static void skipUserOtherSetAct(FragmentActivity context, UserDetail userDetail, int channel) {
+        Intent intent = new Intent(context, UserOtherSetAct.class);
+        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userDetail);
+        intent.putExtra(CenterConstant.USER_SET_KEY, channel);
+        context.startActivityForResult(intent, CenterConstant.USER_SET_REQUEST_CODE);
     }
 
     /**
@@ -507,7 +488,7 @@ public class UIShow {
      */
     private static void showPhotoDisplayAct(FragmentActivity activity, Serializable list, int position, int type) {
         if (list == null || ((List<String>) list).size() == 0) {
-            MMToast.showShort("没有图片数据");
+            PToast.showShort("没有图片数据");
             return;
         }
         Intent intent = new Intent(activity, PhotoDisplayAct.class);
@@ -541,12 +522,11 @@ public class UIShow {
 
     /**
      * 查看大图界面 url
-     *
-     * @param activity
-     * @param list
      */
-    public static void showPhotoOfBigImg(FragmentActivity activity, Serializable list) {
-        showPhotoDisplayAct(activity, list, 0, PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG);
+    public static void showPhotoOfBigImg(FragmentActivity activity, String url) {
+        ArrayList<String> pics = new ArrayList<>();
+        pics.add(url);
+        showPhotoDisplayAct(activity, pics, 0, PhotoDisplayAct.DISPLAY_TYPE_BIG_IMG);
     }
 
     // -----------------------消息提示跳转 start--------------------------
@@ -590,36 +570,51 @@ public class UIShow {
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
         if (appUpdate == null) return;
-        if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                && ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {//相同包名
+
+        // 直接返回服务器没有返回包名的情况
+        if (TextUtils.isEmpty(appUpdate.getPackage_name())) {
+            if (isShowTip)
+                PToast.showShort(App.getResource().getString(R.string.update_server_error));
+            return;
+        }
+
+        // 相同包名
+        if (ModuleMgr.getAppMgr().getPackageName().equals(appUpdate.getPackage_name())) {
             if (appUpdate.getVersion() > ModuleMgr.getAppMgr().getVerCode()) {
                 createUpdateDialog(activity, appUpdate);
             } else {
-                if (isShowTip) PToast.showShort("您当前的版本为最新的");
+                if (isShowTip)
+                    PToast.showShort(App.getResource().getString(R.string.update_already_new));
             }
-        } else {//不同包名
-            if (!TextUtils.isEmpty(appUpdate.getPackage_name())
-                    && APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
-                // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
-                PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
-                    @Override
-                    public void onCancel() {
-                    }
+            return;
+        }
 
-                    @Override
-                    public void onSubmit() {
-                        if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                            activity.moveTaskToBack(activity.isTaskRoot());
+        // 不同包名
+        if (APKUtil.isAppInstalled(App.context, appUpdate.getPackage_name())) {
+            // 如果本地已安装该包名的包，弹窗跳转到已安装的软件并退出当前软件，在新软件中处理升级逻辑
+            PickerDialogUtil.showTipDialogCancelBack(activity, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
                         }
-                    }
-                }, "检测到新版已安装，请点击跳转", "提示", "", "确定", false, false);
-            } else {
-                if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
-                    createUpdateDialog(activity, appUpdate);
-                } else {
-                    if (isShowTip) PToast.showShort("您当前的版本为最新的");
-                }
-            }
+
+                        @Override
+                        public void onSubmit() {
+                            if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
+                                activity.moveTaskToBack(activity.isTaskRoot());
+                            }
+                        }
+                    }, App.getResource().getString(R.string.update_has_install),
+                    App.getResource().getString(R.string.tip), "",
+                    App.getResource().getString(R.string.ok),
+                    false, false);
+            return;
+        }
+
+        if (appUpdate.getVersion() > 0) {//防止服务器没有返回升级结构的情况
+            createUpdateDialog(activity, appUpdate);
+        } else {
+            if (isShowTip)
+                PToast.showShort(App.getResource().getString(R.string.update_already_new));
         }
     }
 
@@ -690,6 +685,17 @@ public class UIShow {
     }
 
     /**
+     * 弹出聊天随机红包弹窗
+     *
+     * @param msg 红包消息mct字段，若无，传null或空字符串即可
+     */
+    public static void showChatRedBoxDialog(Activity context, String msg) {
+        Intent intent = new Intent(context, RandomRedBoxActivity.class);
+        intent.putExtra("msg", msg);
+        context.startActivityForResult(intent, FROM_RANDOM_RED_BOX);
+    }
+
+    /**
      * 通过配置调起的web-dialog弹框
      *
      * @param activity FragmentActivity实例
@@ -707,7 +713,7 @@ public class UIShow {
      *
      * @param activity
      */
-    public static void showPayListAct(final FragmentActivity activity, int orderID) {
+    public static void showPayListAct(final FragmentActivity activity, final int orderID) {
         LoadingDialog.show(activity, "生成订单中");
         ModuleMgr.getCommonMgr().reqGenerateOrders(orderID, new RequestComplete() {
             @Override
@@ -718,6 +724,7 @@ public class UIShow {
                     public void call() {
                         PayGood payGood = new PayGood(response.getResponseString());
                         if (payGood.isOK()) {
+                            payGood.setPay_id(orderID);
                             Intent intent = new Intent(activity, PayListAct.class);
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
@@ -726,6 +733,54 @@ public class UIShow {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 选择支付
+     *
+     * @param activity
+     * @param commodity_Id 订单
+     * @param payType      类型
+     */
+    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final int payType) {
+        LoadingDialog.show(activity, "生成订单中");
+        ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("Re===" + response.getResponseString());
+                PayGood payGood = new PayGood(response.getResponseString());
+                if (!payGood.isOK()) {
+                    LoadingDialog.closeLoadingDialog();
+                    PToast.showShort("支付出错，请重试！");
+                    return;
+                }
+
+                if (payType == GoodsConstant.PAY_TYPE_WECHAT) {//微信支付
+                    LoadingDialog.closeLoadingDialog();
+                    new PayWeixinUtils(activity).onPayment(payGood);
+                    return;
+                }
+                //支付宝支付
+                ModuleMgr.getCommonMgr().reqCUPOrAlipayMethod(UrlParam.reqAlipay, BasePayPannel.getOutTradeNo(), payGood.getPay_name(),
+                        payGood.getPay_id(), payGood.getPay_money(), new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(final HttpResponse response) {
+                                LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PayWX payWX = new PayWX(response.getResponseString());
+                                        if (!payWX.isOK()) {
+                                            PToast.showShort("支付出错，请重试！");
+                                            return;
+                                        }
+                                        new PayAlipayUtils(activity).pay(payWX.getCupPayType(), payWX.getParam());
+                                    }
+                                });
+
+                            }
+                        });
             }
         });
     }
@@ -787,7 +842,7 @@ public class UIShow {
     public static void showQQService(Context context) {
         try {
             String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
-                    PSP.getInstance().getString(FinalKey.CONFIG_SERVICE_QQ, "2931837672");
+                    ModuleMgr.getCommonMgr().getCommonConfig().getService_qq();
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             if (intent.resolveActivity(context.getPackageManager()) != null) {
@@ -846,15 +901,6 @@ public class UIShow {
      */
     public static void showMyDiamondsAct(Context context) {
         context.startActivity(new Intent(context, MyDiamondsAct.class));
-    }
-
-    /**
-     * 打开最近来访页面
-     *
-     * @param context
-     */
-    public static void showNearVisitorAct(Context context) {
-        context.startActivity(new Intent(context, NearVisitorAct.class));
     }
 
     /**
@@ -927,6 +973,7 @@ public class UIShow {
         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
             dialog = new BottomGiftDialog();
             dialog.setToId(to_id);
+            dialog.setCtx(context);
             dialog.showDialog((FragmentActivity) context);
         } else {
             LoadingDialog.show((FragmentActivity) context);
@@ -980,12 +1027,26 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showWithDrawApplyAct(int id, double money, boolean fromEdit, Context context) {
-        Intent intent = new Intent(context, WithDrawApplyAct.class);
-        intent.putExtra("id", id);
-        intent.putExtra("money", money);
-        intent.putExtra("fromEdit", fromEdit);
-        context.startActivity(intent);
+    public static void showWithDrawApplyAct(final int id, final double money, final boolean fromEdit, final FragmentActivity context) {
+        LoadingDialog.show(context, context.getString(R.string.xlistview_header_hint_loading));
+        ModuleMgr.getCommonMgr().reqWithdrawAddress(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk()) {
+                    WithdrawAddressInfo info = new WithdrawAddressInfo();
+                    info.parseJson(response.getResponseString());
+                    Intent intent = new Intent(context, WithDrawApplyAct.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("money", money);
+                    intent.putExtra("fromEdit", fromEdit);
+                    intent.putExtra("info", info);
+                    context.startActivity(intent);
+                } else {
+                    PToast.showShort(context.getString(R.string.net_error_retry));
+                }
+            }
+        });
     }
 
     /**
@@ -1013,6 +1074,24 @@ public class UIShow {
      */
     public static void showRedBoxPhoneVerifyAct(Context context) {
         context.startActivity(new Intent(context, RedBoxPhoneVerifyAct.class));
+    }
+
+    /**
+     * 打开身份证认证页面
+     *
+     * @param context
+     */
+    public static void showIDCardAuthenticationAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+    }
+
+    /**
+     * 打开身份证认证成功页面
+     *
+     * @param context
+     */
+    public static void showIDCardAuthenticationSucceedAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, IDCardAuthenticationSucceedAct.class), requestCode);
     }
     // -----------------------我的提示跳转 end----------------------------
 
@@ -1077,6 +1156,17 @@ public class UIShow {
     }
 
     /**
+     * 打开上传头像界面 完成后跳转到主页
+     *
+     * @param context
+     */
+    public static void showRegHeadUploadActToMain(Context context) {
+        Intent intent = new Intent(context, UserRegHeadUploadAct.class);
+        intent.putExtra("type", 0);
+        context.startActivity(intent);
+    }
+
+    /**
      * 打开头像更新界面
      *
      * @param context
@@ -1087,15 +1177,54 @@ public class UIShow {
     }
 
 
+    /**
+     * 打开头像更新界面 完成后跳转到主页
+     *
+     * @param context
+     */
+    public static void showNoHeadUploadActToMain(Context context) {
+        Intent intent = new Intent(context, UserNoHeadUploadAct.class);
+        intent.putExtra("type", 0);
+        context.startActivity(intent);
+    }
+
+
+    /**
+     * 打开打招呼的人界面
+     *
+     * @param context
+     */
+    public static void showSayHelloUserAct(Context context) {
+        Intent intent = new Intent(context, SayHelloUserAct.class);
+        context.startActivity(intent);
+    }
+
+
     //============================发现 end =============================\\
 
     // -----------------------各种充值弹框跳转 start----------------------------
 
     /**
-     * 钻石充值弹框
+     * 普通送礼钻石充值弹框
      */
     public static void showGoodsDiamondDialog(Context context) {
-        context.startActivity(new Intent(context, GoodsDiamondDialog.class));
+        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
+    }
+
+    /**
+     * 送礼钻石充值弹框
+     *
+     * @param needDiamond 所需钻石差值
+     */
+    public static void showGoodsDiamondDialog(Context context, int needDiamond) {
+        showGoodsDiamondDialog(context, needDiamond, GoodsConstant.DLG_DIAMOND_GIFT_SHORT);
+    }
+
+    private static void showGoodsDiamondDialog(Context context, int needDiamond, int type) {
+        Intent intent = new Intent(context, GoodsDiamondDialog.class);
+        intent.putExtra(GoodsConstant.DLG_TYPE_KEY, type);
+        intent.putExtra(GoodsConstant.DLG_GIFT_NEED, needDiamond);
+        context.startActivity(intent);
     }
 
     /**
@@ -1154,9 +1283,9 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context, UserProfile userProfile) {
+    public static void showSecretGiftDlg(Context context, UserVideo userVideo) {
         Intent intent = new Intent(context, SecretGiftDlg.class);
-        intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
+        intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
         context.startActivity(intent);
     }
 
@@ -1171,8 +1300,10 @@ public class UIShow {
     /**
      * 查看视频：视频播放页
      */
-    public static void showSecretVideoPlayerDlg(FragmentActivity context) {
-        context.startActivity(new Intent(context, SecretVideoPlayerDlg.class));
+    public static void showSecretVideoPlayerDlg(FragmentActivity context, UserVideo userVideo) {
+        Intent intent = new Intent(context, SecretVideoPlayerDlg.class);
+        intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
+        context.startActivity(intent);
     }
 
     /**
@@ -1205,18 +1336,54 @@ public class UIShow {
 
     /**
      * 打开重置密码
+     *
      * @param context
      */
-    public static void showFindPwdAct(FragmentActivity context){
+    public static void showFindPwdAct(FragmentActivity context) {
         context.startActivity(new Intent(context, FindPwdAct.class));
     }
 
     /**
      * 打开手机认证完成页面
+     *
      * @param context
      * @param requestCode
      */
-    public static void showPhoneVerifyCompleteAct(FragmentActivity context,int requestCode){
-        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class),requestCode);
+    public static void showPhoneVerifyCompleteAct(FragmentActivity context, int requestCode) {
+        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
     }
+
+    /**
+     * 显示微信二维码支付
+     *
+     * @param context
+     * @param QRUrl   二维码URL
+     */
+
+    public static void showWxpayForQRCode(Context context, String QRUrl, int time, int money, String uri) {
+        Intent intent = new Intent(context, WepayQRCodeAct.class);
+        intent.putExtra("qrurl", QRUrl);
+        intent.putExtra("time", time);
+        intent.putExtra("money", money);
+        intent.putExtra("uri", uri);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示打开微信对话框
+     *
+     * @param context
+     */
+    public static void showWxpayOpenWx(Context context, String UIR) {
+        Dialog dialog = new OpenWxDialog(context, UIR);
+        dialog.show();
+    }
+
+    public static void sendBroadcast(Context context, int vcTp, String vcChannelKey) {
+        Intent intent = new Intent("com.xiaochen.android.fate_it.va.event");
+        intent.putExtra("vcTp", vcTp);
+        intent.putExtra("vcChannelKey", vcChannelKey);
+        context.sendBroadcast(intent);
+    }
+
 }

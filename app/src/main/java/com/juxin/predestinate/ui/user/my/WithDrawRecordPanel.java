@@ -7,15 +7,15 @@ import android.widget.TextView;
 
 import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
+import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.WithdrawList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.BaseViewPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.WithDrawTabAdapter;
-import com.juxin.predestinate.bean.my.WithdrawList;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * 提现记录
  * Created by zm on 2017/4/25
  */
-public class WithDrawRecordPanel extends BaseViewPanel implements RequestComplete,XRecyclerView.LoadingListener{
+public class WithDrawRecordPanel extends BasePanel implements RequestComplete,XRecyclerView.LoadingListener{
 
     private Context mContext;
     //有关控件
@@ -89,6 +89,7 @@ public class WithDrawRecordPanel extends BaseViewPanel implements RequestComplet
             showNoData();
             return;
         }
+        showNoData();
         crvView.showXrecyclerView();
         PToast.showShort(mContext.getString(R.string.net_error_check_your_net));
     }

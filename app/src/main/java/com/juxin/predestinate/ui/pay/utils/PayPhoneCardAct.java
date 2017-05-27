@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.InputUtils;
-import com.juxin.mumu.bean.utils.MMToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -116,7 +116,7 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
                         PayWX payWX = new PayWX();
                         payWX.onPayPhoneCard(response.getResponseString());
                         if(!"1".equals(payWX.getResult())){
-                            MMToast.showShort("请求失败，请稍后再试");
+                            PToast.showShort("请求失败，请稍后再试");
                             LoadingDialog.closeLoadingDialog();
                             return;
                         }
@@ -141,7 +141,7 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
                 try {
                     if ("1".equals(payWX.getResult())) {
                         LoadingDialog.closeLoadingDialog();
-                        MMToast.showShort(payWX.getPayContent());
+                        PToast.showShort(payWX.getPayContent());
                         // 更新信息
                         MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                     } else if("error".equals(payWX.getResult()) && "订单没有同步，再重试".equals(payWX.getPayContent())){
@@ -152,14 +152,14 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
                         }else{
                             LoadingDialog.closeLoadingDialog();
                             if("订单没有同步，再重试".equals(payWX.getPayContent())){
-                                MMToast.showShort("支付出错，请联系客服");
+                                PToast.showShort("支付出错，请联系客服");
                             }else{
-                                MMToast.showShort(payWX.getPayContent());
+                                PToast.showShort(payWX.getPayContent());
                             }
                         }
                     }else{
                         LoadingDialog.closeLoadingDialog();
-                        MMToast.showShort(payWX.getPayContent());
+                        PToast.showShort(payWX.getPayContent());
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -180,7 +180,7 @@ public class PayPhoneCardAct extends BaseActivity implements View.OnClickListene
                 String pw = pay_phonecard_pw.getText().toString().trim();
 
                 if (TextUtils.isEmpty(sn) || TextUtils.isEmpty(pw)) {
-                    MMToast.showShort("您输入的卡或密码有问题，请重输");
+                    PToast.showShort("您输入的卡或密码有问题，请重输");
                     return;
                 }
 

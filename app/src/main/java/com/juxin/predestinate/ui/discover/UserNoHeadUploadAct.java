@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -22,6 +23,8 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.SDCardUtil;
+import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 
 /**
@@ -35,6 +38,8 @@ public class UserNoHeadUploadAct extends BaseActivity implements ImgSelectUtil.O
     private CircleImageView imgBtn_upload_head;
     private TextView txt_usernohead_info;
 
+    private int intentType = 0; // 0表示跳转到MainAct,1表示跳转到每日推荐页面,否则直接关闭当前页面
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class UserNoHeadUploadAct extends BaseActivity implements ImgSelectUtil.O
         initView();
         initData();
         initEvent();
+        initType();
     }
 
     private void initView() {
@@ -59,8 +65,12 @@ public class UserNoHeadUploadAct extends BaseActivity implements ImgSelectUtil.O
         if (!TextUtils.isEmpty(avatar)) {
             ImageLoader.loadCenterCrop(this, avatar, imgBtn_upload_head);
         }
-        txt_usernohead_info.setText(TextUtils.isEmpty(ModuleMgr.getCenterMgr().getMyInfo().getReasons()) ? getString(R.string.re_upload_avatar_def) :
-                ModuleMgr.getCenterMgr().getMyInfo().getReasons());
+        txt_usernohead_info.setText(getString(R.string.re_upload_avatar_def));
+    }
+
+    private void initType() {
+        PSP.getInstance().put("recommendDate", TimeUtil.getData());
+        intentType = getIntent().getIntExtra("type", 0);
     }
 
 
@@ -116,6 +126,9 @@ public class UserNoHeadUploadAct extends BaseActivity implements ImgSelectUtil.O
     }
 
     private void redirectToOtherAct() {
+        if (intentType == 0) {
+            UIShow.showMainClearTask(this);
+        }
         finish();
     }
 

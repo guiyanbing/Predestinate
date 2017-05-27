@@ -3,7 +3,8 @@ package com.juxin.predestinate.bean.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.juxin.predestinate.bean.db.cache.FProfile;
+import com.juxin.predestinate.bean.db.cache.FHttpCache;
+import com.juxin.predestinate.bean.db.cache.FProfileCache;
 
 /**
  * Created by Kind on 2017/3/21.
@@ -21,9 +22,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(FLetter.getCreateTable());
         db.execSQL(FMessage.getCreateTable());
-        db.execSQL(FProfile.getCreateTable());
+        db.execSQL(FProfileCache.getCreateTable());
         db.execSQL(FMark.getCreateTable());
         db.execSQL(FUnRead.getCreateTable());
+
+        db.execSQL(FProfileCache.getCreateTable());
+        db.execSQL(FHttpCache.getCreateTable());
     }
 
     @Override

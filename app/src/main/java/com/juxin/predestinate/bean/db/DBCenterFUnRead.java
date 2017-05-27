@@ -3,16 +3,18 @@ package com.juxin.predestinate.bean.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
-import com.juxin.mumu.bean.utils.ByteUtil;
+
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.bean.db.utils.DBConstant;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.HashMap;
 import java.util.Map;
 import rx.Observable;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * funread 处理
@@ -70,7 +72,7 @@ public class DBCenterFUnRead {
         }catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     /**
@@ -88,7 +90,7 @@ public class DBCenterFUnRead {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return DBConstant.ERROR;
+        return MessageConstant.ERROR;
     }
 
     /**
@@ -145,27 +147,23 @@ public class DBCenterFUnRead {
                 .append(FUnRead.COLUMN_KEY + " = ")
                 .append(key);
 
-
         return mDatabase.createQuery(FUnRead.FUNREAD_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, String>() {
             @Override
             public String call(SqlBrite.Query query) {
-                String str = null;
-                Cursor cursor = query.run();
-                if (null == cursor) {
-                    return str;
-                }
+                Cursor cursor = null;
                 try {
-                    while (cursor.moveToNext()) {
-                        str = CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT);
-                    }
+                    cursor = query.run();
+                    if (cursor == null || !cursor.moveToNext()) return null;
+
+                    return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     CloseUtil.close(cursor);
                 }
-                return str;
+                return null;
             }
-        });
+        }).unsubscribeOn(Schedulers.io());
     }
 
     /**
