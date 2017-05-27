@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/px30_dp">
+
+    <ImageView
+        android:id="@+id/chat_item_type_img"
+        android:layout_width="@dimen/px60_dp"
+        android:layout_height="@dimen/px60_dp"
+        android:src="@drawable/f1_chat_voice_left" />
 
     <TextView
         android:id="@+id/chat_item_video_text"
         style="@style/chat_item_text_content"
-        android:padding="@dimen/px25_dp"/>
+        android:layout_marginLeft="@dimen/px30_dp" />
 </LinearLayout>
