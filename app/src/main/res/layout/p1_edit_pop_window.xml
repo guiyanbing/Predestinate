@@ -20,7 +20,6 @@
             android:id="@+id/user_edit"
             android:layout_width="150dip"
             android:layout_height="26dip"
-            android:layout_alignTop="@+id/img_pop_pic"
             android:layout_toRightOf="@+id/img_pop_pic"
             android:background="@drawable/p1_edit_pop_bg"
             android:focusable="true"
