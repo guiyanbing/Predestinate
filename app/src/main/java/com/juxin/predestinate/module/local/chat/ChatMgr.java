@@ -850,18 +850,6 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    /**
-     *  没有缓存
-     * @param uid
-     * @param infoComplete
-     */
-    public void getNoCacheUserInfo(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-        synchronized (infoMap) {
-            infoMap.put(uid, infoComplete);
-            getProFile(uid);
-        }
-    }
-
     public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {
         List<Long> longs = new ArrayList<>();
         longs.add(userID);
