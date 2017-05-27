@@ -94,11 +94,20 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID);
     }
 
-
-
-
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
+    }
+
+    /**
+     * 本地模拟语音视频消息
+     * @param otherID
+     */
+    public void sendvideoMsglocalSimulation(String otherID) {
+        VideoMessage videoMessage = new VideoMessage(null, otherID);
+        videoMessage.setStatus(MessageConstant.OK_STATUS);
+        videoMessage.setDataSource(MessageConstant.FOUR);
+        videoMessage.setJsonStr(videoMessage.getJson(videoMessage));
+
     }
 
 

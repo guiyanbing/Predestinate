@@ -25,6 +25,7 @@ import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -92,6 +93,19 @@ public class VideoAudioChatHelper{
 //        AsyncTaskUtil.getInstance(context).setUrl(AppCfg.FATE_GO_GET_SELF_VA_CONFIG).setWhat(TASK_WHAT_GET_SELF_VA_CONFIG).setOnAsyncCallback(this).executeTask();
     }
 
+    private long sendUid = -1;
+
+    /**
+     * 重置发起方uid，每次收到音视频挂断消息时进行调用
+     */
+    public void resetSendUid(){
+        this.sendUid = -1;
+    }
+
+    public long getSendUid(){
+        return sendUid;
+    }
+
     /**
      * 邀请对方音频或视频聊天
      *
@@ -100,6 +114,8 @@ public class VideoAudioChatHelper{
      * @param type    {@link TYPE_VIDEO_CHAT,TYPE_AUDIO_CHAT}   1为视频，2为音频
      */
     public void inviteVAChat(final Activity context, long dstUid, int type) {
+        sendUid = App.uid;//存储发起方uid，即自己的uid
+
         lastOpt = OPT_INVITE;
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(context);

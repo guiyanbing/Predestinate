@@ -31,6 +31,11 @@ public class VideoMessage extends BaseMessage {
         super();
     }
 
+    public VideoMessage(String channelID, String whisperID) {
+        super(channelID, whisperID);
+        this.setType(BaseMessageType.video.getMsgType());
+    }
+
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
