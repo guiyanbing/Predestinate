@@ -260,58 +260,6 @@ public class DBCenterFMessage {
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
     }
 
-    public boolean updateToReadVoice(String channelID, String userID, String sendID) {
-//        try {
-//            String sql;
-//            String[] str;
-//            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
-//                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ? " + FMessage.COLUMN_TYPE + " = ?";
-//                str = new String[]{channelID, userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
-//            } else if (!TextUtils.isEmpty(channelID)) {
-//                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-//                str = new String[]{channelID, String.valueOf(MessageConstant.UNREAD_STATUS)};
-//            } else {
-//                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-//                str = new String[]{userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
-//            }
-//
-//            ContentValues values = new ContentValues();
-//            values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-//            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return MessageConstant.ERROR;
-//
-//
-//        Cursor cursor = null;
-//        try {
-//            String sql;
-//            String[] str;
-//            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {
-//                sql = "channelID = ? and whisperID = ? and sendId = ? and status != ? and type != ?";
-//                str = new String[]{channelID, whisperID, sendID, String.valueOf(ChatMgr.LOCAL_READ_STATUS), String.valueOf(VOICE)};
-//            } else if (!TextUtils.isEmpty(channelID)) {
-//                sql = "channelID = ? and sendId = ? and status != ? and type != ?";
-//                str = new String[]{channelID, sendID, String.valueOf(ChatMgr.LOCAL_READ_STATUS), String.valueOf(VOICE)};
-//            } else {
-//                sql = "whisperID = ? and sendId = ? and status != ? and type != ?";
-//                str = new String[]{whisperID, sendID, String.valueOf(ChatMgr.LOCAL_READ_STATUS), String.valueOf(VOICE)};
-//            }
-//            cursor = mSQLiteDatabase.query(FMESSAGE_TABLE, null, sql, str, null, null, _ID + " desc", null);
-//            return cursor.getCount() > 0;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        } finally {
-//            if (cursor != null)
-//                cursor.close();
-//        }
-
-        return true;
-    }
-
-
     public Observable<BaseMessage> queryVideoMsg(int vcID) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
                 .append(" WHERE ")
@@ -348,7 +296,7 @@ public class DBCenterFMessage {
                         }
                         return null;
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     /**
@@ -394,7 +342,7 @@ public class DBCenterFMessage {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convert(query.run());
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

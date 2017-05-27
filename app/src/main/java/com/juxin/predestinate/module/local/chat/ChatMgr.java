@@ -552,7 +552,7 @@ public class ChatMgr implements ModuleBase {
                 SortList.sortListView(baseMessages);// 排序
                 onChatMsgHistory(channelID, whisperID, true, baseMessages);
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -571,7 +571,7 @@ public class ChatMgr implements ModuleBase {
                     SortList.sortListView(baseMessages);// 排序
                     onChatMsgRecently(channelID, whisperID, true, baseMessages);
                 }
-            });
+            }).unsubscribe();
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if(ret != MessageConstant.ERROR){
