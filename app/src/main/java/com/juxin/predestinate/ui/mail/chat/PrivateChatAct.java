@@ -218,7 +218,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         cus_top_title_img.setBackgroundResource(R.drawable.f1_top02);
                     }
                     if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
-                            (infoLightweight.isVideo_available() || infoLightweight.isVideo_available()))//女性用户显示可通话图标
+                            (infoLightweight.isVideo_available() || infoLightweight.isAudio_available()))//女性用户显示可通话图标
                         cus_top_img_phone.setVisibility(View.VISIBLE);
                     if (infoLightweight.isToper()) {//Top榜
                         cus_top_title_view.setVisibility(View.VISIBLE);
