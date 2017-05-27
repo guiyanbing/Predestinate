@@ -862,6 +862,33 @@ public class ChatMgr implements ModuleBase {
         }
     }
 
+    public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {
+        List<Long> longs = new ArrayList<>();
+        longs.add(userID);
+        ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("re=====" + response.getResponseString());
+                UserInfoLightweight temp = new UserInfoLightweight();
+                if (!response.isOk()) {
+                    infoComplete.onReqComplete(true, temp);
+                    return;
+                }
+                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
+                infoLightweightList.parseJsonSummary(response.getResponseJson());
+
+                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                    temp = infoLightweightList.getUserInfos().get(0);
+                    temp.setTime(getTime());
+                    dbCenter.getCacheCenter().storageProfileData(temp);
+                    dbCenter.getCenterFLetter().updateUserInfoLight(temp);
+                    temp.setUid(userID);
+                    infoComplete.onReqComplete(true, temp);
+                }
+            }
+        });
+    }
+
     /**
      * 更新个人资料
      *

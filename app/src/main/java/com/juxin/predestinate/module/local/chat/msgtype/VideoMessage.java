@@ -1,7 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
+
 import com.juxin.predestinate.module.util.TimeUtil;
+
 import org.json.JSONObject;
 
 /**
@@ -21,11 +23,9 @@ public class VideoMessage extends BaseMessage {
 
     private EmLastStatus emLastStatus;
 
-
     private enum EmLastStatus {
         none, timeout, refuse, cancel, connect
     }
-
 
     public VideoMessage() {
         super();
@@ -159,6 +159,14 @@ public class VideoMessage extends BaseMessage {
         }
     }
 
+    /**
+     * 获取音视频消息聊天列表item展示状态
+     *
+     * @param status   当前音视频状态
+     * @param sendTime 消息接收时间
+     * @param isSender 是否是发送者
+     * @return 转换之后的展示字符串
+     */
     public static String transLastStatusText(EmLastStatus status, String sendTime, boolean isSender) {
         String result;
         switch (status) {
@@ -175,10 +183,17 @@ public class VideoMessage extends BaseMessage {
             default:
                 result = "";
         }
-        return result +" "+ sendTime;
+        return result + " " + sendTime;
     }
 
-
+    /**
+     * 转换聊天窗口音视频消息展示内容
+     *
+     * @param status    当前音视频状态
+     * @param talk_time 通话时长，仅在挂断状态时有效
+     * @param isSender  是否是发送者
+     * @return 转换之后的展示字符串
+     */
     public static String getVideoChatContent(EmLastStatus status, long talk_time, boolean isSender) {
         switch (status) {
             case timeout:
@@ -188,7 +203,7 @@ public class VideoMessage extends BaseMessage {
             case cancel:
                 return isSender ? "已取消" : "对方已取消";
             case connect:
-                return "聊天时长" + TimeUtil.formatTimeLong(talk_time);
+                return "聊天时长 " + TimeUtil.formatTimeLong(talk_time);
             case none:
             default:
                 return "";
