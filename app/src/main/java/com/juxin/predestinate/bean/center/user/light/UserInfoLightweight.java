@@ -25,7 +25,7 @@ public class UserInfoLightweight extends UserBasic {
     private int photoNum;
 
 
-    private String alias;       // 别名
+    private String remark;      // 备注名
     private boolean isVip;      // 是否vip
     private boolean isAuth;     // 是否认证
     private String signname;    // 签名
@@ -62,6 +62,7 @@ public class UserInfoLightweight extends UserBasic {
         if (userInfo == null) return;
         this.setUid(userInfo.getUid());
         this.setNickname(userInfo.getNickname());
+        this.setRemark(userInfo.getRemark());
         this.setGender(userInfo.getGender());
         this.setAvatar(userInfo.getAvatar());
     }
@@ -75,7 +76,7 @@ public class UserInfoLightweight extends UserBasic {
         if (TextUtils.isEmpty(jsonResult)) return;
         this.setInfoJson(jsonResult);
         JSONObject jsonObject = getJsonObject(jsonResult);
-        this.setAlias(jsonObject.optString("alias"));
+        this.setRemark(jsonObject.optString("remark"));
         this.setAuth(jsonObject.optBoolean("is_auth"));
         this.setSignname(jsonObject.optString("signname"));
         this.setDistance(jsonObject.optString("distance"));
@@ -115,6 +116,7 @@ public class UserInfoLightweight extends UserBasic {
         this.setNickname(jsonObject.optString("nickname"));
         this.setSignname(jsonObject.optString("about"));
         this.setAge(jsonObject.optInt("age"));
+        this.setRemark(jsonObject.optString("remark"));
 
 
         this.setHeight(jsonObject.optInt("height"));
@@ -141,6 +143,13 @@ public class UserInfoLightweight extends UserBasic {
         parseJson(infoJson);
     }
 
+    /**
+     * 展示名称
+     */
+    public String getShowName() {
+        return TextUtils.isEmpty(remark) ? getNickname() : remark;
+    }
+
     public boolean isOk() {
         return isOk;
     }
@@ -165,12 +174,12 @@ public class UserInfoLightweight extends UserBasic {
         this.infoJson = infoJson;
     }
 
-    public String getAlias() {
-        return alias;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public boolean isVip() {
@@ -325,7 +334,7 @@ public class UserInfoLightweight extends UserBasic {
         super.writeToParcel(dest, flags);
         dest.writeLong(this.time);
         dest.writeString(this.infoJson);
-        dest.writeString(this.alias);
+        dest.writeString(this.remark);
         dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isAuth ? (byte) 1 : (byte) 0);
         dest.writeString(this.signname);
@@ -335,7 +344,7 @@ public class UserInfoLightweight extends UserBasic {
         super(in);
         this.time = in.readLong();
         this.infoJson = in.readString();
-        this.alias = in.readString();
+        this.remark = in.readString();
         this.isVip = in.readByte() != 0;
         this.isAuth = in.readByte() != 0;
         this.signname = in.readString();
@@ -358,7 +367,7 @@ public class UserInfoLightweight extends UserBasic {
         return "UserInfoLightweight{" +
                 "time=" + time +
                 ", infoJson='" + infoJson + '\'' +
-                ", alias='" + alias + '\'' +
+                ", remark='" + remark + '\'' +
                 ", isVip=" + isVip +
                 ", isAuth=" + isAuth +
                 ", signname='" + signname + '\'' +
