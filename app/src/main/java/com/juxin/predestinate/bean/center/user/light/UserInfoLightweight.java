@@ -143,6 +143,13 @@ public class UserInfoLightweight extends UserBasic {
         parseJson(infoJson);
     }
 
+    /**
+     * 展示名称
+     */
+    public String getShowName() {
+        return TextUtils.isEmpty(remark) ? getNickname() : remark;
+    }
+
     public boolean isOk() {
         return isOk;
     }
