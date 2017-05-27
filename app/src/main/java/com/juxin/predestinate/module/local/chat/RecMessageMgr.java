@@ -6,6 +6,7 @@ import android.util.Log;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -90,10 +91,22 @@ public class RecMessageMgr implements IMProxy.IMListener {
             if(BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()){
                 isSave = false;
             }
+            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()){
+                VideoMessage videoMessage = (VideoMessage) message;
+                if(videoMessage.getVideoTp() == 1 && videoMessage.getVideoTp() == 2) {
+                    isSave = false;
+                }
+            }
 
             if (isSave) {//是否保存
                 message.setInfoJson(null);
-                ModuleMgr.getChatMgr().onReceiving(message);
+                if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()){
+                        ModuleMgr.getChatMgr().onReceivingVideo((VideoMessage) message);
+                }else {
+                    ModuleMgr.getChatMgr().onReceiving(message);
+                }
+
+
             } else {
                 ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
             }

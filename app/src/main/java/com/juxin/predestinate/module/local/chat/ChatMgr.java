@@ -19,6 +19,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
@@ -298,7 +299,7 @@ public class ChatMgr implements ModuleBase {
     //语音消息
     public void sendVoiceMsg(String channelID, String whisperID, String url, int length) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, url, length);
-        commonMessage.setVoiceUrl(url);
+        commonMessage.setLocalVoiceUrl(url);
         commonMessage.setStatus(MessageConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
         commonMessage.setRu(MessageConstant.Ru_Friend);
@@ -499,6 +500,31 @@ public class ChatMgr implements ModuleBase {
     public void onReceiving(BaseMessage message) {
         message.setStatus(MessageConstant.UNREAD_STATUS);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
+    }
+
+    /**
+     * 视频消息
+     * @param videoMessage
+     */
+    public void onReceivingVideo(final VideoMessage videoMessage) {
+        videoMessage.setStatus(MessageConstant.UNREAD_STATUS);
+
+        if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
+
+        long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
+        if (ret == MessageConstant.ERROR) return;
+
+        Observable<BaseMessage> observable = dbCenter.getCenterFMessage().queryVideoMsg(videoMessage.getVideoID());
+        observable.subscribe(new Action1<BaseMessage>() {
+            @Override
+            public void call(BaseMessage baseMessage) {
+                if(baseMessage == null){
+                    pushMsg(dbCenter.getCenterFMessage().insertMsg(videoMessage) != MessageConstant.ERROR, videoMessage);
+                }else {
+                    pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
+                }
+            }
+        });
     }
 
     /**

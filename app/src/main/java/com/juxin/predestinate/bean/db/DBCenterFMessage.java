@@ -6,16 +6,20 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -34,9 +38,10 @@ public class DBCenterFMessage {
 
     /**
      * 多条消息插入
+     *
      * @param list
      */
-    public void insertMsg(List<BaseMessage> list){
+    public void insertMsg(List<BaseMessage> list) {
         BriteDatabase.Transaction transaction = mDatabase.newTransaction();
         try {
             for (BaseMessage item : list) {
@@ -50,6 +55,7 @@ public class DBCenterFMessage {
 
     /**
      * 单条消息插入
+     *
      * @param baseMessage
      * @return
      */
@@ -79,12 +85,11 @@ public class DBCenterFMessage {
             values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
 
 
-
-            PLogger.printObject("yyyyy==="+ baseMessage.getJsonStr());
+            PLogger.printObject("yyyyy===" + baseMessage.getJsonStr());
             values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
             return mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return MessageConstant.ERROR;
@@ -92,11 +97,12 @@ public class DBCenterFMessage {
 
     /**
      * 更新fmessage
+     *
      * @param baseMessage
      * @return
      */
-    public int updateMsg(BaseMessage baseMessage){
-        if(baseMessage == null){
+    public int updateMsg(BaseMessage baseMessage) {
+        if (baseMessage == null) {
             return MessageConstant.ERROR;
         }
 
@@ -140,19 +146,46 @@ public class DBCenterFMessage {
         return MessageConstant.ERROR;
     }
 
-    public long updateMsgFStatus(long msgID){
+    public int updateMsgVideo(VideoMessage videoMessage) {
+        if (videoMessage == null) {
+            return MessageConstant.ERROR;
+        }
+        try {
+            ContentValues values = new ContentValues();
+            if (videoMessage.getMsgID() != -1)
+                values.put(FMessage.COLUMN_MSGID, videoMessage.getMsgID());
+
+            if (videoMessage.getStatus() != -1)
+                values.put(FMessage.COLUMN_STATUS, videoMessage.getStatus());
+
+            if (videoMessage.getTime() != -1)
+                values.put(FMessage.COLUMN_TIME, videoMessage.getTime());
+
+            if (videoMessage.getfStatus() != -1)
+                values.put(FMessage.COLUMN_FSTATUS, videoMessage.getfStatus());
+
+            if (videoMessage.getJsonStr() != null)
+                values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(videoMessage.getJsonStr()));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE,  values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getVideoID()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return MessageConstant.ERROR;
+    }
+
+    public long updateMsgFStatus(long msgID) {
         ContentValues values = new ContentValues();
         values.put(FMessage.COLUMN_FSTATUS, String.valueOf(MessageConstant.NumDefault));
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
     }
 
-    public long updateToReadAll(){
+    public long updateToReadAll() {
         ContentValues values = new ContentValues();
         values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
     }
 
-    public long updateToRead(long userID){
+    public long updateToRead(long userID) {
         ContentValues values = new ContentValues();
         values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_WHISPERID + " = ?", String.valueOf(userID));
@@ -160,11 +193,12 @@ public class DBCenterFMessage {
 
     /**
      * 更新已读消息
+     *
      * @param channelID
      * @param userID
      * @return
      */
-    public long updateToRead(String channelID, String userID){
+    public long updateToRead(String channelID, String userID) {
         try {
             String sql;
             String[] str;
@@ -190,12 +224,13 @@ public class DBCenterFMessage {
 
     /**
      * 对方已读
+     *
      * @param channelID
      * @param userID
      * @param sendID
      * @return
      */
-    public long updateOtherSideRead(String channelID, String userID, String sendID){
+    public long updateOtherSideRead(String channelID, String userID, String sendID) {
         try {
             String sql;
             String[] str;
@@ -225,7 +260,7 @@ public class DBCenterFMessage {
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
     }
 
-        public boolean updateToReadVoice(String channelID, String userID, String sendID) {
+    public boolean updateToReadVoice(String channelID, String userID, String sendID) {
 //        try {
 //            String sql;
 //            String[] str;
@@ -277,6 +312,45 @@ public class DBCenterFMessage {
     }
 
 
+    public Observable<BaseMessage> queryVideoMsg(int vcID) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
+                .append(" WHERE ")
+                .append(FMessage.COLUMN_SPECIALMSGID + " = ")
+                .append(vcID);
+        return querySqlFmessage(sql.toString());
+    }
+
+    public Observable<BaseMessage> querySqlFmessage(String sql) {
+        return mDatabase.createQuery(FMessage.FMESSAGE_TABLE, sql)
+                .map(new Func1<SqlBrite.Query, BaseMessage>() {
+                    @Override
+                    public BaseMessage call(SqlBrite.Query query) {
+                        try {
+                            Cursor cursor = query.run();
+                            if (cursor != null && cursor.moveToFirst()) {
+                                Bundle bundle = new Bundle();
+                                bundle.putLong(FMessage._ID, CursorUtil.getLong(cursor, FMessage._ID));
+                                bundle.putString(FMessage.COLUMN_CHANNELID, CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID));
+                                bundle.putString(FMessage.COLUMN_WHISPERID, CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID));
+                                bundle.putLong(FMessage.COLUMN_SENDID, CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID));
+                                bundle.putLong(FMessage.COLUMN_MSGID, CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID));
+                                bundle.putLong(FMessage.COLUMN_CMSGID, CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID));
+                                bundle.putLong(FMessage.COLUMN_SPECIALMSGID, CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID));
+                                bundle.putInt(FMessage.COLUMN_TYPE, CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE));
+                                bundle.putInt(FMessage.COLUMN_STATUS, CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS));
+                                bundle.putInt(FMessage.COLUMN_FSTATUS, CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS));
+                                bundle.putLong(FMessage.COLUMN_TIME, CursorUtil.getLong(cursor, FMessage.COLUMN_TIME));
+                                bundle.putString(FMessage.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
+                                return BaseMessage.parseToBaseMessage(bundle);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                }).unsubscribeOn(Schedulers.io());
+    }
+
     /**
      * 聊天记录
      *
@@ -287,16 +361,16 @@ public class DBCenterFMessage {
      * @return
      */
     public Observable<List<BaseMessage>> queryMsgList(String channelID, String whisperID, int start, int offset) {
-        if(TextUtils.isEmpty(channelID) && TextUtils.isEmpty(whisperID)){
+        if (TextUtils.isEmpty(channelID) && TextUtils.isEmpty(whisperID)) {
             return null;
         }
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
                 .append(" WHERE ");
-                if(!TextUtils.isEmpty(channelID)){
-                    sql.append(FMessage.COLUMN_CHANNELID + " = ")
-                            .append(channelID)
-                            .append(" AND ");
-                }
+        if (!TextUtils.isEmpty(channelID)) {
+            sql.append(FMessage.COLUMN_CHANNELID + " = ")
+                    .append(channelID)
+                    .append(" AND ");
+        }
 
         sql.append(FMessage.COLUMN_WHISPERID + " = ")
                 .append(whisperID)
@@ -309,6 +383,7 @@ public class DBCenterFMessage {
 
     /**
      * 查询
+     *
      * @param sql
      * @return
      */
@@ -331,18 +406,18 @@ public class DBCenterFMessage {
         try {
             while (cursor.moveToNext()) {
                 Bundle bundle = new Bundle();
-                bundle.putLong(FMessage._ID,  CursorUtil.getLong(cursor, FMessage._ID));
-                bundle.putString(FMessage.COLUMN_CHANNELID,  CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID));
-                bundle.putString(FMessage.COLUMN_WHISPERID,  CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID));
-                bundle.putLong(FMessage.COLUMN_SENDID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID));
-                bundle.putLong(FMessage.COLUMN_MSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID));
-                bundle.putLong(FMessage.COLUMN_CMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID));
-                bundle.putLong(FMessage.COLUMN_SPECIALMSGID,  CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID));
-                bundle.putInt(FMessage.COLUMN_TYPE,  CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE));
-                bundle.putInt(FMessage.COLUMN_STATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS));
-                bundle.putInt(FMessage.COLUMN_FSTATUS,  CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS));
-                bundle.putLong(FMessage.COLUMN_TIME,  CursorUtil.getLong(cursor, FMessage.COLUMN_TIME));
-                bundle.putString(FMessage.COLUMN_CONTENT,  CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
+                bundle.putLong(FMessage._ID, CursorUtil.getLong(cursor, FMessage._ID));
+                bundle.putString(FMessage.COLUMN_CHANNELID, CursorUtil.getString(cursor, FMessage.COLUMN_CHANNELID));
+                bundle.putString(FMessage.COLUMN_WHISPERID, CursorUtil.getString(cursor, FMessage.COLUMN_WHISPERID));
+                bundle.putLong(FMessage.COLUMN_SENDID, CursorUtil.getLong(cursor, FMessage.COLUMN_SENDID));
+                bundle.putLong(FMessage.COLUMN_MSGID, CursorUtil.getLong(cursor, FMessage.COLUMN_MSGID));
+                bundle.putLong(FMessage.COLUMN_CMSGID, CursorUtil.getLong(cursor, FMessage.COLUMN_CMSGID));
+                bundle.putLong(FMessage.COLUMN_SPECIALMSGID, CursorUtil.getLong(cursor, FMessage.COLUMN_SPECIALMSGID));
+                bundle.putInt(FMessage.COLUMN_TYPE, CursorUtil.getInt(cursor, FMessage.COLUMN_TYPE));
+                bundle.putInt(FMessage.COLUMN_STATUS, CursorUtil.getInt(cursor, FMessage.COLUMN_STATUS));
+                bundle.putInt(FMessage.COLUMN_FSTATUS, CursorUtil.getInt(cursor, FMessage.COLUMN_FSTATUS));
+                bundle.putLong(FMessage.COLUMN_TIME, CursorUtil.getLong(cursor, FMessage.COLUMN_TIME));
+                bundle.putString(FMessage.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FMessage.COLUMN_CONTENT));
 
                 result.add(BaseMessage.parseToBaseMessage(bundle));
             }
@@ -357,14 +432,15 @@ public class DBCenterFMessage {
 
     /**
      * 删除
+     *
      * @param whisperID 私聊ID
      * @return
      */
-    public int delete(long whisperID){
+    public int delete(long whisperID) {
         return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
     }
 
-    public int delete(long whisperID, long time){
+    public int delete(long whisperID, long time) {
         return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? AND " +
                 FMessage.COLUMN_TIME + " = ? ", String.valueOf(whisperID), String.valueOf(time));
     }

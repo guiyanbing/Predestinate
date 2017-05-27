@@ -347,5 +347,4 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setSystemMsg(BaseMessage message) {
 
     }
-
 }
