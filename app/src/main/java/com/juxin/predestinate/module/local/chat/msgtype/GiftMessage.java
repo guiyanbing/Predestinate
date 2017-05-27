@@ -2,9 +2,7 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +71,7 @@ public class GiftMessage extends BaseMessage {
 
     public GiftMessage(Bundle bundle, boolean fletter) {
         super(bundle, fletter);
-        parseJson(getJsonStr());
+        convertJSON(getJsonStr());
     }
 
     /**
@@ -81,7 +79,7 @@ public class GiftMessage extends BaseMessage {
      */
     public GiftMessage(Bundle bundle) {
         super(bundle);
-        parseJson(getJsonStr());
+        convertJSON(getJsonStr());
     }
 
     public int getGiftCount() {

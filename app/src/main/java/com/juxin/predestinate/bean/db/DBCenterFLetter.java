@@ -106,7 +106,7 @@ public class DBCenterFLetter {
             if (baseMessage.getStatus() != -1)
                 values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
 
-            if (baseMessage.getRu() != -1 && baseMessage.getRu() != MessageConstant.Ru_Stranger)
+            if (baseMessage.getRu() == MessageConstant.Ru_Friend)
                 values.put(FLetter.COLUMN_RU, baseMessage.getRu());
 
             if (baseMessage.getTime() != -1)

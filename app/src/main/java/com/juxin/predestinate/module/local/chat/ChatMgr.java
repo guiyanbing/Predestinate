@@ -851,6 +851,18 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     *  没有缓存
+     * @param uid
+     * @param infoComplete
+     */
+    public void getNoCacheUserInfo(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
+        synchronized (infoMap) {
+            infoMap.put(uid, infoComplete);
+            getProFile(uid);
+        }
+    }
+
+    /**
      * 更新个人资料
      *
      * @param isRemove        是否要重回调map中移除 true是移除

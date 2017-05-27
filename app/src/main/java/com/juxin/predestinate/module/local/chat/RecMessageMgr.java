@@ -1,8 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-import android.util.Log;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;

@@ -258,8 +258,6 @@ public class CommonMessage extends BaseMessage {
     public CommonMessage(Bundle bundle) {
         super(bundle);
         convertJSON(getJsonStr());
-
-        PLogger.printObject("xxxxx==="+ toString());
     }
 
     public CommonMessage(Bundle bundle, boolean fletter) {
