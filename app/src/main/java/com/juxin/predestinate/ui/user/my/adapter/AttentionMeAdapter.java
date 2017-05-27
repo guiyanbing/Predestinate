@@ -58,7 +58,7 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
         final AttentionUserDetail info = getItem(position);
         mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);//头像
         checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
-        mHolder.tvNickname.setText(info.getNickname() != null ? info.getNickname() : info.getUid() + "");//昵称
+        mHolder.tvNickname.setText(info.getShowName());//昵称
         checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
         if (info.getAge() <= 0)
             mHolder.tvAge.setText(R.string.loading);

@@ -39,7 +39,7 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
         final UserInfoLightweight userInfo = getItem(position);
         ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
-        holder.tv_name.setText(userInfo.getNickname());
+        holder.tv_name.setText(userInfo.getShowName());
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {

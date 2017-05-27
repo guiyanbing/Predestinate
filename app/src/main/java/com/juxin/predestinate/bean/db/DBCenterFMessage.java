@@ -342,7 +342,7 @@ public class DBCenterFMessage {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convert(query.run());
                     }
-                });
+                }).unsubscribeOn(Schedulers.io());
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

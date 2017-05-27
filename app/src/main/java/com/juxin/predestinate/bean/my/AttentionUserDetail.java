@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.my;
 
+import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.net.BaseData;
@@ -17,6 +19,7 @@ public class AttentionUserDetail extends BaseData {
     private long follow_time;
     private int city;
     private String nickname;
+    private String remark;      // 备注名
     private int age;
     private int photoNum;
     private boolean is_vip;
@@ -41,6 +44,7 @@ public class AttentionUserDetail extends BaseData {
         this.setGender(jsonObject.optInt("gender"));
         this.setIs_vip(jsonObject.optBoolean("is_vip"));
         this.setNickname(jsonObject.optString("nickname"));
+        this.setRemark(jsonObject.optString("remark"));
         this.setPhotoNum(jsonObject.optInt("photoNum"));
         this.setKf_id(jsonObject.isNull("kf_id") ? 0 : jsonObject.optInt("kf_id"));
         //        UserDetail detail ;
@@ -57,6 +61,7 @@ public class AttentionUserDetail extends BaseData {
         this.setGender(info.getGender());
         this.setIs_vip(info.isVip());
         this.setNickname(info.getNickname());
+        this.setRemark(info.getRemark());
         if (info.getUserPhotos() != null)
             this.setPhotoNum(info.getUserPhotos().size());
         this.setKf_id(info.getKf_id());
@@ -72,6 +77,7 @@ public class AttentionUserDetail extends BaseData {
         this.setIs_vip(info.isVip());
         this.setNickname(info.getNickname());
         this.setPhotoNum(info.getPhotoNum());
+        this.setRemark(info.getRemark());
         this.setKf_id(info.getKf_id());
     }
 
@@ -193,6 +199,19 @@ public class AttentionUserDetail extends BaseData {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+
+    public String getShowName() {
+        return TextUtils.isEmpty(getRemark()) ? getNickname() : getRemark();
     }
 
 }

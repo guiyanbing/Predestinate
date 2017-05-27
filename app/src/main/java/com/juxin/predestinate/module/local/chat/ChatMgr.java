@@ -278,22 +278,27 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
         if (!b) return;
-        sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                    commonMessage.setImg(upLoadResult.getFile_http_path());
-                    commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-                    long upRet = dbCenter.updateFmessage(commonMessage);
-                    if (upRet == MessageConstant.ERROR) {
-                        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
-                        return;
+
+        if (FileUtil.isURL(img_url)) {
+            sendMessage(commonMessage, null);
+        }else {
+            sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                        commonMessage.setImg(upLoadResult.getFile_http_path());
+                        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                        long upRet = dbCenter.updateFmessage(commonMessage);
+                        if (upRet == MessageConstant.ERROR) {
+                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
+                            return;
+                        }
+                        sendMessage(commonMessage, null);
                     }
-                    sendMessage(commonMessage, null);
                 }
-            }
-        });
+            });
+        }
     }
 
     //语音消息
@@ -575,7 +580,7 @@ public class ChatMgr implements ModuleBase {
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if(ret != MessageConstant.ERROR){
-               // ModuleMgr.getChatListMgr().getWhisperList();
+                ModuleMgr.getChatListMgr().getWhisperList();
             }
 //            updateLocalReadStatus(channelID, whisperID, last_msgid);
         }

@@ -3,6 +3,7 @@ package com.juxin.predestinate.bean.db.cache;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
@@ -11,7 +12,9 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -44,7 +47,7 @@ public class DBCacheCenter {
         BriteDatabase.Transaction transaction = mDatabase.newTransaction();
         try {
             for (UserInfoLightweight temp : lightweights) {
-                storageProfileData(temp);
+                storageData(temp, isInfoExist(temp.getUid()));
             }
             transaction.markSuccessful();
             return true;
@@ -56,6 +59,48 @@ public class DBCacheCenter {
         return false;
     }
 
+
+    /**
+     * 是否存在
+     *
+     * @param userID
+     * @return
+     */
+    private boolean isInfoExist(long userID) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FProfileCache.FPROFILE_TABLE)
+                .append(" WHERE ")
+                .append(FProfileCache.COLUMN_USERID + " = ?");
+        Cursor cursor = mDatabase.query(sql.toString(), String.valueOf(userID));
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        } else {
+            if (cursor != null) cursor.close();
+            return false;
+        }
+    }
+
+
+    private void storageData(UserInfoLightweight lightweight, boolean aBoolean) {
+        try {
+            long uid = lightweight.getUid();
+            PLogger.printObject("storageProfileData==" + aBoolean);
+            final ContentValues values = new ContentValues();
+            values.put(FProfileCache.COLUMN_USERID, uid);
+            values.put(FProfileCache.COLUMN_TIME, lightweight.getTime());
+
+            if (lightweight.getInfoJson() != null)
+                values.put(FProfileCache.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
+
+            if (aBoolean) {
+                mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", String.valueOf(uid));
+            } else {
+                mDatabase.insert(FProfileCache.FPROFILE_TABLE, values);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 插入或更新内容
@@ -71,23 +116,8 @@ public class DBCacheCenter {
         observable.subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
-                try {
-                    PLogger.printObject("storageProfileData==" + aBoolean);
-                    final ContentValues values = new ContentValues();
-                    values.put(FProfileCache.COLUMN_USERID, uid);
-                    values.put(FProfileCache.COLUMN_TIME, lightweight.getTime());
-
-                    if (lightweight.getInfoJson() != null)
-                        values.put(FProfileCache.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
-
-                    if (aBoolean) {
-                        mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", String.valueOf(uid));
-                    } else {
-                        mDatabase.insert(FProfileCache.FPROFILE_TABLE, values);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                PLogger.printObject("storageProfileData==" + aBoolean);
+                storageData(lightweight, aBoolean);
             }
         }).unsubscribe();
     }
