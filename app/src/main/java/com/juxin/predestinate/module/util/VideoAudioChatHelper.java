@@ -400,6 +400,7 @@ public class VideoAudioChatHelper{
         bundle.putString("vc_channel", JniUtil.GetEncryptString("juxin_live_" + vcId));
         bundle.putString("vc_uid", ModuleMgr.getCenterMgr().getMyInfo().getUid() + "");
         bundle.putLong("vc_check_yellow",ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellow() * 1000);
+        bundle.putLong("vc_check_yellow_first", ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellowFirst() * 1000);
         bundle.putLong("vc_dst_uid,",dstUid);
         return bundle;
     }
