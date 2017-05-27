@@ -130,6 +130,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * @param content   消息提示内容
      */
     public void show(final long sendUid, final String whisperID, final int type, final String content) {
+        PLogger.printObject("333333333333");
         // 请求用户资料
         ModuleMgr.getChatMgr().getUserInfoLightweight(sendUid, new ChatMsgInterface.InfoComplete() {
             @Override

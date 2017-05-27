@@ -816,10 +816,10 @@ public class ChatMgr implements ModuleBase {
                     temp.setTime(getTime());
                     dbCenter.getCacheCenter().storageProfileData(temp);
                     dbCenter.getCenterFLetter().updateUserInfoLight(temp);
-                }
 
-                temp.setUid(userID);
-                removeInfoComplete(true, true, userID, temp);
+                    temp.setUid(userID);
+                    removeInfoComplete(true, true, userID, temp);
+                }
             }
         });
     }
@@ -848,6 +848,18 @@ public class ChatMgr implements ModuleBase {
                 }
             }
         });
+    }
+
+    /**
+     *  没有缓存
+     * @param uid
+     * @param infoComplete
+     */
+    public void getNoCacheUserInfo(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
+        synchronized (infoMap) {
+            infoMap.put(uid, infoComplete);
+            getProFile(uid);
+        }
     }
 
     /**
