@@ -64,7 +64,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
     public ChatPanelCommon(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
         super(context, chatInstance, R.layout.f1_chat_item_panel_common, sender);
-
     }
 
     @Override
