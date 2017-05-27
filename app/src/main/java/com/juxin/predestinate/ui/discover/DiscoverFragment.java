@@ -146,6 +146,8 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
 
     @Override
     public void onRequestComplete(HttpResponse response) {
+        exListView.stopRefresh();
+        exListView.stopLoadMore();
         if (response.getUrlParam() == UrlParam.getMainPage) {
             setMainData(response);
         } else if (response.getUrlParam() == UrlParam.getNearUsers2) {
@@ -181,12 +183,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         exListView.setPullLoadEnable(false);
                     }
                 }
-
-                if (page == 1) {
-                    exListView.stopRefresh();
-                } else {
-                    exListView.stopLoadMore();
-                }
             } else {
                 if (page == 1) {
                     UserInfoLightweightList lightweightList = new UserInfoLightweightList();
@@ -205,11 +201,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             if (infos.size() != 0) {
                 customStatusListView.showExListView();
                 adapter.notifyDataSetChanged();
-                if (page == 1) {
-                    exListView.stopRefresh();
-                } else {
-                    exListView.stopLoadMore();
-                }
             } else {
                 customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                     @Override
@@ -246,7 +237,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     });
                     groupSayhiBtn.setVisibility(GONE);
                 }
-                exListView.stopRefresh();
             } else {
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
@@ -265,7 +255,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 adapter.notifyDataSetChanged();
                 customStatusListView.showExListView();
                 setGroupSayhiBtn(true);
-                exListView.stopRefresh();
             } else {
                 customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                     @Override

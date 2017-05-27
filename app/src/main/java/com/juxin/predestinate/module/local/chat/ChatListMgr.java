@@ -317,6 +317,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
+        PLogger.printObject("setVideoMsg==="+videoMessage.toString());
         if (videoMessage.getVideoTp() == 1) {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());

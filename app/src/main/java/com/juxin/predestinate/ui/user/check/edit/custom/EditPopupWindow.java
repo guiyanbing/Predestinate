@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.user.edit.EditKey;
 
 import java.util.HashMap;
@@ -134,13 +133,12 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
         txt.setVisibility(View.INVISIBLE);
         // 适配 android 7.0
         if (Build.VERSION.SDK_INT < 24) {
-            int offSet = UIUtil.dp2px(35);
-            this.showAsDropDown(txt, 0, -offSet);
+            this.showAsDropDown(v);
         } else {
             int[] location = new int[2];
             v.getLocationOnScreen(location);
             int y = location[1];
-            this.showAtLocation(txt, Gravity.NO_GRAVITY, 0, y + getHeight());
+            this.showAtLocation(v, Gravity.NO_GRAVITY, 0, y + getHeight());
         }
     }
 

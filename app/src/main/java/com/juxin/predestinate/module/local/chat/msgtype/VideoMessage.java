@@ -193,4 +193,17 @@ public class VideoMessage extends BaseMessage {
                 return "";
         }
     }
+
+    @Override
+    public String toString() {
+        return "VideoMessage{" +
+                "videoID=" + videoID +
+                ", videoTp=" + videoTp +
+                ", videoMediaTp=" + videoMediaTp +
+                ", videoVcEscCode=" + videoVcEscCode +
+                ", videoVcTalkTime=" + videoVcTalkTime +
+                ", vc_channel_key='" + vc_channel_key + '\'' +
+                ", emLastStatus=" + emLastStatus +
+                '}';
+    }
 }

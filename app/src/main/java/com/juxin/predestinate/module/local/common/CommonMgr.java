@@ -277,6 +277,9 @@ public class CommonMgr implements ModuleBase {
      */
     public boolean checkDate(String key) {
         String recommendDate = PSP.getInstance().getString(key, "-1");
+        if (key.equals(ModuleMgr.getCenterMgr().getGroupSayHiDayKey())) {
+            PLogger.d("checkDate ==+>  recommendDate = " + recommendDate + " TimeUtil.getCurrentData() == " + TimeUtil.getCurrentData());
+        }
         if (recommendDate != null) {
             if (!recommendDate.equals(TimeUtil.getCurrentData())) {
                 return true;
@@ -424,7 +427,7 @@ public class CommonMgr implements ModuleBase {
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
-        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
 
             getSayHiList(new RequestComplete() {
                 @Override

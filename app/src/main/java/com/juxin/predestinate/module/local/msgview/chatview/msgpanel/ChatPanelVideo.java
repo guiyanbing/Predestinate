@@ -1,20 +1,19 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
-import android.text.Html;
 import android.widget.TextView;
+
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
-import com.juxin.predestinate.module.util.TimeUtil;
 
 /**
+ * 音视频结束后状态展示panel
  * Created by Kind on 2017/5/12.
  */
-
 public class ChatPanelVideo extends ChatPanel {
     private TextView chat_item_video_text;
 
@@ -36,8 +35,4 @@ public class ChatPanelVideo extends ChatPanel {
         chat_item_video_text.setText(VideoMessage.getVideoChatContent(videoMessage.getEmLastStatus(), videoMessage.getTime(), videoMessage.isSender()));
         return true;
     }
-
-
-
-
 }
