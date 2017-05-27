@@ -11,6 +11,7 @@ import android.view.View;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -72,49 +73,49 @@ public class LockScreenMgr {
     private LockChatPanel lockChatPanel;
 
     //锁屏聊天框
-    private UserInfoLightweight lockChatPerson;
+    private UserInfoLightweight simpleData;
+    private BaseMessage baseMessage;
     private String lockChatContent;
 
     /**
      * 设置聊天内容
      *
-     * @param simpleData 用户的简单个人资料
-     * @param content    聊天信息
+     * @param simpleData  用户的简单个人资料
+     * @param baseMessage 预先传递消息内容，以处理特殊的情况
+     * @param content     聊天信息
      */
-    public void setChatData(UserInfoLightweight simpleData, String content) {
-        this.lockChatPerson = simpleData;
+    public void setChatData(UserInfoLightweight simpleData, BaseMessage baseMessage, String content) {
+        this.simpleData = simpleData;
+        this.baseMessage = baseMessage;
         this.lockChatContent = content;
     }
 
     private OnLockScreenCallback onLockScreenCallback;
 
     /**
-     * 获取
+     * 获取展示的锁屏弹窗view内容
      *
-     * @param onLockScreenCallback
-     * @return
+     * @param onLockScreenCallback 锁屏弹窗回调
+     * @return 锁屏弹窗view
      */
     public View getLockView(OnLockScreenCallback onLockScreenCallback) {
         this.onLockScreenCallback = onLockScreenCallback;
-        if (lockChatPerson != null) {
-            if (lockChatPanel == null) {
-                lockChatPanel = new LockChatPanel(App.context, lockChatPerson.getUid(),
-                        lockChatPerson.getAvatar(), lockChatPerson.getNickname(), lockChatContent);
-            } else {
-                lockChatPanel.refresh(lockChatPerson.getUid(), lockChatPerson.getAvatar(),
-                        lockChatPerson.getNickname(), lockChatContent);
-            }
-            return lockChatPanel.getContentView();
+        if (lockChatContent == null || baseMessage == null) return null;
+
+        if (lockChatPanel == null) {
+            lockChatPanel = new LockChatPanel(App.getActivity(), simpleData, baseMessage, lockChatContent);
         } else {
-            return null;
+            lockChatPanel.refresh(simpleData, baseMessage, lockChatContent);
         }
+        return lockChatPanel.getContentView();
     }
 
     /**
      * 关闭当前锁屏弹窗
      */
     public void closeLockNotify() {
-        this.lockChatPerson = null;
+        this.simpleData = null;
+        this.baseMessage = null;
         if (onLockScreenCallback != null) {
             onLockScreenCallback.closePopupActivity();
             onLockScreenCallback.disableKeyguard();

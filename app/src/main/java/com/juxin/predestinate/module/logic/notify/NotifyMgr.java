@@ -82,7 +82,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     /**
      * 进行聊天消息通知
      *
-     * @param message 消息基类
+     * @param message 消息内容
      */
     private void showNotify(BaseMessage message) {
         if (!PSP.getInstance().getBoolean(Constant.SETTING_MESSAGE, Constant.SETTING_MESSAGE_DEFAULT)) {
@@ -93,7 +93,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         PLogger.d("------>Msg type: " + type);
         if (type != NOTIFY_COMMON && type != NOTIFY_GIFT && type != NOTIFY_VIDEO) return;
 
-        show(message.getSendID(), message.getWhisperID(), type, getContent(type, jsonObject));
+        show(message, getContent(type, jsonObject));
     }
 
     /**
@@ -124,29 +124,26 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     /**
      * 进行消息提示
      *
-     * @param sendUid   发送ID
-     * @param whisperID 私聊ID
-     * @param type      消息类型
-     * @param content   消息提示内容
+     * @param baseMessage 消息内容
+     * @param content     消息提示内容
      */
-    public void show(final long sendUid, final String whisperID, final int type, final String content) {
-        PLogger.printObject("333333333333");
+    public void show(final BaseMessage baseMessage, final String content) {
         // 请求用户资料
-        ModuleMgr.getChatMgr().getUserInfoLightweight(sendUid, new ChatMsgInterface.InfoComplete() {
+        ModuleMgr.getChatMgr().getUserInfoLightweight(baseMessage.getSendID(), new ChatMsgInterface.InfoComplete() {
             @Override
             public void onReqComplete(boolean ret, final UserInfoLightweight simpleData) {
                 if (!ret || simpleData == null) {
-                    PLogger.d("------>个人资料查询失败, uid: " + sendUid);
+                    PLogger.d("------>个人资料查询失败, uid: " + baseMessage.getSendID());
                     return;
                 }
-                PLogger.d("---文本消息提示--->type：" + type + "，content：" + content + "，simpleData：" + String.valueOf(simpleData));
+                PLogger.d("---文本消息提示--->type：" + baseMessage.getType() + "，content：" + content + "，simpleData：" + String.valueOf(simpleData));
                 if (simpleData.getUid() == MailSpecialID.customerService.getSpecialID()) {
                     simpleData.setNickname(MailSpecialID.customerService.getSpecialIDName());
                 }
                 MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        viewPrivacy(simpleData, whisperID, type, content);
+                        viewPrivacy(simpleData, baseMessage, content);
                     }
                 });
             }
@@ -156,21 +153,20 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     /**
      * 界面展示
      *
-     * @param simpleData 数据库查询出的个人资料数据
-     * @param whisperID  私聊ID
-     * @param type       消息类型
-     * @param content    消息提示内容
+     * @param simpleData  数据库查询出的个人资料数据
+     * @param baseMessage 消息类型处理
+     * @param content     消息提示内容
      */
-    private void viewPrivacy(final UserInfoLightweight simpleData, final String whisperID, final int type, final String content) {
+    private void viewPrivacy(final UserInfoLightweight simpleData, final BaseMessage baseMessage, final String content) {
         boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
-        if (!instanceOfChat && type != NOTIFY_VIDEO) {
+        if (!instanceOfChat && baseMessage.getType() != NOTIFY_VIDEO) {
             playSound();
             vibrator();
         }
 
         //锁屏状态，锁屏弹窗
         if (BaseUtil.isScreenLock(App.context)) {
-            LockScreenMgr.getInstance().setChatData(simpleData, content);
+            LockScreenMgr.getInstance().setChatData(simpleData, baseMessage, content);
             popupActivity();
             return;
         }
@@ -188,7 +184,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                     content, simpleData.getAvatar(), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            UIShow.showPrivateChatAct(App.getActivity(), Long.valueOf(whisperID), simpleData.getNickname());
+                            UIShow.showPrivateChatAct(App.getActivity(), baseMessage.getLWhisperID(), simpleData.getNickname());
                             FloatingMgr.getInstance().removePanel(floatingPanelChat);
                         }
                     });
@@ -201,7 +197,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                 PLogger.d("------>应用外弹框，return");
                 return;
             }
-            UIShow.showUserMailNotifyAct(type, simpleData, content);
+            UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
         }
     }
 
