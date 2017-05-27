@@ -1,13 +1,13 @@
 package com.juxin.predestinate.module.local.mail;
 
 /**
- *  小友客服-特殊号
+ *  缘分小秘书-特殊号
  * Created by Kind on 16/3/25.
  */
 public enum MailSpecialID {
 
-    /**小友客服**/
-    customerService(9999, "小友客服"),
+    /**缘分小秘书**/
+    customerService(9999, "缘分小秘书"),
 
     activity(8000, "活动");
 
