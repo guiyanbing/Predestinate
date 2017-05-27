@@ -524,7 +524,7 @@ public class ChatMgr implements ModuleBase {
                     pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -791,7 +791,7 @@ public class ChatMgr implements ModuleBase {
                         getProFile(uid);
                     }
                 }
-            });
+            }).unsubscribe();
         }
     }
 
