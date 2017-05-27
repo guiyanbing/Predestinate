@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.Msg;
@@ -10,6 +11,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -25,6 +27,8 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -462,6 +466,22 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
+                ModuleMgr.getChatMgr().sendMailReadedMsg(Long.valueOf(whisperId), new IMProxy.SendCallBack() {
+                    @Override
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+                        Log.e("TTTTTTTTTTLLLL11177", "执行||||成功" + messageRet.getS());
+                        if (messageRet.getS() == 0) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+                        Log.e("TTTTTTTTTTLLLL222", "执行||||失败");
+                    }
+                });
             } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {

@@ -100,8 +100,8 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
 //            Log.e("TTTTTTTT", response.getResponseString()+"|||"+response.isOk());
             RedbagList redbagList = new RedbagList();
 
-//            redbagList.parseJson(testData());
-            redbagList.parseJson(response.getResponseString());
+            redbagList.parseJson(testData());
+//            redbagList.parseJson(response.getResponseString());
             if (response.isOk()){
                 ((RedBoxRecordAct)context).refreshView(redbagList.getTotal());
                 mRedbagInfos = redbagList.getRedbagLists();
@@ -172,7 +172,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
     }
 
     private String testData(){
-        String str = "/*{\n" +
+        String str = "{\n" +
                 "  \"status\": \"ok\",\n" +
                 "  \"total\": \"20\",\n" +
                 "  \"result\":[{\n" +
@@ -194,7 +194,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
                 "        \"type\":\"3\",\n" +
                 "        \"rank\":0\n" +
                 "  }]\n" +
-                "}*/";
+                "}";
         return str;
     }
 }

@@ -1,5 +1,8 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import org.json.JSONObject;
 
 /**
@@ -22,12 +25,26 @@ public class SystemMessage extends BaseMessage {
         this.setMsgDesc(object.optString("mct")); //消息内容
         this.setTime(object.optLong("mt")); //消息时间 int64
         this.setXtType(object.optInt("xt"));
+        Log.e("TTTTTTTTT3333",this.getXtType()+"|||"+jsonStr);
         return this;
     }
 
     @Override
     public String getJson(BaseMessage message) {
         return super.getJson(message);
+    }
+
+    public SystemMessage(Bundle bundle, boolean fletter) {
+        super(bundle, fletter);
+        parseJson(getJsonStr());
+    }
+
+    /**
+     * 转换类 fmessage
+     */
+    public SystemMessage(Bundle bundle) {
+        super(bundle);
+        parseJson(getJsonStr());
     }
 
     public int getXtType() {

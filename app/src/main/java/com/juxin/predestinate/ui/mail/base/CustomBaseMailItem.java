@@ -112,9 +112,9 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //            item_certification.setText("官方");
 //        }
         if(msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()){
-            item_last_msg.setText(BaseMessage.getContent(msgData));
-        }else {
             item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
+        }else {
+            item_last_msg.setText(BaseMessage.getContent(msgData));
         }
 
         long time = msgData.getTime();
@@ -158,10 +158,30 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             item_last_status.setVisibility(View.GONE);
             return;
         }
-        item_last_status.setVisibility(View.GONE);
-        if (msgData.getStatus() == 0) {
-            item_last_status.setText("已读");
-            item_last_status.setVisibility(View.VISIBLE);
+        item_last_status.setVisibility(View.VISIBLE);
+//        发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
+        switch (msgData.getStatus()){
+            case 1:
+                item_last_status.setText("送达");
+                break;
+            case 2:
+                item_last_status.setText("发送失败");
+                break;
+            case 3:
+                item_last_status.setText("送达");
+                break;
+            case 10:
+                item_last_status.setText("未读");
+                break;
+            case 11:
+                item_last_status.setText("已读");
+                break;
+            case 12:
+                item_last_status.setText("未审核通过");
+                break;
+            default:
+                item_last_status.setVisibility(View.GONE);
+                break;
         }
     }
 

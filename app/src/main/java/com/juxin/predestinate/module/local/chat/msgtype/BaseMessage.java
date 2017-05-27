@@ -27,6 +27,7 @@ public class BaseMessage implements IBaseMessage {
 
         common(CommonMessage.class, 2),//文本消息
         hi(TextMessage.class, 3),//打招呼
+        sys(SystemMessage.class, 7),//系统
         gift(GiftMessage.class, 10),//礼物消息
         hint(TextMessage.class, 14),//小提示消息
         html(TextMessage.class, 19),//html消息
@@ -591,6 +592,9 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle, true);
                 break;
+            case sys:
+                message = new SystemMessage(bundle, true);
+                break;
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
@@ -626,6 +630,9 @@ public class BaseMessage implements IBaseMessage {
             case gift:
             case wantGift:
                 message = new GiftMessage(bundle);
+                break;
+            case sys:
+                message = new SystemMessage(bundle);
                 break;
             case video:
                 message = new VideoMessage(bundle);
@@ -691,6 +698,14 @@ public class BaseMessage implements IBaseMessage {
             case gift:
             case wantGift:
                 result = msg.getMsgDesc();
+                break;
+            case sys:
+                String content1 = msg.getMsgDesc();
+                if (TextUtils.isEmpty(content1)) {
+                    result = "[已读]";
+                } else {
+                    result = content1;
+                }
                 break;
             default:
                 result = msg.getMsgDesc();

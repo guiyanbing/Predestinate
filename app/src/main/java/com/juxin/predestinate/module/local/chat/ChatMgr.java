@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+import android.util.Log;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -17,7 +18,9 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.MailReadedMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
@@ -251,6 +254,16 @@ public class ChatMgr implements ModuleBase {
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toFllowJson()), sendCallBack);
     }
 
+    /**
+     * 发送已读
+     *
+     * @param userID
+     */
+    public void sendMailReadedMsg(long userID,IMProxy.SendCallBack sendCallBack) {
+        MailReadedMessage message = new MailReadedMessage(userID);
+        IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toMailReadedJson()), sendCallBack);
+    }
+
     public void sendImgMsg(String channelID, String whisperID, String img_url) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
         commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url, DirType.getImageDir()));
@@ -320,7 +333,7 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (!response.isOk()) {
                     updateFail(message, null);
-                  return;
+                    return;
                 }
                 complete.onRequestComplete(response);
             }
@@ -489,6 +502,20 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 接收已读消息
+     *
+     * @param message
+     */
+    public void onSysReceiving(BaseMessage message) {
+        if (message instanceof SystemMessage){
+
+            Log.e("TTTTTTTTTTTTTTGG","对方已读"+((SystemMessage)message).getXtType());
+        }
+//        message.setStatus(MessageConstant.READ_STATUS);
+//        pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
+    }
+
+    /**
      * 本地模拟消息
      * @param message
      */
@@ -535,6 +562,24 @@ public class ChatMgr implements ModuleBase {
             });
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
+            if (ret > 0 && !TextUtils.isEmpty(whisperID))
+                sendMailReadedMsg(Long.valueOf(whisperID), new IMProxy.SendCallBack() {
+                    @Override
+                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                        MessageRet messageRet = new MessageRet();
+                        messageRet.parseJson(contents);
+                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
+                        if (messageRet.getS() == 0) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onSendFailed(NetData data) {
+                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
+                    }
+                });
             if(ret != MessageConstant.ERROR){
                // ModuleMgr.getChatListMgr().getWhisperList();
             }

@@ -47,7 +47,7 @@ ext {
                 libXLog     : "1.3.0",
                 libAnimator : "1.0.5"]
 
-    cApplicationId = "com.xiaochen.android.fate_it"
+    cApplicationId = "com.xiaochen.android.fate_i"
     cConfigTxt = 'configs.txt'
 
     //从配置文件加载的变量
