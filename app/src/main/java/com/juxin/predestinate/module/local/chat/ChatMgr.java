@@ -80,8 +80,21 @@ public class ChatMgr implements ModuleBase {
 
        // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
 
-       // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
+           // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
+
+    /**
+     * 对方已读
+     * @param channelID
+     * @param whisperID
+     * @param sendID
+     */
+    public void updateOtherSideRead(String channelID, String whisperID, String sendID) {
+        dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID);
+    }
+
+
+
 
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);

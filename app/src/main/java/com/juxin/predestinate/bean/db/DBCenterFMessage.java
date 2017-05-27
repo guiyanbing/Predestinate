@@ -188,6 +188,37 @@ public class DBCenterFMessage {
         return MessageConstant.ERROR;
     }
 
+    /**
+     * 对方已读
+     * @param channelID
+     * @param userID
+     * @param sendID
+     * @return
+     */
+    public long updateOtherSideRead(String channelID, String userID, String sendID){
+        try {
+            String sql;
+            String[] str;
+            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
+                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND "
+                        + FMessage.COLUMN_SENDID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
+                str = new String[]{channelID, userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+            } else if (!TextUtils.isEmpty(channelID)) {
+                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_SENDID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
+                str = new String[]{channelID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+            } else {
+                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_SENDID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
+                str = new String[]{userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+            }
+            ContentValues values = new ContentValues();
+            values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return MessageConstant.ERROR;
+    }
+
     public long updateToReadVoice(long msgID) {
         ContentValues values = new ContentValues();
         values.put(FMessage.COLUMN_FSTATUS, 0);
