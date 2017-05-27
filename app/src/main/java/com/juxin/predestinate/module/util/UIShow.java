@@ -56,6 +56,7 @@ import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
 import com.juxin.predestinate.ui.pay.utils.PayAlipayUtils;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
+import com.juxin.predestinate.ui.pay.wepayother.h5.PayWebActivity;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
@@ -1386,4 +1387,9 @@ public class UIShow {
         context.sendBroadcast(intent);
     }
 
+    public static void showWePayForH5(Context context, String url) {
+        Intent intent = new Intent(context, PayWebActivity.class);
+        intent.putExtra("url", url);
+        context.startActivity(intent);
+    }
 }

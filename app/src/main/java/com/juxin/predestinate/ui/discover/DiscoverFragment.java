@@ -168,8 +168,11 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         }
                     }
                     infos.addAll(lightweightList.getUserInfos());
-                    customStatusListView.showExListView();
+                    if (infos.size() < 10) {
+                        exListView.setPullLoadEnable(false);
+                    }
                     adapter.notifyDataSetChanged();
+                    customStatusListView.showExListView();
                 } else {
                     if (page == 1) {
                         customStatusListView.showNoData("暂无数据", "重试", new View.OnClickListener() {
@@ -192,15 +195,21 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                             infos.clear();
                         }
                         infos.addAll(lightweightList.getUserInfos());
-                        customStatusListView.showExListView();
+                        if (infos.size() < 10) {
+                            exListView.setPullLoadEnable(false);
+                        }
                         adapter.notifyDataSetChanged();
+                        customStatusListView.showExListView();
                     }
                 }
             }
         } else {
             if (infos.size() != 0) {
-                customStatusListView.showExListView();
+                if (infos.size() < 10) {
+                    exListView.setPullLoadEnable(false);
+                }
                 adapter.notifyDataSetChanged();
+                customStatusListView.showExListView();
             } else {
                 customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                     @Override
@@ -224,10 +233,10 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         infos.clear();
                     }
                     infos.addAll(lightweightList.getUserInfos());
-                    adapter.notifyDataSetChanged();
                     if (infos.size() < 10) {
                         exListView.setPullLoadEnable(false);
                     }
+                    adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
                     setGroupSayhiBtn(true);
                 } else {
@@ -248,11 +257,11 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         infos.clear();
                     }
                     infos.addAll(lightweightList.getUserInfos());
-                    customStatusListView.showExListView();
-                    adapter.notifyDataSetChanged();
                     if (infos.size() < 10) {
                         exListView.setPullLoadEnable(false);
                     }
+                    adapter.notifyDataSetChanged();
+                    customStatusListView.showExListView();
                     setGroupSayhiBtn(true);
                 }
             }

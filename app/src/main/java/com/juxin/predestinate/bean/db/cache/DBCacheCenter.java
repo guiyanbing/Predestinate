@@ -3,6 +3,7 @@ package com.juxin.predestinate.bean.db.cache;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -10,7 +11,6 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Action1;
@@ -64,12 +64,15 @@ public class DBCacheCenter {
      * @return
      */
     public void storageProfileData(final UserInfoLightweight lightweight) {
+        PLogger.printObject("storageProfileData==" + "111111");
+
         final long uid = lightweight.getUid();
         Observable<Boolean> observable = isProfileExist(uid);
         observable.subscribe(new Action1<Boolean>() {
             @Override
             public void call(Boolean aBoolean) {
                 try {
+                    PLogger.printObject("storageProfileData==" + aBoolean);
                     final ContentValues values = new ContentValues();
                     values.put(FProfileCache.COLUMN_USERID, uid);
                     values.put(FProfileCache.COLUMN_TIME, lightweight.getTime());
@@ -77,16 +80,16 @@ public class DBCacheCenter {
                     if (lightweight.getInfoJson() != null)
                         values.put(FProfileCache.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
 
-                    if (!aBoolean) {
-                        mDatabase.insert(FProfileCache.FPROFILE_TABLE, values);
-                    } else {
+                    if (aBoolean) {
                         mDatabase.update(FProfileCache.FPROFILE_TABLE, values, FProfileCache.COLUMN_USERID + " = ? ", String.valueOf(uid));
+                    } else {
+                        mDatabase.insert(FProfileCache.FPROFILE_TABLE, values);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -119,7 +122,7 @@ public class DBCacheCenter {
                         }
                         return false;
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
 
@@ -231,7 +234,7 @@ public class DBCacheCenter {
                 }
                 return str;
             }
-        });
+        }).unsubscribeOn(Schedulers.io());
     }
 
     /**
