@@ -23,7 +23,7 @@ import com.juxin.predestinate.module.util.BaseUtil;
 public class UserMailNotifyAct extends BaseActivity implements View.OnClickListener {
 
     private ImageView user_img, iv_sex;
-    private TextView user_name, tv_age, tv_distance, user_content;
+    private TextView user_name, tv_age, tv_height, user_content;
     private View ll_age;
 
     private UserInfoLightweight simpleData;//简单的用户资料
@@ -51,7 +51,7 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
         user_name = (TextView) findViewById(R.id.user_name);
         ll_age = findViewById(R.id.ll_age);
         tv_age = (TextView) findViewById(R.id.tv_age);
-        tv_distance = (TextView) findViewById(R.id.tv_distance);
+        tv_height = (TextView) findViewById(R.id.tv_height);
         user_content = (TextView) findViewById(R.id.user_content);
 
         findViewById(R.id.user_mail_notify_main).setOnClickListener(this);
@@ -76,7 +76,7 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
             iv_sex.setImageResource(simpleData.getGender() == 1 ?
                     R.drawable.f1_sex_male_2 : R.drawable.f1_sex_female_2);
             tv_age.setText(simpleData.getAge() + App.context.getString(R.string.age));
-            tv_distance.setText(simpleData.getDistance());
+            tv_height.setText(simpleData.getHeight() + "cm");
             user_content.setText(Html.fromHtml(content));
 
             HideMainMessageForThreeSec();
