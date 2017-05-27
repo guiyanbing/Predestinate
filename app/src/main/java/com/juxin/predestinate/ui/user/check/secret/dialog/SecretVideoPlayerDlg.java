@@ -5,16 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.DownloadProgressView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.custom.CountDownTextView;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
@@ -27,9 +28,11 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
 public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickListener {
     private TextureVideoView tvv_player;
     private ImageView iv_pic, iv_start;
-    private TextView tv_video_time;
+    private CountDownTextView tv_video_time;
     private DownloadProgressView progress_bar;
     private UserVideo userVideo;
+
+    private String videoLocalUrl;  // 视频文件本地地址
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,13 +52,15 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         iv_start = (ImageView) findViewById(R.id.btn_start);
         tvv_player = (TextureVideoView) findViewById(R.id.tvv_player);
         progress_bar = (DownloadProgressView) findViewById(R.id.progress_bar);
-        tv_video_time = (TextView) findViewById(R.id.tv_video_time);
+        tv_video_time = (CountDownTextView) findViewById(R.id.tv_video_time);
 
         iv_start.setOnClickListener(this);
         findViewById(R.id.btn_back).setOnClickListener(this);
 
         ImageLoader.loadFitCenter(this, userVideo.getPic(), iv_pic);
         tv_video_time.setText(TimeUtil.getLongToMinuteTime(userVideo.getDuration() * 1000l));
+        tv_video_time.setCountDownTimes(userVideo.getDuration() * 1000);
+        tv_video_time.setCountDownListener(tipsListener);
     }
 
     /**
@@ -77,7 +82,8 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
             @Override
             public void onSuccess(String url, String filePath) {
                 progress_bar.setVisibility(View.GONE);
-                playLocalVideo(filePath);
+                videoLocalUrl = filePath;
+                playLocalVideo();
             }
 
             @Override
@@ -92,15 +98,14 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
     /**
      * 播放视频
      */
-    public void playLocalVideo(final String filePath) {
-        tvv_player.setVideoPath(filePath);
-        //tvv_player.start();
+    private void playLocalVideo() {
+        tvv_player.setVideoPath(videoLocalUrl);
         tvv_player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(final MediaPlayer mp) {
                 tvv_player.start();
+                tv_video_time.start();
                 iv_start.setVisibility(View.GONE);
-                iv_pic.setVisibility(View.GONE);
                 TimerUtil.beginTime(new TimerUtil.CallBack() {//短暂延时之后取消遮罩，防止屏幕闪烁
                     @Override
                     public void call() {
@@ -109,6 +114,7 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
                 }, 200);
             }
         });
+
         tvv_player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -117,23 +123,21 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
                 return true;
             }
         });
-
-        tvv_player.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tvv_player.isPlaying()) {
-                    tvv_player.pause();
-                } else {
-                    tvv_player.start();
-                }
-            }
-        });
     }
 
     private void resetPlay() {
+        resetCountTime();
         tvv_player.stopPlayback();
         iv_pic.setVisibility(View.VISIBLE);
         iv_start.setVisibility(View.VISIBLE);
+        FileUtil.deleteFile(videoLocalUrl);
+    }
+
+    // 重置倒计时
+    private void resetCountTime() {
+        tv_video_time.cancel();
+        tv_video_time.setText(TimeUtil.getLongToMinuteTime(userVideo.getDuration() * 1000l));
+        tv_video_time.setCountDownTimes(userVideo.getDuration() * 1000);
     }
 
     @Override
@@ -153,4 +157,16 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         iv_pic.setVisibility(View.GONE);
         downloadVideo();
     }
+
+    private CountDownTextView.OnCountDownListener tipsListener = new CountDownTextView.OnCountDownListener() {
+        @Override
+        public void onTick(long min, long sec) {
+        }
+
+        @Override
+        public void onFinish() {
+            resetPlay();
+        }
+    };
+
 }
