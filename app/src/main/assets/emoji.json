@@ -2,7 +2,7 @@
   "name": "表情包",
   "desc": "聊天表情",
   "key": "default",
-  "prefix": "emoji_",
+  "prefix": "default_",
   "files": {
     "bq01": "微笑",
     "bq02": "撇嘴",
