@@ -209,7 +209,7 @@ public class DBCenterFLetter {
                         }
                         return false;
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     /**
@@ -303,7 +303,7 @@ public class DBCenterFLetter {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convertFletter(query.run());
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     public Observable<List<BaseMessage>> deleteKFID(){
@@ -321,7 +321,7 @@ public class DBCenterFLetter {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convertFletter(query.run());
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
 

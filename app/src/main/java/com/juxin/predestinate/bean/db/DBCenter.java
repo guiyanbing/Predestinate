@@ -102,7 +102,7 @@ public class DBCenter {
                     centerFmessage.delete(temp.getLWhisperID(), delTime);
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -127,7 +127,7 @@ public class DBCenter {
                     centerFmessage.delete(temp.getLWhisperID());
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /******************** FMessage **************************/

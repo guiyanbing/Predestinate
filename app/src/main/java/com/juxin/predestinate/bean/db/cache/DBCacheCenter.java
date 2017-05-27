@@ -89,7 +89,7 @@ public class DBCacheCenter {
                     e.printStackTrace();
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -122,7 +122,7 @@ public class DBCacheCenter {
                         }
                         return false;
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
 
@@ -153,7 +153,7 @@ public class DBCacheCenter {
                 }
                 return lightweight;
             }
-        }).unsubscribeOn(Schedulers.io());
+        });
     }
 
     /******************** FHttpCache **************************/

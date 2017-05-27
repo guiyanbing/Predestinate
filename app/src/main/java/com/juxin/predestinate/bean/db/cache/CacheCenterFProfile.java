@@ -79,7 +79,7 @@ public class CacheCenterFProfile {
                     public void call(Boolean b) {
                         updateMsg(b, item);
                     }
-                });
+                }).unsubscribe();
             }
             transaction.markSuccessful();
         } finally {
