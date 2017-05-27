@@ -69,7 +69,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     private Gson gson = new Gson();
 
     private ICSCallback iCSCallback = null;
-    private long uid = 0;//用户ID
+    private volatile long uid = 0;//用户ID
     private String token;//用户token
 
     private AutoConnectMgr() {
@@ -158,7 +158,8 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     /**
      * 以获取到的地址和秘钥登录及时通讯服务器
      */
-    private void connect() {
+    protected void connect() {
+        if (uid == 0) return;
         connectionExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -171,7 +172,9 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     /**
      * 重连，每次重连进行延时，防止刷服务器
      */
-    private void reConnect() {
+    protected void reConnect() {
+        if(uid == 0) return;
+
         Observable.timer(getIncrementTime(), TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
@@ -375,6 +378,12 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
     public void onSocketConnected() {
         onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
         TimerUtil.resetIncreaseTime();
+
+        if(uid == 0){
+            socket.disconnect(true);
+            return;
+        }
+
         socket.sendPacket(getHeartbeat(TCPConstant.MSG_ID_Heartbeat));//登录时发送的是普通心跳消息
         socket.sendPacket(getLoginData());
     }

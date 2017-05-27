@@ -78,6 +78,9 @@ public class DBCenterFMessage {
             if (baseMessage.getcMsgID() != -1)
                 values.put(FMessage.COLUMN_CMSGID, baseMessage.getcMsgID());
 
+            if (baseMessage.getSpecialMsgID() != -1)
+                values.put(FMessage.COLUMN_CMSGID, baseMessage.getSpecialMsgID());
+
             values.put(FMessage.COLUMN_SENDID, baseMessage.getSendID());
             values.put(FMessage.COLUMN_TYPE, baseMessage.getType());
             values.put(FMessage.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
@@ -160,6 +163,9 @@ public class DBCenterFMessage {
 
             if (videoMessage.getTime() != -1)
                 values.put(FMessage.COLUMN_TIME, videoMessage.getTime());
+
+            if (videoMessage.getSpecialMsgID() != -1)
+                values.put(FMessage.COLUMN_TIME, videoMessage.getSpecialMsgID());
 
             if (videoMessage.getfStatus() != -1)
                 values.put(FMessage.COLUMN_FSTATUS, videoMessage.getfStatus());
@@ -260,58 +266,6 @@ public class DBCenterFMessage {
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
     }
 
-    public boolean updateToReadVoice(String channelID, String userID, String sendID) {
-//        try {
-//            String sql;
-//            String[] str;
-//            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
-//                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ? " + FMessage.COLUMN_TYPE + " = ?";
-//                str = new String[]{channelID, userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
-//            } else if (!TextUtils.isEmpty(channelID)) {
-//                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-//                str = new String[]{channelID, String.valueOf(MessageConstant.UNREAD_STATUS)};
-//            } else {
-//                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-//                str = new String[]{userID, String.valueOf(MessageConstant.UNREAD_STATUS)};
-//            }
-//
-//            ContentValues values = new ContentValues();
-//            values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-//            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return MessageConstant.ERROR;
-//
-//
-//        Cursor cursor = null;
-//        try {
-//            String sql;
-//            String[] str;
-//            if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {
-//                sql = "channelID = ? and whisperID = ? and sendId = ? and status != ? and type != ?";
-//                str = new String[]{channelID, whisperID, sendID, String.valueOf(ChatMgr.LOCAL_READ_STATUS), String.valueOf(VOICE)};
-//            } else if (!TextUtils.isEmpty(channelID)) {
-//                sql = "channelID = ? and sendId = ? and status != ? and type != ?";
-//                str = new String[]{channelID, sendID, String.valueOf(ChatMgr.LOCAL_READ_STATUS), String.valueOf(VOICE)};
-//            } else {
-//                sql = "whisperID = ? and sendId = ? and status != ? and type != ?";
-//                str = new String[]{whisperID, sendID, String.valueOf(ChatMgr.LOCAL_READ_STATUS), String.valueOf(VOICE)};
-//            }
-//            cursor = mSQLiteDatabase.query(FMESSAGE_TABLE, null, sql, str, null, null, _ID + " desc", null);
-//            return cursor.getCount() > 0;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        } finally {
-//            if (cursor != null)
-//                cursor.close();
-//        }
-
-        return true;
-    }
-
-
     public Observable<BaseMessage> queryVideoMsg(int vcID) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
                 .append(" WHERE ")
@@ -348,7 +302,7 @@ public class DBCenterFMessage {
                         }
                         return null;
                     }
-                }).unsubscribeOn(Schedulers.io());
+                });
     }
 
     /**

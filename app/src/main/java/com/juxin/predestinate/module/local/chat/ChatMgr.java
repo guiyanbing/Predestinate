@@ -278,22 +278,27 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
         if (!b) return;
-        sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                    commonMessage.setImg(upLoadResult.getFile_http_path());
-                    commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-                    long upRet = dbCenter.updateFmessage(commonMessage);
-                    if (upRet == MessageConstant.ERROR) {
-                        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
-                        return;
+
+        if (FileUtil.isURL(img_url)) {
+            sendMessage(commonMessage, null);
+        }else {
+            sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                        commonMessage.setImg(upLoadResult.getFile_http_path());
+                        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                        long upRet = dbCenter.updateFmessage(commonMessage);
+                        if (upRet == MessageConstant.ERROR) {
+                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
+                            return;
+                        }
+                        sendMessage(commonMessage, null);
                     }
-                    sendMessage(commonMessage, null);
                 }
-            }
-        });
+            });
+        }
     }
 
     //语音消息
@@ -499,6 +504,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void onReceiving(BaseMessage message) {
         message.setStatus(MessageConstant.UNREAD_STATUS);
+        PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
     }
 
@@ -524,7 +530,7 @@ public class ChatMgr implements ModuleBase {
                     pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -552,7 +558,7 @@ public class ChatMgr implements ModuleBase {
                 SortList.sortListView(baseMessages);// 排序
                 onChatMsgHistory(channelID, whisperID, true, baseMessages);
             }
-        });
+        }).unsubscribe();
     }
 
     /**
@@ -571,11 +577,11 @@ public class ChatMgr implements ModuleBase {
                     SortList.sortListView(baseMessages);// 排序
                     onChatMsgRecently(channelID, whisperID, true, baseMessages);
                 }
-            });
+            }).unsubscribe();
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if(ret != MessageConstant.ERROR){
-               // ModuleMgr.getChatListMgr().getWhisperList();
+                ModuleMgr.getChatListMgr().getWhisperList();
             }
 //            updateLocalReadStatus(channelID, whisperID, last_msgid);
         }
@@ -791,7 +797,7 @@ public class ChatMgr implements ModuleBase {
                         getProFile(uid);
                     }
                 }
-            });
+            }).unsubscribe();
         }
     }
 
@@ -848,18 +854,6 @@ public class ChatMgr implements ModuleBase {
                 }
             }
         });
-    }
-
-    /**
-     *  没有缓存
-     * @param uid
-     * @param infoComplete
-     */
-    public void getNoCacheUserInfo(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-        synchronized (infoMap) {
-            infoMap.put(uid, infoComplete);
-            getProFile(uid);
-        }
     }
 
     public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {

@@ -458,6 +458,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
             checkPermissions(message);
 
+            PLogger.printObject("onChatUpdate=" + message);
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();

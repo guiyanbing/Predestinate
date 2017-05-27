@@ -1,12 +1,18 @@
 package com.juxin.predestinate.module.logic.socket;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.util.ExTimerUtil;
+import com.juxin.predestinate.module.util.TimerUtil;
 
 /**
  * socket长连接服务
@@ -15,6 +21,7 @@ import com.juxin.predestinate.module.util.ExTimerUtil;
 public class CoreService extends Service {
 
     private CoreServiceBinder binder = null;
+    private NetWorkChangeReceiver netWorkChangeReceiver = null;
 
     @Override
     public void onCreate() {
@@ -52,11 +59,22 @@ public class CoreService extends Service {
         @Override
         public void login(long uid, String token) throws RemoteException {
             AutoConnectMgr.getInstance().login(uid, token);
+
+            if(netWorkChangeReceiver == null){
+                netWorkChangeReceiver = new NetWorkChangeReceiver();
+            }
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            registerReceiver(netWorkChangeReceiver,intentFilter);
         }
 
         @Override
         public void logout() throws RemoteException {
             AutoConnectMgr.getInstance().logout();
+
+            if(netWorkChangeReceiver != null){
+                unregisterReceiver(netWorkChangeReceiver);
+            }
         }
 
         @Override
@@ -72,6 +90,16 @@ public class CoreService extends Service {
         @Override
         public void sendMsg(NetData data) throws RemoteException {
             AutoConnectMgr.getInstance().send(data);
+        }
+    }
+
+    private class NetWorkChangeReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(NetworkUtils.isConnected(context)){
+                TimerUtil.resetIncreaseTime();
+                AutoConnectMgr.getInstance().reConnect();
+            }
         }
     }
 }

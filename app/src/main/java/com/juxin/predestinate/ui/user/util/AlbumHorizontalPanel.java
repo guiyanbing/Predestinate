@@ -96,12 +96,18 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (showType) {
             case EX_HORIZONTAL_ALBUM:
+                UserDetail info = ModuleMgr.getCenterMgr().getMyInfo();
                 if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
                     UIShow.showPhotoOfSelf((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                     return;
                 }
 
-                if (!ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                if (!info.isMan()) {
+                    UIShow.showPhotoOfOther((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
+                    return;
+                }
+
+                if (!info.isVip()) {
                     showVipTips();
                     return;
                 }

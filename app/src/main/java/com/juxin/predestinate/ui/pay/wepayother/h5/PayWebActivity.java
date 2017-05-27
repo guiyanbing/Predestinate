@@ -1,0 +1,85 @@
+package com.juxin.predestinate.ui.pay.wepayother.h5;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.LinearLayout;
+
+import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.invoke.Invoker;
+
+/**
+ * 微信h5支付
+ * Created by ZRP on 2016/12/9
+ * Fix by IQQ on 2017/05/27.
+ */
+public class PayWebActivity extends BaseActivity {
+
+    private WebPanelPayH5 webPanel;
+    public static int payResutl = 9999;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        isCanBack(false);
+        String url = getIntent().getStringExtra("url");
+        setTitle(getString(R.string.goods_pay_weixin1));
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.common_web_activity);
+        View base_title = findViewById(R.id.base_title);
+        base_title.setVisibility(View.VISIBLE);
+        setBackView();
+
+        LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
+        webPanel = new WebPanelPayH5(this, url, true);
+        webPanel.setWebListener(new WebPanelPayH5.WebListener() {
+            @Override
+            public void onTitle(String title) {
+                setTitle(title);
+            }
+
+            @Override
+            public void onLoadFinish(WebPanelPayH5.WebLoadStatus loadStatus) {
+            }
+        });
+        web_container.addView(webPanel.getContentView());
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webPanel != null && webPanel.getWebView() != null && webPanel.getWebView().canGoBack()) {
+            webPanel.getWebView().goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Invoker.getInstance().setWebView(webPanel == null ? null : webPanel.getWebView());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (webPanel != null) webPanel.clearReference();
+    }
+
+    /**
+     * 关闭loading，显示webView
+     */
+    public void hideLoading() {
+        if (webPanel != null) webPanel.hideLoading();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != RESULT_OK) return;
+        if (requestCode == PayWebActivity.payResutl) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}

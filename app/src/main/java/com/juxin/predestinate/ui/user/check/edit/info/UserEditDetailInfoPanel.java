@@ -108,7 +108,7 @@ public class UserEditDetailInfoPanel extends BasePanel implements RequestComplet
                                 ModuleMgr.getCenterMgr().updateMyInfo(postParams, UserEditDetailInfoPanel.this);
                             }
                         }
-                    }, Integer.valueOf(dateValues[0]), Integer.valueOf(dateValues[1]), Integer.valueOf(dateValues[2]));
+                    }, Integer.valueOf(dateValues[0].trim()), Integer.valueOf(dateValues[1].trim()), Integer.valueOf(dateValues[2].trim()));
                     break;
 
                 case R.id.weight_view:

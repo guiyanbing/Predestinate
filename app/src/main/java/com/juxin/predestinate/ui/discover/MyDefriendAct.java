@@ -80,6 +80,9 @@ public class MyDefriendAct extends BaseActivity implements RequestComplete, ExLi
                         data.clear();
                     }
                     data.addAll(lightweightList.getUserInfos());
+                    if (data.size() < 10) {
+                        exListView.setPullLoadEnable(false);
+                    }
                     adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
                 } else {

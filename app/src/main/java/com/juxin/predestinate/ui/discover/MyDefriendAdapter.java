@@ -31,7 +31,7 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
     public View getView(int position, View convertView, ViewGroup parent) {
         MyViewHolder holder;
         if (convertView == null) {
-            convertView = inflate(R.layout.f1_my_friend_item);
+            convertView = inflate(R.layout.f1_my_defriend_item);
             holder = new MyViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -39,7 +39,7 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
         final UserInfoLightweight userInfo = getItem(position);
         ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
-        holder.tv_name.setText(userInfo.getNickname());
+        holder.tv_name.setText(userInfo.getShowName());
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {

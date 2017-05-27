@@ -256,7 +256,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     private void isShowTopPhone() {
-        ModuleMgr.getChatMgr().getNoCacheUserInfo(whisperID, new ChatMsgInterface.InfoComplete(){
+        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete(){
             @Override
             public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
                 if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -50,7 +51,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
                 break;
             case R.id.mail_item_right_icon:
                 if (msgData == null || !(msgData instanceof VideoMessage)) {
-                    return;
+                    break;
                 }
                 VideoMessage videoMessage = (VideoMessage) msgData;
                 if (videoMessage.isVideoMediaTp()) {
@@ -58,6 +59,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
                 } else {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
+                break;
             default:
                 break;
         }
@@ -74,15 +76,17 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
         this.msgData = msgData;
         findViewById(R.id.gap_item).setVisibility(GONE);
 
-        if(item_last_time != null && BaseMessage.video_MsgType == msgData.getType()){
+        if (item_last_time != null && BaseMessage.video_MsgType == msgData.getType()) {
             item_last_time.setVisibility(GONE);
         }
         if (mail_item_right_icon == null || BaseMessage.video_MsgType != msgData.getType() || !(msgData instanceof VideoMessage)) {// 视频语音消息
+            mail_item_right_icon.setVisibility(GONE);
             return;
         }
 
         mail_item_right_icon.setVisibility(VISIBLE);
         VideoMessage videoMessage = (VideoMessage) msgData;
         mail_item_right_icon.setBackgroundResource(videoMessage.isVideoMediaTp() ? R.drawable.f1_video_state_ico : R.drawable.f1_call_state_ico);
+        mail_item_right_icon.setEnabled(true);
     }
 }
