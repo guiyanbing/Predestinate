@@ -1,7 +1,9 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
+
 import com.juxin.predestinate.module.util.TimeUtil;
+
 import org.json.JSONObject;
 
 /**
@@ -12,6 +14,7 @@ import org.json.JSONObject;
 public class VideoMessage extends BaseMessage {
 
     private int videoID;//视频聊天ID，一次视频聊天过程的唯一标识
+    // 3,4存本地
     private int videoTp;//请求类型，1邀请加入聊天，2同意加入  3拒绝或取消 4挂断（挂断可能会收到不止一次）
     private int videoMediaTp;//现在所有消息都会包含此字段 1视频, 2语音
     private int videoVcEscCode;//拒绝或取消 只在vc_tp=3 时生效 1未接通，对方无应答 2接收方拒绝 3发送方取消
@@ -20,11 +23,9 @@ public class VideoMessage extends BaseMessage {
 
     private EmLastStatus emLastStatus;
 
-
-    public enum EmLastStatus {
+    private enum EmLastStatus {
         none, timeout, refuse, cancel, connect
     }
-
 
     public VideoMessage() {
         super();
@@ -158,6 +159,14 @@ public class VideoMessage extends BaseMessage {
         }
     }
 
+    /**
+     * 获取音视频消息聊天列表item展示状态
+     *
+     * @param status   当前音视频状态
+     * @param sendTime 消息接收时间
+     * @param isSender 是否是发送者
+     * @return 转换之后的展示字符串
+     */
     public static String transLastStatusText(EmLastStatus status, String sendTime, boolean isSender) {
         String result;
         switch (status) {
@@ -174,10 +183,17 @@ public class VideoMessage extends BaseMessage {
             default:
                 result = "";
         }
-        return result +" "+ sendTime;
+        return result + " " + sendTime;
     }
 
-
+    /**
+     * 转换聊天窗口音视频消息展示内容
+     *
+     * @param status    当前音视频状态
+     * @param talk_time 通话时长，仅在挂断状态时有效
+     * @param isSender  是否是发送者
+     * @return 转换之后的展示字符串
+     */
     public static String getVideoChatContent(EmLastStatus status, long talk_time, boolean isSender) {
         switch (status) {
             case timeout:
@@ -187,7 +203,7 @@ public class VideoMessage extends BaseMessage {
             case cancel:
                 return isSender ? "已取消" : "对方已取消";
             case connect:
-                return "聊天时长" + TimeUtil.formatTimeLong(talk_time);
+                return "聊天时长 " + TimeUtil.formatTimeLong(talk_time);
             case none:
             default:
                 return "";

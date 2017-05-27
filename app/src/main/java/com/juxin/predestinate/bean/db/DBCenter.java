@@ -3,6 +3,7 @@ package com.juxin.predestinate.bean.db;
 import android.text.TextUtils;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -53,8 +54,10 @@ public class DBCenter {
     public long insertMsg(BaseMessage baseMessage) {
         if (TextUtils.isEmpty(baseMessage.getWhisperID())) return MessageConstant.ERROR;
 
-        long ret = centerFLetter.storageData(baseMessage);
-        if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+        if(BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()){
+            long ret = centerFLetter.storageData(baseMessage);
+            if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+        }
 
         return centerFmessage.insertMsg(baseMessage);
     }

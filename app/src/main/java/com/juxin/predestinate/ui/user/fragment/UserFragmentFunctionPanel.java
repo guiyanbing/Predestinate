@@ -36,10 +36,8 @@ public class UserFragmentFunctionPanel extends BasePanel {
         iv_immortal_verify = (ImageView) findViewById(R.id.iv_immortal_verify);
         tv_immortal_status = (TextView) findViewById(R.id.tv_immortal_status);
 
+        vipEnable();
         refreshBadge();
-        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            findViewById(R.id.ll_vip_privilege).setOnClickListener(clickListener);
-        }
         findViewById(R.id.ll_immortal_verify).setOnClickListener(clickListener);
     }
 
@@ -74,6 +72,19 @@ public class UserFragmentFunctionPanel extends BasePanel {
         tv_immortal_title.setTextColor(userDetail.isVerifyAll() ? getContext().getResources().getColor(R.color.color_83A0EC) :
                 getContext().getResources().getColor(R.color.color_D4D4D4));
         iv_immortal_verify.setEnabled(!userDetail.isVerifyAll());
+    }
+
+    /**
+     * 开通Vip点击逻辑
+     */
+    private void vipEnable() {
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+
+        if (userDetail.isVip()) return;
+
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            findViewById(R.id.ll_vip_privilege).setOnClickListener(clickListener);
+        }
     }
 
     private final NoDoubleClickListener clickListener = new NoDoubleClickListener() {

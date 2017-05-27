@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -25,7 +24,9 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.my.GiftMessageList;
+import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
@@ -43,7 +44,6 @@ import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
-
 import java.util.List;
 
 /**
@@ -82,32 +82,18 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         initView();
         MsgMgr.getInstance().attach(this);
-
-        //addMessageListener(MsgType.MT_MyInfo_Change, this);//个人资料已更新
-        //addMessageListener(MsgType.MT_Contacts_Change, this);//好友关系发生变化
-        //addMessageListener(MsgType.MT_APP_Suspension_Notice, this);
-        // addMessageListener(MsgType.MT_Pay_Success, this);//充值成功
-        //ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
-
         checkReply();
 
-        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
-                .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
-            privateChat.getChatAdapter().showIsCanChat(false);
-        }
 
-//        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//小友客服
-//            privateChat.getChatAdapter().showInputGONE();//输入框不显示
-//            privateChat.getChatAdapter().showIsCanChat(true);//显示输入框
-//        } else {
-//            if (ModuleMgr.getCenterMgr().isMan() && !ModuleMgr.getCenterMgr().isVIP()) {//男 非包月
-//                if (onDetectHeart()) {
-//                    if (!ModuleMgr.getChatListMgr().getTodayChatShow()) {//今天已经聊过了
-//                        privateChat.getChatAdapter().showIsCanChat(false);
-//                    }
-//                }
-//            }
-//        }
+        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
+            privateChat.getChatAdapter().showInputGONE();//输入框不显示
+            privateChat.getChatAdapter().showIsCanChat(true);//显示输入框
+        } else {
+            if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
+                    .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
+                privateChat.getChatAdapter().showIsCanChat(false);
+            }
+        }
     }
 
     private void initLastGiftList() {
@@ -163,7 +149,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
 
         setNickName(name);
-        if (MailSpecialID.customerService.getSpecialID() != whisperID) {//小友客服
+        if (MailSpecialID.customerService.getSpecialID() != whisperID) {//缘分小秘书
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -217,9 +203,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setBackgroundResource(R.drawable.f1_top02);
                     }
-                    if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
-                            (infoLightweight.isVideo_available() || infoLightweight.isVideo_available()))//女性用户显示可通话图标
-                        cus_top_img_phone.setVisibility(View.VISIBLE);
                     if (infoLightweight.isToper()) {//Top榜
                         cus_top_title_view.setVisibility(View.VISIBLE);
                         llTitleRight.setVisibility(View.VISIBLE);
@@ -236,6 +219,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             initHeadView();
             initFollow();
+            isShowTopPhone();
         }
 
         //VIP男用户展示浮动提示
@@ -267,6 +251,17 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
                 }
 //                cus_top_title_txt.setText(userDetail.get);
+            }
+        });
+    }
+
+    private void isShowTopPhone() {
+        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete(){
+            @Override
+            public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
+                if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
+                        (infoLightweight.isVideo_available() || infoLightweight.isAudio_available()))//女性用户显示可通话图标
+                    cus_top_img_phone.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -342,7 +337,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         } else {
             UIShow.showGoodsVipDlgOld(this);
         }
-
     }
 
     @Override
@@ -350,7 +344,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         super.onNewIntent(intent);
         checkReply();
     }
-
 
     @Override
     public void onMessage(String key, Object value) {
@@ -366,9 +359,15 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
 
             case MsgType.MT_SEND_GIFT_FLAG:
-                if(!Constant.GIFT_CHAT.equals((String) value)) return;
+                if (!Constant.GIFT_CHAT.equals((String) value)) return;
                 PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false);
                 privateChat.mGiftTipsContainerV.setVisibility(View.GONE);
+                break;
+
+            case MsgType.MT_MyInfo_Change://更新个人资料
+                if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && ModuleMgr.getCenterMgr().getMyInfo().isVip()) {//男
+                    privateChat.getChatAdapter().showIsCanChat(true);
+                }
                 break;
 
             default:
@@ -376,111 +375,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         }
     }
 
-
-//    @Override
-//    public void onMessage(MsgType msgType, Msg msg) {
-//        switch (msgType) {
-//            case MT_Chat_Can:
-//                if (ModuleMgr.getCenterMgr().isMan() && !ModuleMgr.getCenterMgr().isVIP()) {//男
-//                    if ((Boolean) msg.getData()) {
-//                        privateChat.getChatAdapter().showIsCanChat(true);
-//                    } else {//不能回复信息
-//                        privateChat.getChatAdapter().showIsCanChat(false);
-//                    }
-//                }
-//                break;
-//            case MT_MyInfo_Change://更新个人资料
-//                if (ModuleMgr.getCenterMgr().isMan() && ModuleMgr.getCenterMgr().isVIP()) {//男
-//                    privateChat.getChatAdapter().showIsCanChat(true);
-//                }
-//                break;
-//            case MT_Pay_Success://充值成功
-////                    if (ModuleMgr.getCenterMgr().isMan() && !ModuleMgr.getCenterMgr().isMonthMail()) {//男
-////                        privateChat.getChatAdapter().showIsCanChat(ModuleMgr.getCenterMgr().getMyInfo().isMonthMail());
-////                    }
-//                break;
-//            case MT_Contacts_Change://好友关系发生变化
-//                if (ModuleMgr.getMsgCommonMgr().getFriendsData().isContains(whisperID)) {
-//                    setRightImg();
-//                } else {
-//                    setRightText();
-//                }
-//                break;
-//            case MT_APP_Suspension_Notice:
-//                Map<String, Object> parms = (Map<String, Object>) msg.getData();
-//                if (parms.containsKey(TipsBarMgr.TipsMgrIsShow)) {
-//                    String isShow = (String) parms.get(TipsBarMgr.TipsMgrIsShow);
-//                    Log.d("_test", "PrivateChatAct onMessage isshow = " + isShow);
-//                    if (isShow.equals(TipsBarMgr.TipsMgrIsShow_true)) {
-//                        showFloatTip(viewGroup);
-//                    } else if (isShow.equals(TipsBarMgr.TipsMgrIsShow_false) || isShow.equals(TipsBarMgr.TipsMgrIsShow_none)) {
-//                        TipToolUtils.dismiss();
-//                    }
-//                }
-//                break;
-//        }
-//    }
-//
-//
-//    private void showFloatTip(final ViewGroup view) {
-//        Log.d("_test", "showFloatTip --- view cont = " + view.getChildCount());
-//        final View anchorView = findViewById(R.id.back_but);
-//        final ViewGroup root = (ViewGroup) getWindow().getDecorView();
-//        MsgMgr.getInstance().sendMsgToUI(new Runnable() {
-//            @Override
-//            public void run() {
-//                TipToolUtils.dismiss();
-//                TipToolUtils.showTip(PrivateChatAct.this, anchorView, view, root, null);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public void onSystemMsg(BaseMessage message) {
-//        try {
-//            if (whisperID != message.getLWhisperID()) {
-//                return;
-//            }
-//            String str = message.getJsonStr();
-//            if (TextUtils.isEmpty(str)) return;
-//            JSONObject jsonObject = new JSONObject(str);
-//            switch (jsonObject.optInt("xt")) {
-//                case 5://5为正在输入
-//                    setBackView(R.id.back_view, "对方正在输入...");
-//                    break;
-//                case 6://6为取消正在输入
-//                    setNickName(name);
-//                    break;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private JSONObject getParmsJson() {
-//        JSONObject object = null;
-//        TipsParms parms = new TipsParms();
-//        parms.setTipsTex("聊天请使用文明用语,发布不良信息被举报将被封号");
-//        parms.setUid(whisperID);
-//        String jsonStr = new Gson().toJson(parms);
-//        if (!TextUtils.isEmpty(jsonStr))
-//            try {
-//                object = new JSONObject(jsonStr);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//        return object;
-//    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         privateChat.getChatAdapter().detach();
-        //  ChatSpecialMgr.getChatSpecialMgr().detachSystemMsgListener(this);
         lastActivity = null;
-        //   ModuleMgr.getTipsBarMgr().detach();
-        //  TipToolUtils.dismiss();
     }
 
     private static BaseActivity lastActivity = null;

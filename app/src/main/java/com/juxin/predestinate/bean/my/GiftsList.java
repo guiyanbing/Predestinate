@@ -16,7 +16,7 @@ public class GiftsList extends BaseData {
 
     private List arrCommonGifts;
     private List arrCallGifts;
-    private List arrlineGifts;
+    private List arrLineGifts;
 
     public List getArrCommonGifts() {
         List gifts = new ArrayList();
@@ -32,16 +32,16 @@ public class GiftsList extends BaseData {
         return gifts;
     }
 
-    public List getArrlineGifts() {
+    public List getArrLineGifts() {
         List gifts = new ArrayList();
-        if (arrlineGifts != null)
-            gifts.addAll(arrlineGifts);
+        if (arrLineGifts != null)
+            gifts.addAll(arrLineGifts);
         return gifts;
     }
 
-    public GiftInfo getGiftInfo(int id){
-        if (arrCommonGifts != null){
-            for (int i = 0 ;i< arrCommonGifts.size();i++){
+    public GiftInfo getGiftInfo(int id) {
+        if (arrCommonGifts != null) {
+            for (int i = 0; i < arrCommonGifts.size(); i++) {
                 GiftInfo gift = (GiftInfo) arrCommonGifts.get(i);
                 if (gift.getId() == id) return gift;
             }
@@ -49,23 +49,11 @@ public class GiftsList extends BaseData {
         return null;
     }
 
-    public void setArrCommonGifts(List arrCommonGifts) {
-        this.arrCommonGifts = arrCommonGifts;
-    }
-
-    public void setArrCallGifts(List arrCallGifts) {
-        this.arrCallGifts = arrCallGifts;
-    }
-
-    public void setArrlineGifts(List arrlineGifts) {
-        this.arrlineGifts = arrlineGifts;
-    }
-
     @Override
     public void parseJson(String s) {
         arrCommonGifts = getBaseDataList(getJsonObject(s).optJSONArray("list"), GiftInfo.class);
         arrCallGifts = getBaseDataList(getJsonObject(s).optJSONArray("calllist"), GiftInfo.class);
-        arrlineGifts = getBaseDataList(getJsonObject(s).optJSONArray("linelist"), GiftInfo.class);
+        arrLineGifts = getBaseDataList(getJsonObject(s).optJSONArray("linelist"), GiftInfo.class);
     }
 
     public static class GiftInfo extends BaseData {
@@ -147,13 +135,14 @@ public class GiftsList extends BaseData {
 
         @Override
         public String toString() {
-            return "RankList{" +
-                    //                    "uid=" + uid +
-                    //                    ", avatar=" + avatar +
-                    //                    ", nickname=" + nickname +
-                    //                    ", gender=" + gender +
-                    //                    ", score=" + score +
-                    //                    ", exp=" + exp +
+            return "GiftInfo{" +
+                    "isSelect=" + isSelect +
+                    ", pic='" + pic + '\'' +
+                    ", name='" + name + '\'' +
+                    ", money=" + money +
+                    ", id=" + id +
+                    ", gif='" + gif + '\'' +
+                    ", isShow=" + isShow +
                     '}';
         }
     }

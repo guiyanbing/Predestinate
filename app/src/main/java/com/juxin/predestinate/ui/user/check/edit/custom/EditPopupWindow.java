@@ -79,6 +79,7 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
 
         // 备注
         if (editKey.equals(EditKey.s_key_remark_name)) {
+            ModuleMgr.getCenterMgr().inputFilterSpace(user_edit);
             data = txt.getText().toString();
         }
         if (TextUtils.isEmpty(data)) data = "";

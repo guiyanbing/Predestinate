@@ -2,9 +2,7 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +71,7 @@ public class GiftMessage extends BaseMessage {
 
     public GiftMessage(Bundle bundle, boolean fletter) {
         super(bundle, fletter);
-        parseJson(getJsonStr());
+        convertJSON(getJsonStr());
     }
 
     /**
@@ -81,7 +79,7 @@ public class GiftMessage extends BaseMessage {
      */
     public GiftMessage(Bundle bundle) {
         super(bundle);
-        parseJson(getJsonStr());
+        convertJSON(getJsonStr());
     }
 
     public int getGiftCount() {
@@ -122,15 +120,14 @@ public class GiftMessage extends BaseMessage {
      * 礼物消息数据解析
      */
     private void parseCommonJson(JSONObject object) {
-        if (getType() == BaseMessageType.wantGift.getMsgType()) {//索要礼物
-            this.setGiftID(object.optInt("gift_id"));
-        } else {//收到礼物
-            if (!object.isNull("gift")) {
-                JSONObject giftJSON = object.optJSONObject("gift");
-                this.setGiftCount(giftJSON.optInt("count"));
-                this.setGiftID(giftJSON.optInt("gift_id"));
-                this.setGiftLogID(giftJSON.optLong("gift_log_id"));
-            }
+        //索要礼物
+        if (object.has("gift_id")) this.setGiftID(object.optInt("gift_id"));
+        //收到礼物
+        if (object.has("gift")) {
+            JSONObject giftJSON = object.optJSONObject("gift");
+            this.setGiftCount(giftJSON.optInt("count"));
+            this.setGiftID(giftJSON.optInt("gift_id"));
+            this.setGiftLogID(giftJSON.optLong("gift_log_id"));
         }
     }
 }
