@@ -195,14 +195,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //        }
 //
         initLastGiftList();
-        ModuleMgr.getChatMgr().getNoCacheUserInfo(whisperID, new ChatMsgInterface.InfoComplete(){
-            @Override
-            public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
-                        (infoLightweight.isVideo_available() || infoLightweight.isAudio_available()))//女性用户显示可通话图标
-                    cus_top_img_phone.setVisibility(View.VISIBLE);
-            }
-        });
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
@@ -227,6 +219,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             initHeadView();
             initFollow();
+            isShowTopPhone();
         }
 
         //VIP男用户展示浮动提示
@@ -258,6 +251,17 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
                 }
 //                cus_top_title_txt.setText(userDetail.get);
+            }
+        });
+    }
+
+    private void isShowTopPhone() {
+        ModuleMgr.getChatMgr().getNoCacheUserInfo(whisperID, new ChatMsgInterface.InfoComplete(){
+            @Override
+            public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
+                if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
+                        (infoLightweight.isVideo_available() || infoLightweight.isAudio_available()))//女性用户显示可通话图标
+                    cus_top_img_phone.setVisibility(View.VISIBLE);
             }
         });
     }
