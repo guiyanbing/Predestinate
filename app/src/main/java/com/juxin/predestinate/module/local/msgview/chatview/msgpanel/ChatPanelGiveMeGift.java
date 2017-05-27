@@ -39,9 +39,9 @@ public class ChatPanelGiveMeGift extends ChatPanel {
         tv_gift_hello = (TextView) findViewById(R.id.tv_gift_hello);
         tv_gift_content = (TextView) findViewById(R.id.tv_gift_content);
         if (isSender()) {//防止数据库出错，索要礼物消息展示在右侧的情况
-            View ll_container = findViewById(R.id.ll_container);
-            ll_container.setBackgroundResource(R.drawable.y1_talk_box_24x24_me);
-            ll_container.setPadding(0, 0, 0, 0);
+            View rl_container = findViewById(R.id.rl_container);
+            rl_container.setBackgroundResource(R.drawable.y1_talk_box_24x24_me);
+            rl_container.setPadding(0, 0, 0, 0);
         }
     }
 

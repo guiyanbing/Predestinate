@@ -304,6 +304,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.video_MsgType://视频消息
                 setVideoMsg(message);
                 break;
+            case BaseMessage.System_MsgType://系统消息
+                setSystemMsg(message);
+                break;
             default:
                 break;
         }
@@ -340,4 +343,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
         String content = jsonObject.optString("mct");
         UIShow.showChatRedBoxDialog((Activity) App.getActivity(), content);
     }
+
+    private void setSystemMsg(BaseMessage message) {
+
+    }
+
 }
