@@ -84,7 +84,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     }
 
     private void initTitle() {
-        setBackView(TextUtils.isEmpty(userDetail.getRemark()) ? userDetail.getNickname() : userDetail.getRemark());
+        setBackView(userDetail.getShowName());
         findViewById(R.id.cut_line).setVisibility(View.GONE);
         if (userDetail.isMan()) {
             setTitleBackground(R.color.picker_blue_color);

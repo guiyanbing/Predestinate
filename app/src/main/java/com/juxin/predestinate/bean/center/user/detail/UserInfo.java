@@ -1,6 +1,7 @@
 package com.juxin.predestinate.bean.center.user.detail;
 
 import android.os.Parcel;
+import android.text.TextUtils;
 
 import org.json.JSONObject;
 
@@ -133,6 +134,13 @@ public class UserInfo extends UserBasic {
 
         // Y
         this.setYcoin(detailObject.optInt("ycoin"));
+    }
+
+    /**
+     * 获取展示名称
+     */
+    public String getShowName() {
+        return TextUtils.isEmpty(remark) ? getNickname() : remark;
     }
 
     /**
