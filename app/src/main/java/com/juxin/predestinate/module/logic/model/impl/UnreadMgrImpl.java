@@ -110,7 +110,7 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
                     public void call(String storeString) {
                         getUnreadMgr().init(storeString, parentMap);
                     }
-                });
+                }).unsubscribe();
                 // 角标变更监听，每次变更之后更新数据库
                 getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
                     @Override
