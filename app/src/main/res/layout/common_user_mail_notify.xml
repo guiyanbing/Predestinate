@@ -75,7 +75,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_distance"
+                    android:id="@+id/tv_height"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
@@ -86,7 +86,7 @@
                     android:paddingTop="1dp"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    tools:text="5km" />
+                    tools:text="175cm" />
             </LinearLayout>
 
             <TextView

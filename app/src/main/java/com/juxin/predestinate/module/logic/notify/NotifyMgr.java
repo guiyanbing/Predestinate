@@ -163,7 +163,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      */
     private void viewPrivacy(final UserInfoLightweight simpleData, final String whisperID, final int type, final String content) {
         boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
-        if (!instanceOfChat) {
+        if (!instanceOfChat && type != NOTIFY_VIDEO) {
             playSound();
             vibrator();
         }

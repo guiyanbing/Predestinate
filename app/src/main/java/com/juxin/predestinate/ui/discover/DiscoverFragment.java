@@ -225,6 +225,9 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     }
                     infos.addAll(lightweightList.getUserInfos());
                     adapter.notifyDataSetChanged();
+                    if (infos.size() < 10) {
+                        exListView.setPullLoadEnable(false);
+                    }
                     customStatusListView.showExListView();
                     setGroupSayhiBtn(true);
                 } else {
@@ -247,6 +250,9 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     infos.addAll(lightweightList.getUserInfos());
                     customStatusListView.showExListView();
                     adapter.notifyDataSetChanged();
+                    if (infos.size() < 10) {
+                        exListView.setPullLoadEnable(false);
+                    }
                     setGroupSayhiBtn(true);
                 }
             }
