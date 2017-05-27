@@ -23,6 +23,7 @@ import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
@@ -258,9 +259,9 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
         if(response.isOk()) {
             if(mContext instanceof PrivateChatAct) {
-                MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, true);
+                MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, Constant.GIFT_CHAT);
             }else if(mContext instanceof  UserCheckInfoAct) {
-                MsgMgr.getInstance().sendMsg(MsgType.MT_INFO_SEND_GIFT_FLAG, true);
+                MsgMgr.getInstance().sendMsg(MsgType.MT_SEND_GIFT_FLAG, Constant.GIFT_INFO);
             }
         }
     }
