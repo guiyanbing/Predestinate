@@ -78,6 +78,9 @@ public class DBCenterFMessage {
             if (baseMessage.getcMsgID() != -1)
                 values.put(FMessage.COLUMN_CMSGID, baseMessage.getcMsgID());
 
+            if (baseMessage.getSpecialMsgID() != -1)
+                values.put(FMessage.COLUMN_CMSGID, baseMessage.getSpecialMsgID());
+
             values.put(FMessage.COLUMN_SENDID, baseMessage.getSendID());
             values.put(FMessage.COLUMN_TYPE, baseMessage.getType());
             values.put(FMessage.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
@@ -160,6 +163,9 @@ public class DBCenterFMessage {
 
             if (videoMessage.getTime() != -1)
                 values.put(FMessage.COLUMN_TIME, videoMessage.getTime());
+
+            if (videoMessage.getSpecialMsgID() != -1)
+                values.put(FMessage.COLUMN_TIME, videoMessage.getSpecialMsgID());
 
             if (videoMessage.getfStatus() != -1)
                 values.put(FMessage.COLUMN_FSTATUS, videoMessage.getfStatus());

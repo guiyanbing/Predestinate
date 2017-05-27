@@ -129,6 +129,7 @@ public class VideoMessage extends BaseMessage {
 
     private void parseVideoJson(JSONObject object) {
         this.setVideoID(object.optInt("vc_id"));
+        this.setSpecialMsgID(getVideoID());
         this.setVideoTp(object.optInt("vc_tp"));
         this.setVideoMediaTp(object.optInt("media_tp"));
         this.setVideoVcEscCode(object.optInt("vc_esc_code"));
