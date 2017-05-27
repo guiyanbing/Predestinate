@@ -96,8 +96,11 @@ public class MyFriendsAct extends BaseActivity implements RequestComplete, ExLis
                         }
                     }
                     data.addAll(lightweightList.getUserInfos());
-                    customStatusListView.showExListView();
+                    if (data.size() < 10) {
+                        exListView.setPullLoadEnable(false);
+                    }
                     adapter.notifyDataSetChanged();
+                    customStatusListView.showExListView();
                 } else {
                     if (page == 1) {
                         customStatusListView.showNoData(getString(R.string.my_friend_nodata), "去添加", new View.OnClickListener() {
