@@ -1,8 +1,9 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-import android.util.Log;
+
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.Msg;
@@ -20,7 +21,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.MailReadedMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -34,14 +34,18 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -97,13 +101,40 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID);
     }
 
-
+    private String whisperID;
+    private String sendID;
+    /**
+     * 对方已读
+     * @param channelID
+     * @param whisperID
+     * @param sendID
+     */
+    public void updateOtherRead(String channelID, String whisperID, String sendID) {
+        this.whisperID = whisperID;
+        this.sendID = sendID;
+        String whisperId = PSP.getInstance().getString("whisperId","-1");
+//        Log.e("TTTTTTTTYYY",channelID+"||"+whisperId+"|||"+whisperID+"|||"+sendID+"|||"+mOnUpdateDataListener);
+        if (!whisperId.equalsIgnoreCase(whisperID)){
+            updateOtherSideRead(channelID,whisperID,sendID);
+        }else {
+            if (mOnUpdateDataListener != null)
+                mOnUpdateDataListener.onUpdateDate(channelID,whisperID,sendID);
+        }
+    }
 
 
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
     }
+//    setOnClickChatItemListener
+    private OnUpdateDataListener mOnUpdateDataListener;
+    public void setOnUpdateDataListener(OnUpdateDataListener mOnUpdateDataListener){
+        this.mOnUpdateDataListener = mOnUpdateDataListener;
+    }
 
+    public interface OnUpdateDataListener{
+        void onUpdateDate(String channelID, String whisperID, String sendID);
+    }
 
     /**
      * 打招呼
@@ -273,8 +304,8 @@ public class ChatMgr implements ModuleBase {
      *
      * @param userID
      */
-    public void sendMailReadedMsg(long userID,IMProxy.SendCallBack sendCallBack) {
-        MailReadedMessage message = new MailReadedMessage(userID);
+    public void sendMailReadedMsg(String channelID,long userID,IMProxy.SendCallBack sendCallBack) {
+        MailReadedMessage message = new MailReadedMessage(channelID,userID);
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toMailReadedJson()), sendCallBack);
     }
 
@@ -352,7 +383,7 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (!response.isOk()) {
                     updateFail(message, null);
-                  return;
+                    return;
                 }
                 complete.onRequestComplete(response);
             }
@@ -537,27 +568,13 @@ public class ChatMgr implements ModuleBase {
         observable.subscribe(new Action1<BaseMessage>() {
             @Override
             public void call(BaseMessage baseMessage) {
-                if(baseMessage == null){
+                if (baseMessage == null) {
                     pushMsg(dbCenter.getCenterFMessage().insertMsg(videoMessage) != MessageConstant.ERROR, videoMessage);
-                }else {
+                } else {
                     pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
                 }
             }
         }).unsubscribe();
-    }
-
-    /**
-     * 接收已读消息
-     *
-     * @param message
-     */
-    public void onSysReceiving(BaseMessage message) {
-        if (message instanceof SystemMessage){
-
-            Log.e("TTTTTTTTTTTTTTGG","对方已读"+((SystemMessage)message).getXtType());
-        }
-//        message.setStatus(MessageConstant.READ_STATUS);
-//        pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
     }
 
     /**
@@ -607,14 +624,14 @@ public class ChatMgr implements ModuleBase {
             }).unsubscribe();
 
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
+//            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
             if (ret > 0 && !TextUtils.isEmpty(whisperID))
-                sendMailReadedMsg(Long.valueOf(whisperID), new IMProxy.SendCallBack() {
+                sendMailReadedMsg(channelID,Long.valueOf(whisperID), new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();
                         messageRet.parseJson(contents);
-                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
+//                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
                         if (messageRet.getS() == 0) {
 
                         }
@@ -622,7 +639,7 @@ public class ChatMgr implements ModuleBase {
 
                     @Override
                     public void onSendFailed(NetData data) {
-                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
+//                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
                     }
                 });
             if(ret != MessageConstant.ERROR){

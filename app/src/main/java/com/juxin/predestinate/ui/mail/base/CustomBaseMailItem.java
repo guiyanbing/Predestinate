@@ -19,6 +19,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
+import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
@@ -112,9 +113,9 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //            item_certification.setText("官方");
 //        }
         if(msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()){
-            item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
-        }else {
             item_last_msg.setText(BaseMessage.getContent(msgData));
+        }else {
+            item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
         }
 
         long time = msgData.getTime();
@@ -154,30 +155,26 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     protected void setStatus(BaseMessage msgData) {
+//        Log.e("TTTTTTTTTTTKKK",msgData.getWhisperID()+"|||"+msgData.getJsonStr());
         if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType() || msgData.getLWhisperID() == MailMsgID.Greet_Msg.type) {
             item_last_status.setVisibility(View.GONE);
             return;
         }
+        item_last_status.setVisibility(View.GONE);
+        if (JsonUtil.getJsonObject(msgData.getJsonStr()).has("fid")) return;
         item_last_status.setVisibility(View.VISIBLE);
 //        发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
+//        Log.e("TTTTTTTTTTTBBB",msgData.getStatus()+"||||");
         switch (msgData.getStatus()){
             case 1:
+            case 10:
                 item_last_status.setText("送达");
                 break;
             case 2:
-                item_last_status.setText("发送失败");
-                break;
-            case 3:
-                item_last_status.setText("送达");
-                break;
-            case 10:
-                item_last_status.setText("未读");
-                break;
+            item_last_status.setText("失败");
+            break;
             case 11:
                 item_last_status.setText("已读");
-                break;
-            case 12:
-                item_last_status.setText("未审核通过");
                 break;
             default:
                 item_last_status.setVisibility(View.GONE);
