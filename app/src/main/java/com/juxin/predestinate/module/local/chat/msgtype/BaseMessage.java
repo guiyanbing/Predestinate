@@ -89,7 +89,7 @@ public class BaseMessage implements IBaseMessage {
     public BaseMessage parseJson(String jsonStr) {
         PLogger.d(jsonStr);
         this.setJsonStr(jsonStr);
-        return null;
+        return this;
     }
 
     @Override

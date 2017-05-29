@@ -107,6 +107,7 @@ public class CommonMessage extends BaseMessage {
                 json.put("mct", message.getMsgDesc());
             }
 
+            //图片
             String img = ((CommonMessage) message).getImg();
             String localImg = ((CommonMessage) message).getLocalImg();
             if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {
@@ -115,21 +116,21 @@ public class CommonMessage extends BaseMessage {
             }
 
             //语音
-            String videoUrl = ((CommonMessage) message).getVideoUrl();
-            String localVideoUrl = ((CommonMessage) message).getLocalVideoUrl();
-            if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {
-                JSONObject tmpVideo = new JSONObject();
-                tmpVideo.put("url", videoUrl);
-                tmpVideo.put("localUrl", localVideoUrl);
-                tmpVideo.put("len", ((CommonMessage) message).getVoiceLen());
-                tmpVideo.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
-                json.put("voice", tmpVideo);
-            }
-
-            //视频
             String voiceUrl = ((CommonMessage) message).getVoiceUrl();
             String localVoiceUrl = ((CommonMessage) message).getLocalVoiceUrl();
             if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {
+                JSONObject tmpVoice = new JSONObject();
+                tmpVoice.put("url", voiceUrl);
+                tmpVoice.put("localUrl", localVoiceUrl);
+                tmpVoice.put("len", ((CommonMessage) message).getVoiceLen());
+                tmpVoice.put("voice_userid", ((CommonMessage) message).getVoiceUserid());
+                json.put("voice", tmpVoice);
+            }
+
+            //视频
+            String videoUrl = ((CommonMessage) message).getVideoUrl();
+            String localVideoUrl = ((CommonMessage) message).getLocalVideoUrl();
+            if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {
                 JSONObject tmpVideo = new JSONObject();
                 tmpVideo.put("url", videoUrl);
                 tmpVideo.put("localUrl", localVideoUrl);
@@ -278,6 +279,7 @@ public class CommonMessage extends BaseMessage {
     private void parseCommonJson(JSONObject object) {
         if (!object.isNull("voice")) {
             JSONObject voiceJSON = object.optJSONObject("voice");
+            this.setLocalVoiceUrl(voiceJSON.optString("localUrl"));
             this.setVoiceUrl(voiceJSON.optString("url"));
             this.setVoiceLen(voiceJSON.optInt("len"));
             this.setVoiceUserid(voiceJSON.optLong("voice_userid"));

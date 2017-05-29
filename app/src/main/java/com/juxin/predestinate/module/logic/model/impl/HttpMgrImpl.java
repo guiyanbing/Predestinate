@@ -105,25 +105,25 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack downloadVideo(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".mp4";
+        String filePath = DirType.getVideoDir() + System.currentTimeMillis() + ".mp4";
         return download(url, filePath, downloadListener);
     }
 
     @Override
     public HTCallBack downloadPic(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".jpg";
+        String filePath = DirType.getImageDir() + System.currentTimeMillis() + ".jpg";
         return download(url, filePath, downloadListener);
     }
 
     @Override
     public HTCallBack downloadVoice(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".wav";
+        String filePath = DirType.getVoiceDir() + System.currentTimeMillis() + ".amr";
         return download(url, filePath, downloadListener);
     }
 
     @Override
     public HTCallBack downloadApk(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getUploadDir() + System.currentTimeMillis() + ".apk";
+        String filePath = DirType.getApkDir() + System.currentTimeMillis() + ".apk";
         return download(url, filePath, downloadListener);
     }
 
@@ -131,12 +131,10 @@ public class HttpMgrImpl implements HttpMgr {
     public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
         if (FileUtil.isExist(filePath)) {
             if (downloadListener != null) downloadListener.onSuccess(url, filePath);
-        } else {
-            return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
+            return new HTCallBack();
         }
-        return new HTCallBack();
+        return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
     }
-
 
     // ================ 以下为基础接口，不要重载 =====================
 

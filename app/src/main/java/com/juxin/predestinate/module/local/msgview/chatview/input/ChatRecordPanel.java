@@ -21,7 +21,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
  * 音频录制panel
  * Created by Kind on 2017/3/30.
  */
-public class ChatRecordPanel extends BasePanel implements ChatMediaRecord.OnRecordListener{
+public class ChatRecordPanel extends BasePanel implements ChatMediaRecord.OnRecordListener {
 
     private ChatAdapter.ChatInstance chatInstance = null;
     private ImageView micImage = null;
@@ -29,6 +29,7 @@ public class ChatRecordPanel extends BasePanel implements ChatMediaRecord.OnReco
 
     // 录音动画
     private Drawable[] micImages = null;
+
     public ChatRecordPanel(Context context, ChatAdapter.ChatInstance chatInstance) {
         super(context);
 
@@ -119,11 +120,6 @@ public class ChatRecordPanel extends BasePanel implements ChatMediaRecord.OnReco
                     String voiceFileUri = ChatMediaRecord.getInstance().getVoiceFileName();
                     if (length > 1000) {
                         ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000);
-                   //     if (chatInstance != null) {
-                   //         ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000, null);
-                    //    } else {
-                  //          ModuleMgr.getChatMgr().sendVoiceMsg(channelId, whisperId, voiceFileUri, (length + 500) / 1000, null);
-                    //    }
                     } else {
                         PToast.showShort("录音不能小于1秒!");
                         FileUtil.deleteFile(voiceFileUri);//清除无效文件
