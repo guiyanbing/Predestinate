@@ -20,7 +20,11 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 /**
+ * 媒体文件播放工具
  * Created by Kind on 2017/5/9.
  */
 public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
@@ -62,125 +66,81 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
      * @param onPlayListener 播放状态监听。
      */
     public synchronized void togglePlayVoice(final String filePath, final OnPlayListener onPlayListener) {
-        togglePlayVoice(filePath, false, onPlayListener);
-    }
-
-    /**
-     * 切换播放状态，如果当前播放的和将要播放的是同一个文件，则停止播放。
-     *
-     * @param filePath       音频文件。
-     * @param mute           静音播放。
-     * @param onPlayListener 播放状态监听。
-     */
-    public synchronized void togglePlayVoice(final String filePath, boolean mute, final OnPlayListener onPlayListener) {
         if (oriFilePath != null && oriFilePath.equals(filePath)) {
             oriFilePath = null;
             stopPlayVoice();
             return;
         }
-
-        playVoice(filePath, mute, onPlayListener);
+        playVoice(filePath, onPlayListener);
     }
 
     /**
-     * 播放一个音频。
+     * 播放一个音频，外部控制传入的音频地址为本地或者网络
      *
      * @param filePath       音频文件。
      * @param onPlayListener 播放状态监听。
      */
-    public synchronized void playVoice(final String filePath, final OnPlayListener onPlayListener) {
-        playVoice(filePath, false, onPlayListener);
-    }
-
-    /**
-     * 播放一个音频。
-     *
-     * @param filePath       音频文件。
-     * @param mute           静音播放。
-     * @param onPlayListener 播放状态监听。
-     */
-    public synchronized void playVoice(final String filePath, final boolean mute, final OnPlayListener onPlayListener) {
+    public synchronized void playVoice(final String filePath, OnPlayListener onPlayListener) {
         stopPlayVoice();
         this.oriFilePath = filePath;
         this.onPlayListener = onPlayListener;
 
-        PLogger.d(filePath);
-
-        if (TextUtils.isEmpty(filePath)) {
-            return;
-        }
+        PLogger.d("---voicePath--->" + filePath);
+        if (TextUtils.isEmpty(filePath)) return;
 
         if (!FileUtil.isURL(filePath)) {
-            playVoice(filePath, mute);
+            playVoice(filePath);
             return;
         }
 
         ModuleMgr.getHttpMgr().downloadVoice(filePath, new DownloadListener() {
             @Override
-            public void onStart(String url, String filePath) {}
+            public void onStart(String url, String filePath) {
+            }
 
             @Override
-            public void onProcess(String url, int process, long size) {}
+            public void onProcess(String url, int process, long size) {
+            }
 
             @Override
             public void onSuccess(String url, String filePath) {
-                if (oriFilePath != null && oriFilePath.equals(filePath)) {
-                    ChatMediaPlayer.getInstance().playVoice(filePath, mute);
-                }
+                ChatMediaPlayer.getInstance().playVoice(filePath);
             }
 
             @Override
             public void onFail(String url, Throwable throwable) {
-
             }
         });
-
-//        ModuleMgr.getChatMgr().reqVoice(filePath, null, new HttpMgr.IReqComplete() {
-//            @Override
-//            public void onReqComplete(HttpResult result) {
-//                if (result.isOk()) {
-//                    if (oriFilePath != null && oriFilePath.equals(filePath)) {
-//                        ChatMediaPlayer.getInstance().playVoice(result.getResultStr(), mute);
-//                    }
-//                }
-//            }
-//        });
     }
 
     /**
-     * 只接受本地地址。
+     * 只接受本地地址
      *
-     * @param filePath 本地文件地址。
-     * @param mute     静音播放。
+     * @param filePath 本地文件地址
      */
-    private void playVoice(final String filePath, boolean mute) {
-        PLogger.d("mute: " + mute + "; file: " + filePath);
+    private void playVoice(final String filePath) {
+        PLogger.d("file: " + filePath);
 
-        if (TextUtils.isEmpty(filePath)) {
-            return;
-        }
-
-        if (isPlaying()) {
-            return;
-        }
+        if (TextUtils.isEmpty(filePath)) return;
+        if (isPlaying()) return;
 
         try {
             AudioManager audioManager = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
             mediaPlayer = new MediaPlayer();
 
-
-            if (ispeaker()) {
+            if (isSpeakerDisplay()) {//扬声器播放
                 audioManager.setMode(AudioManager.MODE_NORMAL);
                 audioManager.setSpeakerphoneOn(true);
-//                mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-            } else {
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+            } else {//听筒播放
                 audioManager.setSpeakerphoneOn(false);// 关闭扬声器
                 // 把声音设定成Earpiece（听筒）出来，设定为正在通话中
                 audioManager.setMode(AudioManager.MODE_IN_CALL);
-//                mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
             }
 
-            mediaPlayer.setDataSource(filePath);
+            FileInputStream fis = new FileInputStream(new File(filePath));
+            mediaPlayer.setDataSource(fis.getFD());
             mediaPlayer.prepare();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -197,25 +157,16 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
                 }
 
             });
-
             mediaPlayer.start();
 
             readySensor();
-
-            if (mute) {
-                mediaPlayer.setVolume(0, 0);
-            }
-
             playing = true;
         } catch (Exception e) {
             PLogger.printThrowable(e);
-
             try {
                 mediaPlayer.release();
             } catch (Exception e1) {
-
             }
-
             mediaPlayer = null;
         }
     }
@@ -225,20 +176,17 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
      */
     public void stopPlayVoice() {
         playing = false;
-
         stopSensor();
 
         if (onPlayListener != null) {
             onPlayListener.onStop(oriFilePath);
             onPlayListener = null;
         }
-
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
         }
-
         oriFilePath = null;
     }
 
@@ -289,21 +237,33 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
         return false;
     }
 
-    public static boolean ispeaker() {
-        return false;
+    private boolean speakerDisplay = true;//是否为扬声器播放
+
+    /**
+     * @return 是否为扬声器播放
+     */
+    public boolean isSpeakerDisplay() {
+        return speakerDisplay;
     }
 
-    SensorManager _sensorManager = null; // 传感器管理器
-    Sensor mProximiny = null; // 传感器实例
-    float f_proximiny; // 当前传感器距离
+    /**
+     * 设置是否为扬声器进行语音播放
+     *
+     * @param speakerDisplay 是否为外置播放器进行语音播放
+     */
+    public void setSpeakerDisplay(boolean speakerDisplay) {
+        this.speakerDisplay = speakerDisplay;
+    }
 
+    private SensorManager _sensorManager = null; // 传感器管理器
+    private Sensor mProximiny = null; // 传感器实例
+    private float f_proximiny; // 当前传感器距离
 
     private void readySensor() {
         if (_sensorManager == null) {
             _sensorManager = (SensorManager) App.getActivity().getSystemService(Context.SENSOR_SERVICE);
             mProximiny = _sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         }
-
         _sensorManager.registerListener(this, mProximiny, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -335,7 +295,6 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     /* -------------------------------视频播放---------------------------------- */
@@ -351,29 +310,30 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
         PLogger.d("filePath:" + filePath);
         if (TextUtils.isEmpty(filePath)) return;
 
+        // 本地文件
         if (!FileUtil.isURL(filePath)) {
             playLocalVideo(mute, textureVideoView, filePath);
             return;
         }
+        // 网络地址，下载完成之后进行播放
+        ModuleMgr.getHttpMgr().downloadVideo(filePath, new DownloadListener() {
+            @Override
+            public void onStart(String url, String filePath) {
+            }
 
-//        ModuleMgr.getChatMgr().reqVideo(filePath, new DownloadListener() {
-//            @Override
-//            public void onStart(String url, String filePath) {
-//            }
-//
-//            @Override
-//            public void onProcess(String url, int process, long size) {
-//            }
-//
-//            @Override
-//            public void onSuccess(String url, String filePath) {
-//                playLocalVideo(mute, textureVideoView, filePath);
-//            }
-//
-//            @Override
-//            public void onFail(String url, Throwable throwable) {
-//            }
-//        });
+            @Override
+            public void onProcess(String url, int process, long size) {
+            }
+
+            @Override
+            public void onSuccess(String url, String filePath) {
+                playLocalVideo(mute, textureVideoView, filePath);
+            }
+
+            @Override
+            public void onFail(String url, Throwable throwable) {
+            }
+        });
     }
 
     /**

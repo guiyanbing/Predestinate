@@ -31,13 +31,13 @@ public enum UrlParam {
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
-    statistics(Hosts.FATE_IT_GO, "xs/hdp/Action", null, false),//大数据统计
+    statistics(Hosts.FATE_IT_GO, "x/hdp/Action2", null, false),//大数据统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
     reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
 
     //============================== 设置页相关接口 =============================
     reqReqVerifyCode("Public/sendSMSM", false),//获取手机验证码
-    mobileAuth("user/bindCellPhone",true),//手机认证
+    mobileAuth("user/bindCellPhone", true),//手机认证
     modifyPassword("user/modifyPassword", null, true),//修改密码
     feedBack("user/feedback"),//意见反馈
     getSetting("s/uinfo/GetSetting", Setting.class, true),//获取设置信息
