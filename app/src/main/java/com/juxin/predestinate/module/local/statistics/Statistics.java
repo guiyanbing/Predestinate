@@ -1,8 +1,11 @@
 package com.juxin.predestinate.module.local.statistics;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.logic.application.App;
@@ -14,191 +17,181 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * 各种统计管理类//TODO 接口及统计策略待确认
+ * 各种统计管理类
  * Created by ZRP on 2017/4/13.
  */
 public class Statistics {
 
-    /**
-     * 用户行为统计点
-     */
-    public enum Behavior {
-        RegisterFirstPage,      //注册首页
-        LoginPage,              //登录
-        UserLoginPage,          //用户登录
-        UserRegisterPage,       //用户注册
-        DiscoveryFirstPage,     //发现-首页
-        DiscoveryNearPage,      //发现-附近
-        PersonalInfoPage,       //查看他人资料界面
-        MessageFirstPage,       //消息首页
-        MessagePage             //聊天界面
-    }
-
-    /**
-     * 用户行为发送点
-     */
-    public enum SendPoint {
-        ClickSayHi,             //打招呼
-        ViewPersonalInfo,       //查看个人资料
-        ClickViewAlbum,         //点击相册
-        ClickFocus,             //点击关注
-        ClickViewQQWechat,      //点击QQ微信
-        ClickSendMessage,       //点击发信
-        Startup,                //APP启动日志:用户每启动一次APP,就发送一次最新的数据
-        Shutdown                //APP关闭事件日志
-    }
-
     private static final String BEHAVIOR_CACHE_KEY = "BEHAVIOR_CACHE_KEY";//用户行为缓存key
+    private static final String BEHAVIOR_SESSION_KEY = "BEHAVIOR_SESSION_KEY";//用户行为session time校验存储key
+    private static final String BEHAVIOR_SESSION_ID_KEY = "BEHAVIOR_SESSION_ID_KEY";//用户行为sessionId存储key
+    private static final String BEHAVIOR_FIRST_KEY = "BEHAVIOR_FIRST_KEY";//是否到达第二天存储key
+    private static final long BEHAVIOR_SESSION_TIME = 30 * 60 * 1000;//session有效时间：30分钟
     private static final Gson gson = new Gson();
-    private static LinkedHashMap<String, String> behaviorPathMap = new LinkedHashMap<>();//用户行为统计list
 
     /**
-     * 添加统计点
-     *
-     * @param behavior 统计点
+     * 客户端统计项
      */
-    public static void addBehavior(Class clazz, Behavior behavior) {
-        behaviorPathMap.put(clazz.getSimpleName(), behavior.toString());
+    private enum StatisticPoint {
+        Startup,                // APP启动日志:用户每启动一次APP,就发送一次最新的数据
+        Shutdown,               // APP关闭事件日志
+        InstallVideoPlugin,     // 安装语音视频插件
+        UserBehavior,           // 客户端用户行为日志
     }
 
     /**
-     * 移除class对应的behavior
-     *
-     * @param clazz 统计点class
+     * APP启动日志:用户每启动一次APP,就发送一次最新的数据
      */
-    public static void removeBehavior(Class clazz) {
-        String remove = behaviorPathMap.remove(clazz.getSimpleName());
-        PLogger.d("--->" + remove);
-    }
-
-    /**
-     * @return 获取行为列表
-     */
-    private static LinkedList<String> getBehaviorPath() {
-        LinkedList<String> linkedList = new LinkedList<>();
-        for (Map.Entry<String, String> entry : behaviorPathMap.entrySet()) {
-            linkedList.add(String.valueOf(entry.getValue()));
-        }
-        return linkedList;
-    }
-
-    /**
-     * 打招呼统计
-     *
-     * @param to_uid  打招呼对方uid
-     * @param success 是否打招呼成功
-     */
-    public static void clickSayHi(long to_uid, boolean success) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("touid", to_uid);
-        hashMap.put("success", success);
-        sendBehaviorStatistics(SendPoint.ClickSayHi, hashMap);
-    }
-
-    /**
-     * 查看对方个人资料统计
-     *
-     * @param to_uid 对方uid
-     */
-    public static void viewPersonalInfo(long to_uid) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("touid", to_uid);
-        sendBehaviorStatistics(SendPoint.ViewPersonalInfo, hashMap);
-    }
-
-    /**
-     * 查看对方相册统计
-     *
-     * @param to_uid  对方uid
-     * @param success 是否成功进入对方相册
-     * @param action  "cancel"-取消；"buy_vip"-去开通；""-进入相册成功
-     */
-    public static void clickViewAlbum(long to_uid, boolean success, String action) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("touid", to_uid);
-        hashMap.put("success", success);
-        hashMap.put("action", action);
-        sendBehaviorStatistics(SendPoint.ClickViewAlbum, hashMap);
-    }
-
-    /**
-     * 点击关注统计
-     *
-     * @param to_uid 对方uid
-     * @param action "focus"-关注；"unfocus"-取消关注
-     */
-    public static void clickFocus(long to_uid, String action) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("touid", to_uid);
-        hashMap.put("action", action);
-        sendBehaviorStatistics(SendPoint.ClickFocus, hashMap);
-    }
-
-    /**
-     * 点击查看QQ微信统计
-     *
-     * @param to_uid 对方uid
-     */
-    public static void clickViewQQWechat(long to_uid) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("touid", to_uid);
-        sendBehaviorStatistics(SendPoint.ClickViewQQWechat, hashMap);
-    }
-
-    /**
-     * 点击发信统计
-     *
-     * @param to_uid  对方uid
-     * @param success 是否成功进入私聊页面
-     * @param action  "say_hi"-给他/她打个招呼；"buy_vip"-开通vip；""-进入私聊页面成功
-     */
-    public static void clickSendMessage(long to_uid, boolean success, String action) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("touid", to_uid);
-        hashMap.put("success", success);
-        hashMap.put("action", action);
-        sendBehaviorStatistics(SendPoint.ClickSendMessage, hashMap);
-    }
-
-    /**
-     * 向大数据发送行为统计数据
-     *
-     * @param sendPoint 用户行为发送点
-     */
-    public static void sendBehaviorStatistics(SendPoint sendPoint, HashMap<String, Object> singleMap) {
-        if (singleMap == null) singleMap = new HashMap<>();
+    public static void startUp() {
+        Map<String, Object> singleMap = new HashMap<>();
         singleMap.put("time", System.currentTimeMillis());//发送时间戳
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
+        singleMap.put("client_type", "2");//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
-        singleMap.put("client_type", "2");//客户端类型
-        singleMap.put("channel_id", ModuleMgr.getAppMgr().getUMChannel());//渠道编号<主渠道>_<子渠道>
+        singleMap.put("channel_id", ModuleMgr.getAppMgr().getMainChannelID() + "_"
+                + ModuleMgr.getAppMgr().getSubChannelID());//渠道编号<主渠道>_<子渠道>
         singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
         singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
         singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串
         singleMap.put("client_ip", NetworkUtils.getIpAddressString());//客户端IP
         singleMap.put("device_model", android.os.Build.MODEL);//手机型号
         singleMap.put("device_os_version", android.os.Build.DISPLAY);//手机操作系统版本
-        singleMap.put("sex", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
-        singleMap.put("path", getBehaviorPath().toArray());//页面层级
+        singleMap.put("screen_width", ModuleMgr.getAppMgr().getScreenWidth());//屏幕宽度
+        singleMap.put("screen_height", ModuleMgr.getAppMgr().getScreenHeight());//屏幕高度
+        singleMap.put("tracker_code", EncryptUtil.md5(ModuleMgr.getAppMgr().getDeviceID()));//追踪码MD5,访客(包含游客)唯一标识且终生唯一
+        singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
 
-        final HashMap<String, Object> postParams = new HashMap<>();
-        postParams.put("topic", sendPoint.toString());//统计项名称
+        // 判断离上次产生session是否超过1天 //是否是APP启动后发送的第1条Startup数据,统计APP启动次数字段
+        singleMap.put("first_start", ModuleMgr.getCommonMgr().checkDateAndSave(BEHAVIOR_FIRST_KEY));
+
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("topic", StatisticPoint.Startup);//统计项名称
         postParams.put("message", singleMap);//统计项数据内容
+        sendStatistics(postParams);
+    }
 
+    /**
+     * APP关闭事件日志
+     */
+    public static void shutDown() {
+        Map<String, Object> singleMap = new HashMap<>();
+        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("topic", StatisticPoint.Shutdown);//统计项名称
+        postParams.put("message", singleMap);//统计项数据内容
+        sendStatistics(postParams);
+    }
+
+    /**
+     * 安装语音视频插件统计
+     *
+     * @param success 是否成功安装插件
+     */
+    public static void installVideoPlugin(boolean success) {
+        Map<String, Object> singleMap = new HashMap<>();
+        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("success", success);//是否成功安装插件
+
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("topic", StatisticPoint.InstallVideoPlugin);//统计项名称
+        postParams.put("message", singleMap);//统计项数据内容
+        sendStatistics(postParams);
+    }
+
+    /**
+     * 用户行为统计
+     *
+     * @param sendPoint 统计点
+     * @param to_uid    与其产生交互的用户uid
+     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     */
+    public static void userBehavior(SendPoint sendPoint, long to_uid, String fixParams) {
+        Map<String, Object> singleMap = new HashMap<>();
+        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
+        singleMap.put("to_uid", to_uid);//与谁交互UID(可选)
+
+        singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
+        singleMap.put("client_type", "2");//客户端类型
+        singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
+        singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
+        singleMap.put("channel_id", ModuleMgr.getAppMgr().getMainChannelID() + "_"
+                + ModuleMgr.getAppMgr().getSubChannelID());//渠道编号<主渠道>_<子渠道>
+        singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
+        singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
+        singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串
+        singleMap.put("client_ip", NetworkUtils.getIpAddressString());//客户端IP
+        singleMap.put("device_model", android.os.Build.MODEL);//手机型号
+        singleMap.put("device_os_version", android.os.Build.DISPLAY);//手机操作系统版本
+        singleMap.put("screen_width", ModuleMgr.getAppMgr().getScreenWidth());//屏幕宽度
+        singleMap.put("screen_height", ModuleMgr.getAppMgr().getScreenHeight());//屏幕高度
+        singleMap.put("tracker_code", EncryptUtil.md5(ModuleMgr.getAppMgr().getDeviceID()));//追踪码MD5,访客(包含游客)唯一标识且终生唯一
+        singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
+
+        singleMap.put("page", App.getActivity().getClass().getSimpleName());//当前页面，栈顶activity
+        singleMap.put("referer", "");//来源页面(可选)，栈中第二个activity// TODO: 2017/5/27
+        singleMap.put("event_type", sendPoint.toString());//事件类型
+        singleMap.put("event_data", TextUtils.isEmpty(fixParams) ? "{}" : fixParams);//事件数据(可选,有数据需提供数据说明文档)
+
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("topic", StatisticPoint.UserBehavior);//统计项名称
+        postParams.put("message", singleMap);//统计项数据内容
+        sendStatistics(postParams);
+    }
+
+    /**
+     * @return 获取用户sessionId，该id本地使用时间戳进行标识
+     */
+    private static String getSessionId() {
+        long sessionTime = PSP.getInstance().getLong(BEHAVIOR_SESSION_KEY, -1);
+        String sessionId = PSP.getInstance().getString(BEHAVIOR_SESSION_ID_KEY, "");
+        long currentTimeMillis = System.currentTimeMillis();
+        if (sessionTime == -1 || TextUtils.isEmpty(sessionId) || currentTimeMillis - sessionTime > BEHAVIOR_SESSION_TIME) {
+            PSP.getInstance().put(BEHAVIOR_SESSION_KEY, currentTimeMillis);
+            PSP.getInstance().put(BEHAVIOR_SESSION_ID_KEY, String.valueOf(currentTimeMillis));
+            return String.valueOf(currentTimeMillis);
+        }
+        PSP.getInstance().put(BEHAVIOR_SESSION_KEY, currentTimeMillis);
+        return sessionId;
+    }
+
+    /**
+     * 发送统计内容
+     *
+     * @param postParams 提交参数map
+     */
+    private static void sendStatistics(HashMap<String, Object> postParams) {
+        if (postParams == null) postParams = new HashMap<>();
         LinkedList<HashMap<String, Object>> cachedList = gson.fromJson(PCache.getInstance().getCache(BEHAVIOR_CACHE_KEY),
                 new TypeToken<LinkedList<HashMap<String, Object>>>() {
                 }.getType());
-        if (NetworkUtils.isConnected(App.context)) {
-            if (cachedList == null) cachedList = new LinkedList<>();
+        if (cachedList == null) cachedList = new LinkedList<>();
+        if (cachedList.size() < 10) {
             cachedList.add(postParams);
+            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(cachedList));
+            return;
+        }
+        if (NetworkUtils.isConnected(App.context)) {
+            cachedList.add(postParams);
+
+            LinkedList<Map<String, Object>> statisticsList = new LinkedList<>();
             Map<String, Object> batchMap = new HashMap<>();
-            batchMap.put("data", cachedList);
+            for (HashMap<String, Object> maps : cachedList) {
+                Map<String, Object> headBodyMap = new HashMap<>();
+                headBodyMap.put("headers", new HashMap<>());
+                headBodyMap.put("body", gson.toJsonTree(maps).toString());
+                statisticsList.add(headBodyMap);
+            }
+            batchMap.put("data", statisticsList);
             final LinkedList<HashMap<String, Object>> tempList = cachedList;
 
             PLogger.d("---Statistics--->" + gson.toJson(batchMap));
@@ -213,14 +206,8 @@ public class Statistics {
                 }
             });
         } else {
-            if (cachedList == null) {
-                LinkedList<HashMap<String, Object>> tempList = new LinkedList<>();
-                tempList.add(postParams);
-                PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(tempList));
-            } else {
-                cachedList.add(postParams);
-                PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(cachedList));
-            }
+            cachedList.add(postParams);
+            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(cachedList));
         }
     }
 }
