@@ -211,7 +211,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             int size = datas.size();
             long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
             int kfID = PSP.getInstance().getInt("kf_idid",0);
-//            Log.e("TTTTTTTGGG", id + "||" + ("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID()) + "|||" + datas.get(size - 1).getMsgID() + "|||" + datas.get(size - 1).getStatus());
             boolean boo =  PSP.getInstance().getBoolean(datas.get(0).getWhisperID() + "id", false);
             BaseMessage message = datas.get(size-1);
             if (kfID != 0){//当聊天对象为机器人时
@@ -227,7 +226,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     if (id >= datas.get(i).getMsgID()){
                         datas.get(i).setStatus(11);
                     } else{
-                        //                    Log.e("TTTTTTTTTTTYYY", datas.get(i).getStatus() + "|||"+datas.get(0).getWhisperID());
                         if (datas.get(i).getStatus()== 11 && !boo) {
                             datas.get(i).setStatus(MessageConstant.OK_STATUS);
                         }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){

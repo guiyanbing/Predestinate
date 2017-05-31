@@ -430,7 +430,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             public void call(List<BaseMessage> baseMessages) {
                 SortList.sortListView(baseMessages);// 排序
                 PLogger.printObject("最近有多少条消息=" + baseMessages.size());
-                List<BaseMessage> listTemp = new ArrayList<>();
+                final List<BaseMessage> listTemp = new ArrayList<>();
 
                 if (baseMessages.size() > 0) {
                     for (BaseMessage baseMessage : baseMessages) {
@@ -439,9 +439,14 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         }
                     }
                 }
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        chatInstance.chatContentAdapter.setList(listTemp);
+                        moveToBottom();
+                    }
+                });
 
-                chatInstance.chatContentAdapter.setList(listTemp);
-                moveToBottom();
             }
         });
         ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
