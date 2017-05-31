@@ -191,6 +191,19 @@ public class DBCenterFMessage {
         return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
     }
 
+    public void updateToRead(List<BaseMessage> list) {
+        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+        try {
+            for (BaseMessage temp : list) {
+                updateToRead(temp.getLWhisperID());
+            }
+            transaction.markSuccessful();
+        } finally {
+            transaction.end();
+        }
+    }
+
+
     public long updateToRead(long userID) {
         ContentValues values = new ContentValues();
         values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));

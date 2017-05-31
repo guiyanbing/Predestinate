@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -34,9 +33,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -750,71 +747,6 @@ public class ChatMgr implements ModuleBase {
         if (chatMsgListener != null) {
             chatMsgListener.remove(chatListener);
         }
-    }
-
-    /**
-     * 最近二十条聊天记录
-     *
-     * @param msgID0
-     * @param ret
-     * @param messageList
-     */
-    public void onChatMsgRecently(String msgID0, String msgID1, final boolean ret, final List<BaseMessage> messageList) {
-        PLogger.printObject(messageList);
-        final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
-        final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (listeners != null) {
-                    for (ChatMsgInterface.ChatMsgListener imListener : listeners) {
-                        imListener.onChatRecently(ret, messageList);
-                    }
-                }
-
-                if (listeners2 != null) {
-                    for (ChatMsgInterface.ChatMsgListener imListener : listeners2) {
-                        imListener.onChatRecently(ret, messageList);
-                    }
-                }
-                for (ChatMsgInterface.ChatMsgListener imListener : chatMsgListener) {
-                    imListener.onChatRecently(ret, messageList);
-                }
-            }
-        });
-    }
-
-    /**
-     * 历史记录
-     *
-     * @param msgID0
-     * @param ret
-     * @param messageList
-     */
-    public void onChatMsgHistory(String msgID0, String msgID1, final boolean ret, final List<BaseMessage> messageList) {
-        PLogger.printObject(messageList);
-        final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
-        final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
-        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (listeners != null) {
-                    for (ChatMsgInterface.ChatMsgListener imListener : listeners) {
-                        imListener.onChatHistory(ret, messageList);
-                    }
-                }
-
-                if (listeners2 != null) {
-                    for (ChatMsgInterface.ChatMsgListener imListener : listeners2) {
-                        imListener.onChatHistory(ret, messageList);
-                    }
-                }
-
-                for (ChatMsgInterface.ChatMsgListener imListener : chatMsgListener) {
-                    imListener.onChatHistory(ret, messageList);
-                }
-            }
-        });
     }
 
     /**

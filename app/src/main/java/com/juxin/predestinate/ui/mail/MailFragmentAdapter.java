@@ -39,7 +39,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
     public List<BaseMessage> mailItemOrdinary() {
         List<BaseMessage> messageList = new ArrayList<>();
         for (BaseMessage tmp : getList()) {
-            if (tmp.getMailItemStyle() == MailItemType.Mail_Item_Ordinary.type) {
+            if (MailItemType.Mail_Item_Ordinary.type == tmp.getMailItemStyle()) {
                 messageList.add(tmp);
             }
         }
@@ -77,7 +77,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
-        int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
+        int geetNum = ModuleMgr.getChatListMgr().getGreetNum();
         baseMessage.setNum(geetNum);
         baseMessage.setName("打招呼的人");
         baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");

@@ -59,14 +59,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     //------------------新消息通知start--------------------
 
     @Override
-    public void onChatRecently(boolean ret, List<BaseMessage> baseMessages) {
-    }
-
-    @Override
-    public void onChatHistory(boolean ret, List<BaseMessage> baseMessages) {
-    }
-
-    @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
         PLogger.d("---onChatUpdate--->ret：" + ret + "，message：" + message.toString());
         if (message.getSendID() == App.uid) return;

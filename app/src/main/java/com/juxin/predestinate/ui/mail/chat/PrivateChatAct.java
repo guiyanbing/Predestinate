@@ -86,7 +86,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
-            privateChat.getChatAdapter().showIsCanChat(true);
+          //  privateChat.getChatAdapter().showIsCanChat(true);
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
                     .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
