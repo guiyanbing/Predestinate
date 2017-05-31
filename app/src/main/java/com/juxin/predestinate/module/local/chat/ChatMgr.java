@@ -131,9 +131,10 @@ public class ChatMgr implements ModuleBase {
      * 本地模拟语音视频消息
      * @param otherID
      */
-    public void sendvideoMsglocalSimulation(String otherID, int videoID) {
-        final VideoMessage videoMessage = new VideoMessage(null, otherID, videoID);
+    public void sendvideoMsglocalSimulation(String otherID, int type, int videoID) {
+        final VideoMessage videoMessage = new VideoMessage(null, otherID, 3);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
+        videoMessage.setVideoMediaTp(type);
         videoMessage.setDataSource(MessageConstant.FOUR);
         videoMessage.setJsonStr(videoMessage.getJson(videoMessage));
 

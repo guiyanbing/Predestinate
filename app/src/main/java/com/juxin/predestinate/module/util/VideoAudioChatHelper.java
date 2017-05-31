@@ -376,7 +376,7 @@ public class VideoAudioChatHelper{
                 JSONObject resJo = jo.getJSONObject("res");
                 int vcID = resJo.getInt("vc_id");
 
-                ModuleMgr.getChatMgr().sendvideoMsglocalSimulation(String.valueOf(dstUid), vcID);
+                ModuleMgr.getChatMgr().sendvideoMsglocalSimulation(String.valueOf(dstUid), type, vcID);
 
 
 //                AppCtx.add_VC_ID(resJo.getInt("vc_id"));

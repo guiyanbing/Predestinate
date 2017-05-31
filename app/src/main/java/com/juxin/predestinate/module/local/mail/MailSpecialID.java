@@ -9,7 +9,7 @@ public enum MailSpecialID {
     /**缘分小秘书**/
     customerService(9999, "缘分小秘书"),
 
-    activity(8000, "活动");
+    ;
 
     public long specialID;
     public String specialIDName;
