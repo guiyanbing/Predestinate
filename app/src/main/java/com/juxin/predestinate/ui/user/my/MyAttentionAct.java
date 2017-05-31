@@ -10,9 +10,11 @@ import com.juxin.library.controls.smarttablayout.PagerItem;
 import com.juxin.library.controls.smarttablayout.SmartTabLayout;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.ui.user.my.adapter.ViewGroupPagerAdapter;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
+import com.juxin.predestinate.ui.user.my.adapter.ViewGroupPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class MyAttentionAct extends BaseActivity{
     }
 
     private void initData() {
+        ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.FOLLOW_ME);
         AttentionUtil.initUserDetails();
     }
 

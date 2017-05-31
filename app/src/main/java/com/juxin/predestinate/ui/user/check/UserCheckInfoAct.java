@@ -29,6 +29,7 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -220,6 +221,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     setTitle(remark);
                     userDetail.setRemark(remark);
                     footPanel.refreshView(userDetail);
+                    //更新缓存
+                    AttentionUtil.updateUserDetails(userDetail);
                     break;
             }
         }
