@@ -212,7 +212,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                     if (null == items) {
                         return;
                     }
-                    items.add(new SmileItem(url));
+//                    items.add(new SmileItem(url));
+                    optItems(new SmileItem(url), 0);
                     PToast.showShort("表情添加成功");
                     initData();
                 } catch (Exception e) {
@@ -241,7 +242,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                     if (null == items) {
                         return;
                     }
-                    items.remove(curPage * pageResNum + positon);
+//                    items.remove(curPage * pageResNum + positon);
+                    optItems(null, curPage * pageResNum + positon);
                     PToast.showShort("表情删除成功");
                     initData();
                 } catch (Exception e) {
@@ -249,6 +251,14 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                 }
             }
         });
+    }
+
+    private synchronized void optItems(SmileItem smileItem, int positon) {
+        if(null != smileItem) {
+            items.add(smileItem);
+        }else {
+            items.remove(positon);
+        }
     }
 
     @Override
