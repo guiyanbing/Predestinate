@@ -6,10 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.bumptech.glide.BitmapRequestBuilder;
+import com.bumptech.glide.BitmapTypeRequest;
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -43,6 +46,9 @@ public class ImageLoader {
         loadPic(context, model, view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop);
     }
 
+    public static <T> void loadCircleAvatar(Context context, T model, ImageView view) {
+        loadCircle(context, model, view, R.drawable.default_head, 0, 0);
+    }
     /**
      * CenterCrop加载图片
      */
@@ -93,49 +99,33 @@ public class ImageLoader {
     /**
      * 加载为圆形图像
      */
-    public static <T> void loadCircle(Context context, T model, ImageView view) {
-        loadCircle(context, model, view, 0, 0);
-    }
-
-    public static <T> void loadCircle(final Context context, final T model, final ImageView view, int borderWidth, int borderColor) {
+    public static <T> void loadCircle(final Context context, final T model, final ImageView view, int defImg, int borderWidth, int borderColor) {
         circleTransform.setBorderWidth(borderWidth);
         circleTransform.setBorderColor(borderColor);
-        loadPicWithCallback(context, R.drawable.default_pic,  new GlideCallback() {
+        loadPicWithCallback(context, defImg,  new GlideCallback() {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                 loadPic(context, model, view, resource, resource, bitmapCenterCrop, circleTransform);
             }
-        }, 0, 0, bitmapCenterCrop, circleTransform);
-    }
-
-    /**
-     * 加载gif图片
-     */
-    public static <T> void loadGif(Context context, T model, ImageView view) {
-        Glide.with(context).load(model).asGif().into(view);
+        }, bitmapCenterCrop, circleTransform);
     }
 
     /**
      * 加载图片： 带回调
      */
-    public static <T> void localPicWithCallback(Context context, T model, GlideCallback callback) {
-        loadPicWithCallback(context, model, callback, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop);
+    public static <T> void loadPicWithCallback(Context context, T model, GlideCallback callback) {
+        loadPicWithCallback(context, model, callback, bitmapCenterCrop);
     }
 
     /**
-     * 加载图片、gif以图片展示
+     * 以静态图片展示Gif
      */
-    public static void loadImgOrGifAsBmp(Context context, String url, ImageView view, int defWH) {
-        if(TextUtils.isEmpty(url)) return;
-        if(url.endsWith("gif")) {
-            loadGifAsBmp(context, url, view, defWH, R.drawable.default_pic, R.drawable.default_pic);
-        }else {
-            loadCenterCrop(context, url, view);
-        }
+    public static <T> void loadPicAsBmp(Context context, T model, ImageView view) {
+        loadPicAsBmp(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
     // ==================================== 内部私有调用 =============================================
-    private static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
+    public static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>...transformation) {
         try {
             getRequestBuilder(context, model, transformation)
                     .placeholder(defResImg)
@@ -146,7 +136,7 @@ public class ImageLoader {
         }
     }
 
-    private static <T> void loadPic(Context context, T model, ImageView view, Drawable defResImg, Drawable errResImg, Transformation<Bitmap>... transformation) {
+    public static <T> void loadPic(Context context, T model, ImageView view, Drawable defResImg, Drawable errResImg, Transformation<Bitmap>...transformation) {
         try {
             getRequestBuilder(context, model, transformation)
                     .placeholder(defResImg)
@@ -157,14 +147,9 @@ public class ImageLoader {
         }
     }
 
-    /**
-     * 网络图片处理: 回调
-     */
-    private static <T> void loadPicWithCallback(Context context, T model, final GlideCallback callback, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
+    public static <T> void loadPicWithCallback(Context context, T model, final GlideCallback callback, BitmapTransformation... transformations) {
         try {
-            getRequestBuilder(context, model, transformation)
-                    .placeholder(defResImg)
-                    .error(errResImg)
+            getRequestBuilder(context, model, transformations)
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -176,9 +161,14 @@ public class ImageLoader {
         }
     }
 
+    public static <T> void loadPicAsBmp(Context context, T model, ImageView view, int defResImg, int errResImg) {
+        getBmpRequestBuilder(context, model, bitmapFitCenter)
+                .placeholder(defResImg)
+                .error(errResImg)
+                .into(view);
+    }
 
-    private static <T> DrawableRequestBuilder<T> getRequestBuilder(Context context, T model, Transformation<Bitmap>... transformation) {
-
+    private static <T> DrawableRequestBuilder<T> getRequestBuilder(Context context, T model, Transformation<Bitmap>...transformation) {
         return Glide.with(context)
                 .load(model)
                 .dontAnimate()
@@ -186,25 +176,17 @@ public class ImageLoader {
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
-    private static void loadGifAsBmp(Context context, String url, ImageView view, int defWH, int defResImg, int errResImg) {
-        try {
-            Glide.with(context)
-                    .load(url)
-                    .asBitmap()
-                    .dontAnimate()
-                    .placeholder(defResImg)
-                    .error(errResImg)
-                    .override(defWH, defWH)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(view);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+    private static <T> BitmapRequestBuilder<T, Bitmap> getBmpRequestBuilder(Context context, T model, BitmapTransformation... transformations) {
+        return Glide.with(context)
+                .load(model)
+                .asBitmap()
+                .dontAnimate()
+                .transform(transformations)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
     // 请求回调
     public interface GlideCallback {
         void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation);
     }
-
 }

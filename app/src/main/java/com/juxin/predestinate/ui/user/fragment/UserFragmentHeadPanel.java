@@ -71,7 +71,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
      */
     public void refreshView() {
         myInfo = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadAvatar(getContext(), myInfo.getAvatar(), user_head);
+        ImageLoader.loadCircleAvatar(getContext(), myInfo.getAvatar(), user_head);
         user_id.setText("ID:" + myInfo.getUid());
         user_nick.setText(myInfo.getNickname());
         iv_invite_code.setText(String.format(getContext().getResources().
@@ -84,18 +84,18 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
     private void refreshHeader() {
         if (myInfo.isVip()) {
             user_head_vip.setVisibility(View.VISIBLE);
-            ImageLoader.loadAvatar(getContext(), R.drawable.f1_user_vip_logo, user_head_vip);
+            ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_user_vip_logo, user_head_vip);
         }
 
         switch (myInfo.getAvatar_status()) {
             case CenterConstant.USER_AVATAR_CHECKING:  // 审核中
                 user_head_status.setVisibility(View.VISIBLE);
-                ImageLoader.loadCircle(getContext(), R.drawable.f1_user_avatar_checking, user_head_status);
+                ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_user_avatar_checking, user_head_status);
                 break;
 
             case CenterConstant.USER_AVATAR_NO_PASS:   // 未通过
                 user_head_status.setVisibility(View.VISIBLE);
-                ImageLoader.loadCircle(getContext(), R.drawable.f1_user_avatar_notpass, user_head_status);
+                ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_user_avatar_notpass, user_head_status);
                 break;
 
             default:

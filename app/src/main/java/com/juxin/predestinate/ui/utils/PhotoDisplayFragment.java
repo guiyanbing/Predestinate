@@ -53,7 +53,7 @@ public class PhotoDisplayFragment extends BaseFragment {
     public void loadPic(String pic) {
         if (!TextUtils.isEmpty(pic)) {
             if (FileUtil.isURL(pic)) {
-                ImageLoader.localPicWithCallback(getContext(), pic, new ImageLoader.GlideCallback() {
+                ImageLoader.loadPicWithCallback(getContext(), pic, new ImageLoader.GlideCallback() {
                     @Override
                     public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                         progress.setVisibility(View.GONE);

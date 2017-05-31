@@ -62,17 +62,21 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
     private void initData() {
+        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small);
+        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small1);
+        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small2);
+        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small3);
         if (data.size() != 0) {
-            ImageLoader.localPicWithCallback(getActivity(), data.get(0).getAvatar(), new ImageLoader.GlideCallback() {
+            ImageLoader.loadPicWithCallback(getActivity(), data.get(0).getAvatar(), new ImageLoader.GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    ImageLoader.loadCircle(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2), Color.WHITE);
+                    ImageLoader.loadCircle(getActivity(), data.get(0).getAvatar(), iv_small, R.drawable.default_head, UIUtil.dip2px(getContext(), 2), Color.WHITE);
                     ImageLoader.loadBlurImg(getActivity(), data.get(0).getAvatar(), 50, iv_big);
                 }
             });
-            ImageLoader.loadCenterCrop(getActivity(), data.get(1).getAvatar(), iv_small1);
-            ImageLoader.loadCenterCrop(getActivity(), data.get(2).getAvatar(), iv_small2);
-            ImageLoader.loadCenterCrop(getActivity(), data.get(3).getAvatar(), iv_small3);
+            ImageLoader.loadAvatar(getActivity(), data.get(1).getAvatar(), iv_small1);
+            ImageLoader.loadAvatar(getActivity(), data.get(2).getAvatar(), iv_small2);
+            ImageLoader.loadAvatar(getActivity(), data.get(3).getAvatar(), iv_small3);
         }
     }
 
@@ -82,7 +86,6 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
         iv_small2 = (ImageView) findViewById(R.id.onkey_user_small2);
         iv_small3 = (ImageView) findViewById(R.id.onkey_user_small3);
         iv_small = (ImageView) findViewById(R.id.onkey_small);
-        ImageLoader.loadCircle(getActivity(), R.drawable.default_pic, iv_small, UIUtil.dip2px(getContext(), 2), Color.WHITE);
 
         findViewById(R.id.onkey_open_rl).setOnClickListener(this);
 

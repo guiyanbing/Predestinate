@@ -68,7 +68,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
             rl_header.setBackgroundColor(getContext().getResources().getColor(R.color.picker_blue_color));
         }
 
-        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header, UIUtil.dip2px(getContext(), 2), Color.WHITE);
+        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header, R.drawable.default_head, UIUtil.dip2px(getContext(), 2), Color.WHITE);
     }
 
     public void refreshView() {

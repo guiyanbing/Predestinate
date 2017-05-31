@@ -85,7 +85,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private void initView() {
         img_reg_info_upload_photo = (ImageView) findViewById(R.id.img_reg_info_upload_photo);
-        ImageLoader.loadCircle(this, R.drawable.btn_reg_upload_photo_selector, img_reg_info_upload_photo);
+        ImageLoader.loadCircleAvatar(this, R.drawable.btn_reg_upload_photo_selector, img_reg_info_upload_photo);
         rl_job_choose = (LinearLayout) findViewById(R.id.layout_reg_info_job);
         rl_edu_choose = (LinearLayout) findViewById(R.id.layout_reg_info_edu);
         rl_income_choose = (LinearLayout) findViewById(R.id.layout_reg_info_income);
@@ -235,7 +235,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                         if (response.isOk()) {
                             JSONObject jsonObject = response.getResponseJson();
                             String file_path = jsonObject.optString("file_path");
-                            ImageLoader.loadCircle(UserRegInfoCompleteAct.this, file_path, img_reg_info_upload_photo);
+                            ImageLoader.loadCircleAvatar(UserRegInfoCompleteAct.this, file_path, img_reg_info_upload_photo);
                             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                             ifUpHead = true;
                         } else {
@@ -254,7 +254,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
-                ImageLoader.loadCircle(this, ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), img_reg_info_upload_photo);
+                ImageLoader.loadCircleAvatar(this, ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), img_reg_info_upload_photo);
                 break;
         }
     }

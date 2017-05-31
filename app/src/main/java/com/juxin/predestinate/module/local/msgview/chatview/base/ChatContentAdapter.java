@@ -414,12 +414,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 //                    name.setVisibility(View.VISIBLE);
 //                }
 
-                ImageLoader.loadCircle(getContext(), infoLightweight.getAvatar(), head);
+                ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
              //   head.setTag("" + msg.getSendID());
 //                head.setImageResource(R.drawable.default_pic);
-                ImageLoader.loadCircle(getContext(), R.drawable.default_pic, head);
+                ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             }
         }
 

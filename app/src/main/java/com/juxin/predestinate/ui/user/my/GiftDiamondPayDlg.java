@@ -94,7 +94,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
     private void initView(Context context) {
         setContentView(R.layout.f1_dlg_diamond_gift_pay);
         img_user_head = (ImageView) findViewById(R.id.dlg_diamond_head);
-        ImageLoader.loadCircle(mContext, avatar, img_user_head);
+        ImageLoader.loadCircleAvatar(mContext, avatar, img_user_head);
 
         ((TextView) findViewById(R.id.dlg_diamond_nickname)).setText(nickname);
         ((TextView) findViewById(R.id.dlg_diamond_msg)).setText(msg);
