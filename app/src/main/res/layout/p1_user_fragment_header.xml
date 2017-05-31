@@ -27,20 +27,20 @@
             android:layout_margin="@dimen/px35_dp">
 
             <!-- 头像 -->
-            <ImageView
+            <com.juxin.library.view.CircleImageView
                 android:id="@+id/user_head"
                 style="@style/avatar_big"
                 android:src="@drawable/default_pic" />
 
             <!-- 头像状态 -->
-            <ImageView
+            <com.juxin.library.view.CircleImageView
                 android:id="@+id/user_head_status"
                 style="@style/avatar_big"
                 android:src="@drawable/f1_user_avatar_checking"
                 android:visibility="gone" />
 
             <!-- 头像vip -->
-            <ImageView
+            <com.juxin.library.view.CircleImageView
                 android:id="@+id/user_head_vip"
                 style="@style/avatar_big"
                 android:src="@drawable/f1_user_vip_logo"

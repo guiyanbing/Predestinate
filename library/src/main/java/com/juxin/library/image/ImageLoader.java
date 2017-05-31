@@ -2,6 +2,7 @@ package com.juxin.library.image;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -37,7 +38,7 @@ public class ImageLoader {
      * 加载头像
      */
     public static <T> void loadAvatar(Context context, T model, ImageView view) {
-        loadCenterCrop(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadPic(context, model, view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop, circleTransform);
     }
 
     /**
@@ -108,6 +109,18 @@ public class ImageLoader {
         loadPicWithCallback(context, url, callback, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop);
     }
 
+    /**
+     * 加载图片、gif以图片展示
+     */
+    public static void loadImgOrGifAsBmp(Context context, String url, ImageView view, int defWH) {
+        if(TextUtils.isEmpty(url)) return;
+        if(url.endsWith("gif")) {
+            loadGifAsBmp(context, url, view, defWH, R.drawable.default_pic, R.drawable.default_pic);
+        }else {
+            loadAvatar(context, url, view);
+        }
+    }
+
     // ==================================== 内部私有调用 =============================================
 
     private static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
@@ -144,6 +157,22 @@ public class ImageLoader {
                         }
                     });
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadGifAsBmp(Context context, String url, ImageView view, int defWH, int defResImg, int errResImg) {
+        try {
+            Glide.with(context)
+                    .load(url)
+                    .asBitmap()
+                    .dontAnimate()
+                    .placeholder(defResImg)
+                    .error(errResImg)
+                    .override(defWH, defWH)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(view);
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }

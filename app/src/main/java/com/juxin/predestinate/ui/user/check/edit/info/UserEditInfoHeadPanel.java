@@ -56,7 +56,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
     public void initData() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
-        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header);
+        ImageLoader.loadAvatar(getContext(), userDetail.getAvatar(), img_header);
         user_id.setText("ID: " + userDetail.getUid());
         user_gender.setText(userDetail.isMan() ? "男" : "女");
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
@@ -70,7 +70,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
 
     public void refreshView() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header);
+        ImageLoader.loadAvatar(getContext(), userDetail.getAvatar(), img_header);
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {

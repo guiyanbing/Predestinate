@@ -29,6 +29,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -59,7 +60,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private View[] views;
     private View layout_main_bottom;
 
-    private BadgeView mail_num;
+    private BadgeView mail_num, user_num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         user_layout.setOnClickListener(this);
 
         mail_num = (BadgeView) findViewById(R.id.mail_number);
+        user_num = (BadgeView) findViewById(R.id.user_number);
         layout_main_bottom = findViewById(R.id.layout_main_bottom);
+        ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
     }
 
     /**

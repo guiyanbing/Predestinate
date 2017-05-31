@@ -216,12 +216,12 @@ public class AppMgrImpl implements AppMgr {
 
     @Override
     public long getTime() {
-        return ServerTime.getServerTime().getTimeInMillis() / 1000;
+        return ServerTime.getServerTime().getTimeInMillis();
     }
 
     @Override
     public long getSecondTime() {
-        return ServerTime.getServerTime().getTimeInMillis();
+        return ServerTime.getServerTime().getTimeInMillis() / 1000;
     }
 
     @Override
