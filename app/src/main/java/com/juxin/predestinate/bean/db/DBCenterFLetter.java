@@ -19,6 +19,9 @@ import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import rx.Observable;
 import rx.Scheduler;
 import rx.functions.Action1;
@@ -236,7 +239,7 @@ public class DBCenterFLetter {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convert(query.run());
                     }
-                });
+                }).subscribeOn(Schedulers.io());
     }
 
 

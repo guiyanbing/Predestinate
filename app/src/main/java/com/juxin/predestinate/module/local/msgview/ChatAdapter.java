@@ -17,6 +17,7 @@ import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -38,6 +39,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -419,7 +423,26 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PLogger.printObject(this);
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
-        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
+        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
+        observable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+                SortList.sortListView(baseMessages);// 排序
+                PLogger.printObject(baseMessages);
+                List<BaseMessage> listTemp = new ArrayList<>();
+
+                if (baseMessages.size() > 0) {
+                    for (BaseMessage baseMessage : baseMessages) {
+                        if (isShowMsg(baseMessage)) {
+                            listTemp.add(baseMessage);
+                        }
+                    }
+                }
+
+                chatInstance.chatContentAdapter.setList(listTemp);
+                moveToBottom();
+            }
+        }).unsubscribe();
     }
 
     /**
@@ -682,7 +705,36 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
+        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
+        observable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+                SortList.sortListView(baseMessages);// 排序
+                PLogger.printObject(baseMessages);
+                chatInstance.chatListView.stopRefresh();
+                if(baseMessages.size() > 0){
+                    if (baseMessages.size() < 20) {
+                        chatInstance.chatListView.setPullRefreshEnable(false);
+                    }
+
+                    List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+
+                    for (BaseMessage baseMessage : baseMessages) {
+                        if (isShowMsg(baseMessage)) {
+                            listTemp.add(baseMessage);
+                        }
+                    }
+
+                    if (chatInstance.chatContentAdapter.getList() != null) {
+                        listTemp.addAll(chatInstance.chatContentAdapter.getList());
+                    }
+
+                    chatInstance.chatContentAdapter.setList(listTemp);
+                    chatInstance.chatListView.setSelection(baseMessages.size());
+                }
+            }
+        }).unsubscribe();
+
     }
 
     @Override

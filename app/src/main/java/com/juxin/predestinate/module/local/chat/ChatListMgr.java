@@ -32,8 +32,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import rx.Observable;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/4/13.
@@ -103,7 +105,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-
                 if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
                     msgList.add(tmp);
                 } else {
@@ -235,6 +236,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void getWhisperList() {
         PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
+        listObservable.subscribeOn(Schedulers.io());
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {

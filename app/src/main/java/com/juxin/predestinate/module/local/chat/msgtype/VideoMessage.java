@@ -31,8 +31,9 @@ public class VideoMessage extends BaseMessage {
         super();
     }
 
-    public VideoMessage(String channelID, String whisperID) {
+    public VideoMessage(String channelID, String whisperID, int videoID) {
         super(channelID, whisperID);
+        this.setVideoID(videoID);
         this.setType(BaseMessageType.video.getMsgType());
     }
 

@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.Msg;
@@ -17,6 +18,7 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.MailReadedMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.OrdinaryMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -129,11 +131,24 @@ public class ChatMgr implements ModuleBase {
      * 本地模拟语音视频消息
      * @param otherID
      */
-    public void sendvideoMsglocalSimulation(String otherID) {
-        VideoMessage videoMessage = new VideoMessage(null, otherID);
+    public void sendvideoMsglocalSimulation(String otherID, int videoID) {
+        final VideoMessage videoMessage = new VideoMessage(null, otherID, videoID);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
         videoMessage.setDataSource(MessageConstant.FOUR);
         videoMessage.setJsonStr(videoMessage.getJson(videoMessage));
+
+        Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
+        observable.subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                if(aBoolean){
+                    if(dbCenter.getCenterFLetter().updateLetter(videoMessage) == MessageConstant.ERROR){
+                        return;
+                    }
+                }
+                dbCenter.getCenterFMessage().insertMsg(videoMessage);
+            }
+        }).unsubscribe();
 
     }
 
@@ -599,15 +614,18 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID 私聊ID
      * @param page      页码
      */
-    public void getHistoryChat(final String channelID, final String whisperID, int page) {
-        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
-        observable.subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);// 排序
-                onChatMsgHistory(channelID, whisperID, true, baseMessages);
-            }
-        }).unsubscribe();
+    public Observable<List<BaseMessage>> getHistoryChat(final String channelID, final String whisperID, int page) {
+         return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
+
+
+//        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
+//        observable.subscribe(new Action1<List<BaseMessage>>() {
+//            @Override
+//            public void call(List<BaseMessage> baseMessages) {
+//                SortList.sortListView(baseMessages);// 排序
+//                onChatMsgHistory(channelID, whisperID, true, baseMessages);
+//            }
+//        }).unsubscribe();
     }
 
     /**
@@ -617,41 +635,48 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID  私聊ID
      * @param last_msgid 群最后一条消息ID
      */
-    public void getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
-        if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
-            Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
-            observable.subscribe(new Action1<List<BaseMessage>>() {
-                @Override
-                public void call(List<BaseMessage> baseMessages) {
-                    SortList.sortListView(baseMessages);// 排序
-                    onChatMsgRecently(channelID, whisperID, true, baseMessages);
-                }
-            }).unsubscribe();
-
-            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-//            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
-            if (ret > 0 && !TextUtils.isEmpty(whisperID))
-                sendMailReadedMsg(channelID,Long.valueOf(whisperID), new IMProxy.SendCallBack() {
-                    @Override
-                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                        MessageRet messageRet = new MessageRet();
-                        messageRet.parseJson(contents);
-//                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
-                        if (messageRet.getS() == 0) {
-
-                        }
-                    }
-
-                    @Override
-                    public void onSendFailed(NetData data) {
-//                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
-                    }
-                });
-            if(ret != MessageConstant.ERROR){
-                ModuleMgr.getChatListMgr().getWhisperList();
-            }
-//            updateLocalReadStatus(channelID, whisperID, last_msgid);
+    public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
+        Observable<List<BaseMessage>> observable =  dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
+        long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+        if(ret != MessageConstant.ERROR){
+            ModuleMgr.getChatListMgr().getWhisperList();
         }
+        return observable;
+
+//        if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
+//            Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
+//            observable.subscribe(new Action1<List<BaseMessage>>() {
+//                @Override
+//                public void call(List<BaseMessage> baseMessages) {
+//                    SortList.sortListView(baseMessages);// 排序
+//                    onChatMsgRecently(channelID, whisperID, true, baseMessages);
+//                }
+//            }).unsubscribe();
+//
+//            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+////            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
+//            if (ret > 0 && !TextUtils.isEmpty(whisperID))
+//                sendMailReadedMsg(channelID,Long.valueOf(whisperID), new IMProxy.SendCallBack() {
+//                    @Override
+//                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+//                        MessageRet messageRet = new MessageRet();
+//                        messageRet.parseJson(contents);
+////                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
+//                        if (messageRet.getS() == 0) {
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onSendFailed(NetData data) {
+////                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
+//                    }
+//                });
+//            if(ret != MessageConstant.ERROR){
+//                ModuleMgr.getChatListMgr().getWhisperList();
+//            }
+////            updateLocalReadStatus(channelID, whisperID, last_msgid);
+//        }
     }
 
     private void pushMsg(boolean ret, BaseMessage message) {

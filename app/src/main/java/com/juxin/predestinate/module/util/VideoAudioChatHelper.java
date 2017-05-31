@@ -374,9 +374,14 @@ public class VideoAudioChatHelper{
             JSONObject jo = new JSONObject(jsonStr);
             if ("ok".equals(jo.optString("status"))) {
                 JSONObject resJo = jo.getJSONObject("res");
+                int vcID = resJo.getInt("vc_id");
+
+                ModuleMgr.getChatMgr().sendvideoMsglocalSimulation(String.valueOf(dstUid), vcID);
+
 
 //                AppCtx.add_VC_ID(resJo.getInt("vc_id"));
-                Bundle bundle = newBundle(resJo.getInt("vc_id"), dstUid, 1, type);
+                Bundle bundle = newBundle(vcID, dstUid, 1, type);
+
                 startRtcInitActivity(context, bundle);
             } else {
                 int code = jo.optInt("code");
