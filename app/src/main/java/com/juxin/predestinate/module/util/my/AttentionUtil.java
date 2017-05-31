@@ -47,7 +47,7 @@ public class AttentionUtil {
     }
 
     public static void addUser(AttentionUserDetail userDetail){
-        userInfos.put(userDetail.getUid(),userDetail);
+        userInfos.put(userDetail.getUid(), userDetail);
     }
 
     public static AttentionUserDetail getUserDetail(Long uid){
@@ -74,6 +74,15 @@ public class AttentionUtil {
         UserDetail detail = new UserDetail();
         AttentionUserDetail userDetail = new AttentionUserDetail();
         detail.parseJson(jsonStr);
+        userDetail.parse(detail);
+        if (userInfos.containsKey(userDetail.getUid())){
+            userInfos.put(userDetail.getUid(),userDetail);
+            saveUserDetails();
+        }
+    }
+
+    public static void updateUserDetails(UserDetail detail){
+        AttentionUserDetail userDetail = new AttentionUserDetail();
         userDetail.parse(detail);
         if (userInfos.containsKey(userDetail.getUid())){
             userInfos.put(userDetail.getUid(),userDetail);
