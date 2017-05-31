@@ -655,19 +655,6 @@ public class ChatMgr implements ModuleBase {
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID,Long.valueOf(whisperID));
         return observable;
-
-//        if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
-//            Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
-//            observable.subscribe(new Action1<List<BaseMessage>>() {
-//                @Override
-//                public void call(List<BaseMessage> baseMessages) {
-//                    SortList.sortListView(baseMessages);// 排序
-//                    onChatMsgRecently(channelID, whisperID, true, baseMessages);
-//                }
-//            }).unsubscribe();
-//
-//            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-//            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
     }
 
     public void sendMailReadedMsg(String channelID,long userID){

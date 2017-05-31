@@ -64,8 +64,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     public LinearLayout mail_item_letter, item_ranking_state;
     public ImageView item_headpic, item_vip;
-    public TextView item_nickname, item_last_time, item_online, item_last_status,
-            item_certification, item_ranking_type, item_ranking_level;
+    public TextView item_nickname, item_last_time, item_last_status, item_certification, item_ranking_type, item_ranking_level;
     public EmojiTextView item_last_msg;
     public BadgeView item_unreadnum;
 
@@ -73,7 +72,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         mail_item_letter = (LinearLayout) contentView.findViewById(R.id.mail_item_letter);
         item_headpic = (ImageView) contentView.findViewById(R.id.mail_item_headpic);
         item_unreadnum = (BadgeView) contentView.findViewById(R.id.mail_item_unreadnum);
-        item_online = (TextView) contentView.findViewById(R.id.mail_item_online);
         item_nickname = (TextView) contentView.findViewById(R.id.mail_item_nickname);
         item_certification = (TextView) contentView.findViewById(R.id.mail_item_certification);
         item_last_msg = (EmojiTextView) contentView.findViewById(R.id.mail_item_last_msg);
@@ -124,12 +122,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         } else {
             item_last_time.setText("");
         }
-
-//        if (ModuleMgr.getCenterMgr().isOnline(msgData.getIsOnline())) {
-//            item_online.setVisibility(View.VISIBLE);
-//        } else {
-//            item_online.setVisibility(View.GONE);
-//        }
         setUnreadnum(msgData);
         setStatus(msgData);
 

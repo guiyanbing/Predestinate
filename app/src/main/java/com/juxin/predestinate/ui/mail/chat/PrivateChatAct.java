@@ -40,7 +40,6 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
-import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
@@ -77,7 +76,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         whisperID = getIntent().getLongExtra("whisperID", 0);
         name = getIntent().getStringExtra("name");
         kf_id = getIntent().getIntExtra("kf_id", -1);
-        PSP.getInstance().put("kf_idid",kf_id);
+        PSP.getInstance().put("kf_idid", kf_id);
         Log.d("_test", "whisperID = " + whisperID);
         setContentView(R.layout.p1_privatechatact);
 
@@ -163,17 +162,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     private void setNickName(String nickName) {
         String str = whisperID + "";
-        MailMsgID mailMsgID = MailMsgID.getMailMsgID(whisperID);
-        if (mailMsgID != null) {
-            switch (mailMsgID) {
-//                case matchmaker_msg://红娘
-//                    str = ModuleMgr.getChatListMgr().getMatchMakerNickname();
-//                    break;
-            }
-        } else {
-            if (!TextUtils.isEmpty(nickName)) {
-                str = nickName;
-            }
+        if (!TextUtils.isEmpty(nickName)) {
+            str = nickName;
         }
 
         if (base_title_title != null) {
@@ -189,13 +179,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
         marqueeView = new GiftMessageInforView(this);
 
-        // if (IS_REPLY) {//是否是首次回复的消息
-        //     privateChat.getChatAdapter().setNewMsg(true);
-
-//        if (kf_id != App.KF_ID) {
-//            privateChat.getChatAdapter().setKf_id(kf_id);
-//        }
-//
         initLastGiftList();
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
@@ -212,7 +195,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
-                    PSP.getInstance().put("kf_idid",kf_id);
+                    PSP.getInstance().put("kf_idid", kf_id);
                     name = infoLightweight.getShowName();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
@@ -253,7 +236,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     chat_title_attention_name.setText("关注她");
                     chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
                 }
-//                cus_top_title_txt.setText(userDetail.get);
             }
         });
     }
@@ -381,7 +363,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        PSP.getInstance().put("kf_idid",-1);
+        PSP.getInstance().put("kf_idid", -1);
         super.onDestroy();
         privateChat.getChatAdapter().detach();
         lastActivity = null;

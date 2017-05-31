@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -25,15 +24,11 @@ import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -268,18 +263,22 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case MsgType.MT_App_Login:
                 PLogger.d("---ChatList_MT_App_Login--->" + value);
                 if ((Boolean) value) {//登录成功
-                    if (App.uid > 0) {
-                        initAppComponent();
-                        getAppComponent().inject(this);
-                        ModuleMgr.getChatMgr().inject();
-                        PLogger.d("uid=======" + App.uid);
-                        getWhisperList();
-                        ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
-                    }
+                    login();
                 } else {
                     logout();
                 }
                 break;
+        }
+    }
+
+    private void login(){
+        if (App.uid > 0) {
+            initAppComponent();
+            getAppComponent().inject(this);
+            ModuleMgr.getChatMgr().inject();
+            PLogger.d("uid=======" + App.uid);
+            getWhisperList();
+            ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
         }
     }
 
@@ -344,8 +343,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
-
-        PLogger.printObject("setVideoMsg===" + videoMessage.toString());
         if (videoMessage.getVideoTp() == 1) {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());

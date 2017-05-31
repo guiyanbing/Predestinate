@@ -48,9 +48,6 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
                 if(msgData != null){
                     UIShow.showPrivateChatAct(getContext(), msgData.getLWhisperID(), msgData.getName(), msgData.getKfID());
                 }
-//                if (msgData != null && MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()) {
-//                    UIShow.showCheckOtherInfoAct(getContext(), msgData.getLWhisperID());
-//                }
                 break;
             case R.id.mail_item_right_icon:
                 if (msgData == null || !(msgData instanceof VideoMessage)) {
