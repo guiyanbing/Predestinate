@@ -51,6 +51,7 @@ dependencies {
     //rxJava:[https://github.com/ReactiveX/RxJava],rxAndroid:[https://github.com/ReactiveX/RxAndroid]
     compile "io.reactivex.rxjava2:rxjava:$rootProject.versions.libRxJava"
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.versions.libRxAndroid"
+    compile "io.reactivex:rxandroid:$rootProject.versions.libRxAndroid1"
 
     //gif文件加载
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -78,6 +77,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         whisperID = getIntent().getLongExtra("whisperID", 0);
         name = getIntent().getStringExtra("name");
         kf_id = getIntent().getIntExtra("kf_id", -1);
+        PSP.getInstance().put("kf_idid",kf_id);
         Log.d("_test", "whisperID = " + whisperID);
         setContentView(R.layout.p1_privatechatact);
 
@@ -88,8 +88,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
-            privateChat.setInput_giftviewVisibility(View.GONE);
-//            privateChat.getChatAdapter().showIsCanChat(true);
+            privateChat.setInputGiftviewVisibility(View.GONE);
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
                     .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
@@ -213,6 +212,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
+                    PSP.getInstance().put("kf_idid",kf_id);
                     name = infoLightweight.getShowName();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
@@ -233,9 +233,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         //状态栏 + 标题 +（关注TA、查看手机）// （去掉滚动条高度） 高度
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 && MailSpecialID.customerService.getSpecialID() != whisperID)
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewH(getTitleView()) + UIUtil.getViewH(privatechat_head) + UIUtil.getStatusHeight(this));
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getViewHeight(privatechat_head) + UIUtil.getStatusHeight(this));
         else
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewH(getTitleView()) + UIUtil.getStatusHeight(this));
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getStatusHeight(this));
     }
 
     private void initFollow() {
@@ -381,6 +381,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onDestroy() {
+        PSP.getInstance().put("kf_idid",-1);
         super.onDestroy();
         privateChat.getChatAdapter().detach();
         lastActivity = null;

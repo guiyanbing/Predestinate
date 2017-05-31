@@ -56,7 +56,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         int num = ModuleMgr.getChatListMgr().getFollowNum();
-        PLogger.printObject("Nem==" + num);
         baseMessage.setNum(num);
         baseMessage.setName("谁关注我");
         baseMessage.setAboutme(num > 0 ? "共有" + num + "位关注我" : "暂时还没有人关注我");
@@ -80,7 +79,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         int geetNum = ModuleMgr.getChatListMgr().getGreetNum();
         baseMessage.setNum(geetNum);
         baseMessage.setName("打招呼的人");
-        baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");
+        baseMessage.setAboutme(geetNum > 0 ? "共有" + ModuleMgr.getChatListMgr().getGeetList().size() + "位打招呼的人" : "暂时还没有打招呼的人");
         baseMessage.setLocalAvatar(R.drawable.f1_hi_btn);
         messageLists.add(baseMessage);
 

@@ -9,6 +9,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.unread.UnreadMgr;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -162,7 +164,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return "isTodayChat" + App.uid;
     }
 
-    public void setTodayChatShow(boolean b) {//隐藏，显示私聊列表
+    public void setTodayChatShow() {//隐藏，显示私聊列表
         PSP.getInstance().put(getIsTodayChatKey(), TimeUtil.getCurrentData());
     }
 
@@ -218,9 +220,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
-        if (ret != MessageConstant.ERROR) {
-            getWhisperList();
-        }
+//        if (ret != MessageConstant.ERROR) {
+//            getWhisperList();
+//        }
     }
 
     public void updateToBatchRead(List<BaseMessage> greetList) {
@@ -255,6 +257,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
+            case MsgType.MT_Unread_change:
+                if ( App.uid <= 0) return;
+                Map<String, Object> msgMap = (Map<String, Object>) value;
+                String Msg_Name_Key = (String) msgMap.get(UnreadMgr.Msg_Name_Key);
+                if(Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)){
+                    getWhisperList();
+                }
+                break;
             case MsgType.MT_App_Login:
                 PLogger.d("---ChatList_MT_App_Login--->" + value);
                 if ((Boolean) value) {//登录成功

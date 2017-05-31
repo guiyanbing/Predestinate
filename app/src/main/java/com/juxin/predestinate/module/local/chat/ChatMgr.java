@@ -505,7 +505,7 @@ public class ChatMgr implements ModuleBase {
      * 是否已经发完当天发的一条了
      */
     private void sendChatCanError() {
-        ModuleMgr.getChatListMgr().setTodayChatShow(true);
+        ModuleMgr.getChatListMgr().setTodayChatShow();
         Msg msg = new Msg();
         msg.setData(false);
         MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
@@ -649,26 +649,11 @@ public class ChatMgr implements ModuleBase {
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-        if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperList();
-        }
+//        if (ret != MessageConstant.ERROR) {
+//            ModuleMgr.getChatListMgr().getWhisperList();
+//        }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
-            sendMailReadedMsg(channelID, Long.valueOf(whisperID), new IMProxy.SendCallBack() {
-                @Override
-                public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                    MessageRet messageRet = new MessageRet();
-                    messageRet.parseJson(contents);
-                    //                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
-                    if (messageRet.getS() == 0) {
-
-                    }
-                }
-
-                @Override
-                public void onSendFailed(NetData data) {
-                    //                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
-                }
-            });
+            sendMailReadedMsg(channelID,Long.valueOf(whisperID));
         return observable;
 
 //        if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
@@ -683,6 +668,25 @@ public class ChatMgr implements ModuleBase {
 //
 //            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
 //            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
+    }
+
+    public void sendMailReadedMsg(String channelID,long userID){
+        sendMailReadedMsg(channelID,userID, new IMProxy.SendCallBack() {
+            @Override
+            public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                MessageRet messageRet = new MessageRet();
+                messageRet.parseJson(contents);
+                //                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
+                if (messageRet.getS() == 0) {
+
+                }
+            }
+
+            @Override
+            public void onSendFailed(NetData data) {
+                //                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
+            }
+        });
     }
 
     private void pushMsg(boolean ret, BaseMessage message) {
