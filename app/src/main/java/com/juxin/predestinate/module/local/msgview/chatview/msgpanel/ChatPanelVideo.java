@@ -5,7 +5,6 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -31,8 +30,16 @@ public class ChatPanelVideo extends ChatPanel {
 
     @Override
     public void initView() {
-        chat_item_type_img = (ImageView) findViewById(R.id.chat_item_type_img);
-        chat_item_video_text = (TextView) findViewById(R.id.chat_item_video_text);
+        CustomFrameLayout fl_video_panel = (CustomFrameLayout) findViewById(R.id.fl_video_panel);
+        if (isSender()) {
+            chat_item_type_img = (ImageView) findViewById(R.id.iv_type_right);
+            chat_item_video_text = (TextView) findViewById(R.id.tv_text_right);
+            fl_video_panel.showOfIndex(1);
+        } else {
+            chat_item_type_img = (ImageView) findViewById(R.id.iv_type_left);
+            chat_item_video_text = (TextView) findViewById(R.id.tv_text_left);
+            fl_video_panel.showOfIndex(0);
+        }
     }
 
     @Override
@@ -46,7 +53,6 @@ public class ChatPanelVideo extends ChatPanel {
                 : (isSender() ? R.drawable.f1_chat_voice_right : R.drawable.f1_chat_voice_left));
         chat_item_video_text.setText(VideoMessage.getVideoChatContent(
                 videoMessage.getEmLastStatus(), videoMessage.getVideoVcTalkTime(), videoMessage.isSender()));
-        PLogger.printObject("videoMessage==" + videoMessage.toString());
         return true;
     }
 
