@@ -5,6 +5,7 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
