@@ -13,6 +13,7 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
@@ -612,6 +613,23 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
+     * 接收聊天红包
+     *
+     * @param red_log_id 聊天红包流水号
+     */
+    public void receiveChatRedBag(int red_log_id) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("rid", red_log_id);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqReceiveChatBag, getParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PToast.showShort(TextUtils.isEmpty(response.getMsg()) ?
+                        App.getContext().getString(R.string.received_error) : response.getMsg());
+            }
+        });
+    }
+
+    /**
      * 索要礼物
      *
      * @param content  内容
@@ -660,15 +678,6 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 获取钻石余额
-     *
-     * @param complete 请求完成后回调
-     */
-    public void getMyDiamand(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.getMyDiamand, null, complete);
-    }
-
-    /**
      * 客户端获得用户红包列表
      *
      * @param complete 请求完成后回调
@@ -689,7 +698,7 @@ public class CommonMgr implements ModuleBase {
     public void reqAddredTotal(long uid, double money, long redbagid, int type, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("uid", uid);
-        postParams.put("money",money);
+        postParams.put("money", money);
         postParams.put("redbagid", redbagid);
         postParams.put("type", type);
         ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqAddredTotal, postParams, complete);

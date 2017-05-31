@@ -126,8 +126,6 @@ public class UIShow {
 
     // ----------------------------activity跳转码------------------------------
 
-    public static final int FROM_RANDOM_RED_BOX = 1000;//聊天随机红包activity result code
-
     // ---------------------------应用内弹出及跳转------------------------------
 
     public static void show(Context context, Intent intent) {
@@ -688,12 +686,14 @@ public class UIShow {
     /**
      * 弹出聊天随机红包弹窗
      *
-     * @param msg 红包消息mct字段，若无，传null或空字符串即可
+     * @param red_log_id 红包流水号
+     * @param msg        红包消息mct字段，若无，传null或空字符串即可
      */
-    public static void showChatRedBoxDialog(Activity context, String msg) {
+    public static void showChatRedBoxDialog(Activity context, int red_log_id, String msg) {
         Intent intent = new Intent(context, RandomRedBoxActivity.class);
+        intent.putExtra("red_log_id", red_log_id);
         intent.putExtra("msg", msg);
-        context.startActivityForResult(intent, FROM_RANDOM_RED_BOX);
+        context.startActivity(intent);
     }
 
     /**
