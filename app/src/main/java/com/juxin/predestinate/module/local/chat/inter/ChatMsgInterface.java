@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat.inter;
 
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-
 import java.util.List;
 
 /**
@@ -41,14 +40,6 @@ public class ChatMsgInterface {
     }
 
     /**
-     * 活动消息返回列表
-     */
-    public interface ActivityDataListener {
-        void onDataListener(boolean ret, List<BaseMessage> messages);
-    }
-
-
-    /**
      * 删除列表中的某个用户
      */
     public interface DelChatUserComplete {//接口
@@ -61,22 +52,6 @@ public class ChatMsgInterface {
          * @param messages 返回的数据 如果是空就是没有数据
          */
         void onListener(BaseMessage messages);
-    }
-
-    public interface DMarkListener {
-        /**
-         *
-         * @param ret 请求是否成功
-         * @param isUsed 是否已使用，true可以使用，false不能使用
-         */
-        void onDataListener(boolean ret, boolean isUsed); //数据库查询回调
-    }
-
-    /**
-     * 黑名单上传聊天记录
-     */
-    public interface OnReportListener {
-        void onReportJson(String json);
     }
 
     /**

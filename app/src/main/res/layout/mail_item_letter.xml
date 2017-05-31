@@ -30,15 +30,6 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_head" />
 
-            <TextView
-                android:id="@+id/mail_item_online"
-                style="@style/badge_common_online"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/px50_dp"
-                android:layout_marginRight="@dimen/px42_dp"
-                android:visibility="gone" />
-
             <com.juxin.library.unread.BadgeView
                 android:id="@+id/mail_item_unreadnum"
                 style="@style/badge_num_big"
@@ -48,15 +39,6 @@
                 android:layout_marginTop="@dimen/px15_dp"
                 android:text="1"
                 android:visibility="visible" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/mail_item_unreadnum"-->
-            <!--style="@style/badge_num_big"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_marginRight="@dimen/px15_dp"-->
-            <!--android:layout_marginTop="@dimen/px15_dp"-->
-            <!--android:visibility="visible" />-->
 
         </RelativeLayout>
 

@@ -108,7 +108,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     private void initView() {
         timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
-        //   View mViewTop = LayoutInflater.from(getContext()).inflate(R.layout.layout_margintop, null);
 
         mail_bottom = findViewById(R.id.mail_bottom);
         mail_delete = (Button) findViewById(R.id.mail_delete);
@@ -259,7 +258,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Friend_Num_Notice:
-                PLogger.printObject("xxxxxxxxxxxxxxx");
                 mailFragmentAdapter.updateAllData();
                 detectInfo(listMail);
                 break;
