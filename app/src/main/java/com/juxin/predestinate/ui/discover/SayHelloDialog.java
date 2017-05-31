@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.discover;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -19,6 +22,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,8 +63,13 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     private void initData() {
         if (data.size() != 0) {
-            ImageLoader.loadCenterCrop(getActivity(), data.get(0).getAvatar(), iv_small);
-            ImageLoader.loadBlurImg(getActivity(), data.get(0).getAvatar(), 50, iv_big);
+            ImageLoader.localPicWithCallback(getActivity(), data.get(0).getAvatar(), new ImageLoader.GlideCallback() {
+                @Override
+                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    ImageLoader.loadCircle(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2), Color.WHITE);
+                    ImageLoader.loadBlurImg(getActivity(), data.get(0).getAvatar(), 50, iv_big);
+                }
+            });
             ImageLoader.loadCenterCrop(getActivity(), data.get(1).getAvatar(), iv_small1);
             ImageLoader.loadCenterCrop(getActivity(), data.get(2).getAvatar(), iv_small2);
             ImageLoader.loadCenterCrop(getActivity(), data.get(3).getAvatar(), iv_small3);
@@ -68,12 +77,13 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
     }
 
     private void initView() {
-
         iv_big = (ImageView) findViewById(R.id.onkey_user_big);
         iv_small1 = (ImageView) findViewById(R.id.onkey_user_small1);
         iv_small2 = (ImageView) findViewById(R.id.onkey_user_small2);
         iv_small3 = (ImageView) findViewById(R.id.onkey_user_small3);
         iv_small = (ImageView) findViewById(R.id.onkey_small);
+        ImageLoader.loadCircle(getActivity(), R.drawable.default_pic, iv_small, UIUtil.dip2px(getContext(), 2), Color.WHITE);
+
         findViewById(R.id.onkey_open_rl).setOnClickListener(this);
 
         TextView tv_btn_ok = (TextView) findViewById(R.id.onkey_open);

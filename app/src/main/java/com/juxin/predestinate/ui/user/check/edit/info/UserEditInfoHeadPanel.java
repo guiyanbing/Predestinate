@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.user.check.edit.info;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
@@ -56,7 +58,6 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
     public void initData() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
-        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header);
         user_id.setText("ID: " + userDetail.getUid());
         user_gender.setText(userDetail.isMan() ? "男" : "女");
         user_age.setText(getContext().getString(R.string.user_info_age, userDetail.getAge()));
@@ -66,6 +67,8 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
         if (userDetail.isMan()) {
             rl_header.setBackgroundColor(getContext().getResources().getColor(R.color.picker_blue_color));
         }
+
+        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header, UIUtil.dip2px(getContext(), 2), Color.WHITE);
     }
 
     public void refreshView() {

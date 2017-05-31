@@ -6,7 +6,7 @@
     android:background="@color/transparent"
     android:orientation="horizontal">
 
-    <com.juxin.library.view.CircleImageView
+    <ImageView
         android:id="@+id/chat_item_head"
         style="@style/chat_item_head"
         android:layout_alignParentRight="true"
