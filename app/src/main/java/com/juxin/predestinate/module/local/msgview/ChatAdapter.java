@@ -12,7 +12,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.module.local.chat.ChatMgr;
+import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -46,7 +46,7 @@ import rx.functions.Action1;
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener,ChatMgr.OnUpdateDataListener {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener,ChatMsgInterface.SystemMsgListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
@@ -140,8 +140,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
             chatInstance.chatInputPanel.showSendBtn();
             page = 0;
-            PSP.getInstance().put("whisperId",whisperId);
-            ModuleMgr.getChatMgr().setOnUpdateDataListener(this);
+            PSP.getInstance().put("whisperId", whisperId);
+//            ModuleMgr.getChatMgr().setOnUpdateDataListener(this);
+
             attach();
         } catch (Exception e) {
             PLogger.printThrowable(e);
@@ -204,8 +205,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onUpdateDate(String channelID, String whisperID, String sendID) {
-//        Log.e("TTTTTTTTTTLLL", "刷新界面" + getChatInstance().chatListView + "||");
+    public void onSystemMsg(BaseMessage message) {
         if (getChatInstance().chatListView == null) {
             return;
         }
@@ -214,8 +214,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             public void run() {
                 List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
                 int size = messages.size();
-                if (size > 0)
+                if (size > 0){
                     PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
+//                    Log.e("TTTTTTTTTTLLL", "刷新界面" + messages.get(size - 1).getMsgID() + "||"+("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID()));
+                }
                 for (int i = size - 1; i >= 0; i--) {
                     if (messages.get(i).getStatus() == 11) {
                         break;
@@ -225,7 +227,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 //        getChatInstance().chatContentAdapter.notifyDataSetChanged();
                 chatInstance.chatContentAdapter.setList(messages);
                 moveToBottom();
-//                Log.e("TTTTTTTTTTLLL", "刷新界面");
+                //                Log.e("TTTTTTTTTTLLL", "刷新界面");
             }
         });
     }
@@ -443,6 +445,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 moveToBottom();
             }
         }).unsubscribe();
+        ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
     }
 
     /**
@@ -450,7 +453,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      */
     public void detach() {
         ModuleMgr.getChatMgr().updateOtherSideRead("", whisperId, App.uid + "");
-        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
+//        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
+        ChatSpecialMgr.getChatSpecialMgr().detachSystemMsgListener(this);
         ModuleMgr.getChatMgr().detachChatListener(this);
         ChatMediaPlayer.getInstance().stopPlayVoice();
 
@@ -458,6 +462,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
             getChatInstance().chatInputPanel.sendSystemMsgCancelInput();
         }
+        PSP.getInstance().put("whisperId", "-1");
     }
 
     @Override
@@ -712,7 +717,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 SortList.sortListView(baseMessages);// 排序
                 PLogger.printObject(baseMessages);
                 chatInstance.chatListView.stopRefresh();
-                if(baseMessages.size() > 0){
+                if (baseMessages.size() > 0) {
                     if (baseMessages.size() < 20) {
                         chatInstance.chatListView.setPullRefreshEnable(false);
                     }

@@ -32,7 +32,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -362,8 +361,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
         SystemMessage mess = (SystemMessage)message;
         switch (mess.getXtType()){
             case 3:
-//                Log.e("TTTTTTTTTVVVV","已送达");
-                ModuleMgr.getChatMgr().updateOtherRead(null,mess.getFid()+"",mess.getTid()+"");
+//                Log.e("TTTTTTTTTVVVV", "已送达"+message.getChannelID()+"||"+mess.getFid()+"||"+mess.getTid());
+                ModuleMgr.getChatMgr().updateOtherRead(null,mess.getFid()+"",mess.getTid());
                 break;
         }
     }

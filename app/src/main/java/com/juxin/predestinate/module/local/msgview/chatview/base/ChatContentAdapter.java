@@ -17,6 +17,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -209,13 +210,20 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         if (datas.size()>0){
             int size = datas.size();
             long id = PSP.getInstance().getLong("xiaoxi"+datas.get(0).getWhisperID()+datas.get(0).getChannelID(),0);
-//            Log.e("TTTTTTTGGG",id+"||");
+//            Log.e("TTTTTTTGGG", id + "||" + ("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID()) + "|||" + datas.get(size - 1).getMsgID() + "|||" + datas.get(size - 1).getStatus());
+            boolean boo =  PSP.getInstance().getBoolean(datas.get(0).getWhisperID() + "id", false);
             for (int i = size-1;i>=0;i--){
-                if (datas.get(i).getStatus()== 11) {
-                    break;
-                }
-                if (id >= datas.get(i).getMsgID())
+                if (id >= datas.get(i).getMsgID()){
                     datas.get(i).setStatus(11);
+                } else{
+//                    Log.e("TTTTTTTTTTTYYY", datas.get(i).getStatus() + "|||"+datas.get(0).getWhisperID());
+                    if (datas.get(i).getStatus()== 11 && !boo) {
+                        datas.get(i).setStatus(MessageConstant.OK_STATUS);
+                    }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
+                        datas.get(i).setStatus(MessageConstant.READ_STATUS);
+                    }
+                }
+
             }
         }
         super.setList(datas);
