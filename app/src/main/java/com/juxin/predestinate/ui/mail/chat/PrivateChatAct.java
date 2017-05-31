@@ -233,9 +233,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         //状态栏 + 标题 +（关注TA、查看手机）// （去掉滚动条高度） 高度
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 && MailSpecialID.customerService.getSpecialID() != whisperID)
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewH(getTitleView()) + UIUtil.getViewH(privatechat_head) + UIUtil.getStatusHeight(this));
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getViewHeight(privatechat_head) + UIUtil.getStatusHeight(this));
         else
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewH(getTitleView()) + UIUtil.getStatusHeight(this));
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getStatusHeight(this));
     }
 
     private void initFollow() {

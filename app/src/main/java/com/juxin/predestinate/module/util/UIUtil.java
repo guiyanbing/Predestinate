@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 import java.lang.reflect.Field;
 
@@ -198,34 +197,13 @@ public class UIUtil {
     }
 
     /**
-     * 根据屏幕宽度及比例计算控件所需的高度
-     *
-     * @param d 宽高比：高/宽
-     * @return 返回控件的高度
-     */
-    public static int getViewHeight(double d) {
-        int screenWidth = ModuleMgr.getAppMgr().getScreenWidth();
-        return (int) (screenWidth * d);
-    }
-
-    /**
-     * 根据屏幕宽度及比例计算控件所需的高度
-     *
-     * @param d      宽高比：高/宽
-     * @param offset 宽度偏移
-     */
-    public static int getViewHeight(double d, double offset) {
-        int screenWidth = ModuleMgr.getAppMgr().getScreenWidth();
-        return (int) ((screenWidth - offset) * d);
-    }
-
-    /**
      * 获取控件的高度
+     *
      * @param view 控件
-     * @return
+     * @return 控件高度
      */
-    public static int getViewH(View view) {
-        if(null == view) return 0;
+    public static int getViewHeight(View view) {
+        if (null == view) return 0;
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         return view.getMeasuredHeight();
     }
