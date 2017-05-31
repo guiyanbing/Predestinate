@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,7 +12,6 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.view.BasePanel;
-import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -30,7 +30,7 @@ import com.juxin.predestinate.ui.user.util.CenterConstant;
  */
 public class UserFragmentHeadPanel extends BasePanel implements View.OnClickListener, ImgSelectUtil.OnChooseCompleteListener {
 
-    private CircleImageView user_head, user_head_vip, user_head_status;
+    private ImageView user_head, user_head_vip, user_head_status;
     private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
     private View edit_top;
@@ -47,9 +47,9 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
 
     private void initView() {
         edit_top = findViewById(R.id.edit_top);
-        user_head = (CircleImageView) findViewById(R.id.user_head);
-        user_head_vip = (CircleImageView) findViewById(R.id.user_head_vip);
-        user_head_status = (CircleImageView) findViewById(R.id.user_head_status);
+        user_head = (ImageView) findViewById(R.id.user_head);
+        user_head_vip = (ImageView) findViewById(R.id.user_head_vip);
+        user_head_status = (ImageView) findViewById(R.id.user_head_status);
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
@@ -90,12 +90,12 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         switch (myInfo.getAvatar_status()) {
             case CenterConstant.USER_AVATAR_CHECKING:  // 审核中
                 user_head_status.setVisibility(View.VISIBLE);
-                ImageLoader.loadAvatar(getContext(), R.drawable.f1_user_avatar_checking, user_head_status);
+                ImageLoader.loadCircle(getContext(), R.drawable.f1_user_avatar_checking, user_head_status);
                 break;
 
             case CenterConstant.USER_AVATAR_NO_PASS:   // 未通过
                 user_head_status.setVisibility(View.VISIBLE);
-                ImageLoader.loadAvatar(getContext(), R.drawable.f1_user_avatar_notpass, user_head_status);
+                ImageLoader.loadCircle(getContext(), R.drawable.f1_user_avatar_notpass, user_head_status);
                 break;
 
             default:

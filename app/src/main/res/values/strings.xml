@@ -477,6 +477,7 @@
     <string name="chat_gift_has_received">礼物已折现，已放入钱包！</string>
     <string name="chat_click_receive_gift">点击收礼</string>
     <string name="chat_click_send_gift">点击赠送</string>
+    <string name="received_error">领取失败！</string>
 
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>

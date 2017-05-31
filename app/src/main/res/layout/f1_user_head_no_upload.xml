@@ -20,13 +20,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.juxin.library.view.CircleImageView
+            <ImageView
                 android:id="@+id/imgBtn_noheard_head"
                 android:layout_width="160dip"
                 android:layout_height="160dip"
-                android:src="@null"
-                app:border_color="#FFFFFF"
-                app:border_width="4dp" />
+                android:src="@null" />
 
             <ImageButton
                 android:id="@+id/imgBtn_noheard_ts"

@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 /**
  * 聊天随机红包弹窗
@@ -23,8 +25,8 @@ import com.juxin.predestinate.R;
 public class RandomRedBoxActivity extends Activity implements View.OnClickListener {
 
     private ImageView mBackLightIv;
-    private Button mGetBtn;
 
+    private int red_log_id;
     private String mMsg;
 
     private Animation bgdRotationAnimation;
@@ -35,13 +37,16 @@ public class RandomRedBoxActivity extends Activity implements View.OnClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.f1_dialog_random_red_box);
         Intent intent = getIntent();
-        if (intent != null) mMsg = intent.getStringExtra("msg");
+        if (intent != null) {
+            red_log_id = intent.getIntExtra("red_log_id", -1);
+            mMsg = intent.getStringExtra("msg");
+        }
         initView();
     }
 
     private void initView() {
         mBackLightIv = (ImageView) findViewById(R.id.iv_random_red_box_back_light);
-        mGetBtn = (Button) findViewById(R.id.btn_random_red_box_get);
+        Button mGetBtn = (Button) findViewById(R.id.btn_random_red_box_get);
         TextView msgTv = (TextView) findViewById(R.id.tv_random_red_box_msg);
 
         if (!TextUtils.isEmpty(mMsg)) {
@@ -73,7 +78,11 @@ public class RandomRedBoxActivity extends Activity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_random_red_box_get:
-                setResult(1, getIntent());
+                if (red_log_id != -1) {
+                    ModuleMgr.getCommonMgr().receiveChatRedBag(red_log_id);
+                } else {
+                    PToast.showShort(getString(R.string.received_error));
+                }
                 finish();
                 break;
         }

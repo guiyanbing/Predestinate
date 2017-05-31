@@ -30,7 +30,7 @@
             android:background="@drawable/f1_dlg_diamond_head_bg"
             android:gravity="center">
 
-            <com.juxin.library.view.CircleImageView
+            <ImageView
                 android:id="@+id/dlg_diamond_head"
                 android:layout_width="@dimen/px190_dp"
                 android:layout_height="@dimen/px190_dp" />
@@ -41,21 +41,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_FFECB9"
-        android:paddingTop="@dimen/px30_dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/px30_dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
+
             <ImageView
                 android:layout_width="@dimen/px75_dp"
                 android:layout_height="@dimen/px75_dp"
                 android:layout_gravity="right" />
+
             <ImageView
                 android:layout_width="@dimen/px75_dp"
                 android:layout_height="@dimen/px75_dp"
                 android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/dlg_diamond_nickname"
                 android:layout_width="wrap_content"
@@ -70,16 +73,18 @@
                 android:text="向你索要礼物"
                 android:textColor="@color/black"
                 android:textSize="@dimen/px42_sp" />
+
             <ImageView
                 android:layout_width="@dimen/px75_dp"
                 android:layout_height="@dimen/px75_dp"
                 android:layout_weight="1" />
+
             <ImageView
                 android:id="@+id/iv_dlg_close"
                 android:layout_width="@dimen/px75_dp"
                 android:layout_height="@dimen/px75_dp"
                 android:layout_gravity="right"
-                android:background="@drawable/f1_dlg_close_small"/>
+                android:background="@drawable/f1_dlg_close_small" />
         </LinearLayout>
 
         <TextView
@@ -88,13 +93,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/px30_dp"
             android:layout_marginLeft="@dimen/px120_dp"
-            android:textSize="@dimen/px36_sp"
             android:layout_marginRight="@dimen/px120_dp"
             android:layout_marginTop="@dimen/px30_dp"
             android:background="@drawable/f1_dlg_diamond_task"
             android:padding="@dimen/px30_dp"
             android:text="帅哥"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/px36_sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -119,10 +124,10 @@
                 android:orientation="vertical">
 
                 <android.support.v4.view.ViewPager
-                    android:layout_margin="@dimen/px9_dp"
                     android:id="@+id/vp_gift_main"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/px420_dp" />
+                    android:layout_height="@dimen/px420_dp"
+                    android:layout_margin="@dimen/px9_dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -141,13 +146,13 @@
                             android:background="@drawable/f1_ic_my_diamonds" />
 
                         <TextView
-                            android:paddingBottom="@dimen/px3_dp"
                             android:id="@+id/dlg_diamond_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/px3_dp"
                             android:text="当前钻石：0"
-                            android:textSize="@dimen/px30_dp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/px30_dp" />
                     </LinearLayout>
 
                     <LinearLayout

@@ -70,6 +70,8 @@ public enum UrlParam {
 
     reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
 
+    // 接收聊天红包
+    reqReceiveChatBag("gift/receiveChatred", true),
     // 私密视频相关
     reqSetPopnum("video2/setPopnum"),        // 增加私密视频人气值
     reqSetViewTime("video2/setviewtime"),    // 设置私密视频观看次数
@@ -109,8 +111,6 @@ public enum UrlParam {
     reqWithdrawModify("fruit/withdrawmodifyNew", true),
     // 获取礼物列表
     getGiftLists("gift/getGifts", true),
-    // 获取钻石余额
-    getMyDiamand("gift/getMyDiamand", false),
     // 索要礼物
     begGift("gift/begGift", true),
     //接收礼物

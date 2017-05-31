@@ -9,6 +9,7 @@ import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.unread.UnreadMgr;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -162,7 +164,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return "isTodayChat" + App.uid;
     }
 
-    public void setTodayChatShow(boolean b) {//隐藏，显示私聊列表
+    public void setTodayChatShow() {//隐藏，显示私聊列表
         PSP.getInstance().put(getIsTodayChatKey(), TimeUtil.getCurrentData());
     }
 
@@ -188,13 +190,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
         for (BaseMessage temp : messageList) {
             dbCenter.deleteMessage(temp.getLWhisperID());
         }
-      //  getWhisperList();
+        //  getWhisperList();
     }
 
     public long deleteMessage(long userID) {
         long ret = dbCenter.deleteMessage(userID);
         if (ret != MessageConstant.ERROR) {
-          //  getWhisperList();
+            //  getWhisperList();
         }
         return ret;
     }
@@ -208,7 +210,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long deleteFmessage(long userID) {
         long ret = dbCenter.getCenterFMessage().delete(userID);
         if (ret != MessageConstant.ERROR) {
-        //    getWhisperList();
+            //    getWhisperList();
         }
         return ret;
     }
@@ -218,20 +220,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
-        if (ret != MessageConstant.ERROR) {
-            getWhisperList();
-        }
+//        if (ret != MessageConstant.ERROR) {
+//            getWhisperList();
+//        }
     }
 
-    public void updateToBatchRead(List<BaseMessage> greetList){
-        if(greetList == null || greetList.size() <= 0){
+    public void updateToBatchRead(List<BaseMessage> greetList) {
+        if (greetList == null || greetList.size() <= 0) {
             return;
         }
         dbCenter.getCenterFMessage().updateToRead(greetList);
         getWhisperList();
     }
 
-    public long updateToRead(long userID){
+    public long updateToRead(long userID) {
         return dbCenter.getCenterFMessage().updateToRead(userID);
     }
 
@@ -255,6 +257,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
+            case MsgType.MT_Unread_change:
+                if ( App.uid <= 0) return;
+                Map<String, Object> msgMap = (Map<String, Object>) value;
+                String Msg_Name_Key = (String) msgMap.get(UnreadMgr.Msg_Name_Key);
+                if(Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)){
+                    getWhisperList();
+                }
+                break;
             case MsgType.MT_App_Login:
                 PLogger.d("---ChatList_MT_App_Login--->" + value);
                 if ((Boolean) value) {//登录成功
@@ -335,7 +345,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
 
-        PLogger.printObject("setVideoMsg==="+videoMessage.toString());
+        PLogger.printObject("setVideoMsg===" + videoMessage.toString());
         if (videoMessage.getVideoTp() == 1) {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
@@ -353,19 +363,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (message == null) return;
 
         JSONObject jsonObject = message.getJsonObj();
-        if (jsonObject == null) return;
-
+        int red_log_id = jsonObject.optInt("red_log_id");
         String content = jsonObject.optString("mct");
-        UIShow.showChatRedBoxDialog((Activity) App.getActivity(), content);
+        UIShow.showChatRedBoxDialog((Activity) App.getActivity(), red_log_id, content);
     }
 
     private void setSystemMsg(BaseMessage message) {
         if (message != null && !(message instanceof SystemMessage)) return;
-        SystemMessage mess = (SystemMessage)message;
-        switch (mess.getXtType()){
+        SystemMessage mess = (SystemMessage) message;
+        switch (mess.getXtType()) {
             case 3:
 //                Log.e("TTTTTTTTTVVVV", "已送达"+message.getChannelID()+"||"+mess.getFid()+"||"+mess.getTid());
-                ModuleMgr.getChatMgr().updateOtherRead(null,mess.getFid()+"",mess.getTid());
+                ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid());
                 break;
         }
     }

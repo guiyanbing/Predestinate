@@ -30,7 +30,7 @@
                 android:textColor="#fd6b8f"
                 android:textSize="15sp" />
 
-            <com.juxin.library.view.CircleImageView
+            <ImageView
                 android:id="@+id/img_reg_info_upload_photo"
                 android:layout_width="80dip"
                 android:layout_height="80dip"

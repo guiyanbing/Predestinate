@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.library.view.CircleImageView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -178,7 +177,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             cih = (ChatItemHolder) vh.receiver;
             cih.parent = convertView.findViewById(R.id.chat_item_left);
             cih.name = (TextView) cih.parent.findViewById(R.id.chat_item_name);
-            cih.head = (CircleImageView) cih.parent.findViewById(R.id.chat_item_head);
+            cih.head = (ImageView) cih.parent.findViewById(R.id.chat_item_head);
             cih.content = (ViewGroup) cih.parent.findViewById(R.id.chat_item_content);
             cih.status = (TextView) cih.parent.findViewById(R.id.chat_item_status);
             cih.statusImg = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img);
@@ -188,7 +187,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             cih = (ChatItemHolder) vh.sender;
             cih.parent = convertView.findViewById(R.id.chat_item_right);
             cih.name = (TextView) cih.parent.findViewById(R.id.chat_item_name);
-            cih.head = (CircleImageView) cih.parent.findViewById(R.id.chat_item_head);
+            cih.head = (ImageView) cih.parent.findViewById(R.id.chat_item_head);
             cih.content = (ViewGroup) cih.parent.findViewById(R.id.chat_item_content);
             cih.status = (TextView) cih.parent.findViewById(R.id.chat_item_status);
             cih.statusImg = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img);
@@ -382,7 +381,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
     public class ChatItemHolder extends ChatViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public TextView name;
-        public CircleImageView head;
+        public ImageView head;
         public ViewGroup content;
         public TextView status;
         public ImageView statusImg, statusError;
@@ -428,11 +427,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 //                    name.setVisibility(View.VISIBLE);
 //                }
 
-                ImageLoader.loadAvatar(getContext(), infoLightweight.getAvatar(), head);
+                ImageLoader.loadCircle(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
              //   head.setTag("" + msg.getSendID());
-                head.setImageResource(R.drawable.default_pic);
+//                head.setImageResource(R.drawable.default_pic);
+                ImageLoader.loadCircle(getContext(), R.drawable.default_pic, head);
             }
         }
 

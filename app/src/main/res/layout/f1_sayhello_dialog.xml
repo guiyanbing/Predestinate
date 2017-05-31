@@ -41,13 +41,11 @@
                     android:layout_marginTop="12dip"
                     android:gravity="center">
 
-                    <com.juxin.library.view.CircleImageView
+                    <ImageView
                         android:id="@+id/onkey_small"
                         android:layout_width="120dip"
                         android:layout_height="120dip"
-                        android:src="@drawable/default_pic"
-                        app:border_color="@color/white"
-                        app:border_width="2dip" />
+                        android:src="@drawable/default_pic" />
 
                 </LinearLayout>
 

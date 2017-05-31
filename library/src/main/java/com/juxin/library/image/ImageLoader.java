@@ -2,9 +2,11 @@ package com.juxin.library.image;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,7 +40,7 @@ public class ImageLoader {
      * 加载头像
      */
     public static <T> void loadAvatar(Context context, T model, ImageView view) {
-        loadPic(context, model, view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop, circleTransform);
+        loadPic(context, model, view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop);
     }
 
     /**
@@ -92,7 +94,18 @@ public class ImageLoader {
      * 加载为圆形图像
      */
     public static <T> void loadCircle(Context context, T model, ImageView view) {
-        loadPic(context, model, view, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop, circleTransform);
+        loadCircle(context, model, view, 0, 0);
+    }
+
+    public static <T> void loadCircle(final Context context, final T model, final ImageView view, int borderWidth, int borderColor) {
+        circleTransform.setBorderWidth(borderWidth);
+        circleTransform.setBorderColor(borderColor);
+        loadPicWithCallback(context, R.drawable.default_pic,  new GlideCallback() {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                loadPic(context, model, view, resource, resource, bitmapCenterCrop, circleTransform);
+            }
+        }, 0, 0, bitmapCenterCrop, circleTransform);
     }
 
     /**
@@ -105,8 +118,8 @@ public class ImageLoader {
     /**
      * 加载图片： 带回调
      */
-    public static void localImgWithCallback(Context context, String url, GlideCallback callback) {
-        loadPicWithCallback(context, url, callback, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop);
+    public static <T> void localPicWithCallback(Context context, T model, GlideCallback callback) {
+        loadPicWithCallback(context, model, callback, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop);
     }
 
     /**
@@ -122,16 +135,22 @@ public class ImageLoader {
     }
 
     // ==================================== 内部私有调用 =============================================
-
     private static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
         try {
-            Glide.with(context)
-                    .load(model)
-                    .dontAnimate()
+            getRequestBuilder(context, model, transformation)
                     .placeholder(defResImg)
                     .error(errResImg)
-                    .bitmapTransform(transformation)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static <T> void loadPic(Context context, T model, ImageView view, Drawable defResImg, Drawable errResImg, Transformation<Bitmap>... transformation) {
+        try {
+            getRequestBuilder(context, model, transformation)
+                    .placeholder(defResImg)
+                    .error(errResImg)
                     .into(view);
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,13 +162,9 @@ public class ImageLoader {
      */
     private static <T> void loadPicWithCallback(Context context, T model, final GlideCallback callback, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
         try {
-            Glide.with(context)
-                    .load(model)
-                    .dontAnimate()
+            getRequestBuilder(context, model, transformation)
                     .placeholder(defResImg)
                     .error(errResImg)
-                    .bitmapTransform(transformation)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -159,6 +174,16 @@ public class ImageLoader {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    private static <T> DrawableRequestBuilder<T> getRequestBuilder(Context context, T model, Transformation<Bitmap>... transformation) {
+
+        return Glide.with(context)
+                .load(model)
+                .dontAnimate()
+                .bitmapTransform(transformation)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
     private static void loadGifAsBmp(Context context, String url, ImageView view, int defWH, int defResImg, int errResImg) {
@@ -181,4 +206,5 @@ public class ImageLoader {
     public interface GlideCallback {
         void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation);
     }
+
 }

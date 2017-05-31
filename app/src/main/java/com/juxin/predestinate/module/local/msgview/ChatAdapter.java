@@ -12,6 +12,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -423,11 +424,12 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
-        observable.subscribe(new Action1<List<BaseMessage>>() {
+        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_TRANSFORMER))
+        .subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
                 SortList.sortListView(baseMessages);// 排序
-                PLogger.printObject(baseMessages);
+                PLogger.printObject("最近有多少条消息=" + baseMessages.size());
                 List<BaseMessage> listTemp = new ArrayList<>();
 
                 if (baseMessages.size() > 0) {
@@ -441,7 +443,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 chatInstance.chatContentAdapter.setList(listTemp);
                 moveToBottom();
             }
-        }).unsubscribe();
+        });
         ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
     }
 
@@ -449,7 +451,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 反注册消息模块，解除绑定。
      */
     public void detach() {
-        ModuleMgr.getChatMgr().updateOtherSideRead("", whisperId, App.uid + "");
+        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "");
 //        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
         ChatSpecialMgr.getChatSpecialMgr().detachSystemMsgListener(this);
         ModuleMgr.getChatMgr().detachChatListener(this);
@@ -533,7 +535,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (message.getType() == BaseMessage.BaseMessageType.common.msgType) {
                 if (ModuleMgr.getChatListMgr().getTodayChatShow()) {
                     //更新时间
-                    ModuleMgr.getChatListMgr().setTodayChatShow(true);
+                    ModuleMgr.getChatListMgr().setTodayChatShow();
                     Msg msg = new Msg();
                     msg.setData(false);
                     MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
@@ -649,7 +651,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onRefresh() {
         // 这里是加载更多信息的。
         Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
-        observable.subscribe(new Action1<List<BaseMessage>>() {
+        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+        .subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
                 SortList.sortListView(baseMessages);// 排序
@@ -676,7 +679,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     chatInstance.chatListView.setSelection(baseMessages.size());
                 }
             }
-        }).unsubscribe();
+        });
 
     }
 

@@ -86,13 +86,14 @@ public class ChatMgr implements ModuleBase {
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
 
-       // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
+        // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
 
-           // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
+        // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
     /**
      * 对方已读
+     *
      * @param channelID
      * @param whisperID
      * @param sendID
@@ -102,21 +103,23 @@ public class ChatMgr implements ModuleBase {
     }
 
     private String whisperID;
+
     /**
      * 对方已读
+     *
      * @param channelID
      * @param whisperID
      * @param sendID
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
         this.whisperID = whisperID;
-        String whisperId = PSP.getInstance().getString("whisperId","-1");
+        String whisperId = PSP.getInstance().getString("whisperId", "-1");
 //        Log.e("TTTTTTTTYYY",!whisperId.equalsIgnoreCase(whisperID)+ "||"+channelID + "||" + whisperId + "|||" + whisperID + "|||" + sendID + "|||" + mOnUpdateDataListener);
         if (!whisperId.equalsIgnoreCase(whisperID)) {
-            updateOtherSideRead(channelID,whisperID,sendID+ "");
-            PSP.getInstance().put(whisperID+"id",true);
-        }else {
-            PSP.getInstance().put(whisperID+"id",false);
+            updateOtherSideRead(channelID, whisperID, sendID + "");
+            PSP.getInstance().put(whisperID + "id", true);
+        } else {
+            PSP.getInstance().put(whisperID + "id", false);
             SystemMessage systemMessage = new SystemMessage();
             systemMessage.setChannelID(channelID);
             systemMessage.setWhisperID(whisperId);
@@ -131,14 +134,17 @@ public class ChatMgr implements ModuleBase {
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
     }
-//    setOnClickChatItemListener
+
+    //    setOnClickChatItemListener
     private OnUpdateDataListener mOnUpdateDataListener;
-    public void setOnUpdateDataListener(OnUpdateDataListener mOnUpdateDataListener){
+
+    public void setOnUpdateDataListener(OnUpdateDataListener mOnUpdateDataListener) {
         this.mOnUpdateDataListener = mOnUpdateDataListener;
     }
 
     /**
      * 本地模拟语音视频消息
+     *
      * @param otherID
      */
     public void sendvideoMsglocalSimulation(String otherID, int type, int videoID) {
@@ -152,7 +158,7 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().insertMsg(videoMessage);
     }
 
-    public interface OnUpdateDataListener{
+    public interface OnUpdateDataListener {
         void onUpdateDate(String channelID, String whisperID, String sendID);
     }
 
@@ -185,11 +191,11 @@ public class ChatMgr implements ModuleBase {
                 observable.subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        if(aBoolean){
-                            if(dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR){
-                               return;
+                        if (aBoolean) {
+                            if (dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR) {
+                                return;
                             }
-                          //  ModuleMgr.getChatListMgr().getWhisperList();
+                            //  ModuleMgr.getChatListMgr().getWhisperList();
                         }
                         dbCenter.getCenterFMessage().insertMsg(textMessage);
                     }
@@ -216,7 +222,7 @@ public class ChatMgr implements ModuleBase {
             onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
 
             switch (messageType) {
-                case common:{
+                case common: {
                     final CommonMessage commonMessage = (CommonMessage) message;
 
                     String voiceUrl = commonMessage.getVoiceUrl();
@@ -225,10 +231,10 @@ public class ChatMgr implements ModuleBase {
                     String localImg = commonMessage.getLocalImg();
                     if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
 
-                        if(!TextUtils.isEmpty(voiceUrl) && !FileUtil.isURL(voiceUrl)){
+                        if (!TextUtils.isEmpty(voiceUrl) && !FileUtil.isURL(voiceUrl)) {
                             sendMessage(commonMessage, null);
-                        }else {
-                            if(TextUtils.isEmpty(voiceUrl)){
+                        } else {
+                            if (TextUtils.isEmpty(voiceUrl)) {
                                 voiceUrl = localVoiceUrl;
                             }
 
@@ -250,10 +256,10 @@ public class ChatMgr implements ModuleBase {
                             });
                         }
                     } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
-                        if(!TextUtils.isEmpty(img) && !FileUtil.isURL(img)){
+                        if (!TextUtils.isEmpty(img) && !FileUtil.isURL(img)) {
                             sendMessage(commonMessage, null);
-                        }else {
-                            if(TextUtils.isEmpty(img)){
+                        } else {
+                            if (TextUtils.isEmpty(img)) {
                                 img = localImg;
                             }
 
@@ -275,7 +281,7 @@ public class ChatMgr implements ModuleBase {
                             });
                         }
                     } else {//文字
-                         sendMessage(commonMessage, null);
+                        sendMessage(commonMessage, null);
                     }
 
                     break;
@@ -324,8 +330,8 @@ public class ChatMgr implements ModuleBase {
      *
      * @param userID
      */
-    public void sendMailReadedMsg(String channelID,long userID,IMProxy.SendCallBack sendCallBack) {
-        MailReadedMessage message = new MailReadedMessage(channelID,userID);
+    public void sendMailReadedMsg(String channelID, long userID, IMProxy.SendCallBack sendCallBack) {
+        MailReadedMessage message = new MailReadedMessage(channelID, userID);
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toMailReadedJson()), sendCallBack);
     }
 
@@ -345,7 +351,7 @@ public class ChatMgr implements ModuleBase {
 
         if (FileUtil.isURL(img_url)) {
             sendMessage(commonMessage, null);
-        }else {
+        } else {
             sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
@@ -397,7 +403,7 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    private void sendHttpFile(String uploadType, final BaseMessage message, String url, final RequestComplete complete){
+    private void sendHttpFile(String uploadType, final BaseMessage message, String url, final RequestComplete complete) {
         ModuleMgr.getMediaMgr().sendHttpFile(uploadType, url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -437,6 +443,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 更新小红点
+     *
      * @param msgID
      */
     public long updateMsgFStatus(long msgID) {
@@ -498,7 +505,7 @@ public class ChatMgr implements ModuleBase {
      * 是否已经发完当天发的一条了
      */
     private void sendChatCanError() {
-        ModuleMgr.getChatListMgr().setTodayChatShow(true);
+        ModuleMgr.getChatListMgr().setTodayChatShow();
         Msg msg = new Msg();
         msg.setData(false);
         MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
@@ -545,6 +552,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 删除多少个小时以前的消息
+     *
      * @param hour
      * @return
      */
@@ -554,6 +562,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 删除机器人多少小时以前的消息
+     *
      * @param hour
      */
     public void deleteMessageKFIDHour(int hour) {
@@ -574,6 +583,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 视频消息
+     *
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
@@ -599,6 +609,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 本地模拟消息
+     *
      * @param message
      */
     public void onLocalReceiving(BaseMessage message) {
@@ -615,7 +626,7 @@ public class ChatMgr implements ModuleBase {
      * @param page      页码
      */
     public Observable<List<BaseMessage>> getHistoryChat(final String channelID, final String whisperID, int page) {
-         return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
+        return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
 
 
 //        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
@@ -636,11 +647,11 @@ public class ChatMgr implements ModuleBase {
      * @param last_msgid 群最后一条消息ID
      */
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
-        Observable<List<BaseMessage>> observable =  dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
+        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-        if(ret != MessageConstant.ERROR){
-            ModuleMgr.getChatListMgr().getWhisperList();
-        }
+//        if (ret != MessageConstant.ERROR) {
+//            ModuleMgr.getChatListMgr().getWhisperList();
+//        }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID,Long.valueOf(whisperID));
         return observable;
@@ -801,9 +812,7 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    /******************************
-     * 个人资料存储
-     ******************************/
+    /* ***************** 个人资料存储 **************** */
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<>();
 
     public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
@@ -872,8 +881,8 @@ public class ChatMgr implements ModuleBase {
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
 
                     boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
-                    if(ret){
-                 //       ModuleMgr.getChatListMgr().getWhisperList();
+                    if (ret) {
+                        //       ModuleMgr.getChatListMgr().getWhisperList();
                     }
 
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
