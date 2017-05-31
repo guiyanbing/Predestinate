@@ -38,7 +38,7 @@ public class ImageLoader {
      * 加载头像
      */
     public static <T> void loadAvatar(Context context, T model, ImageView view) {
-        loadCenterCrop(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadPic(context, model, view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop, circleTransform);
     }
 
     /**
