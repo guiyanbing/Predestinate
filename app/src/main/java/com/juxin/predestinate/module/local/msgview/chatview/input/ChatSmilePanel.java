@@ -30,7 +30,8 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     private HorizontalListView chat_smile_tab;
     private FrameLayout smilePackageLayouts = null;
     private ChatSmileAdapter chatSmileAdapter;
-    private ChatCustomSmilePanel chatSmilePanel;
+    private ChatDefaultSmilePanel chatSmileDefPanel;
+    private ChatCustomSmilePanel chatSmileCustomPanel;
 
     public ChatSmilePanel(Context context, ChatAdapter.ChatInstance chatInstance) {
         super(context, chatInstance);
@@ -73,17 +74,19 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     private void addView_Package_Default() {
         smilePackageLayouts.removeAllViews();
 
-        ChatDefaultSmilePanel chatSmilePanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
+        chatSmileDefPanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
 
-        smilePackageLayouts.addView(chatSmilePanel.getContentView());
+        smilePackageLayouts.addView(chatSmileDefPanel.getContentView());
     }
 
     private void addView_Package_Custom(List<SmileItem> items) {
         smilePackageLayouts.removeAllViews();
 
-        chatSmilePanel = new ChatCustomSmilePanel(getContext(), items, getChatInstance(), tv_custom_face_del);
+        if(null == chatSmileCustomPanel) {
+            chatSmileCustomPanel = new ChatCustomSmilePanel(getContext(), items, getChatInstance(), tv_custom_face_del);
+        }
 
-        smilePackageLayouts.addView(chatSmilePanel.getContentView());
+        smilePackageLayouts.addView(chatSmileCustomPanel.getContentView());
     }
 
     private void addView_Package_Gift(List<GiftItem> items) {
@@ -170,11 +173,11 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
                 String del = tv_custom_face_del.getText().toString();
                 if (v.getTag() == null || (int) v.getTag() == 0 || del.equals("删除")) {
                     v.setTag(1);
-                    chatSmilePanel.setDeleteClick(true);
+                    chatSmileCustomPanel.setDeleteClick(true);
                     tv_custom_face_del.setText("取消");
                 } else {
                     v.setTag(0);
-                    chatSmilePanel.setDeleteClick(false);
+                    chatSmileCustomPanel.setDeleteClick(false);
                     tv_custom_face_del.setText("删除");
                 }
                 break;

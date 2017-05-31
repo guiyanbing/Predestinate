@@ -71,7 +71,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         viewPager = (ViewPager) findViewById(R.id.chat_panel_viewpager);
     }
 
-    private void initData() {
+    private synchronized void initData() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
         viewPager.setAdapter(viewPagerAdapter);
         initPointsView(viewPager, viewPagerAdapter.getCount(), true);
@@ -86,7 +86,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
     }
 
-    private List<View> getAllViews() {
+    private synchronized List<View> getAllViews() {
         List<View> views = new ArrayList<>();
         View view;
         int index = 0;
@@ -97,7 +97,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         return views;
     }
 
-    private View getChildView(int index) {
+    private synchronized View getChildView(int index) {
         List<SmileItem> listTemp = getPageRes(index);
         if (listTemp == null) {
             return null;
@@ -122,7 +122,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @param index 对应页。
      * @return 指定页的资源信息。
      */
-    private List<SmileItem> getPageRes(int index) {
+    private synchronized List<SmileItem> getPageRes(int index) {
         if (items == null) {
             return null;
         }
