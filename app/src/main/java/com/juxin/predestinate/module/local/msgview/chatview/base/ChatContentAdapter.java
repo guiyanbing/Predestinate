@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -209,22 +210,34 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
     public void setList(List<BaseMessage> datas) {
         if (datas.size()>0){
             int size = datas.size();
-            long id = PSP.getInstance().getLong("xiaoxi"+datas.get(0).getWhisperID()+datas.get(0).getChannelID(),0);
+            long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
+            int kfID = PSP.getInstance().getInt("kf_idid",0);
 //            Log.e("TTTTTTTGGG", id + "||" + ("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID()) + "|||" + datas.get(size - 1).getMsgID() + "|||" + datas.get(size - 1).getStatus());
             boolean boo =  PSP.getInstance().getBoolean(datas.get(0).getWhisperID() + "id", false);
-            for (int i = size-1;i>=0;i--){
-                if (id >= datas.get(i).getMsgID()){
-                    datas.get(i).setStatus(11);
-                } else{
-//                    Log.e("TTTTTTTTTTTYYY", datas.get(i).getStatus() + "|||"+datas.get(0).getWhisperID());
-                    if (datas.get(i).getStatus()== 11 && !boo) {
-                        datas.get(i).setStatus(MessageConstant.OK_STATUS);
-                    }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
+            BaseMessage message = datas.get(size-1);
+            if (kfID != 0){//当聊天对象为机器人时
+                for (int i = size -1;i>=0;i--){
+                    if (message.getSendID() != App.uid){
                         datas.get(i).setStatus(MessageConstant.READ_STATUS);
+                        continue;
+                    }
+                    message = getItem(i);
+                }
+            }else {//当聊天对象不为机器人时
+                for (int i = size-1;i>=0;i--){
+                    if (id >= datas.get(i).getMsgID()){
+                        datas.get(i).setStatus(11);
+                    } else{
+                        //                    Log.e("TTTTTTTTTTTYYY", datas.get(i).getStatus() + "|||"+datas.get(0).getWhisperID());
+                        if (datas.get(i).getStatus()== 11 && !boo) {
+                            datas.get(i).setStatus(MessageConstant.OK_STATUS);
+                        }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
+                            datas.get(i).setStatus(MessageConstant.READ_STATUS);
+                        }
                     }
                 }
-
             }
+
         }
         super.setList(datas);
     }

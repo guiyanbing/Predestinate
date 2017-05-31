@@ -194,7 +194,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         }
     }
 
-    public void setInput_giftviewVisibility(int visibility){
+    public void setInputGiftviewVisibility(int visibility){
         input_giftview.setVisibility(visibility);
     }
 

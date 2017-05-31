@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -33,7 +34,9 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -400,7 +403,7 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (!response.isOk()) {
                     updateFail(message, null);
-                  return;
+                    return;
                 }
                 complete.onRequestComplete(response);
             }
@@ -639,22 +642,7 @@ public class ChatMgr implements ModuleBase {
             ModuleMgr.getChatListMgr().getWhisperList();
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
-            sendMailReadedMsg(channelID,Long.valueOf(whisperID), new IMProxy.SendCallBack() {
-                @Override
-                public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                    MessageRet messageRet = new MessageRet();
-                    messageRet.parseJson(contents);
-                    //                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
-                    if (messageRet.getS() == 0) {
-
-                    }
-                }
-
-                @Override
-                public void onSendFailed(NetData data) {
-                    //                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
-                }
-            });
+            sendMailReadedMsg(channelID,Long.valueOf(whisperID));
         return observable;
 
 //        if (TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(whisperID)) {// 如果是群聊去网上取二十条
@@ -669,6 +657,25 @@ public class ChatMgr implements ModuleBase {
 //
 //            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
 //            Log.e("TTTTTTTTTTLLLL", ret + "||||" +whisperID);
+    }
+
+    public void sendMailReadedMsg(String channelID,long userID){
+        sendMailReadedMsg(channelID,userID, new IMProxy.SendCallBack() {
+            @Override
+            public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                MessageRet messageRet = new MessageRet();
+                messageRet.parseJson(contents);
+                //                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
+                if (messageRet.getS() == 0) {
+
+                }
+            }
+
+            @Override
+            public void onSendFailed(NetData data) {
+                //                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
+            }
+        });
     }
 
     private void pushMsg(boolean ret, BaseMessage message) {

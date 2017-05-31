@@ -13,7 +13,6 @@ import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
-import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -30,8 +29,6 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
-import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
 
 import java.lang.reflect.Constructor;
@@ -487,22 +484,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
 //                Log.e("TTTTTTTTTTTTTTLLL", message.getId() + "||" + message.getInfoJson() + "|||" + message.getClass() + "||" + message.getSendID() + "|||" + message.getSSendID());
                 if (message.getSendID() != App.uid)
-                ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), getLWhisperId(), new IMProxy.SendCallBack() {
-                    @Override
-                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                        MessageRet messageRet = new MessageRet();
-                        messageRet.parseJson(contents);
-//                        Log.e("TTTTTTTTTTLLLL11177", "执行||||成功" + messageRet.getS());
-                        if (messageRet.getS() == 0) {
-
-                        }
-                    }
-
-                    @Override
-                    public void onSendFailed(NetData data) {
-//                        Log.e("TTTTTTTTTTLLLL222", "执行||||失败");
-                    }
-                });
+                ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
             } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {
