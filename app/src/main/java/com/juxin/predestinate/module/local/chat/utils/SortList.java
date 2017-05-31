@@ -23,7 +23,7 @@ public class SortList {
 		Collections.sort(baseMessages, new Comparator<BaseMessage>() {
 			@Override
 			public int compare(BaseMessage arg0, BaseMessage arg1) {
-				return new Long(arg0.getId()).compareTo(new Long(arg1.getId()));
+				return new Long(arg0.getId()).compareTo(arg1.getId());
 			}
 		});
 	}
@@ -38,7 +38,7 @@ public class SortList {
 		Collections.sort(baseMessages, new Comparator<BaseMessage>() {
 			@Override
 			public int compare(BaseMessage arg0, BaseMessage arg1) {
-				return new Long(arg0.getTime()).compareTo(new Long(arg1.getTime()));
+				return new Long(arg0.getTime()).compareTo(arg1.getTime());
 			}
 		});
 	}
@@ -55,7 +55,7 @@ public class SortList {
 		Collections.sort(baseMessages, new Comparator<BaseMessage>() {
 			@Override
 			public int compare(BaseMessage arg0, BaseMessage arg1) {
-				int i = new Integer(arg1.getWeight()).compareTo(arg0.getWeight());
+				int i = Integer.valueOf(arg1.getWeight()).compareTo(arg0.getWeight());
 				if (i == 0) {
 					return (arg1.getTime() + "").compareTo(arg0.getTime() + "");
 				} else {

@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -30,6 +31,7 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,11 +66,11 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         return getContentView();
     }
 
-
     private void initListenerAndRequest() {
         MsgMgr.getInstance().attach(this);
         ModuleMgr.getCommonMgr().getFriendsSize();
     }
+
     private void onTitleRight() {
         setTitleRightImgGone();
         View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
@@ -169,7 +171,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     public void onSwipeChooseChecked(int position, boolean isChecked) {
         int size = mailFragmentAdapter.getList().size();
-        if(size <= 0 || position >= size){
+        if (size <= 0 || position >= size) {
             return;
         }
         BaseMessage message = mailFragmentAdapter.getItem(position);
@@ -257,6 +259,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Friend_Num_Notice:
+            case MsgType.MT_Unread_change:
                 PLogger.printObject("xxxxxxxxxxxxxxx");
                 mailFragmentAdapter.updateAllData();
                 detectInfo(listMail);
@@ -316,7 +319,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 continue;
             }
 
-            PLogger.printObject("message===="+ (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID(): message.getName()));
+            PLogger.printObject("message====" + (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID() : message.getName()));
             if (TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())) {
                 stringList.add(message.getLWhisperID());
             }
@@ -355,5 +358,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
 }

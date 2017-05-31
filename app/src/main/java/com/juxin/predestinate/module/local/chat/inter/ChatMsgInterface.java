@@ -18,22 +18,6 @@ public class ChatMsgInterface {
     public interface ChatMsgListener {
 
         /**
-         * 最近聊天内容
-         *
-         * @param ret
-         * @param baseMessages
-         */
-        void onChatRecently(boolean ret, List<BaseMessage> baseMessages);
-
-        /**
-         * 分页加载历史数据
-         *
-         * @param ret
-         * @param baseMessages
-         */
-        void onChatHistory(boolean ret, List<BaseMessage> baseMessages);
-
-        /**
          * 更新数据
          *
          * @param ret

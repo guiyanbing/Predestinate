@@ -117,7 +117,7 @@ public class ImageLoader {
         if(url.endsWith("gif")) {
             loadGifAsBmp(context, url, view, defWH, R.drawable.default_pic, R.drawable.default_pic);
         }else {
-            loadAvatar(context, url, view);
+            loadCenterCrop(context, url, view);
         }
     }
 

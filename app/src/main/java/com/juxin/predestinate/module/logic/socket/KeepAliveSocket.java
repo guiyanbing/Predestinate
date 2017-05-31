@@ -192,7 +192,7 @@ public class KeepAliveSocket {
         if (wantClose) {
             setState(SocketState.DISCONNECT_NORMAL);
         } else {
-            setState(SocketState.DISCONNECT_NORMAL);
+            setState(SocketState.DISCONNECT_ERROR);
         }
     }
     private void onReadClose () {
