@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -89,7 +88,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
             privateChat.setInput_giftviewVisibility(View.GONE);
-//            privateChat.getChatAdapter().showIsCanChat(true);
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
                     .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
