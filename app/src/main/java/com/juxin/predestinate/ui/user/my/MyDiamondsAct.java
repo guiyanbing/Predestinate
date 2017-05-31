@@ -38,6 +38,7 @@ public class MyDiamondsAct extends BaseActivity{
 
     private void initView(){
         setBackView(R.id.base_title_back);
+        tvDiamondSum = (TextView) findViewById(R.id.wode_diamond_txv_sum);
         crlList = (CustomRecyclerView) findViewById(R.id.wode_diamond_crl_list);
         rlvList = crlList.getRecyclerView();
         rlvList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -55,6 +56,7 @@ public class MyDiamondsAct extends BaseActivity{
     }
 
     private void initData() {
+        tvDiamondSum.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()+"");
         mMyDiamondAdapter = new MyDiamondAdapter(this);
         List<Diamond> dataList = ModuleMgr.getCommonMgr().getCommonConfig().getDiamondList();
         rlvList.setAdapter(mMyDiamondAdapter);
