@@ -73,7 +73,7 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
 
     public void refreshView() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header);
+        ImageLoader.loadAvatar(getContext(), userDetail.getAvatar(), img_header);
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {

@@ -71,7 +71,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
      */
     public void refreshView() {
         myInfo = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadCircle(getContext(), myInfo.getAvatar(), user_head);
+        ImageLoader.loadAvatar(getContext(), myInfo.getAvatar(), user_head);
         user_id.setText("ID:" + myInfo.getUid());
         user_nick.setText(myInfo.getNickname());
         iv_invite_code.setText(String.format(getContext().getResources().
@@ -84,7 +84,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
     private void refreshHeader() {
         if (myInfo.isVip()) {
             user_head_vip.setVisibility(View.VISIBLE);
-            ImageLoader.loadCircle(getContext(), R.drawable.f1_user_vip_logo, user_head_vip);
+            ImageLoader.loadAvatar(getContext(), R.drawable.f1_user_vip_logo, user_head_vip);
         }
 
         switch (myInfo.getAvatar_status()) {

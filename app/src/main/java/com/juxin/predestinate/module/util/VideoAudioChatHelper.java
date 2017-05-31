@@ -93,17 +93,17 @@ public class VideoAudioChatHelper{
 //        AsyncTaskUtil.getInstance(context).setUrl(AppCfg.FATE_GO_GET_SELF_VA_CONFIG).setWhat(TASK_WHAT_GET_SELF_VA_CONFIG).setOnAsyncCallback(this).executeTask();
     }
 
-    private long sendUid = -1;
+    private boolean  isSend = false;
 
     /**
      * 重置发起方uid，每次收到音视频挂断消息时进行调用
      */
-    public void resetSendUid(){
-        this.sendUid = -1;
+    public void resetSend(){
+        this.isSend = false;
     }
 
-    public long getSendUid(){
-        return sendUid;
+    public boolean isSend(){
+        return isSend;
     }
 
     /**
@@ -114,7 +114,7 @@ public class VideoAudioChatHelper{
      * @param type    {@link TYPE_VIDEO_CHAT,TYPE_AUDIO_CHAT}   1为视频，2为音频
      */
     public void inviteVAChat(final Activity context, long dstUid, int type) {
-        sendUid = App.uid;//存储发起方uid，即自己的uid
+        isSend = true;
 
         lastOpt = OPT_INVITE;
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {

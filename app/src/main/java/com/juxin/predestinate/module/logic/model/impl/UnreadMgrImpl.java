@@ -11,6 +11,8 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,7 +75,14 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
     public void onUpdateUnread(BaseMessage message) {
         switch (message.getType()) {//比对抛出的未读类型消息，进行角标的添加
             case BaseMessage.Follow_MsgType://谁关注我消息
-                getUnreadMgr().addNumUnread(FOLLOW_ME);
+                // [谁关注我消息文档](http://doc.dev.yuanfenba.net/pkg/yuanfen/common/msg_data/#MSG_TYPE_FOCUS)
+                JSONObject jsonObject = message.getJsonObj();
+                int gz = jsonObject.optInt("gz");//关注状态1为关注2为取消关注
+                if (gz == 1) {
+                    getUnreadMgr().addNumUnread(FOLLOW_ME);
+                } else if (gz == 2) {
+                    getUnreadMgr().reduceUnreadByKey(FOLLOW_ME);
+                }
                 break;
             case BaseMessage.TalkRed_MsgType://聊天随机红包
             case BaseMessage.RedEnvelopesBalance_MsgType://钱包余额变更消息

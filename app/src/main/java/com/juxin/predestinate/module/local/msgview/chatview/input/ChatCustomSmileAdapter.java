@@ -9,11 +9,14 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
+import com.juxin.predestinate.module.util.UIUtil;
+
 import java.util.List;
 
 public class ChatCustomSmileAdapter extends ExBaseAdapter<SmileItem> {
     private boolean mOutDelClick;
     private int mCurPage;
+    private int mDefWH;
     private DelCEmojiCallBack mCallBack;
 
     public interface DelCEmojiCallBack {
@@ -25,6 +28,7 @@ public class ChatCustomSmileAdapter extends ExBaseAdapter<SmileItem> {
         this.mOutDelClick = delFlag;
         this.mCurPage = curPage;
         this.mCallBack = callBack;
+        this.mDefWH = UIUtil.dip2px(context, 60f);
     }
 
     @Override
@@ -45,7 +49,7 @@ public class ChatCustomSmileAdapter extends ExBaseAdapter<SmileItem> {
         if("custom".equals(smileItem.getPic())){
             vh.chat_custom_smile.setBackgroundResource(R.drawable.f1_bt_add_emoji);
         }else {
-            ImageLoader.loadAvatar(getContext(), smileItem.getPic(), vh.chat_custom_smile);
+            ImageLoader.loadImgOrGifAsBmp(getContext(), smileItem.getPic(), vh.chat_custom_smile, mDefWH);
             if(mOutDelClick) {
                 vh.iv_custom_emoji_del.setVisibility(View.VISIBLE);
                 vh.iv_custom_emoji_del.setOnClickListener(new View.OnClickListener() {

@@ -71,7 +71,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         viewPager = (ViewPager) findViewById(R.id.chat_panel_viewpager);
     }
 
-    private void initData() {
+    private synchronized void initData() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
         viewPager.setAdapter(viewPagerAdapter);
         initPointsView(viewPager, viewPagerAdapter.getCount(), true);
@@ -86,7 +86,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
     }
 
-    private List<View> getAllViews() {
+    private synchronized List<View> getAllViews() {
         List<View> views = new ArrayList<>();
         View view;
         int index = 0;
@@ -97,7 +97,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         return views;
     }
 
-    private View getChildView(int index) {
+    private synchronized View getChildView(int index) {
         List<SmileItem> listTemp = getPageRes(index);
         if (listTemp == null) {
             return null;
@@ -122,7 +122,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @param index 对应页。
      * @return 指定页的资源信息。
      */
-    private List<SmileItem> getPageRes(int index) {
+    private synchronized List<SmileItem> getPageRes(int index) {
         if (items == null) {
             return null;
         }
@@ -212,7 +212,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                     if (null == items) {
                         return;
                     }
-                    items.add(new SmileItem(url));
+//                    items.add(new SmileItem(url));
+                    optItems(new SmileItem(url), 0);
                     PToast.showShort("表情添加成功");
                     initData();
                 } catch (Exception e) {
@@ -241,7 +242,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                     if (null == items) {
                         return;
                     }
-                    items.remove(curPage * pageResNum + positon);
+//                    items.remove(curPage * pageResNum + positon);
+                    optItems(null, curPage * pageResNum + positon);
                     PToast.showShort("表情删除成功");
                     initData();
                 } catch (Exception e) {
@@ -249,6 +251,14 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                 }
             }
         });
+    }
+
+    private synchronized void optItems(SmileItem smileItem, int positon) {
+        if(null != smileItem) {
+            items.add(smileItem);
+        }else {
+            items.remove(positon);
+        }
     }
 
     @Override

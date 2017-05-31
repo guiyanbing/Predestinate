@@ -80,6 +80,14 @@
 -keep class com.juxin.predestinate.module.logic.invoke.WebAppInterface {*;}
 # CMD反射
 -keepclassmembers public class com.juxin.predestinate.module.logic.invoke.Invoker$Invoke {*;}
+# 表情映射
+-keepclassmembers public class com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmile {*;}
+# 聊天面板
+-keep class * extends java.util.logging.Formatter
+-keep public class com.juxin.predestinate.module.local.msgview.ChatAdapter$ChatInstance
+-keepclassmembers class * extends com.juxin.predestinate.module.local.msgview.chatview.ChatPanel {
+    public <init>(android.content.Context, com.juxin.predestinate.module.local.msgview.ChatAdapter$ChatInstance, boolean);
+}
 
 # =====x5内核=====
 -dontwarn com.tencent.smtt.**

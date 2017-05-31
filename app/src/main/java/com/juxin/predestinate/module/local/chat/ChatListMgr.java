@@ -43,6 +43,7 @@ import rx.schedulers.Schedulers;
 public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
+    private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //好友列表
 
@@ -60,6 +61,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public int getUnreadNumber() {
         return unreadNum;
+    }
+
+    public int getGreetNum() {
+        return greetNum;
     }
 
     /**
@@ -101,6 +106,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
+        greetNum = 0;
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
@@ -108,6 +114,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
+                    greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
             }
@@ -212,7 +219,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
         if (ret != MessageConstant.ERROR) {
-        //    getWhisperList();
+            getWhisperList();
         }
     }
 
@@ -220,10 +227,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if(greetList == null || greetList.size() <= 0){
             return;
         }
-        for(BaseMessage temp : greetList){
-            updateToRead(temp.getLWhisperID());
-        }
+        dbCenter.getCenterFMessage().updateToRead(greetList);
+        getWhisperList();
     }
+
     public long updateToRead(long userID){
         return dbCenter.getCenterFMessage().updateToRead(userID);
     }
@@ -270,6 +277,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         mAppComponent = null;
         msgList.clear();
         greetList.clear();
+        greetNum = 0;
         unreadNum = 0;
     }
 
@@ -326,18 +334,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
+
         PLogger.printObject("setVideoMsg==="+videoMessage.toString());
         if (videoMessage.getVideoTp() == 1) {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
         } else {
             UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
-        }
-
-        //3拒绝或取消 4挂断（挂断可能会收到不止一次）
-        if (videoMessage.getVideoTp()==3||videoMessage.getVideoTp()==4){
-            VideoAudioChatHelper.getInstance().resetSendUid();
-
         }
     }
 

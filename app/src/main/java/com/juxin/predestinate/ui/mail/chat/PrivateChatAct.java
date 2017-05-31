@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -24,7 +25,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.my.GiftMessageList;
-import com.juxin.predestinate.module.local.chat.ChatMgr;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
@@ -44,6 +44,7 @@ import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+
 import java.util.List;
 
 /**
@@ -87,7 +88,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
-            privateChat.getChatAdapter().showIsCanChat(true);
+            privateChat.setInput_giftviewVisibility(View.GONE);
+//            privateChat.getChatAdapter().showIsCanChat(true);
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
                     .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
@@ -97,22 +99,23 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     private void initLastGiftList() {
-        ModuleMgr.getCommonMgr().lastGiftList(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    GiftMessageList list = (GiftMessageList) response.getBaseData();
-                    List<GiftMessageList.GiftMessageInfo> lastGiftMessages = list.getGiftMessageList();
-                    if (lastGiftMessages != null && !lastGiftMessages.isEmpty()) {
-                        lmvMeassages.setVisibility(View.VISIBLE);
-                        marqueeView.setData(lastGiftMessages);
-                        lmvMeassages.setAnimInAndOut(R.anim.top_in, R.anim.bottom_out);
-                        lmvMeassages.setMarqueeFactory(marqueeView);
-                        lmvMeassages.startFlipping();
+        if (MailSpecialID.customerService.getSpecialID() != whisperID)
+            ModuleMgr.getCommonMgr().lastGiftList(new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()) {
+                        GiftMessageList list = (GiftMessageList) response.getBaseData();
+                        List<GiftMessageList.GiftMessageInfo> lastGiftMessages = list.getGiftMessageList();
+                        if (lastGiftMessages != null && !lastGiftMessages.isEmpty()) {
+                            lmvMeassages.setVisibility(View.VISIBLE);
+                            marqueeView.setData(lastGiftMessages);
+                            lmvMeassages.setAnimInAndOut(R.anim.top_in, R.anim.bottom_out);
+                            lmvMeassages.setMarqueeFactory(marqueeView);
+                            lmvMeassages.startFlipping();
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 
     /**
@@ -199,7 +202,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
-                    setNickName(infoLightweight.getNickname());
+                    setNickName(infoLightweight.getShowName());
                     if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setBackgroundResource(R.drawable.f1_top02);
                     }
@@ -210,13 +213,13 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
-                    name = infoLightweight.getNickname();
+                    name = infoLightweight.getShowName();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
             }
         });
 
-        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID) {
             initHeadView();
             initFollow();
             isShowTopPhone();
@@ -229,7 +232,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         }
 
         //状态栏 + 标题 +（关注TA、查看手机）+ 滚动条 高度
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1)
+        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 && MailSpecialID.customerService.getSpecialID() != whisperID)
             PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight() + UIUtil.getStatusHeight(this));
         else
             PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + UIUtil.getStatusHeight(this));
@@ -256,7 +259,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     private void isShowTopPhone() {
-        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete(){
+        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete() {
             @Override
             public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
                 if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&
