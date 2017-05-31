@@ -220,6 +220,17 @@ public class UIUtil {
     }
 
     /**
+     * 获取控件的高度
+     * @param view 控件
+     * @return
+     */
+    public static int getViewH(View view) {
+        if(null == view) return 0;
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        return view.getMeasuredHeight();
+    }
+
+    /**
      * 设置背景bitmap： 兼容低版本
      */
     public static void setBackground(View v, Drawable background) {

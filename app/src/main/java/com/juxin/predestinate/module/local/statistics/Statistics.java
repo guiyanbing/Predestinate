@@ -52,7 +52,7 @@ public class Statistics {
         singleMap.put("time", System.currentTimeMillis());//发送时间戳
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
         singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
-        singleMap.put("client_type", "2");//客户端类型
+        singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
         singleMap.put("channel_id", ModuleMgr.getAppMgr().getMainChannelID() + "_"
@@ -63,8 +63,8 @@ public class Statistics {
         singleMap.put("client_ip", NetworkUtils.getIpAddressString());//客户端IP
         singleMap.put("device_model", android.os.Build.MODEL);//手机型号
         singleMap.put("device_os_version", android.os.Build.DISPLAY);//手机操作系统版本
-        singleMap.put("screen_width", ModuleMgr.getAppMgr().getScreenWidth());//屏幕宽度
-        singleMap.put("screen_height", ModuleMgr.getAppMgr().getScreenHeight());//屏幕高度
+        singleMap.put("screen_width", String.valueOf(ModuleMgr.getAppMgr().getScreenWidth()));//屏幕宽度
+        singleMap.put("screen_height", String.valueOf(ModuleMgr.getAppMgr().getScreenHeight()));//屏幕高度
         singleMap.put("tracker_code", EncryptUtil.md5(ModuleMgr.getAppMgr().getDeviceID()));//追踪码MD5,访客(包含游客)唯一标识且终生唯一
         singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
 
@@ -122,7 +122,7 @@ public class Statistics {
         singleMap.put("to_uid", to_uid);//与谁交互UID(可选)
 
         singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
-        singleMap.put("client_type", "2");//客户端类型
+        singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
         singleMap.put("channel_id", ModuleMgr.getAppMgr().getMainChannelID() + "_"
@@ -133,8 +133,8 @@ public class Statistics {
         singleMap.put("client_ip", NetworkUtils.getIpAddressString());//客户端IP
         singleMap.put("device_model", android.os.Build.MODEL);//手机型号
         singleMap.put("device_os_version", android.os.Build.DISPLAY);//手机操作系统版本
-        singleMap.put("screen_width", ModuleMgr.getAppMgr().getScreenWidth());//屏幕宽度
-        singleMap.put("screen_height", ModuleMgr.getAppMgr().getScreenHeight());//屏幕高度
+        singleMap.put("screen_width", String.valueOf(ModuleMgr.getAppMgr().getScreenWidth()));//屏幕宽度
+        singleMap.put("screen_height", String.valueOf(ModuleMgr.getAppMgr().getScreenHeight()));//屏幕高度
         singleMap.put("tracker_code", EncryptUtil.md5(ModuleMgr.getAppMgr().getDeviceID()));//追踪码MD5,访客(包含游客)唯一标识且终生唯一
         singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
 

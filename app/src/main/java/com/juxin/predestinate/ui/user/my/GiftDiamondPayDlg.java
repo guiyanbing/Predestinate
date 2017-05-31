@@ -22,7 +22,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.user.my.adapter.GiftGridviewSmallAdapter;
@@ -32,7 +31,7 @@ import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListener, RequestComplete,GiftHelper.OnRequestGiftListCallback {
+public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListener, RequestComplete, GiftHelper.OnRequestGiftListCallback {
 
     //GIft
     private GiftViewPagerAdapter gvpAdapter;
@@ -89,10 +88,6 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         }
         //当前钻石数
         tv_money.setText(getString(R.string.the_current_diamond) + ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
-//        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() > 0) {
-//        } else {
-//            ModuleMgr.getCommonMgr().getMyDiamand(this);
-//        }
         selectVipTypeBtn(R.id.dlg_diamond_ll_diamond10);
     }
 
@@ -202,13 +197,12 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void initSelectAndPay(){
-        if (selectGift == null){
-            return;
-        }
+    private void initSelectAndPay() {
+        if (selectGift == null) return;
+
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - selectGift.getMoney() < 0) {
             findViewById(R.id.ll_gift_pay).setVisibility(View.VISIBLE);
-            dlg_diamond_tv_decdiamod.setText((selectGift.getMoney() -ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) + "钻石");
+            dlg_diamond_tv_decdiamod.setText((selectGift.getMoney() - ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) + "钻石");
         } else {
             findViewById(R.id.ll_gift_pay).setVisibility(View.GONE);
         }
@@ -303,16 +297,16 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
                 initSelectAndPay();
                 if (null != mLists) {
                     if (null != mLists.get(index)) {
-                       notifyDataSetChanged();
+                        notifyDataSetChanged();
                     }
                 }
             }
         }
     }
 
-    private void notifyDataSetChanged(){
-        for (int i = 0 ;i < mLists.size();i++){
-            ((GiftGridviewSmallAdapter)mLists.get(i).getAdapter()).notifyDataSetChanged();
+    private void notifyDataSetChanged() {
+        for (int i = 0; i < mLists.size(); i++) {
+            ((GiftGridviewSmallAdapter) mLists.get(i).getAdapter()).notifyDataSetChanged();
         }
     }
 
@@ -355,7 +349,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         initGiftData();
     }
 
-    private void reSetGift(){
+    private void reSetGift() {
         for (int j = 0; j < mListGift.size(); j++) {
             mListGift.get(j).setIsSelect(false);
         }
@@ -374,7 +368,7 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
 
     private void initGiftList(String json) {
         ModuleMgr.getCommonMgr().getGiftLists().parseJson(json);
-        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0){
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
             initViewGrid();
             initSelect();
         }
@@ -382,19 +376,11 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-//        Log.e("TTTTTTTTTJJ", response.getResponseString() + "|||");
-        if (response.getUrlParam() == UrlParam.getMyDiamand){
-            if (response.isOk()){
-                int diamonds = JsonUtil.getJsonObject(response.getResponseString()).optInt("diamand", 0);
-                tv_money.setText(mContext.getString(R.string.the_current_diamond) + diamonds);
-            }
-            return;
-        }
-        if (response.getUrlParam() == UrlParam.sendGift){
+        if (response.getUrlParam() == UrlParam.sendGift) {
             SendGiftResultInfo info = new SendGiftResultInfo();
             info.parseJson(response.getResponseString());
             ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
-            ModuleMgr.getChatMgr().sendGiftMsg(null, toUid + "",mListGift.get(position).getId() , 1, 0);
+            ModuleMgr.getChatMgr().sendGiftMsg(null, toUid + "", mListGift.get(position).getId(), 1, 0);
             PToast.showShort(info.getMsg() + "");
             return;
         }
@@ -403,9 +389,9 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onRequestGiftListCallback(boolean isOk) {
-        if (isOk){
+        if (isOk) {
             mListGift = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
-            if (mListGift.size() > 0){
+            if (mListGift.size() > 0) {
                 initViewGrid();
                 initSelect();
             }
@@ -437,10 +423,10 @@ public class GiftDiamondPayDlg extends BaseActivity implements View.OnClickListe
         } else {
             if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() >= selectGift.getMoney()) {
                 //发送消息
-                ModuleMgr.getCommonMgr().sendGift(toUid,selectGift.getId()+"",1,2,this);
+                ModuleMgr.getCommonMgr().sendGift(toUid, selectGift.getId() + "", 1, 2, this);
                 finish();
             } else {
-                UIShow.showPayListAct((FragmentActivity)mContext, pay_id);
+                UIShow.showPayListAct((FragmentActivity) mContext, pay_id);
                 finish();
             }
         }

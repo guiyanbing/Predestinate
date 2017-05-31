@@ -231,11 +231,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             privateChat.mGiftTipsContainerV.setVisibility(View.VISIBLE);
         }
 
-        //状态栏 + 标题 +（关注TA、查看手机）+ 滚动条 高度
+        //状态栏 + 标题 +（关注TA、查看手机）// （去掉滚动条高度） 高度
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 && MailSpecialID.customerService.getSpecialID() != whisperID)
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + privatechat_head.getHeight() + UIUtil.getStatusHeight(this));
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewH(getTitleView()) + UIUtil.getViewH(privatechat_head) + UIUtil.getStatusHeight(this));
         else
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, getTitleView().getHeight() + lmvMeassages.getHeight() + UIUtil.getStatusHeight(this));
+            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewH(getTitleView()) + UIUtil.getStatusHeight(this));
     }
 
     private void initFollow() {
