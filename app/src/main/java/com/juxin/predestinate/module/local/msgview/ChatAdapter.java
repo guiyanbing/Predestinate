@@ -466,50 +466,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onChatRecently(boolean ret, List<BaseMessage> baseMessages) {
-        PLogger.printObject(baseMessages);
-        List<BaseMessage> listTemp = new ArrayList<>();
-
-        if (ret) {
-            for (BaseMessage baseMessage : baseMessages) {
-                if (isShowMsg(baseMessage)) {
-                    listTemp.add(baseMessage);
-                }
-            }
-        }
-
-        chatInstance.chatContentAdapter.setList(listTemp);
-        moveToBottom();
-    }
-
-    @Override
-    public void onChatHistory(boolean ret, List<BaseMessage> baseMessages) {
-        PLogger.printObject(baseMessages);
-        chatInstance.chatListView.stopRefresh();
-
-        if (ret) {
-            if (baseMessages.size() < 20) {
-                chatInstance.chatListView.setPullRefreshEnable(false);
-            }
-
-            List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
-
-            for (BaseMessage baseMessage : baseMessages) {
-                if (isShowMsg(baseMessage)) {
-                    listTemp.add(baseMessage);
-                }
-            }
-
-            if (chatInstance.chatContentAdapter.getList() != null) {
-                listTemp.addAll(chatInstance.chatContentAdapter.getList());
-            }
-
-            chatInstance.chatContentAdapter.setList(listTemp);
-            chatInstance.chatListView.setSelection(baseMessages.size());
-        }
-    }
-
-    @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
         PLogger.printObject(message);
         boolean show = false;
@@ -531,7 +487,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
 //                Log.e("TTTTTTTTTTTTTTLLL", message.getId() + "||" + message.getInfoJson() + "|||" + message.getClass() + "||" + message.getSendID() + "|||" + message.getSSendID());
                 if (message.getSendID() != App.uid)
-                ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId), new IMProxy.SendCallBack() {
+                ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), getLWhisperId(), new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();
