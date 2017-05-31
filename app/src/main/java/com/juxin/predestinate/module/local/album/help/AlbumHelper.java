@@ -217,7 +217,8 @@ public class AlbumHelper {
                 ContentResolver contentResolver = App.getActivity().getContentResolver();
                 //获取jpeg和png格式的文件，并且按照时间进行倒序
                 Cursor cursor = contentResolver.query(uri, null, MediaStore.Images.Media.MIME_TYPE + "=\"image/jpeg\" or " +
-                        MediaStore.Images.Media.MIME_TYPE + "=\"image/png\"", null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
+                        MediaStore.Images.Media.MIME_TYPE + "=\"image/png\" or " +
+                        MediaStore.Images.Media.MIME_TYPE + "=\"image/gif\"", null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
                 if (cursor != null) {
                     while (cursor.moveToNext()) {
                         SingleImageModel singleImageModel = new SingleImageModel();
