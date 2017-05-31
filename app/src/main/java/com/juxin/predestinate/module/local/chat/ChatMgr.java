@@ -142,25 +142,14 @@ public class ChatMgr implements ModuleBase {
      * @param otherID
      */
     public void sendvideoMsglocalSimulation(String otherID, int type, int videoID) {
-        final VideoMessage videoMessage = new VideoMessage(null, otherID, 3);
+        final VideoMessage videoMessage = new VideoMessage(null, otherID, type, videoID, 3, 3);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
-        videoMessage.setVideoMediaTp(type);
         videoMessage.setDataSource(MessageConstant.FOUR);
         videoMessage.setJsonStr(videoMessage.getJson(videoMessage));
 
-        Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
-        observable.subscribe(new Action1<Boolean>() {
-            @Override
-            public void call(Boolean aBoolean) {
-                if(aBoolean){
-                    if(dbCenter.getCenterFLetter().updateLetter(videoMessage) == MessageConstant.ERROR){
-                        return;
-                    }
-                }
-                dbCenter.getCenterFMessage().insertMsg(videoMessage);
-            }
-        }).unsubscribe();
-
+        long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
+        if (ret == MessageConstant.ERROR) return;
+        dbCenter.getCenterFMessage().insertMsg(videoMessage);
     }
 
     public interface OnUpdateDataListener{

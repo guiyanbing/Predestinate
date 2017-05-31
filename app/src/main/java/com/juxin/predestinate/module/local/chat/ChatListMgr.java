@@ -326,18 +326,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
+
         PLogger.printObject("setVideoMsg==="+videoMessage.toString());
         if (videoMessage.getVideoTp() == 1) {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
         } else {
             UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
-        }
-
-        //3拒绝或取消 4挂断（挂断可能会收到不止一次）
-        if (videoMessage.getVideoTp()==3||videoMessage.getVideoTp()==4){
-            VideoAudioChatHelper.getInstance().resetSendUid();
-
         }
     }
 

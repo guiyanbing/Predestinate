@@ -29,15 +29,25 @@ public class App extends MultiDexApplication {
      */
     public static boolean isLogin = false;
 
+    private static PActivityLifecycleCallbacks lifecycleCallbacks;
+
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        registerActivityLifecycleCallbacks(new PActivityLifecycleCallbacks());
-        //  initAppComponent();
+        lifecycleCallbacks = new PActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
+        //  initAppComponent();
         ModuleMgr.initModule(context);
+    }
+
+    /**
+     * @return 获取进程生命周期回调
+     */
+    public static PActivityLifecycleCallbacks getLifecycleCallbacks() {
+        return lifecycleCallbacks;
     }
 
     /**

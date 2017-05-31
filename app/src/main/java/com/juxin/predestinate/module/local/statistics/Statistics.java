@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.statistics;
 
+import android.app.Activity;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -137,8 +138,10 @@ public class Statistics {
         singleMap.put("tracker_code", EncryptUtil.md5(ModuleMgr.getAppMgr().getDeviceID()));//追踪码MD5,访客(包含游客)唯一标识且终生唯一
         singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
 
+        LinkedList<Activity> activities = App.getLifecycleCallbacks().getActivities();
         singleMap.put("page", App.getActivity().getClass().getSimpleName());//当前页面，栈顶activity
-        singleMap.put("referer", "");//来源页面(可选)，栈中第二个activity// TODO: 2017/5/27
+        singleMap.put("referer", activities.size() <= 1 ? ""
+                : activities.get(activities.size() - 1).getClass().getSimpleName());//来源页面(可选)，栈中第二个activity
         singleMap.put("event_type", sendPoint.toString());//事件类型
         singleMap.put("event_data", TextUtils.isEmpty(fixParams) ? "{}" : fixParams);//事件数据(可选,有数据需提供数据说明文档)
 

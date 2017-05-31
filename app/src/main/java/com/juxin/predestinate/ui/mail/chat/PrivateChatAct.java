@@ -202,7 +202,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
-                    setNickName(infoLightweight.getNickname());
+                    setNickName(infoLightweight.getShowName());
                     if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setBackgroundResource(R.drawable.f1_top02);
                     }
@@ -213,7 +213,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
-                    name = infoLightweight.getNickname();
+                    name = infoLightweight.getShowName();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
             }
@@ -259,7 +259,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     private void isShowTopPhone() {
-        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete(){
+        ModuleMgr.getChatMgr().getNetSingleProfile(whisperID, new ChatMsgInterface.InfoComplete() {
             @Override
             public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
                 if (MailSpecialID.customerService.getSpecialID() != whisperID && infoLightweight.getGender() == 2 &&

@@ -6,10 +6,10 @@ import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,50 +85,32 @@ public class RecMessageMgr implements IMProxy.IMListener {
             message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-            if(BaseMessage.TalkRed_MsgType == message.getType()){//红包消息不保存，也不通知上层
+            if (BaseMessage.TalkRed_MsgType == message.getType()) {//红包消息不保存，也不通知上层
                 return;
             }
-            if(BaseMessage.System_MsgType == message.getType()){
+            if (BaseMessage.System_MsgType == message.getType()) {
                 return;
             }
-            if(BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()){
+            if (BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()) {
                 isSave = false;
             }
-//            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()){
-//                VideoMessage videoMessage = (VideoMessage) message;
-//                if(videoMessage.getVideoTp() == 1 || videoMessage.getVideoTp() == 2) {
-//                    return;
-//                }
-//            }
 
             if (isSave) {//是否保存
                 message.setInfoJson(null);
-                if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()){
-//                    long uid = VideoAudioChatHelper.getInstance().getSendUid();
-//                    if(uid != message.getSendID()) {//接收方
-//                        String otherid = message.getWhisperID();
-//                        message.setWhisperID(message.getSSendID());
-//                    }else {
-//
-//                    }
-//
-//
-//                    if(uid == -1){//接收方
-//
-//                    }else {
-//
-//                    }
+                if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()) {
+                    VideoMessage videoMessage = (VideoMessage) message;
+                    //   reMsg-jsonStr={"d":167211,"fid":110872900,"mct":"","media_tp":1,"mt":1496199691,"mtp":24,"ru":1,"tid":110872803,"vc_esc_code":3,"vc_id":100000496,"vc_tp":3}
+                    if (VideoAudioChatHelper.getInstance().isSend()) {//发送方
+                        message.setSendID(App.uid);
+                    }
 
+                    //3拒绝或取消 4挂断（挂断可能会收到不止一次）
+                    if(videoMessage.getVideoTp() == 3 || videoMessage.getVideoTp() == 4){
+                        VideoAudioChatHelper.getInstance().resetSend();
+                    }
                     //{"d":167075,"fid":110872922,"mct":"","media_tp":1,"mt":1495891670,"mtp":24,"ru":1,"tid":110872541,"vc_id":100000459,"vc_tp":1}
-
-
-//                    if(uid == message.getLWhisperID()){//一样的
-//
-//                    }else {
-//
-//                    }
-                        ModuleMgr.getChatMgr().onReceivingVideo((VideoMessage) message);
-                }else {
+                    ModuleMgr.getChatMgr().onReceivingVideo((VideoMessage) message);
+                } else {
                     ModuleMgr.getChatMgr().onReceiving(message);
                 }
             } else {
@@ -172,7 +154,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
      */
     public synchronized boolean checkNewMsgGId(long msgId) {
         if (recMsgGId == 0) {
-              recMsgGId = PSP.getInstance().getLong(REC_KEY_GMSGID, REC_DEFVALUE_MSGID);
+            recMsgGId = PSP.getInstance().getLong(REC_KEY_GMSGID, REC_DEFVALUE_MSGID);
         }
         if (this.recMsgGId >= msgId) {
             return false;

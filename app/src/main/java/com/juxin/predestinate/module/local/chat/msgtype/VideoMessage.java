@@ -2,8 +2,12 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.ui.utils.Video;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -31,9 +35,14 @@ public class VideoMessage extends BaseMessage {
         super();
     }
 
-    public VideoMessage(String channelID, String whisperID, int videoID) {
+    public VideoMessage(String channelID, String whisperID, int type, int videoID, int videoTp, int videoVcEscCode) {
         super(channelID, whisperID);
         this.setVideoID(videoID);
+        this.setVideoTp(videoTp);
+        this.setVideoMediaTp(type);
+        this.setVideoVcEscCode(videoVcEscCode);
+
+        this.setEmLastStatus(getLastStatus(getVideoTp(), getVideoVcEscCode()));
         this.setType(BaseMessageType.video.getMsgType());
     }
 
@@ -51,7 +60,26 @@ public class VideoMessage extends BaseMessage {
 
     @Override
     public String getJson(BaseMessage message) {
-        return super.getJson(message);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("tid", new JSONArray().put(message.getWhisperID()));
+            json.put("mtp", message.getType());
+            json.put("mct", message.getMsgDesc());
+            json.put("mt", getCurrentTime());
+            json.put("d", message.getMsgID());
+
+
+            json.put("vc_id", ((VideoMessage)message).getVideoID());
+            json.put("vc_tp", ((VideoMessage)message).getVideoTp());
+            json.put("media_tp", ((VideoMessage)message).getVideoMediaTp());
+            json.put("vc_esc_code", ((VideoMessage)message).getVideoVcEscCode());
+            json.put("vc_talk_time", ((VideoMessage)message).getVideoVcTalkTime());
+            json.put("vc_channel_key", ((VideoMessage)message).getVc_channel_key());
+            return json.toString();
+        } catch (JSONException e) {
+            PLogger.printThrowable(e);
+        }
+        return null;
     }
 
     public int getVideoID() {
