@@ -80,10 +80,10 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
     private void checkAndShowVipStatus(Boolean isVip, ImageView imgVipStatus, TextView tvNickName) {
         if (isVip) {
             imgVipStatus.setVisibility(View.VISIBLE);
-            tvNickName.setTextColor(getContext().getResources().getColor(R.color.color_F36D8E));
+//            tvNickName.setTextColor(getContext().getResources().getColor(R.color.color_F36D8E));
         } else {
             imgVipStatus.setVisibility(View.GONE);
-            tvNickName.setTextColor(getContext().getResources().getColor(R.color.usersnickname));
+//            tvNickName.setTextColor(getContext().getResources().getColor(R.color.usersnickname));
         }
     }
 
