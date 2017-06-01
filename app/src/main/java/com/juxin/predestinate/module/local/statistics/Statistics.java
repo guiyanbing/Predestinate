@@ -49,7 +49,7 @@ public class Statistics {
      */
     public static void startUp() {
         Map<String, Object> singleMap = new HashMap<>();
-        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
         singleMap.put("gender", ModuleMgr.getCenterMgr().getMyInfo().getGender());//用户性别
         singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
@@ -83,7 +83,7 @@ public class Statistics {
     public static void shutDown() {
         Map<String, Object> singleMap = new HashMap<>();
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
-        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
 
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("topic", StatisticPoint.Shutdown);//统计项名称
@@ -99,7 +99,7 @@ public class Statistics {
     public static void installVideoPlugin(boolean success) {
         Map<String, Object> singleMap = new HashMap<>();
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
-        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
         singleMap.put("success", success);//是否成功安装插件
 
         HashMap<String, Object> postParams = new HashMap<>();
@@ -112,12 +112,41 @@ public class Statistics {
      * 用户行为统计
      *
      * @param sendPoint 统计点
+     */
+    public static void userBehavior(SendPoint sendPoint) {
+        userBehavior(sendPoint, 0);
+    }
+
+    /**
+     * 用户行为统计
+     *
+     * @param sendPoint 统计点
+     * @param to_uid    与其产生交互的用户uid
+     */
+    public static void userBehavior(SendPoint sendPoint, long to_uid) {
+        userBehavior(sendPoint, to_uid, null);
+    }
+
+    /**
+     * 用户行为统计
+     *
+     * @param sendPoint 统计点
+     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     */
+    public static void userBehavior(SendPoint sendPoint, String fixParams) {
+        userBehavior(sendPoint, 0, fixParams);
+    }
+
+    /**
+     * 用户行为统计
+     *
+     * @param sendPoint 统计点
      * @param to_uid    与其产生交互的用户uid
      * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
      */
     public static void userBehavior(SendPoint sendPoint, long to_uid, String fixParams) {
         Map<String, Object> singleMap = new HashMap<>();
-        singleMap.put("time", System.currentTimeMillis());//发送时间戳
+        singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
         singleMap.put("to_uid", to_uid);//与谁交互UID(可选)
 
@@ -140,8 +169,8 @@ public class Statistics {
 
         LinkedList<Activity> activities = App.getLifecycleCallbacks().getActivities();
         singleMap.put("page", App.getActivity().getClass().getSimpleName());//当前页面，栈顶activity
-        singleMap.put("referer", activities.size() <= 1 ? ""
-                : activities.get(activities.size() - 1).getClass().getSimpleName());//来源页面(可选)，栈中第二个activity
+        singleMap.put("referer", activities.size() > 1 ?
+                activities.get(activities.size() - 2).getClass().getSimpleName() : "");//来源页面(可选)，栈中第二个activity
         singleMap.put("event_type", sendPoint.toString());//事件类型
         singleMap.put("event_data", TextUtils.isEmpty(fixParams) ? "{}" : fixParams);//事件数据(可选,有数据需提供数据说明文档)
 
