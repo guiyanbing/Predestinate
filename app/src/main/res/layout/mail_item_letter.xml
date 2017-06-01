@@ -167,18 +167,24 @@
                     android:textColor="@color/color_aaaaaa"
                     android:textSize="@dimen/px39_sp" />
 
-
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/mail_item_right_icon"
-            style="@style/icon_small"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/px15_dp"
-            android:layout_marginLeft="@dimen/px15_dp"
-            android:background="@drawable/f1_call_state_ico"
-            android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/mail_item_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/px35_dp"
+            android:paddingRight="@dimen/px35_dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/mail_item_right_icon"
+                style="@style/icon_small"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/f1_call_state_ico" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <View style="@style/divider_line_horizontal" />

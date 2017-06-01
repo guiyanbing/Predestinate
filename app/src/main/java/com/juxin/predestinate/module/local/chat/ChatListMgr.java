@@ -215,9 +215,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
-//        if (ret != MessageConstant.ERROR) {
-//            getWhisperList();
-//        }
+        if (ret != MessageConstant.ERROR) {
+            getWhisperList();
+        }
     }
 
     public void updateToBatchRead(List<BaseMessage> greetList) {
