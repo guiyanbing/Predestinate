@@ -1,4 +1,4 @@
- package com.juxin.predestinate.ui.user.fragment;
+package com.juxin.predestinate.ui.user.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
  * Created by Kind on 2017/3/20.
  */
 
-public class UserFragment extends BaseFragment implements PObserver{
+public class UserFragment extends BaseFragment implements PObserver {
     private UserFragmentHeadPanel headPanel;
     private UserFragmentFootPanel footPanel;
     private CheckIntervalTimeUtil checkIntervalTimeUtil;

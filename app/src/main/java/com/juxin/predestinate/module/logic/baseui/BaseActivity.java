@@ -213,6 +213,10 @@ public class BaseActivity extends FragmentActivity {
         setTitle(title);
     }
 
+    public void setBackViewGone() {
+        findViewById(R.id.base_title_back).setVisibility(View.GONE);
+    }
+
     /**
      * 设置标题
      *
@@ -283,6 +287,26 @@ public class BaseActivity extends FragmentActivity {
         title_center_container.addView(container);
     }
 
+
+    /**
+     * 添加标题栏左边布局的填充view
+     *
+     * @param container 填充的view
+     */
+    public void setTitleLeftContainer(View container) {
+        LinearLayout title_left_container = (LinearLayout) this.findViewById(R.id.base_title_left_container);
+        title_left_container.setVisibility(View.VISIBLE);
+        title_left_container.removeAllViews();
+        title_left_container.addView(container);
+    }
+
+    public void setTitleLeftContainerRemoveAll() {
+        LinearLayout title_left_container = (LinearLayout) this.findViewById(R.id.base_title_left_container);
+        title_left_container.setVisibility(View.GONE);
+        title_left_container.removeAllViews();
+    }
+
+
     /**
      * 添加title中标题右侧的填充view
      *
@@ -303,6 +327,10 @@ public class BaseActivity extends FragmentActivity {
      */
     public void setTitleRight(String txt, View.OnClickListener listener) {
         setTitleRight(txt, -1, listener);
+    }
+
+    public void setTitleRightImgGone() {
+        this.findViewById(R.id.base_title_right_img_container).setVisibility(View.GONE);
     }
 
     /**

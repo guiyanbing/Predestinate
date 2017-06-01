@@ -251,6 +251,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                     complete.onRequestComplete(response);
                 }
 
+                if (!response.isOk()) return;
                 userDetail = (UserDetail) response.getBaseData();
                 setMyInfo(response.getResponseString());         // 保存到SP
                 if (!response.isCache()) {
