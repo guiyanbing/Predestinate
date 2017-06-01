@@ -33,7 +33,8 @@
 
         <TextView
             android:id="@+id/tv_text_right"
-            style="@style/chat_item_text_content" />
+            style="@style/chat_item_text_content"
+            android:textColor="@color/white" />
 
         <ImageView
             android:id="@+id/iv_type_right"

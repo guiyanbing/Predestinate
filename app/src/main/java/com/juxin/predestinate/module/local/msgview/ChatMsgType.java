@@ -20,12 +20,19 @@ public enum ChatMsgType {
 
     // 基本消息类型
     CMT_2(ChatPanelCommon.class, "普通消息"),
-    CMT_3(ChatPanelText.class, "打招呼消息"),
+
+    CMT_3(ChatPanelCommon.class, "打招呼消息"),
+
     CMT_10(ChatPanelGift.class, "礼物消息"),
+
     CMT_14(ChatPanelCustomHint.class, ChatPanelType.CPT_Custom, "小提示消息"),
+
     CMT_19(ChatPanelCustomHint.class, ChatPanelType.CPT_Custom, "HTML小提示消息"),
+
     CMT_20(ChatPanelGiveMeGift.class, "索要礼物消息"),
+
     CMT_24(ChatPanelVideo.class, "音视频消息"),
+
     CMT_25(ChatPanelText.class, "HTML文本消息"),
 
     // 非有效类型

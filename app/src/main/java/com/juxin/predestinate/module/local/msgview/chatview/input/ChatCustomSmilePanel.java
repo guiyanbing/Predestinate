@@ -46,8 +46,15 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     private TextView mOutDelTv;
     private ViewPager viewPager;
 
-    public ChatCustomSmilePanel(Context context, List<SmileItem> items, ChatAdapter.ChatInstance chatInstance, TextView outDelTv) {
+    public ChatCustomSmilePanel(Context context, ChatAdapter.ChatInstance chatInstance, TextView outDelTv) {
         super(context, chatInstance);
+        this.mOutDelTv = outDelTv;
+        setContentView(R.layout.p1_chat_default_smile);
+        MsgMgr.getInstance().attach(this);
+        initView();
+    }
+
+    public void setData(List<SmileItem> items) {
         if (items == null) {
             items = new ArrayList<>();
         }
@@ -55,10 +62,6 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             items.add(0, new SmileItem("custom"));
         }
         this.items = items;
-        this.mOutDelTv = outDelTv;
-        setContentView(R.layout.p1_chat_default_smile);
-        MsgMgr.getInstance().attach(this);
-        initView();
         initData();
     }
 

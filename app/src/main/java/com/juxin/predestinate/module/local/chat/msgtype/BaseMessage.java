@@ -28,7 +28,7 @@ public class BaseMessage implements IBaseMessage {
     public enum BaseMessageType {
 
         common(CommonMessage.class, 2),//文本消息
-        hi(TextMessage.class, 3),//打招呼
+        hi(CommonMessage.class, 3),//打招呼
         sys(SystemMessage.class, 7),//系统
         gift(GiftMessage.class, 10),//礼物消息
         hint(TextMessage.class, 14),//小提示消息
@@ -581,12 +581,12 @@ public class BaseMessage implements IBaseMessage {
             return message;
         }
         switch (messageType) {
-            case hi:
             case html:
             case hint:
             case htmlText:
                 message = new TextMessage(bundle, true);
                 break;
+            case hi:
             case common:
                 message = new CommonMessage(bundle, true);
                 break;
@@ -620,12 +620,12 @@ public class BaseMessage implements IBaseMessage {
             return message;
         }
         switch (messageType) {
-            case hi:
             case html:
             case hint:
             case htmlText:
                 message = new TextMessage(bundle);
                 break;
+            case hi:
             case common:
                 message = new CommonMessage(bundle);
                 break;

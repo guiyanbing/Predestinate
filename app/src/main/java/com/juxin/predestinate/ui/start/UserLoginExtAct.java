@@ -120,7 +120,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
                 }
                 break;
             case R.id.layout_parent:
-            case R.id.et_uid:
+            case R.id.edtTxt_user_login_username:
                 endAnimate();
                 break;
             case R.id.txt_user_login_toReg://免费注册

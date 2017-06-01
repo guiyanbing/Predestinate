@@ -83,9 +83,9 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilePackageLayouts.removeAllViews();
 
         if(null == chatSmileCustomPanel) {
-            chatSmileCustomPanel = new ChatCustomSmilePanel(getContext(), items, getChatInstance(), tv_custom_face_del);
+            chatSmileCustomPanel = new ChatCustomSmilePanel(getContext(), getChatInstance(), tv_custom_face_del);
         }
-
+        chatSmileCustomPanel.setData(items);
         smilePackageLayouts.addView(chatSmileCustomPanel.getContentView());
     }
 
