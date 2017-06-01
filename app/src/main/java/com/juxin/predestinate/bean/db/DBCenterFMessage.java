@@ -76,7 +76,7 @@ public class DBCenterFMessage {
                 values.put(FMessage.COLUMN_CMSGID, baseMessage.getcMsgID());
 
             if (baseMessage.getSpecialMsgID() != -1)
-                values.put(FMessage.COLUMN_CMSGID, baseMessage.getSpecialMsgID());
+                values.put(FMessage.COLUMN_SPECIALMSGID, baseMessage.getSpecialMsgID());
 
             values.put(FMessage.COLUMN_SENDID, baseMessage.getSendID());
             values.put(FMessage.COLUMN_TYPE, baseMessage.getType());
@@ -162,7 +162,7 @@ public class DBCenterFMessage {
                 values.put(FMessage.COLUMN_TIME, videoMessage.getTime());
 
             if (videoMessage.getSpecialMsgID() != -1)
-                values.put(FMessage.COLUMN_TIME, videoMessage.getSpecialMsgID());
+                values.put(FMessage.COLUMN_SPECIALMSGID, videoMessage.getSpecialMsgID());
 
             if (videoMessage.getfStatus() != -1)
                 values.put(FMessage.COLUMN_FSTATUS, videoMessage.getfStatus());
