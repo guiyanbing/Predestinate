@@ -581,12 +581,12 @@ public class BaseMessage implements IBaseMessage {
             return message;
         }
         switch (messageType) {
-            case hi:
             case html:
             case hint:
             case htmlText:
                 message = new TextMessage(bundle, true);
                 break;
+            case hi:
             case common:
                 message = new CommonMessage(bundle, true);
                 break;
@@ -620,12 +620,12 @@ public class BaseMessage implements IBaseMessage {
             return message;
         }
         switch (messageType) {
-            case hi:
             case html:
             case hint:
             case htmlText:
                 message = new TextMessage(bundle);
                 break;
+            case hi:
             case common:
                 message = new CommonMessage(bundle);
                 break;

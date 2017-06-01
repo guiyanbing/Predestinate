@@ -252,7 +252,6 @@ public class CommonMessage extends BaseMessage {
         this.videoHeight = videoHeight;
     }
 
-
     /**
      * 转换类 fmessage
      */
@@ -272,9 +271,7 @@ public class CommonMessage extends BaseMessage {
         JSONObject object = getJsonObject(jsonStr);
 
         this.setMsgDesc(object.optString("mct")); //消息内容
-        if(!object.isNull("img")){
-            this.setImg(object.optString("img"));
-        }
+        this.setImg(object.optString("img"));
         parseCommonJson(object);
     }
 
