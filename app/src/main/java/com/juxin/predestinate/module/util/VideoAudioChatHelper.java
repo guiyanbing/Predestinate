@@ -42,6 +42,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import static com.juxin.predestinate.module.logic.application.App.context;
 import static com.juxin.predestinate.module.logic.application.App.uid;
@@ -422,7 +423,7 @@ public class VideoAudioChatHelper{
         bundle.putString("vc_uid", ModuleMgr.getCenterMgr().getMyInfo().getUid() + "");
         bundle.putLong("vc_check_yellow",ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellow() * 1000);
         bundle.putLong("vc_check_yellow_first", ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellowFirst() * 1000);
-        bundle.putLong("vc_dst_uid,",dstUid);
+        bundle.putLong("vc_dst_uid",dstUid);
         return bundle;
     }
 
