@@ -2,22 +2,17 @@ package com.juxin.predestinate.ui.user.auth;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
-import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.CommonUtil;
-import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import org.json.JSONObject;
@@ -66,7 +61,7 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
                         }
                         JSONObject jsonObject = response.getResponseJson();
                         String qq = jsonObject.optString("qq");
-                        UIShow.showRandomQQService(PhoneVerifyCompleteAct.this,qq);
+                        UIShow.showQQService(PhoneVerifyCompleteAct.this, qq);
                     }
                 });
                 break;

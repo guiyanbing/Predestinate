@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
@@ -122,7 +119,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                         }
                         JSONObject jsonObject = response.getResponseJson();
                         String qq = jsonObject.optString("qq");
-                        UIShow.showRandomQQService(PhoneVerifyAct.this,qq);
+                        UIShow.showQQService(PhoneVerifyAct.this, qq);
                     }
                 });
                 break;
