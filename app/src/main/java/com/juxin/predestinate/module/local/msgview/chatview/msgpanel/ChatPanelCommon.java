@@ -34,6 +34,7 @@ import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.ui.utils.MyURLSpan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,6 +190,8 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         chat_item_customFrameLayout.show(R.id.chat_item_text);
         if(BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()){
             chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()));
+
+            MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), chat_item_text, msg.getMsgDesc());
         }else {
             chat_item_text.setText(msg.getMsgDesc());
         }
