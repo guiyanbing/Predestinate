@@ -1017,7 +1017,7 @@ public class CommonMgr implements ModuleBase {
      * @param complete
      */
     public void reqCustomFace(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqCustomFace, null, complete);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqCustomFace, null, complete);
     }
 
     /**
