@@ -2,12 +2,11 @@ package com.juxin.library.image;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.BitmapRequestBuilder;
-import com.bumptech.glide.BitmapTypeRequest;
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
@@ -47,7 +46,11 @@ public class ImageLoader {
     }
 
     public static <T> void loadCircleAvatar(Context context, T model, ImageView view) {
-        loadCircle(context, model, view, R.drawable.default_head, 0, 0);
+        loadCircleAvatar(context, model, view, 0);
+    }
+
+    public static <T> void loadCircleAvatar(Context context, T model, ImageView view, int borderWidth) {
+        loadCircle(context, model, view, R.drawable.default_head, borderWidth, Color.WHITE);
     }
     /**
      * CenterCrop加载图片
@@ -120,12 +123,12 @@ public class ImageLoader {
     /**
      * 以静态图片展示Gif
      */
-    public static <T> void loadPicAsBmp(Context context, T model, ImageView view) {
-        loadPicAsBmp(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+    public static <T> void loadGifAsBmp(Context context, T model, ImageView view) {
+        loadGifAsBmp(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
     // ==================================== 内部私有调用 =============================================
-    public static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>...transformation) {
+    private static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
         try {
             getRequestBuilder(context, model, transformation)
                     .placeholder(defResImg)
@@ -136,7 +139,7 @@ public class ImageLoader {
         }
     }
 
-    public static <T> void loadPic(Context context, T model, ImageView view, Drawable defResImg, Drawable errResImg, Transformation<Bitmap>...transformation) {
+    private static <T> void loadPic(Context context, T model, ImageView view, Drawable defResImg, Drawable errResImg, Transformation<Bitmap>... transformation) {
         try {
             getRequestBuilder(context, model, transformation)
                     .placeholder(defResImg)
@@ -147,7 +150,7 @@ public class ImageLoader {
         }
     }
 
-    public static <T> void loadPicWithCallback(Context context, T model, final GlideCallback callback, BitmapTransformation... transformations) {
+    private static <T> void loadPicWithCallback(Context context, T model, final GlideCallback callback, BitmapTransformation... transformations) {
         try {
             getRequestBuilder(context, model, transformations)
                     .into(new SimpleTarget<GlideDrawable>() {
@@ -161,7 +164,7 @@ public class ImageLoader {
         }
     }
 
-    public static <T> void loadPicAsBmp(Context context, T model, ImageView view, int defResImg, int errResImg) {
+    private static <T> void loadGifAsBmp(Context context, T model, ImageView view, int defResImg, int errResImg) {
         getBmpRequestBuilder(context, model, bitmapFitCenter)
                 .placeholder(defResImg)
                 .error(errResImg)
@@ -182,7 +185,7 @@ public class ImageLoader {
                 .asBitmap()
                 .dontAnimate()
                 .transform(transformations)
-                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 
     // 请求回调

@@ -63,20 +63,21 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     private void initData() {
         ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small);
-        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small1);
-        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small2);
-        ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small3);
         if (data.size() != 0) {
             ImageLoader.loadPicWithCallback(getActivity(), data.get(0).getAvatar(), new ImageLoader.GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    ImageLoader.loadCircle(getActivity(), data.get(0).getAvatar(), iv_small, R.drawable.default_head, UIUtil.dip2px(getContext(), 2), Color.WHITE);
+                    ImageLoader.loadCircleAvatar(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2));
                     ImageLoader.loadBlurImg(getActivity(), data.get(0).getAvatar(), 50, iv_big);
                 }
             });
             ImageLoader.loadAvatar(getActivity(), data.get(1).getAvatar(), iv_small1);
             ImageLoader.loadAvatar(getActivity(), data.get(2).getAvatar(), iv_small2);
             ImageLoader.loadAvatar(getActivity(), data.get(3).getAvatar(), iv_small3);
+        } else {
+            ImageLoader.loadAvatar(getActivity(), R.drawable.default_head, iv_small1);
+            ImageLoader.loadAvatar(getActivity(), R.drawable.default_head, iv_small2);
+            ImageLoader.loadAvatar(getActivity(), R.drawable.default_head, iv_small3);
         }
     }
 
