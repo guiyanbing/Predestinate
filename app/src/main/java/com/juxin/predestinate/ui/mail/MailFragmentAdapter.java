@@ -69,7 +69,9 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
         int friendNum = ModuleMgr.getCommonMgr().getFriendNum();
-        baseMessage.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
+        int tempfriendNum = ModuleMgr.getCenterMgr().getMyInfo().getGiftfriendscnt();
+        baseMessage.setAboutme((friendNum == 0 && tempfriendNum == 0) ? "赠送礼物即可成为好友" :
+                "共有" + ((tempfriendNum > friendNum) ? tempfriendNum : friendNum) + "位好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 

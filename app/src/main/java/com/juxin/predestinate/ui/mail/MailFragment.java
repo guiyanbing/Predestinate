@@ -354,13 +354,4 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
-
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if(!hidden){
-            ModuleMgr.getCommonMgr().getFriendsSize();
-        }
-    }
 }
