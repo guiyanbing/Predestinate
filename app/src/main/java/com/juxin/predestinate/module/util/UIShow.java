@@ -856,6 +856,24 @@ public class UIShow {
         }
     }
 
+    /**
+     * 打开随机QQ客服
+     */
+    public static void showRandomQQService(Context context, String qq) {
+        try {
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
+            } else {
+                PToast.showShort(context.getResources().getString(R.string.qq_not_install));
+            }
+        } catch (Exception e) {
+            PToast.showShort(context.getResources().getString(R.string.qq_open_error));
+        }
+    }
+
     // -----------------------我的提示跳转 start----------------------------
 
     /**
