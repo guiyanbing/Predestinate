@@ -207,34 +207,35 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public void setList(List<BaseMessage> datas) {
-        if (datas.size()>0){
+        if (datas != null && datas.size()>0){
             int size = datas.size();
             long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
             int kfID = PSP.getInstance().getInt("kf_idid",0);
             boolean boo =  PSP.getInstance().getBoolean(datas.get(0).getWhisperID() + "id", false);
             BaseMessage message = datas.get(size-1);
-            if (kfID != 0){//当聊天对象为机器人时
-                for (int i = size -1;i>=0;i--){
-                    if (message.getSendID() != App.uid){
-                        datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                        continue;
-                    }
-                    message = getItem(i);
-                }
-            }else {//当聊天对象不为机器人时
-                for (int i = size-1;i>=0;i--){
-                    if (id >= datas.get(i).getMsgID()){
-                        datas.get(i).setStatus(11);
-                    } else{
-                        if (datas.get(i).getStatus()== 11 && !boo) {
-                            datas.get(i).setStatus(MessageConstant.OK_STATUS);
-                        }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
+            if (message != null){
+                if (kfID != 0){//当聊天对象为机器人时
+                    for (int i = size -1;i>=0;i--){
+                        if (message.getSendID() != App.uid){
                             datas.get(i).setStatus(MessageConstant.READ_STATUS);
+                            continue;
+                        }
+                        message = getItem(i);
+                    }
+                }else {//当聊天对象不为机器人时
+                    for (int i = size-1;i>=0;i--){
+                        if (id >= datas.get(i).getMsgID()){
+                            datas.get(i).setStatus(MessageConstant.READ_STATUS);
+                        } else{
+                            if (datas.get(i).getStatus()== 11 && !boo) {
+                                datas.get(i).setStatus(MessageConstant.OK_STATUS);
+                            }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
+                                datas.get(i).setStatus(MessageConstant.READ_STATUS);
+                            }
                         }
                     }
                 }
             }
-
         }
         super.setList(datas);
     }

@@ -207,14 +207,13 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (getChatInstance().chatListView == null) {
             return;
         }
-        getChatInstance().chatListView.post(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
                 int size = messages.size();
                 if (size > 0){
                     PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
-//                    Log.e("TTTTTTTTTTLLL", "刷新界面" + messages.get(size - 1).getMsgID() + "||"+("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID()));
                 }
                 for (int i = size - 1; i >= 0; i--) {
                     if (messages.get(i).getStatus() == 11) {
@@ -222,7 +221,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     }
                     messages.get(i).setStatus(11);
                 }
-                //        getChatInstance().chatContentAdapter.notifyDataSetChanged();
                 chatInstance.chatContentAdapter.setList(messages);
                 moveToBottom();
                 //                Log.e("TTTTTTTTTTLLL", "刷新界面");
