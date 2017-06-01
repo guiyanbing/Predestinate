@@ -5,15 +5,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.discover.DiscoverSelect;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,15 +19,19 @@ import java.util.List;
  * Created by zhang on 2017/4/28.
  */
 
-public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnClickListener {
+public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnClickListener, DisCoverSelectAdapter.OnSelect {
 
     private ListView listView;
 
     private View btn_cancle;
 
-    private ArrayAdapter<String> adapter;
+    private DisCoverSelectAdapter adapter;
+
+    private boolean isNear = false;
 
     private OnDialogItemClick onDialogItemClick;
+
+    private List<DiscoverSelect> data = new ArrayList<>();
 
     public DiscoverSelectDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -56,22 +58,26 @@ public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnC
 
     private void initData() {
         String[] selectData = getResources().getStringArray(R.array.discover_select_item);
-        List<String> stringList = new ArrayList<>();
-        Collections.addAll(stringList, selectData);
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.f1_discover_select_item, R.id.discover_select_item_text, stringList);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (onDialogItemClick != null) {
-                    onDialogItemClick.onDialogItemCilck(adapterView, view, i);
-                }
+        for (int i = 0; i < selectData.length; i++) {
+            DiscoverSelect select = new DiscoverSelect();
+            select.setSelectType(selectData[i]);
+            if (i == 0) {
+                select.setSelect(!isNear);
+            } else {
+                select.setSelect(isNear);
             }
-        });
+            data.add(select);
+        }
+        adapter = new DisCoverSelectAdapter(getActivity(), data, this);
+        listView.setAdapter(adapter);
     }
 
     public void setOnItemClick(final OnDialogItemClick onItemClick) {
         onDialogItemClick = onItemClick;
+    }
+
+    public void setNear(boolean isNear) {
+        this.isNear = isNear;
     }
 
     @Override
@@ -83,11 +89,18 @@ public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnC
         }
     }
 
+    @Override
+    public void onSelectChange(int position, DiscoverSelect select) {
+        if (onDialogItemClick != null) {
+            onDialogItemClick.onDialogItemCilck(position);
+        }
+    }
+
     public interface OnDialogItemClick {
         /**
          * @param
          */
-        void onDialogItemCilck(AdapterView<?> parent, View view, int position);
+        void onDialogItemCilck(int position);
     }
 
 }
