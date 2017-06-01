@@ -68,7 +68,6 @@ public class SplashActivity extends BaseActivity {
      * Intent跳转
      */
     private void skipLogic() {
-        Intent intent = null;
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
             if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey())&&!checkUserIsUploadAvatar()) {
                 int avatar_status = ModuleMgr.getCenterMgr().getMyInfo().getAvatar_status();
@@ -81,7 +80,7 @@ public class SplashActivity extends BaseActivity {
                 UIShow.showMainClearTask(SplashActivity.this);
             }
         } else {
-            intent = new Intent(SplashActivity.this, NavUserAct.class);
+            Intent intent = new Intent(SplashActivity.this, NavUserAct.class);
             startActivity(intent);
             finish();
         }
