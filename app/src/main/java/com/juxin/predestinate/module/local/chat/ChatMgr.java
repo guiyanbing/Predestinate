@@ -642,9 +642,9 @@ public class ChatMgr implements ModuleBase {
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-//        if (ret != MessageConstant.ERROR) {
-//            ModuleMgr.getChatListMgr().getWhisperList();
-//        }
+        if (ret != MessageConstant.ERROR) {
+            ModuleMgr.getChatListMgr().getWhisperList();
+        }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID,Long.valueOf(whisperID));
         return observable;

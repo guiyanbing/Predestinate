@@ -249,34 +249,44 @@ public class DBCenterFMessage {
     public long updateOtherSideRead(String channelID, String userID, @NonNull String sendID, long msgID) {
         try {
             StringBuilder sql = new StringBuilder();
-            String[] str;
+            List<String> stringList = new ArrayList<>();
 
             if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
                 sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
                         .append(FMessage.COLUMN_WHISPERID + " = ? AND ")
                         .append(FMessage.COLUMN_SENDID + " = ? AND ")
                         .append(FMessage.COLUMN_STATUS + " = ?");
-                str = new String[]{channelID, userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                stringList.add(channelID);
+                stringList.add(userID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             } else if (!TextUtils.isEmpty(channelID)) {
                 sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
                         .append(FMessage.COLUMN_SENDID + " = ? AND ")
                         .append(FMessage.COLUMN_STATUS + " = ?");
-                str = new String[]{channelID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                stringList.add(channelID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             } else {
                 sql.append(FMessage.COLUMN_WHISPERID + " = ? AND ")
                         .append(FMessage.COLUMN_SENDID + " = ? AND ")
                         .append(FMessage.COLUMN_STATUS + " = ?");
-                str = new String[]{userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                stringList.add(userID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             }
 
             if(msgID != MessageConstant.NumNo){
                 sql.append(" AND " + FMessage.COLUMN_MSGID + " < ?");
-                str[str.length] = String.valueOf(msgID);
+                stringList.add(String.valueOf(msgID));
             }
+
+            String[] strs = new String[stringList.size()];
+            stringList.toArray(strs);
 
             ContentValues values = new ContentValues();
             values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), str);
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
         } catch (Exception e) {
             e.printStackTrace();
         }
