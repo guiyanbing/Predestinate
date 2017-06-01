@@ -14,14 +14,12 @@ public class UserPhoto extends BaseData implements Parcelable {
     private long albumid;       //相册id
     private String pic;         //图片地址
     private int status;         //图片状态
-    private String thumb;
 
     @Override
     public void parseJson(String s) {
         JSONObject photoObject = getJsonObject(s);
         this.setAlbumid(photoObject.optInt("albumid"));
         this.setPic(photoObject.optString("pic"));
-        this.setThumb(photoObject.optString("thumb"));
         this.setStatus(photoObject.optInt("status"));
     }
 
@@ -53,14 +51,6 @@ public class UserPhoto extends BaseData implements Parcelable {
         this.status = status;
     }
 
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -71,7 +61,6 @@ public class UserPhoto extends BaseData implements Parcelable {
         dest.writeLong(this.albumid);
         dest.writeString(this.pic);
         dest.writeInt(this.status);
-        dest.writeString(this.thumb);
     }
 
     public UserPhoto() {
@@ -81,7 +70,6 @@ public class UserPhoto extends BaseData implements Parcelable {
         this.albumid = in.readLong();
         this.pic = in.readString();
         this.status = in.readInt();
-        this.thumb = in.readString();
     }
 
     public static final Creator<UserPhoto> CREATOR = new Creator<UserPhoto>() {

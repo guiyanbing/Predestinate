@@ -47,7 +47,7 @@ public class MediaAdapter extends BaseRecyclerViewAdapter {
         // 展示相册
         if (showType == AlbumHorizontalPanel.EX_HORIZONTAL_ALBUM) {
             UserPhoto userPhoto = (UserPhoto) getItem(position);
-            url = userPhoto.getThumb();
+            url = userPhoto.getPic();
         }
 
         ImageLoader.loadCenterCrop(App.context, url, img_media);

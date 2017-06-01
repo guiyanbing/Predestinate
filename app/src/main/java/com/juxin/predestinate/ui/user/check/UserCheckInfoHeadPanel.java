@@ -49,6 +49,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
     private void initData() {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+            follow = userDetail.getFollowmecount();
             return;
         }
 
