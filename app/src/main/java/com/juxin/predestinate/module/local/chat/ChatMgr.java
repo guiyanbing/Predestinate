@@ -87,7 +87,6 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
 
         // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
-
         // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
@@ -98,11 +97,14 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
+
     public void updateOtherSideRead(String channelID, String whisperID, String sendID) {
-        dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID);
+        updateOtherSideRead(channelID, whisperID, sendID, -1);
     }
 
-    private String whisperID;
+    public void updateOtherSideRead(String channelID, String whisperID, String sendID, long msgID) {
+        dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID, msgID);
+    }
 
     /**
      * 对方已读
@@ -112,7 +114,6 @@ public class ChatMgr implements ModuleBase {
      * @param sendID
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
-        this.whisperID = whisperID;
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
 //        Log.e("TTTTTTTTYYY",!whisperId.equalsIgnoreCase(whisperID)+ "||"+channelID + "||" + whisperId + "|||" + whisperID + "|||" + sendID + "|||" + mOnUpdateDataListener);
         if (!whisperId.equalsIgnoreCase(whisperID)) {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.ui.utils.Video;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,12 +68,12 @@ public class VideoMessage extends BaseMessage {
             json.put("d", message.getMsgID());
 
 
-            json.put("vc_id", ((VideoMessage)message).getVideoID());
-            json.put("vc_tp", ((VideoMessage)message).getVideoTp());
-            json.put("media_tp", ((VideoMessage)message).getVideoMediaTp());
-            json.put("vc_esc_code", ((VideoMessage)message).getVideoVcEscCode());
-            json.put("vc_talk_time", ((VideoMessage)message).getVideoVcTalkTime());
-            json.put("vc_channel_key", ((VideoMessage)message).getVc_channel_key());
+            json.put("vc_id", ((VideoMessage) message).getVideoID());
+            json.put("vc_tp", ((VideoMessage) message).getVideoTp());
+            json.put("media_tp", ((VideoMessage) message).getVideoMediaTp());
+            json.put("vc_esc_code", ((VideoMessage) message).getVideoVcEscCode());
+            json.put("vc_talk_time", ((VideoMessage) message).getVideoVcTalkTime());
+            json.put("vc_channel_key", ((VideoMessage) message).getVc_channel_key());
             return json.toString();
         } catch (JSONException e) {
             PLogger.printThrowable(e);
@@ -235,13 +234,13 @@ public class VideoMessage extends BaseMessage {
                 return isSender ? "对方无应答" : "未接来电";
             case refuse:
                 return isSender ? "对方已拒绝" : "已拒绝";
+            case none:
             case cancel:
                 return isSender ? "已取消" : "对方已取消";
             case connect:
                 return "聊天时长 " + TimeUtil.formatTimeLong(talk_time);
-            case none:
             default:
-                return "";
+                return "已取消";
         }
     }
 
