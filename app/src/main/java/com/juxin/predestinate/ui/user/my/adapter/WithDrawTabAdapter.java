@@ -4,37 +4,41 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.bean.my.WithdrawList;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
+import com.juxin.predestinate.module.util.UIShow;
 
 
 /**
  * 提现记录
  * Created by zm on 2017/4/13.
  */
-public class WithDrawTabAdapter extends BaseRecyclerViewAdapter<WithdrawList.WithdrawInfo>{
+public class WithDrawTabAdapter extends ExBaseAdapter<WithdrawList.WithdrawInfo> {
 
     private Context mContext;
 
     public WithDrawTabAdapter(Context context){
+        super(context,null);
         this.mContext = context;
     }
 
     @Override
-    public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_withdraw_panel_item};
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final MyViewHolder vh;
+        if (convertView == null) {
+            convertView = inflate(R.layout.f1_withdraw_panel_item);
+            vh = new MyViewHolder(convertView);
 
-    @Override
-    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
+            convertView.setTag(vh);
+        } else {
+            vh = (MyViewHolder) convertView.getTag();
+        }
 
-        MyViewHolder vh = new MyViewHolder(viewHolder);
         final WithdrawList.WithdrawInfo info = getList().get(position);
         vh.llSuccess.setVisibility(View.GONE);
         vh.llError.setVisibility(View.GONE);
@@ -75,11 +79,7 @@ public class WithDrawTabAdapter extends BaseRecyclerViewAdapter<WithdrawList.Wit
                 });
                 break;
         }
-    }
-
-    @Override
-    public int getRecycleViewItemType(int position) {
-        return 0;
+        return convertView;
     }
 
     class MyViewHolder {
@@ -87,16 +87,16 @@ public class WithDrawTabAdapter extends BaseRecyclerViewAdapter<WithdrawList.Wit
         TextView tvData,tvMoney,tvStatus;
         LinearLayout llSuccess,llError;
 
-        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+        public MyViewHolder(View convertView) {
             initView(convertView);
         }
 
-        private void initView(BaseRecyclerViewHolder convertView) {
-            tvData = convertView.findViewById(R.id.withdraw_item_tv_date);
-            tvMoney = convertView.findViewById(R.id.withdraw_item_tv_money);
-            tvStatus = convertView.findViewById(R.id.withdraw_item_tv_status);
-            llSuccess = convertView.findViewById(R.id.withdraw_item_ll_success);
-            llError = convertView.findViewById(R.id.withdraw_item_ll_error);
+        private void initView(View convertView) {
+            tvData = (TextView) convertView.findViewById(R.id.withdraw_item_tv_date);
+            tvMoney = (TextView) convertView.findViewById(R.id.withdraw_item_tv_money);
+            tvStatus = (TextView) convertView.findViewById(R.id.withdraw_item_tv_status);
+            llSuccess = (LinearLayout) convertView.findViewById(R.id.withdraw_item_ll_success);
+            llError = (LinearLayout) convertView.findViewById(R.id.withdraw_item_ll_error);
         }
     }
 }
