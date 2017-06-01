@@ -1,7 +1,6 @@
 package com.juxin.predestinate.ui.user.check.edit.info;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;

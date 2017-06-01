@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.discover;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
