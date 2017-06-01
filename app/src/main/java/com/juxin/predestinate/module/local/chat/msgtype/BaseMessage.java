@@ -1,12 +1,14 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.FMessage;
+import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
@@ -696,9 +698,22 @@ public class BaseMessage implements IBaseMessage {
             case hint:
             case html://html消息
             case htmlText:
+                result = msg.getMsgDesc();
+                break;
             case gift:
             case wantGift:
                 result = msg.getMsgDesc();
+                if(TextUtils.isEmpty(result)){
+                    GiftMessage giftMessage = (GiftMessage) msg;
+
+                    GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftMessage.getGiftID());
+                    if (giftInfo == null) {
+                        result = "[礼物]";
+                        break;
+                    }
+                    result = "送你<font color='#FD698C'>" + (giftMessage.getGiftCount() == 0 ? 1 : giftMessage.getGiftCount()) +
+                            "个" + giftInfo.getName() + "</font>";
+                }
                 break;
             case sys:
                 String content1 = msg.getMsgDesc();
