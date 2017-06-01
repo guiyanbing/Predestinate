@@ -53,49 +53,37 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/px20_dp"
             android:text="@string/txt_verify_complete_desc"
+            android:textSize="@dimen/txt_small"
             android:textColor="@color/text_ciyao_gray" />
 
-        <TextView
-            android:id="@+id/txt_phoneverify_complete_pwd"
+
+        <Button
+            android:id="@+id/bt_return_authact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/txt_phoneverify_hit"
-            android:textColor="@color/main_bottom_text_color_sel"
-            android:textSize="16sp" />
+            android:layout_marginTop="@dimen/px60_dp"
+            android:background="@drawable/f1_btn_phoneverify_complete_bg"
+            android:paddingLeft="@dimen/px120_dp"
+            android:paddingRight="@dimen/px120_dp"
+            android:text="@string/bt_return_authact"
+            android:textColor="@color/text_zhuyao_black" />
+
 
         <LinearLayout
+            android:layout_marginTop="@dimen/px200_dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/px60_dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/px55_dp"
-            android:paddingRight="@dimen/px55_dp">
+            android:background="@color/color_F9F9F9"
+            android:paddingBottom="@dimen/px30_dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="@dimen/px30_dp">
 
-            <Button
-                android:id="@+id/bt_return_authact"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/px20_dp"
-                android:layout_weight="1"
-                android:background="@drawable/f1_btn_phoneverify_complete_bg"
-                android:text="@string/bt_return_authact"
-                android:textColor="@color/text_zhuyao_black" />
-
-            <Button
-                android:id="@+id/bt_return_loginact"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/px20_dp"
-                android:layout_weight="1"
-                android:background="@drawable/f1_btn_phoneverify_complete_bg"
-                android:text="@string/bt_return_loginact"
-                android:textColor="@color/text_zhuyao_black" />
-
+            <include
+                layout="@layout/f1_customerservice_panel"
+                android:background="@color/red" />
         </LinearLayout>
     </LinearLayout>
 

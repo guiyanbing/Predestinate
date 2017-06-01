@@ -148,13 +148,15 @@
     <string name="user_edit_info_correct_qq">请输入正确格式的QQ号码</string>
     <string name="user_fragment_no_verify_phone">账户处于高风险状态，建议绑定手机。</string>
 
+    <!--手机绑定-->
     <string name="bt_send_code_normal">获取验证码</string>
     <string name="bt_send_code_press">重新发送（%1$d）秒</string>
     <string name="str_not_filled">未填写</string>
+    <string name="txt_qq_desc">在线QQ</string>
     <string name="txt_phone">手机号</string>
     <string name="txt_verifycode">请输入验证码</string>
     <string name="txt_setpwd">新密码</string>
-    <string name="txt_verify_tip_up">绑定会让您的账号更加安全 \n完成绑定后，您还可以通过手机号登录</string>
+    <string name="txt_verify_tip_up">为了您的账号安全，请绑定手机号码</string>
     <string name="txt_sendmsg_tip">您的手机将会收到一条有验证码的短信</string>
     <string name="txt_phoneverify_hit">13574193515</string>
     <string name="ext_phone_hit">手机号</string>
@@ -164,6 +166,13 @@
     <string name="toast_phone_verified">您的帐号已与手机绑定，不能再绑定。</string>
     <string name="toast_phone_used">该手机已经被验证过了，请输入其他的手机号。</string>
     <string name="toast_code_error">验证码错误。</string>
+
+    <string name="txt_phongbind_privilege_desc">绑定手机号码可获得以下特权:</string>
+    <string name="txt_Phonebind_privilege">1、绑定手机号码，账号更安全。\n2、账号支持手机号码登录。\n3、VIP用户可获得专属的VIP客服提供帮助。</string>
+    <string name="txt_customerservice_qq">客服QQ:</string>
+    <string name="txt_customerservice_phone">客服电话:</string>
+    <string name="txt_customerservice_bind_desc">绑定过程中遇到问题，可联系在线客服获得帮助</string>
+    <string name="txt_customerservice_complete_desc">联系在线客服，反馈意见，获得帮助</string>
 
     <!--设置-->
     <string name="txt_set_account">当前账号：input_field@163.com</string>
@@ -682,8 +691,8 @@
     <string name="txt_authtype_phone">手机认证</string>
     <string name="txt_authtype_id">身份认证</string>
     <string name="txt_authtype_face">自拍认证</string>
-    <string name="txt_phoneverify_ok">认证成功</string>
-    <string name="txt_verify_complete_desc">你可以用手机号登录，密码为:</string>
+    <string name="txt_phoneverify_ok">绑定成功</string>
+    <string name="txt_verify_complete_desc">你可以用手机号登录</string>
     <string name="bank_id">银行卡号</string>
     <string name="zhi_fu_id">支付宝账号</string>
     <string name="id_card_tips_zhi">请填写与本人身份证一致的支付宝帐号信息</string>
