@@ -271,8 +271,10 @@ public class CommonMessage extends BaseMessage {
         super.convertJSON(jsonStr);
         JSONObject object = getJsonObject(jsonStr);
 
-        this.setImg(object.optString("img"));
         this.setMsgDesc(object.optString("mct")); //消息内容
+        if(!object.isNull("img")){
+            this.setImg(object.optString("img"));
+        }
         parseCommonJson(object);
     }
 
