@@ -19,6 +19,7 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
 import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationSucceedAct;
@@ -55,6 +56,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
             ModuleMgr.getCommonMgr().getVerifyStatus(null);
         }
         initView();
+        ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.MY_WALLET);
     }
 
     private void initView(){

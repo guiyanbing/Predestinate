@@ -27,7 +27,6 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * 消息通知管理manager
@@ -217,9 +216,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * 弹窗
      */
     public void popupActivity() {
-        if (LockScreenMgr.getInstance().popupActivity(!isInSleep())) {
-            playSound();
-            vibrator();
-        }
+        LockScreenMgr.getInstance().popupActivity(!isInSleep());
     }
 }

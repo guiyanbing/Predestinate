@@ -71,7 +71,7 @@
         android:layout_weight="1"
         android:layout_gravity="center">
 
-        <com.juxin.predestinate.third.recyclerholder.CustomRecyclerView
+        <com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView
             android:id="@+id/wode_record_panel_crv_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
