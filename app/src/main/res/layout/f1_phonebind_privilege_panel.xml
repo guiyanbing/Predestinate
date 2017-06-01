@@ -14,23 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/px20_dp"
-        android:text="@string/txt_Phonebind_privilege_001"
+        android:lineSpacingExtra="@dimen/px10_dp"
+        android:text="@string/txt_Phonebind_privilege"
         android:textColor="@color/text_ciyao_gray"
         android:textSize="@dimen/px38_sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px10_dp"
-        android:text="@string/txt_Phonebind_privilege_002"
-        android:textColor="@color/text_ciyao_gray"
-        android:textSize="@dimen/px38_sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/px10_dp"
-        android:text="@string/txt_Phonebind_privilege_003"
-        android:textColor="@color/text_ciyao_gray"
-        android:textSize="@dimen/px38_sp" />
 </LinearLayout>
