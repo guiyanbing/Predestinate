@@ -177,6 +177,10 @@
                 <include layout="@layout/f1_customerservice_panel" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px40_dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
