@@ -453,7 +453,19 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             statusImg.setVisibility(View.GONE);
             statusError.setVisibility(View.GONE);
+            if (msg.getStatus() != MessageConstant.SENDING_STATUS)
+                statusProgress.setVisibility(View.GONE);
 
+            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
+            if (messageType != BaseMessage.BaseMessageType.common){
+                status.setVisibility(View.GONE);
+                return;
+            }
+            String result = msg.getMsgDesc();
+            if (TextUtils.isEmpty(result)) {
+                status.setVisibility(View.GONE);
+                return;
+            }
             switch (msg.getStatus()) {
                 case 1: // 发送成功
                     status.setText("送达");
