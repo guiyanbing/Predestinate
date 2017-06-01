@@ -1,14 +1,11 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.FMessage;
-import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.inter.IBaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.MsgIDUtils;
@@ -17,7 +14,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -702,9 +698,10 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case gift:
             case wantGift:
-                result = msg.getMsgDesc();
-                if(TextUtils.isEmpty(result)){
-                    result = "[礼物]";
+                result = "[礼物]";
+//                result = msg.getMsgDesc();
+//                if(TextUtils.isEmpty(result)){
+//                    result = "[礼物]";
 //                    GiftMessage giftMessage = (GiftMessage) msg;
 //
 //                    GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftMessage.getGiftID());
@@ -714,7 +711,7 @@ public class BaseMessage implements IBaseMessage {
 //                    }
 //                    result = "送你<font color='#FD698C'>" + (giftMessage.getGiftCount() == 0 ? 1 : giftMessage.getGiftCount()) +
 //                            "个" + giftInfo.getName() + "</font>";
-                }
+           //     }
                 break;
             case sys:
                 String content1 = msg.getMsgDesc();
