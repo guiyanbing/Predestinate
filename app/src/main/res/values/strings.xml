@@ -168,9 +168,7 @@
     <string name="toast_code_error">验证码错误。</string>
 
     <string name="txt_phongbind_privilege_desc">绑定手机号码可获得以下特权:</string>
-    <string name="txt_Phonebind_privilege_001">1、绑定手机号码，账号更安全。</string>
-    <string name="txt_Phonebind_privilege_002">2、账号支持手机号码登录。</string>
-    <string name="txt_Phonebind_privilege_003">3、VIP用户可获得专属的VIP客服提供帮助。</string>
+    <string name="txt_Phonebind_privilege">1、绑定手机号码，账号更安全。\n2、账号支持手机号码登录。\n3、VIP用户可获得专属的VIP客服提供帮助。</string>
     <string name="txt_customerservice_qq">客服QQ:</string>
     <string name="txt_customerservice_phone">客服电话:</string>
     <string name="txt_customerservice_bind_desc">绑定过程中遇到问题，可联系在线客服获得帮助</string>
