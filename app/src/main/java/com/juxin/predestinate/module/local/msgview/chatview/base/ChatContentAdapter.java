@@ -210,29 +210,27 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         if (datas != null && datas.size()>0){
             int size = datas.size();
             long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
-            int kfID = PSP.getInstance().getInt("kf_idid",0);
-            boolean boo =  PSP.getInstance().getBoolean(datas.get(0).getWhisperID() + "id", false);
+            int kfID = PSP.getInstance().getInt("kf_idid", 0);
             BaseMessage message = datas.get(size-1);
-            if (message != null){
-                if (kfID != 0){//当聊天对象为机器人时
-                    for (int i = size -1;i>=0;i--){
-                        if (message.getSendID() != App.uid){
-                            datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                            continue;
-                        }
-                        message = getItem(i);
+            if (kfID != 0 && message != null){//当聊天对象为机器人时
+                for (int i = size -1;i>=0;i--){
+                    BaseMessage mess = datas.get(i);
+                    if (mess == null) continue;//为null此次循环结束
+                    if (message.getSendID() == App.uid &&mess.getStatus() == MessageConstant.READ_STATUS) break;//已读结束
+                    if (message.getSendID() == App.uid &&mess.getStatus() == MessageConstant.OK_STATUS){
+                        mess.setStatus(MessageConstant.READ_STATUS);
+                        continue;
                     }
-                }else {//当聊天对象不为机器人时
-                    for (int i = size-1;i>=0;i--){
-                        if (id >= datas.get(i).getMsgID()){
-                            datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                        } else{
-                            if (datas.get(i).getStatus()== 11 && !boo) {
-                                datas.get(i).setStatus(MessageConstant.OK_STATUS);
-                            }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
-                                datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                            }
-                        }
+                    message = mess;
+                    PSP.getInstance().put("xiaoxi" + message.getWhisperID() + message.getChannelID(), message.getMsgID());
+                }
+            }else {//当聊天对象不为机器人时
+                for (int i = size-1;i>=0;i--){
+                    BaseMessage mess = datas.get(i);
+                    if (mess == null) continue;//为null此次循环结束
+                    if (mess.getLWhisperID() == App.uid && mess.getStatus() == MessageConstant.READ_STATUS) break;//已读结束
+                    if (id >= mess.getMsgID() && mess.getStatus() == MessageConstant.OK_STATUS){
+                        datas.get(i).setStatus(MessageConstant.READ_STATUS);
                     }
                 }
             }
