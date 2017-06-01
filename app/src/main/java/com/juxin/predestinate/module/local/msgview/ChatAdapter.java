@@ -424,7 +424,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_TRANSFORMER))
+        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
         .subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
@@ -439,13 +439,17 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         }
                     }
                 }
-                MsgMgr.getInstance().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        chatInstance.chatContentAdapter.setList(listTemp);
+
+                chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
-                    }
-                });
+
+//                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        chatInstance.chatContentAdapter.setList(listTemp);
+//                        moveToBottom();
+//                    }
+//                });
 
             }
         });
