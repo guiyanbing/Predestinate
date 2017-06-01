@@ -99,6 +99,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
                 getContext().getString(R.string.user_info_distance_near));
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
+        if (userDetail.isMan()) fl_topN.setBackgroundResource(R.drawable.f1_top02);
         fl_topN.setVisibility(userDetail.getTopN() <= 0 ? View.GONE : View.VISIBLE);
         tv_topN.setText("TOP" + userDetail.getTopN());
     }

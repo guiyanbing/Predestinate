@@ -123,7 +123,7 @@
                     android:layout_width="@dimen/px130_dp"
                     android:layout_height="@dimen/px51_dp"
                     android:layout_marginLeft="@dimen/px15_dp"
-                    android:background="@drawable/f1_user_check_info_rank">
+                    android:background="@drawable/f1_top01">
 
                     <TextView
                         android:id="@+id/tv_top_n"
