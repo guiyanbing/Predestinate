@@ -21,6 +21,8 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -257,7 +259,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 Map<String, Object> msgMap = (Map<String, Object>) value;
                 String Msg_Name_Key = (String) msgMap.get(UnreadMgr.Msg_Name_Key);
                 if(Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)){
-                    getWhisperList();
+                    ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
+                        @Override
+                        public void onRequestComplete(HttpResponse response) {
+                            getWhisperList();
+                        }
+                    });
                 }
                 break;
             case MsgType.MT_App_Login:
