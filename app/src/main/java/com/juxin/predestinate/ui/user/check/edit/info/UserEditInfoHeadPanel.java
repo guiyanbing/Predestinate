@@ -1,7 +1,6 @@
 package com.juxin.predestinate.ui.user.check.edit.info;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -68,12 +67,12 @@ public class UserEditInfoHeadPanel extends BasePanel implements ImgSelectUtil.On
             rl_header.setBackgroundColor(getContext().getResources().getColor(R.color.picker_blue_color));
         }
 
-        ImageLoader.loadCircle(getContext(), userDetail.getAvatar(), img_header, R.drawable.default_head, UIUtil.dip2px(getContext(), 2), Color.WHITE);
+        ImageLoader.loadCircleAvatar(getContext(), userDetail.getAvatar(), img_header, UIUtil.dip2px(getContext(), 2));
     }
 
     public void refreshView() {
         userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadAvatar(getContext(), userDetail.getAvatar(), img_header);
+        ImageLoader.loadCircleAvatar(getContext(), userDetail.getAvatar(), img_header, UIUtil.dip2px(getContext(), 2));
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {

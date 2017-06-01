@@ -65,7 +65,7 @@ public class UserNoHeadUploadAct extends BaseActivity implements ImgSelectUtil.O
 
         String avatar = ModuleMgr.getCenterMgr().getMyInfo().getAvatar();
         if (!TextUtils.isEmpty(avatar)) {
-            ImageLoader.loadCircle(this, avatar, imgBtn_upload_head, R.drawable.default_head, UIUtil.dip2px(this, 4), Color.WHITE);
+            ImageLoader.loadCircleAvatar(this, avatar, imgBtn_upload_head, UIUtil.dip2px(this, 4));
         }
         txt_usernohead_info.setText(getString(R.string.re_upload_avatar_def));
     }

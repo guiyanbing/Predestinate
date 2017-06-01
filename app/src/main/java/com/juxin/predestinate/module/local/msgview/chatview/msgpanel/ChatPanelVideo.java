@@ -45,9 +45,8 @@ public class ChatPanelVideo extends ChatPanel {
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !(msgData instanceof VideoMessage)) {
-            return false;
-        }
+        if (msgData == null || !(msgData instanceof VideoMessage)) return false;
+
         VideoMessage videoMessage = (VideoMessage) msgData;
         chat_item_type_img.setImageResource(videoMessage.isVideoMediaTp()
                 ? (isSender() ? R.drawable.f1_chat_video_right : R.drawable.f1_chat_video_left)
