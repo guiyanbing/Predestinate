@@ -426,8 +426,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         .subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);// 排序
-                PLogger.printObject("最近有多少条消息=" + baseMessages.size());
+                SortList.sortListView(baseMessages);//排序
                 final List<BaseMessage> listTemp = new ArrayList<>();
 
                 if (baseMessages.size() > 0) {
@@ -439,7 +438,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 }
 
                 chatInstance.chatContentAdapter.setList(listTemp);
-                        moveToBottom();
+                moveToBottom();
 
 //                MsgMgr.getInstance().runOnUiThread(new Runnable() {
 //                    @Override
