@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -1049,7 +1050,10 @@ public class UIShow {
                     intent.putExtra("info", info);
                     context.startActivity(intent);
                 } else {
-                    PToast.showShort(context.getString(R.string.net_error_retry));
+                    if (!NetworkUtils.isConnected(context))
+                        PToast.showShort(context.getString(R.string.net_error_retry));
+                    else
+                        PToast.showShort(response.getMsg());
                 }
             }
         });
