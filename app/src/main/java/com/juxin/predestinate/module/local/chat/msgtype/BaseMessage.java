@@ -704,15 +704,16 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 result = msg.getMsgDesc();
                 if(TextUtils.isEmpty(result)){
-                    GiftMessage giftMessage = (GiftMessage) msg;
-
-                    GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftMessage.getGiftID());
-                    if (giftInfo == null) {
-                        result = "[礼物]";
-                        break;
-                    }
-                    result = "送你<font color='#FD698C'>" + (giftMessage.getGiftCount() == 0 ? 1 : giftMessage.getGiftCount()) +
-                            "个" + giftInfo.getName() + "</font>";
+                    result = "[礼物]";
+//                    GiftMessage giftMessage = (GiftMessage) msg;
+//
+//                    GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftMessage.getGiftID());
+//                    if (giftInfo == null) {
+//                        result = "[礼物]";
+//                        break;
+//                    }
+//                    result = "送你<font color='#FD698C'>" + (giftMessage.getGiftCount() == 0 ? 1 : giftMessage.getGiftCount()) +
+//                            "个" + giftInfo.getName() + "</font>";
                 }
                 break;
             case sys:
