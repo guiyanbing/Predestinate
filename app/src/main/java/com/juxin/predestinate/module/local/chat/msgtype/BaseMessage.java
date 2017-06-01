@@ -28,7 +28,7 @@ public class BaseMessage implements IBaseMessage {
     public enum BaseMessageType {
 
         common(CommonMessage.class, 2),//文本消息
-        hi(TextMessage.class, 3),//打招呼
+        hi(CommonMessage.class, 3),//打招呼
         sys(SystemMessage.class, 7),//系统
         gift(GiftMessage.class, 10),//礼物消息
         hint(TextMessage.class, 14),//小提示消息
