@@ -206,6 +206,15 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
+     * 获取客服qq
+     *
+     * @param complete
+     */
+    public void getCustomerserviceQQ(RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, complete);
+    }
+
+    /**
      * 请求礼物列表
      */
     public void requestGiftList(final GiftHelper.OnRequestGiftListCallback callback) {

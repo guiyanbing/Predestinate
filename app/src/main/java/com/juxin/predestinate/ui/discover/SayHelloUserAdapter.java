@@ -17,7 +17,6 @@ import java.util.List;
 
 public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
 
-
     public SayHelloUserAdapter(Context context, List<BaseMessage> datas) {
         super(context, datas);
     }
@@ -34,6 +33,14 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         vh.letterMailItem.showData(getItem(position), false);
+
+        if (getItemHeight() == 0) {
+            int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            vh.letterMailItem.measure(width, height);
+            setItemHeight(vh.letterMailItem.getMeasuredHeight());
+        }
+
         return convertView;
     }
 
@@ -49,6 +56,16 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
             letterMailItem = (CustomLetterMailItem) convertView.findViewById(R.id.say_hello_users_item);
             letterMailItem.init();
         }
-
     }
+
+    private int itemHeight;
+
+    public void setItemHeight(int itemHeight) {
+        this.itemHeight = itemHeight;
+    }
+
+    public int getItemHeight() {
+        return itemHeight;
+    }
+
 }

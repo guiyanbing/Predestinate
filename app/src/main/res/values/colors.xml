@@ -271,7 +271,7 @@
     <color name="user_text_blue">#83a0ec</color>
     <color name="user_text_gray_bottom">#d4d4d4</color>
     <color name="txt_authing">#FFC333</color>
-
+<color name="txt_customerservice_phone">#FD7093</color>
     <!--聊天顶部跑马灯, 男默认字体是白色，女黑色-->
     <color name="lmarquee_boy_bg">#f87da7</color>
     <color name="lmarquee_boy_nick">#fff999</color>
