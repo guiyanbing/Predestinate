@@ -30,6 +30,7 @@ public class UserInfo extends UserBasic {
     private int topN;               // 用户排行
     private int group;              // 1 普通用户  2,3包月用户
     private int validation_status;  // 用户认证状态  1 通过 0 未通过
+    private int followmecount;      // 关注数
 
     // --------------- 自己字段 -----------------------
     private String complete;        // 资料完整度(%)
@@ -39,11 +40,11 @@ public class UserInfo extends UserBasic {
     private int diamand;            // 我的钻石
     private long memdatenum;        // 计算会员到期时间
     private String cell_phone;      // 认证的手机号
+    private int giftfriendscnt;     // 赠礼好友数量
 
     // --------------- TA人字段 ------------------------
     private int kf_id;
     private int distance;           // 距离
-    private int followmecount;      // 关注数
     private int isfollow;           // 是否已关注该用户
     private String online_text;     // 在线时间 "七天前在线"
     private boolean isSayHello;     // 是否已打招呼
@@ -84,6 +85,7 @@ public class UserInfo extends UserBasic {
 
         // G
         this.setGroup(detailObject.optInt("group"));
+        this.setGiftfriendscnt(detailObject.optInt("giftfriendscnt"));
 
         // I
         this.setOnline(detailObject.optBoolean("is_online"));
@@ -208,6 +210,14 @@ public class UserInfo extends UserBasic {
             return;
         }
         mobile_validation = 0;
+    }
+
+    public int getGiftfriendscnt() {
+        return giftfriendscnt;
+    }
+
+    public void setGiftfriendscnt(int giftfriendscnt) {
+        this.giftfriendscnt = giftfriendscnt;
     }
 
     public String getRemark() {
@@ -528,6 +538,7 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.topN);
         dest.writeInt(this.group);
         dest.writeInt(this.validation_status);
+        dest.writeInt(this.followmecount);
         dest.writeString(this.complete);
         dest.writeString(this.idcard);
         dest.writeDouble(this.redbagsum);
@@ -535,9 +546,9 @@ public class UserInfo extends UserBasic {
         dest.writeInt(this.diamand);
         dest.writeLong(this.memdatenum);
         dest.writeString(this.cell_phone);
+        dest.writeInt(this.giftfriendscnt);
         dest.writeInt(this.kf_id);
         dest.writeInt(this.distance);
-        dest.writeInt(this.followmecount);
         dest.writeInt(this.isfollow);
         dest.writeString(this.online_text);
         dest.writeByte(this.isSayHello ? (byte) 1 : (byte) 0);
@@ -571,6 +582,7 @@ public class UserInfo extends UserBasic {
         this.topN = in.readInt();
         this.group = in.readInt();
         this.validation_status = in.readInt();
+        this.followmecount = in.readInt();
         this.complete = in.readString();
         this.idcard = in.readString();
         this.redbagsum = in.readDouble();
@@ -578,9 +590,9 @@ public class UserInfo extends UserBasic {
         this.diamand = in.readInt();
         this.memdatenum = in.readLong();
         this.cell_phone = in.readString();
+        this.giftfriendscnt = in.readInt();
         this.kf_id = in.readInt();
         this.distance = in.readInt();
-        this.followmecount = in.readInt();
         this.isfollow = in.readInt();
         this.online_text = in.readString();
         this.isSayHello = in.readByte() != 0;

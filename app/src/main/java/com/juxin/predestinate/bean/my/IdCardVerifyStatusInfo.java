@@ -118,7 +118,7 @@ public class IdCardVerifyStatusInfo extends BaseData {
     }
 
     public int getStatus() {
-        return status;
+        return status == 0?ModuleMgr.getCenterMgr().getMyInfo().getIdcard_validation():status;
     }
 
     public void setStatus(int status) {

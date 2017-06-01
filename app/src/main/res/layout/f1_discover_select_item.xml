@@ -6,15 +6,25 @@
 
     <View style="@style/divider_line_horizontal" />
 
-    <TextView
-        android:id="@+id/discover_select_item_text"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/list_item_selector"
-        android:gravity="center"
-        android:paddingBottom="@dimen/px35_dp"
-        android:paddingTop="@dimen/px35_dp"
-        android:textColor="@color/text_zhuyao_black"
-        android:textSize="@dimen/px46_sp" />
+    <RelativeLayout style="@style/center_set_item">
+
+        <TextView
+            android:id="@+id/discover_select_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/list_item_selector"
+            android:gravity="center"
+            android:textColor="@color/text_zhuyao_black"
+            android:textSize="@dimen/px46_sp" />
+
+        <CheckBox
+            android:id="@+id/discover_select_item_check"
+            style="@style/icon_middle_center"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/p1_defriend_select_bg"
+            android:button="@null" />
+    </RelativeLayout>
+
 </LinearLayout>

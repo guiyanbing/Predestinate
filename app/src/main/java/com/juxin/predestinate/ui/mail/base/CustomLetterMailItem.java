@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
-
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
@@ -20,7 +19,8 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 public class CustomLetterMailItem extends CustomBaseMailItem {
 
     private BaseMessage msgData = null;
-    public Button mail_item_right_icon;
+    private LinearLayout mail_item_right;
+    private TextView mail_item_right_icon;
 
     public CustomLetterMailItem(Context context) {
         super(context);
@@ -36,21 +36,21 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
 
     public void init() {
         super.init(-1);
-        mail_item_right_icon = (Button) findViewById(R.id.mail_item_right_icon);
-        mail_item_right_icon.setOnClickListener(this);
+        mail_item_right_icon = (TextView) findViewById(R.id.mail_item_right_icon);
+        mail_item_right = (LinearLayout) findViewById(R.id.mail_item_right);
+        mail_item_right.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        if (msgData == null) return;
         switch (v.getId()) {
             case R.id.mail_item_headpic:
-                if(msgData != null){
-                    UIShow.showPrivateChatAct(getContext(), msgData.getLWhisperID(), msgData.getName(), msgData.getKfID());
-                }
+                UIShow.showPrivateChatAct(getContext(), msgData.getLWhisperID(), msgData.getName(), msgData.getKfID());
                 break;
-            case R.id.mail_item_right_icon:
-                if (msgData == null || !(msgData instanceof VideoMessage)) {
+            case R.id.mail_item_right:
+                if (!(msgData instanceof VideoMessage)) {
                     break;
                 }
                 VideoMessage videoMessage = (VideoMessage) msgData;
@@ -79,12 +79,14 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
         if (item_last_time != null && BaseMessage.video_MsgType == msgData.getType()) {
             item_last_time.setVisibility(GONE);
         }
-        if (mail_item_right_icon == null || BaseMessage.video_MsgType != msgData.getType() || !(msgData instanceof VideoMessage)) {// 视频语音消息
-            mail_item_right_icon.setVisibility(GONE);
+        if (mail_item_right == null || mail_item_right_icon == null ) return;
+
+        if (BaseMessage.video_MsgType != msgData.getType() || !(msgData instanceof VideoMessage)) {// 视频语音消息
+            mail_item_right.setVisibility(GONE);
             return;
         }
 
-        mail_item_right_icon.setVisibility(VISIBLE);
+        mail_item_right.setVisibility(VISIBLE);
         VideoMessage videoMessage = (VideoMessage) msgData;
         mail_item_right_icon.setBackgroundResource(videoMessage.isVideoMediaTp() ? R.drawable.f1_video_state_ico : R.drawable.f1_call_state_ico);
         mail_item_right_icon.setEnabled(true);

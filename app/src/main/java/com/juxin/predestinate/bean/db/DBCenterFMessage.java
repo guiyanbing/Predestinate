@@ -5,8 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -16,13 +16,10 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * fmessage 处理
@@ -249,24 +246,47 @@ public class DBCenterFMessage {
      * @param sendID
      * @return
      */
-    public long updateOtherSideRead(String channelID, String userID, String sendID) {
+    public long updateOtherSideRead(String channelID, String userID, @NonNull String sendID, long msgID) {
         try {
-            String sql;
-            String[] str;
+            StringBuilder sql = new StringBuilder();
+            List<String> stringList = new ArrayList<>();
+
             if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
-                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_WHISPERID + " = ? AND "
-                        + FMessage.COLUMN_SENDID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-                str = new String[]{channelID, userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
+                        .append(FMessage.COLUMN_WHISPERID + " = ? AND ")
+                        .append(FMessage.COLUMN_SENDID + " = ? AND ")
+                        .append(FMessage.COLUMN_STATUS + " = ?");
+                stringList.add(channelID);
+                stringList.add(userID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             } else if (!TextUtils.isEmpty(channelID)) {
-                sql = FMessage.COLUMN_CHANNELID + " = ? AND " + FMessage.COLUMN_SENDID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-                str = new String[]{channelID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
+                        .append(FMessage.COLUMN_SENDID + " = ? AND ")
+                        .append(FMessage.COLUMN_STATUS + " = ?");
+                stringList.add(channelID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             } else {
-                sql = FMessage.COLUMN_WHISPERID + " = ? AND " + FMessage.COLUMN_SENDID + " = ? AND " + FMessage.COLUMN_STATUS + " = ?";
-                str = new String[]{userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                sql.append(FMessage.COLUMN_WHISPERID + " = ? AND ")
+                        .append(FMessage.COLUMN_SENDID + " = ? AND ")
+                        .append(FMessage.COLUMN_STATUS + " = ?");
+                stringList.add(userID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             }
+
+            if(msgID != MessageConstant.NumNo){
+                sql.append(" AND " + FMessage.COLUMN_MSGID + " < ?");
+                stringList.add(String.valueOf(msgID));
+            }
+
+            String[] strs = new String[stringList.size()];
+            stringList.toArray(strs);
+
             ContentValues values = new ContentValues();
             values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
         } catch (Exception e) {
             e.printStackTrace();
         }

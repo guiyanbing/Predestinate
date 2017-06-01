@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.ui.utils.MyURLSpan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +188,13 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
      */
     private void onTextDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_text);
-        chat_item_text.setText(msg.getMsgDesc());
+        if(BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()){
+            chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()));
+
+            MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), chat_item_text, msg.getMsgDesc());
+        }else {
+            chat_item_text.setText(msg.getMsgDesc());
+        }
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
 

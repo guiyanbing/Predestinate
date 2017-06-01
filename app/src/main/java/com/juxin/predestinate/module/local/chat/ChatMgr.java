@@ -14,6 +14,7 @@ import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -87,7 +88,6 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
 
         // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
-
         // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
@@ -98,11 +98,14 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
+
     public void updateOtherSideRead(String channelID, String whisperID, String sendID) {
-        dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID);
+        updateOtherSideRead(channelID, whisperID, sendID, -1);
     }
 
-    private String whisperID;
+    public void updateOtherSideRead(String channelID, String whisperID, String sendID, long msgID) {
+        dbCenter.getCenterFMessage().updateOtherSideRead(channelID, whisperID, sendID, msgID);
+    }
 
     /**
      * 对方已读
@@ -112,7 +115,6 @@ public class ChatMgr implements ModuleBase {
      * @param sendID
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
-        this.whisperID = whisperID;
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
 //        Log.e("TTTTTTTTYYY",!whisperId.equalsIgnoreCase(whisperID)+ "||"+channelID + "||" + whisperId + "|||" + whisperID + "|||" + sendID + "|||" + mOnUpdateDataListener);
         if (!whisperId.equalsIgnoreCase(whisperID)) {
@@ -595,6 +597,7 @@ public class ChatMgr implements ModuleBase {
         if (ret == MessageConstant.ERROR) return;
 
         Observable<BaseMessage> observable = dbCenter.getCenterFMessage().queryVideoMsg(videoMessage.getVideoID());
+        observable.compose(RxUtil.<BaseMessage>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER));
         observable.subscribe(new Action1<BaseMessage>() {
             @Override
             public void call(BaseMessage baseMessage) {
@@ -627,16 +630,6 @@ public class ChatMgr implements ModuleBase {
      */
     public Observable<List<BaseMessage>> getHistoryChat(final String channelID, final String whisperID, int page) {
         return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
-
-
-//        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
-//        observable.subscribe(new Action1<List<BaseMessage>>() {
-//            @Override
-//            public void call(List<BaseMessage> baseMessages) {
-//                SortList.sortListView(baseMessages);// 排序
-//                onChatMsgHistory(channelID, whisperID, true, baseMessages);
-//            }
-//        }).unsubscribe();
     }
 
     /**
@@ -649,9 +642,9 @@ public class ChatMgr implements ModuleBase {
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-//        if (ret != MessageConstant.ERROR) {
-//            ModuleMgr.getChatListMgr().getWhisperList();
-//        }
+        if (ret != MessageConstant.ERROR) {
+            ModuleMgr.getChatListMgr().getWhisperList();
+        }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID,Long.valueOf(whisperID));
         return observable;

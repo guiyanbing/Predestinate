@@ -203,7 +203,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onSystemMsg(BaseMessage message) {
+    public void onSystemMsg(final BaseMessage message) {
         if (getChatInstance().chatListView == null) {
             return;
         }
@@ -212,14 +212,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             public void run() {
                 List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
                 int size = messages.size();
-                if (size > 0){
+                if (size > 0 && messages.get(size-1) != null){
                     PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
-                }
-                for (int i = size - 1; i >= 0; i--) {
-                    if (messages.get(i).getStatus() == 11) {
-                        break;
-                    }
-                    messages.get(i).setStatus(11);
                 }
                 chatInstance.chatContentAdapter.setList(messages);
                 moveToBottom();
@@ -426,8 +420,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         .subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);// 排序
-                PLogger.printObject("最近有多少条消息=" + baseMessages.size());
+                SortList.sortListView(baseMessages);//排序
                 final List<BaseMessage> listTemp = new ArrayList<>();
 
                 if (baseMessages.size() > 0) {
@@ -439,7 +432,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 }
 
                 chatInstance.chatContentAdapter.setList(listTemp);
-                        moveToBottom();
+                moveToBottom();
 
 //                MsgMgr.getInstance().runOnUiThread(new Runnable() {
 //                    @Override
@@ -458,7 +451,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 反注册消息模块，解除绑定。
      */
     public void detach() {
-        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "");
+        long id = PSP.getInstance().getLong("xiaoxi" + whisperId + channelId, 0);
+        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "",id);
 //        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
         ChatSpecialMgr.getChatSpecialMgr().detachSystemMsgListener(this);
         ModuleMgr.getChatMgr().detachChatListener(this);

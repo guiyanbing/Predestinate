@@ -56,9 +56,10 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         int num = ModuleMgr.getChatListMgr().getFollowNum();
+        int followCount = ModuleMgr.getCenterMgr().getMyInfo().getFollowmecount();
         baseMessage.setNum(num);
         baseMessage.setName("谁关注我");
-        baseMessage.setAboutme(num > 0 ? "共有" + num + "位关注我" : "暂时还没有人关注我");
+        baseMessage.setAboutme(followCount > 0 ? "共有" + followCount + "位关注我" : "暂时还没有人关注我");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
         messageLists.add(baseMessage);
 
@@ -68,7 +69,9 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
         int friendNum = ModuleMgr.getCommonMgr().getFriendNum();
-        baseMessage.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
+        int tempfriendNum = ModuleMgr.getCenterMgr().getMyInfo().getGiftfriendscnt();
+        baseMessage.setAboutme((friendNum == 0 && tempfriendNum == 0) ? "赠送礼物即可成为好友" :
+                "共有" + ((tempfriendNum > friendNum) ? tempfriendNum : friendNum) + "位好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 

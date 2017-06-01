@@ -55,10 +55,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
     /**
      * 将更新的消息添加到消息列表中。如果已经存在的替换，新消息则添加的末尾。<br>
      * 注意区分发送的消息还是接收到的消息。
+     *
      * @param message 需要更新的消息。
      */
     public void updateData(BaseMessage message) {
-        if (message == null) return;
+        if (message == null)
+            return;
 
         List<BaseMessage> datas = getList();
 
@@ -111,56 +113,56 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
      *
      * @param message 删除消息。
      */
-//    public void delData(DeleteMessage message) {
-//        if (message == null) {
-//            return;
-//        }
-//
-//        List<BaseMessage> datas = getList();
-//
-//        if (datas == null) {
-//            return;
-//        }
-//
-//        BaseMessage data;
-//        for (int i = 0; i < datas.size(); i++) {
-//            data = datas.get(i);
-//
-//            if (data.getMsgID() == message.getDeleteMsgid()) {
-//                datas.remove(data);
-//                notifyDataSetChanged();
-//                return;
-//            }
-//        }
-//    }
+    //    public void delData(DeleteMessage message) {
+    //        if (message == null) {
+    //            return;
+    //        }
+    //
+    //        List<BaseMessage> datas = getList();
+    //
+    //        if (datas == null) {
+    //            return;
+    //        }
+    //
+    //        BaseMessage data;
+    //        for (int i = 0; i < datas.size(); i++) {
+    //            data = datas.get(i);
+    //
+    //            if (data.getMsgID() == message.getDeleteMsgid()) {
+    //                datas.remove(data);
+    //                notifyDataSetChanged();
+    //                return;
+    //            }
+    //        }
+    //    }
 
     /**
      * 回调所有消息。
      *
      * @param
      */
-//    public void callAllMsg(SystemMessage message) {
-//        if (message == null) {
-//            return;
-//        }
-//
-//        List<BaseMessage> datas = getList();
-//        if (datas == null) {
-//            return;
-//        }
-//
-//        boolean update = false;
-//        BaseMessage data;
-//
-//        for (int i = 0; i < datas.size(); i++) {
-//            data = datas.get(i);
-//            update |= message.modifyReadStatus(data);
-//        }
-//
-//        if (update) {
-//            notifyDataSetChanged();
-//        }
-//    }
+    //    public void callAllMsg(SystemMessage message) {
+    //        if (message == null) {
+    //            return;
+    //        }
+    //
+    //        List<BaseMessage> datas = getList();
+    //        if (datas == null) {
+    //            return;
+    //        }
+    //
+    //        boolean update = false;
+    //        BaseMessage data;
+    //
+    //        for (int i = 0; i < datas.size(); i++) {
+    //            data = datas.get(i);
+    //            update |= message.modifyReadStatus(data);
+    //        }
+    //
+    //        if (update) {
+    //            notifyDataSetChanged();
+    //        }
+    //    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
@@ -207,32 +209,34 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public void setList(List<BaseMessage> datas) {
-        if (datas != null && datas.size()>0){
+        if (datas != null && datas.size() > 0) {
             int size = datas.size();
             long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
-            int kfID = PSP.getInstance().getInt("kf_idid",0);
-            boolean boo =  PSP.getInstance().getBoolean(datas.get(0).getWhisperID() + "id", false);
-            BaseMessage message = datas.get(size-1);
-            if (message != null){
-                if (kfID != 0){//当聊天对象为机器人时
-                    for (int i = size -1;i>=0;i--){
-                        if (message.getSendID() != App.uid){
-                            datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                            continue;
-                        }
-                        message = getItem(i);
+            int kfID = PSP.getInstance().getInt("kf_idid", 0);
+            BaseMessage message = datas.get(size - 1);
+            if (kfID != 0 && message != null) {//当聊天对象为机器人时
+                for (int i = size - 1; i >= 0; i--) {
+                    BaseMessage mess = datas.get(i);
+                    if (mess == null)
+                        continue;//为null此次循环结束
+                    if (message.getSendID() == App.uid && mess.getStatus() == MessageConstant.READ_STATUS)
+                        break;//已读结束
+                    if (message.getSendID() == App.uid && mess.getStatus() == MessageConstant.OK_STATUS) {
+                        mess.setStatus(MessageConstant.READ_STATUS);
+                        continue;
                     }
-                }else {//当聊天对象不为机器人时
-                    for (int i = size-1;i>=0;i--){
-                        if (id >= datas.get(i).getMsgID()){
-                            datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                        } else{
-                            if (datas.get(i).getStatus()== 11 && !boo) {
-                                datas.get(i).setStatus(MessageConstant.OK_STATUS);
-                            }else if (boo && datas.get(i).getStatus() == MessageConstant.OK_STATUS){
-                                datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                            }
-                        }
+                    message = mess;
+                    PSP.getInstance().put("xiaoxi" + message.getWhisperID() + message.getChannelID(), message.getMsgID());
+                }
+            } else {//当聊天对象不为机器人时
+                for (int i = size - 1; i >= 0; i--) {
+                    BaseMessage mess = datas.get(i);
+                    if (mess == null)
+                        continue;//为null此次循环结束
+                    if (mess.getLWhisperID() == App.uid && mess.getStatus() == MessageConstant.READ_STATUS)
+                        break;//已读结束
+                    if (id >= mess.getMsgID() && mess.getStatus() == MessageConstant.OK_STATUS) {
+                        datas.get(i).setStatus(MessageConstant.READ_STATUS);
                     }
                 }
             }
@@ -251,7 +255,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         public ChatViewHolder custom = new ChatCustomHolder();
 
         public void reset(boolean sender, BaseMessage msgData, BaseMessage preMsgData) {
-            if (msgData == null) return;
+            if (msgData == null)
+                return;
             String tipTime = "";
             if (preMsgData != null) {
                 long tmp = TimeUtil.onPad(msgData.getTime());
@@ -419,18 +424,18 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
             if (infoLightweight != null) {
-//                if (sender) {
-//                    name.setVisibility(View.GONE);
-//                } else {
-//                    name.setText(infoLightweight.getNickname());
-//                    name.setVisibility(View.VISIBLE);
-//                }
+                //                if (sender) {
+                //                    name.setVisibility(View.GONE);
+                //                } else {
+                //                    name.setText(infoLightweight.getNickname());
+                //                    name.setVisibility(View.VISIBLE);
+                //                }
 
                 ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
-             //   head.setTag("" + msg.getSendID());
-//                head.setImageResource(R.drawable.default_pic);
+                //   head.setTag("" + msg.getSendID());
+                //                head.setImageResource(R.drawable.default_pic);
                 ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             }
         }
@@ -443,7 +448,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 if (ChatMsgType.CMT_2 == msgType && msg.getfStatus() == 1) {
                     CommonMessage message = (CommonMessage) msg;
-                    if(!TextUtils.isEmpty(message.getVoiceUrl())){
+                    if (!TextUtils.isEmpty(message.getVoiceUrl())) {
                         statusImg.setVisibility(View.VISIBLE);
                         return;
                     }
@@ -455,7 +460,19 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             statusImg.setVisibility(View.GONE);
             statusError.setVisibility(View.GONE);
+            if (msg.getStatus() != MessageConstant.SENDING_STATUS)
+                statusProgress.setVisibility(View.GONE);
 
+            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
+            if (messageType != BaseMessage.BaseMessageType.common) {
+                status.setVisibility(View.GONE);
+                return;
+            }
+            String result = msg.getMsgDesc();
+            if (TextUtils.isEmpty(result)) {
+                status.setVisibility(View.GONE);
+                return;
+            }
             switch (msg.getStatus()) {
                 case 1: // 发送成功
                     status.setText("送达");
@@ -484,15 +501,15 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
             //显示进度条或发送失败且小于五分钟也显示进度条
-//                    if(msg.isValid() && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())){
-//                        statusProgress.setVisibility(View.VISIBLE);
-//                        status.setVisibility(View.GONE);
-//                        statusError.setVisibility(View.GONE);
-//                    }else {
-//                        statusProgress.setVisibility(View.GONE);
-//                        status.setVisibility(View.GONE);
-//                        statusError.setVisibility(View.VISIBLE);
-//                    }
+            //                    if(msg.isValid() && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())){
+            //                        statusProgress.setVisibility(View.VISIBLE);
+            //                        status.setVisibility(View.GONE);
+            //                        statusError.setVisibility(View.GONE);
+            //                    }else {
+            //                        statusProgress.setVisibility(View.GONE);
+            //                        status.setVisibility(View.GONE);
+            //                        statusError.setVisibility(View.VISIBLE);
+            //                    }
 
             if (msg.getStatus() == 3 && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())) {//发送中,
                 statusProgress.setVisibility(View.VISIBLE);

@@ -48,7 +48,7 @@ public class HorizontalAdapter extends ExBaseAdapter<UserPhoto> {
         }
 
         UserPhoto userPhoto = getItem(position);
-        ImageLoader.loadCenterCrop(App.context, userPhoto.getThumb(), mHolder.img_media);
+        ImageLoader.loadCenterCrop(App.context, userPhoto.getPic(), mHolder.img_media);
         return convertView;
     }
 

@@ -69,7 +69,7 @@ public class AlbumAdapter extends BaseAdapter {
         }
         UserPhoto userPhoto = userPhotoList.get(position);
 
-        String path = userPhoto.getThumb();
+        String path = userPhoto.getPic();
         if (path != null && !"".equals(path)) {
             ImageLoader.loadCenterCrop(context, path, mHolder.img_info_grid_item_pic);
         } else {

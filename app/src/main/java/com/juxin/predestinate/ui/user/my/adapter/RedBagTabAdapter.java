@@ -5,27 +5,27 @@ import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.AddredTotalInfo;
+import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
-import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
 import com.juxin.predestinate.ui.user.my.RedBagRecordPanel;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
-import com.juxin.predestinate.bean.my.AddredTotalInfo;
-import com.juxin.predestinate.bean.my.RedbagList;
 
 
 /**
  * 红包列表
  * Created by zm on 2017/4/13.
  */
-public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagInfo> implements RequestComplete{
+public class RedBagTabAdapter extends ExBaseAdapter<RedbagList.RedbagInfo> implements RequestComplete{
 
     private String[] strPaths ;
     private int mPosition = -1;
@@ -33,20 +33,24 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
     private RedBagRecordPanel mRedBagRecordPanel;
 
     public RedBagTabAdapter(Context context,RedBagRecordPanel mRedBagRecordPanel){
+        super(context, null);
         this.mContext = context;
         this.mRedBagRecordPanel = mRedBagRecordPanel;
         strPaths = context.getResources().getStringArray(R.array.red_path);
     }
 
     @Override
-    public int[] getItemLayouts() {
-        return new int[]{R.layout.f1_wode_withdraw_item};
-    }
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final MyViewHolder vh;
+        if (convertView == null) {
+            convertView = inflate(R.layout.f1_wode_withdraw_item);
+            vh = new MyViewHolder(convertView);
 
-    @Override
-    public void onBindRecycleViewHolder(BaseRecyclerViewHolder viewHolder, final int position) {
+            convertView.setTag(vh);
+        } else {
+            vh = (MyViewHolder) convertView.getTag();
+        }
 
-        MyViewHolder vh = new MyViewHolder(viewHolder);
         final RedbagList.RedbagInfo info = getItem(position);
         String time = info.getCreate_time();//获取获得红包的时间
         if (!TextUtils.isEmpty(time)) {
@@ -73,11 +77,8 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
                 ModuleMgr.getCommonMgr().reqAddredTotal(ModuleMgr.getCenterMgr().getMyInfo().getUid(), info.getMoney() * 100f, info.getId(), info.getType(), RedBagTabAdapter.this);
             }
         });
-    }
 
-    @Override
-    public int getRecycleViewItemType(int position) {
-        return 0;
+        return convertView;
     }
 
     @Override
@@ -89,7 +90,7 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
             //更新可提现金额
             getList().remove(mPosition);
             notifyDataSetChanged();
-            mRedBagRecordPanel.showCollect();
+            mRedBagRecordPanel.handleData();
             ((RedBoxRecordAct)mContext).refreshView(info.getSum());
         }
         PToast.showShort(info.getMsg()+"");//展示提示
@@ -98,15 +99,15 @@ public class RedBagTabAdapter extends BaseRecyclerViewAdapter<RedbagList.RedbagI
     class MyViewHolder {
         TextView tvData,tvPath,tvMoney,tvStatus;
 
-        public MyViewHolder(BaseRecyclerViewHolder convertView) {
+        public MyViewHolder(View convertView) {
             initView(convertView);
         }
 
-        private void initView(BaseRecyclerViewHolder convertView) {
-            tvData = convertView.findViewById(R.id.withdraw_tv_date);
-            tvPath = convertView.findViewById(R.id.withdraw_tv_path);
-            tvMoney = convertView.findViewById(R.id.withdraw_tv_money);
-            tvStatus = convertView.findViewById(R.id.withdraw_tv_status);
+        private void initView(View convertView) {
+            tvData = (TextView) convertView.findViewById(R.id.withdraw_tv_date);
+            tvPath = (TextView) convertView.findViewById(R.id.withdraw_tv_path);
+            tvMoney = (TextView) convertView.findViewById(R.id.withdraw_tv_money);
+            tvStatus = (TextView) convertView.findViewById(R.id.withdraw_tv_status);
         }
     }
 }

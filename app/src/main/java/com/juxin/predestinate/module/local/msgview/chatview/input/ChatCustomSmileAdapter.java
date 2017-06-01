@@ -49,7 +49,7 @@ public class ChatCustomSmileAdapter extends ExBaseAdapter<SmileItem> {
         if("custom".equals(smileItem.getPic())){
             vh.chat_custom_smile.setBackgroundResource(R.drawable.f1_bt_add_emoji);
         }else {
-            ImageLoader.loadPicAsBmp(getContext(), smileItem.getPic(), vh.chat_custom_smile);
+            ImageLoader.loadGifAsBmp(getContext(), smileItem.getPic(), vh.chat_custom_smile);
             if(mOutDelClick) {
                 vh.iv_custom_emoji_del.setVisibility(View.VISIBLE);
                 vh.iv_custom_emoji_del.setOnClickListener(new View.OnClickListener() {

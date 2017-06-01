@@ -146,6 +146,7 @@
     <string name="user_edit_info_correct_mobile">请输入正确格式的电话号码</string>
     <string name="user_edit_info_correct_wechat">请输入正确格式的微信号码</string>
     <string name="user_edit_info_correct_qq">请输入正确格式的QQ号码</string>
+    <string name="user_fragment_no_verify_phone">账户处于高风险状态，建议绑定手机。</string>
 
     <!--手机绑定-->
     <string name="bt_send_code_normal">获取验证码</string>
