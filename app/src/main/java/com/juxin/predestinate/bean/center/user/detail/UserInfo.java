@@ -39,11 +39,11 @@ public class UserInfo extends UserBasic {
     private int diamand;            // 我的钻石
     private long memdatenum;        // 计算会员到期时间
     private String cell_phone;      // 认证的手机号
+    private int followmecount;      // 关注数
 
     // --------------- TA人字段 ------------------------
     private int kf_id;
     private int distance;           // 距离
-    private int followmecount;      // 关注数
     private int isfollow;           // 是否已关注该用户
     private String online_text;     // 在线时间 "七天前在线"
     private boolean isSayHello;     // 是否已打招呼

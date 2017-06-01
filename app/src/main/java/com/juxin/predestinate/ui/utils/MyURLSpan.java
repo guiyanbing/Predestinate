@@ -46,7 +46,7 @@ public class MyURLSpan extends ClickableSpan {
                 MyURLSpan myURLSpan = new MyURLSpan(mContext, url.getURL());
                 style.setSpan(myURLSpan, sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-       //     style = FaceFormat.formatTextToFace(mContext, style);
+            //     style = FaceFormat.formatTextToFace(mContext, style);
             tv.setText(style);
         }
     }
@@ -90,7 +90,7 @@ public class MyURLSpan extends ClickableSpan {
 
                     }
                 });
-            } else if (BaseUtil.isInt(mUrl)){
+            } else if (BaseUtil.isInt(mUrl)) {
                 int mIndex = Integer.parseInt(mUrl);
                 switch (mIndex) {
                     case URL_TYPE_UPLOAD_HEADPIC:// 上传头像
@@ -101,7 +101,6 @@ public class MyURLSpan extends ClickableSpan {
                         break;
                     case URL_TYPE_BIND_PHONE:  // 绑定手机
                         UIShow.showPhoneVerifyAct((FragmentActivity) mContext,
-                                ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(),
                                 MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE); //跳手机认证页面
                         break;
                     case URL_TYPE_CONNECT_QQ_SERVICE:
