@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -134,7 +135,8 @@ public class UIShow {
 
     public static void show(Context context, Class clz, int flag) {
         Intent intent = new Intent(context, clz);
-        if (flag != -1) intent.addFlags(flag);
+        if (flag != -1)
+            intent.addFlags(flag);
         show(context, intent);
     }
 
@@ -366,7 +368,8 @@ public class UIShow {
     }
 
     private static void skipCheckOtherInfoAct(Context context, int channel, UserDetail userProfile) {
-        if (userProfile == null) return;
+        if (userProfile == null)
+            return;
 
         if (!userProfile.isUserNormal()) {
             showUserBlockAct(context);
@@ -544,7 +547,8 @@ public class UIShow {
      */
     public static void showUserMailNotifyAct(int type, UserInfoLightweight simpleData, String content) {
         int flags = Intent.FLAG_ACTIVITY_NEW_TASK;
-        if (Build.VERSION.SDK_INT >= 11) flags = flags | Intent.FLAG_ACTIVITY_CLEAR_TASK;
+        if (Build.VERSION.SDK_INT >= 11)
+            flags = flags | Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
         Intent intent = new Intent(App.context, UserMailNotifyAct.class);
         intent.addFlags(flags);
@@ -564,7 +568,8 @@ public class UIShow {
      * @param isShowTip 是否展示界面提示
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
-        if (appUpdate == null) return;
+        if (appUpdate == null)
+            return;
 
         // 直接返回服务器没有返回包名的情况
         if (TextUtils.isEmpty(appUpdate.getPackage_name())) {
@@ -1078,8 +1083,23 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationAct(FragmentActivity context, int requestCode) {
-        context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+    public static void showIDCardAuthenticationAct(final FragmentActivity context, final int requestCode) {
+        IdCardVerifyStatusInfo info = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo();
+        if (info.isOk() || ModuleMgr.getCenterMgr().getMyInfo().getIdcard_validation() == 0) {
+            context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+            return;
+        }
+        LoadingDialog.show(context);
+        ModuleMgr.getCommonMgr().getVerifyStatus(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk())
+                    context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+                else
+                    PToast.showShort(context.getString(R.string.net_error_retry));
+            }
+        });
     }
 
     /**
