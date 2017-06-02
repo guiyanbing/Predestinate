@@ -31,6 +31,8 @@ public class ImageLoader {
     private static CenterCrop bitmapCenterCrop;
     private static FitCenter bitmapFitCenter;
     private static CircleTransform circleTransform;
+    private static RoundedCorners roundedCorners;
+    private static BlurImage blurImage;
 
     public static void init(Context context) {
         Context mContext = context.getApplicationContext();
@@ -38,6 +40,8 @@ public class ImageLoader {
         bitmapCenterCrop = new CenterCrop(mContext);
         bitmapFitCenter = new FitCenter(mContext);
         circleTransform = new CircleTransform(mContext);
+        roundedCorners = new RoundedCorners(mContext, 8, 0, RoundedCorners.CornerType.ALL);
+        blurImage = new BlurImage(context, 50);
     }
 
     /**
@@ -56,11 +60,11 @@ public class ImageLoader {
     }
 
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view) {
-        loadRound(context, model, 8, view, R.drawable.default_head);
+        loadRoundAvatar(context, model, view, 8);
     }
 
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view, int roundPx) {
-        loadRound(context, model, roundPx, view, R.drawable.default_head);
+        loadRound(context, model, view, roundPx, R.drawable.default_head);
     }
     /**
      * CenterCrop加载图片
@@ -96,17 +100,17 @@ public class ImageLoader {
      * 图片圆角处理: 默认全角处理，其他需求自行重载方法
      */
     public static <T> void loadRound(Context context, T model, ImageView view) {
-        loadRound(context, model, 8, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadRound(context, model, view, 8, R.drawable.default_pic, R.drawable.default_pic);
     }
 
-    public static <T> void loadRound(Context context, T model, int roundPx, ImageView view, int defResImg) {
-        loadRound(context, model, roundPx, view, defResImg, defResImg);
+    public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg) {
+        loadRound(context, model, view, roundPx, defResImg, defResImg);
     }
     /**
      * @param roundPx 圆角弧度
      */
-    public static <T> void loadRound(Context context, T model, int roundPx, ImageView view, int defResImg, int errResImg) {
-        RoundedCorners roundedCorners = new RoundedCorners(context, roundPx, 0, RoundedCorners.CornerType.ALL);
+    public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg, int errResImg) {
+        roundedCorners.setRadius(roundPx);
         loadPic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
     }
 
@@ -115,8 +119,8 @@ public class ImageLoader {
      *
      * @param level 模糊等级
      */
-    public static <T> void loadBlur(Context context, T model, int level, ImageView view) {
-        BlurImage blurImage = new BlurImage(context, level);
+    public static <T> void loadBlur(Context context, T model, ImageView view, int level) {
+        blurImage.setRadius(level);
         loadPic(context, model, view, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop, blurImage);
     }
 
@@ -233,9 +237,8 @@ public class ImageLoader {
 
 
     private static boolean isActDestroyed(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
-                context instanceof Activity && ((Activity) context).isDestroyed()) return true;
-        return false;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
+                context instanceof Activity && ((Activity) context).isDestroyed();
     }
 
     // 请求回调

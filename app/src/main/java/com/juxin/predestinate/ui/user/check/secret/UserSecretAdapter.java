@@ -40,7 +40,7 @@ public class UserSecretAdapter extends BaseRecyclerViewAdapter {
         TextView tv_time = viewHolder.findViewById(R.id.tv_video_time);
         img_preview.setLayoutParams(new RelativeLayout.LayoutParams(params, params));
 
-        ImageLoader.loadBlur(App.context, data.getPic(), 8, img_preview);
+        ImageLoader.loadBlur(App.context, data.getPic(), img_preview, 8);
         tv_hot.setText(String.valueOf(data.getViewTimes()));
         tv_time.setText(TimeUtil.getLongToMinuteTime(data.getDuration() * 1000l));
     }

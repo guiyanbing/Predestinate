@@ -71,7 +71,7 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
                     ImageLoader.loadCircleAvatar(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2));
-                    ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), 50, iv_big);
+                    ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), iv_big, 50);
                 }
             });
             ImageLoader.loadAvatar(getActivity(), data.get(1).getAvatar(), iv_small1);

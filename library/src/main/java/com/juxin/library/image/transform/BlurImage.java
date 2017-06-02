@@ -23,6 +23,10 @@ public class BlurImage implements Transformation<Bitmap> {
     private Context mContext;
     private BitmapPool mBitmapPool;
 
+    public void setRadius(int mRadius) {
+        this.mRadius = mRadius;
+    }
+
     private int mRadius;
     private int mSampling;
 
