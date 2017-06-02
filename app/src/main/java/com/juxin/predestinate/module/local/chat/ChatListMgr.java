@@ -18,6 +18,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
@@ -110,7 +111,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                if (tmp.isRu() || tmp.getLWhisperID() == MessageConstant.Fate_Small_Secretary) {
+                if (tmp.isRu() || tmp.getLWhisperID() == MailSpecialID.customerService.getSpecialID()) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
@@ -206,7 +207,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (ret == MessageConstant.ERROR) return ret;
         return dbCenter.getCenterFMessage().delete(userID);
     }
-
 
     /**
      * 更新已读

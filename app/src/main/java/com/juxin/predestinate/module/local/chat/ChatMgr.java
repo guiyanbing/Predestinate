@@ -528,7 +528,7 @@ public class ChatMgr implements ModuleBase {
         message.setTime(messageRet.getTm());
         message.setMsgID(messageRet.getMsgId());
 
-        long upRet = dbCenter.updateFmessage(message);
+        long upRet = dbCenter.updateMsg(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
     }
 
@@ -541,7 +541,7 @@ public class ChatMgr implements ModuleBase {
             message.setTime(getTime());
         }
         message.setStatus(MessageConstant.FAIL_STATUS);
-        long upRet = dbCenter.updateFmessage(message);
+        long upRet = dbCenter.updateMsg(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
     }
 
