@@ -77,21 +77,25 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     }
 
     private synchronized void initData() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
-        viewPager.setAdapter(viewPagerAdapter);
-        initPointsView(viewPager, viewPagerAdapter.getCount(), true);
-        if(null != items) {
-            if(items.size() == 1) {
-                mOutDelTv.setVisibility(View.GONE);
+        try {
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
+            viewPager.setAdapter(viewPagerAdapter);
+            initPointsView(viewPager, viewPagerAdapter.getCount(), true);
+            if(null != items) {
+                if(items.size() == 1) {
+                    mOutDelTv.setVisibility(View.GONE);
+                }else {
+                    mOutDelTv.setVisibility(View.VISIBLE);
+                }
             }else {
-                mOutDelTv.setVisibility(View.VISIBLE);
+                mOutDelTv.setVisibility(View.GONE);
             }
-        }else {
-            mOutDelTv.setVisibility(View.GONE);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private synchronized List<View> getAllViews() {
+    private synchronized List<View> getAllViews() throws Exception {
         List<View> views = new ArrayList<>();
         View view;
         int index = 0;
@@ -102,7 +106,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         return views;
     }
 
-    private synchronized View getChildView(int index) {
+    private synchronized View getChildView(int index) throws Exception {
         List<SmileItem> listTemp = getPageRes(index);
         if (listTemp == null) {
             return null;
@@ -127,7 +131,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @param index 对应页。
      * @return 指定页的资源信息。
      */
-    private synchronized List<SmileItem> getPageRes(int index) {
+    private synchronized List<SmileItem> getPageRes(int index) throws Exception {
         if (items == null) {
             return null;
         }
