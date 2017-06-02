@@ -11,6 +11,7 @@ import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -295,6 +296,18 @@ public class DBCenterFLetter {
                 + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
     }
 
+    /**
+     * 发送成功或失败更新状态
+     * @param userID
+     * @param status
+     * @return
+     */
+    public long updateStatus(String userID, int status){
+        ContentValues values = new ContentValues();
+        values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ?", userID);
+    }
+
     public Observable<List<BaseMessage>> deleteCommon(long delTime){
         final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
                 .append(" WHERE ")
@@ -317,7 +330,7 @@ public class DBCenterFLetter {
                     .append(MessageConstant.KF_ID)
                     .append(" AND ")
                     .append(FLetter.COLUMN_USERID + " <> ")
-                    .append(MessageConstant.Fate_Small_Secretary);
+                    .append(MailSpecialID.customerService.getSpecialID());
 
         return mDatabase.createQuery(FLetter.FLETTER_TABLE, sql.toString())
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
