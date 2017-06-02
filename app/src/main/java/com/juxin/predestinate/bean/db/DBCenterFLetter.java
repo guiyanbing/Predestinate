@@ -286,6 +286,13 @@ public class DBCenterFLetter {
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", userid);
     }
 
+    public long updateStatus(long userID){
+        ContentValues values = new ContentValues();
+        values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? AND "
+                + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.UNREAD_STATUS));
+    }
+
     public Observable<List<BaseMessage>> deleteCommon(long delTime){
         final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
                 .append(" WHERE ")

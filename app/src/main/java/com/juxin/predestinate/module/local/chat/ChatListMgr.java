@@ -231,12 +231,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
         getWhisperList();
     }
 
-    public long updateToRead(long userID) {
-        return dbCenter.getCenterFMessage().updateToRead(userID);
-    }
-
-    public void updateToRead(String channelID, String userID) {
-        dbCenter.updateToRead(channelID, userID);
+    /**
+     * 更新私聊列表状态
+     * @param userID
+     * @return
+     */
+    public long updateToReadPrivate(long userID) {
+        return dbCenter.getCenterFLetter().updateStatus(userID);
     }
 
     public void getWhisperList() {
