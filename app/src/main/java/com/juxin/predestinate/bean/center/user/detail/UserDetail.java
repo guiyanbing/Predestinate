@@ -16,7 +16,8 @@ public class UserDetail extends UserInfo {
 
     private List<UserPhoto> userPhotos = new ArrayList<>();
     private List<UserVideo> userVideos = new ArrayList<>();
-    private int voice = 1;  //1为开启语音，0为关闭
+    private int voice = 1;          //1为开启语音，0为关闭
+    private int videopopularity;    // 私密视频人气值
 
     @Override
     public void parseJson(String s) {
@@ -44,6 +45,11 @@ public class UserDetail extends UserInfo {
         if (!jsonObject.isNull("videolist")) {
             this.userVideos = (List<UserVideo>) getBaseDataList(jsonObject.optJSONArray("videolist"), UserVideo.class);
         }
+
+        // 视频人气值
+        if (!jsonObject.isNull("videopopularity")){
+            this.videopopularity = jsonObject.optInt("videopopularity");
+        }
     }
 
     public List<UserVideo> getUserVideos() {
@@ -66,6 +72,13 @@ public class UserDetail extends UserInfo {
         PSP.getInstance().put("diamondsSum" + uid, diamondsSum);
     }
 
+    public int getVideopopularity() {
+        return videopopularity;
+    }
+
+    public UserDetail() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -75,19 +88,17 @@ public class UserDetail extends UserInfo {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeTypedList(this.userPhotos);
-        dest.writeList(this.userVideos);
+        dest.writeTypedList(this.userVideos);
         dest.writeInt(this.voice);
-    }
-
-    public UserDetail() {
+        dest.writeInt(this.videopopularity);
     }
 
     protected UserDetail(Parcel in) {
         super(in);
         this.userPhotos = in.createTypedArrayList(UserPhoto.CREATOR);
-        this.userVideos = new ArrayList<>();
-        in.readList(this.userVideos, UserVideo.class.getClassLoader());
+        this.userVideos = in.createTypedArrayList(UserVideo.CREATOR);
         this.voice = in.readInt();
+        this.videopopularity = in.readInt();
     }
 
     public static final Creator<UserDetail> CREATOR = new Creator<UserDetail>() {

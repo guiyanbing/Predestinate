@@ -19,7 +19,6 @@ import java.util.List;
  * 表情
  * Created by Kind on 2017/3/31.
  */
-
 public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private TextView tv_custom_face_del;
@@ -55,8 +54,8 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
 
     private void addView_Package_Default() {
         smilePackageLayouts.removeAllViews();
-
-        chatSmileDefPanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
+        if(null == chatSmileDefPanel)
+            chatSmileDefPanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
 
         smilePackageLayouts.addView(chatSmileDefPanel.getContentView());
     }
@@ -72,9 +71,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     }
 
     private void addView(SmilePackage smilePackage) {
-        if (smilePackage == null) {
-            return;
-        }
+        if (smilePackage == null) return;
 
         if ("smallface".equals(smilePackage.getType())) {
             tv_custom_face_del.setVisibility(View.GONE);
@@ -118,9 +115,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             e.printStackTrace();
         }
 
-        if (smilePackage == null) {
-            return;
-        }
+        if (smilePackage == null) return;
 
         chatSmileAdapter.setCheckPosition(position);//设置选中效果
         addView(smilePackage);
@@ -130,7 +125,6 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_custom_face_del:
-
                 String del = tv_custom_face_del.getText().toString();
                 if (v.getTag() == null || (int) v.getTag() == 0 || del.equals("删除")) {
                     v.setTag(1);

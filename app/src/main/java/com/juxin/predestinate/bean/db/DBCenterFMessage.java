@@ -33,6 +33,29 @@ public class DBCenterFMessage {
         this.mDatabase = database;
     }
 
+
+    public long storageDataVideo(VideoMessage message){
+        if (!isExist(message.getSpecialMsgID())) {//没有数据
+            return insertMsg(message);
+        } else {
+            return updateMsgVideo(message);
+        }
+    }
+
+    private boolean isExist(long vcID) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
+                .append(" WHERE ")
+                .append(FMessage.COLUMN_SPECIALMSGID + " = ?");
+        Cursor cursor = mDatabase.query(sql.toString(), String.valueOf(vcID));
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        } else {
+            if (cursor != null) cursor.close();
+            return false;
+        }
+    }
+
     /**
      * 多条消息插入
      *
@@ -169,7 +192,7 @@ public class DBCenterFMessage {
 
             if (videoMessage.getJsonStr() != null)
                 values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(videoMessage.getJsonStr()));
-            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getVideoID()));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getSpecialMsgID()));
         } catch (Exception e) {
             e.printStackTrace();
         }

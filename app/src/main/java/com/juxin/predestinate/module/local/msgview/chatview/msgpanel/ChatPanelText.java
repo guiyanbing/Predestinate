@@ -1,10 +1,7 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.Html;
 import android.widget.TextView;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -33,20 +30,12 @@ public class ChatPanelText extends ChatPanel {
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !(msgData instanceof TextMessage)) {
-            return false;
-        }
-
+        if (msgData == null || !(msgData instanceof TextMessage)) return false;
         TextMessage msg = (TextMessage) msgData;
-        chat_item_text.setTextColor(isSender() ? Color.WHITE : context.getResources().getColor(R.color.text_zhuyao_black));
 
-        chat_item_text.setText(
+        MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text,
                 msg.getType() == BaseMessage.BaseMessageType.htmlText.getMsgType()
-                        ? Html.fromHtml(msg.getHtm())
-                        : Html.fromHtml(msg.getMsgDesc()));
-
-        MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), chat_item_text, msg.getMsgDesc());
-
+                        ? msg.getHtm() : msg.getMsgDesc());
         return true;
     }
 }

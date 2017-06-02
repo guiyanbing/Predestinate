@@ -45,10 +45,8 @@ public class ChatPanelCustomHint extends ChatPanel {
                 ((TextMessage) msgData).getHtm() : msgData.getMsgDesc();
         if (TextUtils.isEmpty(hintContent)) {
             getContentView().setVisibility(View.GONE);
-        } else {
-            text.setText(Html.fromHtml(hintContent));
         }
-        MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), text, hintContent);
+        MyURLSpan.addClickToTextViewLink(App.getActivity(), text, hintContent);
         text.setMovementMethod(LinkMovementMethod.getInstance());
         return true;
     }

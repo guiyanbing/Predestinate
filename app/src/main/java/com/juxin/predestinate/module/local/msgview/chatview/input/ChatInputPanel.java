@@ -13,6 +13,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.InputUtils;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -189,7 +190,14 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 onClickChatSend();
                 break;
             case R.id.input_monthly:
-                UIShow.showGoodsVipDlgOld(getContext());
+                String otherID = getChatInstance().chatAdapter.getWhisperId();
+                UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+                if (!otherID.equals(userDetail.getyCoinUserid()) &&
+                        (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
+                    UIShow.showGoodsVipDlgOld(getContext());
+                } else {
+                    UIShow.showGoodsYCoinDlgOld(getContext());
+                }
                 break;
         }
     }

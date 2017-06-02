@@ -41,6 +41,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     //保存表情资源的列表
     private static int pageResNum = 8;
     private boolean mOutDelClick = false;
+    private long mLastTime;
     private List<SmileItem> items = null;
 
     private TextView mOutDelTv;
@@ -77,21 +78,25 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     }
 
     private synchronized void initData() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
-        viewPager.setAdapter(viewPagerAdapter);
-        initPointsView(viewPager, viewPagerAdapter.getCount(), true);
-        if(null != items) {
-            if(items.size() == 1) {
-                mOutDelTv.setVisibility(View.GONE);
+        try {
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
+            viewPager.setAdapter(viewPagerAdapter);
+            initPointsView(viewPager, viewPagerAdapter.getCount(), true);
+            if(null != items) {
+                if(items.size() == 1) {
+                    mOutDelTv.setVisibility(View.GONE);
+                }else {
+                    mOutDelTv.setVisibility(View.VISIBLE);
+                }
             }else {
-                mOutDelTv.setVisibility(View.VISIBLE);
+                mOutDelTv.setVisibility(View.GONE);
             }
-        }else {
-            mOutDelTv.setVisibility(View.GONE);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private synchronized List<View> getAllViews() {
+    private synchronized List<View> getAllViews() throws Exception {
         List<View> views = new ArrayList<>();
         View view;
         int index = 0;
@@ -102,7 +107,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         return views;
     }
 
-    private synchronized View getChildView(int index) {
+    private synchronized View getChildView(int index) throws Exception {
         List<SmileItem> listTemp = getPageRes(index);
         if (listTemp == null) {
             return null;
@@ -127,7 +132,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @param index 对应页。
      * @return 指定页的资源信息。
      */
-    private synchronized List<SmileItem> getPageRes(int index) {
+    private synchronized List<SmileItem> getPageRes(int index) throws Exception {
         if (items == null) {
             return null;
         }
@@ -239,6 +244,9 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         if (TextUtils.isEmpty(url)) {
             return;
         }
+        if(isFastClick()) {
+            return;
+        }
         ModuleMgr.getCommonMgr().delCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -276,11 +284,25 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
         switch (key) {
             case MsgType.MT_ADD_CUSTOM_SMILE:
+                if(isFastClick()) {
+                    return;
+                }
                 addCFace((String) value);
                 break;
 
             default:
                 break;
         }
+    }
+
+    private boolean isFastClick() {
+        boolean isFastClick = false;
+        long curTime = System.currentTimeMillis();
+        if(curTime - mLastTime < 2500) {
+            isFastClick = true;
+            PToast.showShort("操作太快，请稍后");
+        }
+        mLastTime = System.currentTimeMillis();
+        return isFastClick;
     }
 }

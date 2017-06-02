@@ -314,10 +314,14 @@ public class PickOrTakeImageActivity extends BaseActivity implements View.OnClic
                     ArrayList<SingleImageModel> imageModels = AlbumHelper.getInstance().getAllImagesFromCurrentDirectory(currentShowPosition);
                     AlbumHelper.getInstance().skipToPreview(this, imageModels, picklist, picNums, position);
                     AlbumBitmapCacheHelper.getInstance(this).releaseHalfSizeCache();
-                } else {
-                    String path = AlbumHelper.getInstance().getImgPath(position, currentShowPosition);
-                    AlbumHelper.getInstance().skipToFinish(this, path);
+                    return;
                 }
+                String path = AlbumHelper.getInstance().getImgPath(position, currentShowPosition);
+                if (AlbumHelper.getInstance().isCrop()) {
+                    AlbumHelper.getInstance().skipToCrop2(this, path);
+                    return;
+                }
+                AlbumHelper.getInstance().skipToFinish(this, path);
                 break;
 
             // 多选图片右上角选中按钮
@@ -330,26 +334,26 @@ public class PickOrTakeImageActivity extends BaseActivity implements View.OnClic
                         Toast.makeText(this, String.format(getString(R.string.choose_pic_num_out_of_index), picNums), Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    String path = AlbumHelper.getInstance().getImgPath(position, currentShowPosition);
-                    picklist.add(path);
+                    String pathUrl = AlbumHelper.getInstance().getImgPath(position, currentShowPosition);
+                    picklist.add(pathUrl);
                     holder.iv_pick_or_not.setImageResource(R.drawable.p1_album_chosed);
                     holder.v_gray_masking.setVisibility(View.VISIBLE);
                     currentPicNums++;
                     tv_preview.setText(String.format(getString(R.string.preview_with_num), currentPicNums));
                     title_right_txt.setText(String.format(getString(R.string.choose_pic_finish_with_num), currentPicNums, picNums));
-                } else {  // 取消
-                    String path = AlbumHelper.getInstance().getImgPath(position, currentShowPosition);
-                    picklist.remove(path);
-                    holder.iv_pick_or_not.setImageResource(R.drawable.p1_album_chose);
-                    holder.v_gray_masking.setVisibility(View.GONE);
-                    currentPicNums--;
-                    if (currentPicNums == 0) {
-                        title_right_txt.setText(getString(R.string.choose_pic_finish));
-                        tv_preview.setText(getString(R.string.preview_without_num));
-                    } else {
-                        tv_preview.setText(String.format(getString(R.string.preview_with_num), currentPicNums));
-                        title_right_txt.setText(String.format(getString(R.string.choose_pic_finish_with_num), currentPicNums, picNums));
-                    }
+                    return;
+                }
+                String pathUrl = AlbumHelper.getInstance().getImgPath(position, currentShowPosition);
+                picklist.remove(pathUrl);
+                holder.iv_pick_or_not.setImageResource(R.drawable.p1_album_chose);
+                holder.v_gray_masking.setVisibility(View.GONE);
+                currentPicNums--;
+                if (currentPicNums == 0) {
+                    title_right_txt.setText(getString(R.string.choose_pic_finish));
+                    tv_preview.setText(getString(R.string.preview_without_num));
+                } else {
+                    tv_preview.setText(String.format(getString(R.string.preview_with_num), currentPicNums));
+                    title_right_txt.setText(String.format(getString(R.string.choose_pic_finish_with_num), currentPicNums, picNums));
                 }
                 break;
         }

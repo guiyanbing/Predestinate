@@ -189,9 +189,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
     private void onTextDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_text);
         if(BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()){
-            chat_item_text.setText(Html.fromHtml(msg.getMsgDesc()));
-
-            MyURLSpan.addClickToTextViewLinkEx(App.getActivity(), chat_item_text, msg.getMsgDesc());
+            MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text, msg.getMsgDesc());
         }else {
             chat_item_text.setText(msg.getMsgDesc());
         }

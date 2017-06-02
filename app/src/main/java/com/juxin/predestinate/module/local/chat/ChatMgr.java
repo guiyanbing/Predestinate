@@ -10,10 +10,10 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -110,7 +110,6 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
-//        Log.e("TTTTTTTTYYY",!whisperId.equalsIgnoreCase(whisperID)+ "||"+channelID + "||" + whisperId + "|||" + whisperID + "|||" + sendID + "|||" + mOnUpdateDataListener);
         if (!whisperId.equalsIgnoreCase(whisperID)) {
             updateOtherSideRead(channelID, whisperID, sendID + "");
             PSP.getInstance().put(whisperID + "id", true);
@@ -121,11 +120,8 @@ public class ChatMgr implements ModuleBase {
             systemMessage.setWhisperID(whisperId);
             systemMessage.setSendID(sendID);
             specialMgr.setSystemMsg(systemMessage);
-//            if (mOnUpdateDataListener != null)
-//                mOnUpdateDataListener.onUpdateDate(channelID,whisperID,sendID);
         }
     }
-
 
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
@@ -180,7 +176,6 @@ public class ChatMgr implements ModuleBase {
                             if (dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR) {
                                 return;
                             }
-                            //  ModuleMgr.getChatListMgr().getWhisperList();
                         }
                         dbCenter.getCenterFMessage().insertMsg(textMessage);
                     }
@@ -449,6 +444,7 @@ public class ChatMgr implements ModuleBase {
                     updateFail(message, messageRet);
                 } else {
                     updateOk(message, messageRet);
+                    sendMessageRefreshYcoin();
                 }
 
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
@@ -463,6 +459,20 @@ public class ChatMgr implements ModuleBase {
                 PLogger.d("isMsgError=" + message.getJsonStr());
             }
         });
+    }
+
+
+    private void sendMessageRefreshYcoin() {
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        if ((userDetail.isVip() && userDetail.getYcoin() > 0) || (!userDetail.isVip() && userDetail.getYcoin() > 79)) {
+            if (userDetail.isVip())
+                ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
+            else
+                ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 80);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_Ycoin, false);
+        } else {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_Ycoin, true);
+        }
     }
 
     /**
@@ -572,25 +582,19 @@ public class ChatMgr implements ModuleBase {
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
-        videoMessage.setStatus(MessageConstant.UNREAD_STATUS);
+        if(videoMessage.isSender()){
+            videoMessage.setStatus(MessageConstant.OK_STATUS);
+        }else {
+            videoMessage.setStatus(MessageConstant.READ_STATUS);
+        }
 
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
         long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
         if (ret == MessageConstant.ERROR) return;
 
-        Observable<BaseMessage> observable = dbCenter.getCenterFMessage().queryVideoMsg(videoMessage.getVideoID());
-        observable.compose(RxUtil.<BaseMessage>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER));
-        observable.subscribe(new Action1<BaseMessage>() {
-            @Override
-            public void call(BaseMessage baseMessage) {
-                if (baseMessage == null) {
-                    pushMsg(dbCenter.getCenterFMessage().insertMsg(videoMessage) != MessageConstant.ERROR, videoMessage);
-                } else {
-                    pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
-                }
-            }
-        }).unsubscribe();
+        ret = dbCenter.getCenterFMessage().storageDataVideo(videoMessage);
+        pushMsg(ret != MessageConstant.ERROR, videoMessage);
     }
 
     /**
@@ -779,7 +783,6 @@ public class ChatMgr implements ModuleBase {
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<>();
 
     public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-        PLogger.printObject("getUserInfoLightweight");
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
@@ -787,11 +790,16 @@ public class ChatMgr implements ModuleBase {
                 @Override
                 public void call(UserInfoLightweight lightweight) {
                     PLogger.printObject("lightweight==222==" + lightweight);
+                    if(lightweight.getUid() <= 0){
+                        removeInfoComplete(false, false, uid, lightweight);
+                        getProFile(uid);
+                        return;
+                    }
                     long infoTime = lightweight.getTime();
-                    if (lightweight.getUid() > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
                         removeInfoComplete(true, true, uid, lightweight);
                     } else {
-                        removeInfoComplete(false, false, uid, lightweight);
+                        removeInfoComplete(false, true, uid, lightweight);
                         getProFile(uid);
                     }
                 }
@@ -844,10 +852,6 @@ public class ChatMgr implements ModuleBase {
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
 
                     boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
-                    if (ret) {
-                        //       ModuleMgr.getChatListMgr().getWhisperList();
-                    }
-
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                 }
             }
