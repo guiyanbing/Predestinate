@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
 import android.widget.TextView;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;

@@ -13,7 +13,6 @@ import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -572,25 +571,32 @@ public class ChatMgr implements ModuleBase {
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
-        videoMessage.setStatus(MessageConstant.UNREAD_STATUS);
+        if(videoMessage.isSender()){
+            videoMessage.setStatus(MessageConstant.OK_STATUS);
+        }else {
+            videoMessage.setStatus(MessageConstant.READ_STATUS);
+        }
 
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
         long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
         if (ret == MessageConstant.ERROR) return;
 
-        Observable<BaseMessage> observable = dbCenter.getCenterFMessage().queryVideoMsg(videoMessage.getVideoID());
-        observable.compose(RxUtil.<BaseMessage>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER));
-        observable.subscribe(new Action1<BaseMessage>() {
-            @Override
-            public void call(BaseMessage baseMessage) {
-                if (baseMessage == null) {
-                    pushMsg(dbCenter.getCenterFMessage().insertMsg(videoMessage) != MessageConstant.ERROR, videoMessage);
-                } else {
-                    pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
-                }
-            }
-        }).unsubscribe();
+        ret = dbCenter.getCenterFMessage().storageDataVideo(videoMessage);
+
+        pushMsg(ret != MessageConstant.ERROR, videoMessage);
+//        Observable<BaseMessage> observable = dbCenter.getCenterFMessage().queryVideoMsg(videoMessage.getVideoID());
+//        observable.compose(RxUtil.<BaseMessage>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER));
+//        observable.subscribe(new Action1<BaseMessage>() {
+//            @Override
+//            public void call(BaseMessage baseMessage) {
+//                if (baseMessage == null) {
+//                    pushMsg(dbCenter.getCenterFMessage().insertMsg(videoMessage) != MessageConstant.ERROR, videoMessage);
+//                } else {
+//                    pushMsg(dbCenter.getCenterFMessage().updateMsgVideo(videoMessage) != MessageConstant.ERROR, videoMessage);
+//                }
+//            }
+//        }).unsubscribe();
     }
 
     /**
