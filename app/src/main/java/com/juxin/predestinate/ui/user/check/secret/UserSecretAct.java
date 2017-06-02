@@ -67,6 +67,8 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         secretAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(secretAdapter);
         secretAdapter.setList(userDetail.getUserVideos());
+
+        tv_hot.setText(String.valueOf(userDetail.getVideopopularity()));
     }
 
     @Override
