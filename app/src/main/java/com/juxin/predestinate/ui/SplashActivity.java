@@ -73,7 +73,7 @@ public class SplashActivity extends BaseActivity {
                 int avatar_status = ModuleMgr.getCenterMgr().getMyInfo().getAvatar_status();
                 if (avatar_status == CenterConstant.USER_AVATAR_NO_PASS)
                     UIShow.showNoHeadUploadActToMain(SplashActivity.this);//更新
-                if (avatar_status == 3)
+                if (avatar_status == CenterConstant.USER_AVATAR_NO_UPLOAD)
                     UIShow.showRegHeadUploadActToMain(SplashActivity.this);
                 finish();
             } else {
@@ -100,7 +100,7 @@ public class SplashActivity extends BaseActivity {
     private boolean checkUserIsUploadAvatar() {
         int avatar_status = ModuleMgr.getCenterMgr().getMyInfo().getAvatar_status();
         // 判断用户头像是否正常(未上传／未通过时跳转上传头像)
-        return !(avatar_status == CenterConstant.USER_AVATAR_NO_PASS || avatar_status == 3);
+        return !(avatar_status == CenterConstant.USER_AVATAR_NO_PASS || avatar_status == CenterConstant.USER_AVATAR_NO_UPLOAD);
     }
 
     @Override

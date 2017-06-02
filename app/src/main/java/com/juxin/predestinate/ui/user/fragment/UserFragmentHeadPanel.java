@@ -98,7 +98,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         }
 
         switch (myInfo.getAvatar_status()) {
-            case CenterConstant.USER_AVATAR_CHECKING:  // 审核中
+            case CenterConstant.USER_AVATAR_UNCHECKING:  // 审核中
                 user_head_status.setVisibility(View.VISIBLE);
                 ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_user_avatar_checking, user_head_status);
                 break;
