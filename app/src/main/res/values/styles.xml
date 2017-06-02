@@ -581,7 +581,7 @@
     <style name="chat_item_head">
         <item name="android:layout_width">@dimen/px120_dp</item>
         <item name="android:layout_height">@dimen/px120_dp</item>
-        <item name="android:src">@drawable/default_pic</item>
+        <item name="android:src">@drawable/default_head</item>
     </style>
 
     <style name="chat_item_custom_simple_text" parent="chat_item_time">
