@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/px8_dp"
-                    android:background="@drawable/bg_mail_status_shibai"
+                    android:background="@drawable/f1_mail_item_delivery"
                     android:lines="1"
                     android:paddingLeft="@dimen/px6_dp"
                     android:paddingRight="@dimen/px6_dp"
