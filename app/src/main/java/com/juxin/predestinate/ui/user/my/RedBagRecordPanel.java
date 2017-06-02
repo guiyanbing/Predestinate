@@ -71,6 +71,8 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
 //        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 //        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
 //                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+        rvList.setHeaderStr(getContext().getString(R.string.xlistview_header_hint_normal),
+               getContext().getString(R.string.xlistview_header_hint_loading));
         mRedBagTabAdapter = new RedBagTabAdapter(mContext,this);
         rvList.setAdapter(mRedBagTabAdapter);
         rvList.setPullLoadEnable(false);
