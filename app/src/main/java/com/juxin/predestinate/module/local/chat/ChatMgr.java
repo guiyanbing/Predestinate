@@ -110,7 +110,6 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
-//        Log.e("TTTTTTTTYYY",!whisperId.equalsIgnoreCase(whisperID)+ "||"+channelID + "||" + whisperId + "|||" + whisperID + "|||" + sendID + "|||" + mOnUpdateDataListener);
         if (!whisperId.equalsIgnoreCase(whisperID)) {
             updateOtherSideRead(channelID, whisperID, sendID + "");
             PSP.getInstance().put(whisperID + "id", true);
@@ -121,11 +120,8 @@ public class ChatMgr implements ModuleBase {
             systemMessage.setWhisperID(whisperId);
             systemMessage.setSendID(sendID);
             specialMgr.setSystemMsg(systemMessage);
-//            if (mOnUpdateDataListener != null)
-//                mOnUpdateDataListener.onUpdateDate(channelID,whisperID,sendID);
         }
     }
-
 
     public long updateToReadVoice(long msgID) {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
@@ -180,7 +176,6 @@ public class ChatMgr implements ModuleBase {
                             if (dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR) {
                                 return;
                             }
-                            //  ModuleMgr.getChatListMgr().getWhisperList();
                         }
                         dbCenter.getCenterFMessage().insertMsg(textMessage);
                     }

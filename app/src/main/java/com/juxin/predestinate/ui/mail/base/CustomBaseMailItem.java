@@ -115,7 +115,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
                 ? result : Html.fromHtml(result));
 
         long time = msgData.getTime();
-        if (!TextUtils.isEmpty(result) && time > 0) {
+        if (time > 0) {
             item_last_time.setText(TimeUtil.formatBeforeTimeWeek(time));
         } else {
             item_last_time.setText("");

@@ -283,6 +283,8 @@ public class DBCenterFLetter {
     public long updateContent(String userid){
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_CONTENT, new byte[0]);
+        values.put(FLetter.COLUMN_TYPE, 0);
+        values.put(FLetter.COLUMN_TIME, 0);
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", userid);
     }
 
@@ -290,7 +292,7 @@ public class DBCenterFLetter {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? AND "
-                + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.UNREAD_STATUS));
+                + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
     }
 
     public Observable<List<BaseMessage>> deleteCommon(long delTime){
