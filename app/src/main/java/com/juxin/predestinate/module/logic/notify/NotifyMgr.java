@@ -17,7 +17,6 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.UIShow;
@@ -163,7 +162,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         }
 
         //解锁状态
-        if (CommonUtil.isForeground() && ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
+        if (ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
 //            if (App.getActivity() instanceof BaseActivity &&
 //                    !((BaseActivity) App.getActivity()).isCanNotify()) return;
             boolean instanceOfMain = App.getActivity() instanceof MainActivity;

@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
@@ -23,7 +20,6 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import org.json.JSONObject;
@@ -117,12 +113,12 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                     public void onRequestComplete(HttpResponse response) {
                         LoadingDialog.closeLoadingDialog();
                         if (!response.isOk()) {
-                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(response.getMsg());
                             return;
                         }
                         JSONObject jsonObject = response.getResponseJson();
                         String qq = jsonObject.optString("qq");
-                        UIShow.showRandomQQService(PhoneVerifyAct.this,qq);
+                        UIShow.showQQService(PhoneVerifyAct.this, qq);
                     }
                 });
                 break;
@@ -172,7 +168,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqReqVerifyCode) {
             if (!response.isOk()) {
-                PToast.showLong(CommonUtil.getErrorMsg(response.getMsg()));
+                PToast.showLong(response.getMsg());
                 bt_send_code.setEnabled(true);
                 return;
             }
@@ -185,7 +181,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
             }
         } else if (response.getUrlParam() == UrlParam.mobileAuth) {
             if (!response.isOk()) {
-                PToast.showLong(CommonUtil.getErrorMsg(response.getMsg()));
+                PToast.showLong(response.getMsg());
                 return;
             }
             PToast.showShort(getResources().getString(R.string.toast_mobile_authok));

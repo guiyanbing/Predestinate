@@ -732,7 +732,7 @@ public class UIShow {
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
                         } else {
-                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(response.getMsg());
                         }
                     }
                 });
@@ -838,30 +838,17 @@ public class UIShow {
         activity.startActivityForResult(intent_web, Constant.PAYMENTACT_TO);
     }
 
-
     /**
      * 打开QQ客服
      */
     public static void showQQService(Context context) {
-        try {
-            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
-                    ModuleMgr.getCommonMgr().getCommonConfig().getService_qq();
-            Uri uri = Uri.parse(url);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            if (intent.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(intent);
-            } else {
-                PToast.showShort(context.getResources().getString(R.string.qq_not_install));
-            }
-        } catch (Exception e) {
-            PToast.showShort(context.getResources().getString(R.string.qq_open_error));
-        }
+        showQQService(context, ModuleMgr.getCommonMgr().getCommonConfig().getService_qq());
     }
 
     /**
      * 打开随机QQ客服
      */
-    public static void showRandomQQService(Context context, String qq) {
+    public static void showQQService(Context context, String qq) {
         try {
             String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
             Uri uri = Uri.parse(url);

@@ -18,7 +18,6 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.module.util.CommonUtil;
 
 import java.lang.ref.WeakReference;
 
@@ -158,14 +157,14 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
 
             } else {
                 bt_send_code.setEnabled(true);
-                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                PToast.showShort(response.getMsg());
             }
         } else if (response.getUrlParam() == UrlParam.forgotPassword) {
             if (response.isOk()) {
                 PToast.showShort(getResources().getString(R.string.toast_resetpwd_ok));
                 back();
             } else {
-                PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                PToast.showShort(response.getMsg());
             }
         }
     }

@@ -8,6 +8,7 @@ import com.juxin.library.log.PToast;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -144,6 +145,17 @@ public class ChineseFilter {
             s = s.replaceAll("[.]$", "");//如最后一位是.则去掉
         }
         return s;
+    }
+
+    /**
+     * 对double类型的数值保留指定位数的小数: 就进舍入
+     *
+     * @param value ： 需格式化的数字
+     * @param digit : 小数点后保留的位数
+     */
+    public static Double formatNum(double value, int digit) {
+        BigDecimal bg = new BigDecimal(value);
+        return bg.setScale(digit, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     /**
