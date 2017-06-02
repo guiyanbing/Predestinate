@@ -681,8 +681,10 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case video: {
                 VideoMessage videoMessage = (VideoMessage) msg;
+                boolean sender = videoMessage.getStatus() == MessageConstant.OK_STATUS ||
+                        videoMessage.getStatus() == MessageConstant.FAIL_STATUS ||  videoMessage.getStatus() == MessageConstant.SENDING_STATUS;
                 result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
-                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
+                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), sender);
                 break;
             }
             case hint:

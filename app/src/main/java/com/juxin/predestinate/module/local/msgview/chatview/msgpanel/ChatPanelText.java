@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
 import android.widget.TextView;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
