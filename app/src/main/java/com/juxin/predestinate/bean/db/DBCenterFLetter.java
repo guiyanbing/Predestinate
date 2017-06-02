@@ -283,8 +283,8 @@ public class DBCenterFLetter {
     public long updateContent(String userid){
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_CONTENT, new byte[0]);
-        values.put(FLetter.COLUMN_TYPE, new byte[0]);
-        values.put(FLetter.COLUMN_TIME, new byte[0]);
+        values.put(FLetter.COLUMN_TYPE, 0);
+        values.put(FLetter.COLUMN_TIME, 0);
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", userid);
     }
 
