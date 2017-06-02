@@ -44,7 +44,7 @@ import rx.functions.Action1;
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener,ChatMsgInterface.SystemMsgListener {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, ChatMsgInterface.SystemMsgListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
@@ -160,26 +160,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     /**
-     * 将一个提示添加到消息的最后条。
-     *
-     * @param content 提示内容。
-     */
-//    public void addClientCustomTip(String content) {
-//        addClientCustomTip(new CustomMessage(channelId, whisperId, content));
-//    }
-
-    /**
-     * 将一个提示添加到消息的最后条。
-     */
-//    public void addClientCustomTip(CustomMessage customMessage) {
-//        try {
-//            getChatInstance().chatContentAdapter.updateData(customMessage);
-//        } catch (Exception e) {
-//            PLogger.printThrowable(e);
-//        }
-//    }
-
-    /**
      * 设置输入框的背景色。
      *
      * @param bgColor     背景色。
@@ -212,12 +192,11 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             public void run() {
                 List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
                 int size = messages.size();
-                if (size > 0 && messages.get(size-1) != null){
+                if (size > 0 && messages.get(size - 1) != null) {
                     PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
                 }
                 chatInstance.chatContentAdapter.setList(messages);
                 moveToBottom();
-                //                Log.e("TTTTTTTTTTLLL", "刷新界面");
             }
         });
     }
@@ -270,38 +249,20 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      */
     public synchronized UserInfoLightweight getUserInfo(long uid) {
         UserInfoLightweight userInfo = userInfos.get(uid);
-        if (userInfo == null) {
-            if (uid == App.uid) {
-                UserDetail temp = ModuleMgr.getCenterMgr().getMyInfo();
-                if (temp != null) {
-                    UserInfoLightweight infoLightweight = new UserInfoLightweight(temp);
-                    userInfos.put(uid, infoLightweight);
-                    return infoLightweight;
-                }
-            }
-            PLogger.printObject("111111111111111");
+        if (userInfo == null && uid == App.uid) {
+            UserDetail temp = ModuleMgr.getCenterMgr().getMyInfo();
+            UserInfoLightweight infoLightweight = new UserInfoLightweight(temp);
+            userInfos.put(uid, infoLightweight);
+            return infoLightweight;
+        }
+        if (userInfo == null || (TextUtils.isEmpty(userInfo.getNickname()) && TextUtils.isEmpty(userInfo.getAvatar()))) {
+            PLogger.d("------>User's userInfo or nickname or avatar is empty, Re-qurey or re-request user info.");
             ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-
                 @Override
                 public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                    if (ret) {
-                        addUserInfo(infoLightweight);
-                    }
+                    if (ret) addUserInfo(infoLightweight);
                 }
             });
-        } else {
-            if (TextUtils.isEmpty(userInfo.getNickname()) && TextUtils.isEmpty(userInfo.getAvatar())) {
-                PLogger.printObject("22222222222");
-                ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
-
-                    @Override
-                    public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                        if (ret) {
-                            addUserInfo(infoLightweight);
-                        }
-                    }
-                });
-            }
         }
         return userInfo;
     }
@@ -313,9 +274,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      */
     public synchronized void addUserInfo(final UserInfoLightweight userInfo) {
         if (userInfo == null) return;
-
-        final UserInfoLightweight temp = userInfos.get(userInfo.getUid());
-
+        UserInfoLightweight temp = userInfos.get(userInfo.getUid());
         if (temp == null) {
             PLogger.printObject(userInfo);
             userInfos.put(userInfo.getUid(), userInfo);
@@ -417,22 +376,22 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
         Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
         observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-        .subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);//排序
-                final List<BaseMessage> listTemp = new ArrayList<>();
+                .subscribe(new Action1<List<BaseMessage>>() {
+                    @Override
+                    public void call(List<BaseMessage> baseMessages) {
+                        SortList.sortListView(baseMessages);//排序
+                        final List<BaseMessage> listTemp = new ArrayList<>();
 
-                if (baseMessages.size() > 0) {
-                    for (BaseMessage baseMessage : baseMessages) {
-                        if (isShowMsg(baseMessage)) {
-                            listTemp.add(baseMessage);
+                        if (baseMessages.size() > 0) {
+                            for (BaseMessage baseMessage : baseMessages) {
+                                if (isShowMsg(baseMessage)) {
+                                    listTemp.add(baseMessage);
+                                }
+                            }
                         }
-                    }
-                }
 
-                chatInstance.chatContentAdapter.setList(listTemp);
-                moveToBottom();
+                        chatInstance.chatContentAdapter.setList(listTemp);
+                        moveToBottom();
 
 //                MsgMgr.getInstance().runOnUiThread(new Runnable() {
 //                    @Override
@@ -442,8 +401,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 //                    }
 //                });
 
-            }
-        });
+                    }
+                });
         ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
     }
 
@@ -452,7 +411,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      */
     public void detach() {
         long id = PSP.getInstance().getLong("xiaoxi" + whisperId + channelId, 0);
-        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "",id);
+        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "", id);
 //        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
         ChatSpecialMgr.getChatSpecialMgr().detachSystemMsgListener(this);
         ModuleMgr.getChatMgr().detachChatListener(this);
@@ -485,9 +444,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
 
-//                Log.e("TTTTTTTTTTTTTTLLL", message.getId() + "||" + message.getInfoJson() + "|||" + message.getClass() + "||" + message.getSendID() + "|||" + message.getSSendID());
                 if (message.getSendID() != App.uid)
-                ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
+                    ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
             } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {
@@ -653,34 +611,34 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         // 这里是加载更多信息的。
         Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
         observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-        .subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);// 排序
-                PLogger.printObject(baseMessages);
-                chatInstance.chatListView.stopRefresh();
-                if (baseMessages.size() > 0) {
-                    if (baseMessages.size() < 20) {
-                        chatInstance.chatListView.setPullRefreshEnable(false);
-                    }
+                .subscribe(new Action1<List<BaseMessage>>() {
+                    @Override
+                    public void call(List<BaseMessage> baseMessages) {
+                        SortList.sortListView(baseMessages);// 排序
+                        PLogger.printObject(baseMessages);
+                        chatInstance.chatListView.stopRefresh();
+                        if (baseMessages.size() > 0) {
+                            if (baseMessages.size() < 20) {
+                                chatInstance.chatListView.setPullRefreshEnable(false);
+                            }
 
-                    List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+                            List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
 
-                    for (BaseMessage baseMessage : baseMessages) {
-                        if (isShowMsg(baseMessage)) {
-                            listTemp.add(baseMessage);
+                            for (BaseMessage baseMessage : baseMessages) {
+                                if (isShowMsg(baseMessage)) {
+                                    listTemp.add(baseMessage);
+                                }
+                            }
+
+                            if (chatInstance.chatContentAdapter.getList() != null) {
+                                listTemp.addAll(chatInstance.chatContentAdapter.getList());
+                            }
+
+                            chatInstance.chatContentAdapter.setList(listTemp);
+                            chatInstance.chatListView.setSelection(baseMessages.size());
                         }
                     }
-
-                    if (chatInstance.chatContentAdapter.getList() != null) {
-                        listTemp.addAll(chatInstance.chatContentAdapter.getList());
-                    }
-
-                    chatInstance.chatContentAdapter.setList(listTemp);
-                    chatInstance.chatListView.setSelection(baseMessages.size());
-                }
-            }
-        });
+                });
 
     }
 
