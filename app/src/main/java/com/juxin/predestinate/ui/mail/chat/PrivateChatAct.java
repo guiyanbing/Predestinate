@@ -44,6 +44,7 @@ import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
+
 import java.util.List;
 
 /**
@@ -86,16 +87,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         checkReply();
 
         checkIsCanSendMsg();
-//        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
-//            privateChat.getChatAdapter().showInputGONE();//输入框不显示
-//            privateChat.setInputGiftviewVisibility(View.GONE);
-//        } else {
-//            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-//            if (userDetail.isMan() && !userDetail.isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()
-//                    && userDetail.getYcoin() < 79) {//男 非包月 //今天已经聊过了
-//                privateChat.getChatAdapter().showIsCanChat(false);
-//            }
-//        }
     }
 
     public void checkIsCanSendMsg() {
@@ -128,7 +119,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             public void onRequestComplete(HttpResponse response) {
                 CheckYCoinBean yCoinBean = new CheckYCoinBean();
                 yCoinBean.parseJson(response.getResponseString());
-                if(yCoinBean.isOk()){
+                if (yCoinBean.isOk()) {
                     ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
                     ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
                     checkIsCanSendMsg();
@@ -399,9 +390,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 }
                 break;
             case MsgType.MT_Update_Ycoin:
-                if((Boolean) value){//去请求网络
+                if ((Boolean) value) {//去请求网络
                     executeYCoinTask();
-                }else {//不请求网络
+                } else {//不请求网络
                     checkIsCanSendMsg();
                     chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
                 }
