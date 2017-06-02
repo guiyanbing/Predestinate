@@ -22,7 +22,7 @@ import java.util.List;
  * 提现记录
  * Created by zm on 2017/4/25
  */
-public class WithDrawRecordPanel extends BasePanel implements RequestComplete,ExListView.IXListViewListener{
+public class WithDrawRecordPanel extends BasePanel implements RequestComplete, ExListView.IXListViewListener {
 
     private Context mContext;
     //有关控件
@@ -41,12 +41,13 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,Ex
         reqData();
         crvView.showLoading();
     }
+
     //请求数据
     private void reqData() {
         ModuleMgr.getCommonMgr().reqWithdrawlist(this);
     }
 
-    private void initView(){
+    private void initView() {
         crvView = (CustomStatusListView) findViewById(R.id.withdraw_record_panel_crv_list);
         tvNoData = (TextView) findViewById(R.id.withdraw_record_panel_tv_data_tip);
         tvNoData.setVisibility(View.GONE);
@@ -54,6 +55,8 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,Ex
 //        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 //        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
 //                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+        rvList.setHeaderStr(getContext().getString(R.string.xlistview_header_hint_normal),
+                getContext().getString(R.string.xlistview_header_hint_loading));
         mRedBagTabAdapter = new WithDrawTabAdapter(mContext);
 //        rvList.setEmptyView(tvNoData);
         rvList.setAdapter(mRedBagTabAdapter);
@@ -68,14 +71,14 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,Ex
         rvList.stopLoadMore();
 //        Log.e("TTTTTTTTTTFF", response.getResponseString() + "|||" + response.isOk());
         crvView.showExListView();
-        if (response.isOk()){
+        if (response.isOk()) {
             WithdrawList withdrawList = new WithdrawList();
 
 //            withdrawList.parseJson(testData());
             withdrawList.parseJson(response.getResponseString());
             mWithdrawInfos = withdrawList.getRedbagLists();
-            ((RedBoxRecordAct)context).refreshView(withdrawList.getTotal());
-            if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()){
+            ((RedBoxRecordAct) context).refreshView(withdrawList.getTotal());
+            if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()) {
                 tvNoData.setVisibility(View.GONE);
                 mRedBagTabAdapter.setList(mWithdrawInfos);
                 return;
@@ -83,7 +86,7 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,Ex
             showNoData();
             return;
         }
-        if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()){
+        if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()) {
             showNoData();
             return;
         }
@@ -93,7 +96,7 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,Ex
     }
 
     //暂无数据
-    private void showNoData(){
+    private void showNoData() {
         tvNoData.setVisibility(View.VISIBLE);
     }
 
@@ -108,7 +111,7 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete,Ex
 
     }
 
-    private String testData(){
+    private String testData() {
         String str = "{\n" +
                 "  \"status\": \"ok\",\n" +
                 "  \"total\": \"20\",\n" +

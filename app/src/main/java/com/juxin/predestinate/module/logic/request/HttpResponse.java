@@ -2,7 +2,9 @@ package com.juxin.predestinate.module.logic.request;
 
 import android.text.TextUtils;
 
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 
@@ -92,7 +94,7 @@ public class HttpResponse extends BaseData {
     }
 
     public String getMsg() {
-        return msg;
+        return TextUtils.isEmpty(msg) ? App.getContext().getString(R.string.request_error) : msg;
     }
 
     public void setMsg(String msg) {

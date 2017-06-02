@@ -732,7 +732,7 @@ public class UIShow {
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
                         } else {
-                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(response.getMsg());
                         }
                     }
                 });

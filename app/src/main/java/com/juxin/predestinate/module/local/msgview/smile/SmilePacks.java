@@ -62,29 +62,6 @@ public class SmilePacks {
         packages.add(smilePackage);
     }
 
-    /**
-     * @param allSmilePacks
-     * @param sex
-     */
-    public SmilePacks(AllSmilePacks allSmilePacks, boolean sex) {
-        if (allSmilePacks == null) {
-            return;
-        }
-
-        ver = allSmilePacks.getVer();
-
-        if (sex) {
-            deafultImg = allSmilePacks.getMendefault();
-            fastInput = allSmilePacks.getMeninput();
-        } else {
-            deafultImg = allSmilePacks.getWomendefault();
-            fastInput = allSmilePacks.getWomeninput();
-        }
-
-        packages = allSmilePacks.getPackages(sex);
-        allSmiles = allSmilePacks.getAllSmiles();
-    }
-
     public int getVer() {
         return ver;
     }

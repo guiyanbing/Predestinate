@@ -12,7 +12,6 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.UIShow;
 
 import org.json.JSONObject;
@@ -56,7 +55,7 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
                     public void onRequestComplete(HttpResponse response) {
                         LoadingDialog.closeLoadingDialog();
                         if (!response.isOk()) {
-                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(response.getMsg());
                             return;
                         }
                         JSONObject jsonObject = response.getResponseJson();

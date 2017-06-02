@@ -62,6 +62,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             items.add(0, new SmileItem("custom"));
         }
         this.items = items;
+        mOutDelClick = false;
+        mOutDelTv.setText("删除");
         initData();
     }
 
@@ -131,18 +133,21 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
 
         List<SmileItem> listTemp = items;
-        int start = index * pageResNum;
-        int offset = listTemp.size() - start;
+        synchronized (listTemp) {
+            int start = index * pageResNum;
+            int offset = listTemp.size() - start;
 
-        if (offset <= 0) {
-            return null;
+            if (offset <= 0) {
+                return null;
+            }
+
+            if (offset > pageResNum) {
+                offset = pageResNum;
+            }
+
+            listTemp = listTemp.subList(start, start + offset);
         }
-
-        if (offset > pageResNum) {
-            offset = pageResNum;
-        }
-
-        return listTemp.subList(start, start + offset);
+        return listTemp;
     }
 
     @Override

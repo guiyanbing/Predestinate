@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -35,18 +34,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -86,7 +81,6 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
-
         // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
         // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
@@ -137,13 +131,6 @@ public class ChatMgr implements ModuleBase {
         return dbCenter.getCenterFMessage().updateToReadVoice(msgID);
     }
 
-    //    setOnClickChatItemListener
-    private OnUpdateDataListener mOnUpdateDataListener;
-
-    public void setOnUpdateDataListener(OnUpdateDataListener mOnUpdateDataListener) {
-        this.mOnUpdateDataListener = mOnUpdateDataListener;
-    }
-
     /**
      * 本地模拟语音视频消息
      *
@@ -158,10 +145,6 @@ public class ChatMgr implements ModuleBase {
         long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
         if (ret == MessageConstant.ERROR) return;
         dbCenter.getCenterFMessage().insertMsg(videoMessage);
-    }
-
-    public interface OnUpdateDataListener {
-        void onUpdateDate(String channelID, String whisperID, String sendID);
     }
 
     /**

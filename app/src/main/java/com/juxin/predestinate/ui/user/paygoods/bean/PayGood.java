@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.util.ChineseFilter;
-import com.juxin.predestinate.module.util.CommonUtil;
 
 import org.json.JSONObject;
 
@@ -82,8 +81,7 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
     }
 
     public String getDiscount() {
-        //return ChineseFilter.subZeroString(CommonUtil.formatNum(discount / 100, 2) + "");
-        return ChineseFilter.subZeroString(CommonUtil.formatNum(discount, 2) + "");
+        return ChineseFilter.subZeroString(ChineseFilter.formatNum(discount, 2) + "");
     }
 
     public void setDiscount(double discount) {
@@ -103,8 +101,7 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
     }
 
     public String getPrice() {
-        //return ChineseFilter.subZeroString(CommonUtil.formatNum(price / 100, 2) + "");
-        return ChineseFilter.subZeroString(CommonUtil.formatNum(price, 2) + "");
+        return ChineseFilter.subZeroString(ChineseFilter.formatNum(price, 2) + "");
     }
 
     public void setPrice(double price) {

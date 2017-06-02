@@ -77,7 +77,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         title_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onTitleLeft();
                 if (!isGone) {
                     editContent();
                 } else {
@@ -87,19 +86,19 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         });
     }
 
-    private void onTitleLeft() {
-        if (!isGone) {
-            View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
-            title_left.findViewById(R.id.mail_title_left).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    selectAll();
-                }
-            });
-            setTitleLeftContainer(title_left);
-        } else {
-            setTitleLeftContainerRemoveAll();
-        }
+    private void ondisplayTitleLeft() {
+        View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
+        title_left.findViewById(R.id.mail_title_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectAll();
+            }
+        });
+        setTitleLeftContainer(title_left);
+    }
+
+    private void onhideTitleLeft() {
+        setTitleLeftContainerRemoveAll();
     }
 
     private void initView() {
@@ -154,6 +153,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         mail_bottom.setVisibility(View.VISIBLE);
         mail_title_right_text.setText("取消");
         isGone = true;
+        ondisplayTitleLeft();
     }
 
     @Override
@@ -162,6 +162,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         mail_bottom.setVisibility(View.GONE);
         mail_title_right_text.setText("编辑");
         isGone = false;
+        onhideTitleLeft();
     }
 
     @Override
@@ -352,6 +353,5 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
 }

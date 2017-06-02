@@ -2,15 +2,10 @@ package com.juxin.predestinate.module.local.msgview;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.predestinate.module.local.msgview.smile.FastInputItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePacks;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 表情
@@ -20,8 +15,6 @@ import java.util.Map;
 public class PhizMgr implements ModuleBase {
 
     private SmilePacks smilePacks = new SmilePacks();
-
-    private Map<Long, Integer> giftLevel = new HashMap<Long, Integer>();
 
     @Override
     public void init() {
@@ -35,67 +28,6 @@ public class PhizMgr implements ModuleBase {
 
     public SmilePacks getSmilePacks() {
         return smilePacks;
-    }
-
-    /**
-     * 获取针对用户的礼物等级。
-     *
-     * @param uid
-     * @return
-     */
-    public int getGiftLevel(Long uid) {
-        Integer value = giftLevel.get(uid);
-
-        return value == null ? 0 : value;
-    }
-
-    /**
-     * 设置针对用户的礼物等级。
-     *
-     * @param uid
-     * @param level
-     */
-    public void setGiftLevel(Long uid, int level) {
-        giftLevel.put(uid, level);
-    }
-
-
-    /**
-     * 调用前，key必须用TextUtils.isEmpty(key)进行判断。
-     *
-     * @param key
-     * @return
-     */
-    public List<SmileItem> matchingSmileItems(CharSequence key) {
-        try {
-            Map<String, FastInputItem> matchingItems = getSmilePacks().getFastInput();
-            FastInputItem fastInputItem = matchingItems.get(key.toString());
-
-            if (fastInputItem == null) {
-                return null;
-            }
-
-            List<Integer> matchingIds = fastInputItem.getIds();
-
-            SmileItem smileItem = null;
-            List<SmileItem> smileItems = new ArrayList<SmileItem>();
-            Map<Integer, SmileItem> allSmiles = getSmilePacks().getAllSmiles();
-
-            for (Integer matchingId : matchingIds) {
-                smileItem = allSmiles.get(matchingId);
-
-                if (smileItem != null) {
-                    smileItems.add(smileItem);
-                }
-
-            }
-
-            return smileItems;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     /**
