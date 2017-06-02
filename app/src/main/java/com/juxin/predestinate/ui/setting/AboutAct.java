@@ -54,20 +54,7 @@ public class AboutAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.ll_open_qq_btn://在线客服qq交流
-                LoadingDialog.show(AboutAct.this);
-                ModuleMgr.getCommonMgr().getCustomerserviceQQ(new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        LoadingDialog.closeLoadingDialog();
-                        if (!response.isOk()) {
-                            PToast.showShort(response.getMsg());
-                            return;
-                        }
-                        JSONObject jsonObject = response.getResponseJson();
-                        String qq = jsonObject.optString("qq");
-                        UIShow.showQQService(AboutAct.this, qq);
-                    }
-                });
+                ModuleMgr.getCommonMgr().getCustomerserviceQQ(AboutAct.this);
                 break;
             default:
                 break;
