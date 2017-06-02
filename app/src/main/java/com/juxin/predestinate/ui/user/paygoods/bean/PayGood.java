@@ -21,6 +21,7 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
     private String name;//商品名称
     private int num; // vip: 有效天数，钻石: 钻石数
     private String desc;//商品活动, 例如：优惠50%/首冲三个月送100话费
+    private String privilege;// 商品优惠提示
     private double price;//商品原价(分),置灰的价格
 
     // 未提供字段
@@ -35,13 +36,21 @@ public class PayGood extends BaseData implements Serializable, Parcelable {
         this.setName(jsonObject.optString("cname"));
         this.setNum(jsonObject.optInt("cnum"));
         this.setDesc(jsonObject.optString("desc"));
+        this.setPrivilege(jsonObject.optString("privilege"));
         this.setPrice(jsonObject.optDouble("price"));
-
         this.setIcon(jsonObject.optString("curl"));
         this.setType(jsonObject.optInt("ctype"));
         this.setDiscount(jsonObject.optDouble("discount"));
 
         this.sub_id = jsonObject.optInt("sub_cid");
+    }
+
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
     }
 
     public int getSub_id() {

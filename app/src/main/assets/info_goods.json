@@ -142,6 +142,7 @@
         "cname": "",
         "cnum": 11000,
         "desc": "(送100元话费)",
+        "privilege": "(在赠送100元话费)",
         "price": 100
       },
       {
@@ -149,6 +150,7 @@
         "cname": "",
         "cnum": 5000,
         "desc": "可与MM发消息",
+        "privilege": "",
         "price": 50
       }
     ]
