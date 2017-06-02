@@ -1,9 +1,9 @@
 package com.juxin.predestinate.module.local.common;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -35,10 +35,8 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -200,11 +198,22 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 获取客服qq
-     *
-     * @param complete
      */
-    public void getCustomerserviceQQ(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, complete);
+    public void getCustomerserviceQQ(final FragmentActivity context) {
+        LoadingDialog.show(context);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (!response.isOk()) {
+                    PToast.showShort(response.getMsg());
+                    return;
+                }
+                JSONObject jsonObject = response.getResponseJson();
+                String qq = jsonObject.optString("qq");
+                UIShow.showQQService(context, qq);
+            }
+        });
     }
 
     /**

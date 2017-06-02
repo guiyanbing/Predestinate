@@ -107,20 +107,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_open_qq_btn://在线客服qq交流
-                LoadingDialog.show(PhoneVerifyAct.this);
-                ModuleMgr.getCommonMgr().getCustomerserviceQQ(new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        LoadingDialog.closeLoadingDialog();
-                        if (!response.isOk()) {
-                            PToast.showShort(response.getMsg());
-                            return;
-                        }
-                        JSONObject jsonObject = response.getResponseJson();
-                        String qq = jsonObject.optString("qq");
-                        UIShow.showQQService(PhoneVerifyAct.this, qq);
-                    }
-                });
+                ModuleMgr.getCommonMgr().getCustomerserviceQQ(PhoneVerifyAct.this);
                 break;
             case R.id.btn_phoneverify_begin:
                 if (validPhone()) {

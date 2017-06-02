@@ -284,7 +284,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         public void adjustMargin(BaseMessage msgData, boolean sender) {
             ViewGroup layoutVG;
-
             if (sender) {
                 layoutVG = (ViewGroup) parent.findViewById(R.id.chat_item_right_layout);
 
@@ -352,7 +351,10 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             super.reset(msgData, sender);
 
             UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
-            updateHead(infoLightweight, sender);
+            // 更新头像
+            if (infoLightweight != null) {
+                ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
+            }
 
             if (chatpanel != null) {
                 updateStatus(ChatMsgType.getMsgType(msg.getType()), sender);
@@ -361,15 +363,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 showLayout(sender, content);
             } else {
                 updateStatus(null, sender);
-            }
-        }
-
-        private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
-            ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
-            if (infoLightweight != null) {
-                ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
-            } else {
-                name.setVisibility(View.GONE);
             }
         }
 

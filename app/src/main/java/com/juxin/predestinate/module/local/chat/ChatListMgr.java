@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -18,6 +19,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
@@ -26,11 +28,15 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -102,7 +108,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public void updateListMsg(List<BaseMessage> messages) {
+    public synchronized void updateListMsg(List<BaseMessage> messages) {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
@@ -110,7 +116,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                if (tmp.isRu() || tmp.getLWhisperID() == MessageConstant.Fate_Small_Secretary) {
+                if (tmp.isRu() || tmp.getLWhisperID() == MailSpecialID.customerService.getSpecialID()) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
@@ -207,7 +213,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return dbCenter.getCenterFMessage().delete(userID);
     }
 
-
     /**
      * 更新已读
      */
@@ -232,7 +237,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public long updateToReadPrivate(long userID) {
-        return dbCenter.getCenterFLetter().updateStatus(userID);
+        long ret = dbCenter.getCenterFLetter().updateStatus(userID);
+        if(ret != MessageConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
     }
 
     public void getWhisperList() {
