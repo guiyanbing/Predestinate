@@ -31,7 +31,6 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -188,9 +187,7 @@ public class CommonMgr implements ModuleBase {
                     requestVideochatConfig();
                     return;
                 }
-                JSONObject json = response.getResponseJson();
-                if (json != null)
-                    PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
+                PToast.showShort(response.getMsg());
             }
         });
     }

@@ -17,6 +17,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.StringUtils;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
@@ -25,12 +26,12 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 
 import org.json.JSONException;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -133,22 +135,15 @@ public class CenterMgr implements ModuleBase, PObserver {
         ModuleMgr.getHttpMgr().reqPost(UrlParam.modifyPassword, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-
-                try {
-                    JSONObject json = new JSONObject(response.getResponseString());
-                    if ("success".equals(json.optString("result"))) {
-                        PToast.showShort(context.getResources().getString(R.string.toast_update_ok));
-                        LoginMgr loginMgr = ModuleMgr.getLoginMgr();
-                        long uid = loginMgr.getUid();
-                        loginMgr.addLoginUser(uid, newpwd);
-//                        DataCenter.getInstance().update_user_item(AppCtx.getPreference(AppCtx.UserName), newpwd, -1, null);
-                        ((UserModifyPwdAct) context).exitApp();
-                    } else {
-                        PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (response.isOk()) {
+                    PToast.showShort(context.getResources().getString(R.string.toast_update_ok));
+                    LoginMgr loginMgr = ModuleMgr.getLoginMgr();
+                    long uid = loginMgr.getUid();
+                    loginMgr.addLoginUser(uid, newpwd);
+                    ((UserModifyPwdAct) context).exitApp();
+                    return;
                 }
+                PToast.showShort(response.getMsg());
             }
         });
     }
@@ -614,7 +609,7 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if (response.isOk()) {
                     PToast.showShort(App.context.getResources().getString(R.string.toast_update_ok));
                 } else {
-                    PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                    PToast.showShort(response.getMsg());
                 }
             }
         });
@@ -672,4 +667,19 @@ public class CenterMgr implements ModuleBase, PObserver {
     }
     // -------------------------充值页面逻辑 end---------------------------
 
+    /**
+     * 根据日期获取星座
+     */
+    private List<String> starList;
+    private List<String> matchTable; // 配表
+
+    public String getStar(int month, int day) {
+        if (null == starList) {
+            starList = InfoConfig.getInstance().getConstellation().getShow();
+        }
+        if (null == matchTable) {
+            matchTable = InfoConfig.getInstance().getConstellation().getSubmit();
+        }
+        return day < TypeConvertUtil.toInt(matchTable.get(month - 1)) ? starList.get(month - 1) : starList.get(month);
+    }
 }
