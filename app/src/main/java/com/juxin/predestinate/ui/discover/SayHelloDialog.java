@@ -65,9 +65,9 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
         if (data.size() != 0) {
             ImageLoader.loadPicWithCallback(getActivity(), data.get(0).getAvatar(), new ImageLoader.GlideCallback() {
                 @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                public void onResourceReady(GlideDrawable resource) {
                     ImageLoader.loadCircleAvatar(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2));
-                    ImageLoader.loadBlurImg(getActivity(), data.get(0).getAvatar(), 50, iv_big);
+                    ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), 50, iv_big);
                 }
             });
             ImageLoader.loadAvatar(getActivity(), data.get(1).getAvatar(), iv_small1);

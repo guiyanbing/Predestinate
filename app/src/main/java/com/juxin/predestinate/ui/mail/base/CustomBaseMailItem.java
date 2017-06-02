@@ -96,7 +96,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      */
     public void showData(BaseMessage msgData, boolean isSlideLoading) {
         PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
-        ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
+        ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
 
         String nickname = msgData.getName();
         if (!TextUtils.isEmpty(nickname)) {

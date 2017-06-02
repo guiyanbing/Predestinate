@@ -48,7 +48,7 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
 
         final UserInfoLightweight userInfo = getItem(position);
-        ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
+        ImageLoader.loadRoundAvatar(getContext(), userInfo.getAvatar(), holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(userInfo.getGroup()) ? View.VISIBLE : View.GONE);
 

@@ -52,7 +52,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     public void showData(BaseMessage msgData, boolean isSlideLoading) {
         this.msgData = msgData;
         if (!TextUtils.isEmpty(msgData.getAvatar())) {
-            ImageLoader.loadRoundCorners(getContext(), msgData.getAvatar(), item_headpic);
+            ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
         } else {
             item_headpic.setImageResource(msgData.getLocalAvatar());
         }
