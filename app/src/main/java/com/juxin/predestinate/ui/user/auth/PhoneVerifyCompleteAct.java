@@ -49,20 +49,7 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_open_qq_btn://在线客服qq交流
-                LoadingDialog.show(PhoneVerifyCompleteAct.this);
-                ModuleMgr.getCommonMgr().getCustomerserviceQQ(new RequestComplete() {
-                    @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        LoadingDialog.closeLoadingDialog();
-                        if (!response.isOk()) {
-                            PToast.showShort(response.getMsg());
-                            return;
-                        }
-                        JSONObject jsonObject = response.getResponseJson();
-                        String qq = jsonObject.optString("qq");
-                        UIShow.showQQService(PhoneVerifyCompleteAct.this, qq);
-                    }
-                });
+                ModuleMgr.getCommonMgr().getCustomerserviceQQ(PhoneVerifyCompleteAct.this);
                 break;
             case R.id.bt_return_authact:
                 setResult(203);
