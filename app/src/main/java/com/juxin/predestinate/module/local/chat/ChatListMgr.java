@@ -206,12 +206,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public long deleteFmessage(long userID) {
-        long ret = dbCenter.getCenterFMessage().delete(userID);
-        if (ret != MessageConstant.ERROR) {
-            //    getWhisperList();
-        }
-        return ret;
+        long ret = dbCenter.getCenterFLetter().updateContent(String.valueOf(userID));
+        if (ret == MessageConstant.ERROR) return ret;
+        return dbCenter.getCenterFMessage().delete(userID);
     }
+
 
     /**
      * 更新已读

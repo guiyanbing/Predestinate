@@ -1,17 +1,15 @@
 package com.juxin.predestinate.module.local.album.activity;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.juxin.library.utils.BitmapUtil;
+import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.help.AlbumHelper;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
 
 import java.util.ArrayList;
 
@@ -21,7 +19,7 @@ import java.util.ArrayList;
  * Created by Su on 2016/7/24.
  */
 public class ResetOrFinishAct extends BaseActivity implements View.OnClickListener {
-    private ImageView photoImg;
+    private TouchImageView photoImg;
     private String imgPath;
 
     @Override
@@ -36,7 +34,7 @@ public class ResetOrFinishAct extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         imgPath = getIntent().getStringExtra("path");
-        photoImg = (ImageView) findViewById(R.id.confirm_img);
+        photoImg = (TouchImageView) findViewById(R.id.confirm_img);
         TextView reset = (TextView) findViewById(R.id.reset);
         TextView finish = (TextView) findViewById(R.id.finish);
 
@@ -48,11 +46,7 @@ public class ResetOrFinishAct extends BaseActivity implements View.OnClickListen
         if (TextUtils.isEmpty(imgPath)) {
             return;
         }
-        Bitmap bitmap = BitmapUtil.decodeSampledBitmap(imgPath, 720, 1280);
-        if (bitmap == null) {
-            return;
-        }
-        UIUtil.setImageBitmap(photoImg, bitmap);
+        ImageLoader.loadFitCenter(this, imgPath, photoImg);
     }
 
     @Override
