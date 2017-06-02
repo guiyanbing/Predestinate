@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.unread.BadgeView;
@@ -151,20 +152,42 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
         if (JsonUtil.getJsonObject(msgData.getJsonStr()).has("fid")) return;
         item_last_status.setVisibility(View.VISIBLE);
-//        发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
+
+        BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msgData.getType());
+        if (messageType != BaseMessage.BaseMessageType.common) {
+            item_last_status.setVisibility(View.GONE);
+            return;
+        }
+        String result = msgData.getMsgDesc();
+        if (TextUtils.isEmpty(result)) {
+            item_last_status.setVisibility(View.GONE);
+            return;
+        }
+        //        发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
         switch (msgData.getStatus()){
             case 1:
             case 10:
                 item_last_status.setText("送达");
                 break;
-            case 2:
-            item_last_status.setText("失败");
-            break;
-            case 11:
+
+            case 2: // 发送失败
+                item_last_status.setText("失败");
+                break;
+
+            case 3: // 发送中
+                item_last_status.setText("发送中");
+                break;
+
+            case 11: // 已读
                 item_last_status.setText("已读");
                 break;
-            default:
-                item_last_status.setVisibility(View.GONE);
+
+            case 12: // 审核未通过
+                item_last_status.setText("");
+                break;
+
+            default: // "未知状态" + msg.getStatus()
+                item_last_status.setText("");
                 break;
         }
     }

@@ -110,6 +110,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
+        ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
         if (!whisperId.equalsIgnoreCase(whisperID)) {
             updateOtherSideRead(channelID, whisperID, sendID + "");
             PSP.getInstance().put(whisperID + "id", true);
