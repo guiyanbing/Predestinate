@@ -1020,4 +1020,10 @@ public class CommonMgr implements ModuleBase {
         postParms.put("uids", uids.toArray(new Long[uids.size()]));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserInfoSummary, postParms, complete);
     }
+
+    public void checkycoin(RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("uid", App.uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkycoin, getParms, complete);
+    }
 }

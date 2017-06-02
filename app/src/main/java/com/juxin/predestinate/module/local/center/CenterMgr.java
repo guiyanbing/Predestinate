@@ -33,6 +33,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
+import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -515,7 +516,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      * @return true可以打招呼 false不可以打招呼
      */
     public boolean isCanSayHi(Context context) {
-        if (getMyInfo().getAvatar_status() == 2) {
+        if (getMyInfo().getAvatar_status() == CenterConstant.USER_AVATAR_NO_PASS) {
             PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
             return false;
         } else {
@@ -532,7 +533,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public boolean isCanGroupSayHi(Context context) {
         //头像状态是否是未通过审核状态
-        if (getMyInfo().getAvatar_status() == 2) {
+        if (getMyInfo().getAvatar_status() == CenterConstant.USER_AVATAR_NO_PASS) {
             PToast.showShort(context.getString(R.string.say_hi_avatar_fail));
             return false;
         }

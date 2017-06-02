@@ -71,6 +71,8 @@ public enum UrlParam {
 
     reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
 
+    checkycoin("ycoin/checkycoin", null, true),//获得用户Y币状态
+
     // 接收聊天红包
     reqReceiveChatBag("gift/receiveChatred", true),
     // 私密视频相关
