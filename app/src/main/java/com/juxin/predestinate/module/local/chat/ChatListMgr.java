@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -242,6 +243,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
+        listObservable.observeOn(AndroidSchedulers.mainThread());
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {

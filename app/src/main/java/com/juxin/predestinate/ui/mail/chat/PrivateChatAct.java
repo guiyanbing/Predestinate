@@ -44,10 +44,7 @@ import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 聊天页
@@ -88,89 +85,57 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         MsgMgr.getInstance().attach(this);
         checkReply();
 
+        checkIsCanSendMsg();
+//        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
+//            privateChat.getChatAdapter().showInputGONE();//输入框不显示
+//            privateChat.setInputGiftviewVisibility(View.GONE);
+//        } else {
+//            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+//            if (userDetail.isMan() && !userDetail.isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()
+//                    && userDetail.getYcoin() < 79) {//男 非包月 //今天已经聊过了
+//                privateChat.getChatAdapter().showIsCanChat(false);
+//            }
+//        }
+    }
 
+    public void checkIsCanSendMsg() {
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
             privateChat.setInputGiftviewVisibility(View.GONE);
+            return;
+        }
+
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+
+        if ((userDetail.getGender() == 2)//女性用户
+                || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0
+                || (userDetail.getYcoin() > 79 && "0".equals(userDetail.getyCoinUserid())) //Y币 高于79 并且未绑定用户
+                || (userDetail.getYcoin() > 79 && String.valueOf(whisperID).equals(userDetail.getyCoinUserid())) //Y币高于79，并且是绑定用户
+                ) {
+            privateChat.getChatAdapter().showIsCanChat(true);
         } else {
-            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-            if (userDetail.isMan() && !userDetail.isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()
-                    && userDetail.getYcoin() < 79) {//男 非包月 //今天已经聊过了
+            if (ModuleMgr.getChatListMgr().getTodayChatShow() && userDetail.getYcoin() == 0) { //当天末发送还要Y币==0 //最初状态
+                privateChat.getChatAdapter().showIsCanChat(true);
+            } else {
                 privateChat.getChatAdapter().showIsCanChat(false);
             }
         }
     }
 
-
-//    public void checkIsCanSendMsg() {
-//        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
-//            privateChat.getChatAdapter().showInputGONE();//输入框不显示
-//            privateChat.setInputGiftviewVisibility(View.GONE);
-//            return;
-//        }
-//
-//        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-//
-//        if ((userDetail.getGender() == 2)//女性用户
-//                || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0
-//                || (userDetail.getYcoin() > 79 && "0".equals(userDetail.getyCoinUserid())) //Y币 高于79 并且未绑定用户
-//                || (userDetail.getYcoin() > 79 && whisperID.equals(userDetail.getyCoinUserid())) //Y币高于79，并且是绑定用户
-//                ) {
-//            setButtonMail();
-//        } else {
-//            if (getLockDay() && myUserDetail.getYcoin() == 0) { //当天末发送还要Y币==0 //最初状态
-//                setButtonMail();
-//                return true;
-//            } else {
-//                Common.hideKeyBoard(this, editMsg);
-//                setButtonNotMail();
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
-
-//    private void executeYCoinTask() {
-//        ModuleMgr.getCommonMgr().checkycoin(new RequestComplete() {
-//            @Override
-//            public void onRequestComplete(HttpResponse response) {
-//                CheckYCoinBean yCoinBean = new CheckYCoinBean();
-//                yCoinBean.parseJson(response.getResponseString());
-//                ModuleMgr.getCenterMgr().set
-//            }
-//        });
-//        if (YCoinTaskUtil == null) {
-//            YCoinTaskUtil = AsyncTaskUtil.getInstance(this).setUrl(AppCfg.getAppCfg().FATE_CHECK_Y_COIN)
-//                    .setMethod(BaseAsyncTask.METHOD_GET).isLogin(false).setShowAsyncDialog(false)
-//                    .setOnAsyncCallback(new OnAsyncCallback() {
-//                        @Override
-//                        public void requestSuccess(BaseAsyncTask task) {
-//                            if (task instanceof SimpleAsyncTask) {
-//                                SimpleAsyncTask simpleTask = (SimpleAsyncTask) task;
-//                                try {
-//                                    CheckYCoinBean checkYCoinBean = new AppJsonParser().checkYCoin(simpleTask.getJsonResult());
-//                                    AppModel.getInstance().getUserDetail().setYcoin(checkYCoinBean.getY());
-//                                    AppModel.getInstance().getUserDetail().setyCoinUserid(checkYCoinBean.getTouid());
-//                                    if (!checkYCoinBean.getTouid().equals("")) {
-//                                        MaillistDataControl.getInstance(AAMainAct.this).sortListView();
-//                                    }
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void requestFail(BaseAsyncTask task, Exception e) {
-//
-//                        }
-//                    });
-//        }
-//        Map<String, Object> getParams = new HashMap<String, Object>();
-//        getParams.put("uid", AppCtx.getPreference(AppCtx.SUid));
-//        YCoinTaskUtil.setGetParams(getParams).executeTask();
-//    }
+    private void executeYCoinTask() {
+        ModuleMgr.getCommonMgr().checkycoin(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                CheckYCoinBean yCoinBean = new CheckYCoinBean();
+                yCoinBean.parseJson(response.getResponseString());
+                if(yCoinBean.isOk()){
+                    ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
+                    ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
+                    checkIsCanSendMsg();
+                }
+            }
+        });
+    }
 
 
     private void initLastGiftList() {
@@ -257,6 +222,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         marqueeView = new GiftMessageInforView(this);
 
         initLastGiftList();
+        executeYCoinTask();
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
@@ -430,6 +396,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             case MsgType.MT_MyInfo_Change://更新个人资料
                 if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && ModuleMgr.getCenterMgr().getMyInfo().isVip()) {//男
                     privateChat.getChatAdapter().showIsCanChat(true);
+                }
+                break;
+            case MsgType.MT_Update_Ycoin:
+                if((Boolean) value){//去请求网络
+                    executeYCoinTask();
+                }else {//不请求网络
+                    checkIsCanSendMsg();
+                    chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
                 }
                 break;
             default:

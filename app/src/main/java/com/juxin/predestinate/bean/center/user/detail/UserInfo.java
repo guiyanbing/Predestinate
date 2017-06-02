@@ -27,6 +27,7 @@ public class UserInfo extends UserBasic {
     private boolean miss_info;      // 资料是否完整
     private int videoAuth;          // 用户视频权限
     private int ycoin = 0;          // Y币
+    private String yCoinUserid = "0";//不在返回的结构体解析，本地用的
     private int topN;               // 用户排行
     private int group;              // 1 普通用户  2,3包月用户
     private int validation_status;  // 用户认证状态  1 通过 0 未通过
@@ -495,6 +496,14 @@ public class UserInfo extends UserBasic {
 
     public void setYcoin(int ycoin) {
         this.ycoin = ycoin;
+    }
+
+    public String getyCoinUserid() {
+        return yCoinUserid;
+    }
+
+    public void setyCoinUserid(String yCoinUserid) {
+        this.yCoinUserid = yCoinUserid;
     }
 
     public String getShareCode() {

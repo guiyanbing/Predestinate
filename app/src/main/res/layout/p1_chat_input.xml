@@ -11,7 +11,7 @@
         android:background="@drawable/btn_chat_input_reply"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             style="@style/icon_small"
@@ -39,6 +39,7 @@
         android:gravity="center_vertical"
         android:minHeight="@dimen/title_footer_height"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:paddingLeft="@dimen/px35_dp">
 
         <LinearLayout

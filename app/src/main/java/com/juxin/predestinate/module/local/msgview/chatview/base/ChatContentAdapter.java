@@ -423,20 +423,19 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
+            ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             if (infoLightweight != null) {
-                //                if (sender) {
-                //                    name.setVisibility(View.GONE);
-                //                } else {
-                //                    name.setText(infoLightweight.getNickname());
-                //                    name.setVisibility(View.VISIBLE);
-                //                }
-
+//                if (sender) {
+//                    name.setVisibility(View.GONE);
+//                } else {
+//                    name.setText(infoLightweight.getNickname());
+//                    name.setVisibility(View.VISIBLE);
+//                }
                 ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
                 //   head.setTag("" + msg.getSendID());
-                //                head.setImageResource(R.drawable.default_pic);
-                ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
+                //  head.setImageResource(R.drawable.default_pic);
             }
         }
 

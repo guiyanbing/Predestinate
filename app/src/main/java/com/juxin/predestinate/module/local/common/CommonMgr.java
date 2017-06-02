@@ -19,6 +19,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.local.pay.CheckYCoinBean;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -57,8 +58,6 @@ public class CommonMgr implements ModuleBase {
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
-
-    private int friendNum = 0;
 
     @Override
     public void init() {
