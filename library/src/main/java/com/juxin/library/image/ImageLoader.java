@@ -111,6 +111,7 @@ public class ImageLoader {
      */
     public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg, int errResImg) {
         roundedCorners.setRadius(roundPx);
+        loadPic(context, defResImg, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
         loadPic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
     }
 
@@ -131,12 +132,8 @@ public class ImageLoader {
                                       final int defResImg, final int errResImg, int borderWidth, int borderColor) {
         circleTransform.setBorderWidth(borderWidth);
         circleTransform.setBorderColor(borderColor);
-        loadPicWithCallback(context, defResImg, new GlideCallback() {
-            @Override
-            public void onResourceReady(GlideDrawable resource) {
-                loadPic(context, model, view, defResImg, errResImg, bitmapCenterCrop, circleTransform);
-            }
-        });
+        loadPic(context, defResImg, view, defResImg, errResImg, bitmapCenterCrop, circleTransform);
+        loadPic(context, model, view, defResImg, errResImg, bitmapCenterCrop, circleTransform);
     }
 
     /**
