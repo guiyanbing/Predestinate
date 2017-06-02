@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -29,6 +30,7 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
+import com.juxin.predestinate.module.local.pay.CheckYCoinBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -84,17 +86,48 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         MsgMgr.getInstance().attach(this);
         checkReply();
 
+        checkIsCanSendMsg();
+    }
 
+    public void checkIsCanSendMsg() {
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
             privateChat.setInputGiftviewVisibility(View.GONE);
+            return;
+        }
+
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+
+        if ((userDetail.getGender() == 2)//女性用户
+                || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0
+                || (userDetail.getYcoin() > 79 && "0".equals(userDetail.getyCoinUserid())) //Y币 高于79 并且未绑定用户
+                || (userDetail.getYcoin() > 79 && String.valueOf(whisperID).equals(userDetail.getyCoinUserid())) //Y币高于79，并且是绑定用户
+                ) {
+            privateChat.getChatAdapter().showIsCanChat(true);
         } else {
-            if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
-                    .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
+            if (ModuleMgr.getChatListMgr().getTodayChatShow() && userDetail.getYcoin() == 0) { //当天末发送还要Y币==0 //最初状态
+                privateChat.getChatAdapter().showIsCanChat(true);
+            } else {
                 privateChat.getChatAdapter().showIsCanChat(false);
             }
         }
     }
+
+    private void executeYCoinTask() {
+        ModuleMgr.getCommonMgr().checkycoin(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                CheckYCoinBean yCoinBean = new CheckYCoinBean();
+                yCoinBean.parseJson(response.getResponseString());
+                if (yCoinBean.isOk()) {
+                    ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
+                    ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
+                    checkIsCanSendMsg();
+                }
+            }
+        });
+    }
+
 
     private void initLastGiftList() {
         if (MailSpecialID.customerService.getSpecialID() != whisperID)
@@ -180,6 +213,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         marqueeView = new GiftMessageInforView(this);
 
         initLastGiftList();
+        executeYCoinTask();
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
@@ -210,7 +244,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         //VIP男用户展示浮动提示
         if (ModuleMgr.getCenterMgr().getMyInfo().isVip() && ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1
-                && PSP.getInstance().getBoolean(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false)) {
+                && PSP.getInstance().getBoolean(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false) && MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.mGiftTipsContainerV.setVisibility(View.VISIBLE);
         }
 
@@ -355,7 +389,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     privateChat.getChatAdapter().showIsCanChat(true);
                 }
                 break;
-
+            case MsgType.MT_Update_Ycoin:
+                if ((Boolean) value) {//去请求网络
+                    executeYCoinTask();
+                } else {//不请求网络
+                    checkIsCanSendMsg();
+                    chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
+                }
+                break;
             default:
                 break;
         }

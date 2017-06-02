@@ -27,6 +27,7 @@ public enum UrlParam {
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
     reqForgotsms("Public/forgotsms", false),//找回密码发送验证码
+    getserviceqq("user/getserviceqq", true),//获取客服qq
     //================================ 配置项 ==================================
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级
@@ -69,6 +70,8 @@ public enum UrlParam {
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
     reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
+
+    checkycoin("ycoin/checkycoin", null, true),//获得用户Y币状态
 
     // 接收聊天红包
     reqReceiveChatBag("gift/receiveChatred", true),

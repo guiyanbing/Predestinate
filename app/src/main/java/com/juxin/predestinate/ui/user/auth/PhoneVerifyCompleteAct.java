@@ -5,22 +5,25 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.UIShow;
+
+import org.json.JSONObject;
 
 /**
  * 手机认证完成页面
  * Created by xy on 2017/5/17.
  */
 
-public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClickListener{
+public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClickListener {
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_phoneverify_complete_act);
         setBackView(getResources().getString(R.string.title_phone_certification));
@@ -29,20 +32,10 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
-        UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
-        if (user != null) {
-            String password = ModuleMgr.getLoginMgr().getUserList().get(0).getPw();
-            ((TextView) findViewById(R.id.txt_phoneverify_complete_pwd)).setText(password);
-        }
         findViewById(R.id.bt_return_authact).setOnClickListener(this);
-        findViewById(R.id.bt_return_loginact).setOnClickListener(this);
-    }
-
-
-    public void exitLogin() {
-        clearUserInfo();
-        setResult(Constant.EXITLOGIN_RESULTCODE);
-        finish();
+        findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
+        ((TextView) findViewById(R.id.tv_customerservice_desc)).setText(getResources().getString(R.string.txt_customerservice_complete_desc));
+        ((TextView) findViewById(R.id.tv_customerservice_phone)).setText("0731-1231124444");//TODO 获取客服手机
     }
 
     public static void clearUserInfo() {
@@ -54,22 +47,15 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
+            case R.id.ll_open_qq_btn://在线客服qq交流
+                ModuleMgr.getCommonMgr().getCustomerserviceQQ(PhoneVerifyCompleteAct.this);
+                break;
             case R.id.bt_return_authact:
                 setResult(203);
                 finish();
                 break;
-            case R.id.bt_return_loginact:
-                PickerDialogUtil.showSimpleTipDialog(this, new SimpleTipDialog.ConfirmListener() {
-                    @Override
-                    public void onCancel() {
-                    }
-
-                    @Override
-                    public void onSubmit() {
-                        exitLogin();
-                    }
-                }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.cancel), getResources().getString(R.string.ok), true);
+            default:
                 break;
         }
     }

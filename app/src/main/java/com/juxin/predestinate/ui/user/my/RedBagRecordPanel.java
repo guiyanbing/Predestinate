@@ -2,26 +2,24 @@ package com.juxin.predestinate.ui.user.my;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.juxin.library.controls.xRecyclerView.XRecyclerView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.RedOneKeyList;
+import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
+import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
+import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
-import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.RedBagTabAdapter;
-import com.juxin.predestinate.bean.my.RedOneKeyList;
-import com.juxin.predestinate.bean.my.RedbagList;
 import com.switfpass.pay.utils.Util;
 
 import java.util.List;
@@ -30,13 +28,13 @@ import java.util.List;
  * 收入详情
  * Created by zm on 2017/4/25
  */
-public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRecyclerView.LoadingListener,View.OnClickListener{
+public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExListView.IXListViewListener,View.OnClickListener{
 
     private Context mContext;
     //有关控件
     private Button butOneKey;
-    private CustomRecyclerView crvView;
-    private XRecyclerView rvList;
+    private CustomStatusListView crvView;
+    private ExListView rvList;
     private LinearLayout llSummary;
     private TextView tvData,tvPath,tvMoney,tvStatus;
     private TextView tvNoData;
@@ -59,7 +57,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
 
     private void initView(){
         butOneKey = (Button) findViewById(R.id.wode_record_panel_btn_one_key);
-        crvView = (CustomRecyclerView) findViewById(R.id.wode_record_panel_crv_list);
+        crvView = (CustomStatusListView) findViewById(R.id.wode_record_panel_crv_list);
         llSummary = (LinearLayout) findViewById(R.id.withdraw_ll_summary);
         tvData = (TextView) findViewById(R.id.withdraw_tv_date);
         tvPath = (TextView) findViewById(R.id.withdraw_tv_path);
@@ -69,14 +67,16 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
         tvNoData.setVisibility(View.GONE);
         llSummary.setVisibility(View.GONE);
         butOneKey.setOnClickListener(this);
-        rvList = crvView.getXRecyclerView();
-        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+        rvList = crvView.getExListView();
+//        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+//        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
+//                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
+        rvList.setHeaderStr(getContext().getString(R.string.xlistview_header_hint_normal),
+               getContext().getString(R.string.xlistview_header_hint_loading));
         mRedBagTabAdapter = new RedBagTabAdapter(mContext,this);
         rvList.setAdapter(mRedBagTabAdapter);
-        rvList.setLoadingMoreEnabled(false);
-        rvList.setLoadingListener(this);
+        rvList.setPullLoadEnable(false);
+        rvList.setXListViewListener(this);
     }
 
     //用于计算总钱数
@@ -93,9 +93,9 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
     public void onRequestComplete(HttpResponse response) {
         LoadingDialog.closeLoadingDialog();
         tvNoData.setVisibility(View.GONE);
-        crvView.showXrecyclerView();
-        rvList.refreshComplete();
-        rvList.loadMoreComplete();
+        crvView.showExListView();
+        rvList.stopRefresh();
+        rvList.stopLoadMore();
         if (response.getUrlParam() == UrlParam.reqRedbagList){
 //            Log.e("TTTTTTTT", response.getResponseString()+"|||"+response.isOk());
             RedbagList redbagList = new RedbagList();
@@ -130,7 +130,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,XRec
         showNoData();
     }
     //处理数据
-    private void handleData(){
+    public void handleData(){
         if (mRedbagInfos != null && !mRedbagInfos.isEmpty()){
             mRedBagTabAdapter.setList(mRedbagInfos);
             butOneKey.setEnabled(true);

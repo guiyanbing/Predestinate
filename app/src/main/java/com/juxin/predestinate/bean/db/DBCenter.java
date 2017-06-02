@@ -3,7 +3,6 @@ package com.juxin.predestinate.bean.db;
 import android.text.TextUtils;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -60,6 +59,23 @@ public class DBCenter {
         }
 
         return centerFmessage.insertMsg(baseMessage);
+    }
+
+    /**
+     * 更新
+     * @param baseMessage
+     * @return
+     */
+    public long updateMsg(BaseMessage baseMessage) {
+        String userID = baseMessage.getWhisperID();
+        if (TextUtils.isEmpty(userID)) return MessageConstant.ERROR;
+
+        if(BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()){
+            long ret = centerFLetter.updateStatus(userID, baseMessage.getStatus());
+            if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+        }
+
+        return centerFmessage.updateMsg(baseMessage);
     }
 
     public DBCenterFLetter getCenterFLetter() {
@@ -149,17 +165,4 @@ public class DBCenter {
     public long updateToReadAll() {
         return centerFmessage.updateToReadAll();
     }
-
-    /**
-     * 更新未读
-     *
-     * @param channelID
-     * @param userID
-     * @return
-     */
-    public long updateToRead(String channelID, String userID) {
-        return centerFmessage.updateToRead(channelID, userID);
-    }
-
-    /********************FMessage end **************************/
 }

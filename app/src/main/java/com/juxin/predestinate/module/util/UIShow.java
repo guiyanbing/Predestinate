@@ -14,12 +14,14 @@ import android.view.WindowManager;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.APKUtil;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.config.CommonConfig;
+import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
@@ -134,7 +136,8 @@ public class UIShow {
 
     public static void show(Context context, Class clz, int flag) {
         Intent intent = new Intent(context, clz);
-        if (flag != -1) intent.addFlags(flag);
+        if (flag != -1)
+            intent.addFlags(flag);
         show(context, intent);
     }
 
@@ -254,13 +257,9 @@ public class UIShow {
 
     /**
      * 手机绑定
-     *
-     * @param activity
-     * @param isVerify 是否绑定手机
      */
-    public static void showPhoneVerifyAct(FragmentActivity activity, boolean isVerify, int requestCode) {
+    public static void showPhoneVerifyAct(FragmentActivity activity, int requestCode) {
         Intent intent = new Intent(activity, PhoneVerifyAct.class);
-        intent.putExtra("isVerify", isVerify);
         activity.startActivityForResult(intent, requestCode);
     }
 
@@ -343,6 +342,7 @@ public class UIShow {
      */
     private static void showCheckOtherInfoAct(final Context context, long uid, final int channel, UserDetail userProfile) {
         if (userProfile != null) {
+            AttentionUtil.updateUserDetails(userProfile);
             skipCheckOtherInfoAct(context, channel, userProfile);
             return;
         }
@@ -370,7 +370,8 @@ public class UIShow {
     }
 
     private static void skipCheckOtherInfoAct(Context context, int channel, UserDetail userProfile) {
-        if (userProfile == null) return;
+        if (userProfile == null)
+            return;
 
         if (!userProfile.isUserNormal()) {
             showUserBlockAct(context);
@@ -548,7 +549,8 @@ public class UIShow {
      */
     public static void showUserMailNotifyAct(int type, UserInfoLightweight simpleData, String content) {
         int flags = Intent.FLAG_ACTIVITY_NEW_TASK;
-        if (Build.VERSION.SDK_INT >= 11) flags = flags | Intent.FLAG_ACTIVITY_CLEAR_TASK;
+        if (Build.VERSION.SDK_INT >= 11)
+            flags = flags | Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
         Intent intent = new Intent(App.context, UserMailNotifyAct.class);
         intent.addFlags(flags);
@@ -568,7 +570,8 @@ public class UIShow {
      * @param isShowTip 是否展示界面提示
      */
     public static void showUpdateDialog(final FragmentActivity activity, final AppUpdate appUpdate, boolean isShowTip) {
-        if (appUpdate == null) return;
+        if (appUpdate == null)
+            return;
 
         // 直接返回服务器没有返回包名的情况
         if (TextUtils.isEmpty(appUpdate.getPackage_name())) {
@@ -730,7 +733,7 @@ public class UIShow {
                             intent.putExtra("payGood", (Serializable) payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
                         } else {
-                            PToast.showShort(CommonUtil.getErrorMsg(response.getMsg()));
+                            PToast.showShort(response.getMsg());
                         }
                     }
                 });
@@ -836,14 +839,19 @@ public class UIShow {
         activity.startActivityForResult(intent_web, Constant.PAYMENTACT_TO);
     }
 
-
     /**
      * 打开QQ客服
      */
     public static void showQQService(Context context) {
+        showQQService(context, ModuleMgr.getCommonMgr().getCommonConfig().getService_qq());
+    }
+
+    /**
+     * 打开随机QQ客服
+     */
+    public static void showQQService(Context context, String qq) {
         try {
-            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" +
-                    ModuleMgr.getCommonMgr().getCommonConfig().getService_qq();
+            String url = "mqqwpa://im/chat?chat_type=wpa&uin=" + qq;
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             if (intent.resolveActivity(context.getPackageManager()) != null) {
@@ -983,9 +991,10 @@ public class UIShow {
                 public void onRequestGiftListCallback(boolean isOk) {
                     LoadingDialog.closeLoadingDialog();
                     if (isOk) {
-                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null) {
+                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
                             dialog = new BottomGiftDialog();
                             dialog.setToId(to_id);
+                            dialog.setCtx(context);
                             dialog.showDialog((FragmentActivity) context);
                         }
                     } else {
@@ -1044,7 +1053,10 @@ public class UIShow {
                     intent.putExtra("info", info);
                     context.startActivity(intent);
                 } else {
-                    PToast.showShort(context.getString(R.string.net_error_retry));
+                    if (!NetworkUtils.isConnected(context))
+                        PToast.showShort(context.getString(R.string.net_error_retry));
+                    else
+                        PToast.showShort(response.getMsg());
                 }
             }
         });
@@ -1082,8 +1094,23 @@ public class UIShow {
      *
      * @param context
      */
-    public static void showIDCardAuthenticationAct(FragmentActivity context, int requestCode) {
-        context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+    public static void showIDCardAuthenticationAct(final FragmentActivity context, final int requestCode) {
+        IdCardVerifyStatusInfo info = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo();
+        if (info.isOk() || ModuleMgr.getCenterMgr().getMyInfo().getIdcard_validation() == 0) {
+            context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+            return;
+        }
+        LoadingDialog.show(context);
+        ModuleMgr.getCommonMgr().getVerifyStatus(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (response.isOk())
+                    context.startActivityForResult(new Intent(context, IDCardAuthenticationAct.class), requestCode);
+                else
+                    PToast.showShort(context.getString(R.string.net_error_retry));
+            }
+        });
     }
 
     /**

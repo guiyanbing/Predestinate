@@ -5,6 +5,7 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -53,6 +54,8 @@ public class ChatPanelVideo extends ChatPanel {
                 : (isSender() ? R.drawable.f1_chat_voice_right : R.drawable.f1_chat_voice_left));
         chat_item_video_text.setText(VideoMessage.getVideoChatContent(
                 videoMessage.getEmLastStatus(), videoMessage.getVideoVcTalkTime(), videoMessage.isSender()));
+
+        PLogger.printObject("tp="+ videoMessage.getVideoTp() +":code="+ videoMessage.getVideoVcEscCode());
         return true;
     }
 

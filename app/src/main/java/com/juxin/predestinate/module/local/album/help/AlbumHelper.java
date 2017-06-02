@@ -13,6 +13,7 @@ import android.text.TextUtils;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.local.album.activity.PickBigImagesActivity;
 import com.juxin.predestinate.module.local.album.activity.ResetOrFinishAct;
 import com.juxin.predestinate.module.local.album.activity.TransferActivity;
@@ -223,6 +224,9 @@ public class AlbumHelper {
                     while (cursor.moveToNext()) {
                         SingleImageModel singleImageModel = new SingleImageModel();
                         singleImageModel.path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+                        // 跳过不存在文件
+                        if (!FileUtil.isExist(singleImageModel.path)) continue;
                         try {
                             singleImageModel.date = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)));
                         } catch (NumberFormatException e) {

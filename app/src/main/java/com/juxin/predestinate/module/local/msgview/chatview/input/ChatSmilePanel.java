@@ -5,25 +5,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
-import com.juxin.predestinate.module.local.msgview.smile.GiftItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
-
 import java.util.List;
 
 /**
  * 表情
  * Created by Kind on 2017/3/31.
  */
-
 public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private TextView tv_custom_face_del;
@@ -57,24 +52,10 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         show(false);
     }
 
-    public void resetSmilePackages() {
-        if (chatSmileAdapter == null) {
-            return;
-        }
-
-        // chatSmileAdapter.setList(ModuleMgr.getPhizMgr().getSmilePacks().getPackages());
-
-//        if (ChatListMgr.Folder.sys_notice == getChatInstance().chatAdapter.getFolder()) {
-//             chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages(new String[]{"gift"}));
-//        } else {
-//              chatSmileAdapter.setList(ModuleMgr.getSmileMgr().getSmilePacks().getPackages());
-//        }
-    }
-
     private void addView_Package_Default() {
         smilePackageLayouts.removeAllViews();
-
-        chatSmileDefPanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
+        if(null == chatSmileDefPanel)
+            chatSmileDefPanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
 
         smilePackageLayouts.addView(chatSmileDefPanel.getContentView());
     }
@@ -89,18 +70,8 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilePackageLayouts.addView(chatSmileCustomPanel.getContentView());
     }
 
-    private void addView_Package_Gift(List<GiftItem> items) {
-        smilePackageLayouts.removeAllViews();
-
-        ChatGiftSmilePanel chatSmilePanel = new ChatGiftSmilePanel(getContext(), items, getChatInstance());
-
-        smilePackageLayouts.addView(chatSmilePanel.getContentView());
-    }
-
     private void addView(SmilePackage smilePackage) {
-        if (smilePackage == null) {
-            return;
-        }
+        if (smilePackage == null) return;
 
         if ("smallface".equals(smilePackage.getType())) {
             tv_custom_face_del.setVisibility(View.GONE);
@@ -109,19 +80,6 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             tv_custom_face_del.setVisibility(View.VISIBLE);
             addView_Package_Custom(smilePackage.getItems());
         }
-
-
-//
-//        if ("smallface".equals(smilePackage.getType())) {
-//            addView_Package_Default();
-//        } else if ("bigface".equals(smilePackage.getType())) {
-//            addView_Package_Big(smilePackage.getItems(), 0);
-//        } else if ("minigame".equals(smilePackage.getType())) {
-//            addView_Package_Big(smilePackage.getItems(), 1);
-//        } else if ("gift".equals(smilePackage.getType())) {
-        //      ModuleMgr.getSmileMgr().reqGiftLevel(getChatInstance().chatAdapter.getLWhisperId(), null);
-        //        addView_Package_Gift(ModuleMgr.getSmileMgr().getGiftShop().getItems());
-        //  }
     }
 
     /**
@@ -157,9 +115,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
             e.printStackTrace();
         }
 
-        if (smilePackage == null) {
-            return;
-        }
+        if (smilePackage == null) return;
 
         chatSmileAdapter.setCheckPosition(position);//设置选中效果
         addView(smilePackage);
@@ -169,7 +125,6 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_custom_face_del:
-
                 String del = tv_custom_face_del.getText().toString();
                 if (v.getTag() == null || (int) v.getTag() == 0 || del.equals("删除")) {
                     v.setTag(1);

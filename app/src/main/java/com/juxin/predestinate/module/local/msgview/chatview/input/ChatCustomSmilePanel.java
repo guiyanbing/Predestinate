@@ -28,9 +28,7 @@ import com.juxin.predestinate.module.util.UIUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 自定义
@@ -41,6 +39,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     //保存表情资源的列表
     private static int pageResNum = 8;
     private boolean mOutDelClick = false;
+    private long mLastTime;
     private List<SmileItem> items = null;
 
     private TextView mOutDelTv;
@@ -62,6 +61,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             items.add(0, new SmileItem("custom"));
         }
         this.items = items;
+        mOutDelClick = false;
+        mOutDelTv.setText("删除");
         initData();
     }
 
@@ -74,22 +75,28 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         viewPager = (ViewPager) findViewById(R.id.chat_panel_viewpager);
     }
 
-    private synchronized void initData() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
-        viewPager.setAdapter(viewPagerAdapter);
-        initPointsView(viewPager, viewPagerAdapter.getCount(), true);
-        if(null != items) {
-            if(items.size() == 1) {
-                mOutDelTv.setVisibility(View.GONE);
-            }else {
-                mOutDelTv.setVisibility(View.VISIBLE);
+    private void initData() {
+        try {
+            synchronized (items) {
+                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
+                viewPager.setAdapter(viewPagerAdapter);
+                initPointsView(viewPager, viewPagerAdapter.getCount(), true);
+                if(null != items) {
+                    if(items.size() == 1) {
+                        mOutDelTv.setVisibility(View.GONE);
+                    }else {
+                        mOutDelTv.setVisibility(View.VISIBLE);
+                    }
+                }else {
+                    mOutDelTv.setVisibility(View.GONE);
+                }
             }
-        }else {
-            mOutDelTv.setVisibility(View.GONE);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private synchronized List<View> getAllViews() {
+    private List<View> getAllViews() throws Exception {
         List<View> views = new ArrayList<>();
         View view;
         int index = 0;
@@ -100,22 +107,23 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         return views;
     }
 
-    private synchronized View getChildView(int index) {
+    private View getChildView(int index) throws Exception {
         List<SmileItem> listTemp = getPageRes(index);
         if (listTemp == null) {
             return null;
         }
 
         View view = View.inflate(getContext(), R.layout.p1_chat_smile_grid, null);
-        GridView gv = (GridView) view.findViewById(R.id.chat_panel_gridview);
-        gv.setNumColumns(pageResNum / 2);
-        gv.setGravity(Gravity.CENTER);
-        gv.setVerticalSpacing(UIUtil.dp2px(5));
+        synchronized (listTemp) {
+            GridView gv = (GridView) view.findViewById(R.id.chat_panel_gridview);
+            gv.setNumColumns(pageResNum / 2);
+            gv.setGravity(Gravity.CENTER);
+            gv.setVerticalSpacing(UIUtil.dp2px(5));
 
-        ChatCustomSmileAdapter customSmileAdapter = new ChatCustomSmileAdapter(getContext(), listTemp, index, mOutDelClick, this);
-        gv.setAdapter(customSmileAdapter);
-        gv.setOnItemClickListener(this);
-
+            ChatCustomSmileAdapter customSmileAdapter = new ChatCustomSmileAdapter(getContext(), listTemp, index, mOutDelClick, this);
+            gv.setAdapter(customSmileAdapter);
+            gv.setOnItemClickListener(this);
+        }
         return view;
     }
 
@@ -125,24 +133,28 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @param index 对应页。
      * @return 指定页的资源信息。
      */
-    private synchronized List<SmileItem> getPageRes(int index) {
+    private List<SmileItem> getPageRes(int index) throws Exception {
         if (items == null) {
             return null;
         }
 
-        List<SmileItem> listTemp = items;
-        int start = index * pageResNum;
-        int offset = listTemp.size() - start;
+        List<SmileItem> listTemp;
+        synchronized (items) {
+            listTemp = items;
+            int start = index * pageResNum;
+            int offset = listTemp.size() - start;
 
-        if (offset <= 0) {
-            return null;
+            if (offset <= 0) {
+                return null;
+            }
+
+            if (offset > pageResNum) {
+                offset = pageResNum;
+            }
+
+            listTemp = listTemp.subList(start, start + offset);
         }
-
-        if (offset > pageResNum) {
-            offset = pageResNum;
-        }
-
-        return listTemp.subList(start, start + offset);
+        return listTemp;
     }
 
     @Override
@@ -234,6 +246,9 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         if (TextUtils.isEmpty(url)) {
             return;
         }
+        if(isFastClick()) {
+            return;
+        }
         ModuleMgr.getCommonMgr().delCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -256,11 +271,13 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         });
     }
 
-    private synchronized void optItems(SmileItem smileItem, int positon) {
-        if(null != smileItem) {
-            items.add(smileItem);
-        }else {
-            items.remove(positon);
+    private void optItems(SmileItem smileItem, int positon) {
+        synchronized (items) {
+            if(null != smileItem) {
+                items.add(smileItem);
+            }else {
+                items.remove(positon);
+            }
         }
     }
 
@@ -271,11 +288,25 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
         switch (key) {
             case MsgType.MT_ADD_CUSTOM_SMILE:
+                if(isFastClick()) {
+                    return;
+                }
                 addCFace((String) value);
                 break;
 
             default:
                 break;
         }
+    }
+
+    private boolean isFastClick() {
+        boolean isFastClick = false;
+        long curTime = System.currentTimeMillis();
+        if(curTime - mLastTime < 1000) {
+            isFastClick = true;
+            PToast.showShort("操作太快，请稍后");
+        }
+        mLastTime = System.currentTimeMillis();
+        return isFastClick;
     }
 }

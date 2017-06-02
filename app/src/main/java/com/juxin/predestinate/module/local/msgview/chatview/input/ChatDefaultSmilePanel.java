@@ -28,7 +28,7 @@ public class ChatDefaultSmilePanel extends ChatBaseSmilePanel implements Adapter
 
     public void initView() {
         vp = (ViewPager) findViewById(R.id.chat_panel_viewpager);
-//
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
         vp.setAdapter(viewPagerAdapter);
 

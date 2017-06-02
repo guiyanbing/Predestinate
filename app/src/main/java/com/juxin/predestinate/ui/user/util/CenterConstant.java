@@ -23,6 +23,10 @@ public class CenterConstant {
     public static final int USER_SET_RESULT_CODE = 0x16;        // 返回码
 
     // 头像审核状态码
-    public static final int USER_AVATAR_CHECKING = 0;  // 审核中
-    public static final int USER_AVATAR_NO_PASS = 2;   // 未通过
+    public static final int USER_AVATAR_UNCHECKING = 0;  // 未审核
+    public static final int USER_AVATAR_PASS = 1;        // 通过
+    public static final int USER_AVATAR_NO_PASS = 2;     // 拒绝
+    public static final int USER_AVATAR_NO_UPLOAD = 3;   // 未上传
+    public static final int USER_AVATAR_NICE = 4;        // 好
+    public static final int USER_AVATAR_VERY_NICE = 5;   // 很好
 }

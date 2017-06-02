@@ -78,8 +78,8 @@ var Ranking = Ranking || (function ($) {
         var firstThree = [2, 1, 3];
         var giftsText = '';
         var noAvatar = 'http://image1.yuanfenba.net/oss/red/ic_user_avatar_default_new.png';
-        if(dataList.length<3){
-            var dataListCount = dataList.length;
+        var dataListCount = dataList.length;
+          if(dataListCount<3){
             for (var i = 0; i < 3-dataListCount; i++) {
                 var noData = {
                     nickname: '<空>',
@@ -90,9 +90,9 @@ var Ranking = Ranking || (function ($) {
             }
         }
         if (_tabIndex === 0) {
-          giftsText = '收到'
+          giftsText = '您收到'
         } else if (_tabIndex === 1) {
-          giftsText = '送出'
+          giftsText = '您送出'
         }
         for (var i = 0; i < firstThree.length; i++) {
           var data = dataList[firstThree[i] - 1];

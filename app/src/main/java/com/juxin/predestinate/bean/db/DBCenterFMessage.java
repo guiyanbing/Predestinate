@@ -33,6 +33,29 @@ public class DBCenterFMessage {
         this.mDatabase = database;
     }
 
+
+    public long storageDataVideo(VideoMessage message){
+        if (!isExist(message.getSpecialMsgID())) {//没有数据
+            return insertMsg(message);
+        } else {
+            return updateMsgVideo(message);
+        }
+    }
+
+    private boolean isExist(long vcID) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
+                .append(" WHERE ")
+                .append(FMessage.COLUMN_SPECIALMSGID + " = ?");
+        Cursor cursor = mDatabase.query(sql.toString(), String.valueOf(vcID));
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        } else {
+            if (cursor != null) cursor.close();
+            return false;
+        }
+    }
+
     /**
      * 多条消息插入
      *
@@ -76,7 +99,7 @@ public class DBCenterFMessage {
                 values.put(FMessage.COLUMN_CMSGID, baseMessage.getcMsgID());
 
             if (baseMessage.getSpecialMsgID() != -1)
-                values.put(FMessage.COLUMN_CMSGID, baseMessage.getSpecialMsgID());
+                values.put(FMessage.COLUMN_SPECIALMSGID, baseMessage.getSpecialMsgID());
 
             values.put(FMessage.COLUMN_SENDID, baseMessage.getSendID());
             values.put(FMessage.COLUMN_TYPE, baseMessage.getType());
@@ -162,14 +185,14 @@ public class DBCenterFMessage {
                 values.put(FMessage.COLUMN_TIME, videoMessage.getTime());
 
             if (videoMessage.getSpecialMsgID() != -1)
-                values.put(FMessage.COLUMN_TIME, videoMessage.getSpecialMsgID());
+                values.put(FMessage.COLUMN_SPECIALMSGID, videoMessage.getSpecialMsgID());
 
             if (videoMessage.getfStatus() != -1)
                 values.put(FMessage.COLUMN_FSTATUS, videoMessage.getfStatus());
 
             if (videoMessage.getJsonStr() != null)
                 values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(videoMessage.getJsonStr()));
-            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getVideoID()));
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(videoMessage.getSpecialMsgID()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -249,34 +272,44 @@ public class DBCenterFMessage {
     public long updateOtherSideRead(String channelID, String userID, @NonNull String sendID, long msgID) {
         try {
             StringBuilder sql = new StringBuilder();
-            String[] str;
+            List<String> stringList = new ArrayList<>();
 
             if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
                 sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
                         .append(FMessage.COLUMN_WHISPERID + " = ? AND ")
                         .append(FMessage.COLUMN_SENDID + " = ? AND ")
                         .append(FMessage.COLUMN_STATUS + " = ?");
-                str = new String[]{channelID, userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                stringList.add(channelID);
+                stringList.add(userID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             } else if (!TextUtils.isEmpty(channelID)) {
                 sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
                         .append(FMessage.COLUMN_SENDID + " = ? AND ")
                         .append(FMessage.COLUMN_STATUS + " = ?");
-                str = new String[]{channelID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                stringList.add(channelID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             } else {
                 sql.append(FMessage.COLUMN_WHISPERID + " = ? AND ")
                         .append(FMessage.COLUMN_SENDID + " = ? AND ")
                         .append(FMessage.COLUMN_STATUS + " = ?");
-                str = new String[]{userID, sendID, String.valueOf(MessageConstant.OK_STATUS)};
+                stringList.add(userID);
+                stringList.add(sendID);
+                stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             }
 
             if(msgID != MessageConstant.NumNo){
                 sql.append(" AND " + FMessage.COLUMN_MSGID + " < ?");
-                str[str.length] = String.valueOf(msgID);
+                stringList.add(String.valueOf(msgID));
             }
+
+            String[] strs = new String[stringList.size()];
+            stringList.toArray(strs);
 
             ContentValues values = new ContentValues();
             values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), str);
+            return mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
         } catch (Exception e) {
             e.printStackTrace();
         }

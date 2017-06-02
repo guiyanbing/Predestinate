@@ -21,6 +21,8 @@ import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ChineseFilter;
+import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.check.edit.custom.EditPopupWindow;
 import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -33,6 +35,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
     private ImageView user_head, user_head_vip, user_head_status;
     private TextView user_nick, user_id, iv_invite_code;
     private UserFragmentFunctionPanel functionPanel;
+    private LinearLayout user_tips;
     private View edit_top;
 
     private UserDetail myInfo;
@@ -53,12 +56,14 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         user_nick = (TextView) findViewById(R.id.user_nick);
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
+        user_tips = (LinearLayout) findViewById(R.id.tips_verify_mobile);
 
         //根据屏幕分辨率设置最大显示长度
         user_nick.setMaxEms(App.context.getResources().getDisplayMetrics().density <= 1.5 ? 5 : 7);
 
         user_head.setOnClickListener(this);
         user_nick.setOnClickListener(this);
+        user_tips.setOnClickListener(this);
         findViewById(R.id.iv_code_copy).setOnClickListener(this);
 
         LinearLayout function_container = (LinearLayout) findViewById(R.id.function_container);
@@ -77,8 +82,13 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         iv_invite_code.setText(String.format(getContext().getResources().
                 getString(R.string.center_my_invite_code), myInfo.getShareCode()));
         functionPanel.refreshView(myInfo);
-
         refreshHeader();
+
+        if (!myInfo.isVerifyCellphone()) {
+            user_tips.setVisibility(View.VISIBLE);
+            return;
+        }
+        user_tips.setVisibility(View.GONE);
     }
 
     private void refreshHeader() {
@@ -88,7 +98,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         }
 
         switch (myInfo.getAvatar_status()) {
-            case CenterConstant.USER_AVATAR_CHECKING:  // 审核中
+            case CenterConstant.USER_AVATAR_UNCHECKING:  // 审核中
                 user_head_status.setVisibility(View.VISIBLE);
                 ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_user_avatar_checking, user_head_status);
                 break;
@@ -123,6 +133,10 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
                 break;
             case R.id.iv_code_copy://复制邀请码
                 ChineseFilter.copyString(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getShareCode());
+                break;
+            case R.id.tips_verify_mobile:
+                UIShow.showPhoneVerifyAct((FragmentActivity) getContext(),
+                        MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE); //跳手机认证页面
                 break;
         }
     }

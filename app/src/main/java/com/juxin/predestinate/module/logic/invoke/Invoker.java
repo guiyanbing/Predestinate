@@ -236,21 +236,12 @@ public class Invoker {
         }
 
         // 播放音效，url为音频相对地址
-        // 具体查看音乐地址文档-> http://test.game.xiaoyouapp.cn:30081/static/assets/cutfruit/config/sounds.json
-        // 游戏名：fruit_ninja切水果      cashcow  红包来了
         public void play_sound(String data) {
             PLogger.d("---play_sound--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            //TODO 待配置文档
-//            if ("cashcow".equalsIgnoreCase(dataObject.optString("game"))) {
-//                PlayerPool.getInstance().playSound(AppCfg.ASet.getCashcow_asset_url() + dataObject.optString("url"));
-//            } else {
-//                if (dataObject.optInt("is_long") == 1) {//是否是长音频：0-不是，1-是
-//                    PlayerPool.getInstance().playBg(AppCfg.ASet.getBase_url() + dataObject.optString("url"));
-//                } else {
-//                    PlayerPool.getInstance().playSound(AppCfg.ASet.getBase_url() + dataObject.optString("url"));
-//                }
-//            }
+            // 该版本无此cmd
+            // dataObject.optString("game");
+            // dataObject.optInt("is_long");//是否是长音频：0-不是，1-是
         }
 
         // 结束当前游戏页面
@@ -366,7 +357,6 @@ public class Invoker {
             //跳转到应用内页面
             Activity act = appInterface.getAct();
             Activity context = (act == null ? (Activity) App.getActivity() : act);
-            //TODO
             switch (dataObject.optInt("code")) {
                 case 11://跳转到灵气说明页面
                     break;
@@ -375,6 +365,8 @@ public class Invoker {
                 case 31://跳转到购买体力页面
                     break;
                 case 41://跳转到掠夺记录页面
+                    break;
+                default:
                     break;
             }
         }
@@ -432,6 +424,8 @@ public class Invoker {
                     break;
                 case 5:
                     index = FinalKey.MAIN_TAB_5;
+                    break;
+                default:
                     break;
             }
             Activity act = appInterface.getAct();

@@ -1,42 +1,62 @@
 package com.juxin.predestinate.ui.discover;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
-import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.baseui.xlistview.XListView;
+import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
+import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
+import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.juxin.predestinate.R.id.say_hello_users_all_ignore;
+import static com.juxin.predestinate.module.logic.application.App.getActivity;
+
 /**
  * 打招呼的人
  * Created by zhang on 2017/5/22.
  */
 
-public class SayHelloUserAct extends BaseActivity implements ExListView.IXListViewListener, AdapterView.OnItemClickListener, PObserver {
+public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemClickListener, PObserver, XListView.IXListViewListener, View.OnClickListener, SwipeListView.OnSwipeItemClickedListener {
 
-    private CustomStatusListView customStatusListView;
-    private ExListView exListView;
+    private CustomFrameLayout customFrameLayout;
+    private SwipeListView exListView;
 
     private List<BaseMessage> data = new ArrayList<>();
 
     private SayHelloUserAdapter adapter;
 
+    private TextView mail_title_right_text;
+    private View bottom_view;
+    private Button del_btn, ignore_btn;
+    private boolean isGone = false;//是否首面底部，默认是false
+    private List<BaseMessage> delList = new ArrayList<>();
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        isCanBack(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_say_hello_user_act);
         initView();
@@ -47,17 +67,45 @@ public class SayHelloUserAct extends BaseActivity implements ExListView.IXListVi
     private void initView() {
         setTitle(getString(R.string.say_hello_user_act_title));
         setBackView();
-        customStatusListView = (CustomStatusListView) findViewById(R.id.say_hello_users_list);
+        onTitleRight();
+
+        customFrameLayout = (CustomFrameLayout) findViewById(R.id.say_hello_users_frame_layput);
+        customFrameLayout.setList(new int[]{R.id.say_hello_users_data, R.id.common_nodata});
+        exListView = (SwipeListView) findViewById(R.id.say_hello_users_list);
         View mViewTop = LayoutInflater.from(this).inflate(R.layout.layout_margintop, null);
-        exListView = customStatusListView.getExListView();
+        View listview_footer = LayoutInflater.from(getActivity()).inflate(R.layout.common_footer_distance, null);
         exListView.setPullLoadEnable(true);
         exListView.setPullLoadEnable(false);
         exListView.setXListViewListener(this);
         exListView.addHeaderView(mViewTop);
+        exListView.addFooterView(listview_footer);
         adapter = new SayHelloUserAdapter(this, data);
         exListView.setAdapter(adapter);
         exListView.setOnItemClickListener(this);
-        customStatusListView.showLoading();
+
+        exListView.setMenuCreator(new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                if (menu.getViewType() == 1) {
+                    menu.setTitle("忽略");
+                } else {
+                    menu.setTitle("删除");
+                }
+                menu.setTitleSize(18);
+                menu.setTitleColor(Color.WHITE);
+                menu.setViewHeight(adapter.getItemHeight());
+            }
+        });
+
+        exListView.setSwipeItemClickedListener(this);
+
+
+        bottom_view = findViewById(R.id.say_hello_users_bottom);
+        del_btn = (Button) findViewById(R.id.say_hello_users_delete);
+        ignore_btn = (Button) findViewById(say_hello_users_all_ignore);
+        del_btn.setOnClickListener(this);
+        ignore_btn.setOnClickListener(this);
+
     }
 
     private void initData() {
@@ -66,13 +114,74 @@ public class SayHelloUserAct extends BaseActivity implements ExListView.IXListVi
         }
         data.addAll(ModuleMgr.getChatListMgr().getGeetList());
         if (data.size() != 0) {
-            adapter.notifyDataSetChanged();
-            exListView.stopRefresh();
-            customStatusListView.showExListView();
+            showHasData();
         } else {
-            customStatusListView.showNoData();
+            showNoData();
         }
     }
+
+    private void onTitleRight() {
+        setTitleRightImgGone();
+        View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
+        mail_title_right_text = (TextView) title_right.findViewById(R.id.mail_title_right_text);
+        mail_title_right_text.setText("编辑");
+        setTitleRightContainer(title_right);
+        title_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTitleLeft();
+                if (!isGone) {
+                    editContent();
+                } else {
+                    cancleEdit();
+                }
+            }
+        });
+    }
+
+
+    private void onTitleLeft() {
+        if (!isGone) {
+            View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
+            title_left.findViewById(R.id.mail_title_left).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectAll();
+                }
+            });
+            setBackViewGone();
+            setTitleLeftContainer(title_left);
+        } else {
+            setTitleLeftContainerRemoveAll();
+            setBackView();
+        }
+    }
+
+
+    // 全选
+    public void selectAll() {
+        del_btn.setEnabled(true);
+        delList.addAll(adapter.getList());
+        exListView.selectAllChooseView();
+    }
+
+    public void cancleEdit() {
+        delList.clear();
+        del_btn.setEnabled(false);
+        exListView.smoothCloseChooseView();
+    }
+
+    public void editContent() {
+        delList.clear();
+        if (adapter.getList().size() > 0) {
+            exListView.smoothOpenChooseView();
+        } else {
+            setTitleLeftContainerRemoveAll();
+            PToast.showCenterShort("没有可编辑选项");
+            setBackView();
+        }
+    }
+
 
     @Override
     public void onRefresh() {
@@ -103,6 +212,94 @@ public class SayHelloUserAct extends BaseActivity implements ExListView.IXListVi
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 显示有数据状态
+     */
+    public void showHasData() {
+        adapter.notifyDataSetChanged();
+        exListView.stopRefresh();
+        customFrameLayout.show(R.id.say_hello_users_data);
+    }
+
+    /**
+     * 显示无数据状态
+     */
+    public void showNoData() {
+        customFrameLayout.show(R.id.common_nodata);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.say_hello_users_delete:
+                del_btn.setEnabled(false);
+                ModuleMgr.getChatListMgr().deleteBatchMessage(delList);
+                delList.clear();
+                setTitleLeftContainerRemoveAll();
+                setBackView();
+                exListView.smoothCloseChooseView();
+                break;
+            case R.id.say_hello_users_all_ignore:
+                //忽略所有未读消息
+                PickerDialogUtil.showSimpleAlertDialog(this, new SimpleTipDialog.ConfirmListener() {
+                    @Override
+                    public void onCancel() {
+                    }
+
+                    @Override
+                    public void onSubmit() {
+                        setTitleLeftContainerRemoveAll();
+                        setBackView();
+                        ModuleMgr.getChatListMgr().updateToBatchRead(data);
+                        exListView.smoothCloseChooseView();
+                        PToast.showShort("忽略成功!");
+                    }
+                }, "忽略未读消息,但消息不会删除.", "忽略消息");
+                break;
+        }
+    }
+
+    @Override
+    public void onSwipeChooseOpened() {
+        bottom_view.setVisibility(View.VISIBLE);
+        mail_title_right_text.setText("取消");
+        isGone = true;
+    }
+
+    @Override
+    public void onSwipeChooseClosed() {
+        bottom_view.setVisibility(View.GONE);
+        mail_title_right_text.setText("编辑");
+        isGone = false;
+    }
+
+    @Override
+    public void onSwipeChooseChecked(int position, boolean isChecked) {
+        int size = adapter.getList().size();
+        if (size <= 0 || position >= size) {
+            return;
+        }
+        BaseMessage message = adapter.getItem(position);
+        if (isChecked) {
+            delList.add(message);
+        } else {
+            delList.remove(message);
+        }
+        del_btn.setEnabled(delList.size() > 0);
+    }
+
+    @Override
+    public void onSwipeMenuClick(int position, SwipeMenu swipeMenu, View contentView) {
+        List<BaseMessage> baseMessageList = adapter.getList();
+        final BaseMessage item = baseMessageList.get(position);
+        if (item != null) {
+            MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
+            if (mailMsgID == null) {
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+            }
         }
     }
 }

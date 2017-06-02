@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -18,18 +19,26 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -99,7 +108,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public void updateListMsg(List<BaseMessage> messages) {
+    public synchronized void updateListMsg(List<BaseMessage> messages) {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
@@ -107,7 +116,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
+                if (tmp.isRu() || tmp.getLWhisperID() == MailSpecialID.customerService.getSpecialID()) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
@@ -185,14 +194,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         for (BaseMessage temp : messageList) {
             dbCenter.deleteMessage(temp.getLWhisperID());
         }
-        //  getWhisperList();
     }
 
     public long deleteMessage(long userID) {
         long ret = dbCenter.deleteMessage(userID);
-        if (ret != MessageConstant.ERROR) {
-            //  getWhisperList();
-        }
         return ret;
     }
 
@@ -203,11 +208,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public long deleteFmessage(long userID) {
-        long ret = dbCenter.getCenterFMessage().delete(userID);
-        if (ret != MessageConstant.ERROR) {
-            //    getWhisperList();
-        }
-        return ret;
+        long ret = dbCenter.getCenterFLetter().updateContent(String.valueOf(userID));
+        if (ret == MessageConstant.ERROR) return ret;
+        return dbCenter.getCenterFMessage().delete(userID);
     }
 
     /**
@@ -215,9 +218,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
-//        if (ret != MessageConstant.ERROR) {
-//            getWhisperList();
-//        }
+        if (ret != MessageConstant.ERROR) {
+            getWhisperList();
+        }
     }
 
     public void updateToBatchRead(List<BaseMessage> greetList) {
@@ -228,18 +231,23 @@ public class ChatListMgr implements ModuleBase, PObserver {
         getWhisperList();
     }
 
-    public long updateToRead(long userID) {
-        return dbCenter.getCenterFMessage().updateToRead(userID);
-    }
-
-    public void updateToRead(String channelID, String userID) {
-        dbCenter.updateToRead(channelID, userID);
+    /**
+     * 更新私聊列表状态
+     * @param userID
+     * @return
+     */
+    public long updateToReadPrivate(long userID) {
+        long ret = dbCenter.getCenterFLetter().updateStatus(userID);
+        if(ret != MessageConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
     }
 
     public void getWhisperList() {
-        PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
+        listObservable.observeOn(AndroidSchedulers.mainThread());
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {
@@ -257,7 +265,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 Map<String, Object> msgMap = (Map<String, Object>) value;
                 String Msg_Name_Key = (String) msgMap.get(UnreadMgr.Msg_Name_Key);
                 if(Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)){
-                    getWhisperList();
+                    ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
+                        @Override
+                        public void onRequestComplete(HttpResponse response) {
+                            getWhisperList();
+                        }
+                    });
                 }
                 break;
             case MsgType.MT_App_Login:

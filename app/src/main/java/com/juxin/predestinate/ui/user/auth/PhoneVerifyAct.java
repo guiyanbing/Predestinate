@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
@@ -19,8 +20,9 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.UIShow;
+
+import org.json.JSONObject;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
@@ -34,7 +36,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
 
     private EditText edtPhone, et_code;
     private Button bt_send_code, btnok;
-
+    private TextView tv_customerservice_desc, tv_customerservice_phone;
 
     // byIQQ phone fare
     private String phone, code;
@@ -88,18 +90,25 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     }
 
     private void initView() {
+        tv_customerservice_desc = (TextView) findViewById(R.id.tv_customerservice_desc);
+        tv_customerservice_phone = (TextView) findViewById(R.id.tv_customerservice_phone);
         edtPhone = (EditText) this.findViewById(R.id.edt_phoneverify_phone);
         et_code = (EditText) this.findViewById(R.id.edt_phoneverify_note);
         bt_send_code = (Button) this.findViewById(R.id.btn_phoneverify_begin);
         btnok = (Button) this.findViewById(R.id.btn_phoneverify_ok);
         bt_send_code.setOnClickListener(this);
         btnok.setOnClickListener(this);
-
+        findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
+        tv_customerservice_desc.setText(getResources().getString(R.string.txt_customerservice_bind_desc));
+        tv_customerservice_phone.setText("0731-1231124444");//TODO 获取客服手机
     }
 
 
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ll_open_qq_btn://在线客服qq交流
+                ModuleMgr.getCommonMgr().getCustomerserviceQQ(PhoneVerifyAct.this);
+                break;
             case R.id.btn_phoneverify_begin:
                 if (validPhone()) {
                     ModuleMgr.getCenterMgr().reqVerifyCodeEx(phone, this);
@@ -111,6 +120,8 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                     ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                 }
+                break;
+            default:
                 break;
         }
 
@@ -144,7 +155,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         LoadingDialog.closeLoadingDialog();
         if (response.getUrlParam() == UrlParam.reqReqVerifyCode) {
             if (!response.isOk()) {
-                PToast.showLong(CommonUtil.getErrorMsg(response.getMsg()));
+                PToast.showLong(response.getMsg());
                 bt_send_code.setEnabled(true);
                 return;
             }
@@ -155,10 +166,9 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 sendthread = new SendEnableThread();
                 sendthread.start();
             }
-        } else if (response.getUrlParam() == UrlParam.mobileAuth)
-        {
+        } else if (response.getUrlParam() == UrlParam.mobileAuth) {
             if (!response.isOk()) {
-                PToast.showLong(CommonUtil.getErrorMsg(response.getMsg()));
+                PToast.showLong(response.getMsg());
                 return;
             }
             PToast.showShort(getResources().getString(R.string.toast_mobile_authok));

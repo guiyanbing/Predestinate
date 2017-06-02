@@ -1,16 +1,14 @@
 package com.juxin.predestinate.module.local.common;
 
+import android.content.Context;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
@@ -31,17 +29,14 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -60,8 +55,6 @@ public class CommonMgr implements ModuleBase {
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
-
-    private int friendNum = 0;
 
     @Override
     public void init() {
@@ -188,9 +181,7 @@ public class CommonMgr implements ModuleBase {
                     requestVideochatConfig();
                     return;
                 }
-                JSONObject json = response.getResponseJson();
-                if (json != null)
-                    PToast.showShort(CommonUtil.getErrorMsg(json.optString("msg")));
+                PToast.showShort(response.getMsg());
             }
         });
     }
@@ -203,6 +194,26 @@ public class CommonMgr implements ModuleBase {
         post_param.put("imgurl", imgUrl);
         post_param.put("videourl", videoUrl);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
+    }
+
+    /**
+     * 获取客服qq
+     */
+    public void getCustomerserviceQQ(final FragmentActivity context) {
+        LoadingDialog.show(context);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                LoadingDialog.closeLoadingDialog();
+                if (!response.isOk()) {
+                    PToast.showShort(response.getMsg());
+                    return;
+                }
+                JSONObject jsonObject = response.getResponseJson();
+                String qq = jsonObject.optString("qq");
+                UIShow.showQQService(context, qq);
+            }
+        });
     }
 
     /**
@@ -418,15 +429,19 @@ public class CommonMgr implements ModuleBase {
         return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
+    private SayHelloDialog sayHelloDialog = new SayHelloDialog();
+
     /**
      * 显示一键打招呼对话框
      *
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
+        if (sayHelloDialog.isShowing()) {
+            return;
+        }
         PLogger.d("showSayHelloDialog === isVip = " + ModuleMgr.getCenterMgr().getMyInfo().isVip());
         if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
-
             getSayHiList(new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
@@ -434,46 +449,12 @@ public class CommonMgr implements ModuleBase {
                     if (response.isOk()) {
                         UserInfoLightweightList list = new UserInfoLightweightList();
                         list.parseJsonSayhi(response.getResponseString());
-                        SayHelloDialog sayHelloDialog = new SayHelloDialog();
                         sayHelloDialog.showDialog(context);
                         sayHelloDialog.setData(list.getLightweightLists());
                     }
                 }
             });
         }
-    }
-
-
-    /**
-     * 请求好友数据  发出更新好友条数通知
-     */
-    public void getFriendsSize() {
-        getMyFriends(1, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    if (!response.isCache()) {
-                        UserInfoLightweightList lightweightList = new UserInfoLightweightList();
-                        lightweightList.parseJsonFriends(response.getResponseString());
-                        setFriendNum(lightweightList.getTotalcnt());
-                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice, getFriendNum());
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * 获取好友数量
-     *
-     * @return
-     */
-    public int getFriendNum() {
-        return friendNum;
-    }
-
-    public void setFriendNum(int friendNum) {
-        this.friendNum = friendNum;
     }
 
 
@@ -1048,5 +1029,11 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> postParms = new HashMap<>();
         postParms.put("uids", uids.toArray(new Long[uids.size()]));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserInfoSummary, postParms, complete);
+    }
+
+    public void checkycoin(RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("uid", App.uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkycoin, getParms, complete);
     }
 }

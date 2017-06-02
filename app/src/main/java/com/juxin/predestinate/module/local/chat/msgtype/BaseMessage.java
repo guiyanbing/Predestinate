@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
@@ -15,7 +14,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -424,14 +422,6 @@ public class BaseMessage implements IBaseMessage {
         this.kfID = kfID;
     }
 
-    /**
-     * 是否是机器人
-     *
-     * @return ture是机器人
-     */
-//    public boolean isKF_ID() {
-//        return ModuleMgr.getCenterMgr().isRobot(getKf_id());
-//    }
     public int getVersion() {
         return version;
     }
@@ -679,26 +669,30 @@ public class BaseMessage implements IBaseMessage {
                     String img = commonMessage.getImg();
                     String localImg = commonMessage.getLocalImg();
                     if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
-                        result = "[视频消息]";
+                        result = "[视频]";
                     } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
-                        result = "[语音消息]";
+                        result = "[语音]";
                     } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
-                        result = "[图片消息]";
+                        result = "[图片]";
                     }
                 }
                 break;
             case video: {
                 VideoMessage videoMessage = (VideoMessage) msg;
+                boolean sender = videoMessage.getStatus() == MessageConstant.OK_STATUS ||
+                        videoMessage.getStatus() == MessageConstant.FAIL_STATUS ||  videoMessage.getStatus() == MessageConstant.SENDING_STATUS;
                 result = VideoMessage.transLastStatusText(videoMessage.getEmLastStatus(),
-                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), videoMessage.isSender());
+                        TimeUtil.getFormatTimeChatTip(TimeUtil.onPad(videoMessage.getTime())), sender);
                 break;
             }
             case hint:
             case html://html消息
             case htmlText:
+                result = msg.getMsgDesc();
+                break;
             case gift:
             case wantGift:
-                result = msg.getMsgDesc();
+                result = "[礼物]";
                 break;
             case sys:
                 String content1 = msg.getMsgDesc();

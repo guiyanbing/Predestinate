@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.input;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
-
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;

@@ -19,7 +19,6 @@ import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.CommonUtil;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.edit.EditKey;
@@ -101,7 +100,7 @@ public class UserEditDetailInfoPanel extends BasePanel implements RequestComplet
                                 String value = year + "-" + month + "-" + day;
                                 HashMap<String, Object> postParams = new HashMap<>();
                                 postParams.put(EditKey.s_key_birth, value);
-                                String starValueTmp = CommonUtil.getStar(TypeConvertUtil.toInt(month), TypeConvertUtil.toInt(day));
+                                String starValueTmp = ModuleMgr.getCenterMgr().getStar(TypeConvertUtil.toInt(month), TypeConvertUtil.toInt(day));
                                 if (!starValue.equals(starValueTmp) || starValue != starValueTmp) {
                                     postParams.put(EditKey.s_key_star, starConfig.getSubmitWithShow(starValueTmp));
                                 }

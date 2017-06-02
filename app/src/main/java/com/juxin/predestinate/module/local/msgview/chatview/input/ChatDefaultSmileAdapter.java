@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import java.util.List;
@@ -19,8 +21,7 @@ public class ChatDefaultSmileAdapter extends ExBaseAdapter<EmojiPack.EmojiItem> 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder vh = null;
-
+        ViewHolder vh ;
         if (convertView == null) {
             vh = new ViewHolder();
             convertView = inflate(R.layout.p1_chat_smile_grid_item);
@@ -35,6 +36,7 @@ public class ChatDefaultSmileAdapter extends ExBaseAdapter<EmojiPack.EmojiItem> 
         EmojiPack.EmojiItem smileItem = getItem(position);
 
         vh.smile.setTag(smileItem.key);
+        PLogger.printObject("smileItem.resId=" + smileItem.resId);
         vh.smile.setImageResource(smileItem.resId);
         return convertView;
     }

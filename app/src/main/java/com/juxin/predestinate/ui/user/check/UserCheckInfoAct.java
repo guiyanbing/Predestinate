@@ -3,7 +3,6 @@ package com.juxin.predestinate.ui.user.check;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -217,9 +216,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             switch (resultCode) {
                 case CenterConstant.USER_SET_RESULT_CODE:
                     String remark = data.getStringExtra("remark");
-                    if (TextUtils.isEmpty(remark)) return;
-                    setTitle(remark);
                     userDetail.setRemark(remark);
+                    setTitle(userDetail.getShowName());
                     footPanel.refreshView(userDetail);
                     //更新缓存
                     AttentionUtil.updateUserDetails(userDetail);
@@ -259,7 +257,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                 break;
 
             case MsgType.MT_SEND_GIFT_FLAG:
-                if(!Constant.GIFT_INFO.equals((String) value)) return;
+                if (!Constant.GIFT_INFO.equals((String) value)) return;
                 PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, false);
                 mGiftTipsContainerV.setVisibility(View.GONE);
                 break;

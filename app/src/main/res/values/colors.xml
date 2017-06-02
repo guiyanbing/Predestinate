@@ -141,6 +141,10 @@
     <color name="color_62BFDE">#62BFDE</color>
     <color name="color_D1D1D1">#D1D1D1</color>
     <color name="color_75CD81">#75CD81</color>
+    <color name="color_FC828A">#FC828A</color>
+    <color name="color_F6EDEF">#F6EDEF</color>
+    <color name="color_89B3FA">#89B3FA</color>
+    <color name="color_F7D0D4">#F7D0D4</color>
 
     <color name="color_ff4d79">#ff4d79</color>
     <color name="color_e6c2aa">#e6c2aa</color>
@@ -267,7 +271,7 @@
     <color name="user_text_blue">#83a0ec</color>
     <color name="user_text_gray_bottom">#d4d4d4</color>
     <color name="txt_authing">#FFC333</color>
-
+<color name="txt_customerservice_phone">#FD7093</color>
     <!--聊天顶部跑马灯, 男默认字体是白色，女黑色-->
     <color name="lmarquee_boy_bg">#f87da7</color>
     <color name="lmarquee_boy_nick">#fff999</color>
