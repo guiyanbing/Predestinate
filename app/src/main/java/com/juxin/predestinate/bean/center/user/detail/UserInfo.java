@@ -554,6 +554,7 @@ public class UserInfo extends UserBasic {
         dest.writeByte(this.miss_info ? (byte) 1 : (byte) 0);
         dest.writeInt(this.videoAuth);
         dest.writeInt(this.ycoin);
+        dest.writeString(this.yCoinUserid);
         dest.writeInt(this.topN);
         dest.writeInt(this.group);
         dest.writeInt(this.validation_status);
@@ -599,6 +600,7 @@ public class UserInfo extends UserBasic {
         this.miss_info = in.readByte() != 0;
         this.videoAuth = in.readInt();
         this.ycoin = in.readInt();
+        this.yCoinUserid = in.readString();
         this.topN = in.readInt();
         this.group = in.readInt();
         this.validation_status = in.readInt();
