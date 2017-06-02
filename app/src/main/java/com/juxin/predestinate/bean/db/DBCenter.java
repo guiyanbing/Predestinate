@@ -61,6 +61,23 @@ public class DBCenter {
         return centerFmessage.insertMsg(baseMessage);
     }
 
+    /**
+     * 更新
+     * @param baseMessage
+     * @return
+     */
+    public long updateMsg(BaseMessage baseMessage) {
+        String userID = baseMessage.getWhisperID();
+        if (TextUtils.isEmpty(userID)) return MessageConstant.ERROR;
+
+        if(BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()){
+            long ret = centerFLetter.updateStatus(userID, baseMessage.getStatus());
+            if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+        }
+
+        return centerFmessage.updateMsg(baseMessage);
+    }
+
     public DBCenterFLetter getCenterFLetter() {
         return centerFLetter;
     }
