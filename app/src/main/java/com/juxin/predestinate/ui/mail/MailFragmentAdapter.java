@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -13,6 +14,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,10 +70,8 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         baseMessage.setName("我的好友");
-        int friendNum = ModuleMgr.getCommonMgr().getFriendNum();
-        int tempfriendNum = ModuleMgr.getCenterMgr().getMyInfo().getGiftfriendscnt();
-        baseMessage.setAboutme((friendNum == 0 && tempfriendNum == 0) ? "赠送礼物即可成为好友" :
-                "共有" + ((tempfriendNum > friendNum) ? tempfriendNum : friendNum) + "位好友");
+        int friendNum = ModuleMgr.getCenterMgr().getMyInfo().getGiftfriendscnt();
+        baseMessage.setAboutme(friendNum == 0 ? "赠送礼物即可成为好友" : "共有" + friendNum + "位好友");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw02_ico);
         messageLists.add(baseMessage);
 
