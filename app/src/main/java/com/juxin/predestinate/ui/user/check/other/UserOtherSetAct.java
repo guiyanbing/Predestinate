@@ -73,7 +73,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         findViewById(R.id.rl_complain).setOnClickListener(listener);
         findViewById(R.id.ll_edit).setOnClickListener(listener);
 
-        ImageLoader.loadRoundCorners(this, userDetail.getAvatar(), 8, user_head);
+        ImageLoader.loadRoundAvatar(this, userDetail.getAvatar(), user_head);
         user_nick.setText(userDetail.getNickname());
         user_id.setText("ID: " + userDetail.getUid());
         user_remark.setText(userDetail.getRemark());

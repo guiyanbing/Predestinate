@@ -85,7 +85,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
             }
         }
 
-        ImageLoader.loadRoundCorners(getContext(), userDetail.getAvatar(), 10, img_header);
+        ImageLoader.loadRoundAvatar(getContext(), userDetail.getAvatar(), img_header, 10);
         if (userDetail.isMan()) {
             rl_header.setBackgroundColor(getContext().getResources().getColor(R.color.picker_blue_color));
             img_gender.setImageResource(R.drawable.f1_sex_male_2);

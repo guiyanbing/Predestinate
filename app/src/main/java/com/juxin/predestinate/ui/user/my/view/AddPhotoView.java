@@ -70,7 +70,7 @@ public class AddPhotoView extends LinearLayout implements View.OnClickListener, 
      */
     public void setImg(String url){
         tvTip.setVisibility(View.INVISIBLE);
-        ImageLoader.loadRoundCorners(getContext(), url, 8, imgPhoto);
+        ImageLoader.loadRound(getContext(), url, imgPhoto);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class AddPhotoView extends LinearLayout implements View.OnClickListener, 
                     tvTip.setVisibility(View.INVISIBLE);
                     AddPhotoView.this.setBackgroundResource(R.color.transparent);
                     JSONObject jsonObject = JsonUtil.getJsonObject(response.getResponseString());
-                    ImageLoader.loadRoundCorners(getContext(), jsonObject.optString("file_path"), 8, imgPhoto);
+                    ImageLoader.loadRound(getContext(), jsonObject.optString("file_path"), imgPhoto);
                     strPath = jsonObject.optString("big_path");
                 }else {
                     PToast.showShort(response.getMsg()+"");

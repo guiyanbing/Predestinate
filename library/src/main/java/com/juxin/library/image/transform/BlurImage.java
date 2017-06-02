@@ -62,10 +62,9 @@ public class BlurImage implements Transformation<Bitmap> {
         int scaledWidth = width / mSampling;
         int scaledHeight = height / mSampling;
 
-        Bitmap bitmap = mBitmapPool.get(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
-        if (bitmap == null) {
-            bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
-        }
+        Bitmap bitmap = mBitmapPool.get(scaledWidth, scaledHeight, Bitmap.Config.RGB_565);
+        if (bitmap == null)
+            bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.RGB_565);
 
         Canvas canvas = new Canvas(bitmap);
         canvas.scale(1 / (float) mSampling, 1 / (float) mSampling);

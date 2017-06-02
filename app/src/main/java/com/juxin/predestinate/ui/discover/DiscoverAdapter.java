@@ -48,7 +48,7 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
 
         final UserInfoLightweight userInfo = getItem(position);
-        ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
+        ImageLoader.loadRoundAvatar(getContext(), userInfo.getAvatar(), holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(userInfo.getGroup()) ? View.VISIBLE : View.GONE);
 
@@ -130,48 +130,18 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id())) {
-
+            if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                showSayHello(holder, userInfo, position);
+            } else {
+                showOnline(holder, userInfo);
             }
-        }
-
-
-        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
-            holder.btn_sayhi.setVisibility(View.GONE);
-            holder.tv_online_state.setVisibility(View.VISIBLE);
-            holder.tv_online_state.setText(userInfo.isOnline() ? "在线" : userInfo.getLast_onLine());
         } else {
-            holder.tv_online_state.setVisibility(View.GONE);
-            holder.btn_sayhi.setVisibility(View.VISIBLE);
-            holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
-            if (!userInfo.isSayHello()) {
-                holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
-                            ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
-                                    getContext().getString(R.string.say_hello_txt),
-                                    userInfo.getKf_id(),
-                                    ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                            Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
-                                        @Override
-                                        public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                            PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
-                                            getItem(position).setSayHello(true);
-                                            notifyDataSetChanged();
-                                        }
-
-                                        @Override
-                                        public void onSendFailed(NetData data) {
-                                            PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
-                                        }
-                                    });
-                        }
-                    }
-                });
+            if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                showOnline(holder, userInfo);
+            } else {
+                showSayHello(holder, userInfo, position);
             }
         }
-
 
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +157,57 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             }
         });
         return convertView;
+    }
+
+    /**
+     * 显示在线状态
+     *
+     * @param holder
+     * @param userInfo
+     */
+    private void showOnline(MyViewHolder holder, UserInfoLightweight userInfo) {
+        holder.btn_sayhi.setVisibility(View.GONE);
+        holder.tv_online_state.setVisibility(View.VISIBLE);
+        holder.tv_online_state.setText(userInfo.isOnline() ? "在线" : userInfo.getLast_onLine());
+    }
+
+    /**
+     * 显示打招呼
+     *
+     * @param holder
+     * @param userInfo
+     * @param position
+     */
+    private void showSayHello(MyViewHolder holder, final UserInfoLightweight userInfo, final int position) {
+        holder.tv_online_state.setVisibility(View.GONE);
+        holder.btn_sayhi.setVisibility(View.VISIBLE);
+        holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
+        if (!userInfo.isSayHello()) {
+            holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
+                        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
+                                getContext().getString(R.string.say_hello_txt),
+                                userInfo.getKf_id(),
+                                ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
+                                        Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                                    @Override
+                                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                                        PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
+                                        getItem(position).setSayHello(true);
+                                        notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onSendFailed(NetData data) {
+                                        PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
+                                    }
+                                });
+                    }
+                }
+            });
+        }
     }
 
 
