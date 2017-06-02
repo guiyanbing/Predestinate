@@ -72,6 +72,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initFragment();
         initData();
         initListenerAndRequest();
+        showSayHelloDialog();
     }
 
     private void initData() {
@@ -181,6 +182,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     };
 
+    private void showSayHelloDialog() {
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                ModuleMgr.getCommonMgr().showSayHelloDialog(MainActivity.this);
+            }
+        }, 3000);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -278,9 +288,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
                     }
                 }, 200);
-                break;
-            case MsgType.MT_MyInfo_Change:
-                ModuleMgr.getCommonMgr().showSayHelloDialog(this);
                 break;
             default:
                 break;

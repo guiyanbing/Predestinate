@@ -45,7 +45,7 @@ public class UserInfoLightweightList extends BaseData {
             JSONArray jsonArray = object.optJSONArray("list");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
             if (object.has("ref")) {
-                setRef(object.optInt("ref") == 1);
+                setRef(object.optBoolean("ref"));
             }
         }
     }

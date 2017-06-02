@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.discover;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,6 +45,8 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
     private ImageView iv_small3;
     private ImageView iv_small;
 
+    private boolean isShowing = false;
+
     public SayHelloDialog() {
         settWindowAnimations(R.style.AnimScaleInScaleOutOverShoot);
         setGravity(Gravity.CENTER);
@@ -57,6 +60,7 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
         setContentView(R.layout.f1_sayhello_dialog);
         initView();
         initData();
+        setShowing(true);
         return getContentView();
     }
 
@@ -148,5 +152,19 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
     public void setData(List<UserInfoLightweight> data) {
         this.data = data;
         this.tmp.addAll(data);
+    }
+
+    public boolean isShowing() {
+        return isShowing;
+    }
+
+    public void setShowing(boolean showing) {
+        isShowing = showing;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        setShowing(false);
     }
 }

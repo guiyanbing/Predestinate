@@ -19,7 +19,6 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.module.local.location.LocationMgr;
-import com.juxin.predestinate.module.local.pay.CheckYCoinBean;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -421,15 +420,19 @@ public class CommonMgr implements ModuleBase {
         return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
+    private SayHelloDialog sayHelloDialog = new SayHelloDialog();
+
     /**
      * 显示一键打招呼对话框
      *
      * @param context
      */
     public void showSayHelloDialog(final FragmentActivity context) {
+        if (sayHelloDialog.isShowing()) {
+            return;
+        }
         PLogger.d("showSayHelloDialog === isVip = " + ModuleMgr.getCenterMgr().getMyInfo().isVip());
         if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
-
             getSayHiList(new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
@@ -437,7 +440,6 @@ public class CommonMgr implements ModuleBase {
                     if (response.isOk()) {
                         UserInfoLightweightList list = new UserInfoLightweightList();
                         list.parseJsonSayhi(response.getResponseString());
-                        SayHelloDialog sayHelloDialog = new SayHelloDialog();
                         sayHelloDialog.showDialog(context);
                         sayHelloDialog.setData(list.getLightweightLists());
                     }
