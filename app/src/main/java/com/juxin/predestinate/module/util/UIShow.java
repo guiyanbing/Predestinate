@@ -342,6 +342,7 @@ public class UIShow {
      */
     private static void showCheckOtherInfoAct(final Context context, long uid, final int channel, UserDetail userProfile) {
         if (userProfile != null) {
+            AttentionUtil.updateUserDetails(userProfile);
             skipCheckOtherInfoAct(context, channel, userProfile);
             return;
         }
@@ -990,9 +991,10 @@ public class UIShow {
                 public void onRequestGiftListCallback(boolean isOk) {
                     LoadingDialog.closeLoadingDialog();
                     if (isOk) {
-                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null) {
+                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
                             dialog = new BottomGiftDialog();
                             dialog.setToId(to_id);
+                            dialog.setCtx(context);
                             dialog.showDialog((FragmentActivity) context);
                         }
                     } else {
