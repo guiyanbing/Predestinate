@@ -49,6 +49,7 @@ public class UserInfo extends UserBasic {
     private String online_text;     // 在线时间 "七天前在线"
     private boolean isSayHello;     // 是否已打招呼
     private String remark;          // 备注名
+    private int videopopularity;    // 私密视频人气值
 
     // 个人空间
     private String datingfor;       // 目的，交友意向
@@ -129,6 +130,7 @@ public class UserInfo extends UserBasic {
         // V
         this.setVideoAuth(detailObject.optInt("video_auth"));
         this.setValidation_status(detailObject.optInt("validation_status"));
+        this.setVideopopularity(detailObject.optInt("videopopularity"));
 
         // W
         this.setWeChat(detailObject.optString("wechat"));
@@ -210,6 +212,14 @@ public class UserInfo extends UserBasic {
             return;
         }
         mobile_validation = 0;
+    }
+
+    public int getVideopopularity() {
+        return videopopularity;
+    }
+
+    public void setVideopopularity(int videopopularity) {
+        this.videopopularity = videopopularity;
     }
 
     public int getGiftfriendscnt() {
@@ -553,6 +563,7 @@ public class UserInfo extends UserBasic {
         dest.writeString(this.online_text);
         dest.writeByte(this.isSayHello ? (byte) 1 : (byte) 0);
         dest.writeString(this.remark);
+        dest.writeInt(this.videopopularity);
         dest.writeString(this.datingfor);
         dest.writeString(this.concept);
         dest.writeString(this.favplace);
@@ -597,6 +608,7 @@ public class UserInfo extends UserBasic {
         this.online_text = in.readString();
         this.isSayHello = in.readByte() != 0;
         this.remark = in.readString();
+        this.videopopularity = in.readInt();
         this.datingfor = in.readString();
         this.concept = in.readString();
         this.favplace = in.readString();
