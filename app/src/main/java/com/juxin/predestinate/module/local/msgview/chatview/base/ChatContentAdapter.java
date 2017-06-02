@@ -365,11 +365,11 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
+            ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             if (infoLightweight != null) {
                 ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
-                ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             }
         }
 
