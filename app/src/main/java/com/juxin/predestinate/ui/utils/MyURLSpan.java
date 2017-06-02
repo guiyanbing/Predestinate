@@ -11,6 +11,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
+
 import com.juxin.library.request.DownloadListener;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.ApkUnit;
@@ -19,10 +20,11 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 
 /**
+ * 对TextView设置显示文字及html展示点击行为
  * Created by siow on 2017/5/8.
  */
-
 public class MyURLSpan extends ClickableSpan {
+
     private final static int URL_TYPE_UPLOAD_HEADPIC = 1;
     private final static int URL_TYPE_COMPLETE_INFO = 2;
     private final static int URL_TYPE_BIND_PHONE = 3;
@@ -31,7 +33,19 @@ public class MyURLSpan extends ClickableSpan {
 
     private String mUrl;
 
-    public static void addClickToTextViewLinkEx(Context mContext, TextView tv, String content) {
+    private MyURLSpan(Context mContext, String url) {
+        mUrl = url;
+        this.mContext = mContext;
+    }
+
+    /**
+     * 设置TextView文字展示及其html格式内容点击行为
+     *
+     * @param mContext 上下文
+     * @param tv       需要设置html点击效果展示的TextView
+     * @param content  TextView展示的文字
+     */
+    public static void addClickToTextViewLink(Context mContext, TextView tv, String content) {
         tv.setText(Html.fromHtml(content + ""));
         tv.setMovementMethod(LinkMovementMethod.getInstance());
         CharSequence linkContent = tv.getText();
@@ -40,20 +54,13 @@ public class MyURLSpan extends ClickableSpan {
             Spannable sp = (Spannable) linkContent;
             URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
             SpannableStringBuilder style = new SpannableStringBuilder(linkContent);
-            //style.clearSpans();//should clear old spans
             for (URLSpan url : urls) {
                 style.removeSpan(url);
                 MyURLSpan myURLSpan = new MyURLSpan(mContext, url.getURL());
                 style.setSpan(myURLSpan, sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            //     style = FaceFormat.formatTextToFace(mContext, style);
             tv.setText(style);
         }
-    }
-
-    private MyURLSpan(Context mContext, String url) {
-        mUrl = url;
-        this.mContext = mContext;
     }
 
     @Override
