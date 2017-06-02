@@ -788,7 +788,6 @@ public class ChatMgr implements ModuleBase {
     private Map<Long, ChatMsgInterface.InfoComplete> infoMap = new HashMap<>();
 
     public void getUserInfoLightweight(final long uid, final ChatMsgInterface.InfoComplete infoComplete) {
-        PLogger.printObject("getUserInfoLightweight");
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
@@ -796,11 +795,16 @@ public class ChatMgr implements ModuleBase {
                 @Override
                 public void call(UserInfoLightweight lightweight) {
                     PLogger.printObject("lightweight==222==" + lightweight);
+                    if(lightweight.getUid() <= 0){
+                        removeInfoComplete(false, false, uid, lightweight);
+                        getProFile(uid);
+                        return;
+                    }
                     long infoTime = lightweight.getTime();
-                    if (lightweight.getUid() > 0 && infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
+                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
                         removeInfoComplete(true, true, uid, lightweight);
                     } else {
-                        removeInfoComplete(false, false, uid, lightweight);
+                        removeInfoComplete(false, true, uid, lightweight);
                         getProFile(uid);
                     }
                 }
@@ -853,10 +857,6 @@ public class ChatMgr implements ModuleBase {
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
 
                     boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
-                    if (ret) {
-                        //       ModuleMgr.getChatListMgr().getWhisperList();
-                    }
-
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                 }
             }
