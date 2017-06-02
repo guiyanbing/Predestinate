@@ -168,10 +168,12 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             case 1:
             case 10:
                 item_last_status.setText("送达");
+                item_last_status.setBackgroundResource(R.drawable.f1_mail_item_delivery);
                 break;
 
             case 2: // 发送失败
                 item_last_status.setText("失败");
+                item_last_status.setBackgroundResource(R.drawable.f1_mail_item_fall);
                 break;
 
             case 3: // 发送中
@@ -180,6 +182,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
             case 11: // 已读
                 item_last_status.setText("已读");
+                item_last_status.setBackgroundResource(R.drawable.f1_mail_item_read);
                 break;
 
             case 12: // 审核未通过
