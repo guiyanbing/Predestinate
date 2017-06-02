@@ -284,7 +284,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         public void adjustMargin(BaseMessage msgData, boolean sender) {
             ViewGroup layoutVG;
-
             if (sender) {
                 layoutVG = (ViewGroup) parent.findViewById(R.id.chat_item_right_layout);
 

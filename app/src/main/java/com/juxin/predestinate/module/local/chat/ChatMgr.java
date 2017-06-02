@@ -583,9 +583,9 @@ public class ChatMgr implements ModuleBase {
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
-        if(videoMessage.isSender()){
+        if (videoMessage.isSender()) {
             videoMessage.setStatus(MessageConstant.OK_STATUS);
-        }else {
+        } else {
             videoMessage.setStatus(MessageConstant.READ_STATUS);
         }
 
@@ -634,12 +634,12 @@ public class ChatMgr implements ModuleBase {
             ModuleMgr.getChatListMgr().getWhisperList();
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
-            sendMailReadedMsg(channelID,Long.valueOf(whisperID));
+            sendMailReadedMsg(channelID, Long.valueOf(whisperID));
         return observable;
     }
 
-    public void sendMailReadedMsg(String channelID,long userID){
-        sendMailReadedMsg(channelID,userID, new IMProxy.SendCallBack() {
+    public void sendMailReadedMsg(String channelID, long userID) {
+        sendMailReadedMsg(channelID, userID, new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                 MessageRet messageRet = new MessageRet();
@@ -791,7 +791,7 @@ public class ChatMgr implements ModuleBase {
                 @Override
                 public void call(UserInfoLightweight lightweight) {
                     PLogger.printObject("lightweight==222==" + lightweight);
-                    if(lightweight.getUid() <= 0){
+                    if (lightweight.getUid() <= 0) {
                         removeInfoComplete(false, false, uid, lightweight);
                         getProFile(uid);
                         return;
@@ -837,12 +837,10 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-
     public void getProFile(List<Long> userIds) {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("response==File==" + response.getResponseString());
                 if (!response.isOk()) {
                     return;
                 }
@@ -865,7 +863,6 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("re=====" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if (!response.isOk()) {
                     infoComplete.onReqComplete(true, temp);

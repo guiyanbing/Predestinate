@@ -108,7 +108,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public void updateListMsg(List<BaseMessage> messages) {
+    public synchronized void updateListMsg(List<BaseMessage> messages) {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
