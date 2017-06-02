@@ -66,6 +66,7 @@ public class ImageLoader {
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view, int roundPx) {
         loadRound(context, model, view, roundPx, R.drawable.default_head);
     }
+
     /**
      * CenterCrop加载图片
      */
@@ -106,13 +107,30 @@ public class ImageLoader {
     public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg) {
         loadRound(context, model, view, roundPx, defResImg, defResImg);
     }
+
     /**
      * @param roundPx 圆角弧度
      */
-    public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg, int errResImg) {
+    public static <T> void loadRound(final Context context, final T model, final ImageView view,
+                                     int roundPx, int defResImg, final int errResImg) {
         roundedCorners.setRadius(roundPx);
-        loadPic(context, defResImg, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
-        loadPic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
+        loadPicWithCallback(context,
+                defResImg,
+                new GlideCallback() {
+                    @Override
+                    public void onResourceReady(final GlideDrawable defRes) {
+                        loadPicWithCallback(context,
+                                errResImg,
+                                new GlideCallback() {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable errRes) {
+                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, roundedCorners);
+                                    }
+                                },
+                                bitmapCenterCrop, roundedCorners);
+                    }
+                },
+                bitmapCenterCrop, roundedCorners);
     }
 
     /**
@@ -132,8 +150,21 @@ public class ImageLoader {
                                       final int defResImg, final int errResImg, int borderWidth, int borderColor) {
         circleTransform.setBorderWidth(borderWidth);
         circleTransform.setBorderColor(borderColor);
-        loadPic(context, defResImg, view, defResImg, errResImg, bitmapCenterCrop, circleTransform);
-        loadPic(context, model, view, defResImg, errResImg, bitmapCenterCrop, circleTransform);
+        loadPicWithCallback(context,
+                defResImg,
+                new GlideCallback() {
+                    @Override
+                    public void onResourceReady(final GlideDrawable defRes) {
+                        loadPicWithCallback(context,
+                                errResImg,
+                                new GlideCallback() {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable errRes) {
+                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, circleTransform);
+                                    }
+                                }, bitmapCenterCrop, circleTransform);
+                    }
+                }, bitmapCenterCrop, circleTransform);
     }
 
     /**
@@ -185,6 +216,28 @@ public class ImageLoader {
                 return;
 
             getDrawableBuilder(context, model)
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            if (isActDestroyed(context))
+                                return;
+
+                            if (callback != null)
+                                callback.onResourceReady(resource);
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
+        try {
+            if (isActDestroyed(context))
+                return;
+
+            getDrawableBuilder(context, model)
+                    .bitmapTransform(transformation)
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
