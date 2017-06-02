@@ -253,7 +253,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         //VIP男用户展示浮动提示
         if (ModuleMgr.getCenterMgr().getMyInfo().isVip() && ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1
-                && PSP.getInstance().getBoolean(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false)) {
+                && PSP.getInstance().getBoolean(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false) && MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.mGiftTipsContainerV.setVisibility(View.VISIBLE);
         }
 
