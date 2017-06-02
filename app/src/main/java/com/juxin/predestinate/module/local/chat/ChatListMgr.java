@@ -110,7 +110,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
+                if (tmp.isRu() || tmp.getLWhisperID() == MessageConstant.Fate_Small_Secretary) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
@@ -240,7 +240,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void getWhisperList() {
-        PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
         listObservable.observeOn(AndroidSchedulers.mainThread());
