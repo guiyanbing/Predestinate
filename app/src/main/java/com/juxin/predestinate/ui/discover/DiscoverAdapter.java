@@ -129,6 +129,12 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             }
         }
 
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id())) {
+
+            }
+        }
+
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
             holder.btn_sayhi.setVisibility(View.GONE);

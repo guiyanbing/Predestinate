@@ -9,8 +9,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
-import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
@@ -447,39 +445,6 @@ public class CommonMgr implements ModuleBase {
                 }
             });
         }
-    }
-
-
-    /**
-     * 请求好友数据  发出更新好友条数通知
-     */
-    public void getFriendsSize() {
-        getMyFriends(1, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    if (!response.isCache()) {
-                        UserInfoLightweightList lightweightList = new UserInfoLightweightList();
-                        lightweightList.parseJsonFriends(response.getResponseString());
-                        setFriendNum(lightweightList.getTotalcnt());
-                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice, getFriendNum());
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * 获取好友数量
-     *
-     * @return
-     */
-    public int getFriendNum() {
-        return friendNum;
-    }
-
-    public void setFriendNum(int friendNum) {
-        this.friendNum = friendNum;
     }
 
 
@@ -1054,5 +1019,11 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> postParms = new HashMap<>();
         postParms.put("uids", uids.toArray(new Long[uids.size()]));
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserInfoSummary, postParms, complete);
+    }
+
+    public void checkycoin(RequestComplete complete) {
+        HashMap<String, Object> getParms = new HashMap<>();
+        getParms.put("uid", App.uid);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkycoin, getParms, complete);
     }
 }

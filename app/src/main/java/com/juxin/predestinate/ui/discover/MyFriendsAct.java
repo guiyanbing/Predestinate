@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -88,8 +90,14 @@ public class MyFriendsAct extends BaseActivity implements RequestComplete, ExLis
             if (!response.isCache()) {
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJsonFriends(response.getResponseString());
-
                 if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+
+                    //更新好友数量 （如果列表中的数量与个人资料内好友数量不一致 更新个人资料的好友数量并发出更新好友数量的通知）
+                    if (ModuleMgr.getCenterMgr().getMyInfo().getGiftfriendscnt() != lightweightList.getTotalcnt()) {
+                        ModuleMgr.getCenterMgr().getMyInfo().setGiftfriendscnt(lightweightList.getTotalcnt());
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_Friend_Num_Notice, lightweightList.getTotalcnt());
+                    }
+
                     if (page == 1) {
                         if (data.size() != 0) {
                             data.clear();
