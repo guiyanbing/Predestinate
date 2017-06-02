@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -89,8 +90,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             privateChat.getChatAdapter().showInputGONE();//输入框不显示
             privateChat.setInputGiftviewVisibility(View.GONE);
         } else {
-            if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr()
-                    .getMyInfo().isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()) {//男 非包月 //今天已经聊过了
+            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+            if (userDetail.isMan() && !userDetail.isVip() && !ModuleMgr.getChatListMgr().getTodayChatShow()
+                    && userDetail.getYcoin() < 79) {//男 非包月 //今天已经聊过了
                 privateChat.getChatAdapter().showIsCanChat(false);
             }
         }
@@ -355,7 +357,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     privateChat.getChatAdapter().showIsCanChat(true);
                 }
                 break;
-
             default:
                 break;
         }
