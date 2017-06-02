@@ -239,6 +239,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
         dbCenter.updateToRead(channelID, userID);
     }
 
+    /**
+     * 更新私聊列表状态
+     * @param userID
+     * @return
+     */
+    public long updateToReadPrivate(long userID) {
+        return dbCenter.getCenterFLetter().updateStatus(userID);
+    }
+
     public void getWhisperList() {
         PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
