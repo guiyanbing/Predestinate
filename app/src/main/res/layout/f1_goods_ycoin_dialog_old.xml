@@ -27,10 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/kaitong"
-            android:layout_marginTop="@dimen/px10_dp"
-            android:orientation="horizontal"
             android:layout_marginLeft="@dimen/px40_dp"
-            android:layout_marginRight="@dimen/px40_dp" />
+            android:layout_marginRight="@dimen/px40_dp"
+            android:layout_marginTop="@dimen/px10_dp"
+            android:orientation="horizontal" />
 
         <LinearLayout
             android:id="@+id/pay_method"
@@ -46,23 +46,14 @@
                 android:id="@+id/tv_ycoin_ts1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dip"
-                android:paddingBottom="10dip"
-                android:paddingTop="10dip"
+                android:layout_margin="@dimen/px6_dp"
+                android:paddingBottom="@dimen/px30_dp"
+                android:paddingTop="@dimen/px30_dp"
+                android:paddingLeft="@dimen/px15_dp"
                 android:text="对应11000Y币"
                 android:textColor="#999999"
-                android:textSize="13sp" />
+                android:textSize="@dimen/px39_sp" />
 
-            <TextView
-                android:id="@+id/tv_ycoin_ts2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dip"
-                android:paddingBottom="10dip"
-                android:paddingTop="10dip"
-                android:text="(再赠送100元话费)"
-                android:textColor="@color/red"
-                android:textSize="13sp" />
         </LinearLayout>
 
         <!-- 支付方式-->

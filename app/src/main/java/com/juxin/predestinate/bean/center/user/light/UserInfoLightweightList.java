@@ -25,6 +25,13 @@ public class UserInfoLightweightList extends BaseData {
     private int totalcnt;
 
     /**
+     * ref 如果是 true 并且请求的如果非第一页
+     * 那么返回来的就是第一页 应该把之前的数据都清掉
+     * 把返回的数据作为第一页
+     */
+    private boolean isRef = false;
+
+    /**
      * 正常解析用户简略信息
      *
      * @param jsonStr
@@ -34,8 +41,12 @@ public class UserInfoLightweightList extends BaseData {
         if (!TextUtils.isEmpty(jsonStr)) {
             PLogger.d("UserInfoLightweightList parseJson ---- jsonStr " + jsonStr);
             String jsonData = getJsonObject(jsonStr).optString("res");
-            JSONArray jsonArray = getJsonObject(jsonData).optJSONArray("list");
+            JSONObject object = getJsonObject(jsonData);
+            JSONArray jsonArray = object.optJSONArray("list");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+            if (object.has("ref")) {
+                setRef(object.optInt("ref") == 1);
+            }
         }
     }
 
@@ -109,5 +120,14 @@ public class UserInfoLightweightList extends BaseData {
 
     public void setTotalcnt(int totalcnt) {
         this.totalcnt = totalcnt;
+    }
+
+
+    public boolean isRef() {
+        return isRef;
+    }
+
+    public void setRef(boolean ref) {
+        isRef = ref;
     }
 }

@@ -162,10 +162,16 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 lightweightList.parseJson(response.getResponseString());
 
                 if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
-                    if (page == 1) {
+                    /**
+                     * ref 如果是 true 并且请求的如果非第一页
+                     * 那么返回来的就是第一页 应该把之前的数据都清掉
+                     * 把返回的数据作为第一页
+                     */
+                    if (page == 1 || lightweightList.isRef()) {
                         if (infos.size() != 0) {
                             infos.clear();
                         }
+                        page = 1;
                     }
                     infos.addAll(lightweightList.getUserInfos());
                     if (infos.size() < 10) {

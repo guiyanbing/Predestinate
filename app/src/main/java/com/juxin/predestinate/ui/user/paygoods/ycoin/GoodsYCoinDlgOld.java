@@ -2,9 +2,11 @@ package com.juxin.predestinate.ui.user.paygoods.ycoin;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
@@ -15,6 +17,7 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
+import com.juxin.predestinate.ui.user.paygoods.bean.PayGood;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 
 import org.json.JSONException;
@@ -29,17 +32,18 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
 
+    private TextView tv_tips; // 充值优惠提示信息
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_goods_ycoin_dialog_old);
-
         initView();
     }
 
     private void initView() {
+        tv_tips = (TextView) findViewById(R.id.tv_ycoin_ts1);
         findViewById(R.id.btn_recharge).setOnClickListener(this);
-
         fillGoodsPanel();
     }
 
@@ -47,12 +51,16 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
         LinearLayout container = (LinearLayout) findViewById(R.id.goods_container);
         goodsPanel = new GoodsListPanel(this, GoodsConstant.DLG_YCOIN_PRIVEDEG);
         container.addView(goodsPanel.getContentView());
+        attachPanelListener();
         initList();
 
         // 支付方式
         LinearLayout payContainer = (LinearLayout) findViewById(R.id.pay_type_container);
         payTypePanel = new GoodsPayTypePanel(this, GoodsConstant.PAY_TYPE_OLD);
         payContainer.addView(payTypePanel.getContentView());
+
+        tv_tips.setText(Html.fromHtml(getResources().getString(R.string.goods_ycoin_pay_num, payGoods.getCommodityList().get(0).getNum())
+                + "<font color='#FF0000'>" + payGoods.getCommodityList().get(0).getPrivilege() + "</font>"));
     }
 
     private void initList() {
@@ -71,6 +79,21 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
         } catch (JSONException e) {
             PLogger.printThrowable(e);
         }
+    }
+
+    private void attachPanelListener() {
+        goodsPanel.setPanelItemClickListener(new GoodsListPanel.ListPanelItemClickListener() {
+            @Override
+            public void OnPanelItemClick(View convertView, int position) {
+                try {
+                    PayGood payGood = payGoods.getCommodityList().get(position);
+                    tv_tips.setText(Html.fromHtml(getResources().getString(R.string.goods_ycoin_pay_num, payGood.getNum())
+                            + "<font color='#FF0000'>" + payGood.getPrivilege() + "</font>"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
