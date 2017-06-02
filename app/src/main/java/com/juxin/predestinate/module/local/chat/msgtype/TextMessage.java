@@ -119,6 +119,8 @@ public class TextMessage extends BaseMessage {
     @Override
     public void convertJSON(String jsonStr) {
         super.convertJSON(jsonStr);
-        this.setMsgDesc(getJsonObject(jsonStr).optString("mct")); //消息内容
+        JSONObject object = getJsonObject(jsonStr);
+        this.setHtm(object.optString("htm"));
+        this.setMsgDesc(object.optString("mct")); //消息内容
     }
 }

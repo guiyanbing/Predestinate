@@ -30,6 +30,7 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
+import com.juxin.predestinate.module.local.pay.CheckYCoinBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -44,7 +45,9 @@ import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 聊天页
@@ -97,6 +100,78 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
         }
     }
+
+
+//    public void checkIsCanSendMsg() {
+//        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
+//            privateChat.getChatAdapter().showInputGONE();//输入框不显示
+//            privateChat.setInputGiftviewVisibility(View.GONE);
+//            return;
+//        }
+//
+//        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+//
+//        if ((userDetail.getGender() == 2)//女性用户
+//                || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0
+//                || (userDetail.getYcoin() > 79 && "0".equals(userDetail.getyCoinUserid())) //Y币 高于79 并且未绑定用户
+//                || (userDetail.getYcoin() > 79 && whisperID.equals(userDetail.getyCoinUserid())) //Y币高于79，并且是绑定用户
+//                ) {
+//            setButtonMail();
+//        } else {
+//            if (getLockDay() && myUserDetail.getYcoin() == 0) { //当天末发送还要Y币==0 //最初状态
+//                setButtonMail();
+//                return true;
+//            } else {
+//                Common.hideKeyBoard(this, editMsg);
+//                setButtonNotMail();
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+
+
+//    private void executeYCoinTask() {
+//        ModuleMgr.getCommonMgr().checkycoin(new RequestComplete() {
+//            @Override
+//            public void onRequestComplete(HttpResponse response) {
+//                CheckYCoinBean yCoinBean = new CheckYCoinBean();
+//                yCoinBean.parseJson(response.getResponseString());
+//                ModuleMgr.getCenterMgr().set
+//            }
+//        });
+//        if (YCoinTaskUtil == null) {
+//            YCoinTaskUtil = AsyncTaskUtil.getInstance(this).setUrl(AppCfg.getAppCfg().FATE_CHECK_Y_COIN)
+//                    .setMethod(BaseAsyncTask.METHOD_GET).isLogin(false).setShowAsyncDialog(false)
+//                    .setOnAsyncCallback(new OnAsyncCallback() {
+//                        @Override
+//                        public void requestSuccess(BaseAsyncTask task) {
+//                            if (task instanceof SimpleAsyncTask) {
+//                                SimpleAsyncTask simpleTask = (SimpleAsyncTask) task;
+//                                try {
+//                                    CheckYCoinBean checkYCoinBean = new AppJsonParser().checkYCoin(simpleTask.getJsonResult());
+//                                    AppModel.getInstance().getUserDetail().setYcoin(checkYCoinBean.getY());
+//                                    AppModel.getInstance().getUserDetail().setyCoinUserid(checkYCoinBean.getTouid());
+//                                    if (!checkYCoinBean.getTouid().equals("")) {
+//                                        MaillistDataControl.getInstance(AAMainAct.this).sortListView();
+//                                    }
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void requestFail(BaseAsyncTask task, Exception e) {
+//
+//                        }
+//                    });
+//        }
+//        Map<String, Object> getParams = new HashMap<String, Object>();
+//        getParams.put("uid", AppCtx.getPreference(AppCtx.SUid));
+//        YCoinTaskUtil.setGetParams(getParams).executeTask();
+//    }
+
 
     private void initLastGiftList() {
         if (MailSpecialID.customerService.getSpecialID() != whisperID)
