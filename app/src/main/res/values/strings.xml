@@ -146,7 +146,7 @@
     <string name="user_edit_info_correct_mobile">请输入正确格式的电话号码</string>
     <string name="user_edit_info_correct_wechat">请输入正确格式的微信号码</string>
     <string name="user_edit_info_correct_qq">请输入正确格式的QQ号码</string>
-    <string name="user_fragment_no_verify_phone">账户处于高风险状态，建议绑定手机。</string>
+    <string name="user_fragment_no_verify_phone">为了你的账户安全，建议你绑定手机号码。</string>
 
     <!--手机绑定-->
     <string name="bt_send_code_normal">获取验证码</string>
@@ -402,7 +402,7 @@
     <string name="goods_ycoin_dredge">开通服务</string>
     <string name="goods_ycoin_welfare">开通VIP赠送100体力，并且享受体力加速恢复，\n充值Y币额外赠送10%</string>
     <string name="goods_ycoin_pay">立即支付%d</string>
-
+    <string name="goods_ycoin_pay_num">对应%dY币</string>
 
     <!--  相册  -->
     <string name="album_all" translatable="false">全部图片</string>

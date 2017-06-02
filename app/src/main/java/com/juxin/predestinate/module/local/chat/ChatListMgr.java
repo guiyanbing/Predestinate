@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -109,7 +110,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                if (tmp.isRu() || tmp.getLWhisperID() == 9999) {
+                if (tmp.isRu() || tmp.getLWhisperID() == MessageConstant.Fate_Small_Secretary) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
@@ -187,14 +188,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         for (BaseMessage temp : messageList) {
             dbCenter.deleteMessage(temp.getLWhisperID());
         }
-        //  getWhisperList();
     }
 
     public long deleteMessage(long userID) {
         long ret = dbCenter.deleteMessage(userID);
-        if (ret != MessageConstant.ERROR) {
-            //  getWhisperList();
-        }
         return ret;
     }
 
@@ -205,12 +202,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public long deleteFmessage(long userID) {
-        long ret = dbCenter.getCenterFMessage().delete(userID);
-        if (ret != MessageConstant.ERROR) {
-            //    getWhisperList();
-        }
-        return ret;
+        long ret = dbCenter.getCenterFLetter().updateContent(String.valueOf(userID));
+        if (ret == MessageConstant.ERROR) return ret;
+        return dbCenter.getCenterFMessage().delete(userID);
     }
+
 
     /**
      * 更新已读
@@ -230,18 +226,19 @@ public class ChatListMgr implements ModuleBase, PObserver {
         getWhisperList();
     }
 
-    public long updateToRead(long userID) {
-        return dbCenter.getCenterFMessage().updateToRead(userID);
-    }
-
-    public void updateToRead(String channelID, String userID) {
-        dbCenter.updateToRead(channelID, userID);
+    /**
+     * 更新私聊列表状态
+     * @param userID
+     * @return
+     */
+    public long updateToReadPrivate(long userID) {
+        return dbCenter.getCenterFLetter().updateStatus(userID);
     }
 
     public void getWhisperList() {
-        PLogger.printObject("getWhisperList====1" + "11111");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
+        listObservable.observeOn(AndroidSchedulers.mainThread());
         listObservable.subscribe(new Action1<List<BaseMessage>>() {
             @Override
             public void call(List<BaseMessage> baseMessages) {

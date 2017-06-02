@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.unread.BadgeView;
@@ -110,11 +109,10 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 //            item_certification.setVisibility(VISIBLE);
 //            item_certification.setText("官方");
 //        }
-        if(msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()){
-            item_last_msg.setText(BaseMessage.getContent(msgData));
-        }else {
-            item_last_msg.setText(Html.fromHtml(BaseMessage.getContent(msgData)));
-        }
+
+        String result = BaseMessage.getContent(msgData);
+        item_last_msg.setText((msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType())
+                ? result : Html.fromHtml(result));
 
         long time = msgData.getTime();
         if (time > 0) {
@@ -147,16 +145,13 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     protected void setStatus(BaseMessage msgData) {
-//        Log.e("TTTTTTTTTTTKKK",msgData.getWhisperID()+"|||"+msgData.getJsonStr());
+        item_last_status.setVisibility(View.GONE);
         if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType() || msgData.getLWhisperID() == MailMsgID.Greet_Msg.type) {
-            item_last_status.setVisibility(View.GONE);
             return;
         }
-        item_last_status.setVisibility(View.GONE);
         if (JsonUtil.getJsonObject(msgData.getJsonStr()).has("fid")) return;
         item_last_status.setVisibility(View.VISIBLE);
 //        发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
-//        Log.e("TTTTTTTTTTTBBB",msgData.getStatus()+"||||");
         switch (msgData.getStatus()){
             case 1:
             case 10:
@@ -199,6 +194,5 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {
-    }
+    public void onClick(View v) {}
 }

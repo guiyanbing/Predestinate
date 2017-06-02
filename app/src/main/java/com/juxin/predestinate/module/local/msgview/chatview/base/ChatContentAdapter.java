@@ -35,7 +35,6 @@ import java.util.Map;
 /**
  * Created by Kind on 2017/3/30.
  */
-
 public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
     private ChatAdapter.ChatInstance chatInstance = null;
@@ -108,61 +107,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         notifyDataSetChanged();
     }
 
-    /**
-     * 删除一条消息。
-     *
-     * @param message 删除消息。
-     */
-    //    public void delData(DeleteMessage message) {
-    //        if (message == null) {
-    //            return;
-    //        }
-    //
-    //        List<BaseMessage> datas = getList();
-    //
-    //        if (datas == null) {
-    //            return;
-    //        }
-    //
-    //        BaseMessage data;
-    //        for (int i = 0; i < datas.size(); i++) {
-    //            data = datas.get(i);
-    //
-    //            if (data.getMsgID() == message.getDeleteMsgid()) {
-    //                datas.remove(data);
-    //                notifyDataSetChanged();
-    //                return;
-    //            }
-    //        }
-    //    }
-
-    /**
-     * 回调所有消息。
-     *
-     * @param
-     */
-    //    public void callAllMsg(SystemMessage message) {
-    //        if (message == null) {
-    //            return;
-    //        }
-    //
-    //        List<BaseMessage> datas = getList();
-    //        if (datas == null) {
-    //            return;
-    //        }
-    //
-    //        boolean update = false;
-    //        BaseMessage data;
-    //
-    //        for (int i = 0; i < datas.size(); i++) {
-    //            data = datas.get(i);
-    //            update |= message.modifyReadStatus(data);
-    //        }
-    //
-    //        if (update) {
-    //            notifyDataSetChanged();
-    //        }
-    //    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
@@ -255,8 +199,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         public ChatViewHolder custom = new ChatCustomHolder();
 
         public void reset(boolean sender, BaseMessage msgData, BaseMessage preMsgData) {
-            if (msgData == null)
-                return;
+            if (msgData == null) return;
+
             String tipTime = "";
             if (preMsgData != null) {
                 long tmp = TimeUtil.onPad(msgData.getTime());
@@ -367,9 +311,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
          * @param viewGroup
          */
         public void showLayout(boolean sender, ViewGroup viewGroup) {
-            if (chatpanel == null || viewGroup == null) {
-                return;
-            }
+            if (chatpanel == null || viewGroup == null) return;
 
             if (chatpanel.isShowParentLayout()) {
                 if (sender) {
@@ -409,7 +351,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         public void reset(BaseMessage msgData, boolean sender) {
             super.reset(msgData, sender);
 
-            final UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
+            UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
             updateHead(infoLightweight, sender);
 
             if (chatpanel != null) {
@@ -423,20 +365,11 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         private void updateHead(UserInfoLightweight infoLightweight, boolean sender) {
+            ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             if (infoLightweight != null) {
-                //                if (sender) {
-                //                    name.setVisibility(View.GONE);
-                //                } else {
-                //                    name.setText(infoLightweight.getNickname());
-                //                    name.setVisibility(View.VISIBLE);
-                //                }
-
                 ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
             } else {
                 name.setVisibility(View.GONE);
-                //   head.setTag("" + msg.getSendID());
-                //                head.setImageResource(R.drawable.default_pic);
-                ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, head);
             }
         }
 
@@ -499,18 +432,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     break;
             }
 
-            // if(msg.getStatus() == 3 || msg.getStatus() == 2){//发送中, 发送失败
-            //显示进度条或发送失败且小于五分钟也显示进度条
-            //                    if(msg.isValid() && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())){
-            //                        statusProgress.setVisibility(View.VISIBLE);
-            //                        status.setVisibility(View.GONE);
-            //                        statusError.setVisibility(View.GONE);
-            //                    }else {
-            //                        statusProgress.setVisibility(View.GONE);
-            //                        status.setVisibility(View.GONE);
-            //                        statusError.setVisibility(View.VISIBLE);
-            //                    }
-
             if (msg.getStatus() == 3 && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())) {//发送中,
                 statusProgress.setVisibility(View.VISIBLE);
                 status.setVisibility(View.GONE);
@@ -551,6 +472,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                         chatpanel.onClickErrorResend(msg);
                     }
                     break;
+                default:
+                    break;
             }
         }
 
@@ -574,6 +497,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                         chatpanel.onClickContent(msg, true);
                         return true;
                     }
+                    break;
+                default:
                     break;
             }
             return false;

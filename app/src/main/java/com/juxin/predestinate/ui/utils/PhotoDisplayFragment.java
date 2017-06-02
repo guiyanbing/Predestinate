@@ -7,13 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
+import com.juxin.predestinate.module.util.TimerUtil;
 
 /**
  * PhotoDisplayAct：查看大图Fragment页面
@@ -53,13 +52,13 @@ public class PhotoDisplayFragment extends BaseFragment {
     public void loadPic(String pic) {
         if (!TextUtils.isEmpty(pic)) {
             if (FileUtil.isURL(pic)) {
-                ImageLoader.loadPicWithCallback(getContext(), pic, new ImageLoader.GlideCallback() {
+                ImageLoader.loadFitCenter(getContext(), pic, image);
+                TimerUtil.beginTime(new TimerUtil.CallBack() {
                     @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    public void call() {
                         progress.setVisibility(View.GONE);
-                        image.setImageDrawable(resource);
                     }
-                });
+                }, 100);
             } else {
                 ImageLoader.loadCenterCrop(getContext(), R.drawable.default_pic, image);
                 progress.setVisibility(View.GONE);

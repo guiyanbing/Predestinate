@@ -54,12 +54,12 @@
 
     </LinearLayout>
 
-    <ImageView
+    <com.juxin.predestinate.module.logic.baseui.custom.TouchImageView
         android:id="@+id/confirm_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomView"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/default_pic" />
 
 </RelativeLayout>

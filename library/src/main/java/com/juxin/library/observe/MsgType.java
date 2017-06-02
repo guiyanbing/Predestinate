@@ -71,6 +71,12 @@ public class MsgType {
     public static final String MT_Update_MyInfo = "MT_Update_MyInfo";
 
     /**
+     * 通知刷新Ycoin
+     * true是请求http，false是不请求本地处理
+     */
+    public static final String MT_Update_Ycoin = "MT_Update_Ycoin";
+
+    /**
      * 未读数变更消息
      */
     public static final String MT_Unread_change = "MT_Unread_change";
