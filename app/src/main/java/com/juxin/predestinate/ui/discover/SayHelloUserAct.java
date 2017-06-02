@@ -178,6 +178,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         } else {
             setTitleLeftContainerRemoveAll();
             PToast.showCenterShort("没有可编辑选项");
+            setBackView();
         }
     }
 
@@ -238,6 +239,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                 ModuleMgr.getChatListMgr().deleteBatchMessage(delList);
                 delList.clear();
                 setTitleLeftContainerRemoveAll();
+                setBackView();
                 exListView.smoothCloseChooseView();
                 break;
             case R.id.say_hello_users_all_ignore:
@@ -250,6 +252,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                     @Override
                     public void onSubmit() {
                         setTitleLeftContainerRemoveAll();
+                        setBackView();
                         ModuleMgr.getChatListMgr().updateToBatchRead(data);
                         exListView.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
