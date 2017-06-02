@@ -41,6 +41,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     //保存表情资源的列表
     private static int pageResNum = 8;
     private boolean mOutDelClick = false;
+    private long mLastTime;
     private List<SmileItem> items = null;
 
     private TextView mOutDelTv;
@@ -243,6 +244,9 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         if (TextUtils.isEmpty(url)) {
             return;
         }
+        if(isFastClick()) {
+            return;
+        }
         ModuleMgr.getCommonMgr().delCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -280,11 +284,25 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         }
         switch (key) {
             case MsgType.MT_ADD_CUSTOM_SMILE:
+                if(isFastClick()) {
+                    return;
+                }
                 addCFace((String) value);
                 break;
 
             default:
                 break;
         }
+    }
+
+    private boolean isFastClick() {
+        boolean isFastClick = false;
+        long curTime = System.currentTimeMillis();
+        if(curTime - mLastTime < 2500) {
+            isFastClick = true;
+            PToast.showShort("操作太快，请稍后");
+        }
+        mLastTime = System.currentTimeMillis();
+        return isFastClick;
     }
 }
