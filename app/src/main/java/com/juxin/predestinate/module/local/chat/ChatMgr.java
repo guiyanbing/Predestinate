@@ -81,6 +81,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+
         // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
         // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
@@ -591,11 +592,12 @@ public class ChatMgr implements ModuleBase {
 
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
-        long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
-        if (ret == MessageConstant.ERROR) return;
+        if (dbCenter.getCenterFMessage().storageDataVideo(videoMessage) == MessageConstant.ERROR){
+            pushMsg(false, videoMessage);
+            return;
+        }
 
-        ret = dbCenter.getCenterFMessage().storageDataVideo(videoMessage);
-        pushMsg(ret != MessageConstant.ERROR, videoMessage);
+        pushMsg(dbCenter.getCenterFLetter().storageData(videoMessage) != MessageConstant.ERROR, videoMessage);
     }
 
     /**
