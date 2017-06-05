@@ -116,9 +116,9 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
                 holder.iv_call.setEnabled(userInfo.isAudio_available());
                 holder.tv_call.setVisibility(View.VISIBLE);
             } else {
-                //不可语音不可视频显示灰色语音图标
+                //不可语音不可视频都不显示
                 holder.iv_calling.setVisibility(View.GONE);
-                holder.lin_call_state.setVisibility(View.VISIBLE);
+                holder.lin_call_state.setVisibility(View.GONE);
                 holder.lin_video_state.setVisibility(View.GONE);
                 holder.iv_call.setEnabled(userInfo.isVideo_available());
                 holder.tv_call.setVisibility(View.GONE);

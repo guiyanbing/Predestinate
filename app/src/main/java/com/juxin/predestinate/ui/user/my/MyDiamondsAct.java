@@ -13,7 +13,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
-import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
+import com.juxin.predestinate.ui.user.my.view.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.MyDiamondAdapter;
 
 import java.util.List;

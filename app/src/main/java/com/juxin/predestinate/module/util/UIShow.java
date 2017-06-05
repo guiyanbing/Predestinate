@@ -52,9 +52,6 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.BasePayPannel;
 import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.pay.PayWebAct;
-import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
-import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
-import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
 import com.juxin.predestinate.ui.pay.utils.PayAlipayUtils;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
@@ -257,9 +254,15 @@ public class UIShow {
     /**
      * 手机绑定
      */
-    public static void showPhoneVerifyAct(FragmentActivity activity, int requestCode) {
-        Intent intent = new Intent(activity, PhoneVerifyAct.class);
-        activity.startActivityForResult(intent, requestCode);
+    public static void showPhoneVerifyAct(final FragmentActivity activity,final int requestCode) {
+        ModuleMgr.getCommonMgr().getCustomerserviceContact(activity, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                Intent intent = new Intent(activity, PhoneVerifyAct.class);
+                activity.startActivityForResult(intent, requestCode);
+            }
+        });
+
     }
 
     /**
@@ -283,8 +286,14 @@ public class UIShow {
     /**
      * 打开关于页面
      */
-    public static void showAboutAct(final Activity context) {
-        context.startActivity(new Intent(context, AboutAct.class));
+    public static void showAboutAct(final FragmentActivity context) {
+        ModuleMgr.getCommonMgr().getCustomerserviceContact(context, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                context.startActivity(new Intent(context, AboutAct.class));
+            }
+        });
+
     }
 
     /**
@@ -795,42 +804,7 @@ public class UIShow {
         activity.startActivityForResult(intent, Constant.PAYMENTACT);
     }
 
-    public static void showPayVoiceAct(final FragmentActivity activity, PayGood payGood, PayWX payWX) {
-        Intent intent = new Intent(activity, PayVoiceAct.class);
-        intent.putExtra("payGood", payGood);
-        if (payWX != null) {
-            intent.putExtra("payWX", payWX);
-        }
-        activity.startActivityForResult(intent, Constant.PAYMENTACT);
-    }
 
-    /**
-     * 新的语音支付详细页面
-     */
-    public static void shoPayCupVoiceDetailAct(Activity context, PayGood payGood, String bank_name, int resultCode) {
-        Intent intent = new Intent(context, PayCupVoiceDetailAct.class);
-        intent.putExtra("payGood", payGood);
-        intent.putExtra("bank_name", bank_name);
-        context.startActivityForResult(intent, resultCode);
-    }
-
-    /**
-     * 新的语音支付详细页面
-     */
-    public static void showPayCupVoiceOkAct(Activity context, PayGood payGood, String phone,
-                                            String nickname, String number, String bank_id, int resultCode) {
-        Intent intent = new Intent(context, PayCupVoiceOkAct.class);
-        intent.putExtra("payGood", payGood);
-        intent.putExtra("phone", phone);
-        intent.putExtra("nickname", nickname);
-        if (number != null) {
-            intent.putExtra("number", number);
-        }
-        if (bank_id != null) {
-            intent.putExtra("bank_id", bank_id);
-        }
-        context.startActivityForResult(intent, resultCode);
-    }
 
     public static void showPayWebAct(FragmentActivity activity, PayGood payGood) {
         Intent intent_web = new Intent(activity, PayWebAct.class);
@@ -1369,8 +1343,13 @@ public class UIShow {
      * @param context
      * @param requestCode
      */
-    public static void showPhoneVerifyCompleteAct(FragmentActivity context, int requestCode) {
-        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
+    public static void showPhoneVerifyCompleteAct(final FragmentActivity context, final int requestCode) {
+        ModuleMgr.getCommonMgr().getCustomerserviceContact(context, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
+            }
+        });
     }
 
     /**

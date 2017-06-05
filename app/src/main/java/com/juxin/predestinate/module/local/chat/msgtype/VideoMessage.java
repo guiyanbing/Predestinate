@@ -26,7 +26,7 @@ public class VideoMessage extends BaseMessage {
 
     private EmLastStatus emLastStatus;
 
-    private enum EmLastStatus {
+    public enum EmLastStatus {
         none, timeout, refuse, cancel, connect
     }
 
@@ -207,10 +207,8 @@ public class VideoMessage extends BaseMessage {
         switch (status) {
             case timeout:
             case cancel:
-                result = "<font color='#ffac0c'>" + (isSender ? "[未接通]" : "[未接来电]") + "</font>";
-                break;
             case refuse:
-                result = "<font color='#ffac0c'>[未接通]</font>";
+                result = "<font color='#ffac0c'>" + (isSender ? "[未接通]" : "[未接来电]") + "</font>";
                 break;
             case connect:
                 result = "[通话结束]";

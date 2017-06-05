@@ -14,7 +14,6 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.ui.user.edit.EditKey;
 import com.juxin.predestinate.ui.utils.EmojiFilter;
 
 import java.util.HashMap;

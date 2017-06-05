@@ -136,7 +136,6 @@
                     <Button
                         android:id="@+id/discover_item_video"
                         style="@style/icon_small"
-                        android:layout_marginLeft="@dimen/px15_dp"
                         android:background="@drawable/f1_video_state_ico" />
 
                     <TextView
@@ -145,7 +144,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/px5_dp"
                         android:text="可视频"
-                        android:textColor="@color/color_6dcca3"
+                        android:textColor="@color/color_b89ca3"
                         android:textSize="@dimen/px30_sp" />
                 </LinearLayout>
 
@@ -159,7 +158,6 @@
                     <Button
                         android:id="@+id/discover_item_call"
                         style="@style/icon_small"
-                        android:layout_marginLeft="@dimen/px15_dp"
                         android:background="@drawable/f1_call_state_ico" />
 
                     <TextView
@@ -169,7 +167,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/px5_dp"
                         android:text="可语音"
-                        android:textColor="@color/color_6dcca3"
+                        android:textColor="@color/color_b89ca3"
                         android:textSize="@dimen/px30_sp" />
                 </LinearLayout>
             </LinearLayout>
