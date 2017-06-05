@@ -32,6 +32,7 @@ public class ImageLoader {
     private static FitCenter bitmapFitCenter;
     private static CircleTransform circleTransform;
     private static RoundedCorners roundedCorners;
+    private static RoundedCorners roundedCornerTop;
     private static BlurImage blurImage;
 
     public static void init(Context context) {
@@ -41,6 +42,7 @@ public class ImageLoader {
         bitmapFitCenter = new FitCenter(mContext);
         circleTransform = new CircleTransform(mContext);
         roundedCorners = new RoundedCorners(mContext, 8, 0, RoundedCorners.CornerType.ALL);
+        roundedCornerTop = new RoundedCorners(mContext, 15, 0, RoundedCorners.CornerType.TOP);
         blurImage = new BlurImage(context, 50);
     }
 
@@ -107,6 +109,41 @@ public class ImageLoader {
     public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg) {
         loadRound(context, model, view, roundPx, defResImg, defResImg);
     }
+
+
+    /**
+     * 图片圆角处理: 上面两个角
+     */
+    public static <T> void loadRoundTop(Context context, T model, ImageView view) {
+        loadRoundTop(context, model, view, 15, R.drawable.default_pic, R.drawable.default_pic);
+    }
+
+
+    /**
+     * @param roundPx 圆角弧度
+     */
+    public static <T> void loadRoundTop(final Context context, final T model, final ImageView view,
+                                        int roundPx, int defResImg, final int errResImg) {
+        roundedCornerTop.setRadius(roundPx);
+        loadPicWithCallback(context,
+                defResImg,
+                new GlideCallback() {
+                    @Override
+                    public void onResourceReady(final GlideDrawable defRes) {
+                        loadPicWithCallback(context,
+                                errResImg,
+                                new GlideCallback() {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable errRes) {
+                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, roundedCornerTop);
+                                    }
+                                },
+                                bitmapCenterCrop, roundedCornerTop);
+                    }
+                },
+                bitmapCenterCrop, roundedCornerTop);
+    }
+
 
     /**
      * @param roundPx 圆角弧度

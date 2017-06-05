@@ -53,7 +53,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     }
 
     @Override
-    public void showData(BaseMessage msgData, boolean isSlideLoading) {
+    public void showData(BaseMessage msgData) {
         this.msgData = msgData;
         if (!TextUtils.isEmpty(msgData.getAvatar())) {
             ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);

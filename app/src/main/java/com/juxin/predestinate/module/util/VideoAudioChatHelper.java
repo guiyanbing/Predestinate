@@ -212,7 +212,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             int vcID = resJo.optInt("vc_id");
-            ModuleMgr.getChatMgr().sendvideoMsglocalSimulation(String.valueOf(dstUid), type, vcID);
+            ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
             Bundle bundle = newBundle(vcID, dstUid, 1, type);
             startRtcInitActivity(context, bundle);
             return;

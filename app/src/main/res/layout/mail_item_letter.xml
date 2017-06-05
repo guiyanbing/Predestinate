@@ -128,6 +128,7 @@
                     android:visibility="gone" />
 
                 <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/mail_item_last_msg"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -138,7 +139,8 @@
                     android:maxLines="1"
                     android:maxWidth="200dp"
                     android:textColor="@color/color_aaaaaa"
-                    android:textSize="@dimen/px39_sp" />
+                    android:textSize="@dimen/px39_sp"
+                    app:emojiSize="16dp" />
             </LinearLayout>
         </LinearLayout>
 

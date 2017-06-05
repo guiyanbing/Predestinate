@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.unread.BadgeView;
@@ -92,7 +91,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      *
      * @param msgData
      */
-    public void showData(BaseMessage msgData, boolean isSlideLoading) {
+    public void showData(BaseMessage msgData) {
         PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
         ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
 
