@@ -53,18 +53,14 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         holder.iv_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(userInfo.getGroup()) ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {
-            holder.lin_ranking.setVisibility(View.VISIBLE);
+            holder.iv_ranking.setVisibility(View.VISIBLE);
             if (userInfo.isMan()) {
-                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_man));
-                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+                holder.iv_ranking.setImageResource(R.drawable.f1_top02);
             } else {
-                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_woman));
-                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+                holder.iv_ranking.setImageResource(R.drawable.f1_top01);
             }
         } else {
-            holder.lin_ranking.setVisibility(View.GONE);
+            holder.iv_ranking.setVisibility(View.GONE);
         }
 
         if (userInfo.getAge() == 0) {
@@ -212,11 +208,11 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
 
 
     class MyViewHolder {
-        private ImageView iv_avatar, iv_vip;
+        private ImageView iv_avatar, iv_vip, iv_ranking;
         private Button iv_video, iv_call;
-        private TextView tv_name, tv_age, tv_height, tv_distance, tv_ranking_type, tv_ranking_level;
+        private TextView tv_name, tv_age, tv_height, tv_distance;
         private Button btn_sayhi;
-        private LinearLayout lin_ranking, iv_calling, lin_video_state, lin_call_state;
+        private LinearLayout iv_calling, lin_video_state, lin_call_state;
         private RelativeLayout rel_item;
         private View point;
 
@@ -239,12 +235,9 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             tv_height = (TextView) convertView.findViewById(R.id.discover_item_height);
             tv_distance = (TextView) convertView.findViewById(R.id.discover_item_distance);
 
-            tv_ranking_type = (TextView) convertView.findViewById(R.id.discover_item_ranking_type);
-            tv_ranking_level = (TextView) convertView.findViewById(R.id.discover_item_ranking_level);
-
             btn_sayhi = (Button) convertView.findViewById(R.id.discover_item_sayhi);
 
-            lin_ranking = (LinearLayout) convertView.findViewById(R.id.discover_item_ranking_state);
+            iv_ranking = (ImageView) convertView.findViewById(R.id.discover_item_ranking_state);
             rel_item = (RelativeLayout) convertView.findViewById(R.id.discover_item);
 
             point = convertView.findViewById(R.id.discover_item_point);

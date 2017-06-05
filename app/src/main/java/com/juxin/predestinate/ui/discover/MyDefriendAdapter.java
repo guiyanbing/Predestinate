@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,18 +42,14 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
         holder.iv_vip.setVisibility(userInfo.isVip() ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {
-            holder.lin_ranking.setVisibility(View.VISIBLE);
+            holder.iv_ranking.setVisibility(View.VISIBLE);
             if (userInfo.isMan()) {
-                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_man));
-                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+                holder.iv_ranking.setImageResource(R.drawable.f1_top02);
             } else {
-                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_woman));
-                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+                holder.iv_ranking.setImageResource(R.drawable.f1_top01);
             }
         } else {
-            holder.lin_ranking.setVisibility(View.GONE);
+            holder.iv_ranking.setVisibility(View.GONE);
         }
 
         if (userInfo.getAge() == 0) {
@@ -90,9 +85,8 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
 
 
     private class MyViewHolder {
-        private ImageView iv_avatar, iv_vip;
-        private TextView tv_name, tv_age, tv_height, tv_ranking_type, tv_ranking_level;
-        private LinearLayout lin_ranking;
+        private ImageView iv_avatar, iv_vip, iv_ranking;
+        private TextView tv_name, tv_age, tv_height;
         private RelativeLayout rel_item;
 
         public MyViewHolder(View convertView) {
@@ -108,10 +102,7 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
             tv_age = (TextView) convertView.findViewById(R.id.mydefriend_item_age);
             tv_height = (TextView) convertView.findViewById(R.id.mydefriend_item_height);
 
-            tv_ranking_type = (TextView) convertView.findViewById(R.id.mydefriend_item_ranking_type);
-            tv_ranking_level = (TextView) convertView.findViewById(R.id.mydefriend_item_ranking_level);
-
-            lin_ranking = (LinearLayout) convertView.findViewById(R.id.mydefriend_item_ranking_state);
+            iv_ranking = (ImageView) convertView.findViewById(R.id.mydefriend_item_ranking_state);
             rel_item = (RelativeLayout) convertView.findViewById(R.id.mydefriend_item);
         }
 
