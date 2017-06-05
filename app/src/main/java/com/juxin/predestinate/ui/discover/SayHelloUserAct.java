@@ -273,6 +273,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onSwipeChooseClosed() {
         bottom_view.setVisibility(View.GONE);
         mail_title_right_text.setText("编辑");
+        setTitleLeftContainerRemoveAll();
+        setBackView();
         isGone = false;
     }
 

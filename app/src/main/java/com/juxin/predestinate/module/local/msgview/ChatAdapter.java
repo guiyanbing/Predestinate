@@ -392,15 +392,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
-
-//                MsgMgr.getInstance().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        chatInstance.chatContentAdapter.setList(listTemp);
-//                        moveToBottom();
-//                    }
-//                });
-
                     }
                 });
         ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);

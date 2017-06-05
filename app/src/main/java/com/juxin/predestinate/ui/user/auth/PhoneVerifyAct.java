@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -21,8 +22,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.UIShow;
-
-import org.json.JSONObject;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
@@ -36,12 +35,14 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
 
     private EditText edtPhone, et_code;
     private Button bt_send_code, btnok;
-    private TextView tv_customerservice_desc, tv_customerservice_phone;
+    private TextView tv_customerservice_desc;
 
     // byIQQ phone fare
     private String phone, code;
     private final MyHandler m_Handler = new MyHandler(this);
     private SendEnableThread sendthread = null;
+    private ContactBean contactBean;
+    private String qq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,6 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
 
     private void initView() {
         tv_customerservice_desc = (TextView) findViewById(R.id.tv_customerservice_desc);
-        tv_customerservice_phone = (TextView) findViewById(R.id.tv_customerservice_phone);
         edtPhone = (EditText) this.findViewById(R.id.edt_phoneverify_phone);
         et_code = (EditText) this.findViewById(R.id.edt_phoneverify_note);
         bt_send_code = (Button) this.findViewById(R.id.btn_phoneverify_begin);
@@ -99,15 +99,21 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         bt_send_code.setOnClickListener(this);
         btnok.setOnClickListener(this);
         findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
+        contactBean = ModuleMgr.getCommonMgr().getContactBean();
+        if (contactBean == null) {
+            return;
+        }
         tv_customerservice_desc.setText(getResources().getString(R.string.txt_customerservice_bind_desc));
-        tv_customerservice_phone.setText("0731-1231124444");//TODO 获取客服手机
+        ((TextView)findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText(contactBean.getWork_time());
+        qq = contactBean.getQq();
     }
 
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_open_qq_btn://在线客服qq交流
-                ModuleMgr.getCommonMgr().getCustomerserviceQQ(PhoneVerifyAct.this);
+                UIShow.showQQService(PhoneVerifyAct.this, qq);
                 break;
             case R.id.btn_phoneverify_begin:
                 if (validPhone()) {

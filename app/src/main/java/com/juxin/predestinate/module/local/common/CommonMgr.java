@@ -18,6 +18,7 @@ import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
+import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -31,6 +32,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
@@ -55,6 +57,7 @@ public class CommonMgr implements ModuleBase {
     private GiftsList giftLists;//礼物信息
     private VideoVerifyBean videoVerify;//视频聊天配置
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
+    private ContactBean contactBean;//客服信息
 
     @Override
     public void init() {
@@ -62,6 +65,14 @@ public class CommonMgr implements ModuleBase {
 
     @Override
     public void release() {
+    }
+
+    public ContactBean getContactBean() {
+        return contactBean;
+    }
+
+    public void setContactBean(ContactBean contactBean) {
+        this.contactBean = contactBean;
     }
 
     /**
@@ -196,24 +207,28 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
     }
 
+
     /**
-     * 获取客服qq
+     * 获取客服信息
      */
-    public void getCustomerserviceQQ(final FragmentActivity context) {
+    public void getCustomerserviceContact(final FragmentActivity context,final RequestComplete complete){
         LoadingDialog.show(context);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                LoadingDialog.closeLoadingDialog();
-                if (!response.isOk()) {
-                    PToast.showShort(response.getMsg());
-                    return;
+                if (response.isOk()){
+                    contactBean= (ContactBean)response.getBaseData();
                 }
-                JSONObject jsonObject = response.getResponseJson();
-                String qq = jsonObject.optString("qq");
-                UIShow.showQQService(context, qq);
+                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        complete.onRequestComplete(null);
+                    }
+                });
+
             }
         });
+
     }
 
     /**

@@ -614,8 +614,7 @@
     <string name="sent">送了</string>
     <string name="ge">个</string>
 
-
-    <!--发现start-->
+    <!-- 发现start -->
     <string name="discover_title">发现</string>
 
     <string name="defriend_title">举报</string>
@@ -646,10 +645,7 @@
     <string name="say_hi_group_num_state">群发功能每天只能使用三次！</string>
     <string name="say_hi_group_refresh">请先刷新列表再打招呼</string>
     <string name="say_hello_user_act_title">打招呼的人</string>
-
-    "
-    <!--发现end-->
-
+    <!-- 发现end -->
 
     <string name="privatechat_title_attention">关注TA</string>
     <string name="privatechat_title_unsubscribe">取消关注</string>
@@ -660,7 +656,6 @@
     <string name="diamond">钻石</string>
 
     <string name="say_hello_txt">您好,我对您的眼缘不错！</string>
-
 
     <!--认证-->
     <string name="txt_submit">提交</string>

@@ -106,7 +106,6 @@ import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
-import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDlgOld;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
@@ -258,9 +257,15 @@ public class UIShow {
     /**
      * 手机绑定
      */
-    public static void showPhoneVerifyAct(FragmentActivity activity, int requestCode) {
-        Intent intent = new Intent(activity, PhoneVerifyAct.class);
-        activity.startActivityForResult(intent, requestCode);
+    public static void showPhoneVerifyAct(final FragmentActivity activity,final int requestCode) {
+        ModuleMgr.getCommonMgr().getCustomerserviceContact(activity, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                Intent intent = new Intent(activity, PhoneVerifyAct.class);
+                activity.startActivityForResult(intent, requestCode);
+            }
+        });
+
     }
 
     /**
@@ -284,8 +289,14 @@ public class UIShow {
     /**
      * 打开关于页面
      */
-    public static void showAboutAct(final Activity context) {
-        context.startActivity(new Intent(context, AboutAct.class));
+    public static void showAboutAct(final FragmentActivity context) {
+        ModuleMgr.getCommonMgr().getCustomerserviceContact(context, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                context.startActivity(new Intent(context, AboutAct.class));
+            }
+        });
+
     }
 
     /**
@@ -1294,13 +1305,6 @@ public class UIShow {
     }
 
     /**
-     * 打开VIP开通页
-     */
-    public static void showGoodsVipAct(Context context) {
-        context.startActivity(new Intent(context, GoodsVipAct.class));
-    }
-
-    /**
      * 打开钻石商品页
      */
     public static void showGoodsDiamondAct(Context context) {
@@ -1377,8 +1381,13 @@ public class UIShow {
      * @param context
      * @param requestCode
      */
-    public static void showPhoneVerifyCompleteAct(FragmentActivity context, int requestCode) {
-        context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
+    public static void showPhoneVerifyCompleteAct(final FragmentActivity context, final int requestCode) {
+        ModuleMgr.getCommonMgr().getCustomerserviceContact(context, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
+            }
+        });
     }
 
     /**

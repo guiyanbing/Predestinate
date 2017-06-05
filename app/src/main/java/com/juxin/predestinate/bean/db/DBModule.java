@@ -3,12 +3,15 @@ package com.juxin.predestinate.bean.db;
 import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.BuildConfig;
 import com.squareup.sqlbrite.SqlBrite;
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/27.
@@ -38,7 +41,7 @@ public class DBModule {
                 @Override
                 public void log(String message) {
                     if (!TextUtils.isEmpty(message)) {
-                        //XLog.d(message);
+                        PLogger.printObject(message);
                     }
                 }
             });
@@ -49,7 +52,7 @@ public class DBModule {
     @Provides
     @Singleton
     BriteDatabase provideDatabase(SqlBrite sqlBrite, SQLiteOpenHelper helper) {
-        BriteDatabase db = sqlBrite.wrapDatabaseHelper(helper, rx.schedulers.Schedulers.io());
+        BriteDatabase db = sqlBrite.wrapDatabaseHelper(helper, Schedulers.io());
         db.setLoggingEnabled(BuildConfig.DEBUG);
         return db;
     }

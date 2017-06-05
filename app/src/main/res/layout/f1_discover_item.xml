@@ -37,43 +37,17 @@
                     android:id="@+id/discover_item_name"
                     style="@style/txt_item_nickname" />
 
-
-                <LinearLayout
+                <ImageView
                     android:id="@+id/discover_item_ranking_state"
-                    style="@style/icon_middle_center"
-                    android:layout_width="@dimen/px140_dp"
-                    android:layout_height="@dimen/px50_dp"
-                    android:layout_marginLeft="@dimen/px35_dp"
-                    android:background="@drawable/f1_ranking_bg_w"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/discover_item_ranking_type"
-                        android:layout_width="@dimen/px35_dp"
-                        android:layout_height="@dimen/px35_dp"
-                        android:layout_marginLeft="@dimen/px10_dp"
-                        android:background="@drawable/f1_round_text_bg"
-                        android:gravity="center"
-                        android:text="魅"
-                        android:textColor="@color/color_ff4d79"
-                        android:textSize="@dimen/px22_sp" />
-
-                    <TextView
-                        android:id="@+id/discover_item_ranking_level"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/px5_dp"
-                        android:singleLine="true"
-                        android:text="TOP 01"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/px22_sp" />
-                </LinearLayout>
+                    style="@style/icon_small"
+                    android:layout_marginLeft="@dimen/px10_dp"
+                    android:src="@drawable/f1_top01"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/discover_item_vip_state"
-                    style="@style/icon_middle"
-                    android:layout_marginLeft="@dimen/px5_dp"
+                    style="@style/icon_small"
+                    android:layout_marginLeft="@dimen/px10_dp"
                     android:src="@drawable/f1_vip_icon"
                     android:visibility="visible" />
             </LinearLayout>
@@ -162,7 +136,6 @@
                     <Button
                         android:id="@+id/discover_item_video"
                         style="@style/icon_small"
-                        android:layout_marginLeft="@dimen/px15_dp"
                         android:background="@drawable/f1_video_state_ico" />
 
                     <TextView
@@ -171,7 +144,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/px5_dp"
                         android:text="可视频"
-                        android:textColor="@color/color_6dcca3"
+                        android:textColor="@color/color_b89ca3"
                         android:textSize="@dimen/px30_sp" />
                 </LinearLayout>
 
@@ -185,7 +158,6 @@
                     <Button
                         android:id="@+id/discover_item_call"
                         style="@style/icon_small"
-                        android:layout_marginLeft="@dimen/px15_dp"
                         android:background="@drawable/f1_call_state_ico" />
 
                     <TextView
@@ -195,7 +167,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/px5_dp"
                         android:text="可语音"
-                        android:textColor="@color/color_6dcca3"
+                        android:textColor="@color/color_b89ca3"
                         android:textSize="@dimen/px30_sp" />
                 </LinearLayout>
             </LinearLayout>

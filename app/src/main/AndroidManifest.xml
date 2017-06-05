@@ -233,10 +233,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.user.paygoods.vip.GoodsVipAct"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.mail.chat.PrivateChatAct"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />

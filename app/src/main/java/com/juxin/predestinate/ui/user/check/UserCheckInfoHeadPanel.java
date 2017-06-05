@@ -70,8 +70,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
         TextView user_height = (TextView) findViewById(R.id.tv_height);
         TextView user_distance = (TextView) findViewById(R.id.tv_distance);
         TextView user_online_time = (TextView) findViewById(R.id.tv_last_online);
-        FrameLayout fl_topN = (FrameLayout) findViewById(R.id.fl_top_n);
-        TextView tv_topN = (TextView) findViewById(R.id.tv_top_n);
+        ImageView iv_rank = (ImageView) findViewById(R.id.iv_rank);
         ImageView iv_vip = (ImageView) findViewById(R.id.iv_vip);
         img_header.setOnClickListener(listener);
         user_follow = (TextView) findViewById(R.id.tv_guanzhu);
@@ -99,9 +98,8 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
                 getContext().getString(R.string.user_info_distance_near));
         user_follow.setText(getContext().getString(R.string.user_info_follow_count, follow));
         iv_vip.setVisibility(userDetail.isVip() ? View.VISIBLE : View.GONE);
-        if (userDetail.isMan()) fl_topN.setBackgroundResource(R.drawable.f1_top02);
-        fl_topN.setVisibility(userDetail.getTopN() <= 0 ? View.GONE : View.VISIBLE);
-        tv_topN.setText("TOP" + userDetail.getTopN());
+        if (userDetail.isMan()) iv_rank.setImageResource(R.drawable.f1_top02);
+        iv_rank.setVisibility(userDetail.getTopN() <= 0 ? View.GONE : View.VISIBLE);
     }
 
     private NoDoubleClickListener listener = new NoDoubleClickListener() {
