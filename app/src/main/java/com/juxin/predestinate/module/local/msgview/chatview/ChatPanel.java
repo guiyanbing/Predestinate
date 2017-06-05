@@ -1,12 +1,9 @@
 package com.juxin.predestinate.module.local.msgview.chatview;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -19,8 +16,6 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
-
-import java.io.IOException;
 
 /**
  * 只处理聊天内容部分的信息
@@ -185,9 +180,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
     }
 
     /**
-     * 是否显示parent的背景。
-     *
-     * @return
+     * @return 是否显示parent的背景
      */
     public boolean isShowParentLayout() {
         return isShowParentBg;
@@ -206,76 +199,6 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
         }
 
         return tag.equals(view.getTag());
-    }
-
-    /**
-     * 处理图片相关。
-     *
-     * @param img
-     * @param fileName
-     */
-    protected void setGiftImg(ImageView img, String fileName, String key) {
-        if (isEqualsTag(img, key)) {
-            return;
-        }
-
-        // TODO: 2017/5/24 替换使用glide进行gif加载
-//        GifDrawable drawable = null;
-//
-//        try {
-//            drawable = new GifDrawable(fileName);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        setImg(img, drawable, key);
-    }
-
-    protected void setAssetsGiftImg(ImageView img, String fileName) {
-        if (isEqualsTag(img, fileName)) {
-            return;
-        }
-
-        // TODO: 2017/5/24 替换使用glide进行gif加载
-//        GifDrawable drawable = null;
-//
-//        try {
-//            drawable = new GifDrawable(getContext().getAssets(), fileName);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        setImg(img, drawable, fileName);
-    }
-
-    protected void setAssetsImg(ImageView img, String fileName) {
-        if (isEqualsTag(img, fileName)) {
-            return;
-        }
-
-        BitmapDrawable drawable = null;
-
-        try {
-            drawable = new BitmapDrawable(getContext().getAssets().open(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setImg(img, drawable, fileName);
-    }
-
-    protected void setImg(ImageView imageView, Drawable drawable, String key) {
-        if (imageView == null) {
-            return;
-        }
-
-        if (drawable == null) {
-            imageView.setImageDrawable(null);
-            imageView.setTag("");
-        } else {
-            imageView.setImageDrawable(drawable);
-            imageView.setTag(key);
-        }
     }
 
     protected void setDialog(final BaseMessage msgData, final SimpleTipDialog.ConfirmListener listener) {

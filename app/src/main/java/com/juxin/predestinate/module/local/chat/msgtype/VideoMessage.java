@@ -207,8 +207,10 @@ public class VideoMessage extends BaseMessage {
         switch (status) {
             case timeout:
             case cancel:
-            case refuse:
                 result = "<font color='#ffac0c'>" + (isSender ? "[未接通]" : "[未接来电]") + "</font>";
+                break;
+            case refuse:
+                result = "<font color='#ffac0c'>[未接通]</font>";
                 break;
             case connect:
                 result = "[通话结束]";
