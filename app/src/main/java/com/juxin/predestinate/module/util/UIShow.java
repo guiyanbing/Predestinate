@@ -106,7 +106,6 @@ import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
-import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipAct;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDlgOld;
 import com.juxin.predestinate.ui.user.paygoods.ycoin.GoodsYCoinDialog;
@@ -1291,13 +1290,6 @@ public class UIShow {
      */
     public static void showGoodsYCoinDlgOld(Context context) {
         context.startActivity(new Intent(context, GoodsYCoinDlgOld.class));
-    }
-
-    /**
-     * 打开VIP开通页
-     */
-    public static void showGoodsVipAct(Context context) {
-        context.startActivity(new Intent(context, GoodsVipAct.class));
     }
 
     /**
