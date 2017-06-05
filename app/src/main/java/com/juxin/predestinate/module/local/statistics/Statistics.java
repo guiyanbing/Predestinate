@@ -158,6 +158,19 @@ public class Statistics {
      * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
      */
     public static void userBehavior(SendPoint sendPoint, long to_uid, String fixParams) {
+        userBehavior(sendPoint.toString(), to_uid, fixParams);
+    }
+
+    /**
+     * 用户行为统计
+     *
+     * @param sendPoint 统计点
+     * @param to_uid    与其产生交互的用户uid
+     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     */
+    public static void userBehavior(String sendPoint, long to_uid, String fixParams) {
+        if (TextUtils.isEmpty(sendPoint)) return;
+
         Map<String, Object> singleMap = new HashMap<>();
         singleMap.put("time", ModuleMgr.getAppMgr().getSecondTime());//发送时间戳
         singleMap.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());//用户UID,获取失败返回0
@@ -184,7 +197,7 @@ public class Statistics {
         singleMap.put("page", App.getActivity().getClass().getSimpleName());//当前页面，栈顶activity
         singleMap.put("referer", activities.size() > 1 ?
                 activities.get(activities.size() - 2).getClass().getSimpleName() : "");//来源页面(可选)，栈中第二个activity
-        singleMap.put("event_type", sendPoint.toString());//事件类型
+        singleMap.put("event_type", sendPoint);//事件类型
         singleMap.put("event_data", TextUtils.isEmpty(fixParams) ? "{}" : fixParams);//事件数据(可选,有数据需提供数据说明文档)
 
         HashMap<String, Object> postParams = new HashMap<>();

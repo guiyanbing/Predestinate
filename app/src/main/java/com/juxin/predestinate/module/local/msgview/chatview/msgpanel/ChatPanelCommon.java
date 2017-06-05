@@ -164,9 +164,11 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         //图片
         if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {
             onImgDisplayContent(msg);
+            setShowParentBg(false);
             return true;
         }
         //文本
+        setShowParentBg(true);
         onTextDisplayContent(msg);
         return true;
     }
@@ -204,7 +206,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String url = msg.getLocalImg();
         if (TextUtils.isEmpty(url)) url = msg.getImg();
         ImageLoader.loadRound(getContext(), url, chat_item_img);
-        setShowParentBg(false);
     }
 
     /**

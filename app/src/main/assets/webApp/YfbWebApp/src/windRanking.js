@@ -90,9 +90,9 @@ var Ranking = Ranking || (function ($) {
             }
         }
         if (_tabIndex === 0) {
-          giftsText = '您收到'
+          giftsText = '收到'
         } else if (_tabIndex === 1) {
-          giftsText = '您送出'
+          giftsText = '送出'
         }
         for (var i = 0; i < firstThree.length; i++) {
           var data = dataList[firstThree[i] - 1];
@@ -134,9 +134,9 @@ var Ranking = Ranking || (function ($) {
       var _selfNumHtml = function (mynum) {
         var html = '';
         if (_tabIndex === 0) {
-          html += '收到:' + mynum + '个礼物';
+          html += '您收到:' + mynum + '个礼物';
         } else if (_tabIndex === 1) {
-          html += '送出:' + mynum + '个礼物';
+          html += '您送出:' + mynum + '个礼物';
         }
         console.log('html=' + html);
 
