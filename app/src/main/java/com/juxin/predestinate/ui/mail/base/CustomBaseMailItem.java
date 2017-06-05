@@ -220,5 +220,5 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View view) {}
 }

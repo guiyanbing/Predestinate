@@ -11,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -31,7 +30,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -329,6 +327,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onScrollStateChanged(final AbsListView view, int scrollState) {
+        if(mailFragmentAdapter == null) return;
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
