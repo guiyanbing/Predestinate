@@ -155,11 +155,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             item_last_status.setVisibility(View.GONE);
             return;
         }
-        String result = msgData.getMsgDesc();
-        if (TextUtils.isEmpty(result)) {
-            item_last_status.setVisibility(View.GONE);
-            return;
-        }
         // 发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
         switch (msgData.getStatus()) {
             case 1:

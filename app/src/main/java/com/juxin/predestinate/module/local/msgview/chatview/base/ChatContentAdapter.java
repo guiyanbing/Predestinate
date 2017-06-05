@@ -394,11 +394,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 status.setVisibility(View.GONE);
                 return;
             }
-            String result = msg.getMsgDesc();
-            if (TextUtils.isEmpty(result)) {
-                status.setVisibility(View.GONE);
-                return;
-            }
             switch (msg.getStatus()) {
                 case 1: // 发送成功
                     status.setText("送达");
