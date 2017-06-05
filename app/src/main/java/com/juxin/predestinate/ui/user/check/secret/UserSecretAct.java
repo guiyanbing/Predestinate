@@ -80,7 +80,7 @@ public class UserSecretAct extends BaseActivity implements BaseRecyclerViewHolde
         }
 
         // 判断当前选择视频解锁状态，未解锁礼物弹框，解锁直接进入播放弹框
-        if (!userVideo.isCanView()) {
+        if (!userVideo.isCanView() && userVideo.getGiftid() != 0) {
             UIShow.showSecretGiftDlg(this, userVideo);
             return;
         }

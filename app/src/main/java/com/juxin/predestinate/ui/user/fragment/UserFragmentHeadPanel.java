@@ -57,6 +57,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         user_id = (TextView) findViewById(R.id.user_id);
         iv_invite_code = (TextView) findViewById(R.id.iv_invite_code);
         user_tips = (LinearLayout) findViewById(R.id.tips_verify_mobile);
+        ImageLoader.loadCircleAvatar(getContext(), R.drawable.default_head, user_head);
 
         //根据屏幕分辨率设置最大显示长度
         user_nick.setMaxEms(App.context.getResources().getDisplayMetrics().density <= 1.5 ? 5 : 7);
@@ -75,14 +76,12 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
      * 界面刷新
      */
     public void refreshView() {
-        myInfo = ModuleMgr.getCenterMgr().getMyInfo();
-        ImageLoader.loadCircleAvatar(getContext(), myInfo.getAvatar(), user_head);
+        refreshHeader();
         user_id.setText("ID:" + myInfo.getUid());
         user_nick.setText(myInfo.getNickname());
         iv_invite_code.setText(String.format(getContext().getResources().
                 getString(R.string.center_my_invite_code), myInfo.getShareCode()));
         functionPanel.refreshView(myInfo);
-        refreshHeader();
 
         if (!myInfo.isVerifyCellphone()) {
             user_tips.setVisibility(View.VISIBLE);
@@ -92,6 +91,8 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
     }
 
     private void refreshHeader() {
+        myInfo = ModuleMgr.getCenterMgr().getMyInfo();
+        ImageLoader.loadCircleAvatar(getContext(), myInfo.getAvatar(), user_head);
         if (myInfo.isVip()) {
             user_head_vip.setVisibility(View.VISIBLE);
             ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_user_vip_logo, user_head_vip);
