@@ -27,7 +27,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public static boolean bPayOkFlag;
 
     private PayGood payGood;
-    private BasePayPannel payAlipayPannel, payWXPannel, payCupPannel, payPhonecardPannel, payAlipayWebPannel, payVoicePannel;
+    private BasePayPannel payAlipayPannel, payWXPannel,  payPhonecardPannel, payAlipayWebPannel;
 
     private TextView paylist_help_txt;
     private boolean help_txt = true;
@@ -57,8 +57,6 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         LinearLayout pay_listView = (LinearLayout) findViewById(R.id.paytype_list);
         payAlipayPannel = new PayAlipayPannel(this, payGood);
         payWXPannel = new PayWXPannel(this, payGood);
-        payVoicePannel = new PayVoicePannel(this, payGood);
-        payCupPannel = new PayCUPPannel(this, payGood);
         payAlipayWebPannel = new PayAlipayWebPannel(this, payGood);
         payPhonecardPannel = new PayPhoneCardPannel(this, payGood);
 
@@ -80,8 +78,6 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
             pay_listView.addView(payWXPannel.getContentView());
         }
 
-        pay_listView.addView(payVoicePannel.getContentView());
-        pay_listView.addView(payCupPannel.getContentView());
         pay_listView.addView(payAlipayWebPannel.getContentView());
         pay_listView.addView(payPhonecardPannel.getContentView());
     }

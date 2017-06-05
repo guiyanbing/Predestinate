@@ -251,19 +251,6 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name=".ui.pay.cupvoice.PayVoiceAct"
-            android:configChanges="screenSize|keyboard|orientation"
-            android:windowSoftInputMode="stateHidden" />
-
-        <activity
-            android:name=".ui.pay.cupvoice.PayCupVoiceDetailAct"
-            android:configChanges="screenSize|keyboard|orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.pay.cupvoice.PayCupVoiceOkAct"
-            android:configChanges="screenSize|keyboard|orientation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.pay.PayWebAct"
             android:screenOrientation="portrait" />
 
