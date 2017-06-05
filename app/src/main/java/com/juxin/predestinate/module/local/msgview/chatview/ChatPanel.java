@@ -18,7 +18,6 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 import java.io.IOException;
@@ -112,15 +111,6 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
             //   UIShow.showMyInfoActivity(getChatInstance().context);
             return true;
         }
-
-        //红娘禁止跳转个人资料
-        MailMsgID mailMsgID = MailMsgID.getMailMsgID(msgData.getLWhisperID());
-//        if (mailMsgID != null) {
-//            switch (mailMsgID){
-//                case matchmaker_msg:
-//                    return true;
-//            }
-//        }
 
         if (MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()) {
             UIShow.showUserOtherSetAct((FragmentActivity) getChatInstance().context, msgData.getLWhisperID(), null, CenterConstant.USER_SET_FROM_CHAT);

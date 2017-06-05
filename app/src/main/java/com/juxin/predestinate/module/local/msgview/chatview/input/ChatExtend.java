@@ -1,7 +1,5 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
-import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.util.ArrayList;
 import java.util.List;
 

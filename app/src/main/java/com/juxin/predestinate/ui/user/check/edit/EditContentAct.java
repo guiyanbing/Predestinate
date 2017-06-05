@@ -13,7 +13,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIUtil;
-import com.juxin.predestinate.ui.user.edit.EditKey;
 
 import java.util.HashMap;
 
