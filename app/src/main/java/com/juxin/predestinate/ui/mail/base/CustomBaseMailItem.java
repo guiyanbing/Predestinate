@@ -62,9 +62,9 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         return contentView;
     }
 
-    public LinearLayout mail_item_letter, item_ranking_state;
-    public ImageView item_headpic, item_vip;
-    public TextView item_nickname, item_last_time, item_last_status, item_certification, item_ranking_type, item_ranking_level;
+    public LinearLayout mail_item_letter;
+    public ImageView item_headpic, item_vip, item_ranking_state;
+    public TextView item_nickname, item_last_time, item_last_status, item_certification;
     public EmojiTextView item_last_msg;
     public BadgeView item_unreadnum;
 
@@ -79,9 +79,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_last_status = (TextView) contentView.findViewById(R.id.mail_item_last_status);
         item_headpic.setOnClickListener(this);
 
-        item_ranking_state = (LinearLayout) contentView.findViewById(R.id.mail_item_ranking_state);
-        item_ranking_type = (TextView) contentView.findViewById(R.id.mail_item_ranking_type);
-        item_ranking_level = (TextView) contentView.findViewById(R.id.mail_item_ranking_level);
+        item_ranking_state = (ImageView) contentView.findViewById(R.id.mail_item_ranking_state);
         item_vip = (ImageView) contentView.findViewById(R.id.mail_item_vip);
     }
 
@@ -209,13 +207,9 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
         item_ranking_state.setVisibility(View.VISIBLE);
         if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            item_ranking_state.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-            item_ranking_type.setText(context.getString(R.string.top_type_man));
-            item_ranking_level.setText("TOP " + msgData.getTop());
+            item_ranking_state.setImageResource(R.drawable.f1_top02);
         } else {
-            item_ranking_state.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-            item_ranking_type.setText(context.getString(R.string.top_type_woman));
-            item_ranking_level.setText("TOP " + msgData.getTop());
+            item_ranking_state.setImageResource(R.drawable.f1_top01);
         }
     }
 

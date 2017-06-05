@@ -9,6 +9,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
@@ -30,7 +31,7 @@ public class Statistics {
     private static final String BEHAVIOR_CACHE_KEY = "BEHAVIOR_CACHE_KEY";//用户行为缓存key
     private static final String BEHAVIOR_SESSION_KEY = "BEHAVIOR_SESSION_KEY";//用户行为session time校验存储key
     private static final String BEHAVIOR_SESSION_ID_KEY = "BEHAVIOR_SESSION_ID_KEY";//用户行为sessionId存储key
-    private static final String BEHAVIOR_FIRST_KEY = "BEHAVIOR_FIRST_KEY";//是否到达第二天存储key
+    private static final String BEHAVIOR_ACCOUNT_KEY = "BEHAVIOR_ACCOUNT_KEY";//是否切换帐号登录存储key，存储用户uid
     private static final long BEHAVIOR_SESSION_TIME = 30 * 60 * 1000;//session有效时间：30分钟
     private static final Gson gson = new Gson();
 
@@ -69,12 +70,24 @@ public class Statistics {
         singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
 
         // 判断离上次产生session是否超过1天 //是否是APP启动后发送的第1条Startup数据,统计APP启动次数字段
-        singleMap.put("first_start", ModuleMgr.getCommonMgr().checkDateAndSave(BEHAVIOR_FIRST_KEY));
+        singleMap.put("first_start", isSwitchAccount());
 
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("topic", StatisticPoint.Startup);//统计项名称
         postParams.put("message", singleMap);//统计项数据内容
         sendStatistics(postParams);
+    }
+
+    /**
+     * @return 用户切换帐号登录-false，同一帐号登录-true
+     */
+    private static boolean isSwitchAccount() {
+        String account = PSP.getInstance().getString(BEHAVIOR_ACCOUNT_KEY, "");
+        if (TextUtils.isEmpty(account) || ModuleMgr.getLoginMgr().getUid() == TypeConvertUtil.toLong(account)) {
+            PSP.getInstance().put(BEHAVIOR_ACCOUNT_KEY, ModuleMgr.getLoginMgr().getUid());
+            return false;
+        }
+        return true;
     }
 
     /**

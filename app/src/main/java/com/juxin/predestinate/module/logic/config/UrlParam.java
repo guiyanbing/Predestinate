@@ -9,6 +9,7 @@ import com.juxin.predestinate.bean.my.GiftMessageList;
 import com.juxin.predestinate.bean.my.RedOneKeyList;
 import com.juxin.predestinate.bean.my.RedbagList;
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.OfflineMsg;
@@ -27,7 +28,7 @@ public enum UrlParam {
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
     reqForgotsms("Public/forgotsms", false),//找回密码发送验证码
-    getserviceqq("user/getserviceqq", true),//获取客服qq
+    getserviceqq("user/getserviceqq",ContactBean.class,true),//获取客服信息
     //================================ 配置项 ==================================
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
     checkUpdate("public/checkupNew", null, true),//检查软件升级

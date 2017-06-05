@@ -35,9 +35,9 @@
 
         <ImageView
             android:id="@+id/cus_top_title_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/f1_top01" />
+            android:layout_width="@dimen/px52_dp"
+            android:layout_height="@dimen/px52_dp"
+            android:src="@drawable/f1_top01" />
 
         <TextView
             android:id="@+id/cus_top_title_txt"
@@ -53,7 +53,8 @@
             android:maxLines="1"
             android:text="Top3"
             android:textColor="@color/white"
-            android:textSize="@dimen/px26_sp" />
+            android:textSize="@dimen/px26_sp"
+            android:visibility="gone"/>
     </RelativeLayout>
 </RelativeLayout>
 
