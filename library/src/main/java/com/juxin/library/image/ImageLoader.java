@@ -71,11 +71,11 @@ public class ImageLoader {
      * CenterCrop加载图片
      */
     public static <T> void loadCenterCrop(Context context, T model, ImageView view) {
-        loadCenterCrop(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadCenterCrop(context, model, view, R.drawable.default_pic);
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg) {
-        loadPic(context, model, view, defResImg, defResImg, bitmapCenterCrop);
+        loadCenterCrop(context, model, view, defResImg, defResImg);
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg, int errResImg) {
@@ -86,11 +86,11 @@ public class ImageLoader {
      * FitCenter加载图片
      */
     public static <T> void loadFitCenter(Context context, T model, ImageView view) {
-        loadFitCenter(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadFitCenter(context, model, view, R.drawable.default_pic);
     }
 
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg) {
-        loadPic(context, model, view, defResImg, defResImg, bitmapFitCenter);
+        loadFitCenter(context, model, view, defResImg, defResImg);
     }
 
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg, int errResImg) {
@@ -191,6 +191,10 @@ public class ImageLoader {
                                     final Drawable defResImg, final Drawable errResImg,
                                     final Transformation<Bitmap>... transformation) {
         try {
+            //先加载默认图
+            view.setImageDrawable(defResImg);
+
+            //再去网络请求
             loadPicWithCallback(context, model, new GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
@@ -211,24 +215,7 @@ public class ImageLoader {
      * 加载图片： 带回调
      */
     public static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback) {
-        try {
-            if (isActDestroyed(context))
-                return;
-
-            getDrawableBuilder(context, model)
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            if (isActDestroyed(context))
-                                return;
-
-                            if (callback != null)
-                                callback.onResourceReady(resource);
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadPicWithCallback(context, model, callback, null);
     }
 
     private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
@@ -236,9 +223,10 @@ public class ImageLoader {
             if (isActDestroyed(context))
                 return;
 
-            getDrawableBuilder(context, model)
-                    .bitmapTransform(transformation)
-                    .into(new SimpleTarget<GlideDrawable>() {
+            DrawableRequestBuilder<T> builder = getDrawableBuilder(context, model);
+            if (transformation != null)
+                builder.bitmapTransform(transformation);
+            builder.into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                             if (isActDestroyed(context))
