@@ -1,17 +1,19 @@
 package com.juxin.library.image;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.widget.ImageView;
 
 import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.DrawableRequestBuilder;
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -29,6 +31,8 @@ public class ImageLoader {
     private static CenterCrop bitmapCenterCrop;
     private static FitCenter bitmapFitCenter;
     private static CircleTransform circleTransform;
+    private static RoundedCorners roundedCorners;
+    private static BlurImage blurImage;
 
     public static void init(Context context) {
         Context mContext = context.getApplicationContext();
@@ -36,6 +40,8 @@ public class ImageLoader {
         bitmapCenterCrop = new CenterCrop(mContext);
         bitmapFitCenter = new FitCenter(mContext);
         circleTransform = new CircleTransform(mContext);
+        roundedCorners = new RoundedCorners(mContext, 8, 0, RoundedCorners.CornerType.ALL);
+        blurImage = new BlurImage(context, 50);
     }
 
     /**
@@ -50,13 +56,26 @@ public class ImageLoader {
     }
 
     public static <T> void loadCircleAvatar(Context context, T model, ImageView view, int borderWidth) {
-        loadCircle(context, model, view, R.drawable.default_head, borderWidth, Color.WHITE);
+        loadCircle(context, model, view, R.drawable.default_head, R.drawable.default_head, borderWidth, Color.WHITE);
     }
+
+    public static <T> void loadRoundAvatar(Context context, T model, ImageView view) {
+        loadRoundAvatar(context, model, view, 8);
+    }
+
+    public static <T> void loadRoundAvatar(Context context, T model, ImageView view, int roundPx) {
+        loadRound(context, model, view, roundPx, R.drawable.default_head);
+    }
+
     /**
      * CenterCrop加载图片
      */
     public static <T> void loadCenterCrop(Context context, T model, ImageView view) {
         loadCenterCrop(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+    }
+
+    public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg) {
+        loadPic(context, model, view, defResImg, defResImg, bitmapCenterCrop);
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg, int errResImg) {
@@ -70,6 +89,10 @@ public class ImageLoader {
         loadFitCenter(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
+    public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg) {
+        loadPic(context, model, view, defResImg, defResImg, bitmapFitCenter);
+    }
+
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg, int errResImg) {
         loadPic(context, model, view, defResImg, errResImg, bitmapFitCenter);
     }
@@ -77,16 +100,37 @@ public class ImageLoader {
     /**
      * 图片圆角处理: 默认全角处理，其他需求自行重载方法
      */
-    public static <T> void loadRoundCorners(Context context, T model, ImageView view) {
-        loadRoundCorners(context, model, 8, view);
+    public static <T> void loadRound(Context context, T model, ImageView view) {
+        loadRound(context, model, view, 8, R.drawable.default_pic, R.drawable.default_pic);
+    }
+
+    public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg) {
+        loadRound(context, model, view, roundPx, defResImg, defResImg);
     }
 
     /**
      * @param roundPx 圆角弧度
      */
-    public static <T> void loadRoundCorners(Context context, T model, int roundPx, ImageView view) {
-        RoundedCorners roundedCorners = new RoundedCorners(context, roundPx, 0, RoundedCorners.CornerType.ALL);
-        loadPic(context, model, view, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop, roundedCorners);
+    public static <T> void loadRound(final Context context, final T model, final ImageView view,
+                                     int roundPx, int defResImg, final int errResImg) {
+        roundedCorners.setRadius(roundPx);
+        loadPicWithCallback(context,
+                defResImg,
+                new GlideCallback() {
+                    @Override
+                    public void onResourceReady(final GlideDrawable defRes) {
+                        loadPicWithCallback(context,
+                                errResImg,
+                                new GlideCallback() {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable errRes) {
+                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, roundedCorners);
+                                    }
+                                },
+                                bitmapCenterCrop, roundedCorners);
+                    }
+                },
+                bitmapCenterCrop, roundedCorners);
     }
 
     /**
@@ -94,30 +138,33 @@ public class ImageLoader {
      *
      * @param level 模糊等级
      */
-    public static <T> void loadBlurImg(Context context, T model, int level, ImageView view) {
-        BlurImage blurImage = new BlurImage(context, level);
+    public static <T> void loadBlur(Context context, T model, ImageView view, int level) {
+        blurImage.setRadius(level);
         loadPic(context, model, view, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop, blurImage);
     }
 
     /**
      * 加载为圆形图像
      */
-    public static <T> void loadCircle(final Context context, final T model, final ImageView view, int defImg, int borderWidth, int borderColor) {
+    public static <T> void loadCircle(final Context context, final T model, final ImageView view,
+                                      final int defResImg, final int errResImg, int borderWidth, int borderColor) {
         circleTransform.setBorderWidth(borderWidth);
         circleTransform.setBorderColor(borderColor);
-        loadPicWithCallback(context, defImg,  new GlideCallback() {
-            @Override
-            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                loadPic(context, model, view, resource, resource, bitmapCenterCrop, circleTransform);
-            }
-        }, bitmapCenterCrop, circleTransform);
-    }
-
-    /**
-     * 加载图片： 带回调
-     */
-    public static <T> void loadPicWithCallback(Context context, T model, GlideCallback callback) {
-        loadPicWithCallback(context, model, callback, bitmapCenterCrop);
+        loadPicWithCallback(context,
+                defResImg,
+                new GlideCallback() {
+                    @Override
+                    public void onResourceReady(final GlideDrawable defRes) {
+                        loadPicWithCallback(context,
+                                errResImg,
+                                new GlideCallback() {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable errRes) {
+                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, circleTransform);
+                                    }
+                                }, bitmapCenterCrop, circleTransform);
+                    }
+                }, bitmapCenterCrop, circleTransform);
     }
 
     /**
@@ -128,35 +175,77 @@ public class ImageLoader {
     }
 
     // ==================================== 内部私有调用 =============================================
-    private static <T> void loadPic(Context context, T model, ImageView view, int defResImg, int errResImg, Transformation<Bitmap>... transformation) {
+
+    private static <T> void loadPic(Context context, T model, ImageView view,
+                                    int defResImg, int errResImg,
+                                    Transformation<Bitmap>... transformation) {
         try {
-            getRequestBuilder(context, model, transformation)
-                    .placeholder(defResImg)
-                    .error(errResImg)
-                    .into(view);
+            loadPic(context, model, view, context.getResources().getDrawable(defResImg),
+                    context.getResources().getDrawable(errResImg), transformation);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static <T> void loadPic(Context context, T model, ImageView view, Drawable defResImg, Drawable errResImg, Transformation<Bitmap>... transformation) {
+    private static <T> void loadPic(final Context context, final T model, final ImageView view,
+                                    final Drawable defResImg, final Drawable errResImg,
+                                    final Transformation<Bitmap>... transformation) {
         try {
-            getRequestBuilder(context, model, transformation)
-                    .placeholder(defResImg)
-                    .error(errResImg)
-                    .into(view);
+            loadPicWithCallback(context, model, new GlideCallback() {
+                @Override
+                public void onResourceReady(GlideDrawable resource) {
+                    getDrawableBuilder(context, model)
+                            .bitmapTransform(transformation)
+                            .placeholder(defResImg)
+                            .error(errResImg)
+                            .diskCacheStrategy(resource.isAnimated() ? DiskCacheStrategy.SOURCE : DiskCacheStrategy.ALL)
+                            .into(view);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static <T> void loadPicWithCallback(Context context, T model, final GlideCallback callback, BitmapTransformation... transformations) {
+    /**
+     * 加载图片： 带回调
+     */
+    public static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback) {
         try {
-            getRequestBuilder(context, model, transformations)
+            if (isActDestroyed(context))
+                return;
+
+            getDrawableBuilder(context, model)
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            callback.onResourceReady(resource, glideAnimation);
+                            if (isActDestroyed(context))
+                                return;
+
+                            if (callback != null)
+                                callback.onResourceReady(resource);
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
+        try {
+            if (isActDestroyed(context))
+                return;
+
+            getDrawableBuilder(context, model)
+                    .bitmapTransform(transformation)
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            if (isActDestroyed(context))
+                                return;
+
+                            if (callback != null)
+                                callback.onResourceReady(resource);
                         }
                     });
         } catch (Exception e) {
@@ -165,31 +254,45 @@ public class ImageLoader {
     }
 
     private static <T> void loadGifAsBmp(Context context, T model, ImageView view, int defResImg, int errResImg) {
-        getBmpRequestBuilder(context, model, bitmapFitCenter)
-                .placeholder(defResImg)
-                .error(errResImg)
-                .into(view);
+        try {
+            if (isActDestroyed(context))
+                return;
+
+            getBitmapBuilder(context, model)
+                    .transform(bitmapFitCenter)
+                    .placeholder(defResImg)
+                    .error(errResImg)
+                    .into(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private static <T> DrawableRequestBuilder<T> getRequestBuilder(Context context, T model, Transformation<Bitmap>...transformation) {
-        return Glide.with(context)
-                .load(model)
+    private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
+        return getDrawableRequest(context, model)
                 .dontAnimate()
-                .bitmapTransform(transformation)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE);
+    }
+
+    private static <T> BitmapRequestBuilder<T, Bitmap> getBitmapBuilder(Context context, T model) {
+        return getDrawableRequest(context, model)
+                .asBitmap()
+                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
-    private static <T> BitmapRequestBuilder<T, Bitmap> getBmpRequestBuilder(Context context, T model, BitmapTransformation... transformations) {
-        return Glide.with(context)
-                .load(model)
-                .asBitmap()
-                .dontAnimate()
-                .transform(transformations)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE);
+    private static <T> DrawableTypeRequest<T> getDrawableRequest(Context context, T model) {
+        return Glide.with(context).load(model);
+    }
+
+
+    private static boolean isActDestroyed(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
+                context instanceof Activity && ((Activity) context).isDestroyed();
     }
 
     // 请求回调
     public interface GlideCallback {
-        void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation);
+        void onResourceReady(GlideDrawable resource);
     }
 }

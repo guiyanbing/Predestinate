@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -34,14 +35,18 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -80,7 +85,11 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      */
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
-        dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+        long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+        if (ret != MessageConstant.ERROR) {
+            ModuleMgr.getChatListMgr().getWhisperList();
+        }
+
         // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
         // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
@@ -110,6 +119,7 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateOtherRead(String channelID, String whisperID, long sendID) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
+        ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
         if (!whisperId.equalsIgnoreCase(whisperID)) {
             updateOtherSideRead(channelID, whisperID, sendID + "");
             PSP.getInstance().put(whisperID + "id", true);
@@ -582,19 +592,14 @@ public class ChatMgr implements ModuleBase {
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
-        if(videoMessage.isSender()){
-            videoMessage.setStatus(MessageConstant.OK_STATUS);
-        }else {
-            videoMessage.setStatus(MessageConstant.READ_STATUS);
-        }
-
+        videoMessage.setStatus(videoMessage.isSender() ? MessageConstant.OK_STATUS : MessageConstant.READ_STATUS);
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
-        long ret = dbCenter.getCenterFLetter().storageData(videoMessage);
-        if (ret == MessageConstant.ERROR) return;
-
-        ret = dbCenter.getCenterFMessage().storageDataVideo(videoMessage);
-        pushMsg(ret != MessageConstant.ERROR, videoMessage);
+        if (dbCenter.getCenterFMessage().storageDataVideo(videoMessage) == MessageConstant.ERROR){
+            pushMsg(false, videoMessage);
+            return;
+        }
+        pushMsg(dbCenter.getCenterFLetter().storageData(videoMessage) != MessageConstant.ERROR, videoMessage);
     }
 
     /**
@@ -633,12 +638,12 @@ public class ChatMgr implements ModuleBase {
             ModuleMgr.getChatListMgr().getWhisperList();
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
-            sendMailReadedMsg(channelID,Long.valueOf(whisperID));
+            sendMailReadedMsg(channelID, Long.valueOf(whisperID));
         return observable;
     }
 
-    public void sendMailReadedMsg(String channelID,long userID){
-        sendMailReadedMsg(channelID,userID, new IMProxy.SendCallBack() {
+    public void sendMailReadedMsg(String channelID, long userID) {
+        sendMailReadedMsg(channelID, userID, new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                 MessageRet messageRet = new MessageRet();
@@ -790,7 +795,7 @@ public class ChatMgr implements ModuleBase {
                 @Override
                 public void call(UserInfoLightweight lightweight) {
                     PLogger.printObject("lightweight==222==" + lightweight);
-                    if(lightweight.getUid() <= 0){
+                    if (lightweight.getUid() <= 0) {
                         removeInfoComplete(false, false, uid, lightweight);
                         getProFile(uid);
                         return;
@@ -836,12 +841,10 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-
     public void getProFile(List<Long> userIds) {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("response==File==" + response.getResponseString());
                 if (!response.isOk()) {
                     return;
                 }
@@ -864,7 +867,6 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("re=====" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if (!response.isOk()) {
                     infoComplete.onReqComplete(true, temp);

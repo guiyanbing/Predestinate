@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -188,9 +187,9 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
      */
     private void onTextDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_text);
-        if(BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()){
+        if (BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()) {
             MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text, msg.getMsgDesc());
-        }else {
+        } else {
             chat_item_text.setText(msg.getMsgDesc());
         }
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
@@ -204,7 +203,8 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
         String url = msg.getLocalImg();
         if (TextUtils.isEmpty(url)) url = msg.getImg();
-        ImageLoader.loadRoundCorners(getContext(), url, chat_item_img);
+        ImageLoader.loadRound(getContext(), url, chat_item_img);
+        setShowParentBg(false);
     }
 
     /**

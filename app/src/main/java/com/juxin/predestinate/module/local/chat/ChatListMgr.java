@@ -103,7 +103,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public void updateListMsg(List<BaseMessage> messages) {
+    public synchronized void updateListMsg(List<BaseMessage> messages) {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
@@ -118,6 +118,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
+                PLogger.printObject("unreadNum="+ tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
@@ -185,15 +186,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param messageList
      */
     public void deleteBatchMessage(List<BaseMessage> messageList) {
-        PLogger.printObject("messageList===" + messageList.size());
         for (BaseMessage temp : messageList) {
             dbCenter.deleteMessage(temp.getLWhisperID());
         }
     }
 
     public long deleteMessage(long userID) {
-        long ret = dbCenter.deleteMessage(userID);
-        return ret;
+        return dbCenter.deleteMessage(userID);
     }
 
     /**
@@ -232,7 +231,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public long updateToReadPrivate(long userID) {
-        return dbCenter.getCenterFLetter().updateStatus(userID);
+        long ret = dbCenter.getCenterFLetter().updateStatus(userID);
+        if(ret != MessageConstant.ERROR){
+            getWhisperList();
+        }
+        return ret;
     }
 
     public void getWhisperList() {

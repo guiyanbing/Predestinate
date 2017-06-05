@@ -48,23 +48,19 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
 
         final UserInfoLightweight userInfo = getItem(position);
-        ImageLoader.loadRoundCorners(getContext(), userInfo.getAvatar(), 8, holder.iv_avatar);
+        ImageLoader.loadRoundAvatar(getContext(), userInfo.getAvatar(), holder.iv_avatar);
         holder.tv_name.setText(userInfo.getNickname());
         holder.iv_vip.setVisibility(ModuleMgr.getCenterMgr().isVip(userInfo.getGroup()) ? View.VISIBLE : View.GONE);
 
         if (userInfo.isToper()) {
-            holder.lin_ranking.setVisibility(View.VISIBLE);
+            holder.iv_ranking.setVisibility(View.VISIBLE);
             if (userInfo.isMan()) {
-                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_m);
-                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_man));
-                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+                holder.iv_ranking.setImageResource(R.drawable.f1_top02);
             } else {
-                holder.lin_ranking.setBackgroundResource(R.drawable.f1_ranking_bg_w);
-                holder.tv_ranking_type.setText(getContext().getString(R.string.top_type_woman));
-                holder.tv_ranking_level.setText("TOP " + userInfo.getTop());
+                holder.iv_ranking.setImageResource(R.drawable.f1_top01);
             }
         } else {
-            holder.lin_ranking.setVisibility(View.GONE);
+            holder.iv_ranking.setVisibility(View.GONE);
         }
 
         if (userInfo.getAge() == 0) {
@@ -120,9 +116,9 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
                 holder.iv_call.setEnabled(userInfo.isAudio_available());
                 holder.tv_call.setVisibility(View.VISIBLE);
             } else {
-                //不可语音不可视频显示灰色语音图标
+                //不可语音不可视频都不显示
                 holder.iv_calling.setVisibility(View.GONE);
-                holder.lin_call_state.setVisibility(View.VISIBLE);
+                holder.lin_call_state.setVisibility(View.GONE);
                 holder.lin_video_state.setVisibility(View.GONE);
                 holder.iv_call.setEnabled(userInfo.isVideo_available());
                 holder.tv_call.setVisibility(View.GONE);
@@ -130,48 +126,18 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id())) {
-
+            if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                showSayHello(holder, userInfo, position);
+            } else {
+                showOnline(holder, userInfo);
             }
-        }
-
-
-        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
-            holder.btn_sayhi.setVisibility(View.GONE);
-            holder.tv_online_state.setVisibility(View.VISIBLE);
-            holder.tv_online_state.setText(userInfo.isOnline() ? "在线" : userInfo.getLast_onLine());
         } else {
-            holder.tv_online_state.setVisibility(View.GONE);
-            holder.btn_sayhi.setVisibility(View.VISIBLE);
-            holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
-            if (!userInfo.isSayHello()) {
-                holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
-                            ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
-                                    getContext().getString(R.string.say_hello_txt),
-                                    userInfo.getKf_id(),
-                                    ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
-                                            Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
-                                        @Override
-                                        public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                                            PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
-                                            getItem(position).setSayHello(true);
-                                            notifyDataSetChanged();
-                                        }
-
-                                        @Override
-                                        public void onSendFailed(NetData data) {
-                                            PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
-                                        }
-                                    });
-                        }
-                    }
-                });
+            if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                showOnline(holder, userInfo);
+            } else {
+                showSayHello(holder, userInfo, position);
             }
         }
-
 
         holder.rel_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,13 +155,64 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         return convertView;
     }
 
+    /**
+     * 显示在线状态
+     *
+     * @param holder
+     * @param userInfo
+     */
+    private void showOnline(MyViewHolder holder, UserInfoLightweight userInfo) {
+        holder.btn_sayhi.setVisibility(View.GONE);
+        holder.tv_online_state.setVisibility(View.VISIBLE);
+        holder.tv_online_state.setText(userInfo.isOnline() ? "在线" : userInfo.getLast_onLine());
+    }
+
+    /**
+     * 显示打招呼
+     *
+     * @param holder
+     * @param userInfo
+     * @param position
+     */
+    private void showSayHello(MyViewHolder holder, final UserInfoLightweight userInfo, final int position) {
+        holder.tv_online_state.setVisibility(View.GONE);
+        holder.btn_sayhi.setVisibility(View.VISIBLE);
+        holder.btn_sayhi.setEnabled(!userInfo.isSayHello());
+        if (!userInfo.isSayHello()) {
+            holder.btn_sayhi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ModuleMgr.getCenterMgr().isCanSayHi(getContext())) {
+                        ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userInfo.getUid()),
+                                getContext().getString(R.string.say_hello_txt),
+                                userInfo.getKf_id(),
+                                ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) ?
+                                        Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                                    @Override
+                                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                                        PToast.showShort(getContext().getString(R.string.user_info_hi_suc));
+                                        getItem(position).setSayHello(true);
+                                        notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onSendFailed(NetData data) {
+                                        PToast.showShort(getContext().getString(R.string.user_info_hi_fail));
+                                    }
+                                });
+                    }
+                }
+            });
+        }
+    }
+
 
     class MyViewHolder {
-        private ImageView iv_avatar, iv_vip;
+        private ImageView iv_avatar, iv_vip, iv_ranking;
         private Button iv_video, iv_call;
-        private TextView tv_name, tv_age, tv_height, tv_distance, tv_ranking_type, tv_ranking_level;
+        private TextView tv_name, tv_age, tv_height, tv_distance;
         private Button btn_sayhi;
-        private LinearLayout lin_ranking, iv_calling, lin_video_state, lin_call_state;
+        private LinearLayout iv_calling, lin_video_state, lin_call_state;
         private RelativeLayout rel_item;
         private View point;
 
@@ -218,12 +235,9 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             tv_height = (TextView) convertView.findViewById(R.id.discover_item_height);
             tv_distance = (TextView) convertView.findViewById(R.id.discover_item_distance);
 
-            tv_ranking_type = (TextView) convertView.findViewById(R.id.discover_item_ranking_type);
-            tv_ranking_level = (TextView) convertView.findViewById(R.id.discover_item_ranking_level);
-
             btn_sayhi = (Button) convertView.findViewById(R.id.discover_item_sayhi);
 
-            lin_ranking = (LinearLayout) convertView.findViewById(R.id.discover_item_ranking_state);
+            iv_ranking = (ImageView) convertView.findViewById(R.id.discover_item_ranking_state);
             rel_item = (RelativeLayout) convertView.findViewById(R.id.discover_item);
 
             point = convertView.findViewById(R.id.discover_item_point);

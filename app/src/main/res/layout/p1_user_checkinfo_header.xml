@@ -118,30 +118,20 @@
                     android:textSize="10sp"
                     tools:text="165cm" />
 
-                <FrameLayout
-                    android:id="@+id/fl_top_n"
-                    android:layout_width="@dimen/px130_dp"
-                    android:layout_height="@dimen/px51_dp"
-                    android:layout_marginLeft="@dimen/px15_dp"
-                    android:background="@drawable/f1_top01">
-
-                    <TextView
-                        android:id="@+id/tv_top_n"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="TOP5"
-                        android:paddingLeft="@dimen/px27_dp"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/px22_sp" />
-                </FrameLayout>
+                <!-- 魅力土豪 -->
+                <ImageView
+                    android:id="@+id/iv_rank"
+                    android:layout_width="@dimen/px52_dp"
+                    android:layout_height="@dimen/px52_dp"
+                    android:layout_marginLeft="@dimen/px12_dp"
+                    android:src="@drawable/f1_top01" />
 
                 <ImageView
                     android:id="@+id/iv_vip"
-                    android:layout_width="@dimen/px118_dp"
+                    android:layout_width="@dimen/px52_dp"
                     android:layout_height="@dimen/px52_dp"
-                    android:layout_marginLeft="@dimen/px6_dp"
-                    android:src="@drawable/f1_vip_icon"/>
+                    android:layout_marginLeft="@dimen/px12_dp"
+                    android:src="@drawable/f1_vip_icon" />
 
             </LinearLayout>
 
@@ -196,8 +186,8 @@
                 android:id="@+id/iv_guanzhu"
                 android:layout_width="@dimen/px45_dp"
                 android:layout_height="@dimen/px45_dp"
-                android:src="@drawable/f1_follow_star"
-                android:scaleType="centerInside" />
+                android:scaleType="centerInside"
+                android:src="@drawable/f1_follow_star" />
 
             <TextView
                 android:id="@+id/tv_guanzhu"
