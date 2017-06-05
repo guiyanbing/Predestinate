@@ -215,24 +215,7 @@ public class ImageLoader {
      * 加载图片： 带回调
      */
     public static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback) {
-        try {
-            if (isActDestroyed(context))
-                return;
-
-            getDrawableBuilder(context, model)
-                    .into(new SimpleTarget<GlideDrawable>() {
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            if (isActDestroyed(context))
-                                return;
-
-                            if (callback != null)
-                                callback.onResourceReady(resource);
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadPicWithCallback(context, model, callback, null);
     }
 
     private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
@@ -240,9 +223,10 @@ public class ImageLoader {
             if (isActDestroyed(context))
                 return;
 
-            getDrawableBuilder(context, model)
-                    .bitmapTransform(transformation)
-                    .into(new SimpleTarget<GlideDrawable>() {
+            DrawableRequestBuilder<T> builder = getDrawableBuilder(context, model);
+            if (transformation != null)
+                builder.bitmapTransform(transformation);
+            builder.into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                             if (isActDestroyed(context))
