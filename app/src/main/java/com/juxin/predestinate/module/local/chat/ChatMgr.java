@@ -796,8 +796,13 @@ public class ChatMgr implements ModuleBase {
 
                 //纯私聊消息
                 if (!TextUtils.isEmpty(message.getWhisperID())) {
-                    // 私聊消息//告诉上层可以获取私聊列表了
+                    // 私聊消息
                     specialMgr.onWhisperMsgUpdate(message);
+                }
+
+                if(!message.isSender() && message.getMsgID() > 0){
+                    PSP.getInstance().put(MessageConstant.Stranger_New, true);
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
                 }
 
                 //角标消息更改

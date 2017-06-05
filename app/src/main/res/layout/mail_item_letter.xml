@@ -139,7 +139,6 @@
                     android:maxWidth="200dp"
                     android:textColor="@color/color_aaaaaa"
                     android:textSize="@dimen/px39_sp" />
-
             </LinearLayout>
         </LinearLayout>
 

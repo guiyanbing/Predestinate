@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -84,7 +85,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
-        baseMessage.setNum(geetNum);
+        baseMessage.setNum(PSP.getInstance().getBoolean(MessageConstant.Stranger_New, false) ? 1 : 0);
         baseMessage.setName("打招呼的人");
         baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");
         baseMessage.setLocalAvatar(R.drawable.f1_hi_btn);

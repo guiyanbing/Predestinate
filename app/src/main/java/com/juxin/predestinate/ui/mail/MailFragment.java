@@ -256,6 +256,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Friend_Num_Notice:
+            case MsgType.MT_Stranger_New:
                 mailFragmentAdapter.updateAllData();
                 detectInfo(listMail);
                 break;
