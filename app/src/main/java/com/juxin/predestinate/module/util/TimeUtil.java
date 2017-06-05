@@ -921,6 +921,9 @@ public class TimeUtil extends TimeBaseUtil {
     public static String formatTimeLong(Long l) {
         DecimalFormat f = new DecimalFormat();
         f.applyPattern("00");
-        return f.format(l / 60) + ':' + f.format(l % 60);
+        String result = f.format(l / 60 % 60) + ':' + f.format(l % 60);
+        if (l >= 3600)
+            result = f.format(l / 3600) + ':' + result;
+        return result;
     }
 }

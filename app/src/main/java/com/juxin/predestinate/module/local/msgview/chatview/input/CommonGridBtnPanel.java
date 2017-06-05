@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.complete;
+package com.juxin.predestinate.module.local.msgview.chatview.input;
 
 import android.content.Context;
 import android.view.View;

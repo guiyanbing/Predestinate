@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.recommend;
+package com.juxin.predestinate.ui.user.my.view;
 
 
 import android.content.Context;

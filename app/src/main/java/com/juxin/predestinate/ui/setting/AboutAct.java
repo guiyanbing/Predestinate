@@ -1,21 +1,15 @@
 package com.juxin.predestinate.ui.setting;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
-
-import org.json.JSONObject;
 
 /**
  * 关于页面
@@ -23,6 +17,8 @@ import org.json.JSONObject;
 public class AboutAct extends BaseActivity implements OnClickListener {
 
     private int iCount;
+    private ContactBean contactBean;
+    private String qq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +37,15 @@ public class AboutAct extends BaseActivity implements OnClickListener {
         img_logo.setOnClickListener(this);
         tv_ver.setText("V" + ModuleMgr.getAppMgr().getVerName());
         tv_email.setText(email);
-        ((TextView) findViewById(R.id.tv_customerservice_phone)).setText("0731-1231124444");//TODO 获取客服手机
+
         findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
+        contactBean= ModuleMgr.getCommonMgr().getContactBean();
+        if (contactBean == null) {
+            return;
+        }
+        ((TextView) findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText(contactBean.getWork_time());
+        qq=contactBean.getQq();
     }
 
     public void onClick(View v) {
@@ -54,7 +57,7 @@ public class AboutAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.ll_open_qq_btn://在线客服qq交流
-                ModuleMgr.getCommonMgr().getCustomerserviceQQ(AboutAct.this);
+                UIShow.showQQService(AboutAct.this, qq);
                 break;
             default:
                 break;

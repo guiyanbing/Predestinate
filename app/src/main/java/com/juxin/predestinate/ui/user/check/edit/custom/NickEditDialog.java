@@ -16,7 +16,7 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimerUtil;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.ui.user.check.edit.EditKey;
 
 import java.util.HashMap;
 

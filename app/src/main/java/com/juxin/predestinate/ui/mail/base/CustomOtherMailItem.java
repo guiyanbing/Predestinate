@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
@@ -74,23 +75,21 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         switch (v.getId()) {
             case R.id.mail_item_headpic:
                 if (msgData == null) return;
                 MailMsgID mailMsgID = MailMsgID.getMailMsgID(msgData.getLWhisperID());
-                if (mailMsgID != null) {
-                    switch (mailMsgID) {
-                        case Follow_Msg://谁关注我
-                            UIShow.showMyAttentionAct(getContext());
-                            break;
-                        case MyFriend_Msg://我的好友
-                            UIShow.showMyFriendsAct(getContext());
-                            break;
-                        case Greet_Msg://打招呼的人
-                            UIShow.showSayHelloUserAct(getContext());
-                            break;
-                    }
+                if (mailMsgID == null) return;
+                switch (mailMsgID) {
+                    case Follow_Msg://谁关注我
+                        UIShow.showMyAttentionAct(getContext());
+                        break;
+                    case MyFriend_Msg://我的好友
+                        UIShow.showMyFriendsAct(getContext());
+                        break;
+                    case Greet_Msg://打招呼的人
+                        UIShow.showSayHelloUserAct(getContext());
+                        break;
                 }
                 break;
             default:

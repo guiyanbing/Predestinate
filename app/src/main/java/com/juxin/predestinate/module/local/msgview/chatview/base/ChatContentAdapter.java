@@ -409,19 +409,15 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     break;
 
                 case 3: // 发送中
-                    status.setText("");
+                    status.setText("发送中");
                     break;
 
                 case 11: // 已读
                     status.setText("已读");
                     break;
 
-                case 12: // 审核未通过
-                    status.setText("");
-                    break;
-
                 default: // "未知状态" + msg.getStatus()
-                    status.setText("");
+                    status.setVisibility(View.GONE);
                     break;
             }
 

@@ -77,14 +77,15 @@
             android:layout_marginLeft="@dimen/px20_dp"
             android:textSize="@dimen/px38_sp"
             android:textColor="@color/txt_customerservice_phone"
-            android:text="9999-9999999999" />
+            android:text="0731-89746010" />
 
         <TextView
+            android:id="@+id/tv_customerservice_worktime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/px10_dp"
             android:textSize="@dimen/px38_sp"
-            android:text="(09:30-20:30)"
+            android:text="(9:00-18:00)"
             android:textColor="@color/text_ciyao_gray" />
     </LinearLayout>
 

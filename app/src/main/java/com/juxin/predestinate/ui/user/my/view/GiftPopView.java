@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsNumInfo;
-import com.juxin.predestinate.ui.recommend.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.GiftNumAdapter;
 
 import java.util.ArrayList;
