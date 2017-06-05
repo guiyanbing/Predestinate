@@ -85,7 +85,10 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      */
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
-        dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+        long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+        if (ret != MessageConstant.ERROR) {
+            ModuleMgr.getChatListMgr().getWhisperList();
+        }
 
         // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
         // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
