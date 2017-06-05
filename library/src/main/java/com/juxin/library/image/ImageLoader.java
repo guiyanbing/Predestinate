@@ -75,7 +75,7 @@ public class ImageLoader {
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg) {
-        loadPic(context, model, view, defResImg, defResImg, bitmapCenterCrop);
+        loadCenterCrop(context, model, view, defResImg, defResImg);
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg, int errResImg) {
@@ -90,7 +90,7 @@ public class ImageLoader {
     }
 
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg) {
-        loadPic(context, model, view, defResImg, defResImg, bitmapFitCenter);
+        loadFitCenter(context, model, view, defResImg, defResImg);
     }
 
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg, int errResImg) {
