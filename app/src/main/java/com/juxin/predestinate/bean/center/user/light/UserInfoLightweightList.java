@@ -59,7 +59,7 @@ public class UserInfoLightweightList extends BaseData {
         if (!TextUtils.isEmpty(jsonStr)) {
             PLogger.d("UserInfoLightweightList parseJsonFriends ---- jsonStr " + jsonStr);
             String jsonData = getJsonObject(jsonStr).optString("res");
-            setTotalcnt(getJsonObject(jsonStr).optInt("totalcnt"));
+            setTotalcnt(getJsonObject(jsonData).optInt("totalcnt"));
             JSONArray jsonArray = getJsonObject(jsonData).optJSONArray("friends");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
         }
