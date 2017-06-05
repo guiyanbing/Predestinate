@@ -3,12 +3,9 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -18,7 +15,6 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -27,17 +23,15 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.ChatInputPanel
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatRecordPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel;
+import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnPanel;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
-import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -427,8 +421,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             }
 
             show = isShowMsg(message);
-
-            checkPermissions(message);
 
             PLogger.printObject("onChatUpdate=" + message);
             if (show) {
