@@ -53,12 +53,14 @@ public class DBCenter {
     public long insertMsg(BaseMessage baseMessage) {
         if (TextUtils.isEmpty(baseMessage.getWhisperID())) return MessageConstant.ERROR;
 
+        long ret = centerFmessage.insertMsg(baseMessage);
+        if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+
         if(BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()){
-            long ret = centerFLetter.storageData(baseMessage);
-            if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+            ret = centerFLetter.storageData(baseMessage);
         }
 
-        return centerFmessage.insertMsg(baseMessage);
+        return ret;
     }
 
     /**
