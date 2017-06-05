@@ -1,5 +1,9 @@
 package com.juxin.predestinate.module.local.chat.utils;
 
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
+import com.juxin.predestinate.module.logic.application.App;
+
 /**
  * 消息常量类
  * Created by Kind on 2017/5/24.
@@ -41,4 +45,8 @@ public class MessageConstant {
     public static final int UNREAD_STATUS = 10;//未读
     public static final int READ_STATUS = 11;//对方已读
     public static final int LOCAL_READ_STATUS = 13;//本地已读
+
+
+
+    public static final String Stranger_New = "Stranger_New" + App.uid; //默认的人
 }
