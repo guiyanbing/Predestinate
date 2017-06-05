@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -19,6 +19,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -125,6 +126,12 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             showHasData();
         } else {
             showNoData();
+        }
+
+        //发送清消息列表打招呼的人角标
+        if (PSP.getInstance().getBoolean(MessageConstant.Stranger_New, false)) {
+            PSP.getInstance().put(MessageConstant.Stranger_New, false);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
         }
     }
 
@@ -346,7 +353,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if(adapter == null) return;
+        if (adapter == null) return;
         if (!timeUtil.check(10 * 1000)) {
             return;
         }
