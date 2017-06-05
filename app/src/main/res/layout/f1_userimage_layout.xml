@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userimage_fl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <com.juxin.predestinate.ui.discover.cardimage.ModeViewPager
+        android:id="@+id/mvp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"/>
+
+    <!--<RadioButton-->
+        <!--android:id="@+id/uimcount"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="left|top"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:focusableInTouchMode="false"-->
+        <!--android:text=" 6"-->
+        <!--android:visibility="visible" />-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|top"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_love"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/iv_del"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/dots_linear"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_gravity="left|bottom"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:visibility="invisible">-->
+
+    <!--</LinearLayout>-->
+</FrameLayout>
