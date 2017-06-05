@@ -1,4 +1,4 @@
-package com.juxin.predestinate.ui.user.edit;
+package com.juxin.predestinate.ui.user.check.edit;
 
 /**
  * 修改个人资料字段维护类

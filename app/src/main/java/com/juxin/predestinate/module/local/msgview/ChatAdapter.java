@@ -30,7 +30,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
-import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
+import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnPanel;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

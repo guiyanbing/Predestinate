@@ -24,7 +24,7 @@ import com.juxin.predestinate.module.util.ChineseFilter;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.check.edit.custom.EditPopupWindow;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.ui.user.check.edit.EditKey;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
