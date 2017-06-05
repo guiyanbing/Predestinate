@@ -39,6 +39,15 @@
                 android:text="1"
                 android:visibility="visible" />
 
+            <com.juxin.library.unread.BadgeView
+                android:id="@+id/mail_item_unreadnum_two"
+                style="@style/badge_num_small"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="@dimen/px21_dp"
+                android:layout_marginTop="@dimen/px21_dp"
+                android:visibility="visible" />
+
         </RelativeLayout>
 
         <LinearLayout

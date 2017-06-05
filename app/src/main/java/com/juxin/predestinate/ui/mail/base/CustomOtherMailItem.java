@@ -11,6 +11,7 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
@@ -22,6 +23,7 @@ import com.juxin.predestinate.ui.mail.item.MailMsgID;
 public class CustomOtherMailItem extends CustomBaseMailItem {
 
     private BaseMessage msgData;
+    private BadgeView mail_item_unreadnum_two;
 
     public CustomOtherMailItem(Context context) {
         super(context);
@@ -39,6 +41,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
         super.init(R.layout.p1_mail_item_act);
         item_headpic = (ImageView) getContentView().findViewById(R.id.mail_item_headpic);
         item_unreadnum = (BadgeView) getContentView().findViewById(R.id.mail_item_unreadnum);
+        mail_item_unreadnum_two =  (BadgeView) getContentView().findViewById(R.id.mail_item_unreadnum_two);
         item_nickname = (TextView) getContentView().findViewById(R.id.mail_item_nickname);
         item_last_msg = (EmojiTextView) getContentView().findViewById(R.id.mail_item_last_msg);
         item_headpic.setOnClickListener(this);
@@ -70,7 +73,17 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
         }
 
         item_last_msg.setText(msgData.getAboutme());
-        setUnreadnum(msgData);
+
+        item_unreadnum.setVisibility(View.GONE);
+        mail_item_unreadnum_two.setVisibility(GONE);
+        if (msgData.getNum() > 0) {
+            if(MailMsgID.Greet_Msg.type == msgData.getLWhisperID()){
+                mail_item_unreadnum_two.setVisibility(VISIBLE);
+                return;
+            }
+            item_unreadnum.setVisibility(View.VISIBLE);
+            item_unreadnum.setText(ModuleMgr.getChatListMgr().getUnreadNum(msgData.getNum()));
+        }
     }
 
     @Override

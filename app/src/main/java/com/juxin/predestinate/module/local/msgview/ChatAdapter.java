@@ -3,12 +3,9 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -18,7 +15,6 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -31,13 +27,11 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.ui.user.complete.CommonGridBtnPanel;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -428,8 +422,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
             show = isShowMsg(message);
 
-            checkPermissions(message);
-
             PLogger.printObject("onChatUpdate=" + message);
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
@@ -462,34 +454,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
                     || (message.getDataSource() == MessageConstant.TWO && show)) {
                 ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
-            }
-        }
-    }
-
-    /**
-     * 聊天权限处理
-     *
-     * @param message
-     */
-    private void checkPermissions(BaseMessage message) {
-        if (MailSpecialID.customerService.getSpecialID() == message.getLWhisperID()) return;
-        UserDetail user = ModuleMgr.getCenterMgr().getMyInfo();
-        /**
-         * 如果是男的，而且非包月用户，而且是自己发送的消息，而且是发送成功的消息
-         */
-        if (user.isMan() && !user.isVip() && message.isSender() && message.getMsgID() > 0) {//男 没有开通包月
-            /**
-             * 文本消息,语音消息,图片消息
-             * 只能免费发送一条消息
-             */
-            if (message.getType() == BaseMessage.BaseMessageType.common.msgType) {
-                if (ModuleMgr.getChatListMgr().getTodayChatShow()) {
-                    //更新时间
-                    ModuleMgr.getChatListMgr().setTodayChatShow();
-                    Msg msg = new Msg();
-                    msg.setData(false);
-                    MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
-                }
             }
         }
     }

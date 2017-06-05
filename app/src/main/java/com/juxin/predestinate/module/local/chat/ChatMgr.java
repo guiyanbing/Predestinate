@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -35,18 +34,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -449,14 +444,15 @@ public class ChatMgr implements ModuleBase {
                 }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
-                onInternalPro(messageRet);
+
                 if (!messageRet.isOk() || !messageRet.isS()) {
                     updateFail(message, messageRet);
                 } else {
+                    checkPermissions(message);
                     updateOk(message, messageRet);
                     sendMessageRefreshYcoin();
                 }
-
+                onInternalPro(messageRet);
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
             }
 
@@ -507,13 +503,31 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 聊天权限处理
+     *
+     * @param message
+     */
+    private void checkPermissions(BaseMessage message) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && ModuleMgr.getChatListMgr().getTodayChatShow()) {
+            //更新时间
+            ModuleMgr.getChatListMgr().setTodayChatShow();
+            Msg msg = new Msg();
+            msg.setData(false);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+        }
+    }
+
+    /**
      * 是否已经发完当天发的一条了
      */
     private void sendChatCanError() {
-        ModuleMgr.getChatListMgr().setTodayChatShow();
-        Msg msg = new Msg();
-        msg.setData(false);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        if(userDetail.isMan() && userDetail.getYcoin() < 79 ){
+            ModuleMgr.getChatListMgr().setTodayChatShow();
+            Msg msg = new Msg();
+            msg.setData(false);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+        }
     }
 
     /**

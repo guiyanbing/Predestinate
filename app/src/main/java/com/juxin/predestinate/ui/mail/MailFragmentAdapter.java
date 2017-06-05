@@ -8,6 +8,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
@@ -50,6 +51,11 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
     public void updateAllData() {
         List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getMsgList();
         PLogger.d("messageLists=多少人=" + messageLists.size());
+        for (BaseMessage temp : messageLists){
+            if (MailSpecialID.customerService.getSpecialID() == temp.getLWhisperID()){
+                temp.setWeight(MessageConstant.Great_Weight);
+            }
+        }
 
         BaseMessage baseMessage = new BaseMessage();
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Follow_Msg.type));

@@ -278,6 +278,14 @@
         <item name="android:textSize">@dimen/px28_sp</item>
     </style>
 
+    <style name="badge_num_small" parent="badge_common">
+        <item name="android:layout_width">@dimen/px35_dp</item>
+        <item name="android:layout_height">@dimen/px35_dp</item>
+        <item name="android:minWidth">@dimen/px35_dp</item>
+        <item name="android:paddingLeft">@dimen/px12_dp</item>
+        <item name="android:paddingRight">@dimen/px12_dp</item>
+    </style>
+
     <style name="badge_num_big" parent="badge_common">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/px52_dp</item>
