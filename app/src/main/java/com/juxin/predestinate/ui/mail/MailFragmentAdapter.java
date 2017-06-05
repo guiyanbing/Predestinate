@@ -5,8 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;

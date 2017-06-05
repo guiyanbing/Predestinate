@@ -1,7 +1,5 @@
 package com.juxin.predestinate.module.local.chat.utils;
 
-import com.juxin.library.observe.MsgMgr;
-import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.module.logic.application.App;
 
 /**

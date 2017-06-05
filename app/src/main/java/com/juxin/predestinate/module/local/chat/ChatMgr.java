@@ -800,7 +800,7 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if(!message.isSender()){
+                if(!message.isSender() && message.getMsgID() > 0){
                     PSP.getInstance().put(MessageConstant.Stranger_New, true);
                     MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
                 }
