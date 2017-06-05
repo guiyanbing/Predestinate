@@ -20,7 +20,7 @@ public class BlurImage implements Transformation<Bitmap> {
     private static int MAX_RADIUS = 25;
     private static int DEFAULT_DOWN_SAMPLING = 1;
 
-    private Context mContext;
+//    private Context mContext;
     private BitmapPool mBitmapPool;
 
     public void setRadius(int mRadius) {
@@ -51,7 +51,7 @@ public class BlurImage implements Transformation<Bitmap> {
     }
 
     public BlurImage(Context context, BitmapPool pool, int radius, int sampling) {
-        mContext = context.getApplicationContext();
+//        mContext = context.getApplicationContext();
         mBitmapPool = pool;
         mRadius = radius;
         mSampling = sampling;

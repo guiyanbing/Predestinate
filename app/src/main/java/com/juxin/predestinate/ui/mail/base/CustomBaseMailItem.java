@@ -92,7 +92,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      *
      * @param msgData
      */
-    public void showData(BaseMessage msgData, boolean isSlideLoading) {
+    public void showData(BaseMessage msgData) {
         PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
         ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
 
@@ -104,14 +104,13 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         }
 
         item_certification.setVisibility(GONE);
-//        if(msgData.getLWhisperID() == MailSpecialID.customerService.getSpecialID()){
-//            item_certification.setVisibility(VISIBLE);
-//            item_certification.setText("官方");
-//        }
 
         String result = BaseMessage.getContent(msgData);
-        item_last_msg.setText((msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType())
-                ? result : Html.fromHtml(result));
+        if (msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()) {
+            item_last_msg.setTextContent(result);
+        } else {
+            item_last_msg.setText(Html.fromHtml(result));
+        }
 
         long time = msgData.getTime();
         if (time > 0) {
@@ -156,8 +155,8 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             item_last_status.setVisibility(View.GONE);
             return;
         }
-        //        发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
-        switch (msgData.getStatus()){
+        // 发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
+        switch (msgData.getStatus()) {
             case 1:
             case 10:
                 item_last_status.setText("送达");
@@ -186,6 +185,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     /**
      * vip角标
+     *
      * @param msgData
      */
     protected void setRanking(BaseMessage msgData) {
@@ -205,5 +205,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     @Override
-    public void onClick(View view) {}
+    public void onClick(View view) {
+    }
 }

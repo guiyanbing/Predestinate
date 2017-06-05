@@ -86,7 +86,7 @@
             <ImageView
                 android:id="@+id/user_head"
                 style="@style/avatar_big"
-                android:src="@drawable/default_pic" />
+                android:src="@drawable/default_head" />
 
             <!-- 头像状态 -->
             <ImageView
