@@ -232,7 +232,7 @@ public class DBCenterFLetter {
                     public List<BaseMessage> call(SqlBrite.Query query) {
                         return convert(query.run());
                     }
-                }).subscribeOn(Schedulers.io());
+                });
     }
 
 

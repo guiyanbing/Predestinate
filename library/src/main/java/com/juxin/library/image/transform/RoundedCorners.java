@@ -27,6 +27,12 @@ public class RoundedCorners implements Transformation<Bitmap> {
     }
 
     private BitmapPool mBitmapPool;
+
+    public void setRadius(int mRadius) {
+        this.mRadius = mRadius;
+        mDiameter = mRadius * 2;
+    }
+
     private int mRadius;
     private int mDiameter;
     private int mMargin;

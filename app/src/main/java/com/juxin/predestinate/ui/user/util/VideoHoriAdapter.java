@@ -49,7 +49,7 @@ public class VideoHoriAdapter extends ExBaseAdapter<UserVideo> {
 
         UserVideo userVideo = getItem(position);
 
-        ImageLoader.loadBlurImg(App.context, userVideo.getPic(), 8, mHolder.img_media);
+        ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media, 8);
         mHolder.img_shade.setVisibility(View.VISIBLE);
         return convertView;
     }
