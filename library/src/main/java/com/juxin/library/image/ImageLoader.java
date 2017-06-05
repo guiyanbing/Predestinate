@@ -215,7 +215,7 @@ public class ImageLoader {
      * 加载图片： 带回调
      */
     public static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback) {
-        loadPicWithCallback(context, model, callback, null);
+        loadPicWithCallback(context, model, callback, (Transformation<Bitmap>[]) null);
     }
 
     private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
@@ -224,8 +224,10 @@ public class ImageLoader {
                 return;
 
             DrawableRequestBuilder<T> builder = getDrawableBuilder(context, model);
-            if (transformation != null)
+
+            if (transformation != null && transformation.length > 0)
                 builder.bitmapTransform(transformation);
+
             builder.into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
