@@ -71,7 +71,7 @@ public class ImageLoader {
      * CenterCrop加载图片
      */
     public static <T> void loadCenterCrop(Context context, T model, ImageView view) {
-        loadCenterCrop(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadCenterCrop(context, model, view, R.drawable.default_pic);
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg) {
@@ -86,7 +86,7 @@ public class ImageLoader {
      * FitCenter加载图片
      */
     public static <T> void loadFitCenter(Context context, T model, ImageView view) {
-        loadFitCenter(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+        loadFitCenter(context, model, view, R.drawable.default_pic);
     }
 
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg) {
@@ -191,6 +191,10 @@ public class ImageLoader {
                                     final Drawable defResImg, final Drawable errResImg,
                                     final Transformation<Bitmap>... transformation) {
         try {
+            //先加载默认图
+            view.setImageDrawable(defResImg);
+
+            //再去网络请求
             loadPicWithCallback(context, model, new GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
