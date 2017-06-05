@@ -183,12 +183,8 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
                 item_last_status.setBackgroundResource(R.drawable.f1_mail_item_read);
                 break;
 
-            case 12: // 审核未通过
-                item_last_status.setText("");
-                break;
-
             default: // "未知状态" + msg.getStatus()
-                item_last_status.setText("");
+                item_last_status.setVisibility(View.GONE);
                 break;
         }
     }
@@ -214,5 +210,5 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View view) {}
 }

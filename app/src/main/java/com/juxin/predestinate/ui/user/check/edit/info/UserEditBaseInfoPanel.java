@@ -21,7 +21,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.check.edit.custom.ContactEditDialog;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.ui.user.check.edit.EditKey;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.util.HashMap;

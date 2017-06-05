@@ -3,12 +3,15 @@ package com.juxin.predestinate.ui.discover;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -24,8 +27,10 @@ import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenuCreator;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +43,9 @@ import static com.juxin.predestinate.module.logic.application.App.getActivity;
  * Created by zhang on 2017/5/22.
  */
 
-public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemClickListener, PObserver, XListView.IXListViewListener, View.OnClickListener, SwipeListView.OnSwipeItemClickedListener {
+public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemClickListener,
+        PObserver, XListView.IXListViewListener, View.OnClickListener,
+        SwipeListView.OnSwipeItemClickedListener, AbsListView.OnScrollListener {
 
     private CustomFrameLayout customFrameLayout;
     private SwipeListView exListView;
@@ -52,7 +59,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     private Button del_btn, ignore_btn;
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> delList = new ArrayList<>();
-
+    private CheckIntervalTimeUtil timeUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +76,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         setBackView();
         onTitleRight();
 
+        timeUtil = new CheckIntervalTimeUtil();
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.say_hello_users_frame_layput);
         customFrameLayout.setList(new int[]{R.id.say_hello_users_data, R.id.common_nodata});
         exListView = (SwipeListView) findViewById(R.id.say_hello_users_list);
@@ -98,6 +106,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         });
 
         exListView.setSwipeItemClickedListener(this);
+        exListView.setOnScrollListener(this);
 
 
         bottom_view = findViewById(R.id.say_hello_users_bottom);
@@ -105,7 +114,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         ignore_btn = (Button) findViewById(say_hello_users_all_ignore);
         del_btn.setOnClickListener(this);
         ignore_btn.setOnClickListener(this);
-
     }
 
     private void initData() {
@@ -302,6 +310,64 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             if (mailMsgID == null) {
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
             }
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(final AbsListView view, int scrollState) {
+        switch (scrollState) {
+            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
+                //设置为停止滚动
+                TimerUtil.beginTime(new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        detectInfo(view);
+                    }
+                }, 200);
+                break;
+            }
+            case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
+                break;
+            }
+            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL: {//正在滚动
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
+
+
+    /**
+     * 检测个人资料
+     *
+     * @param view
+     */
+    private void detectInfo(AbsListView view) {
+        if(adapter == null) return;
+        if (!timeUtil.check(10 * 1000)) {
+            return;
+        }
+        List<Long> stringList = new ArrayList<>();
+
+        int firs = view.getFirstVisiblePosition();
+        int last = view.getLastVisiblePosition();
+
+        for (int i = firs; i < last; i++) {
+            BaseMessage message = adapter.getItem(i);
+            if (message == null || MailMsgID.getMailMsgID(message.getLWhisperID()) != null) {
+                continue;
+            }
+
+            if (TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())) {
+                stringList.add(message.getLWhisperID());
+            }
+        }
+
+        if (stringList.size() > 0) {
+            ModuleMgr.getChatMgr().getProFile(stringList);
         }
     }
 }

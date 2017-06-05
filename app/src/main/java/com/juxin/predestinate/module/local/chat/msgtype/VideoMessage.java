@@ -26,7 +26,7 @@ public class VideoMessage extends BaseMessage {
 
     private EmLastStatus emLastStatus;
 
-    private enum EmLastStatus {
+    public enum EmLastStatus {
         none, timeout, refuse, cancel, connect
     }
 

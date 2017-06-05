@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.ui.user.edit.EditKey;
+import com.juxin.predestinate.ui.user.check.edit.EditKey;
 
 import java.util.HashMap;
 

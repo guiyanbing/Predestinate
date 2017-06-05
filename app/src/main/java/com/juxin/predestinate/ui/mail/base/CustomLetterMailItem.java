@@ -43,7 +43,6 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         if (msgData == null) return;
         switch (v.getId()) {
             case R.id.mail_item_headpic:
