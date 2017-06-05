@@ -84,9 +84,6 @@ public class ChatMgr implements ModuleBase {
         if (ret != MessageConstant.ERROR) {
             ModuleMgr.getChatListMgr().getWhisperList();
         }
-
-        // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
-        // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
     /**

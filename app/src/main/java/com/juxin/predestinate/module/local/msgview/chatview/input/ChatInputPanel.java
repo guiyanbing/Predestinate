@@ -24,7 +24,7 @@ import com.juxin.predestinate.module.util.UIUtil;
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatInputPanel extends ChatViewPanel implements View.OnClickListener, View.OnTouchListener, TextWatcher, View.OnFocusChangeListener {
+public class ChatInputPanel extends ChatViewPanel implements View.OnClickListener, View.OnTouchListener, TextWatcher {
     private View chatBtnVoice = null;
     private View chatBtnText = null;
 
@@ -475,29 +475,5 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     public void showInputGONE() {
         input_monthly.setVisibility(View.GONE);
         bg.setVisibility(View.GONE);
-    }
-
-    /**
-     * 如果正在输入，edit不失去焦点
-     */
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v != chatTextEdit) {
-            return;
-        }
-
-        if (hasFocus) {
-            return;
-        }
-
-        boolean forceFocus = false;
-        forceFocus |= getChatInstance().chatExtendPanel.getContentView().getVisibility() == View.VISIBLE;
-        forceFocus |= getChatInstance().chatInputPanel.getContentView().getVisibility() == View.VISIBLE;
-        forceFocus |= getChatInstance().chatSmilePanel.getContentView().getVisibility() == View.VISIBLE;
-        if (!forceFocus) {
-            return;
-        }
-
-        chatTextEdit.requestFocus();
     }
 }
