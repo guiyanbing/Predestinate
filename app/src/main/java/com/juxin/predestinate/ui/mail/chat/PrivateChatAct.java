@@ -42,7 +42,7 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
-import com.juxin.predestinate.ui.user.my.view.GiftMessageInforView;
+import com.juxin.predestinate.ui.user.my.view.GiftMessageInfoView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 import java.util.List;
@@ -210,7 +210,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
         privateChat.getChatAdapter().setWhisperId(whisperID);
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
-        marqueeView = new GiftMessageInforView(this);
+        marqueeView = new GiftMessageInfoView(this);
 
         initLastGiftList();
         executeYCoinTask();

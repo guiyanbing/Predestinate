@@ -3,8 +3,8 @@
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:background="@color/color_FFF2E2"
+    android:gravity="center"
     android:orientation="horizontal">
 
     <TextView
@@ -12,36 +12,39 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px100_dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/px40_sp"
+        android:text=""
         android:textColor="@color/color_62BFDE"
-        android:text=""/>
+        android:textSize="@dimen/px40_sp" />
+
     <TextView
         android:id="@+id/txt_info_two"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/px40_sp"
+        android:text=""
         android:textColor="@color/color_999999"
-        android:text=""/>
+        android:textSize="@dimen/px40_sp" />
+
     <TextView
         android:id="@+id/txt_info_three"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/px40_sp"
+        android:text=""
         android:textColor="@color/color_62BFDE"
-        android:text=""/>
+        android:textSize="@dimen/px40_sp" />
+
     <TextView
         android:id="@+id/txt_info_four"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/px40_sp"
+        android:text=""
         android:textColor="@color/color_999999"
-        android:text=""/>
+        android:textSize="@dimen/px40_sp" />
 
     <TextView
         android:id="@+id/txt_info_five"
@@ -49,7 +52,7 @@
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:textSize="@dimen/px40_sp"
+        android:text=""
         android:textColor="@color/color_999999"
-        android:text=""/>
+        android:textSize="@dimen/px40_sp" />
 </LinearLayout>
