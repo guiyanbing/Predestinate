@@ -190,7 +190,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         if (BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()) {
             MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text, msg.getMsgDesc());
         } else {
-            chat_item_text.setText(msg.getMsgDesc());
+            chat_item_text.setTextContent(msg.getMsgDesc());
         }
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }

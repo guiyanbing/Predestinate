@@ -75,7 +75,7 @@ public class EmojiTextView extends TextView {
         }
     }
 
-    public void setText(String text) {
+    public void setTextContent(String text) {
         Spannable span;
         if (emojiSize == -1) {
             span = ChatSmile.getSmiledText(getContext(), text, (int) getTextSize());
