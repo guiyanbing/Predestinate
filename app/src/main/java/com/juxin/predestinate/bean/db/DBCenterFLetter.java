@@ -286,6 +286,7 @@ public class DBCenterFLetter {
         values.put(FLetter.COLUMN_CONTENT, new byte[0]);
         values.put(FLetter.COLUMN_TYPE, 0);
         values.put(FLetter.COLUMN_TIME, 0);
+        values.put(FLetter.COLUMN_STATUS, 0);
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", userid);
     }
 

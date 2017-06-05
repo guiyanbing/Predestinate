@@ -592,7 +592,17 @@ public class ChatMgr implements ModuleBase {
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
-        videoMessage.setStatus(videoMessage.isSender() ? MessageConstant.OK_STATUS : MessageConstant.READ_STATUS);
+        if(videoMessage.isSender()){
+            videoMessage.setStatus(MessageConstant.OK_STATUS);
+        }else {
+            if(videoMessage.getEmLastStatus() == VideoMessage.EmLastStatus.cancel ||
+                    videoMessage.getEmLastStatus() == VideoMessage.EmLastStatus.timeout){
+                videoMessage.setStatus(MessageConstant.UNREAD_STATUS);
+            }else {
+                videoMessage.setStatus(MessageConstant.READ_STATUS);
+            }
+        }
+
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
         if (dbCenter.getCenterFMessage().storageDataVideo(videoMessage) == MessageConstant.ERROR){
