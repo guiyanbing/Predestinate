@@ -229,9 +229,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     // 全选
     public void selectAll() {
-        mail_delete.setEnabled(true);
-        mailDelInfoList.addAll(mailFragmentAdapter.mailItemOrdinary());
-        listMail.selectAllChooseView();
+        mailDelInfoList.clear();
+        if (mailFragmentAdapter != null && mailFragmentAdapter.mailItemOrdinarySize() > 0) {
+            if(mail_delete != null){
+                mail_delete.setEnabled(true);
+            }
+            mailDelInfoList.addAll(mailFragmentAdapter.mailItemOrdinary());
+            listMail.selectAllChooseView();
+        }
     }
 
     public void cancleEdit() {

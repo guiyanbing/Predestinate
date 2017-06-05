@@ -135,10 +135,10 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
             if (mailItemType != null) {
                 switch (mailItemType) {
                     case Mail_Item_Ordinary:
-                        vh.customMailItem.showItemLetter(msgData, scrollState);
+                        vh.customMailItem.showItemLetter(msgData);
                         break;
                     case Mail_Item_Other:
-                        vh.customMailItem.showItemAct(msgData, scrollState);
+                        vh.customMailItem.showItemAct(msgData);
                         break;
                     default:
                         break;
