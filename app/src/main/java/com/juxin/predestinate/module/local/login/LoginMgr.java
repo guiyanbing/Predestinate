@@ -237,11 +237,9 @@ public class LoginMgr implements ModuleBase {
                         }
                         // 临时资料设置
                         LoginResult result = (LoginResult) response.getBaseData();
+                        result.setUserInfo();
                         putAllLoginInfo(result.getUid(), pwd, true);// Cookie 在http响应头中返回
-                        PSP.getInstance().put(Constant.USER_GENDER, result.getGender());
-                        ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
-                        ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
-                        ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());
+
                         if (!result.isValidDetailInfo()) {
                             PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
                             UIShow.showUserInfoCompleteAct(context, result.getGender());
@@ -306,7 +304,6 @@ public class LoginMgr implements ModuleBase {
         setUid(uid + "");
         PSP.getInstance().put(LOGINMGR_AUTH, EncryptUtil.md5(password));
         putUserInfo(uid, password); //保存登录账户到list配置
-//        setCookie(cookie);//在setLoginInfo方法之前执行
         setLoginInfo(uid, isUserLogin);  //设置登录状态
     }
 

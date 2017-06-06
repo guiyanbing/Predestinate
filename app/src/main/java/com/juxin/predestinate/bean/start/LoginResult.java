@@ -1,6 +1,8 @@
 package com.juxin.predestinate.bean.start;
 
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 import org.json.JSONObject;
 
@@ -8,28 +10,53 @@ import org.json.JSONObject;
  * 登录解析类
  * Created YAO on 2017/4/25.
  */
-
 public class LoginResult extends BaseData {
-    private String nickname;
+
     private long uid;
-    private int miss_info;    // 判断是否缺失数据,缺失则继续跳转到用户注册
-    private boolean validDetailInfo;
+    private String nickname;
+    private String avatar;
+    private int avatar_status;
     private int gender;
+    private int group;
+    private int ycoin;
 
-    public int getGender() {
-        return gender;
+    private int miss_info;// 判断是否缺失数据,缺失则继续跳转到用户注册
+
+    /**
+     * @return 判断用户是否缺失信息
+     */
+    public boolean isValidDetailInfo() {
+        return miss_info != 1;
     }
 
-    public void setGender(int gender) {
-        this.gender = gender;
+    @Override
+    public void parseJson(String jsonStr) {
+        JSONObject jsonFirst = getJsonObject(jsonStr);
+        JSONObject jsonNext = jsonFirst.optJSONObject("user_info");
+        if (jsonNext != null) {
+            this.setUid(jsonNext.optLong("uid"));
+            this.setNickname(jsonNext.optString("nickname"));
+            this.setAvatar(jsonNext.optString("avatar"));
+            this.setAvatar_status(jsonNext.optInt("avatar_status"));
+            this.setGender(jsonNext.optInt("gender"));
+            this.setGroup(jsonNext.optInt("group"));
+            this.setYcoin(jsonNext.optInt("ycoin"));
+            this.setMiss_info(jsonNext.optInt("miss_info"));
+        }
+        setUserInfo();
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    /**
+     * 登录成功之后根据返回信息重设个人资料
+     */
+    public void setUserInfo() {
+        UserDetail myInfo = ModuleMgr.getCenterMgr().getMyInfo();
+        myInfo.setUid(getUid());
+        myInfo.setNickname(getNickname());
+        myInfo.setAvatar(getAvatar());
+        myInfo.setAvatar_status(getAvatar_status());
+        myInfo.setGroup(getGroup());
+        myInfo.setYcoin(getYcoin());
     }
 
     public long getUid() {
@@ -40,32 +67,59 @@ public class LoginResult extends BaseData {
         this.uid = uid;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getAvatar_status() {
+        return avatar_status;
+    }
+
+    public void setAvatar_status(int avatar_status) {
+        this.avatar_status = avatar_status;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public int getYcoin() {
+        return ycoin;
+    }
+
+    public void setYcoin(int ycoin) {
+        this.ycoin = ycoin;
+    }
+
     public int getMiss_info() {
         return miss_info;
     }
 
     public void setMiss_info(int miss_info) {
         this.miss_info = miss_info;
-    }
-
-    public boolean isValidDetailInfo() {
-        return miss_info != 1;
-    }
-
-    public void setValidDetailInfo(boolean validDetailInfo) {
-        this.validDetailInfo = validDetailInfo;
-    }
-
-    @Override
-    public void parseJson(String jsonStr) {
-        JSONObject jsonFirst = getJsonObject(jsonStr);
-        JSONObject jsonNext = jsonFirst.optJSONObject("user_info");
-        if (jsonNext != null) {
-            this.nickname = jsonNext.optString("nickname");
-            this.uid = jsonNext.optLong("uid");
-            this.miss_info = jsonNext.optInt("miss_info");
-            this.gender= jsonNext.optInt("gender");
-        }
-
     }
 }
