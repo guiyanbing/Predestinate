@@ -10,36 +10,28 @@
         android:id="@+id/recharge_popping"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/f1_ycoin_old_bg">
+        android:background="@drawable/f1_vip_old_bg">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
-            android:paddingRight="@dimen/px66_dp"
             android:gravity="right">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="聊天需要Y币，您的Y币余额："
-                android:textColor="#666666" />
-
-            <TextView
-                android:id="@+id/tv_dlg_ycoin_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="#FF6633" />
+                android:text="开通后，可查看美女联系资料"
+                android:textColor="#AB3334" />
         </LinearLayout>
 
         <TextView
-            android:paddingTop="@dimen/px80_dp"
             android:id="@+id/kaitong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/px50_dp"
+            android:paddingTop="@dimen/px80_dp"
             android:text="@string/goods_ycoin_dredge"
             android:textColor="@color/color_999999"
             android:textSize="@dimen/px40_sp" />
@@ -55,51 +47,24 @@
             android:layout_marginTop="@dimen/px10_dp"
             android:orientation="horizontal" />
 
-        <LinearLayout
-            android:id="@+id/pay_method"
+        <TextView
+            android:id="@+id/tv_pay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/goods_container"
             android:layout_marginLeft="@dimen/px50_dp"
             android:layout_marginRight="@dimen/px50_dp"
             android:layout_marginTop="@dimen/px30_dp"
-            android:background="@drawable/view_gray_stroke">
-
-            <TextView
-                android:id="@+id/tv_ycoin_ts1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/px6_dp"
-                android:paddingBottom="@dimen/px30_dp"
-                android:paddingTop="@dimen/px30_dp"
-                android:paddingLeft="@dimen/px15_dp"
-                android:text="对应11000Y币"
-                android:textColor="#999999"
-                android:textSize="@dimen/px39_sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/tv_get_tel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dip"
-                android:paddingBottom="10dip"
-                android:text="话费领取规则  >"
-                android:textColor="@color/pay_tel_color"
-                android:textSize="13sp" />
-
-        </LinearLayout>
+            android:text="@string/goods_pay_type"
+            android:textColor="#999999"
+            android:textSize="@dimen/px40_sp" />
 
         <!-- 支付方式-->
         <LinearLayout
             android:id="@+id/pay_type_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pay_method"
+            android:layout_below="@id/tv_pay"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/px50_dp"
             android:paddingRight="@dimen/px50_dp" />

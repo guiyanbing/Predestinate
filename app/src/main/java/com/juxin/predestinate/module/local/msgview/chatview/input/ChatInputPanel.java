@@ -194,7 +194,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 if (!otherID.equals(userDetail.getyCoinUserid()) &&
                         (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
-                    UIShow.showGoodsVipDlgOld(getContext());
+                    UIShow.showGoodsVipDlgOld(getContext(),1);
                 } else {
                     UIShow.showGoodsYCoinDlgOld(getContext());
                 }

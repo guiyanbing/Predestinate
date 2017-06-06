@@ -210,14 +210,14 @@
                 android:layout_marginLeft="@dimen/px30_dp"
                 android:layout_marginRight="@dimen/px30_dp"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/px100_dp"
+                android:layout_height="@dimen/px120_dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/px60_dp"
+                    android:textSize="@dimen/px40_dp"
                     android:text="开心大转盘"/>
 
                 <ImageView
@@ -235,13 +235,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textColor="#919191"
-                    android:textSize="@dimen/px60_dp"
+                    android:textSize="@dimen/px42_dp"
                     android:gravity="center"
                     android:layout_marginRight="@dimen/px18_dp"
                     android:text="设置"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/px28_dp"
+                    android:layout_height="@dimen/px42_dp"
                     android:background="@drawable/y1_go_ico"/>
             </LinearLayout>
         </LinearLayout>

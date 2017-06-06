@@ -181,7 +181,7 @@ public class AskForGiftDialog extends Dialog implements OnClickListener, GiftHel
     }
 
     private void initEdit() {
-        btn_input_change.setBackgroundResource(R.drawable.f1_btn_voice_speak);
+        btn_input_change.setImageResource(R.drawable.p1_chat_a01);
         tv_edit.setVisibility(View.VISIBLE);
         btn_voice.setVisibility(View.GONE);
         ll_voice_main.setVisibility(View.GONE);
@@ -190,7 +190,7 @@ public class AskForGiftDialog extends Dialog implements OnClickListener, GiftHel
     private void changeEdit() {
         if (isEdit) {
             isEdit = false;
-            btn_input_change.setBackgroundResource(R.drawable.p1_chat_c01);
+            btn_input_change.setImageResource(R.drawable.p1_chat_e01);
             tv_edit.setVisibility(View.GONE);
             btn_voice.setVisibility(View.VISIBLE);
             ll_voice_main.setVisibility(View.GONE);

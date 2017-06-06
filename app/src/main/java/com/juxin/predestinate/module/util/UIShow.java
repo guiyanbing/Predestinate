@@ -1252,6 +1252,17 @@ public class UIShow {
     }
 
     /**
+     * 老：VIP充值弹框
+     * @param context
+     * @param seeType 1从Y聊天锁按钮发起  2 从查看资料发起
+     */
+    public static void showGoodsVipDlgOld(Context context, int seeType){
+        Intent intent = new Intent(context, GoodsVipDlgOld.class);
+        intent.putExtra("seetype",seeType);
+        context.startActivity(intent);
+    }
+
+    /**
      * Y币充值弹框
      *
      * @param remain   Y币余额

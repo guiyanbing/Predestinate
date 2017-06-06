@@ -25,9 +25,9 @@ import com.juxin.predestinate.module.util.UIShow;
 public class MyAuthenticationAct extends BaseActivity implements View.OnClickListener, RequestComplete {
     private TextView tv_txt_auth_phone, tv_txt_auth_video, tv_txt_auth_id;
     private UserDetail userDetail;
-    private int authForVodeo = 104;
+    private final int authForVodeo = 104;
     public static final int AUTHENTICSTION_REQUESTCODE = 103;
-    private int authIDCard = 105;
+    private final int authIDCard = 105;
     private VideoVerifyBean videoVerifyBean;
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
 
@@ -110,11 +110,6 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

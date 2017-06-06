@@ -1,9 +1,9 @@
 package com.juxin.predestinate.module.local.common;
 
-import android.content.Context;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -37,8 +37,10 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
 import com.juxin.predestinate.ui.discover.SayHelloDialog;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -211,13 +213,13 @@ public class CommonMgr implements ModuleBase {
     /**
      * 获取客服信息
      */
-    public void getCustomerserviceContact(final FragmentActivity context,final RequestComplete complete){
+    public void getCustomerserviceContact(final FragmentActivity context, final RequestComplete complete) {
         LoadingDialog.show(context);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()){
-                    contactBean= (ContactBean)response.getBaseData();
+                if (response.isOk()) {
+                    contactBean = (ContactBean) response.getBaseData();
                 }
                 LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
                     @Override
@@ -1050,5 +1052,21 @@ public class CommonMgr implements ModuleBase {
         HashMap<String, Object> getParms = new HashMap<>();
         getParms.put("uid", App.uid);
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.checkycoin, getParms, complete);
+    }
+
+    /**
+     * 获取用户热门列表
+     *
+     * @param page
+     * @param limit
+     * @param reload   是否刷新缓存 1为刷新缓存 0为向下翻页
+     * @param complete
+     */
+    public void reqUserInfoHotList(int page, final int limit, boolean reload, RequestComplete complete) {
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("page", page);
+        postParams.put("limit", limit);
+        postParams.put("reload", reload ? 1 : 0);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserHotList, postParams, complete);
     }
 }

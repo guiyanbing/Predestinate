@@ -32,8 +32,12 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.f1_goods_vip_dialog_old);
-
+        int seetype = getIntent().getIntExtra("seetype", 1);
+        if (seetype == 2) {
+            setContentView(R.layout.f1_goods_vip2_dialog_old);
+        } else {
+            setContentView(R.layout.f1_goods_vip_dialog_old);
+        }
         initView();
     }
 

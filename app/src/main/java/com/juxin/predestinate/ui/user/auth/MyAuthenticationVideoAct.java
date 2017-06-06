@@ -41,7 +41,8 @@ import java.io.FileInputStream;
 
 public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener {
     private Context context;
-    private static int PhotoUploadResult = 10001, VideoUploadResult = 10002;
+    private static final int PhotoUploadResult = 10001;
+    private static final int VideoUploadResult = 10002;
     private ImageView ivAuthPic, ivAuthVideo, ivPic, ivVideo;
     private TextView tvAuthPic, tvAuthVideo, tvMakePic, tvMakeVideo;
     private boolean isMakePhotoOK = false, isMakeVideoOk = false, isMakeing = false;
@@ -151,11 +152,6 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_make_pic:
@@ -260,7 +256,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     }
 
 
-    public void VideoUpload(String sPath) {
+    private void VideoUpload(String sPath) {
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO, sPath, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -308,7 +304,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     }
 
     // 是否隐藏右上角view
-    protected void setHideTopRightView(boolean bool) {
+    private void setHideTopRightView(boolean bool) {
         if (bool) {
             setTitleRight("", null);
         } else {
