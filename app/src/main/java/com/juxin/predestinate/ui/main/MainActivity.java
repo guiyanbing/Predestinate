@@ -289,6 +289,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }
                 }, 200);
                 break;
+
+            case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
+                HashMap<String, Object> data = (HashMap<String, Object>) value;
+                int type = (int) data.get("type");
+                if (type == 0 || type == 2)
+                    getOfflineMsg();
+                break;
+
             default:
                 break;
         }

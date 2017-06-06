@@ -26,7 +26,11 @@ web.urlMethod = {
   CheckPhoneNum: 'user/bindCellPhone',
   GetActivity: 'user/Activity',
   QQServiceNum: 'user/serviceQQ',
-  ReceiveActivity: 'user/receiveActivity'
+  ReceiveActivity: 'user/receiveActivity',
+  GetMyTurnConfig: 'xs/minigame/GetMyTurnConfig',
+  GetOtherTurnConfig: 'xs/minigame/GetTurnConfig',
+  SetTurnConfig: 'xs/minigame/SetTurnConfig',
+  TurntableStart: 'xs/minigame/Rotate'
 };
 
 web.pages = {

@@ -129,9 +129,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         }
 
         //发送清消息列表打招呼的人角标
-        if (PSP.getInstance().getBoolean(MessageConstant.Stranger_New, false)) {
-            PSP.getInstance().put(MessageConstant.Stranger_New, false);
-            MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
+        if (ModuleMgr.getChatListMgr().getStrangerNew()) {
+            ModuleMgr.getChatListMgr().setStrangerNew();
         }
     }
 

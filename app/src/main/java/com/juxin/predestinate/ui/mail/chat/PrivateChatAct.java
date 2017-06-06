@@ -90,13 +90,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     public void checkIsCanSendMsg() {
-        if (MailSpecialID.customerService.getSpecialID() == whisperID) {//缘分小秘书
-            privateChat.getChatAdapter().showInputGONE();//输入框不显示
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+
+        if (MailSpecialID.customerService.getSpecialID() == whisperID && (userDetail.isVip()
+                || userDetail.getYcoin() > 0 || userDetail.getDiamondsSum() > 0)) {//缘分小秘书
+            privateChat.getChatAdapter().showIsCanChat(true);//输入框不显示
             privateChat.setInputGiftviewVisibility(View.GONE);
             return;
         }
-
-        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
         if ((userDetail.getGender() == 2)//女性用户
                 || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0

@@ -67,10 +67,10 @@
 
                     <ImageView
                         android:id="@+id/askfor_btn_voice"
-                        android:layout_width="@dimen/px120_dp"
-                        android:layout_height="@dimen/px120_dp"
+                        android:layout_width="@dimen/px100_dp"
+                        android:layout_height="@dimen/px100_dp"
                         android:layout_weight="0"
-                        android:src="@drawable/f1_btn_voice_speak" />
+                        android:src="@drawable/p1_chat_a01" />
 
                     <EditText
                         android:id="@+id/askfor_editmsg"
