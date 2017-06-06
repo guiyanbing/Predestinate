@@ -3,7 +3,6 @@ package com.juxin.predestinate.bean.db;
 import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.BuildConfig;

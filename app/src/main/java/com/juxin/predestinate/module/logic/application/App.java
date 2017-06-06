@@ -39,7 +39,7 @@ public class App extends MultiDexApplication {
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
-        //  initAppComponent();
+       // initAppComponent();
         ModuleMgr.initModule(context);
     }
 
