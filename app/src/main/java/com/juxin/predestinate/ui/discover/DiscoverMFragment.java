@@ -4,16 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 
@@ -27,7 +23,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private BaseFragment current;
     private RadioButton discover_recommend,discover_hot;
     private DiscoverFragment discoverFragment;
-    private HotFragment hotFragment;
+//    private HotFragment hotFragment;
     private FragmentManager fragmentManager;
 
     @Nullable
@@ -70,7 +66,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private void initFragment() {
         fragmentManager = getChildFragmentManager();
         discoverFragment = new DiscoverFragment();
-        hotFragment = new HotFragment();
+//        hotFragment = new HotFragment();
         switchContent(discoverFragment);
     }
 
@@ -103,7 +99,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
             case R.id.discover_hot:
                 discover_recommend.setChecked(false);
                 discover_hot.setChecked(true);
-                switchContent(hotFragment);
+//                switchContent(hotFragment);
                 break;
             default:
                 break;
