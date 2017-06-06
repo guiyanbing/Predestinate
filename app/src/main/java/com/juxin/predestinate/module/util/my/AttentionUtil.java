@@ -6,6 +6,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.bean.my.AttentionUserDetailList;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class AttentionUtil {
             @Override
             public void run() {
                 if (userInfos.size()<=0){
-                    String jsonStr = PSP.getInstance().getString(USERSKEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),"");
+                    String jsonStr = PSP.getInstance().getString(USERSKEY+ App.uid,"");
 //                                Log.e("TTTTTTTJJJ111", jsonStr);
 //                                PSP.getInstance().remove(USERSKEY+ModuleMgr.getCenterMgr().getMyInfo().getUid());
                     AttentionUserDetailList list = new AttentionUserDetailList();
