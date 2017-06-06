@@ -23,12 +23,9 @@ public class UserModifyPwdAct extends BaseActivity implements OnClickListener{
 	private EditText edtTxt_modify_oldpwd;
 	private EditText edtTxt_modify_newpwd;
 	private EditText edtTxt_modify_renewpwd;
-	private Button btn_modify_pwd_submit;
-	private TextView txt_modifypwd_id;
 
 	private String oldpwd;
 	private String newpwd;
-	private String renewpwd;
 
 
 	@Override
@@ -43,8 +40,8 @@ public class UserModifyPwdAct extends BaseActivity implements OnClickListener{
 		edtTxt_modify_oldpwd = (EditText) findViewById(R.id.edtTxt_modify_oldpwd);
 		edtTxt_modify_newpwd = (EditText) findViewById(R.id.edtTxt_modify_newpwd);
 		edtTxt_modify_renewpwd = (EditText) findViewById(R.id.edtTxt_modify_renewpwd);
-		btn_modify_pwd_submit = (Button) findViewById(R.id.btn_modify_pwd_submit);
-		txt_modifypwd_id = (TextView) findViewById(R.id.txt_modifypwd_id);
+		Button btn_modify_pwd_submit = (Button) findViewById(R.id.btn_modify_pwd_submit);
+		TextView txt_modifypwd_id = (TextView) findViewById(R.id.txt_modifypwd_id);
 		txt_modifypwd_id.setText(App.uid+ "");
 		btn_modify_pwd_submit.setOnClickListener(this);
 	}
@@ -71,7 +68,7 @@ public class UserModifyPwdAct extends BaseActivity implements OnClickListener{
 			PToast.showShort(getResources().getString(R.string.toast_pwd_error));
 			return true;
 		}
-		renewpwd = edtTxt_modify_renewpwd.getText().toString();
+		String renewpwd = edtTxt_modify_renewpwd.getText().toString();
 		if (TextUtils.isEmpty(renewpwd) || !newpwd.equals(renewpwd)) {
 			PToast.showShort(getResources().getString(R.string.toast_pwd_next_error));
 			return true;

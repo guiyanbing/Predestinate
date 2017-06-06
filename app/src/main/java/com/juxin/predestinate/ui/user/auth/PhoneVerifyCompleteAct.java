@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
@@ -41,13 +40,6 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
         ((TextView) findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
         ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+contactBean.getWork_time()+")");
         qq = contactBean.getQq();
-    }
-
-    public static void clearUserInfo() {
-        // 清除当前登录的用户信息
-        ModuleMgr.getLoginMgr().logout();
-        PSP.getInstance().put("addMsgToUserDate", null);
-        PSP.getInstance().put("recommendDate", null);
     }
 
     @Override
