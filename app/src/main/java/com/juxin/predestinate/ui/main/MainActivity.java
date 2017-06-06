@@ -38,6 +38,7 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.discover.DiscoverFragment;
+import com.juxin.predestinate.ui.discover.DiscoverMFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
@@ -50,7 +51,7 @@ import java.util.Map;
 public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
     private FragmentManager fragmentManager;
-    private DiscoverFragment discoverFragment;
+    private DiscoverMFragment discoverMFragment;
     private MailFragment mailFragment;
     private RankFragment rankFragment;
     private WebFragment plazaFragment;
@@ -102,14 +103,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initFragment() {
         fragmentManager = getSupportFragmentManager();
-        discoverFragment = new DiscoverFragment();
+        discoverMFragment = new DiscoverMFragment();
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
         plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
                 "http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/square/square.html");// TODO: 2017/5/3
         userFragment = new UserFragment();
 
-        switchContent(discoverFragment);
+        switchContent(discoverMFragment);
     }
 
     private void initViews() {
@@ -160,7 +161,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     private void tabSwitchStatus(BaseFragment fragment) {
         FloatingMgr.getInstance().setCanNotify(fragment != mailFragment);
-        if (fragment == discoverFragment) {
+        if (fragment == discoverMFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.discovery_layout);
         } else if (fragment == mailFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.mail_layout);
@@ -195,7 +196,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.discovery_layout:
-                switchContent(discoverFragment);
+                switchContent(discoverMFragment);
                 break;
             case R.id.mail_layout:
                 switchContent(mailFragment);
@@ -240,7 +241,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void changeTab(int tab_type, Intent intent) {
         PLogger.d("---changeTab--->tab_type：" + tab_type);
         if (FinalKey.MAIN_TAB_1 == tab_type) {//跳转到发现tab
-            switchContent(discoverFragment);
+            switchContent(discoverMFragment);
         } else if (FinalKey.MAIN_TAB_2 == tab_type) {//跳转到消息tab
             switchContent(mailFragment);
         } else if (FinalKey.MAIN_TAB_3 == tab_type) {//跳转到风云榜tab
