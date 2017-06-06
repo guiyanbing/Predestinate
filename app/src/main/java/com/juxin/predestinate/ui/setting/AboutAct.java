@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -44,7 +45,8 @@ public class AboutAct extends BaseActivity implements OnClickListener {
             return;
         }
         ((TextView) findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
-        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText(contactBean.getWork_time());
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+contactBean.getWork_time()+")");
+        findViewById(R.id.ll_customerservice_btn).setOnClickListener(this);
         qq=contactBean.getQq();
     }
 
@@ -58,6 +60,9 @@ public class AboutAct extends BaseActivity implements OnClickListener {
                 break;
             case R.id.ll_open_qq_btn://在线客服qq交流
                 UIShow.showQQService(AboutAct.this, qq);
+                break;
+            case R.id.ll_customerservice_btn:
+                UIShow.showPrivateChatAct(AboutAct.this, MailSpecialID.customerService.getSpecialID(),"");
                 break;
             default:
                 break;
