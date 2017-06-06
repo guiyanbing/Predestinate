@@ -131,7 +131,8 @@ var CMD = {
   refreshUserDetail: 'refresh_userdetail',
   showLoading: 'show_data_loading',
   hideLoading: 'hide_data_loading',
-  getAgentUrl: 'get_agent_url'
+  getAgentUrl: 'get_agent_url',
+  userBehavior: 'user_behavior'
 }; /**
     * Created by chuhaoyuan on 2016/11/2.
     */
@@ -502,6 +503,14 @@ var PlatformHelper = function PlatformHelper() {
 
   that.getIdentifyStatus = function (cb) {
     _executeCMD(CMD.getIdentifyStatus, null, cb);
+  };
+
+  that.userBehavior = function (to_uid, event_type, event_Data) {
+    _executeCMD(CMD.userBehavior, {
+      to_uid: to_uid,
+      event_type: event_type,
+      event_Data: event_Data
+    });
   };
 
   that.executeCMD = _executeCMD;
