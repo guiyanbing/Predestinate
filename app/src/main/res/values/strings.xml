@@ -616,6 +616,8 @@
 
     <!-- 发现start -->
     <string name="discover_title">发现</string>
+    <string name="discover_man_title_recommend">推荐</string>
+    <string name="discover_man_title_hot">热门</string>
 
     <string name="defriend_title">举报</string>
     <string name="defriend_title_right">提交</string>
