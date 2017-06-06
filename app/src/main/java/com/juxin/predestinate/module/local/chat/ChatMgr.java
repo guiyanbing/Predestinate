@@ -25,6 +25,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -791,7 +792,7 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if(!message.isSender() && message.getMsgID() > 0 && !message.isRu()){
+                if(!message.isSender() && message.getMsgID() > 0 && !message.isRu() && !MailSpecialID.getMailSpecialID(message.getLWhisperID())){
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
