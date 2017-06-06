@@ -55,6 +55,7 @@ public class LoginResult extends BaseData {
         myInfo.setNickname(getNickname());
         myInfo.setAvatar(getAvatar());
         myInfo.setAvatar_status(getAvatar_status());
+        myInfo.setGender(getGender());
         myInfo.setGroup(getGroup());
         myInfo.setYcoin(getYcoin());
     }
