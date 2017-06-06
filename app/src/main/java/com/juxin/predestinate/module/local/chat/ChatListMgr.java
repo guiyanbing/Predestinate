@@ -390,7 +390,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         SystemMessage mess = (SystemMessage) message;
         switch (mess.getXtType()) {
             case 3:
-                ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid());
+                ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(),message);
                 break;
         }
     }

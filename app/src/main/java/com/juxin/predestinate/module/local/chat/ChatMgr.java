@@ -36,9 +36,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
-import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
-
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
