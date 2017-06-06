@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.base.CustomLetterMailItem;
 
@@ -68,4 +69,11 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
         return itemHeight;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        if (getList() != null && getList().size() != 0) {
+            SortList.sortWeightTimeListView(getList());
+        }
+        super.notifyDataSetChanged();
+    }
 }

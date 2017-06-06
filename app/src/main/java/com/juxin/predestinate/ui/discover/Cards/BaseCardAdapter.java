@@ -30,9 +30,16 @@ public abstract class BaseCardAdapter<T> {
 
     /**
      * 获取可见的cardview的数目，默认是3
+     *
      * @return
      */
     public int getVisibleCardCount() {
         return 3;
     }
+
+
+    public interface OnDataNeedReq {
+        void onNeedReq();
+    }
+
 }
