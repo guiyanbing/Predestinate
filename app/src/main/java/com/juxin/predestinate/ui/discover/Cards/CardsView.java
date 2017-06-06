@@ -18,10 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.Scroller;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 /**
@@ -84,6 +84,7 @@ public class CardsView extends LinearLayout {
         super(context, attrs, defStyle);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipCardsView);
         yOffsetStep = (int) a.getDimension(R.styleable.SwipCardsView_yOffsetStep, yOffsetStep);
+        yOffsetStep = UIUtil.dp2px(yOffsetStep);
         alphaOffsetStep = a.getInt(R.styleable.SwipCardsView_alphaOffsetStep, alphaOffsetStep);
         scaleOffsetStep = a.getFloat(R.styleable.SwipCardsView_scaleOffsetStep, scaleOffsetStep);
 
@@ -567,10 +568,10 @@ public class CardsView extends LinearLayout {
         int offset = yOffsetStep * index;
         float scale = 1 - scaleOffsetStep * index;
         float alpha = 1.0f * (100 - alphaOffsetStep * index) / 100;
-        if (index == viewList.size()-1 && viewList.size() > 1){
-            offset = yOffsetStep * (index-1);
-            scale = 1 - scaleOffsetStep * (index-1);
-            alpha = 1.0f * (100 - alphaOffsetStep * (index-1)) / 100;
+        if (index == viewList.size() - 1 && viewList.size() > 1) {
+            offset = yOffsetStep * (index - 1);
+            scale = 1 - scaleOffsetStep * (index - 1);
+            alpha = 1.0f * (100 - alphaOffsetStep * (index - 1)) / 100;
         }
         child.offsetTopAndBottom(offset);
         child.setScaleX(scale);
@@ -689,7 +690,7 @@ public class CardsView extends LinearLayout {
             } else if (rate3 < 0) {
                 rate3 = 0;
             }
-            if (i != viewList.size()-1)
+            if (i != viewList.size() - 1)
                 ajustLinkageViewItem(changedView, rate3, i);
         }
     }
