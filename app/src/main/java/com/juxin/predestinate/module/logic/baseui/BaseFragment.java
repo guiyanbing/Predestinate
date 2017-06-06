@@ -125,7 +125,10 @@ public class BaseFragment extends Fragment {
 
     public void setTitleRightImgGone() {
         this.findViewById(R.id.base_title_right_img_container).setVisibility(View.GONE);
+    }
 
+    public void setTitleRightImgVisible() {
+        this.findViewById(R.id.base_title_right_img_container).setVisibility(View.VISIBLE);
     }
 
     /**

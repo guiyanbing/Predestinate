@@ -21,9 +21,9 @@ import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 public class DiscoverMFragment extends BaseFragment implements View.OnClickListener {
 
     private BaseFragment current;
-    private RadioButton discover_recommend,discover_hot;
+    private RadioButton discover_recommend, discover_hot;
     private DiscoverFragment discoverFragment;
-//    private HotFragment hotFragment;
+    //    private HotFragment hotFragment;
     private FragmentManager fragmentManager;
 
     @Nullable
@@ -38,28 +38,25 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void setTopView() {
-
-        setTitle(getString(R.string.discover_title));
         setTitleRightImg(R.drawable.f1_discover_select_ico, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showDiscoverSelectDialog();
+                discoverFragment.showDiscoverSelectDialog();
             }
         });
 //        MsgMgr.getInstance().attach(this);
     }
 
     private void initView() {
-        View mDisManTitle = LayoutInflater.from(getContext()).inflate(R.layout.f1_discover_man_title, null);
-        setTitleCenterContainer(mDisManTitle);
-        discover_recommend = (RadioButton) findViewById(R.id.discover_recommend);
-        discover_hot = (RadioButton) findViewById(R.id.discover_hot);
-
-        discover_recommend.setOnClickListener(this);
-        discover_hot.setOnClickListener(this);
-
         if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1) {
-
+            View mDisManTitle = LayoutInflater.from(getContext()).inflate(R.layout.f1_discover_man_title, null);
+            setTitleCenterContainer(mDisManTitle);
+            discover_recommend = (RadioButton) findViewById(R.id.discover_recommend);
+            discover_hot = (RadioButton) findViewById(R.id.discover_hot);
+            discover_recommend.setOnClickListener(this);
+            discover_hot.setOnClickListener(this);
+        } else {
+            setTitle(getString(R.string.discover_title));
         }
     }
 
@@ -92,11 +89,13 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.discover_recommend:
+                setTitleRightImgVisible();
                 discover_recommend.setChecked(true);
                 discover_hot.setChecked(false);
                 switchContent(discoverFragment);
                 break;
             case R.id.discover_hot:
+                setTitleRightImgGone();
                 discover_recommend.setChecked(false);
                 discover_hot.setChecked(true);
 //                switchContent(hotFragment);

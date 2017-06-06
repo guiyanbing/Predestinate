@@ -62,7 +62,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.discover_fragment);
-        setTopView();
+//        setTopView();
         initView();
         onRefresh(); //默认加载全部
         return getContentView();
@@ -120,7 +120,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         ModuleMgr.getCommonMgr().getMainPage(page, 0, this);
     }
 
-    private void showDiscoverSelectDialog() {
+    public void showDiscoverSelectDialog() {
         final DiscoverSelectDialog dialog = new DiscoverSelectDialog();
         dialog.setNear(isNearPage);
         dialog.setOnItemClick(new DiscoverSelectDialog.OnDialogItemClick() {
