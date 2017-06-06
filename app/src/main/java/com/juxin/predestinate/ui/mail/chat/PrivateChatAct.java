@@ -355,7 +355,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
             UIShow.showCheckOtherInfoAct(this, whisperID);
         } else {
-            UIShow.showGoodsVipDlgOld(this);
+            UIShow.showGoodsVipDlgOld(this, 2);
         }
     }
 
