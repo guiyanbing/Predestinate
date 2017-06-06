@@ -94,7 +94,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void clearUserInfo() {
         userDetail = null;
-        setMyInfo(null);
+        setMyInfo("");
         putSettingPsp(null);
     }
 
