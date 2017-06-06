@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.config;
 
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.hot.UserInfoHotList;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
@@ -71,6 +72,8 @@ public enum UrlParam {
     reqSetOpposingVideoSetting(Hosts.FATE_IT_GO, "xs/userrelation/SetOpposingVideoSetting", null, true), // 设置接受他人音视频配置
 
     reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
+
+    reqUserHotList(Hosts.FATE_IT_GO, "xs/discovery/HotUsers ", UserInfoHotList.class, true),   //获取用户信息热门列表
 
     checkycoin("ycoin/checkycoin", null, true),//获得用户Y币状态
 
