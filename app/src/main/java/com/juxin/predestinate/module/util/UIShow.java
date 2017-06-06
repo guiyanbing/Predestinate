@@ -841,14 +841,14 @@ public class UIShow {
      * 跳转到开通vip页面
      */
     public static void showOpenVipActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_VIP, ModuleMgr.getCenterMgr().getChargeH5Params()));
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID, ModuleMgr.getCenterMgr().getChargeH5Params(2)));
     }
 
     /**
      * 跳转到购买Y币页面
      */
     public static void showBuyCoinActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_COIN, ModuleMgr.getCenterMgr().getChargeH5Params()));
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID, ModuleMgr.getCenterMgr().getChargeH5Params(1)));
     }
 
     /**
