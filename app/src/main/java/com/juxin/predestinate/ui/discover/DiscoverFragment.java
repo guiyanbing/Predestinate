@@ -65,6 +65,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
 //        setTopView();
         initView();
         onRefresh(); //默认加载全部
+        MsgMgr.getInstance().attach(this);
         return getContentView();
     }
 
@@ -76,7 +77,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 showDiscoverSelectDialog();
             }
         });
-        MsgMgr.getInstance().attach(this);
     }
 
 
@@ -388,6 +388,10 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 for (int i = 0; i < data.size(); i++) {
                     notifyAdapter(data.get(i).getUid());
                 }
+                break;
+            case MsgType.MT_Say_HI_Notice:
+                long uid = (long) value;
+                notifyAdapter(uid);
                 break;
             default:
                 break;

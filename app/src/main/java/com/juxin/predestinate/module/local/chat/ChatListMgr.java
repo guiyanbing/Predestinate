@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -28,15 +27,11 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -123,7 +118,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
-                PLogger.printObject("unreadNum=" + tmp.getNum());
+                PLogger.printObject("unreadNum="+ tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
@@ -245,7 +240,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 更新私聊列表状态
-     *
      * @param userID
      * @return
      */
@@ -274,10 +268,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_Unread_change:
-                if (App.uid <= 0) return;
+                if ( App.uid <= 0) return;
                 Map<String, Object> msgMap = (Map<String, Object>) value;
                 String Msg_Name_Key = (String) msgMap.get(UnreadMgr.Msg_Name_Key);
-                if (Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)) {
+                if(Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)){
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
@@ -297,7 +291,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    private void login() {
+    private void login(){
         if (App.uid > 0) {
             initAppComponent();
             getAppComponent().inject(this);

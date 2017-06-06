@@ -158,7 +158,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         // 发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过
         switch (msgData.getStatus()) {
             case 1:
-            case 10:
                 item_last_status.setText("送达");
                 item_last_status.setBackgroundResource(R.drawable.f1_mail_item_delivery);
                 break;

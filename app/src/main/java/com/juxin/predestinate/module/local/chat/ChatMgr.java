@@ -114,7 +114,7 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
-    public void updateOtherRead(String channelID, String whisperID, long sendID) {
+    public void updateOtherRead(String channelID, String whisperID, long sendID,BaseMessage message) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
         ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
         if (!whisperId.equalsIgnoreCase(whisperID)) {
@@ -126,7 +126,7 @@ public class ChatMgr implements ModuleBase {
             systemMessage.setChannelID(channelID);
             systemMessage.setWhisperID(whisperId);
             systemMessage.setSendID(sendID);
-            specialMgr.setSystemMsg(systemMessage);
+            onChatMsgUpdate(channelID, whisperID, true, message);
         }
     }
 
@@ -392,7 +392,8 @@ public class ChatMgr implements ModuleBase {
         boolean b = ret != MessageConstant.ERROR;
         onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
 
-        if (!b) return;
+        if (!b)
+            return;
         sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {

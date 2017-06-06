@@ -32,8 +32,7 @@ public class Hosts {
     private static final String H5_HOST = "file:///android_asset/webApp/YfbWebApp/pages/";
     public static final String H5_RANKING = H5_HOST + "windRanking/windRanking.html";  // 排行榜
     public static final String H5_ACTION = H5_HOST + "setting/activity.html";          // 活动相关
-    public static final String H5_PREPAID_COIN = H5_HOST + "prepaid/prepaid.html";     // 购买Y币
-    public static final String H5_PREPAID_VIP = H5_HOST + "prepaid/prepaid-vip.html";  // 购买VIP
+    public static final String H5_PREPAID = H5_HOST + "prepaid/prepaid.html";          // 购买页面，根据type区分Y币和vip
     public static final String H5_GIFT = H5_HOST + "myGift/myGift.html";               // 我的礼物
     public static final String H5_BILL = H5_HOST + "setting/tollCollection.html";      // 话费领取
     public static final String H5_ROTARY = H5_HOST + "turntable/turntable.html";       // 大转盘设置

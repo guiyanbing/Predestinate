@@ -24,7 +24,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private BaseFragment current;
     private RadioButton discover_recommend, discover_hot;
     private DiscoverFragment discoverFragment;
-//    private HotFragment hotFragment;
+    private HotFragment hotFragment;
     private FragmentManager fragmentManager;
 
     @Nullable
@@ -65,7 +65,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
         fragmentManager = getChildFragmentManager();
         discoverFragment = new DiscoverFragment();
         if (PSP.getInstance().getInt(Constant.USER_GENDER, 1) == 1) {
-//            hotFragment = new HotFragment();
+            hotFragment = new HotFragment();
         }
         switchContent(discoverFragment);
     }
@@ -101,7 +101,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
                 setTitleRightImgGone();
                 discover_recommend.setChecked(false);
                 discover_hot.setChecked(true);
-//                switchContent(hotFragment);
+                switchContent(hotFragment);
                 break;
             default:
                 break;

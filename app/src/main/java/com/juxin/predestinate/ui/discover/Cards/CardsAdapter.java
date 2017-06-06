@@ -36,6 +36,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         this.datas = datas;
     }
 
+
     @Override
     public int getCount() {
         return datas.size();
@@ -67,9 +68,10 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             vh = (ViewHoder) cardview.getTag();
         }
 
-        vh.lin_imgs_view.setOnClickListener(new View.OnClickListener() {
+        vh.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                UIShow.showCheckOtherInfoAct(context, infoHot.getUid());
             }
         });
 

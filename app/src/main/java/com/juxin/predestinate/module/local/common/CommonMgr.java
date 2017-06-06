@@ -1058,14 +1058,13 @@ public class CommonMgr implements ModuleBase {
      * 获取用户热门列表
      *
      * @param page
-     * @param limit
      * @param reload   是否刷新缓存 1为刷新缓存 0为向下翻页
      * @param complete
      */
-    public void reqUserInfoHotList(int page, final int limit, boolean reload, RequestComplete complete) {
+    public void reqUserInfoHotList(int page, boolean reload, RequestComplete complete) {
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("page", page);
-        postParams.put("limit", limit);
+        postParams.put("limit", 10);
         postParams.put("reload", reload ? 1 : 0);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserHotList, postParams, complete);
     }
