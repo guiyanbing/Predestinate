@@ -23,7 +23,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private BaseFragment current;
     private RadioButton discover_recommend, discover_hot;
     private DiscoverFragment discoverFragment;
-    //    private HotFragment hotFragment;
+//    private HotFragment hotFragment;
     private FragmentManager fragmentManager;
 
     @Nullable
@@ -63,7 +63,9 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private void initFragment() {
         fragmentManager = getChildFragmentManager();
         discoverFragment = new DiscoverFragment();
-//        hotFragment = new HotFragment();
+        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1) {
+//            hotFragment = new HotFragment();
+        }
         switchContent(discoverFragment);
     }
 
