@@ -163,8 +163,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return PSP.getInstance().getBoolean(MessageConstant.Stranger_New, false);
     }
 
-    public void setStrangerNew() {
-        PSP.getInstance().put(MessageConstant.Stranger_New, true);
+    public void setStrangerNew(boolean strangerNew) {
+        PSP.getInstance().put(MessageConstant.Stranger_New, strangerNew);
         MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
     }
 

@@ -92,10 +92,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void checkIsCanSendMsg() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
-        if (MailSpecialID.customerService.getSpecialID() == whisperID && (userDetail.isVip()
-                || userDetail.getYcoin() > 0 || userDetail.getDiamondsSum() > 0)) {//缘分小秘书
-            privateChat.getChatAdapter().showIsCanChat(true);//输入框不显示
+        if (MailSpecialID.customerService.getSpecialID() == whisperID){
             privateChat.setInputGiftviewVisibility(View.GONE);
+            if (userDetail.isVip() || userDetail.getYcoin() > 0 || userDetail.getDiamondsSum() > 0) {//缘分小秘书
+                privateChat.getChatAdapter().showIsCanChat(true);//输入框不显示
+            }
             return;
         }
 

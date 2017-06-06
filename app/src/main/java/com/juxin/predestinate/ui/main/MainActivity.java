@@ -24,6 +24,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;

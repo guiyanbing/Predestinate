@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -16,8 +17,10 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -34,7 +37,7 @@ public class DBCenterFMessage {
     }
 
 
-    public long storageDataVideo(VideoMessage message){
+    public long storageDataVideo(VideoMessage message) {
         if (!isExist(message.getSpecialMsgID())) {//没有数据
             return insertMsg(message);
         } else {
@@ -107,10 +110,7 @@ public class DBCenterFMessage {
             values.put(FMessage.COLUMN_FSTATUS, 1);// 默认为1插入的时候
             values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
 
-
-            PLogger.printObject("yyyyy===" + baseMessage.getJsonStr());
             values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
-
             return mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
         } catch (Exception e) {
             e.printStackTrace();
@@ -299,7 +299,7 @@ public class DBCenterFMessage {
                 stringList.add(String.valueOf(MessageConstant.OK_STATUS));
             }
 
-            if(msgID != MessageConstant.NumNo){
+            if (msgID != MessageConstant.NumNo) {
                 sql.append(" AND " + FMessage.COLUMN_MSGID + " < ?");
                 stringList.add(String.valueOf(msgID));
             }
