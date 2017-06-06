@@ -162,8 +162,13 @@ public class CardsView extends LinearLayout {
         mCount = mAdapter.getCount();
         //        cardVisibleCount = mAdapter.getVisibleCardCount();
         cardVisibleCount = Math.min(cardVisibleCount, mCount);
+        int tmpIndex = 0;
         for (int i = mShowingIndex; i < mShowingIndex + cardVisibleCount; i++) {
-            View childView = viewList.get(i - mShowingIndex);
+            tmpIndex = i - mShowingIndex;
+            if (tmpIndex >= viewList.size() ) {
+                return;
+            }
+            View childView = viewList.get(tmpIndex);
             if (childView == null) {
                 return;
             }
