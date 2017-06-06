@@ -11,6 +11,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -113,6 +114,15 @@ public class ChatPanelGift extends ChatPanel {
                 }
             }
         });
+        return true;
+    }
+
+    @Override
+    public boolean onClickErrorResend(BaseMessage msgData) {
+        if (msgData == null || !(msgData instanceof GiftMessage)) {
+            return false;
+        }
+        setDialog(msgData, null);
         return true;
     }
 }
