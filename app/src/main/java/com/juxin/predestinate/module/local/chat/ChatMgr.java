@@ -435,8 +435,8 @@ public class ChatMgr implements ModuleBase {
      * @param giftCount
      * @param giftLogID
      */
-    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID, int gType) {
-        final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount, giftLogID);
+    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, int gType) {
+        final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount);
         giftMessage.setStatus(MessageConstant.SENDING_STATUS);
         giftMessage.setJsonStr(giftMessage.getJson(giftMessage));
         giftMessage.setRu(MessageConstant.Ru_Friend);
