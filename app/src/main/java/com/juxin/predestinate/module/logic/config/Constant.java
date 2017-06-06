@@ -22,6 +22,7 @@ public class Constant {
     public final static String WEIXIN_App_Key = "xCNyzKceB8szwWmUqT4laGqK5SapQn5L";
 
     // -------------------------K-V---------------------------
+    public static final String USER_GENDER = "user_gender"; //用户性别
     public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
     public static final String SETTING_QUIT_MESSAGE = "setting_quit_message";   //是否进行锁屏弹窗，存储key及默认值
