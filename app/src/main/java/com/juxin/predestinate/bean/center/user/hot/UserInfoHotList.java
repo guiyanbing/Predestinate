@@ -49,4 +49,12 @@ public class UserInfoHotList extends BaseData {
     public void setRef(boolean ref) {
         isRef = ref;
     }
+
+    public ArrayList<UserInfoHot> getHotLists() {
+        return hotLists;
+    }
+
+    public void setHotLists(ArrayList<UserInfoHot> hotLists) {
+        this.hotLists = hotLists;
+    }
 }

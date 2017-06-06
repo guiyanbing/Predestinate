@@ -73,7 +73,7 @@ public enum UrlParam {
 
     reqUserInfoSummary(Hosts.FATE_IT_GO, "xs/userinfo/UserInfoSummary", null, true),   //获取轻量级的用户信息
 
-    reqUserHotList(Hosts.FATE_IT_GO, "xs/discovery/HotUsers ", UserInfoHotList.class, true),   //获取用户信息热门列表
+    reqUserHotList(Hosts.FATE_IT_GO, "xs/discovery/HotUsers", UserInfoHotList.class, true),   //获取用户信息热门列表
 
     checkycoin("ycoin/checkycoin", null, true),//获得用户Y币状态
 
