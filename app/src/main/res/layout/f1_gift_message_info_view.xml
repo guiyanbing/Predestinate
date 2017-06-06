@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/px100_dp"
         android:gravity="center_vertical"
-        android:text=""
-        android:textColor="@color/color_62BFDE"
+        android:text="妄自"
+        android:textColor="@color/lmarquee_nick"
         android:textSize="@dimen/px40_sp" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:text=""
+        android:text=" 刚刚给 "
         android:textColor="@color/color_999999"
         android:textSize="@dimen/px40_sp" />
 
@@ -32,8 +32,8 @@
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:text=""
-        android:textColor="@color/color_62BFDE"
+        android:text="药剂女"
+        android:textColor="@color/lmarquee_nick"
         android:textSize="@dimen/px40_sp" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:text=""
+        android:text="送了"
         android:textColor="@color/color_999999"
         android:textSize="@dimen/px40_sp" />
 
@@ -52,7 +52,7 @@
         android:layout_height="@dimen/px100_dp"
         android:layout_marginLeft="@dimen/px10_dp"
         android:gravity="center_vertical"
-        android:text=""
-        android:textColor="@color/color_999999"
+        android:text="1个玫瑰花"
+        android:textColor="@color/lmarquee_boy_gift"
         android:textSize="@dimen/px40_sp" />
 </LinearLayout>
