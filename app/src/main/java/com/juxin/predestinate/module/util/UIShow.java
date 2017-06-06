@@ -866,6 +866,13 @@ public class UIShow {
     }
 
     /**
+     * 跳转到话费领取页面
+     */
+    public static void showBillCollectionActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_BILL));
+    }
+
+    /**
      * 跳转到大转盘设置页面
      */
     public static void showRotaryActivity(Context context) {
@@ -1253,12 +1260,13 @@ public class UIShow {
 
     /**
      * 老：VIP充值弹框
+     *
      * @param context
      * @param seeType 1从Y聊天锁按钮发起  2 从查看资料发起
      */
-    public static void showGoodsVipDlgOld(Context context, int seeType){
+    public static void showGoodsVipDlgOld(Context context, int seeType) {
         Intent intent = new Intent(context, GoodsVipDlgOld.class);
-        intent.putExtra("seetype",seeType);
+        intent.putExtra("seetype", seeType);
         context.startActivity(intent);
     }
 
