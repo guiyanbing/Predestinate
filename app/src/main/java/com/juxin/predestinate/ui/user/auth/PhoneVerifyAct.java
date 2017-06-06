@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
@@ -37,13 +36,11 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
 
     private EditText edtPhone, et_code;
     private Button bt_send_code, btnok;
-    private TextView tv_customerservice_desc;
 
     // byIQQ phone fare
     private String phone, code;
     private final MyHandler m_Handler = new MyHandler(this);
     private SendEnableThread sendthread = null;
-    private ContactBean contactBean;
     private String qq;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +53,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     }
 
     private static class MyHandler extends Handler {
-        private WeakReference<PhoneVerifyAct> mActivity;
+        private final WeakReference<PhoneVerifyAct> mActivity;
 
         MyHandler(PhoneVerifyAct act) {
             this.mActivity = new WeakReference<>(act);
@@ -92,7 +89,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     }
 
     private void initView() {
-        tv_customerservice_desc = (TextView) findViewById(R.id.tv_customerservice_desc);
+        TextView tv_customerservice_desc = (TextView) findViewById(R.id.tv_customerservice_desc);
         edtPhone = (EditText) this.findViewById(R.id.edt_phoneverify_phone);
         et_code = (EditText) this.findViewById(R.id.edt_phoneverify_note);
         bt_send_code = (Button) this.findViewById(R.id.btn_phoneverify_begin);
@@ -101,13 +98,13 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         btnok.setOnClickListener(this);
         findViewById(R.id.ll_customerservice_btn).setOnClickListener(this);
         findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
-        contactBean = ModuleMgr.getCommonMgr().getContactBean();
+        ContactBean contactBean = ModuleMgr.getCommonMgr().getContactBean();
         if (contactBean == null) {
             return;
         }
         tv_customerservice_desc.setText(getResources().getString(R.string.txt_customerservice_bind_desc));
         ((TextView)findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
-        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+contactBean.getWork_time()+")");
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+ contactBean.getWork_time()+")");
         qq = contactBean.getQq();
     }
 
@@ -124,14 +121,10 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 }
                 break;
             case R.id.btn_phoneverify_ok:
-//                if (validInput()) {
-//                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
-//                    LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
-//                }
-                PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
-                ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
-                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
-                UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
+                if (validInput()) {
+                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
+                    LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                }
                 break;
             case R.id.ll_customerservice_btn://客服小秘书
                 UIShow.showPrivateChatAct(PhoneVerifyAct.this, MailSpecialID.customerService.getSpecialID(),"");

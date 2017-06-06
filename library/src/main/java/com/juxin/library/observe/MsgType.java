@@ -142,25 +142,6 @@ public class MsgType {
      */
     public static final String MT_SEND_GIFT_FLAG = "MT_SEND_GIFT_FLAG";
 
-    // -----------------------------socket相关 start---------------------------------
-
-    /**
-     * socket开始连接
-     */
-    public static final String MT_Socket_Start_Connect = "MT_Socket_Start_Connect";
-
-    /**
-     * socket消息写入
-     */
-    public static final String MT_Socket_Write_Content = "MT_Socket_Write_Content";
-
-    /**
-     * socket消息读取
-     */
-    public static final String MT_Socket_Read_Content = "MT_Socket_Read_Content";
-
-    // -----------------------------socket相关 end---------------------------------
-
     /**
      * 一键打招呼完成后回调用
      */

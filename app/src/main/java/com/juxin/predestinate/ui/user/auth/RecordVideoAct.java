@@ -45,7 +45,6 @@ public class RecordVideoAct extends FragmentActivity {
     private MediaRecorder mediaRecorder;
     // 显示视频预览的SurfaceView
     private SurfaceView surfaceView;
-    private SurfaceHolder.Callback callback;
     //摄像头
     private Camera camera;
     // 记录是否正在进行录制
@@ -82,7 +81,7 @@ public class RecordVideoAct extends FragmentActivity {
         surfaceView.getHolder().setFixedSize(1280, 720);
         // 设置该组件让屏幕不会自动关闭
         surfaceView.getHolder().setKeepScreenOn(true);
-        callback = new SurfaceHolder.Callback() {
+        SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 doCreate();
@@ -125,10 +124,10 @@ public class RecordVideoAct extends FragmentActivity {
     /**
      * 查找前置摄像头ID
      *
-     * @return
+     * @return cameraId
      */
     private int findFrontCamera() {
-        int cameraCount = 0;
+        int cameraCount;
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         cameraCount = Camera.getNumberOfCameras(); // get cameras number
 
@@ -172,7 +171,7 @@ public class RecordVideoAct extends FragmentActivity {
         stopRecord();
     }
 
-    public int getDegree() {
+    private int getDegree() {
         //获取当前屏幕旋转的角度
         int rotating = this.getWindowManager().getDefaultDisplay().getRotation();
         int degree = 0;
@@ -287,7 +286,7 @@ public class RecordVideoAct extends FragmentActivity {
     }
 
 
-    private CountDownTimer cdt = new CountDownTimer(6000, 1000) {
+    private final CountDownTimer cdt = new CountDownTimer(6000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
             if (tvHintRecord != null)
@@ -336,9 +335,7 @@ public class RecordVideoAct extends FragmentActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (isRecording)
-            return true;
-        return super.onKeyDown(keyCode, event);
+        return isRecording || super.onKeyDown(keyCode, event);
     }
 
     // 跳转到当前应用的设置界面

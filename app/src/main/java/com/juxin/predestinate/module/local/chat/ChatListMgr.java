@@ -159,6 +159,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
 
+    public boolean getStrangerNew() {
+        return PSP.getInstance().getBoolean(MessageConstant.Stranger_New, false);
+    }
+
+    public void setStrangerNew() {
+        PSP.getInstance().put(MessageConstant.Stranger_New, true);
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
+    }
+
     //是否能聊天
     private String getIsTodayChatKey() {//是否显示问题反馈第一句KEY
         return "isTodayChat" + App.uid;

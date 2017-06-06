@@ -254,7 +254,7 @@ public class UIShow {
     /**
      * 手机绑定
      */
-    public static void showPhoneVerifyAct(final FragmentActivity activity,final int requestCode) {
+    public static void showPhoneVerifyAct(final FragmentActivity activity, final int requestCode) {
         ModuleMgr.getCommonMgr().getCustomerserviceContact(activity, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -804,8 +804,6 @@ public class UIShow {
         activity.startActivityForResult(intent, Constant.PAYMENTACT);
     }
 
-
-
     public static void showPayWebAct(FragmentActivity activity, PayGood payGood) {
         Intent intent_web = new Intent(activity, PayWebAct.class);
         intent_web.putExtra("payGood", payGood);
@@ -865,6 +863,13 @@ public class UIShow {
      */
     public static void showActionActivity(Context context) {
         showWebActivity(context, WebUtil.jointUrl(Hosts.H5_ACTION));
+    }
+
+    /**
+     * 跳转到大转盘设置页面
+     */
+    public static void showRotaryActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_ROTARY));
     }
 
     /**

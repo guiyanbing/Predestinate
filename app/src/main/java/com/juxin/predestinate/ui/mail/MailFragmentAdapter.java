@@ -84,9 +84,9 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
-        int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
-        baseMessage.setNum(PSP.getInstance().getBoolean(MessageConstant.Stranger_New, false) ? 1 : 0);
+        baseMessage.setNum(ModuleMgr.getChatListMgr().getStrangerNew() ? 1 : 0);
         baseMessage.setName("打招呼的人");
+        int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
         baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");
         baseMessage.setLocalAvatar(R.drawable.f1_hi_btn);
         messageLists.add(baseMessage);

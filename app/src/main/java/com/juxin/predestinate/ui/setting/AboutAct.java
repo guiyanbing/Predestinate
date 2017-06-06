@@ -18,7 +18,6 @@ import com.juxin.predestinate.module.util.UIShow;
 public class AboutAct extends BaseActivity implements OnClickListener {
 
     private int iCount;
-    private ContactBean contactBean;
     private String qq;
 
     @Override
@@ -40,14 +39,14 @@ public class AboutAct extends BaseActivity implements OnClickListener {
         tv_email.setText(email);
 
         findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
-        contactBean= ModuleMgr.getCommonMgr().getContactBean();
+        ContactBean contactBean = ModuleMgr.getCommonMgr().getContactBean();
         if (contactBean == null) {
             return;
         }
         ((TextView) findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
-        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+contactBean.getWork_time()+")");
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+ contactBean.getWork_time()+")");
         findViewById(R.id.ll_customerservice_btn).setOnClickListener(this);
-        qq=contactBean.getQq();
+        qq= contactBean.getQq();
     }
 
     public void onClick(View v) {

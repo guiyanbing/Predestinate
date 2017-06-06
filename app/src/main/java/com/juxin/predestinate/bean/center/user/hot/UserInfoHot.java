@@ -21,7 +21,7 @@ public class UserInfoHot extends UserBasic {
     private int channel_uid;
     private int photoNum;
 
-    private String onlineState;     // 在线状态
+    private boolean onlineState;     // 在线状态
     private String lastOnLineTime;  // 上次在线时间
 
     private boolean isVip;      // 是否vip
@@ -64,7 +64,7 @@ public class UserInfoHot extends UserBasic {
         this.setVip(jsonObject.optInt("group") >= 2);
         this.setHeight(jsonObject.optInt("height"));
         this.setKf_id(jsonObject.optInt("kf_id"));
-        this.setOnlineState(jsonObject.optString("is_online"));
+        this.setOnlineState(jsonObject.optBoolean("is_online"));
         this.setLastOnLineTime(jsonObject.optString("last_online"));
         this.setNickname(jsonObject.optString("nickname"));
         this.setMobileValidation(jsonObject.optInt("mobile_validation",0) == 1);
@@ -72,8 +72,8 @@ public class UserInfoHot extends UserBasic {
         this.setVideoBusy(jsonObject.optInt("video_busy",0) == 1);
         this.setPhotoNum(jsonObject.optInt("photonum"));
 
-        if(!jsonObject.isNull("videochatConfig")) {
-            JSONObject configJsonObj = jsonObject.optJSONObject("videochatConfig");
+        if(!jsonObject.isNull("videochatconfig")) {
+            JSONObject configJsonObj = jsonObject.optJSONObject("videochatconfig");
             this.setVideo_available(configJsonObj.optInt("videochat") == 1);
             this.setAudio_available(configJsonObj.optInt("audiochat") == 1);
             this.setVideoValidation(configJsonObj.optInt("videoverify") == 3);
@@ -190,11 +190,11 @@ public class UserInfoHot extends UserBasic {
         this.photoNum = photoNum;
     }
 
-    public String getOnlineState() {
+    public boolean getOnlineState() {
         return onlineState;
     }
 
-    public void setOnlineState(String onlineState) {
+    public void setOnlineState(boolean onlineState) {
         this.onlineState = onlineState;
     }
 
@@ -245,7 +245,7 @@ public class UserInfoHot extends UserBasic {
         dest.writeString(this.infoJson);
         dest.writeInt(channel_uid);
         dest.writeInt(photoNum);
-        dest.writeString(onlineState);
+        dest.writeByte(onlineState?(byte)1:(byte)0);
         dest.writeString(lastOnLineTime);
         dest.writeByte(isVip?(byte)1:(byte)0);
         dest.writeString(distance);
@@ -266,7 +266,7 @@ public class UserInfoHot extends UserBasic {
         this.infoJson = in.readString();
         this.channel_uid = in.readInt();
         this.photoNum = in.readInt();
-        this.onlineState = in.readString();
+        this.onlineState = in.readByte() != 0;
         this.lastOnLineTime = in.readString();
         this.isVip = in.readByte() != 0;
         this.distance = in.readString();

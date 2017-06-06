@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;

@@ -247,6 +247,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     public void editContent() {
         mailDelInfoList.clear();
+        mail_delete.setEnabled(false);
         if (mailFragmentAdapter.mailItemOrdinarySize() > 0) {
             listMail.smoothOpenChooseView();
         } else {
