@@ -718,6 +718,7 @@
     <string name="txt_getvideo_desc">保持正面，拍摄5秒</string>
     <string name="bt_return_authact">返回首页</string>
     <string name="bt_return_loginact">手机号登录</string>
+    <string name="bt_customerservice_chat">客服服务</string>
 
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>

@@ -35,5 +35,6 @@ public class Hosts {
     public static final String H5_PREPAID_COIN = H5_HOST + "prepaid/prepaid.html";     // 购买Y币
     public static final String H5_PREPAID_VIP = H5_HOST + "prepaid/prepaid-vip.html";  // 购买VIP
     public static final String H5_GIFT = H5_HOST + "myGift/myGift.html";               // 我的礼物
+    public static final String H5_ROTARY = H5_HOST + "turntable/turntable.html";       // 大转盘设置
     // ---------------------H5 assets路径 end--------------------
 }

@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -43,7 +45,6 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     private SendEnableThread sendthread = null;
     private ContactBean contactBean;
     private String qq;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +99,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         btnok = (Button) this.findViewById(R.id.btn_phoneverify_ok);
         bt_send_code.setOnClickListener(this);
         btnok.setOnClickListener(this);
+        findViewById(R.id.ll_customerservice_btn).setOnClickListener(this);
         findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
         contactBean = ModuleMgr.getCommonMgr().getContactBean();
         if (contactBean == null) {
@@ -105,7 +107,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         }
         tv_customerservice_desc.setText(getResources().getString(R.string.txt_customerservice_bind_desc));
         ((TextView)findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
-        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText(contactBean.getWork_time());
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+contactBean.getWork_time()+")");
         qq = contactBean.getQq();
     }
 
@@ -122,10 +124,17 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 }
                 break;
             case R.id.btn_phoneverify_ok:
-                if (validInput()) {
-                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
-                    LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
-                }
+//                if (validInput()) {
+//                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
+//                    LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+//                }
+                PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
+                ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
+                ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
+                UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
+                break;
+            case R.id.ll_customerservice_btn://客服小秘书
+                UIShow.showPrivateChatAct(PhoneVerifyAct.this, MailSpecialID.customerService.getSpecialID(),"");
                 break;
             default:
                 break;

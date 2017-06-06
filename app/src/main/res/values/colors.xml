@@ -277,14 +277,11 @@
     <color name="user_text_gray_bottom">#d4d4d4</color>
     <color name="txt_authing">#FFC333</color>
     <color name="txt_customerservice_phone">#FD7093</color>
-
+    <color name="bg_cucsomerservice">#787EA6</color>
     <!--聊天顶部跑马灯, 男默认字体是白色，女黑色-->
-    <color name="lmarquee_boy_bg">#f87da7</color>
-    <color name="lmarquee_boy_nick">#fff999</color>
-    <color name="lmarquee_boy_gift">#c30d23</color>
-
-    <color name="lmarquee_girl_bg">#fce5e7</color>
-    <color name="lmarquee_girl_nick_gift">#fd698c</color>
+    <color name="lmarquee_boy_bg">#fff2e2</color>
+    <color name="lmarquee_nick">@color/color_62BFDE</color>
+    <color name="lmarquee_boy_gift">#ff6699</color>
 
     <color name="pay_tel_color">#45A9EF</color>
 </resources>

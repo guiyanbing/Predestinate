@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设置开心大转盘</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../../css/mui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/app.css"/>
+    <style>
+    </style>
+</head>
+<style>
+    ul,li{list-style: none;}
+    .mui-content{background:#f5f5f5 !important;}
+    .cancel-p{margin-bottom:0 !important;}
+    .special-list div{padding-right:10px !important;}
+    .special-list div li.dark-gray{background-color: #fafafa;}
+    .special-list div li{background-color: #fff; box-shadow: 1px 1px 1px #ccc; border-radius:2px;margin-bottom:10px;position: relative;}
+    .special-list div li div input{height:35px;font-size:14px;width:50% !important;float:left !important;margin-left:10px;padding-right:0 !important;}
+    .special-list div li div label{background: #fff; color:#ccc;border:1px solid #ccc;border-radius:50%;width:35px;height:35px;text-align:center;line-height: 35px;padding:0 !important;}
+    .gift-ico{position:absolute;right:0;top:50%;margin-top:-13px;width:25px;height:25px;}
+    .triangle-ico{position: absolute;top:0;right:10px;width:15px;height:15px;z-index:999;}
+    button.getGiftBtn{
+        color:#f690A9;height:35px;line-height: 35px; font-size: 14px; outline:none;border:none;float:left;margin-left:10px;padding:0 !important;background: none !important;
+    }
+    @media screen and (max-width:370px){
+        .special-list div li div input{height:25px; font-size:12px;width:50% !important;float:left !important;margin-left:5px;padding-right:0 !important;}
+        .special-list div li div label{background: #fff; color:#ccc;font-size:12px; border:1px solid #ccc;border-radius:50%;width:25px;height:25px;text-align:center;line-height: 25px;padding:0 !important;}
+        .gift-ico{position:absolute;right:0;top:50%;margin-top:-11px;width:20px;height:20px;}
+        button.getGiftBtn{
+            color:#f690A9;height:25px;line-height: 25px; font-size: 12px;outline:none;border:none;float:left;margin-left:10px;padding:0 !important;background: none !important;
+        }
+    }
+    .mui-table-view-cell:after{height:0 !important;}
+    .mui-toast-container{bottom:50% !important;}
+</style>
+<!--背景 f5f5f5 粉色字体 f690A9-->
+<body  style="background-color: #f5f5f5">
+<div class="mui-content">
+    <p class="cancel-p" style="background-color: #F7F4EB ;color:#D8CAA9;padding:10px 15px;">设置自己的特长、让对方送礼物或才艺(可重复)。视频时对方可转动转盘进行游戏互动。</p>
+    <div class="mui-content">
+        <p style="padding:10px 15px 0 15px;color:#ccc;font-size: 12px;">请输入2-4个汉字描述，例："唱首歌"、"跳支舞"。<span style="color:#f690A9;">(可重复，不可为空)</span></p>
+        <div class="mui-row special-list" style="padding:0 5px 0 15px;">
+            <!--<div class="mui-col-sm-6 mui-col-xs-6" style="padding-right: 20px;">
+                <li class="mui-table-view-cell dark-gray" style="text-align:center;">
+                    <div class="mui-input-row" style="padding-right:0;">
+                        <label>01</label>
+                        <input type="text" disabled="disabled" required="required" class="pink-text" placeholder="送我礼物">
+                        <img class="gift-ico" src="../../../assets/gift_img.png" alt="gift">
+                    </div>
+                </li>
+                <img class="triangle-ico" src="../../../assets/bj_ico.png" alt="">
+            </div>
+            <div class="mui-col-sm-6 mui-col-xs-6">
+                <li class="mui-table-view-cell" style="text-align:center;">
+                    <div class="mui-input-row">
+                        <label>02</label>
+                        <input type="text" required="required" minlength="2" maxlength="4" placeholder="请输入用">
+                    </div>
+                </li>
+            </div>
+            <div class="mui-col-sm-6 mui-col-xs-6" style="padding-right: 20px;">
+                <li class="mui-table-view-cell" style="text-align:center;">
+                    <div class="mui-input-row">
+                        <label>03</label>
+                        <input type="text" required="required" minlength="2" maxlength="4" placeholder="请输">
+                    </div>
+                </li>
+            </div>
+            <div class="mui-col-sm-6 mui-col-xs-6">
+                <li class="mui-table-view-cell" style="text-align:center;">
+                    <div class="mui-input-row">
+                        <label>04</label>
+                        <input type="text" required="required" minlength="2" maxlength="4" placeholder="请输入">
+                    </div>
+                </li>
+            </div>-->
+        </div>
+        <div class="mui-row"  style="padding:22px 15px;position:relative;">
+            <div style="width:100%;height:1px;background:#ccc;opacity: 0.5;"></div>
+            <h4 style="padding:0 10px;font-size: 12px; position: absolute;top:50%;left:50%;transform: translate(-50%,-80%);color:#ccc;background: #f5f5f5;">参考示例</h4>
+        </div>
+        <div class="mui-row" style="padding-bottom:22px;">
+            <img style="width:80%;display:block;margin:0 auto;" src="../../assets/sample_img.jpg" alt="">
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../js/mui.min.js"></script>
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../lib/jxlib.all.js"></script>
+<script src="../../lib/url-config.js"></script>
+<script src="../../lib/defines.js"></script>
+<script src="../../src/turntable/turntable.js"></script>
+</html>

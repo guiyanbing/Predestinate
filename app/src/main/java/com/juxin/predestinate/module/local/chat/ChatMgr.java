@@ -419,12 +419,6 @@ public class ChatMgr implements ModuleBase {
         onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), ret != MessageConstant.ERROR, giftMessage);
     }
 
-    public void updateMsgFStatus(BaseMessage baseMessage) {
-        baseMessage.setfStatus(0);
-        long upRet = dbCenter.updateFmessage(baseMessage);
-        onChatMsgUpdate(baseMessage.getChannelID(), baseMessage.getWhisperID(), upRet != MessageConstant.ERROR, baseMessage);
-    }
-
     /**
      * 更新小红点
      *
@@ -797,9 +791,8 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if(!message.isSender() && message.getMsgID() > 0){
-                    PSP.getInstance().put(MessageConstant.Stranger_New, true);
-                    MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
+                if(!message.isSender() && message.getMsgID() > 0 && !message.isRu()){
+                    ModuleMgr.getChatListMgr().setStrangerNew();
                 }
 
                 //角标消息更改
