@@ -47,7 +47,7 @@ import java.util.Map;
  *
  * @author zm
  */
-public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelper.OnRequestGiftListCallback,RecordVoicePanel.OnRecordVoiceCallBack,ChatMediaPlayer.OnPlayListener{
+public class AskForGiftDialog extends Dialog implements OnClickListener, GiftHelper.OnRequestGiftListCallback, RecordVoicePanel.OnRecordVoiceCallBack, ChatMediaPlayer.OnPlayListener {
 
     private GiftViewPagerAdapter gvpAdapter;
     private List<GridView> mLists;
@@ -58,7 +58,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
     private LinearLayout llMid;
     private List<ImageView> lv;
     private int pageCount;
-    private String other, channel;
     public GiftsList.GiftInfo selectGift;
     private TextView tv_pagesize;
     private ImageView btn_input_change;
@@ -69,14 +68,12 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
     private RecordVoicePanel recordPanel;
     private RelativeLayout rMain;
     private int voice_length;
-    private String voice_file, sVoiceUrl;
+    private String sVoiceUrl;
     private VoiceView mVoiceView;
     private long timeCount;
 
-    public AskforGiftDialog(Context context, String otheruserid, String channelid) {
+    public AskForGiftDialog(Context context) {
         this(context, R.style.No_Background);
-        other = otheruserid;
-        channel = channelid;
         mContext = context;
         initView();
         //获取礼物列表
@@ -86,18 +83,14 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         } else {//配置中未返回就去请求配置
             ModuleMgr.getCommonMgr().requestGiftList(this);
         }
-//        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamondsSum() == 0) {//请求钻石数目
-//            ModuleMgr.getCommonMgr().getMyDiamand(this);
-////            executeDiamondTask();
-//        }
     }
 
-    public AskforGiftDialog(Context context, int theme) {
+    public AskForGiftDialog(Context context, int theme) {
         super(context, theme);
         mContext = context;
     }
 
-    protected AskforGiftDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+    protected AskForGiftDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
         mContext = context;
     }
@@ -137,7 +130,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int action = event.getAction();
-            float PosY = event.getY();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
 
@@ -150,11 +142,9 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                     btn_voice.setText(R.string.loosen_the_end);
                     btn_voice.setPressed(true);
                     recordPanel.setVisibility(View.VISIBLE);
-//                    ChatMediaRecord.getInstance().startRecordVoice(onRecordListener);
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-//                    recordPanel.initYPos(PosY);
                     recordPanel.onTouch(action, event.getY());
                     break;
 
@@ -165,13 +155,10 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
                     btn_voice.setText(R.string.hold_to_talk);
                     recordPanel.onTouch(action, event.getY());
                     btn_voice.setPressed(false);
-//                    outVoice(PosY);
                     recordPanel.setVisibility(View.GONE);
                     break;
 
                 default:
-//                    chatVoiceRecord.setText("按下 开始");
-//                    chatVoiceRecord.setPressed(false);
                     recordPanel.onTouch(action, 0f);
                     timeCount = System.currentTimeMillis();
                     btn_voice.setText(R.string.hold_to_talk);
@@ -182,42 +169,14 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         }
     };
 
-//    private void uploadVoice(final String sPath) {
-//        BaseUtil.uploadFile(mContext, true, sPath, "voice", new OnAsyncCallback() {
-//            @Override
-//            public void requestSuccess(BaseAsyncTask task) {
-//                try {
-//                    String str = task.getJsonResult();
-//                    JSONObject jso = new JSONObject(str);
-//                    if ("ok".equals(jso.optString("status")) && jso.optJSONObject("res") != null) {
-//                        sVoiceUrl = jso.optJSONObject("res").optString("file_http_path");
-//                        //缓存到本地，避免本地播放时下载
-//                        AppCtx.myCache.put(sVoiceUrl, sPath);
-//                        switchVoice();
-//                    } else {
-//                        T.showLong(mContext, "语音发送失败!");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void requestFail(BaseAsyncTask task, Exception e) {
-//                T.showLong(mContext, "语音录取失败，请稍后再试");
-//            }
-//        });
-//    }
-
     private void switchVoice() {
         tv_edit.setVisibility(View.GONE);
         btn_voice.setVisibility(View.GONE);
         ll_voice_main.setVisibility(View.VISIBLE);
-        if (mVoiceView == null){
+        if (mVoiceView == null) {
             mVoiceView = new VoiceView(mContext);
             ll_voice.addView(mVoiceView);
         }
-        //chatPanelVoice.setParent(ll_voice);
         mVoiceView.setData(sVoiceUrl, String.valueOf(voice_length) + mContext.getString(R.string.second));
     }
 
@@ -235,7 +194,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             tv_edit.setVisibility(View.GONE);
             btn_voice.setVisibility(View.VISIBLE);
             ll_voice_main.setVisibility(View.GONE);
-            voice_file = "";
             sVoiceUrl = "";
             voice_length = 0;
         } else {
@@ -243,7 +201,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             initEdit();
         }
     }
-
 
     private void initDot(int select) {
         if (true) return;
@@ -291,9 +248,8 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
     }
 
     private void initGridView() {
-        if (null == mListGift) {
-            return;
-        }
+        if (null == mListGift) return;
+
         pageCount = (int) Math.ceil(mListGift.size() / 6.0f);
         mLists = new ArrayList<>();
         for (int i = 0; i < pageCount; i++) {
@@ -323,7 +279,6 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         initData();
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -342,21 +297,21 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
         }
     }
 
-
     private void initViewGrid() {
         if (null != mListGift) {
             if (mListGift.size() > 0) {
                 initGridView();
                 initDot(0);
                 initSelect();
-            } else
+            } else {
                 dismiss();
+            }
         }
     }
 
     @Override
     public void onRequestGiftListCallback(boolean isOk) {
-        if (isOk){
+        if (isOk) {
             mListGift = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
             initGridView();
         }
@@ -387,19 +342,16 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
 
     @Override
     public void onStart(String filePath) {
-
     }
 
     @Override
     public void onStop(String filePath) {
-
     }
 
     class MyOnPageChanger implements OnPageChangeListener {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
         }
 
         @Override
@@ -427,10 +379,10 @@ public class AskforGiftDialog extends Dialog implements OnClickListener,GiftHelp
             requestObject.put("voice_len", voice_length);
         }
         // 发送请求
-        ModuleMgr.getCommonMgr().CMDRequest("POST", true, UrlParam.qunFa.getFinalUrl(), requestObject, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.qunFa, requestObject, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()){
+                if (response.isOk()) {
                     PToast.showShort(mContext.getString(R.string.send_suceed));
                     return;
                 }

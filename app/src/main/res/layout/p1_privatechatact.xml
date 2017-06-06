@@ -8,13 +8,14 @@
     <include layout="@layout/base_title" />
 
     <include layout="@layout/p1_privatechatact_head" />
+
     <com.juxin.library.view.roadlights.LMarqueeView
         android:id="@+id/privatechat_lmv_messages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
@@ -27,11 +28,13 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -337,8 +340,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (getChatInstance().chatListView == null) {
             return;
         }
-
         getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
+        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
     }
 
     /**
@@ -429,22 +432,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                 if (message.getSendID() != App.uid)
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
-            } else {
-                ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
-                switch (msgType) {
-//                    case CMT_del_msg:
-//                        chatInstance.chatContentAdapter.delData((DeleteMessage) message);
-//                        break;
-//                    case CMT_7:
-//                        if (message instanceof SystemMessage) {
-//                            SystemMessage tmpSystem = (SystemMessage) message;
-//                            if (tmpSystem.getxType() == 3) {//已读消息
-//                                isUpdate = false;
-//                                chatInstance.chatContentAdapter.callAllMsg(tmpSystem);
-//                            }
-//                        }
-//                        break;
-                }
             }
 
             /**
