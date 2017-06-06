@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHotList;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class HotFragment extends BaseFragment implements RequestComplete, BaseCardAdapter.OnDataNeedReq, CardsView.CardsSlideListener {
 
+    private CustomFrameLayout hot_frame;
     private CardsView cardsView;
     private CardsAdapter adapter;
 
@@ -47,7 +49,6 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
         initView();
         initData();
         return getContentView();
-
     }
 
     private void initData() {
@@ -66,9 +67,12 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
     }
 
     private void initView() {
+        hot_frame = (CustomFrameLayout) findViewById(R.id.hot_frame);
+        hot_frame.setList(new int[]{R.id.common_loading, R.id.hot_card_nodata, R.id.hot_card_layout});
         cardsView = (CardsView) findViewById(R.id.hot_card_view);
         adapter = new CardsAdapter(viewData, getContext(), this);
         cardsView.setCardsSlideListener(this);
+        showLoading();
     }
 
     @Override
@@ -107,6 +111,24 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
                 } else {
                     cardsView.notifyDatasetChanged(nowPosition);
                 }
+                showCardView();
+            } else {
+                if (page == 1) {
+                    showNodata();
+                }
+            }
+        } else {
+            showNodata();
+        }
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            if (viewData.size() == 0 && page == 1) {
+                initData();
             }
         }
     }
@@ -123,11 +145,25 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
 
     @Override
     public void onCardVanish(int index, CardsView.SlideType type) {
-
+        if (index + 1 == viewData.size()) {
+            showNodata();
+        }
     }
 
     @Override
     public void onItemClick(View cardImageView, int index) {
 
+    }
+
+    private void showNodata() {
+        hot_frame.show(R.id.hot_card_nodata);
+    }
+
+    private void showCardView() {
+        hot_frame.show(R.id.hot_card_layout);
+    }
+
+    private void showLoading() {
+        hot_frame.show(R.id.common_loading);
     }
 }
