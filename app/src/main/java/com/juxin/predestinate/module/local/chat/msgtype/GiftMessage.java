@@ -18,6 +18,9 @@ public class GiftMessage extends BaseMessage {
     private int giftCount;
     private long giftLogID;
 
+    //临时发送用的
+    private int gType;
+
     public GiftMessage() {
         super();
     }
@@ -106,6 +109,13 @@ public class GiftMessage extends BaseMessage {
         this.giftLogID = giftLogID;
     }
 
+    public int getgType() {
+        return gType;
+    }
+
+    public void setgType(int gType) {
+        this.gType = gType;
+    }
 
     @Override
     public void convertJSON(String jsonStr) {

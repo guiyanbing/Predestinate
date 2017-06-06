@@ -15,6 +15,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
@@ -35,6 +36,9 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
+import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -271,6 +275,25 @@ public class ChatMgr implements ModuleBase {
 
                     break;
                 }
+                case gift:{
+                    final GiftMessage giftMessage = (GiftMessage) message;
+
+                    ModuleMgr.getCommonMgr().sendGift(giftMessage.getWhisperID(), String.valueOf(giftMessage.getGiftID()),
+                            giftMessage.getGiftCount(), giftMessage.getgType(), new RequestComplete() {
+                        @Override
+                        public void onRequestComplete(HttpResponse response) {
+                            SendGiftResultInfo info = new SendGiftResultInfo();
+                            info.parseJson(response.getResponseString());
+                            if(response.isOk()) {
+                                updateOk(giftMessage, null);
+                            }else {
+                                updateFail(giftMessage, null);
+                            }
+                        }
+                    });
+                    break;
+                }
+
                 default:
                     break;
             }
@@ -401,23 +424,40 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
+    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
+
+    }
+
     /**
      * 发送礼物
-     *
+     * 发送中
      * @param channelID
      * @param whisperID
      * @param giftID
      * @param giftCount
      * @param giftLogID
      */
-    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
-        GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount, giftLogID);
-        giftMessage.setStatus(MessageConstant.OK_STATUS);
+    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID, int gType) {
+        final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount, giftLogID);
+        giftMessage.setStatus(MessageConstant.SENDING_STATUS);
         giftMessage.setJsonStr(giftMessage.getJson(giftMessage));
         giftMessage.setRu(MessageConstant.Ru_Friend);
 
         long ret = dbCenter.insertMsg(giftMessage);
         onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), ret != MessageConstant.ERROR, giftMessage);
+
+        ModuleMgr.getCommonMgr().sendGift(whisperID, String.valueOf(giftID), giftCount, gType, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                SendGiftResultInfo info = new SendGiftResultInfo();
+                info.parseJson(response.getResponseString());
+                if(response.isOk()) {
+                    updateOk(giftMessage, null);
+                }else {
+                    updateFail(giftMessage, null);
+                }
+            }
+        });
     }
 
     /**
@@ -542,10 +582,15 @@ public class ChatMgr implements ModuleBase {
 
     // 成功后更新数据库
     private void updateOk(BaseMessage message, MessageRet messageRet) {
-        message.setStatus(MessageConstant.OK_STATUS);
-        message.setTime(messageRet.getTm());
-        message.setMsgID(messageRet.getMsgId());
+        if (messageRet != null && messageRet.getMsgId() > 0) {
+            message.setMsgID(messageRet.getMsgId());
+            message.setTime(messageRet.getTm());
+        } else {
+            message.setMsgID(MessageConstant.NumNo);
+            message.setTime(getTime());
+        }
 
+        message.setStatus(MessageConstant.OK_STATUS);
         long upRet = dbCenter.updateMsg(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
     }
@@ -793,6 +838,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 if(!message.isSender() && message.getMsgID() > 0 && !message.isRu() && !MailSpecialID.getMailSpecialID(message.getLWhisperID())){
+                    PLogger.printObject("chatMsg =" + message.toString());
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
@@ -874,7 +920,7 @@ public class ChatMgr implements ModuleBase {
                 if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
 
-                    boolean ret = dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
+                    dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                 }
             }
