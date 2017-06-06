@@ -354,9 +354,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
             // 更新头像
-            if (infoLightweight != null) {
-                ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
-            }
+            ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null) ? infoLightweight.getAvatar() : "", head);
 
             if (chatpanel != null) {
                 updateStatus(ChatMsgType.getMsgType(msg.getType()), sender);

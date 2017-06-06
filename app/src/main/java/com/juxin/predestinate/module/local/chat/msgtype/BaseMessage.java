@@ -710,4 +710,46 @@ public class BaseMessage implements IBaseMessage {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "BaseMessage{" +
+                "displayWidth=" + displayWidth +
+                ", id=" + id +
+                ", channelID='" + channelID + '\'' +
+                ", whisperID='" + whisperID + '\'' +
+                ", sendID=" + sendID +
+                ", msgID=" + msgID +
+                ", cMsgID=" + cMsgID +
+                ", specialMsgID=" + specialMsgID +
+                ", time=" + time +
+                ", content='" + content + '\'' +
+                ", jsonStr='" + jsonStr + '\'' +
+                ", status=" + status +
+                ", fStatus=" + fStatus +
+                ", type=" + type +
+                ", dataSource=" + dataSource +
+                ", customtype='" + customtype + '\'' +
+                ", version=" + version +
+                ", isResending=" + isResending +
+                ", isValid=" + isValid +
+                ", msgDesc='" + msgDesc + '\'' +
+                ", ru=" + ru +
+                ", isRead=" + isRead +
+                ", isSave=" + isSave +
+                ", isAutoplay=" + isAutoplay +
+                ", infoJson='" + infoJson + '\'' +
+                ", name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", localAvatar=" + localAvatar +
+                ", top=" + top +
+                ", aboutme='" + aboutme + '\'' +
+                ", isVip=" + isVip +
+                ", kfID=" + kfID +
+                ", num=" + num +
+                ", Weight=" + Weight +
+                ", MailItemStyle=" + MailItemStyle +
+                ", msgPanelType=" + msgPanelType +
+                '}';
+    }
 }

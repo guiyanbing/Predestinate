@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -28,15 +27,11 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -250,7 +245,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public long updateToReadPrivate(long userID) {
         long ret = dbCenter.getCenterFLetter().updateStatus(userID);
-        if(ret != MessageConstant.ERROR){
+        if (ret != MessageConstant.ERROR) {
             getWhisperList();
         }
         return ret;
@@ -395,36 +390,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
         SystemMessage mess = (SystemMessage) message;
         switch (mess.getXtType()) {
             case 3:
-//                Log.e("TTTTTTTTTVVVV", "已读" + message.getChannelID() + "||" + mess.getFid() + "||" + mess.getTid());
                 ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(),message);
                 break;
         }
     }
-
-//    /**
-//     * 系统消息
-//     *
-//     * @param message
-//     */
-//    private void setSysMsg(BaseMessage message) {
-//        //接收系统消息返回
-//        if (message == null || !(message instanceof SystemMessage)){
-//            return;
-//        }
-//        SystemMessage sysMessage = (SystemMessage) message;
-//        long time = PSP.getInstance().getLong("TIME", 0);
-//        Log.e("TTTTTTTTTTTTTTGG", "对方已读" + ModuleMgr.getAppMgr().getTime() + "|||" + time + "|||" + (ModuleMgr.getAppMgr().getTime() - time) + "||||" + message + "|||");
-//        if ( ModuleMgr.getAppMgr().getTime() - time < 2) return;
-//        ModuleMgr.getChatMgr().updateOtherSideRead(sysMessage.getMsgDesc(), sysMessage.getTid()+"", sysMessage.getFid()+"");
-//        PSP.getInstance().put("TIME", ModuleMgr.getAppMgr().getTime());
-//
-//
-////        PLogger.printObject("setVideoMsg===" + videoMessage.toString());
-////        if (videoMessage.getVideoTp() == 1) {
-////            VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
-////                    videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
-////        } else {
-////            UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
-////        }
-//    }
 }

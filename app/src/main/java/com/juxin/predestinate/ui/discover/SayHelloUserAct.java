@@ -174,7 +174,11 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
     // 全选
     public void selectAll() {
-        del_btn.setEnabled(true);
+        delList.clear();
+        if (adapter == null) return;
+        if (del_btn != null) {
+            del_btn.setEnabled(true);
+        }
         delList.addAll(adapter.getList());
         exListView.selectAllChooseView();
     }
@@ -187,6 +191,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
     public void editContent() {
         delList.clear();
+        del_btn.setEnabled(false);
         if (adapter.getList().size() > 0) {
             exListView.smoothOpenChooseView();
         } else {

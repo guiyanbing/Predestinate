@@ -2,15 +2,20 @@ package com.juxin.predestinate.bean.db.cache;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.FMessage;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
+import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Action1;
@@ -179,6 +184,50 @@ public class DBCacheCenter {
                     CloseUtil.close(cursor);
                 }
                 return lightweight;
+            }
+        });
+    }
+
+    public Observable<List<UserInfoLightweight>> queryProfile(List<Long> userIDs) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FProfileCache.FPROFILE_TABLE)
+                .append(" WHERE ").append(FProfileCache.COLUMN_USERID + " in ").append("( ");
+
+                for(int i = 0; i < userIDs.size(); i++){
+                    if((i+1) >= userIDs.size()){
+                        sql.append(userIDs.get(i));
+                    }else {
+                        sql.append(userIDs.get(i) + ",");
+                    }
+                }
+
+        sql.append(" )");
+
+        return mDatabase.createQuery(FProfileCache.FPROFILE_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, List<UserInfoLightweight>>() {
+            @Override
+            public List<UserInfoLightweight> call(SqlBrite.Query query) {
+                Cursor cursor = query.run();
+
+                if (null == cursor) {
+                    return null;
+                }
+                List<UserInfoLightweight> infoLightweights = new ArrayList<UserInfoLightweight>();
+                try {
+                    while (cursor.moveToNext()) {
+                        UserInfoLightweight temp = new UserInfoLightweight();
+                        temp.parseUserInfoLightweight(
+                                CursorUtil.getLong(cursor, FProfileCache.COLUMN_USERID),
+                                CursorUtil.getBlobToString(cursor, FProfileCache.COLUMN_INFOJSON),
+                                CursorUtil.getLong(cursor, FProfileCache.COLUMN_TIME)
+                        );
+                        infoLightweights.add(temp);
+                    }
+                    return infoLightweights;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    CloseUtil.close(cursor);
+                }
+                return infoLightweights;
             }
         });
     }
