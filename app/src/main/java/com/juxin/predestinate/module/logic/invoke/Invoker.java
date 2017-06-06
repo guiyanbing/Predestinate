@@ -14,6 +14,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -59,7 +60,11 @@ import io.reactivex.schedulers.Schedulers;
 public class Invoker {
 
     // js cmd key
-    public static final String JSCMD_ranking_btn_click = "ranking_btn_click";//风云榜按钮点击事件（本周上周切换）
+    public static final String JSCMD_ranking_btn_click = "ranking_btn_click";// 风云榜按钮点击事件（本周上周切换）
+    public static final String JSCMD_header_right_btn_click = "header_right_btn_click";// 导航条右侧按钮点击事件
+    public static final String JSCMD_turntable_result = "turntable_result";// 转盘转动结果(同步他人客户端开始抽奖)
+    public static final String JSCMD_chat_message = "chat_message";// 聊天信息
+    public static final String JSCMD_gift_message = "gift_message";// 礼物信息
 
     private Gson gson = new Gson();
     private WebAppInterface appInterface = new WebAppInterface(App.context, null);
@@ -394,13 +399,13 @@ public class Invoker {
         // 加密网络请求
         public void safe_request(String data) {
             PLogger.d("---safe_request--->" + data);
-            cmdRequest(JsonUtil.getJsonObject(data));
+            cmdRequest(JsonUtil.getJsonObject(data), true);
         }
 
         // 普通网络请求
         public void normal_request(String data) {
             PLogger.d("---normal_request--->" + data);
-            cmdRequest(JsonUtil.getJsonObject(data));
+            cmdRequest(JsonUtil.getJsonObject(data), false);
         }
 
         // 切换到主tab页
@@ -585,6 +590,15 @@ public class Invoker {
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
         }
 
+        // H5页面用户行为统计
+        public void user_behavior(String data) {
+            PLogger.d("---user_behavior--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            Statistics.userBehavior(dataObject.optString("event_type"),
+                    dataObject.optLong("to_uid"), dataObject.optString("event_data"));
+        }
+
         // ------------------------------游戏用cmd---------------------------------
 
         // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid
@@ -623,13 +637,13 @@ public class Invoker {
     /**
      * 游戏交互-请求转发，判断是否为go服务器接口进行url-hash加密，
      *
-     * @param dataObject JS传递的JSONObject
+     * @param dataObject    JS传递的JSONObject
+     * @param isSafeRequest 是否是加密请求
      */
-    private void cmdRequest(final JSONObject dataObject) {
+    private void cmdRequest(final JSONObject dataObject, boolean isSafeRequest) {
         JSONObject bodyObject = JsonUtil.getJsonObject(dataObject.optString("body"));
         String url = dataObject.optString("url");
-        ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"),
-                !TextUtils.isEmpty(url) && url.contains(Hosts.FATE_IT_GO), url,
+        ModuleMgr.getCommonMgr().CMDRequest(dataObject.optString("method"), isSafeRequest, url,
                 ChineseFilter.JSONObjectToMap(bodyObject), new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {

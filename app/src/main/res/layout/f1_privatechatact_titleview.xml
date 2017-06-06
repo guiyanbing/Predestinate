@@ -37,7 +37,7 @@
             android:id="@+id/cus_top_title_img"
             android:layout_width="@dimen/px52_dp"
             android:layout_height="@dimen/px52_dp"
-            android:src="@drawable/f1_top01" />
+            android:src="@drawable/f1_topc01" />
 
         <TextView
             android:id="@+id/cus_top_title_txt"

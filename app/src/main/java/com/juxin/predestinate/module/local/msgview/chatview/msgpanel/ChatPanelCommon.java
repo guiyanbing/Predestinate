@@ -164,9 +164,11 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         //图片
         if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {
             onImgDisplayContent(msg);
+            setShowParentBg(false);
             return true;
         }
         //文本
+        setShowParentBg(true);
         onTextDisplayContent(msg);
         return true;
     }
@@ -190,7 +192,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         if (BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()) {
             MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text, msg.getMsgDesc());
         } else {
-            chat_item_text.setText(msg.getMsgDesc());
+            chat_item_text.setTextContent(msg.getMsgDesc());
         }
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
@@ -204,7 +206,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String url = msg.getLocalImg();
         if (TextUtils.isEmpty(url)) url = msg.getImg();
         ImageLoader.loadRound(getContext(), url, chat_item_img);
-        setShowParentBg(false);
     }
 
     /**

@@ -32,7 +32,7 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
             vh = (MyViewHolder) convertView.getTag();
         }
 
-        vh.letterMailItem.showData(getItem(position), false);
+        vh.letterMailItem.showData(getItem(position));
 
         if (getItemHeight() == 0) {
             int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);

@@ -83,6 +83,7 @@ public class ChatPanelGift extends ChatPanel {
         if (msgData == null || !(msgData instanceof GiftMessage) || isSender() || msgData.getfStatus() == 0) {
             return false;
         }
+        msgData.setfStatus(0);
         //别人给你发的礼物
         final GiftMessage msg = (GiftMessage) msgData;
         GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(msg.getGiftID());
@@ -90,6 +91,7 @@ public class ChatPanelGift extends ChatPanel {
             PLogger.d("------>gift list is empty or gift list doesn't have this gift_id.");
             return false;
         }
+
         ModuleMgr.getCommonMgr().receiveGift(msg.getGiftLogID(), giftInfo.getName(), msg.getGiftID(), new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -107,6 +109,8 @@ public class ChatPanelGift extends ChatPanel {
                     textMessage.setType(BaseMessage.BaseMessageType.hint.getMsgType());
                     textMessage.setJsonStr(textMessage.getJson(textMessage));
                     ModuleMgr.getChatMgr().onLocalReceiving(textMessage);
+                }else {
+                    msgData.setfStatus(1);
                 }
             }
         });

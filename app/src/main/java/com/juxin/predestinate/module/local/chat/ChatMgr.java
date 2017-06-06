@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -35,18 +34,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -89,9 +84,6 @@ public class ChatMgr implements ModuleBase {
         if (ret != MessageConstant.ERROR) {
             ModuleMgr.getChatListMgr().getWhisperList();
         }
-
-        // dbCenter.getCenterFMessage().updateToReadVoice(channelID, whisperID);//把当前用户未读信息都更新成已读
-        // DBCenter.getInstance().queryLocalReadStatus(new SystemMessage(channelID, whisperID, TypeConvUtil.toLong(whisperID), msgID));
     }
 
     /**
@@ -142,7 +134,7 @@ public class ChatMgr implements ModuleBase {
      *
      * @param otherID
      */
-    public void sendvideoMsglocalSimulation(String otherID, int type, int videoID) {
+    public void sendVideoMsgLocalSimulation(String otherID, int type, int videoID) {
         final VideoMessage videoMessage = new VideoMessage(null, otherID, type, videoID, 3, 3);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
         videoMessage.setDataSource(MessageConstant.FOUR);
@@ -202,9 +194,11 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    /*****************
+    /**
      * 重发消息
-     *********************/
+     *
+     * @param message 消息体
+     */
     public void resendMsg(BaseMessage message) {
         BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(message.getType());
         if (messageType != null) {
@@ -449,14 +443,15 @@ public class ChatMgr implements ModuleBase {
                 }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
-                onInternalPro(messageRet);
+
                 if (!messageRet.isOk() || !messageRet.isS()) {
                     updateFail(message, messageRet);
                 } else {
+                    checkPermissions(message);
                     updateOk(message, messageRet);
                     sendMessageRefreshYcoin();
                 }
-
+                onInternalPro(messageRet);
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
             }
 
@@ -507,13 +502,31 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 聊天权限处理
+     *
+     * @param message
+     */
+    private void checkPermissions(BaseMessage message) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && ModuleMgr.getChatListMgr().getTodayChatShow()) {
+            //更新时间
+            ModuleMgr.getChatListMgr().setTodayChatShow();
+            Msg msg = new Msg();
+            msg.setData(false);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+        }
+    }
+
+    /**
      * 是否已经发完当天发的一条了
      */
     private void sendChatCanError() {
-        ModuleMgr.getChatListMgr().setTodayChatShow();
-        Msg msg = new Msg();
-        msg.setData(false);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        if(userDetail.isMan() && userDetail.getYcoin() < 79 ){
+            ModuleMgr.getChatListMgr().setTodayChatShow();
+            Msg msg = new Msg();
+            msg.setData(false);
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
+        }
     }
 
     /**
@@ -592,20 +605,20 @@ public class ChatMgr implements ModuleBase {
      * @param videoMessage
      */
     public void onReceivingVideo(final VideoMessage videoMessage) {
-        if(videoMessage.isSender()){
+        if (videoMessage.isSender()) {
             videoMessage.setStatus(MessageConstant.OK_STATUS);
-        }else {
-            if(videoMessage.getEmLastStatus() == VideoMessage.EmLastStatus.cancel ||
-                    videoMessage.getEmLastStatus() == VideoMessage.EmLastStatus.timeout){
+        } else {
+            if (videoMessage.getEmLastStatus() == VideoMessage.EmLastStatus.cancel ||
+                    videoMessage.getEmLastStatus() == VideoMessage.EmLastStatus.timeout) {
                 videoMessage.setStatus(MessageConstant.UNREAD_STATUS);
-            }else {
+            } else {
                 videoMessage.setStatus(MessageConstant.READ_STATUS);
             }
         }
 
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
-        if (dbCenter.getCenterFMessage().storageDataVideo(videoMessage) == MessageConstant.ERROR){
+        if (dbCenter.getCenterFMessage().storageDataVideo(videoMessage) == MessageConstant.ERROR) {
             pushMsg(false, videoMessage);
             return;
         }
@@ -658,7 +671,6 @@ public class ChatMgr implements ModuleBase {
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
-                //                        Log.e("TTTTTTTTTTLLLL111",   "执行||||成功"+messageRet.getS());
                 if (messageRet.getS() == 0) {
 
                 }
@@ -666,7 +678,6 @@ public class ChatMgr implements ModuleBase {
 
             @Override
             public void onSendFailed(NetData data) {
-                //                        Log.e("TTTTTTTTTTLLLL222",   "执行||||失败");
             }
         });
     }
@@ -782,8 +793,13 @@ public class ChatMgr implements ModuleBase {
 
                 //纯私聊消息
                 if (!TextUtils.isEmpty(message.getWhisperID())) {
-                    // 私聊消息//告诉上层可以获取私聊列表了
+                    // 私聊消息
                     specialMgr.onWhisperMsgUpdate(message);
+                }
+
+                if(!message.isSender() && message.getMsgID() > 0){
+                    PSP.getInstance().put(MessageConstant.Stranger_New, true);
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
                 }
 
                 //角标消息更改

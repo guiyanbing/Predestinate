@@ -52,9 +52,6 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.pay.BasePayPannel;
 import com.juxin.predestinate.ui.pay.PayListAct;
 import com.juxin.predestinate.ui.pay.PayWebAct;
-import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceDetailAct;
-import com.juxin.predestinate.ui.pay.cupvoice.PayCupVoiceOkAct;
-import com.juxin.predestinate.ui.pay.cupvoice.PayVoiceAct;
 import com.juxin.predestinate.ui.pay.utils.PayAlipayUtils;
 import com.juxin.predestinate.ui.pay.utils.PayPhoneCardAct;
 import com.juxin.predestinate.ui.pay.utils.PayWeixinUtils;
@@ -807,42 +804,7 @@ public class UIShow {
         activity.startActivityForResult(intent, Constant.PAYMENTACT);
     }
 
-    public static void showPayVoiceAct(final FragmentActivity activity, PayGood payGood, PayWX payWX) {
-        Intent intent = new Intent(activity, PayVoiceAct.class);
-        intent.putExtra("payGood", payGood);
-        if (payWX != null) {
-            intent.putExtra("payWX", payWX);
-        }
-        activity.startActivityForResult(intent, Constant.PAYMENTACT);
-    }
 
-    /**
-     * 新的语音支付详细页面
-     */
-    public static void shoPayCupVoiceDetailAct(Activity context, PayGood payGood, String bank_name, int resultCode) {
-        Intent intent = new Intent(context, PayCupVoiceDetailAct.class);
-        intent.putExtra("payGood", payGood);
-        intent.putExtra("bank_name", bank_name);
-        context.startActivityForResult(intent, resultCode);
-    }
-
-    /**
-     * 新的语音支付详细页面
-     */
-    public static void showPayCupVoiceOkAct(Activity context, PayGood payGood, String phone,
-                                            String nickname, String number, String bank_id, int resultCode) {
-        Intent intent = new Intent(context, PayCupVoiceOkAct.class);
-        intent.putExtra("payGood", payGood);
-        intent.putExtra("phone", phone);
-        intent.putExtra("nickname", nickname);
-        if (number != null) {
-            intent.putExtra("number", number);
-        }
-        if (bank_id != null) {
-            intent.putExtra("bank_id", bank_id);
-        }
-        context.startActivityForResult(intent, resultCode);
-    }
 
     public static void showPayWebAct(FragmentActivity activity, PayGood payGood) {
         Intent intent_web = new Intent(activity, PayWebAct.class);

@@ -123,6 +123,11 @@ public class MsgType {
     public static final String MT_Chat_Can = "MT_Chat_Can";
 
     /**
+     * 新的陌生人消息
+     */
+    public static final String MT_Stranger_New = "MT_Stranger_New";
+
+    /**
      * 数据库初始化完成
      */
     public static final String MT_DB_Init_Ok = "MT_DB_Init_Ok";

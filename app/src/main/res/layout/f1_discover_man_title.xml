@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/px560_dp"
+        android:layout_height="@dimen/px105_dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/discover_recommend"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/f1_rank_title_left"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/discover_man_title_recommend"
+            android:textColor="@drawable/f1_rank_title_txt"
+            android:textSize="@dimen/px45_sp" />
+
+        <RadioButton
+            android:id="@+id/discover_hot"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/f1_rank_title_right"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/discover_man_title_hot"
+            android:textColor="@drawable/f1_rank_title_txt"
+            android:textSize="@dimen/px45_sp" />
+    </LinearLayout>
+</LinearLayout>

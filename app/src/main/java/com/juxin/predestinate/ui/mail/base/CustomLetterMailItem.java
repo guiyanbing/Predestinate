@@ -70,8 +70,8 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
     }
 
     @Override
-    public void showData(BaseMessage msgData, boolean isSlideLoading) {
-        super.showData(msgData, isSlideLoading);
+    public void showData(BaseMessage msgData) {
+        super.showData(msgData);
         this.msgData = msgData;
         findViewById(R.id.gap_item).setVisibility(GONE);
 

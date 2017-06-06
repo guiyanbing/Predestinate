@@ -20,10 +20,10 @@ import com.juxin.predestinate.module.util.my.GiftHelper;
  * 我的钱包页面
  * Created by zm on 2017/4/20
  */
-public class DemandRedPacketAct extends BaseActivity implements View.OnClickListener,RequestComplete{
+public class DemandRedPacketAct extends BaseActivity implements View.OnClickListener, RequestComplete {
 
     private TextView tvSendNum;
-    private AskforGiftDialog dialog;
+    private AskForGiftDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,33 +33,43 @@ public class DemandRedPacketAct extends BaseActivity implements View.OnClickList
         initData();
     }
 
-    private void initView(){
+    private void initView() {
         setBackView(R.id.base_title_back);
-        setTitle("我要赚红包");
+        setTitle(getString(R.string.user_info_earn_redbag));
         findViewById(R.id.demand_red_packet_tv_askfor_gift_send).setOnClickListener(this);
         tvSendNum = (TextView) findViewById(R.id.demand_red_packet_tv_askfor_gift_send_num);
+        findViewById(R.id.demand_red_packet_ll_askfor_gift_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //弹出设置
+            }
+        });
+    }
+
+    private void initData() {
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.qunCount, null, this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.demand_red_packet_tv_askfor_gift_send://索要礼物弹框
                 dialog = null;
-                if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size()>0){
-                    dialog = new AskforGiftDialog(DemandRedPacketAct.this,"","");
+                if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
+                    dialog = new AskForGiftDialog(DemandRedPacketAct.this);
                     dialog.show();
-                }else {
+                } else {
                     LoadingDialog.show(DemandRedPacketAct.this);
                     ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
                         @Override
                         public void onRequestGiftListCallback(boolean isOk) {
                             LoadingDialog.closeLoadingDialog();
-                            if (isOk){
-                                if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null){
-                                    dialog = new AskforGiftDialog(DemandRedPacketAct.this,"","");
+                            if (isOk) {
+                                if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null) {
+                                    dialog = new AskForGiftDialog(DemandRedPacketAct.this);
                                     dialog.show();
                                 }
-                            }else {
+                            } else {
                                 PToast.showShort("数据加载失败，请检查您的网络");
                             }
                         }
@@ -71,17 +81,12 @@ public class DemandRedPacketAct extends BaseActivity implements View.OnClickList
         }
     }
 
-    private void initData(){
-        ModuleMgr.getCommonMgr().CMDRequest("GET", true, UrlParam.qunCount.getFinalUrl(), null, DemandRedPacketAct.this);
-    }
-
     @Override
     public void onRequestComplete(HttpResponse response) {
         QunCountInfo info = new QunCountInfo();
         info.parseJson(response.getResponseString());
-        if (info.isOk()){
-//            Log.e("TTTTTTRRRR", response.getResponseString() + "   ||   " + jsonResult+"|||"+response.isOk()+"|||"+response.getResponseJson());
-            tvSendNum.setText(info.getCount()+"");
+        if (info.isOk()) {
+            tvSendNum.setText(info.getCount() + " 人");
             return;
         }
         PToast.showShort(getString(R.string.net_error));

@@ -12,6 +12,27 @@
         android:layout_height="wrap_content"
         android:background="@drawable/f1_ycoin_old_bg">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="聊天需要Y币，您的Y币余额："
+                android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/tv_dlg_ycoin_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="#FF6633" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/kaitong"
             android:layout_width="wrap_content"
@@ -53,6 +74,21 @@
                 android:text="对应11000Y币"
                 android:textColor="#999999"
                 android:textSize="@dimen/px39_sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_get_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dip"
+                android:paddingBottom="10dip"
+                android:text="话费领取规则  >"
+                android:textColor="@color/pay_tel_color"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
