@@ -389,6 +389,10 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     notifyAdapter(data.get(i).getUid());
                 }
                 break;
+            case MsgType.MT_Say_HI_Notice:
+                long uid = (long) value;
+                notifyAdapter(uid);
+                break;
             default:
                 break;
         }

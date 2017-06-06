@@ -649,7 +649,8 @@
 
     <string name="hot_card_video_tips">对方未开启视频聊天</string>
     <string name="hot_card_audio_tips">对方未开启语音聊天</string>
-
+    <string name="hot_card_nodata_top_tip">非常抱歉\n一大波美女帅哥在排队中...</string>
+    <string name="hot_card_nodata_bottom_tip">暂时还没出现符合条件的用户噢~</string>
     <!-- 发现end -->
 
     <string name="privatechat_title_attention">关注TA</string>
