@@ -162,6 +162,7 @@
                     android:textSize="@dimen/px28_sp" />
 
                 <TextView
+                    android:id="@+id/hot_card_to_video_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/px2_dp"
@@ -198,6 +199,7 @@
                     android:textSize="@dimen/px28_sp" />
 
                 <TextView
+                    android:id="@+id/hot_card_to_voice_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/px2_dp"
@@ -223,13 +225,13 @@
                 <ImageView
                     android:layout_width="@dimen/px45_dp"
                     android:layout_height="@dimen/px45_dp"
-                    android:layout_marginTop="@dimen/px8_dp"
+                    android:layout_marginTop="@dimen/px12_dp"
                     android:background="@drawable/f1_userinfo_send" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px2_dp"
+                    android:layout_marginTop="@dimen/px12_dp"
                     android:text="发私信"
                     android:textSize="@dimen/px28_sp" />
             </LinearLayout>
@@ -251,13 +253,13 @@
                 <ImageView
                     android:layout_width="@dimen/px45_dp"
                     android:layout_height="@dimen/px45_dp"
-                    android:layout_marginTop="@dimen/px8_dp"
+                    android:layout_marginTop="@dimen/px12_dp"
                     android:background="@drawable/f1_gift_ico" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px8_dp"
+                    android:layout_marginTop="@dimen/px12_dp"
                     android:text="送礼物"
                     android:textSize="@dimen/px28_sp" />
             </LinearLayout>
