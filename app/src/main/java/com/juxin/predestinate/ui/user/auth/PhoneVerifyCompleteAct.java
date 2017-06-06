@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -28,6 +29,7 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
+        findViewById(R.id.ll_customerservice_btn).setOnClickListener(this);
         findViewById(R.id.bt_return_authact).setOnClickListener(this);
         findViewById(R.id.ll_open_qq_btn).setOnClickListener(this);
         ((TextView) findViewById(R.id.tv_customerservice_desc)).setText(getResources().getString(R.string.txt_customerservice_complete_desc));
@@ -37,7 +39,7 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
             return;
         }
         ((TextView) findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
-        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText(contactBean.getWork_time());
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+contactBean.getWork_time()+")");
         qq = contactBean.getQq();
     }
 
@@ -57,6 +59,9 @@ public class PhoneVerifyCompleteAct extends BaseActivity implements View.OnClick
             case R.id.bt_return_authact:
                 setResult(203);
                 finish();
+                break;
+            case R.id.ll_customerservice_btn:
+                UIShow.showPrivateChatAct(PhoneVerifyCompleteAct.this, MailSpecialID.customerService.getSpecialID(),"");
                 break;
             default:
                 break;
