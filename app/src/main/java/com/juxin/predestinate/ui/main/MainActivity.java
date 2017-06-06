@@ -306,9 +306,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onStart() {
         super.onStart();
         registerNetReceiver();
-
-        // test
-        getOfflineMsg();
     }
 
     @Override
