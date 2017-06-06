@@ -145,7 +145,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/px30_dp"
         android:layout_marginRight="@dimen/px60_dp"
-        android:background="@drawable/f1_user_check_info_gift"
+        android:background="@drawable/f1_fc_gift"
         android:visibility="gone" />
 
     <LinearLayout

@@ -55,8 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/px20_dp"
             android:text="@string/txt_verify_complete_desc"
-            android:textSize="@dimen/txt_small"
-            android:textColor="@color/text_ciyao_gray" />
+            android:textColor="@color/text_ciyao_gray"
+            android:textSize="@dimen/txt_small" />
 
 
         <Button
@@ -72,9 +72,9 @@
 
 
         <LinearLayout
-            android:layout_marginTop="@dimen/px200_dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px200_dp"
             android:background="@color/color_F9F9F9"
             android:paddingBottom="@dimen/px30_dp"
             android:paddingLeft="10dp"
@@ -87,4 +87,10 @@
         </LinearLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/f1_customerservice_btn" />
+    </RelativeLayout>
 </LinearLayout>

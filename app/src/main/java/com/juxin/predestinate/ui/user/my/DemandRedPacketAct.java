@@ -38,6 +38,12 @@ public class DemandRedPacketAct extends BaseActivity implements View.OnClickList
         setTitle(getString(R.string.user_info_earn_redbag));
         findViewById(R.id.demand_red_packet_tv_askfor_gift_send).setOnClickListener(this);
         tvSendNum = (TextView) findViewById(R.id.demand_red_packet_tv_askfor_gift_send_num);
+        findViewById(R.id.demand_red_packet_ll_askfor_gift_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //弹出设置
+            }
+        });
     }
 
     private void initData() {
