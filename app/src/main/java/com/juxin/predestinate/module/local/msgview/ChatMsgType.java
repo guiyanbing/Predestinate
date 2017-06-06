@@ -35,6 +35,9 @@ public enum ChatMsgType {
 
     CMT_25(ChatPanelText.class, "HTML文本消息"),
 
+
+    CMT_7("已读消息"),
+
     // 非有效类型
     CMT_Invalid(null, "非有效类型");
 

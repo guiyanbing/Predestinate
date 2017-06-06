@@ -41,7 +41,7 @@ import rx.functions.Action1;
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener, ChatMsgInterface.SystemMsgListener {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
@@ -177,25 +177,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }
-    }
-
-    @Override
-    public void onSystemMsg(final BaseMessage message) {
-        if (getChatInstance().chatListView == null) {
-            return;
-        }
-        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
-                int size = messages.size();
-                if (size > 0 && messages.get(size - 1) != null) {
-                    PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
-                }
-                chatInstance.chatContentAdapter.setList(messages);
-                moveToBottom();
-            }
-        });
     }
 
     /**
@@ -341,7 +322,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             return;
         }
         getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
-        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+     //   chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
     }
 
     /**
@@ -391,7 +372,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         moveToBottom();
                     }
                 });
-        ChatSpecialMgr.getChatSpecialMgr().attachSystemMsgListener(this);
     }
 
     /**
@@ -400,8 +380,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void detach() {
         long id = PSP.getInstance().getLong("xiaoxi" + whisperId + channelId, 0);
         ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "", id);
-//        ModuleMgr.getChatMgr().setOnUpdateDataListener(null);
-        ChatSpecialMgr.getChatSpecialMgr().detachSystemMsgListener(this);
         ModuleMgr.getChatMgr().detachChatListener(this);
         ChatMediaPlayer.getInstance().stopPlayVoice();
 
@@ -432,6 +410,26 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                 if (message.getSendID() != App.uid)
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
+            } else {
+                ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
+                switch (msgType) {
+                    case CMT_7:{
+                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
+                                int size = messages.size();
+                                if (size > 0 && messages.get(size - 1) != null) {
+                                    PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
+                                }
+                                chatInstance.chatContentAdapter.setList(messages);
+                                moveToBottom();
+                            }
+                        });
+
+                        }
+                        break;
+                }
             }
 
             /**

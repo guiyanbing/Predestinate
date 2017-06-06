@@ -238,7 +238,7 @@ public class LoginMgr implements ModuleBase {
                         // 临时资料设置
                         LoginResult result = (LoginResult) response.getBaseData();
                         putAllLoginInfo(result.getUid(), pwd, true);// Cookie 在http响应头中返回
-
+                        PSP.getInstance().put(Constant.USER_GENDER, result.getGender());
                         ModuleMgr.getCenterMgr().getMyInfo().setNickname(result.getNickname());
                         ModuleMgr.getCenterMgr().getMyInfo().setUid(result.getUid());
                         ModuleMgr.getCenterMgr().getMyInfo().setGender(result.getGender());

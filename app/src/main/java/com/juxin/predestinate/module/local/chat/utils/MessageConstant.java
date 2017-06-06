@@ -46,5 +46,5 @@ public class MessageConstant {
 
 
 
-    public static final String Stranger_New = "Stranger_New" + App.uid; //默认的人
+    public static final String Stranger_New = "Stranger_New"; //默认的人
 }

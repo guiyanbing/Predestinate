@@ -5,7 +5,7 @@
             <!-- 描边 -->
             <!--<stroke android:width="2px" android:color="#dcdcdc" />-->
             <!--填充-->
-            <solid android:color="@color/color_FFCB02" />
+            <solid android:color="@color/pink" />
             <corners android:radius="@dimen/px60_dp"/>
         </shape>
     </item>

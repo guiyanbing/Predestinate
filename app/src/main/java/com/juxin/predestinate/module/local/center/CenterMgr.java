@@ -651,6 +651,7 @@ public class CenterMgr implements ModuleBase, PObserver {
         HashMap<String, Object> params = new HashMap<>();
         params.put("ycoin_person", getActiveUserNum(CHARGE_NUM_COIN));
         params.put("vip_person", getActiveUserNum(CHARGE_NUM_VIP));
+        params.put("ycoin_surplus", getMyInfo().getYcoin());
         return params;
     }
 

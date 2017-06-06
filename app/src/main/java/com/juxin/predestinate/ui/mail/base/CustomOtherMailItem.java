@@ -74,14 +74,14 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
         item_last_msg.setText(msgData.getAboutme());
 
         item_unreadnum.setVisibility(View.GONE);
-        mail_item_unreadnum_two.setVisibility(GONE);
+        mail_item_unreadnum_two.setVisibility(View.GONE);
         if (msgData.getNum() > 0) {
             if(MailMsgID.Greet_Msg.type == msgData.getLWhisperID()){
-                mail_item_unreadnum_two.setVisibility(VISIBLE);
-                return;
+                mail_item_unreadnum_two.setVisibility(View.VISIBLE);
+            }else {
+                item_unreadnum.setVisibility(View.VISIBLE);
+                item_unreadnum.setText(ModuleMgr.getChatListMgr().getUnreadNum(msgData.getNum()));
             }
-            item_unreadnum.setVisibility(View.VISIBLE);
-            item_unreadnum.setText(ModuleMgr.getChatListMgr().getUnreadNum(msgData.getNum()));
         }
     }
 

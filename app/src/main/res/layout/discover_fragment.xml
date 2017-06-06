@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/base_title" />
+        <!--<include layout="@layout/base_title" />-->
 
         <com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView
             android:id="@+id/discover_content"

@@ -792,7 +792,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 if(!message.isSender() && message.getMsgID() > 0 && !message.isRu()){
-                    ModuleMgr.getChatListMgr().setStrangerNew();
+                    ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
                 //角标消息更改

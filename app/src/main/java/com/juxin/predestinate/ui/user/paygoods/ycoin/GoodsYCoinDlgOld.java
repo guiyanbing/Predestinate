@@ -12,6 +12,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
@@ -33,6 +34,7 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     private GoodsPayTypePanel payTypePanel; // 支付方式
 
     private TextView tv_tips; // 充值优惠提示信息
+    private TextView tv_ycoin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,8 +45,16 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         tv_tips = (TextView) findViewById(R.id.tv_ycoin_ts1);
+        tv_ycoin = (TextView) findViewById(R.id.tv_dlg_ycoin_num);
+        tv_ycoin.setText(ModuleMgr.getCenterMgr().getMyInfo().getYcoin() + "");
         findViewById(R.id.btn_recharge).setOnClickListener(this);
         fillGoodsPanel();
+        findViewById(R.id.tv_get_tel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UIShow.showActionActivity(GoodsYCoinDlgOld.this);
+            }
+        });
     }
 
     private void fillGoodsPanel() {

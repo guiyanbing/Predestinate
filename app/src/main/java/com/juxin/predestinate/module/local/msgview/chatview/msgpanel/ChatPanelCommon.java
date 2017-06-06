@@ -73,7 +73,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         chat_item_customFrameLayout = (CustomFrameLayout) findViewById(R.id.chat_item_customFrameLayout);
         chat_item_text = (EmojiTextView) findViewById(R.id.chat_item_text);
         chat_item_img = (ImageView) findViewById(R.id.chat_item_img);
-
+        chat_item_customFrameLayout.show(R.id.chat_item_text);
         //语音
         if (isSender()) {
             parent = findViewById(R.id.chat_item_panel_voice_right);
