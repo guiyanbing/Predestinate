@@ -123,7 +123,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             data.clear();
         }
         data.addAll(ModuleMgr.getChatListMgr().getGeetList());
-        if (data.size() != 0) {
+        if (data.size() > 0) {
             showHasData();
         } else {
             showNoData();
@@ -241,6 +241,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     public void showHasData() {
         adapter.notifyDataSetChanged();
+        detectInfo(exListView);
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
     }
