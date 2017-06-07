@@ -173,7 +173,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             public void onSubmit() {
                 UIShow.showOpenVipActivity(UserCheckInfoAct.this);
             }
-        }, getString(R.string.goods_vip_check_other_chat), "", getString(R.string.goods_vip_check_other_chat_hi), "去开通", true, R.color.text_zhuyao_black);
+        }, getString(R.string.hot_card_price_vip), "", getString(R.string.hot_card_price_cancle), getString(R.string.hot_card_price_sure), true, R.color.text_zhuyao_black);
     }
 
     private void initSayHi() {
