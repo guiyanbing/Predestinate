@@ -78,6 +78,15 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
+     * 和用户id 有关的字段
+     * @param val 定义的字段值
+     * @return
+     */
+    public String getPrivateKey(String val) {
+        return ModuleMgr.getCenterMgr().getMyInfo().getUid() + val;
+    }
+
+    /**
      * 游戏交互-请求转发。接口回调data为String类型。[注意]：加密请求添加了新的header，若服务器无法处理，谨慎调用该方法
      *
      * @param requestType   请求方式（GET/POST）

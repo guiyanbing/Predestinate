@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -83,10 +84,12 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
             case R.id.tv_select_ok:
                 if (cb_def_sel.isChecked()) {
                     if (cb_own_agree.isChecked()) {
-                        PSP.getInstance().put(Constant.APPEAR_TYPE, APPEAR_TYPE_OWN);
+                        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_OWN);
                     } else if (cb_own_disagree.isChecked()) {
-                        PSP.getInstance().put(Constant.APPEAR_TYPE, APPEAR_TYPE_NO_OWN);
+                        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_NO_OWN);
                     }
+                }else {
+                    PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), true);
                 }
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 dismiss();
