@@ -29,7 +29,7 @@ public class BaseMessage implements IBaseMessage {
 
         common(CommonMessage.class, 2),//文本消息
         hi(CommonMessage.class, 3),//打招呼
-        sys(SystemMessage.class, 7),//系统
+      //  sys(SystemMessage.class, 7),//系统
         gift(GiftMessage.class, 10),//礼物消息
         hint(TextMessage.class, 14),//小提示消息
         html(TextMessage.class, 19),//html消息
@@ -586,9 +586,9 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle, true);
                 break;
-            case sys:
-                message = new SystemMessage(bundle, true);
-                break;
+//            case sys:
+//                message = new SystemMessage(bundle, true);
+//                break;
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
@@ -625,9 +625,9 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle);
                 break;
-            case sys:
-                message = new SystemMessage(bundle);
-                break;
+//            case sys:
+//                message = new SystemMessage(bundle);
+//                break;
             case video:
                 message = new VideoMessage(bundle);
                 break;
@@ -696,60 +696,18 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 result = "[礼物]";
                 break;
-            case sys:
-                String content1 = msg.getMsgDesc();
-                if (TextUtils.isEmpty(content1)) {
-                    result = "[已读]";
-                } else {
-                    result = content1;
-                }
-                break;
+//            case sys:
+//                String content1 = msg.getMsgDesc();
+//                if (TextUtils.isEmpty(content1)) {
+//                    result = "[已读]";
+//                } else {
+//                    result = content1;
+//                }
+//                break;
             default:
                 result = msg.getMsgDesc();
                 break;
         }
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "BaseMessage{" +
-                "displayWidth=" + displayWidth +
-                ", id=" + id +
-                ", channelID='" + channelID + '\'' +
-                ", whisperID='" + whisperID + '\'' +
-                ", sendID=" + sendID +
-                ", msgID=" + msgID +
-                ", cMsgID=" + cMsgID +
-                ", specialMsgID=" + specialMsgID +
-                ", time=" + time +
-                ", content='" + content + '\'' +
-                ", jsonStr='" + jsonStr + '\'' +
-                ", status=" + status +
-                ", fStatus=" + fStatus +
-                ", type=" + type +
-                ", dataSource=" + dataSource +
-                ", customtype='" + customtype + '\'' +
-                ", version=" + version +
-                ", isResending=" + isResending +
-                ", isValid=" + isValid +
-                ", msgDesc='" + msgDesc + '\'' +
-                ", ru=" + ru +
-                ", isRead=" + isRead +
-                ", isSave=" + isSave +
-                ", isAutoplay=" + isAutoplay +
-                ", infoJson='" + infoJson + '\'' +
-                ", name='" + name + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", localAvatar=" + localAvatar +
-                ", top=" + top +
-                ", aboutme='" + aboutme + '\'' +
-                ", isVip=" + isVip +
-                ", kfID=" + kfID +
-                ", num=" + num +
-                ", Weight=" + Weight +
-                ", MailItemStyle=" + MailItemStyle +
-                ", msgPanelType=" + msgPanelType +
-                '}';
     }
 }
