@@ -92,6 +92,7 @@ import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
 import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
+import com.juxin.predestinate.ui.user.my.LookAtHerDlg;
 import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
@@ -976,6 +977,15 @@ public class UIShow {
                 }
             });
         }
+    }
+
+    /**
+     * 看看她
+     * 出场方式选项
+     */
+    public static void showLookAtHerDlg(final Context context) {
+        LookAtHerDlg dialog = new LookAtHerDlg();
+        dialog.showDialog((FragmentActivity) context);
     }
 
     /**

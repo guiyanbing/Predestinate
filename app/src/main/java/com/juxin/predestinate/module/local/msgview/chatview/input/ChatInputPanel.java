@@ -96,6 +96,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         showSendBtn(false);
 
         onClickChatGift();
+        onClickLookAtHer();
     }
 
     /**
@@ -425,6 +426,19 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             public void onClick(View view) {
                 closeAllInput();
                 UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
+            }
+        });
+    }
+
+    /**
+     * 看看她
+     */
+    private void onClickLookAtHer() {
+        getChatInstance().chatViewLayout.onClickLookAtHer(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeAllInput();
+                UIShow.showLookAtHerDlg(getContext());
             }
         });
     }
