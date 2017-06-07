@@ -48,8 +48,11 @@ public class VideoHoriAdapter extends ExBaseAdapter<UserVideo> {
         }
 
         UserVideo userVideo = getItem(position);
-
-        ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media, 8);
+        if(userVideo.isCanView()){
+            ImageLoader.loadAvatar(App.context, userVideo.getPic(), mHolder.img_media);
+        }else{
+            ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media, 8);
+        }
         mHolder.img_shade.setVisibility(View.VISIBLE);
         return convertView;
     }
