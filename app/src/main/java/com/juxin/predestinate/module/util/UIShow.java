@@ -983,8 +983,10 @@ public class UIShow {
      * 看看她
      * 出场方式选项
      */
-    public static void showLookAtHerDlg(final Context context) {
+    public static void showLookAtHerDlg(final Context context, long otherId) {
         LookAtHerDlg dialog = new LookAtHerDlg();
+        dialog.setContext(context);
+        dialog.setOtherId(otherId);
         dialog.showDialog((FragmentActivity) context);
     }
 

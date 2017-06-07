@@ -1,5 +1,7 @@
 package com.juxin.predestinate.ui.user.my;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
 /**
  * 创建日期：2017/6/7
@@ -23,6 +26,8 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private static final int APPEAR_TYPE_OWN = 1;//自己露脸
     private static final int APPEAR_TYPE_NO_OWN = 2;//自己不露脸
 
+    private Context context;
+    private long otherId;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -30,6 +35,14 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         setGravity(Gravity.BOTTOM);
         setDialogSizeRatio(1, 0);
         setCancelable(true);
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void setOtherId(long otherId) {
+        this.otherId = otherId;
     }
 
     @Override
@@ -75,7 +88,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                         PSP.getInstance().put(Constant.APPEAR_TYPE, APPEAR_TYPE_NO_OWN);
                     }
                 }
-                //TODO 跳转
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 dismiss();
                 break;
             default:

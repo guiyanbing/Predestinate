@@ -92,6 +92,11 @@ public class VideoAudioChatHelper {
     public void inviteVAChat(final Activity context, long dstUid, int type) {
         isSend = true;
 
+        if(PSP.getInstance().getInt(Constant.APPEAR_TYPE, 0) == 0) {
+            UIShow.showLookAtHerDlg(context, dstUid);
+            return;
+        }
+
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(context);
             return;

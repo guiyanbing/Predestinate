@@ -242,9 +242,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.setInputLookAtHerVisibility(View.VISIBLE);
-            if(PSP.getInstance().getInt(Constant.APPEAR_TYPE, 0) != 0) {
-                //TODO 选中了默认，直接跳转
-            }
             initHeadView();
             initFollow();
             isShowTopPhone();
