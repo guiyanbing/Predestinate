@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.ApkUnit;
-import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 
@@ -24,18 +23,20 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
  * Created by siow on 2017/5/8.
  */
 public class MyURLSpan extends ClickableSpan {
-
-    private final static int URL_TYPE_UPLOAD_HEADPIC = 1;// 上传头像
-    private final static int URL_TYPE_COMPLETE_INFO = 2;// 完善资料
-    private final static int URL_TYPE_BIND_PHONE = 3;// 绑定手机
-    private final static int URL_TYPE_CONNECT_QQ_SERVICE = 4;
     private final Context mContext;
 
+    private final static String URL_TYPE_UPLOAD_HEAD_PIC = "1";//上传头像
+    private final static String URL_TYPE_COMPLETE_INFO = "2";//完善资料
+    private final static String URL_TYPE_BIND_PHONE = "3";//绑定手机
+    private final static String URL_TYPE_CONNECT_QQ_SERVICE = "4";//QQ客服
+    private final static String URL_TYPE_VIDEO_CERTIFICATION = "video_certification";//视频认证
+    private final static String URL_TYPE_RECHARGE_YB = "recharge_yb";//充值Y币
+    private final static String URL_TYPE_RECHARGE_VIP = "recharge_vip";//充值VIP
     private String mUrl;
 
     private MyURLSpan(Context mContext, String url) {
-        mUrl = url;
         this.mContext = mContext;
+        mUrl = url;
     }
 
     /**
@@ -68,57 +69,79 @@ public class MyURLSpan extends ClickableSpan {
         try {
             if (TextUtils.isEmpty(mUrl))
                 return;
-            if ("video_certification".equals(mUrl)) {
-                UIShow.showMyAuthenticationVideoAct((FragmentActivity) mContext, 0);
-            } else if (mUrl.startsWith("downex://") || mUrl.startsWith("downex1://") ||
-                    mUrl.startsWith("downex2://") || mUrl.startsWith("downex3://")) {
-                String sUrl = mUrl.replace("downex://", "http://");
-                sUrl = sUrl.replace("downex1://", "http://");
-                sUrl = sUrl.replace("downex2://", "ftp://");
-                sUrl = sUrl.replace("downex3://", "https://");
-                ModuleMgr.getHttpMgr().downloadApk(sUrl, new DownloadListener() {
-                    @Override
-                    public void onStart(String url, String filePath) {
 
+            switch (mUrl){
+                //上传头像
+                case URL_TYPE_UPLOAD_HEAD_PIC:
+                    UIShow.showUserRegHeadUploadAct(mContext);
+                    break;
+                //完善资料
+                case URL_TYPE_COMPLETE_INFO:
+                    UIShow.showUserEditInfoAct(mContext);
+                    break;
+                //绑定手机
+                case URL_TYPE_BIND_PHONE:
+                    UIShow.showPhoneVerifyAct((FragmentActivity) mContext, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
+                    break;
+                //QQ客服
+                case URL_TYPE_CONNECT_QQ_SERVICE:
+                    UIShow.showQQService(mContext);
+                    break;
+                //视频认证
+                case URL_TYPE_VIDEO_CERTIFICATION:
+                    UIShow.showMyAuthenticationVideoAct((FragmentActivity) mContext, 0);
+                    break;
+                //充值Y币
+                case URL_TYPE_RECHARGE_YB:
+                    UIShow.showBuyCoinActivity(mContext);
+                    break;
+                //充值VIP
+                case URL_TYPE_RECHARGE_VIP:
+                    UIShow.showOpenVipActivity(mContext);
+                    break;
+                default:
+                    int i = testDownExUrl(mUrl);
+                    //是否自定义下载协议
+                    if (i >= 0) {
+                        String sUrl = mUrl.replace(DownExUrlHead[i], DownExUrlReplace[i]);
+                        ModuleMgr.getHttpMgr().downloadApk(sUrl, downloadListener);
                     }
-
-                    @Override
-                    public void onProcess(String url, int process, long size) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(String url, String filePath) {
-                        ApkUnit.ExecApkFile(mContext, filePath);
-                    }
-
-                    @Override
-                    public void onFail(String url, Throwable throwable) {
-
-                    }
-                });
-            } else if (BaseUtil.isInt(mUrl)) {
-                int mIndex = Integer.parseInt(mUrl);
-                switch (mIndex) {
-                    case URL_TYPE_UPLOAD_HEADPIC:// 上传头像
-                        UIShow.showUserRegHeadUploadAct(mContext);
-                        break;
-                    case URL_TYPE_COMPLETE_INFO:  // 完善资料
-                        UIShow.showUserEditInfoAct(mContext);
-                        break;
-                    case URL_TYPE_BIND_PHONE:  // 绑定手机
-                        UIShow.showPhoneVerifyAct((FragmentActivity) mContext,
-                                MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE); //跳手机认证页面
-                        break;
-                    case URL_TYPE_CONNECT_QQ_SERVICE:
-                        UIShow.showQQService(mContext);
-                        break;
-                }
-            } else {
-                UIShow.showWebActivity(mContext, mUrl);
+                    else
+                        UIShow.showWebActivity(mContext, mUrl);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private final static String[] DownExUrlHead = {"downex://", "downex1://", "downex2://", "downex3://"};
+    private final static String[] DownExUrlReplace = {"http://", "http://", "ftp://", "https://"};
+
+    private int testDownExUrl(String url){
+        for (int i = DownExUrlHead.length - 1; i >= 0; i--) {
+            if (url.startsWith(DownExUrlHead[i]))
+                return i;
+        }
+        return -1;
+    }
+
+    private DownloadListener downloadListener = new DownloadListener() {
+        @Override
+        public void onStart(String url, String filePath) {
+        }
+
+        @Override
+        public void onProcess(String url, int process, long size) {
+        }
+
+        @Override
+        public void onSuccess(String url, String filePath) {
+            ApkUnit.ExecApkFile(mContext, filePath);
+        }
+
+        @Override
+        public void onFail(String url, Throwable throwable) {
+        }
+    };
 }

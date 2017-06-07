@@ -48,7 +48,7 @@ import java.util.Map;
  */
 public class CenterMgr implements ModuleBase, PObserver {
 
-    public static final String INFO_SAVE_KEY = "INFO_SAVE_KEY"; // 本地化个人资料key
+    private static final String INFO_SAVE_KEY = "INFO_SAVE_KEY"; // 本地化个人资料key
     private static final String SETTING_SAVE_KEY = "SETTING_SAVE_KEY"; // 本地化设置key
     private UserDetail userDetail = null;
     private Setting setting = null;

@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="客服电话：0731-89746010"
+            android:text="客服：电话0731-89746010"
             android:textColor="#666666" />
     </RelativeLayout>
 </RelativeLayout>

@@ -166,7 +166,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         private LinearLayout lin_imgs_view;
         private TextView tv_img_num;
         private ImageView iv_avatar;
-        private TextView tv_name, tv_age, tv_online, tv_video_price, tv_voice_price;
+        private TextView tv_name, tv_age, tv_online,tv_video_price,tv_voice_price;
 
         private ImageView iv_auth_user, iv_auth_phone, iv_auth_video;
 
