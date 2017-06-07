@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
@@ -100,6 +101,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 if (infoHot.isVideo_available()) {
+                    PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), true);
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_video_tips));

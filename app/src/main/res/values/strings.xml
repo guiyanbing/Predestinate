@@ -92,6 +92,7 @@
     <string name="user_info_has_hi">已打招呼</string>
     <string name="user_info_video">发视频</string>
     <string name="user_info_look_at_her">看看她</string>
+    <string name="user_info_look_at_he">看看他</string>
     <string name="user_info_voice">发语音</string>
     <string name="user_info_age">%d岁</string>
     <string name="user_info_follow_count">关注 %d</string>
