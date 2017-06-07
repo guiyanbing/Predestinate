@@ -918,17 +918,8 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void getUserInfoList(List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
-        PLogger.printObject("111getUserInfoList=111=" + uids.size());
-        Observable<List<UserInfoLightweight>> observable = dbCenter.getCacheCenter().queryProfile(uids);
-        observable.subscribeOn(Schedulers.io());
-        observable.subscribe(new Action1<List<UserInfoLightweight>>() {
-            @Override
-            public void call(List<UserInfoLightweight> lightweights) {
-                PLogger.printObject("111getUserInfoList=222=" + lightweights.size());
-                listComplete.onReqInfosComplete(lightweights);
-            }
-        }).unsubscribe();
+    public Observable<List<UserInfoLightweight>> getUserInfoList(List<Long> uids) {
+        return dbCenter.getCacheCenter().queryProfile(uids);
     }
 
     public void getProFile(List<Long> userIds) {
