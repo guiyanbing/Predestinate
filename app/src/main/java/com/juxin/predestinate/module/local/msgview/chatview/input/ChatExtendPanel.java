@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
-
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -19,7 +18,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,10 +99,6 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             @Override
                             public void onComplete(String... path) {
                                 if (path.length > 0) {
-
-//                                        if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
-//                                            return;
-//                                        }
                                     //TODO 发送图片
                                     ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
                                 }

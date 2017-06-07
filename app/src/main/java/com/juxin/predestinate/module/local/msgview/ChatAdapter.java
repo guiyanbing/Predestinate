@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
@@ -11,7 +10,6 @@ import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
-import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -28,20 +26,19 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import rx.Observable;
 import rx.functions.Action1;
 
 /**
  * Created by Kind on 2017/3/30.
  */
-public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener, ChatInterface.OnClickChatItemListener {
+public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView.IXListViewListener,
+        ChatInterface.OnClickChatItemListener {
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
@@ -136,7 +133,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             chatInstance.chatInputPanel.showSendBtn();
             page = 0;
             PSP.getInstance().put("whisperId", whisperId);
-//            ModuleMgr.getChatMgr().setOnUpdateDataListener(this);
 
             attach();
         } catch (Exception e) {
@@ -358,7 +354,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     @Override
                     public void call(List<BaseMessage> baseMessages) {
                         SortList.sortListView(baseMessages);//排序
-                        final List<BaseMessage> listTemp = new ArrayList<>();
+                        List<BaseMessage> listTemp = new ArrayList<>();
 
                         if (baseMessages.size() > 0) {
                             for (BaseMessage baseMessage : baseMessages) {
@@ -583,8 +579,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onLoadMore() {
-    }
+    public void onLoadMore() {}
 
     /**
      * 是否可以聊天

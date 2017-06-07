@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.msgview.smile;
 
 import com.juxin.predestinate.bean.net.BaseData;
-
 import org.json.JSONObject;
 
 /**
@@ -17,8 +16,7 @@ public class SmileItem extends BaseData {
     private int gender = 0; //分组所属性别1男 2女 0通用
 
 
-    public SmileItem() {
-    }
+    public SmileItem() {}
 
     public SmileItem(String pic) {
         this.pic = pic;

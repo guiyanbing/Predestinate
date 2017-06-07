@@ -336,15 +336,10 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     MsgMgr.getInstance().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            boolean ret = (infoLightweights != null && infoLightweights.size() > 0);
-                            if(ret) ModuleMgr.getChatMgr().updateUserInfoList(infoLightweights);
-
-                            TimerUtil.beginTime(new TimerUtil.CallBack() {
-                                @Override
-                                public void call() {
-                                    ModuleMgr.getChatMgr().getProFile(stringList);
-                                }
-                            }, ret ? 500 : 0);
+                            if(infoLightweights != null && infoLightweights.size() > 0){
+                                ModuleMgr.getChatMgr().updateUserInfoList(infoLightweights);
+                            }
+                            ModuleMgr.getChatMgr().getProFile(stringList);
                         }
                     });
                 }
