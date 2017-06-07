@@ -297,12 +297,6 @@ public class DBCenterFLetter {
                 + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
     }
 
-    public long updateStatusFail() {
-        ContentValues values = new ContentValues();
-        values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
-    }
-
     /**
      * 发送成功或失败更新状态
      * @param userID

@@ -393,8 +393,6 @@
     <string name="goods_vip_dlg_get_dog">获取斗牛犬</string>
     <string name="goods_vip_dlg_get_dog_tips">开通VIP立即送斗牛犬，可以守卫摇钱树并且反抢敌人。</string>
     <string name="goods_vip_check_other_album">您没开通VIP，不可以查看用户相册</string>
-    <string name="goods_vip_check_other_chat">您非VIP会员，不可以直接发信！可以先给她打个招呼，等待她的回复！</string>
-    <string name="goods_vip_check_other_chat_hi">给她打个招呼</string>
 
     <string name="goods_ycoin_title">购买Y币</string>
     <string name="goods_ycoin_remain">Y币余额:</string>
@@ -653,12 +651,6 @@
     <string name="hot_card_audio_tips">对方未开启语音聊天</string>
     <string name="hot_card_nodata_top_tip">非常抱歉\n一大波美女帅哥在排队中...</string>
     <string name="hot_card_nodata_bottom_tip">暂时还没出现符合条件的用户噢~</string>
-
-
-    <string name="hot_card_price_vip">您非VIP会员，不可以直接发信！可以先给她打个招呼，等待她的回复！</string>
-    <string name="hot_card_price_cancle">给她打招呼</string>
-    <string name="hot_card_price_sure">去开通</string>
-
     <!-- 发现end -->
 
     <string name="privatechat_title_attention">关注TA</string>

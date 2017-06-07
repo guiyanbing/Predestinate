@@ -15,6 +15,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
@@ -37,14 +38,18 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -69,16 +74,6 @@ public class ChatMgr implements ModuleBase {
     public void release() {
         messageMgr.release();
         specialMgr.release();
-
-        updateStatusFail();
-    }
-
-    /**
-     * 退出程序的时候把发送中都更改为发送失败
-     */
-    public void updateStatusFail(){
-        dbCenter.getCenterFLetter().updateStatusFail();
-        dbCenter.getCenterFMessage().updateStatusFail();
     }
 
     public void inject() {
@@ -845,6 +840,8 @@ public class ChatMgr implements ModuleBase {
                 if (!message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
                         !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
                         (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
+                    PLogger.printObject("chatMsg =" + message.toString());
+                    PLogger.printObject("1111111111111111 ChatMgr = " + ModuleMgr.getChatListMgr().getStrangerNew());
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
@@ -915,13 +912,14 @@ public class ChatMgr implements ModuleBase {
 
     public void getUserInfoList(final List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
         Observable<List<UserInfoLightweight>> observable = dbCenter.getCacheCenter().queryProfile(uids);
+        observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER));
         observable.subscribe(new Action1<List<UserInfoLightweight>>() {
             @Override
             public void call(List<UserInfoLightweight> lightweights) {
-                PLogger.printObject("lightweight==222==" + lightweights.size());
+                PLogger.printObject("lightweight==222==" + lightweights);
                 listComplete.onReqInfosComplete(lightweights);
             }
-        }).unsubscribe();
+        });
 
     }
 
@@ -938,15 +936,11 @@ public class ChatMgr implements ModuleBase {
                 if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
 
-                    updateUserInfoList(infoLightweights);
+                    dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                 }
             }
         });
-    }
-
-    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights){
-        dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
     }
 
     public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {
