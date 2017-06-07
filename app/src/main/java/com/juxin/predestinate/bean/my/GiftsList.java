@@ -17,6 +17,7 @@ public class GiftsList extends BaseData {
     private List arrCommonGifts;
     private List arrCallGifts;
     private List arrLineGifts;
+    private String strGiftConfig = "";
 
     public List getArrCommonGifts() {
         List gifts = new ArrayList();
@@ -49,8 +50,17 @@ public class GiftsList extends BaseData {
         return null;
     }
 
+    public String getStrGiftConfig() {
+        return strGiftConfig;
+    }
+
+    public void setStrGiftConfig(String strGiftConfig) {
+        this.strGiftConfig = strGiftConfig;
+    }
+
     @Override
     public void parseJson(String s) {
+        strGiftConfig = s;
         arrCommonGifts = getBaseDataList(getJsonObject(s).optJSONArray("list"), GiftInfo.class);
         arrCallGifts = getBaseDataList(getJsonObject(s).optJSONArray("calllist"), GiftInfo.class);
         arrLineGifts = getBaseDataList(getJsonObject(s).optJSONArray("linelist"), GiftInfo.class);
