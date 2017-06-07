@@ -126,7 +126,7 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
         }
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            if (ModuleMgr.getCenterMgr().isRobot(getItem(0).getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+            if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
                 showSayHello(holder, userInfo, position);
             } else {
                 showOnline(holder, userInfo);

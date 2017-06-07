@@ -127,7 +127,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
                     UIShow.showPrivateChatAct(context, infoHot.getUid(), null);
                 } else {
-                    PickerDialogUtil.showSimpleTipDialog((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
+                    PickerDialogUtil.showSimpleTipDialogExt((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
                         @Override
                         public void onCancel() {
                             doSayhi(infoHot, position);
@@ -137,7 +137,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                         public void onSubmit() {
                             UIShow.showOpenVipActivity(context);
                         }
-                    }, context.getString(R.string.hot_card_price_vip), "", context.getString(R.string.hot_card_price_cancle), context.getString(R.string.hot_card_price_sure), true);
+                    }, context.getString(R.string.hot_card_price_vip), "", context.getString(R.string.hot_card_price_cancle), context.getString(R.string.hot_card_price_sure), true, R.color.text_zhuyao_black);
                 }
             }
         });
@@ -166,7 +166,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         private LinearLayout lin_imgs_view;
         private TextView tv_img_num;
         private ImageView iv_avatar;
-        private TextView tv_name, tv_age, tv_online,tv_video_price,tv_voice_price;
+        private TextView tv_name, tv_age, tv_online, tv_video_price, tv_voice_price;
 
         private ImageView iv_auth_user, iv_auth_phone, iv_auth_video;
 
@@ -215,7 +215,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                             PToast.showShort(context.getString(R.string.user_info_hi_fail));
                         }
                     });
-        } else  if (ModuleMgr.getCenterMgr().isCanSayHi(context) && infoHot.is_sayHello()){
+        } else if (ModuleMgr.getCenterMgr().isCanSayHi(context) && infoHot.is_sayHello()) {
             PToast.showShort(context.getString(R.string.user_info_has_hi));
         }
     }

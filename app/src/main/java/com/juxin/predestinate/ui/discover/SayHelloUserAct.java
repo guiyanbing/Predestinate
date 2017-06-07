@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -20,7 +19,6 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -145,7 +143,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         title_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onTitleLeft();
                 if (!isGone) {
                     editContent();
                 } else {
@@ -156,21 +153,21 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
 
-    private void onTitleLeft() {
-        if (!isGone) {
-            View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
-            title_left.findViewById(R.id.mail_title_left).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    selectAll();
-                }
-            });
-            setBackViewGone();
-            setTitleLeftContainer(title_left);
-        } else {
-            setTitleLeftContainerRemoveAll();
-            setBackView();
-        }
+    private void onShowTitleLeft() {
+        View title_left = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_left, null);
+        title_left.findViewById(R.id.mail_title_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectAll();
+            }
+        });
+        setBackViewGone();
+        setTitleLeftContainer(title_left);
+    }
+
+    private void onHidTitleLeft() {
+        setTitleLeftContainerRemoveAll();
+        setBackView();
     }
 
 
@@ -197,9 +194,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         if (adapter.getList().size() > 0) {
             exListView.smoothOpenChooseView();
         } else {
-            setTitleLeftContainerRemoveAll();
+            onHidTitleLeft();
             PToast.showCenterShort("没有可编辑选项");
-            setBackView();
         }
     }
 
@@ -260,8 +256,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                 del_btn.setEnabled(false);
                 ModuleMgr.getChatListMgr().deleteBatchMessage(delList);
                 delList.clear();
-                setTitleLeftContainerRemoveAll();
-                setBackView();
+                onHidTitleLeft();
                 exListView.smoothCloseChooseView();
                 break;
             case R.id.say_hello_users_all_ignore:
@@ -273,8 +268,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
                     @Override
                     public void onSubmit() {
-                        setTitleLeftContainerRemoveAll();
-                        setBackView();
+                        onHidTitleLeft();
                         ModuleMgr.getChatListMgr().updateToBatchRead(data);
                         exListView.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
@@ -287,6 +281,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     @Override
     public void onSwipeChooseOpened() {
         bottom_view.setVisibility(View.VISIBLE);
+        onShowTitleLeft();
         mail_title_right_text.setText("取消");
         isGone = true;
     }
@@ -295,8 +290,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onSwipeChooseClosed() {
         bottom_view.setVisibility(View.GONE);
         mail_title_right_text.setText("编辑");
-        setTitleLeftContainerRemoveAll();
-        setBackView();
+        onHidTitleLeft();
         isGone = false;
     }
 
