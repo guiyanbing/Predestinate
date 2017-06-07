@@ -24,6 +24,7 @@ public class Constant {
     // -----------------------私有K-V-----------------------
     public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
     public static final String APPEAR_TYPE = "appear_type"; //出场方式
+    public static final String APPEAR_TYPE_SURE = "appear_type_sure"; //出场方式点击确定
 
     // -------------------------K-V---------------------------
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏

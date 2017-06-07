@@ -42,7 +42,8 @@
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px35_dp"
                     android:layout_marginRight="@dimen/px15_dp"
-                    android:src="@drawable/f1_look_at_her" />
+                    android:src="@drawable/f1_look_at_her"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/input_giftview"
