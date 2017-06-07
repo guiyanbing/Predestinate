@@ -193,10 +193,9 @@ public class DBCacheCenter {
                 .append(" WHERE ").append(FProfileCache.COLUMN_USERID + " in ").append("( ");
 
                 for(int i = 0; i < userIDs.size(); i++){
-                    if((i+1) >= userIDs.size()){
-                        sql.append(userIDs.get(i));
-                    }else {
-                        sql.append(userIDs.get(i) + ",");
+                    sql.append(userIDs.get(i));
+                    if((i+1) < userIDs.size()){
+                        sql.append(",");
                     }
                 }
 
