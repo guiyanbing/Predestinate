@@ -92,7 +92,8 @@ public class VideoAudioChatHelper {
     public void inviteVAChat(final Activity context, long dstUid, int type) {
         isSend = true;
 
-        if(!PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), false)) {
+        if(PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), false)) {
+            PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), false);
             UIShow.showLookAtHerDlg(context, dstUid);
             return;
         }

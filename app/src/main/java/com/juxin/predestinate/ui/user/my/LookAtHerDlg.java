@@ -88,8 +88,6 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                     } else if (cb_own_disagree.isChecked()) {
                         PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_NO_OWN);
                     }
-                }else {
-                    PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), true);
                 }
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 dismiss();
