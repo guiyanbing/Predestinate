@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 
-import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
-import com.juxin.predestinate.module.logic.config.Constant;
 
 /**
  * 创建日期：2017/6/6
@@ -49,7 +48,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void initView() {
-        if (PSP.getInstance().getInt(Constant.USER_GENDER, 1) == 1) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             View mDisManTitle = LayoutInflater.from(getContext()).inflate(R.layout.f1_discover_man_title, null);
             setTitleCenterContainer(mDisManTitle);
             discover_recommend = (RadioButton) findViewById(R.id.discover_recommend);
@@ -64,7 +63,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private void initFragment() {
         fragmentManager = getChildFragmentManager();
         discoverFragment = new DiscoverFragment();
-        if (PSP.getInstance().getInt(Constant.USER_GENDER, 1) == 1) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             hotFragment = new HotFragment();
         }
         switchContent(discoverFragment);

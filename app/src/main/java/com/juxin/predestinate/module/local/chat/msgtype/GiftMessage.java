@@ -25,11 +25,11 @@ public class GiftMessage extends BaseMessage {
         super();
     }
 
-    public GiftMessage(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
+    public GiftMessage(String channelID, String whisperID, int giftID, int giftCount) {
         super(channelID, whisperID);
         this.setGiftID(giftID);
         this.setGiftCount(giftCount);
-        this.setGiftLogID(giftLogID);
+    //    this.setGiftLogID(giftLogID);
         this.setType(BaseMessageType.gift.getMsgType());
     }
 

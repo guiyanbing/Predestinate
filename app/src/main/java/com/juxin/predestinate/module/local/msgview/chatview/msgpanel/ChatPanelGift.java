@@ -115,4 +115,13 @@ public class ChatPanelGift extends ChatPanel {
         });
         return true;
     }
+
+    @Override
+    public boolean onClickErrorResend(BaseMessage msgData) {
+        if (msgData == null || !(msgData instanceof GiftMessage)) {
+            return false;
+        }
+        setDialog(msgData, null);
+        return true;
+    }
 }

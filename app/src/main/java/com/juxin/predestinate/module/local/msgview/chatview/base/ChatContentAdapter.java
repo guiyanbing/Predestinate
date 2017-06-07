@@ -390,7 +390,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 statusProgress.setVisibility(View.GONE);
 
             BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
-            if (messageType != BaseMessage.BaseMessageType.common) {
+            if (messageType != BaseMessage.BaseMessageType.common && messageType != BaseMessage.BaseMessageType.gift) {
                 status.setVisibility(View.GONE);
                 return;
             }

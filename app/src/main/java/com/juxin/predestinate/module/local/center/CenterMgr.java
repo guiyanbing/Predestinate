@@ -240,7 +240,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取自己的个人资料
      */
     public void reqMyInfo(final RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (complete != null) {

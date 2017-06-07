@@ -84,8 +84,8 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.iv_auth_phone.setVisibility(infoHot.isMobileValidation() ? View.VISIBLE : View.GONE);
         vh.iv_auth_video.setVisibility(infoHot.isVideoValidation() ? View.VISIBLE : View.GONE);
         //发视频
-        vh.lin_to_video.setBackgroundResource(infoHot.isVideo_available() ?
-                R.drawable.f1_card_infor_item_bg : R.drawable.f1_card_infor_item_unbg);
+        vh.lin_to_video.setEnabled(infoHot.isVideo_available());
+        vh.tv_video_price.setText(infoHot.getVideoPrice()+"钻石/分");
         vh.lin_to_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,8 +97,8 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             }
         });
         //发语音
-        vh.lin_to_voice.setBackgroundResource(infoHot.isAudio_available() ?
-                R.drawable.f1_card_infor_item_bg : R.drawable.f1_card_infor_item_unbg);
+        vh.lin_to_voice.setEnabled(infoHot.isAudio_available());
+        vh.tv_voice_price.setText(infoHot.getAudioPrice()+"钻石/分");
         vh.lin_to_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,7 +141,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         private LinearLayout lin_imgs_view;
         private TextView tv_img_num;
         private ImageView iv_avatar;
-        private TextView tv_name, tv_age, tv_online;
+        private TextView tv_name, tv_age, tv_online,tv_video_price,tv_voice_price;
 
         private ImageView iv_auth_user, iv_auth_phone, iv_auth_video;
 
@@ -159,11 +159,14 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             tv_name = (TextView) view.findViewById(R.id.hot_card_name);
             tv_age = (TextView) view.findViewById(R.id.hot_card_age);
             tv_online = (TextView) view.findViewById(R.id.hot_card_online_state);
+            tv_video_price = (TextView) view.findViewById(R.id.hot_card_to_video_price);
+            tv_voice_price = (TextView) view.findViewById(R.id.hot_card_to_voice_price);
             iv_auth_user = (ImageView) view.findViewById(R.id.hot_card_auth_user);
             iv_auth_phone = (ImageView) view.findViewById(R.id.hot_card_auth_phone);
             iv_auth_video = (ImageView) view.findViewById(R.id.hot_card_auth_video);
 
             lin_to_video = (LinearLayout) view.findViewById(R.id.hot_card_to_video);
+
             lin_to_voice = (LinearLayout) view.findViewById(R.id.hot_card_to_voice);
             lin_to_message = (LinearLayout) view.findViewById(R.id.hot_card_to_message);
             lin_to_gift = (LinearLayout) view.findViewById(R.id.hot_card_to_gift);

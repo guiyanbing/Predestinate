@@ -151,7 +151,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_last_status.setVisibility(View.VISIBLE);
 
         BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msgData.getType());
-        if (messageType != BaseMessage.BaseMessageType.common) {
+        if (messageType != BaseMessage.BaseMessageType.common && messageType != BaseMessage.BaseMessageType.gift) {
             item_last_status.setVisibility(View.GONE);
             return;
         }
