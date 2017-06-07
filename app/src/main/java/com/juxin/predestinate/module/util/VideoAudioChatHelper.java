@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.JniUtil;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
 import static com.juxin.predestinate.module.logic.application.App.context;
 
 /**
@@ -245,6 +247,8 @@ public class VideoAudioChatHelper {
         bundle.putLong("vc_check_yellow", ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellow() * 1000);
         bundle.putLong("vc_check_yellow_first", ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellowFirst() * 1000);
         bundle.putLong("vc_dst_uid", dstUid);
+        bundle.putString("vc_self_info", PSP.getInstance().getString(INFO_SAVE_KEY, ""));
+        bundle.putString("vc_gift_list",ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
         return bundle;
     }
 

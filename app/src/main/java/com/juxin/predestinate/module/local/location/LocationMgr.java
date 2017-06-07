@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.location;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.TextUtils;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -70,7 +69,6 @@ public class LocationMgr implements Handler.Callback {
         if (pointD == null) {
             readCfg();
         }
-
         return useFixPlace ? fixPlace : pointD;
     }
 
@@ -79,6 +77,14 @@ public class LocationMgr implements Handler.Callback {
      */
     public boolean isUseFixPlace() {
         return useFixPlace;
+    }
+
+    /**
+     * 是否固定位置信息
+     */
+    public void setUseFixPlace(boolean useFixPlace) {
+        this.useFixPlace = useFixPlace;
+        writeCfg();
     }
 
     /**
@@ -91,27 +97,8 @@ public class LocationMgr implements Handler.Callback {
         writeCfg();
     }
 
-    /**
-     * 是否固定位置信息
-     */
-    public void setUseFixPlace(boolean useFixPlace) {
-        this.useFixPlace = useFixPlace;
-        writeCfg();
-    }
+    // ================================= SDK初始化 ====================================
 
-    /**
-     * 是否为直辖市
-     */
-    public boolean isMunicipality(String province) {
-        if (TextUtils.isEmpty(province)) {
-            return false;
-        }
-        return province.equals("北京市") || province.equals("天津市") || province.equals("上海市") || province.equals("重庆市")
-                || province.equals("香港") || province.equals("澳门") || province.equals("台湾");
-    }
-
-
-    // ================================= SDK初始化 =================================================
     private static LocationClient locationClient = null;
     private static PointD pointD = null;
     private static BDListener listener;
@@ -304,8 +291,8 @@ public class LocationMgr implements Handler.Callback {
 
         pointD = new PointD();
         try {
-            pointD.longitude = Double.valueOf(PSP.getInstance().getString("LM_longitude", "1000"));
-            pointD.latitude = Double.valueOf(PSP.getInstance().getString("LM_latitude", "1000"));
+            pointD.longitude = Double.valueOf(PSP.getInstance().getString("LM_longitude", "0"));
+            pointD.latitude = Double.valueOf(PSP.getInstance().getString("LM_latitude", "0"));
             pointD.countryCode = PSP.getInstance().getString("LM_countryCode", "");
             pointD.province = PSP.getInstance().getString("LM_province", "");
             pointD.proCode = PSP.getInstance().getString("LM_proCode", "");
@@ -317,8 +304,8 @@ public class LocationMgr implements Handler.Callback {
             pointD.streetNum = PSP.getInstance().getString("LM_streetNum", "");
             pointD.buildID = PSP.getInstance().getString("LM_buildID", "");
             useFixPlace = PSP.getInstance().getBoolean("LM_Fix_use", false);
-            fixPlace.longitude = Double.valueOf(PSP.getInstance().getString("LM_Fix_latitude", "1000"));
-            fixPlace.latitude = Double.valueOf(PSP.getInstance().getString("LM_Fix_longitude", "1000"));
+            fixPlace.longitude = Double.valueOf(PSP.getInstance().getString("LM_Fix_latitude", "0"));
+            fixPlace.latitude = Double.valueOf(PSP.getInstance().getString("LM_Fix_longitude", "0"));
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }

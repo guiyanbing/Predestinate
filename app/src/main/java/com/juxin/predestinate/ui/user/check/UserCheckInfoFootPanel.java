@@ -105,7 +105,6 @@ public class UserCheckInfoFootPanel extends BasePanel {
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             boolean isAuthVideo = ModuleMgr.getCommonMgr().getVideoVerify().isVerifyVideo();
             iv_auth_video.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
-            chatLayout.setVisibility(isAuthVideo ? View.VISIBLE : View.GONE);
         }
 
         iv_auth_photo.setVisibility(userDetail.isVerifyIdcard() ? View.VISIBLE : View.GONE);

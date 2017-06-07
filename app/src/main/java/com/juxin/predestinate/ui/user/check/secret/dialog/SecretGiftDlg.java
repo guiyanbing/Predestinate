@@ -86,7 +86,7 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
      */
     private void unlock() {
         LoadingDialog.show(this, getString(R.string.user_secret_media_unlock));
-        ModuleMgr.getCenterMgr().reqUnlockVideo(userDetail.getUid(), userVideo.getId(), new RequestComplete() {
+        ModuleMgr.getCenterMgr().reqUnlockVideo(userVideo.getUid(), userVideo.getId(), new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 LoadingDialog.closeLoadingDialog();

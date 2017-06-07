@@ -37,6 +37,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:persistent="true"
+        android:taskAffinity="com.juxin.predestinate.assist"
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.SplashActivity"
@@ -363,7 +365,7 @@
         <!-- 百度定位 注意后续对 AK 的替换 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="czltCjkpCiT1sawjuxGzAeTMRWMZATPP" />
+            android:value="EK7Vx3ZsGZvBcGj6sSUUGgaU" />
 
         <service
             android:name="com.baidu.location.f"

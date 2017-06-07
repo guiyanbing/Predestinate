@@ -18,6 +18,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -25,6 +26,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -95,9 +97,9 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     // 底部功能按钮展示逻辑
     private void initBottom() {
+        ModuleMgr.getCenterMgr().reqVideoChatConfig(userDetail.getUid(), this); // 请求音视频开关配置
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
-        ModuleMgr.getCenterMgr().reqVideoChatConfig(userDetail.getUid(), this); // 请求音视频开关配置
         videoBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_video);
         voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
         sayHibottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_hi);
@@ -128,11 +130,15 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
+                    UserDetail info = ModuleMgr.getCenterMgr().getMyInfo();
+                    if (info.isMan() && !info.isVip()) {
+                        showVipTips();
+                        return;
+                    }
                     UIShow.showPrivateChatAct(UserCheckInfoAct.this, userDetail.getUid(), null);
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    if (userDetail.isSayHello()) return;
                     handleSayHi();
                     break;
 
@@ -151,6 +157,23 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         }
     };
 
+    /**
+     * 开通Vip提示
+     */
+    private void showVipTips() {
+        PickerDialogUtil.showSimpleTipDialogExt(this, new SimpleTipDialog.ConfirmListener() {
+            @Override
+            public void onCancel() {
+                handleSayHi();
+            }
+
+            @Override
+            public void onSubmit() {
+                UIShow.showOpenVipActivity(UserCheckInfoAct.this);
+            }
+        }, getString(R.string.goods_vip_check_other_chat), "", getString(R.string.goods_vip_check_other_chat_hi), "去开通", true, R.color.text_zhuyao_black);
+    }
+
     private void initSayHi() {
         tv_sayhi.setText(getString(R.string.user_info_has_hi));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -162,6 +185,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
      * 底部已打招呼处理
      */
     private void handleSayHi() {
+        if (userDetail.isSayHello()) {
+            PToast.showShort(getString(R.string.user_info_has_hi));
+            return;
+        }
+
         ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userDetail.getUid()),
                 getString(R.string.say_hello_txt),
                 userDetail.getKf_id(),
@@ -238,6 +266,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             if (response.isOk()) {
                 VideoConfig config = (VideoConfig) response.getBaseData();
                 footPanel.refreshChatPrice(config);
+                if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
                 if (config.getVideoChat() == 1) {  // 展示发视频
                     videoBottom.setVisibility(View.VISIBLE);
                 }
