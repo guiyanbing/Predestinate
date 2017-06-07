@@ -124,7 +124,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         TimerUtil.beginTime(new TimerUtil.CallBack() {
             @Override
             public void call() {
-                PLogger.printObject("MailFragment=111111111");
                 detectInfo(listMail);
             }
         }, 800);
@@ -197,7 +196,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         ModuleMgr.getChatListMgr().updateFollow();
                         break;
                     case MyFriend_Msg:
-
                         break;
                     case Greet_Msg:
                         ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
@@ -268,12 +266,10 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                PLogger.printObject("MailFragment=222222" + key);
                 mailFragmentAdapter.updateAllData();
                 TimerUtil.beginTime(new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        PLogger.printObject("MailFragment=111111111");
                         detectInfo(listMail);
                     }
                 }, 800);
@@ -370,7 +366,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 TimerUtil.beginTime(new TimerUtil.CallBack() {
                     @Override
                     public void call() {
-                        PLogger.printObject("MailFragment=33333333");
                         detectInfo(view);
                     }
                 }, 200);
