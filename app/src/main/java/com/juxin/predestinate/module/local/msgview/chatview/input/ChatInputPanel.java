@@ -441,8 +441,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), true);
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
             }
         });
     }
