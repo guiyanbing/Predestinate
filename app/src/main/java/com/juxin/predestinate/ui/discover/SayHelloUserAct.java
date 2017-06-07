@@ -18,6 +18,8 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -34,6 +36,9 @@ import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 import static com.juxin.predestinate.R.id.say_hello_users_all_ignore;
 import static com.juxin.predestinate.module.logic.application.App.getActivity;
@@ -344,8 +349,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
 
 
     /**
@@ -358,7 +362,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         if (!timeUtil.check(10 * 1000)) {
             return;
         }
-        List<Long> stringList = new ArrayList<>();
+        final List<Long> stringList = new ArrayList<>();
 
         int firs = view.getFirstVisiblePosition();
         int last = view.getLastVisiblePosition();
@@ -375,7 +379,23 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         }
 
         if (stringList.size() > 0) {
-            ModuleMgr.getChatMgr().getProFile(stringList);
+            Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
+            observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+            .subscribe(new Action1<List<UserInfoLightweight>>() {
+                @Override
+                public void call(List<UserInfoLightweight> lightweights) {
+                    if(lightweights != null && lightweights.size() > 0){
+                        ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
+                    }
+                }
+            });
+
+            TimerUtil.beginTime(new TimerUtil.CallBack() {
+                @Override
+                public void call() {
+                    ModuleMgr.getChatMgr().getProFile(stringList);
+                }
+            }, 800);
         }
     }
 }

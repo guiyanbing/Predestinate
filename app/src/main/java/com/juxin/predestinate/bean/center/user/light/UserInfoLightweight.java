@@ -2,11 +2,9 @@ package com.juxin.predestinate.bean.center.user.light;
 
 import android.os.Parcel;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
-
 import org.json.JSONObject;
 
 /**

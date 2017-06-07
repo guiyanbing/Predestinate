@@ -37,14 +37,18 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -914,18 +918,8 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void getUserInfoList(List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
-        PLogger.printObject("111getUserInfoList=111=" + uids.size());
-        Observable<List<UserInfoLightweight>> observable = dbCenter.getCacheCenter().queryProfile(uids);
-        observable.subscribeOn(Schedulers.io());
-        observable.subscribe(new Action1<List<UserInfoLightweight>>() {
-            @Override
-            public void call(List<UserInfoLightweight> lightweights) {
-                PLogger.printObject("111getUserInfoList=222=" + lightweights.size());
-                listComplete.onReqInfosComplete(lightweights);
-            }
-        }).unsubscribe();
-
+    public Observable<List<UserInfoLightweight>> getUserInfoList(List<Long> uids) {
+        return dbCenter.getCacheCenter().queryProfile(uids);
     }
 
     public void getProFile(List<Long> userIds) {

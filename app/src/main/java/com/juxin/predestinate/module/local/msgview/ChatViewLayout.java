@@ -243,7 +243,6 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
                     removeFirstView();
                     break;
                 case 1:
-                    PLogger.d("");
                     if (chatFixedTip.getChildCount() != 0) {
                         chatFixedTip.removeViewAt(0);
                     }

@@ -18,8 +18,10 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -34,6 +36,9 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * 消息
@@ -330,25 +335,23 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         }
 
         if (stringList.size() > 0) {
-            ModuleMgr.getChatMgr().getUserInfoList(stringList, new ChatMsgInterface.InfoListComplete() {
+            Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
+            observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+            .subscribe(new Action1<List<UserInfoLightweight>>() {
                 @Override
-                public void onReqInfosComplete(final List<UserInfoLightweight> infoLightweights) {
-                    MsgMgr.getInstance().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            boolean ret = (infoLightweights != null && infoLightweights.size() > 0);
-                            if(ret) ModuleMgr.getChatMgr().updateUserInfoList(infoLightweights);
-
-                            TimerUtil.beginTime(new TimerUtil.CallBack() {
-                                @Override
-                                public void call() {
-                                    ModuleMgr.getChatMgr().getProFile(stringList);
-                                }
-                            }, ret ? 500 : 0);
-                        }
-                    });
+                public void call(List<UserInfoLightweight> lightweights) {
+                    if(lightweights != null && lightweights.size() > 0){
+                        ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
+                    }
                 }
             });
+
+            TimerUtil.beginTime(new TimerUtil.CallBack() {
+                @Override
+                public void call() {
+                    ModuleMgr.getChatMgr().getProFile(stringList);
+                }
+            }, 800);
         }
     }
 

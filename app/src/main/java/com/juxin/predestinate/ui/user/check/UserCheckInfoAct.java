@@ -35,6 +35,8 @@ import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
+import static android.os.Build.VERSION_CODES.*;
+
 /**
  * 查看用户资料详情
  * Created by Su on 2016/5/30.
@@ -176,7 +178,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     private void initSayHi() {
         tv_sayhi.setText(getString(R.string.user_info_has_hi));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= HONEYCOMB) {
             sayHibottom.setAlpha(0.4f);
         }
     }

@@ -415,6 +415,11 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/No_Background" />
+        <receiver android:name=".module.logic.notify.PluginReceiver">
+            <intent-filter>
+                <action android:name="com.juxin.action.plugin"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
