@@ -51,6 +51,15 @@ public class UserFragment extends BaseFragment implements PObserver {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (headPanel != null && footPanel != null){
+            headPanel.refreshView();
+            footPanel.refreshView();
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         headPanel.onActivityResult(requestCode, resultCode);

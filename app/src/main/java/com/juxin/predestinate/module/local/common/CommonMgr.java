@@ -213,21 +213,13 @@ public class CommonMgr implements ModuleBase {
     /**
      * 获取客服信息
      */
-    public void getCustomerserviceContact(final FragmentActivity context, final RequestComplete complete) {
-        LoadingDialog.show(context);
+    public void getCustomerserviceContact() {
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.getserviceqq, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     contactBean = (ContactBean) response.getBaseData();
                 }
-                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        complete.onRequestComplete(null);
-                    }
-                });
-
             }
         });
 

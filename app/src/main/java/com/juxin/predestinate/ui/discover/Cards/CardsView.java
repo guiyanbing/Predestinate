@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.Scroller;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +34,14 @@ public class CardsView extends LinearLayout {
     private int initLeft = 0, initTop = 0; // 正常状态下 topView的left和top
     private int mWidth = 0; // swipeCardsView的宽度
     private int mHeight = 0; // swipeCardsView的高度
+    private int childHeight = 0;
     private int mCardWidth = 0; // 每一个子View对应的宽度
 
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 400; // 水平距离+垂直距离
 
-    private int yOffsetStep = 0; // view叠加垂直偏移量的步长
-    private float scaleOffsetStep = 0f; // view叠加缩放的步长
-    private int alphaOffsetStep = 0; //view叠加透明度的步长
+    private int yOffsetStep = 1; //
+    private float scaleOffsetStep = 0.08f; // view叠加缩放的步长
+    private int alphaOffsetStep = 10; //view叠加透明度的步长
 
     private static final int X_VEL_THRESHOLD = 900;
     private static final int X_DISTANCE_THRESHOLD = 300;
@@ -84,7 +84,6 @@ public class CardsView extends LinearLayout {
         super(context, attrs, defStyle);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipCardsView);
         yOffsetStep = (int) a.getDimension(R.styleable.SwipCardsView_yOffsetStep, yOffsetStep);
-        yOffsetStep = UIUtil.dp2px(yOffsetStep);
         alphaOffsetStep = a.getInt(R.styleable.SwipCardsView_alphaOffsetStep, alphaOffsetStep);
         scaleOffsetStep = a.getFloat(R.styleable.SwipCardsView_scaleOffsetStep, scaleOffsetStep);
 
@@ -530,6 +529,7 @@ public class CardsView extends LinearLayout {
         LayoutParams lp = (LayoutParams) child.getLayoutParams();
         int width = child.getMeasuredWidth();
         int height = child.getMeasuredHeight();
+        this.childHeight = height/2;
 
         int gravity = lp.gravity;
         if (gravity == -1) {
@@ -570,11 +570,11 @@ public class CardsView extends LinearLayout {
         }
         child.layout(childLeft, childTop, childLeft + width, childTop + height);
 
-        int offset = yOffsetStep * index;
+        int offset = (int)(yOffsetStep * index + childHeight*scaleOffsetStep*index);
         float scale = 1 - scaleOffsetStep * index;
         float alpha = 1.0f * (100 - alphaOffsetStep * index) / 100;
         if (index == viewList.size() - 1 && viewList.size() > 1) {
-            offset = yOffsetStep * (index - 1);
+            offset = (int)(yOffsetStep * (index - 1) + childHeight*scaleOffsetStep*(index-1));
             scale = 1 - scaleOffsetStep * (index - 1);
             alpha = 1.0f * (100 - alphaOffsetStep * (index - 1)) / 100;
         }
@@ -704,11 +704,11 @@ public class CardsView extends LinearLayout {
     private void ajustLinkageViewItem(View changedView, float rate, int index) {
         int changeIndex = viewList.indexOf(changedView);
 
-        int initPosY = yOffsetStep * index;
+        int initPosY = (int)(yOffsetStep * index + childHeight*scaleOffsetStep*index) ;
         float initScale = 1 - scaleOffsetStep * index;
         float initAlpha = 1.0f * (100 - alphaOffsetStep * index) / 100;
 
-        int nextPosY = yOffsetStep * (index - 1);
+        int nextPosY = (int)(yOffsetStep * (index - 1) + childHeight*scaleOffsetStep*(index-1));
         float nextScale = 1 - scaleOffsetStep * (index - 1);
         float nextAlpha = 1.0f * (100 - alphaOffsetStep * (index - 1)) / 100;
 
@@ -717,6 +717,7 @@ public class CardsView extends LinearLayout {
         float alpha = initAlpha + (nextAlpha - initAlpha) * rate;
 
         View ajustView = viewList.get(changeIndex + index);
+
         ajustView.offsetTopAndBottom(offset - ajustView.getTop() + initTop);
         ajustView.setScaleX(scale);
         ajustView.setScaleY(scale);
@@ -739,21 +740,24 @@ public class CardsView extends LinearLayout {
             // 由于dx作为分母，此处保护处理
             dx = 1;
         }
-        if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
-            finalX = mWidth;
-            finalY = dy * (mCardWidth + initLeft) / dx + initTop;
-            flyType = SlideType.RIGHT;
-        } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
-            finalX = -mCardWidth;
-            finalY = dy * (mCardWidth + initLeft) / (-dx) + dy + initTop;
-            flyType = SlideType.LEFT;
+
+        if (mAdapter != null && mShowingIndex != (mAdapter.getCount()-1)){
+            if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
+                finalX = mWidth;
+                finalY = dy * (mCardWidth + initLeft) / dx + initTop;
+                flyType = SlideType.RIGHT;
+            } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
+                finalX = -mCardWidth;
+                finalY = dy * (mCardWidth + initLeft) / (-dx) + dy + initTop;
+                flyType = SlideType.LEFT;
+            }
+            if (finalY > mHeight) {
+                finalY = mHeight;
+            } else if (finalY < -mHeight / 2) {
+                finalY = -mHeight / 2;
+            }
         }
 
-        if (finalY > mHeight) {
-            finalY = mHeight;
-        } else if (finalY < -mHeight / 2) {
-            finalY = -mHeight / 2;
-        }
         startScrollTopView(finalX, finalY, SCROLL_DURATION, flyType);
     }
 
