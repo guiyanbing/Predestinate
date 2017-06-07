@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * fletter 处理
@@ -295,6 +294,12 @@ public class DBCenterFLetter {
         values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? AND "
                 + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
+    }
+
+    public long updateStatusFail() {
+        ContentValues values = new ContentValues();
+        values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
     }
 
     /**

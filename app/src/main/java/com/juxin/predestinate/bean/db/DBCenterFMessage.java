@@ -223,6 +223,11 @@ public class DBCenterFMessage {
         }
     }
 
+    public long updateStatusFail() {
+        ContentValues values = new ContentValues();
+        values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
+        return mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
+    }
 
     public long updateToRead(long userID) {
         ContentValues values = new ContentValues();
