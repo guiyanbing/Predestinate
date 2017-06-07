@@ -139,7 +139,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    if (userDetail.isSayHello()) return;
                     handleSayHi();
                     break;
 

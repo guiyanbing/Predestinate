@@ -25,9 +25,9 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
  */
 public class MyURLSpan extends ClickableSpan {
 
-    private final static int URL_TYPE_UPLOAD_HEADPIC = 1;
-    private final static int URL_TYPE_COMPLETE_INFO = 2;
-    private final static int URL_TYPE_BIND_PHONE = 3;
+    private final static int URL_TYPE_UPLOAD_HEADPIC = 1;// 上传头像
+    private final static int URL_TYPE_COMPLETE_INFO = 2;// 完善资料
+    private final static int URL_TYPE_BIND_PHONE = 3;// 绑定手机
     private final static int URL_TYPE_CONNECT_QQ_SERVICE = 4;
     private final Context mContext;
 
