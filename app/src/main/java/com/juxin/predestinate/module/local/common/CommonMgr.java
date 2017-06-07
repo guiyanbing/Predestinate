@@ -32,7 +32,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
@@ -75,6 +74,16 @@ public class CommonMgr implements ModuleBase {
 
     public void setContactBean(ContactBean contactBean) {
         this.contactBean = contactBean;
+    }
+
+    /**
+     * 拼接用户uid参与的key值
+     *
+     * @param val 定义的字段值
+     * @return 获取用户uid参与的key值
+     */
+    public String getPrivateKey(String val) {
+        return (TextUtils.isEmpty(val) ? "uid" : val) + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
     /**

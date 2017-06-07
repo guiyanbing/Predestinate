@@ -86,6 +86,12 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 jo.put("gift_id",giftJo.getInt("gift_id"));
             }
 
+            if(mtp == 26){
+                jo = new JSONObject();
+                jo.put("mt",6);
+                jo.put("ctype",object.getInt("ctype"));// 1关闭视频 2打开视频
+            }
+
             if(mtp == 27){
                 jo = new JSONObject();
                 jo.put("mt",5);

@@ -84,6 +84,21 @@ public class VideoAudioChatHelper {
 
     /**
      * 邀请对方音频或视频聊天
+     * @param context
+     * @param dstUid
+     * @param type
+     * @param flag  判断是否显示进场dlg
+     */
+    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag) {
+        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), 0) == 0) {
+            UIShow.showLookAtHerDlg(context, dstUid);
+            return;
+        }
+        inviteVAChat(context, dstUid, type);
+    }
+
+    /**
+     * 邀请对方音频或视频聊天
      *
      * @param context Activity
      * @param dstUid  对方UID
@@ -91,11 +106,6 @@ public class VideoAudioChatHelper {
      */
     public void inviteVAChat(final Activity context, long dstUid, int type) {
         isSend = true;
-
-        if(PSP.getInstance().getInt(Constant.APPEAR_TYPE, 0) == 0) {
-            UIShow.showLookAtHerDlg(context, dstUid);
-            return;
-        }
 
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(context);

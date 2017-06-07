@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.InputUtils;
@@ -440,7 +441,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
             }
         });
     }
