@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -37,7 +38,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 senderID = object.optLong("fid");
             }
             int type = object.optInt("mtp");
-
+            notifyPlugin(object);
             BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(type);
             BaseMessage message;
             //基本消息
@@ -63,6 +64,42 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
         } catch (Exception e) {
             PLogger.printThrowable(e);
+        }
+    }
+
+    private void notifyPlugin(JSONObject object){
+        try {
+            int mtp = object.getInt("mtp");
+            String mct = object.optString("mct");
+            long fid = object.optLong("fid");
+            JSONObject jo = null;
+            if(mtp == 2 && !TextUtils.isEmpty(mct)){
+                jo = new JSONObject();
+                jo.put("mt",2);
+                jo.put("text",mct);
+            }
+
+            if(mtp == 10){
+                jo = new JSONObject();
+                jo.put("mt",4);
+                JSONObject giftJo = object.getJSONObject("gift");
+                jo.put("gift_id",giftJo.getInt("gift_id"));
+            }
+
+            if(mtp == 27){
+                jo = new JSONObject();
+                jo.put("mt",5);
+                JSONObject dataJo = object.getJSONObject("g_data");
+                jo.put("wave_index",dataJo.getInt("wave_index"));
+            }
+            if(jo != null) {
+                jo.put("fid",fid);
+                Intent intent = new Intent("com.juxin.action.plugin");
+                intent.putExtra("extra_json", jo.toString());
+                App.context.sendBroadcast(intent);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
