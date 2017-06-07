@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -68,6 +69,16 @@ public class ChatMgr implements ModuleBase {
     public void release() {
         messageMgr.release();
         specialMgr.release();
+
+        updateStatusFail();
+    }
+
+    /**
+     * 退出程序的时候把发送中都更改为发送失败
+     */
+    public void updateStatusFail(){
+        dbCenter.getCenterFLetter().updateStatusFail();
+        dbCenter.getCenterFMessage().updateStatusFail();
     }
 
     public void inject() {
@@ -111,7 +122,7 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
-    public void updateOtherRead(String channelID, String whisperID, long sendID,BaseMessage message) {
+    public void updateOtherRead(String channelID, String whisperID, long sendID, BaseMessage message) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
         ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
         if (!whisperId.equalsIgnoreCase(whisperID)) {
@@ -272,22 +283,22 @@ public class ChatMgr implements ModuleBase {
 
                     break;
                 }
-                case gift:{
+                case gift: {
                     final GiftMessage giftMessage = (GiftMessage) message;
 
                     ModuleMgr.getCommonMgr().sendGift(giftMessage.getWhisperID(), String.valueOf(giftMessage.getGiftID()),
                             giftMessage.getGiftCount(), giftMessage.getgType(), new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            SendGiftResultInfo info = new SendGiftResultInfo();
-                            info.parseJson(response.getResponseString());
-                            if(response.isOk()) {
-                                updateOk(giftMessage, null);
-                            }else {
-                                updateFail(giftMessage, null);
-                            }
-                        }
-                    });
+                                @Override
+                                public void onRequestComplete(HttpResponse response) {
+                                    SendGiftResultInfo info = new SendGiftResultInfo();
+                                    info.parseJson(response.getResponseString());
+                                    if (response.isOk()) {
+                                        updateOk(giftMessage, null);
+                                    } else {
+                                        updateFail(giftMessage, null);
+                                    }
+                                }
+                            });
                     break;
                 }
 
@@ -422,18 +433,14 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
-
-    }
-
     /**
      * 发送礼物
-     * 发送中
-     * @param channelID
-     * @param whisperID
-     * @param giftID
-     * @param giftCount
-     * @param giftLogID
+     *
+     * @param channelID 目前没有用
+     * @param whisperID 对方ID
+     * @param giftID    礼物ID
+     * @param giftCount 礼物个数
+     * @param gType     来源
      */
     public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, int gType) {
         final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount);
@@ -449,9 +456,9 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 SendGiftResultInfo info = new SendGiftResultInfo();
                 info.parseJson(response.getResponseString());
-                if(response.isOk()) {
+                if (response.isOk()) {
                     updateOk(giftMessage, null);
-                }else {
+                } else {
                     updateFail(giftMessage, null);
                 }
             }
@@ -554,7 +561,7 @@ public class ChatMgr implements ModuleBase {
      */
     private void sendChatCanError() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        if(userDetail.isMan() && userDetail.getYcoin() < 79 ){
+        if (userDetail.isMan() && userDetail.getYcoin() < 79) {
             ModuleMgr.getChatListMgr().setTodayChatShow();
             Msg msg = new Msg();
             msg.setData(false);
@@ -835,8 +842,9 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if(!message.isSender() && message.getMsgID() > 0 && !message.isRu() && !MailSpecialID.getMailSpecialID(message.getLWhisperID())){
-                    PLogger.printObject("chatMsg =" + message.toString());
+                if (!message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
+                        !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
+                        (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
@@ -905,6 +913,18 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
+    public void getUserInfoList(final List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
+        Observable<List<UserInfoLightweight>> observable = dbCenter.getCacheCenter().queryProfile(uids);
+        observable.subscribe(new Action1<List<UserInfoLightweight>>() {
+            @Override
+            public void call(List<UserInfoLightweight> lightweights) {
+                PLogger.printObject("lightweight==222==" + lightweights.size());
+                listComplete.onReqInfosComplete(lightweights);
+            }
+        }).unsubscribe();
+
+    }
+
     public void getProFile(List<Long> userIds) {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
             @Override
@@ -918,11 +938,15 @@ public class ChatMgr implements ModuleBase {
                 if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
                     ArrayList<UserInfoLightweight> infoLightweights = infoLightweightList.getUserInfos();
 
-                    dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
+                    updateUserInfoList(infoLightweights);
                     dbCenter.getCacheCenter().storageProfileData(infoLightweights);
                 }
             }
         });
+    }
+
+    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights){
+        dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
     }
 
     public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {

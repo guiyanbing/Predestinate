@@ -25,6 +25,7 @@ import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
+import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
@@ -90,6 +91,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
+    public boolean isContain(long userID) {
+        synchronized (msgList) {
+            for(BaseMessage temp : msgList){
+                if(userID == temp.getLWhisperID()){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     /**
      * 陌生人列表
      *
@@ -118,7 +130,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
-                PLogger.printObject("unreadNum="+ tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
@@ -296,18 +307,23 @@ public class ChatListMgr implements ModuleBase, PObserver {
             initAppComponent();
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
-            PLogger.d("uid=======" + App.uid);
             getWhisperList();
             ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
         }
     }
 
     private void logout() {
-        mAppComponent = null;
-        msgList.clear();
-        greetList.clear();
-        greetNum = 0;
-        unreadNum = 0;
+        ModuleMgr.getChatMgr().updateStatusFail();
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                mAppComponent = null;
+                msgList.clear();
+                greetList.clear();
+                greetNum = 0;
+                unreadNum = 0;
+            }
+        },100);
     }
 
     /**
