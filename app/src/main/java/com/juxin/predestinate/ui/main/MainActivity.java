@@ -87,6 +87,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
+        ModuleMgr.getCommonMgr().getCustomerserviceContact();//获取客服联系信息
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
 
         //初始化显示打招呼送礼提示，每次进入应用的时候重置
