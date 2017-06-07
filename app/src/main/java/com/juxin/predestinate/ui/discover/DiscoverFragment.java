@@ -244,7 +244,11 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     }
                     adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
-                    setGroupSayhiBtn(true);
+                    if (ModuleMgr.getCenterMgr().isRobot(infos.get(0).getKf_id())) {
+                        setGroupSayhiBtn(false);
+                    } else {
+                        setGroupSayhiBtn(true);
+                    }
                 } else {
                     customStatusListView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
@@ -268,14 +272,22 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     }
                     adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
-                    setGroupSayhiBtn(true);
+                    if (ModuleMgr.getCenterMgr().isRobot(infos.get(0).getKf_id())) {
+                        setGroupSayhiBtn(false);
+                    } else {
+                        setGroupSayhiBtn(true);
+                    }
                 }
             }
         } else {
             if (infos.size() != 0) {
                 adapter.notifyDataSetChanged();
                 customStatusListView.showExListView();
-                setGroupSayhiBtn(true);
+                if (ModuleMgr.getCenterMgr().isRobot(infos.get(0).getKf_id())) {
+                    setGroupSayhiBtn(false);
+                } else {
+                    setGroupSayhiBtn(true);
+                }
             } else {
                 customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                     @Override

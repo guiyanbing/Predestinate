@@ -2,15 +2,23 @@ package com.juxin.predestinate.ui.discover.Cards;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
@@ -48,7 +56,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
     }
 
     @Override
-    public void onBindData(int position, View cardview) {
+    public void onBindData(final int position, View cardview) {
         if (datas == null || datas.size() == 0) {
             return;
         }
@@ -61,6 +69,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         }
 
         final UserInfoHot infoHot = datas.get(position);
+        PLogger.d("onBindData=====> infoHot == " + infoHot.toString());
         if (cardview != null) {
             vh = new ViewHoder(cardview);
             cardview.setTag(vh);
@@ -84,8 +93,9 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.iv_auth_phone.setVisibility(infoHot.isMobileValidation() ? View.VISIBLE : View.GONE);
         vh.iv_auth_video.setVisibility(infoHot.isVideoValidation() ? View.VISIBLE : View.GONE);
         //发视频
-        vh.lin_to_video.setEnabled(infoHot.isVideo_available());
-        vh.tv_video_price.setText(infoHot.getVideoPrice()+"钻石/分");
+        vh.lin_to_video.setBackgroundResource(!infoHot.isVideo_available() ?
+                R.drawable.f1_card_infor_item_bg : R.drawable.f1_card_infor_item_unbg);
+        vh.tv_video_price.setText(infoHot.getVideoPrice() + "钻石/分");
         vh.lin_to_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,8 +107,9 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             }
         });
         //发语音
-        vh.lin_to_voice.setEnabled(infoHot.isAudio_available());
-        vh.tv_voice_price.setText(infoHot.getAudioPrice()+"钻石/分");
+        vh.lin_to_voice.setBackgroundResource(!infoHot.isAudio_available() ?
+                R.drawable.f1_card_infor_item_bg : R.drawable.f1_card_infor_item_unbg);
+        vh.tv_voice_price.setText(infoHot.getAudioPrice() + "钻石/分");
         vh.lin_to_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +124,21 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.lin_to_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showPrivateChatAct(context, infoHot.getUid(), null);
+                if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                    UIShow.showPrivateChatAct(context, infoHot.getUid(), null);
+                } else {
+                    PickerDialogUtil.showSimpleTipDialog((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
+                        @Override
+                        public void onCancel() {
+                            doSayhi(infoHot, position);
+                        }
+
+                        @Override
+                        public void onSubmit() {
+                            UIShow.showOpenVipActivity(context);
+                        }
+                    }, context.getString(R.string.hot_card_price_vip), "", context.getString(R.string.hot_card_price_cancle), context.getString(R.string.hot_card_price_sure), true);
+                }
             }
         });
         //送礼物
@@ -170,6 +195,28 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             lin_to_voice = (LinearLayout) view.findViewById(R.id.hot_card_to_voice);
             lin_to_message = (LinearLayout) view.findViewById(R.id.hot_card_to_message);
             lin_to_gift = (LinearLayout) view.findViewById(R.id.hot_card_to_gift);
+        }
+    }
+
+    private void doSayhi(UserInfoHot infoHot, final int position) {
+        if (ModuleMgr.getCenterMgr().isCanSayHi(context) && !infoHot.is_sayHello()) {
+            ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(infoHot.getUid()), context.getString(R.string.say_hello_txt),
+                    infoHot.getKf_id(),
+                    ModuleMgr.getCenterMgr().isRobot(infoHot.getKf_id()) ?
+                            Constant.SAY_HELLO_TYPE_ONLY : Constant.SAY_HELLO_TYPE_SIMPLE, new IMProxy.SendCallBack() {
+                        @Override
+                        public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
+                            PToast.showShort(context.getString(R.string.user_info_hi_suc));
+                            datas.get(position).setIs_sayHello(true);
+                        }
+
+                        @Override
+                        public void onSendFailed(NetData data) {
+                            PToast.showShort(context.getString(R.string.user_info_hi_fail));
+                        }
+                    });
+        } else  if (ModuleMgr.getCenterMgr().isCanSayHi(context) && infoHot.is_sayHello()){
+            PToast.showShort(context.getString(R.string.user_info_has_hi));
         }
     }
 
