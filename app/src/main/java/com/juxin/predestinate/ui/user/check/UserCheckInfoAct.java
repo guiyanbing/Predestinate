@@ -186,6 +186,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
      * 底部已打招呼处理
      */
     private void handleSayHi() {
+        if (userDetail.isSayHello()) {
+            PToast.showShort(getString(R.string.user_info_has_hi));
+            return;
+        }
+
         ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(userDetail.getUid()),
                 getString(R.string.say_hello_txt),
                 userDetail.getKf_id(),
