@@ -13,9 +13,9 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:cacheColorHint="@color/transparent"
-        android:scrollbars="none"
         android:divider="@null"
-        android:dividerHeight="0dip" />
+        android:dividerHeight="0dip"
+        android:scrollbars="none" />
 
     <LinearLayout
         android:id="@+id/mail_bottom"
@@ -25,7 +25,7 @@
         android:orientation="horizontal"
         android:paddingBottom="10dip"
         android:paddingTop="10dip"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <Button
             android:id="@+id/mail_delete"

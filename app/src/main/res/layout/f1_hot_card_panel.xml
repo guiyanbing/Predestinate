@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/transparent"
-    android:padding="@dimen/px100_dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/px80_dp"
+    android:paddingRight="@dimen/px80_dp"
+    android:paddingTop="@dimen/px80_dp">
 
     <com.juxin.library.view.AspectRatioLinearLayout
         android:layout_width="match_parent"
@@ -57,7 +59,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/px35_dp">
+            android:padding="@dimen/px20_dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -121,15 +123,15 @@
 
         <View
             style="@style/divider_line_horizontal"
-            android:layout_marginLeft="@dimen/px35_dp"
-            android:layout_marginRight="@dimen/px35_dp" />
+            android:layout_marginLeft="@dimen/px20_dp"
+            android:layout_marginRight="@dimen/px20_dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userinfo_item_view_line"
-            android:layout_marginBottom="@dimen/px72_dp"
-            android:layout_marginTop="@dimen/px50_dp"
+            android:layout_marginBottom="@dimen/px30_dp"
+            android:layout_marginTop="@dimen/px20_dp"
             android:orientation="horizontal">
 
             <View
@@ -139,30 +141,31 @@
 
             <LinearLayout
                 android:id="@+id/hot_card_to_video"
-                android:layout_width="@dimen/px195_dp"
-                android:layout_height="@dimen/px195_dp"
+                android:layout_width="@dimen/px150_dp"
+                android:layout_height="@dimen/px150_dp"
                 android:background="@drawable/f1_card_infor_item_selector"
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/px72_dp"
-                    android:layout_height="@dimen/px72_dp"
-                    android:layout_marginTop="@dimen/px12_dp"
+                    android:layout_width="@dimen/px45_dp"
+                    android:layout_height="@dimen/px45_dp"
+                    android:layout_marginTop="@dimen/px8_dp"
                     android:background="@drawable/f1_userinfo_video" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px10_dp"
+                    android:layout_marginTop="@dimen/px2_dp"
                     android:text="发视频"
-                    android:textSize="@dimen/px34_sp" />
+                    android:textSize="@dimen/px28_sp" />
 
                 <TextView
+                    android:id="@+id/hot_card_to_video_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px8_dp"
+                    android:layout_marginTop="@dimen/px2_dp"
                     android:text="20钻石/分"
                     android:textColor="@color/text_ciyao_gray"
                     android:textSize="@dimen/px22_sp" />
@@ -175,30 +178,31 @@
 
             <LinearLayout
                 android:id="@+id/hot_card_to_voice"
-                android:layout_width="@dimen/px195_dp"
-                android:layout_height="@dimen/px195_dp"
+                android:layout_width="@dimen/px150_dp"
+                android:layout_height="@dimen/px150_dp"
                 android:background="@drawable/f1_card_infor_item_selector"
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/px72_dp"
-                    android:layout_height="@dimen/px72_dp"
-                    android:layout_marginTop="@dimen/px12_dp"
+                    android:layout_width="@dimen/px45_dp"
+                    android:layout_height="@dimen/px45_dp"
+                    android:layout_marginTop="@dimen/px8_dp"
                     android:background="@drawable/f1_userinfo_voice" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px10_dp"
+                    android:layout_marginTop="@dimen/px2_dp"
                     android:text="发语音"
-                    android:textSize="@dimen/px34_sp" />
+                    android:textSize="@dimen/px28_sp" />
 
                 <TextView
+                    android:id="@+id/hot_card_to_voice_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px8_dp"
+                    android:layout_marginTop="@dimen/px2_dp"
                     android:text="10钻石/分"
                     android:textColor="@color/text_ciyao_gray"
                     android:textSize="@dimen/px22_sp" />
@@ -211,25 +215,25 @@
 
             <LinearLayout
                 android:id="@+id/hot_card_to_message"
-                android:layout_width="@dimen/px195_dp"
-                android:layout_height="@dimen/px195_dp"
+                android:layout_width="@dimen/px150_dp"
+                android:layout_height="@dimen/px150_dp"
                 android:background="@drawable/f1_card_infor_item_selector"
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/px72_dp"
-                    android:layout_height="@dimen/px72_dp"
+                    android:layout_width="@dimen/px45_dp"
+                    android:layout_height="@dimen/px45_dp"
                     android:layout_marginTop="@dimen/px12_dp"
                     android:background="@drawable/f1_userinfo_send" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px10_dp"
+                    android:layout_marginTop="@dimen/px12_dp"
                     android:text="发私信"
-                    android:textSize="@dimen/px34_sp" />
+                    android:textSize="@dimen/px28_sp" />
             </LinearLayout>
 
             <View
@@ -239,25 +243,25 @@
 
             <LinearLayout
                 android:id="@+id/hot_card_to_gift"
-                android:layout_width="@dimen/px195_dp"
-                android:layout_height="@dimen/px195_dp"
+                android:layout_width="@dimen/px150_dp"
+                android:layout_height="@dimen/px150_dp"
                 android:background="@drawable/f1_card_infor_item_selector"
                 android:clickable="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/px72_dp"
-                    android:layout_height="@dimen/px72_dp"
+                    android:layout_width="@dimen/px45_dp"
+                    android:layout_height="@dimen/px45_dp"
                     android:layout_marginTop="@dimen/px12_dp"
                     android:background="@drawable/f1_gift_ico" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/px10_dp"
+                    android:layout_marginTop="@dimen/px12_dp"
                     android:text="送礼物"
-                    android:textSize="@dimen/px34_sp" />
+                    android:textSize="@dimen/px28_sp" />
             </LinearLayout>
 
             <View

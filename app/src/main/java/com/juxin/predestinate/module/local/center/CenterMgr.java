@@ -94,7 +94,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      */
     public void clearUserInfo() {
         userDetail = null;
-        setMyInfo(null);
+        setMyInfo("");
         putSettingPsp(null);
     }
 
@@ -240,7 +240,7 @@ public class CenterMgr implements ModuleBase, PObserver {
      * 获取自己的个人资料
      */
     public void reqMyInfo(final RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqMyInfo, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (complete != null) {
@@ -645,12 +645,15 @@ public class CenterMgr implements ModuleBase, PObserver {
     /**
      * 获取进入H5充值页面需要传递的参数map
      *
+     * @param type 1 表示购买y币 2 表示购买vip
      * @return 拼接完成的参数map
      */
-    public HashMap<String, Object> getChargeH5Params() {
+    public HashMap<String, Object> getChargeH5Params(int type) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("ycoin_person", getActiveUserNum(CHARGE_NUM_COIN));
         params.put("vip_person", getActiveUserNum(CHARGE_NUM_VIP));
+        params.put("ycoin_surplus", getMyInfo().getYcoin());
+        params.put("type", type);
         return params;
     }
 

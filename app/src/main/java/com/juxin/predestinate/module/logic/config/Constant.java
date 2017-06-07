@@ -21,8 +21,10 @@ public class Constant {
     public static String WEIXIN_APP_ID = "wxab302910f007a8ed";//聚鑫 //"wxc56bbddc3c2e0c18";//APPID
     public final static String WEIXIN_App_Key = "xCNyzKceB8szwWmUqT4laGqK5SapQn5L";
 
-    // -------------------------K-V---------------------------
+    // -----------------------私有K-V-----------------------
     public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
+
+    // -------------------------K-V---------------------------
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
     public static final String SETTING_QUIT_MESSAGE = "setting_quit_message";   //是否进行锁屏弹窗，存储key及默认值
     public static final boolean SETTING_QUIT_MESSAGE_DEFAULT = true;
@@ -116,6 +118,6 @@ public class Constant {
     /**
      * 退出登录resultcode
      */
-    public static final int EXITLOGIN_RESULTCODE=200;
+    public static final int EXITLOGIN_RESULTCODE = 200;
 
 }

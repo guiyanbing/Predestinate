@@ -18,15 +18,18 @@ public class GiftMessage extends BaseMessage {
     private int giftCount;
     private long giftLogID;
 
+    //临时发送用的
+    private int gType;
+
     public GiftMessage() {
         super();
     }
 
-    public GiftMessage(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
+    public GiftMessage(String channelID, String whisperID, int giftID, int giftCount) {
         super(channelID, whisperID);
         this.setGiftID(giftID);
         this.setGiftCount(giftCount);
-        this.setGiftLogID(giftLogID);
+    //    this.setGiftLogID(giftLogID);
         this.setType(BaseMessageType.gift.getMsgType());
     }
 
@@ -106,6 +109,13 @@ public class GiftMessage extends BaseMessage {
         this.giftLogID = giftLogID;
     }
 
+    public int getgType() {
+        return gType;
+    }
+
+    public void setgType(int gType) {
+        this.gType = gType;
+    }
 
     @Override
     public void convertJSON(String jsonStr) {

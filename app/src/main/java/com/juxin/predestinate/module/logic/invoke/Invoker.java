@@ -14,6 +14,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserInfo;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -363,13 +364,14 @@ public class Invoker {
             Activity act = appInterface.getAct();
             Activity context = (act == null ? (Activity) App.getActivity() : act);
             switch (dataObject.optInt("code")) {
-                case 11://跳转到灵气说明页面
+                case 501://跳转到话费领取页面
+                    UIShow.showBillCollectionActivity(context);
                     break;
-                case 21://跳转到亲密度说明页面
+                case 502://跳转到Y币购买页面
+                    UIShow.showBuyCoinActivity(context);
                     break;
-                case 31://跳转到购买体力页面
-                    break;
-                case 41://跳转到掠夺记录页面
+                case 503://跳转到设置-活动相关页面
+                    UIShow.showActionActivity(context);
                     break;
                 default:
                     break;
@@ -597,6 +599,13 @@ public class Invoker {
 
             Statistics.userBehavior(dataObject.optString("event_type"),
                     dataObject.optLong("to_uid"), dataObject.optString("event_data"));
+        }
+
+        // 跳转小秘书聊天页
+        public void open_small_secretary(String data) {
+            PLogger.d("---open_small_secretary--->" + data);
+            Activity act = appInterface.getAct();
+            UIShow.showPrivateChatAct(act == null ? App.context : act, MailSpecialID.customerService.getSpecialID(), "");
         }
 
         // ------------------------------游戏用cmd---------------------------------

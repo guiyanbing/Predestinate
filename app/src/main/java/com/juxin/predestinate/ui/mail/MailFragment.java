@@ -262,7 +262,12 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Friend_Num_Notice:
+                mailFragmentAdapter.updateAllData();
+                detectInfo(listMail);
+                break;
+
             case MsgType.MT_Stranger_New:
+                PLogger.printObject("!1111111111");
                 mailFragmentAdapter.updateAllData();
                 detectInfo(listMail);
                 break;
@@ -277,9 +282,9 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case R.id.mail_delete:
                 mail_delete.setEnabled(false);
                 ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList);
-                mailDelInfoList.clear();
                 setTitleLeftContainerRemoveAll();
                 listMail.smoothCloseChooseView();
+                mailDelInfoList.clear();
                 break;
             case R.id.mail_all_ignore:
                 //忽略所有未读消息

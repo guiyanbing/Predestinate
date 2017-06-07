@@ -23,7 +23,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private BaseFragment current;
     private RadioButton discover_recommend, discover_hot;
     private DiscoverFragment discoverFragment;
-//    private HotFragment hotFragment;
+    private HotFragment hotFragment;
     private FragmentManager fragmentManager;
 
     @Nullable
@@ -48,7 +48,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void initView() {
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             View mDisManTitle = LayoutInflater.from(getContext()).inflate(R.layout.f1_discover_man_title, null);
             setTitleCenterContainer(mDisManTitle);
             discover_recommend = (RadioButton) findViewById(R.id.discover_recommend);
@@ -63,8 +63,8 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
     private void initFragment() {
         fragmentManager = getChildFragmentManager();
         discoverFragment = new DiscoverFragment();
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1) {
-//            hotFragment = new HotFragment();
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            hotFragment = new HotFragment();
         }
         switchContent(discoverFragment);
     }
@@ -100,7 +100,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
                 setTitleRightImgGone();
                 discover_recommend.setChecked(false);
                 discover_hot.setChecked(true);
-//                switchContent(hotFragment);
+                switchContent(hotFragment);
                 break;
             default:
                 break;

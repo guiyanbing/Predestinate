@@ -2,12 +2,14 @@ package com.juxin.predestinate.module.local.msgview.chatview.base;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -25,6 +27,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -156,6 +159,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
             int kfID = PSP.getInstance().getInt("kf_idid", 0);
             BaseMessage message = datas.get(size - 1);
+            Log.e("TTTTTTTTTTTTTTPPP","id="+id+"||"+"kfid="+kfID+"||"+ message.getMsgID()+"|||"+datas.get(0).getWhisperID());
             if (kfID != 0 && message != null) {//当聊天对象为机器人时
                 for (int i = size - 1; i >= 0; i--) {
                     BaseMessage mess = datas.get(i);
@@ -350,9 +354,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
             // 更新头像
-            if (infoLightweight != null) {
-                ImageLoader.loadCircleAvatar(getContext(), infoLightweight.getAvatar(), head);
-            }
+            ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null) ? infoLightweight.getAvatar() : "", head);
 
             if (chatpanel != null) {
                 updateStatus(ChatMsgType.getMsgType(msg.getType()), sender);
@@ -388,7 +390,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 statusProgress.setVisibility(View.GONE);
 
             BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
-            if (messageType != BaseMessage.BaseMessageType.common) {
+            if (messageType != BaseMessage.BaseMessageType.common && messageType != BaseMessage.BaseMessageType.gift) {
                 status.setVisibility(View.GONE);
                 return;
             }

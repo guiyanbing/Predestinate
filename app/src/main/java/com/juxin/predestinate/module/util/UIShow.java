@@ -829,14 +829,14 @@ public class UIShow {
      * 跳转到开通vip页面
      */
     public static void showOpenVipActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_VIP, ModuleMgr.getCenterMgr().getChargeH5Params()));
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID, ModuleMgr.getCenterMgr().getChargeH5Params(2)));
     }
 
     /**
      * 跳转到购买Y币页面
      */
     public static void showBuyCoinActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID_COIN, ModuleMgr.getCenterMgr().getChargeH5Params()));
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_PREPAID, ModuleMgr.getCenterMgr().getChargeH5Params(1)));
     }
 
     /**
@@ -851,6 +851,13 @@ public class UIShow {
      */
     public static void showActionActivity(Context context) {
         showWebActivity(context, WebUtil.jointUrl(Hosts.H5_ACTION));
+    }
+
+    /**
+     * 跳转到话费领取页面
+     */
+    public static void showBillCollectionActivity(Context context) {
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_BILL));
     }
 
     /**
@@ -1241,12 +1248,13 @@ public class UIShow {
 
     /**
      * 老：VIP充值弹框
+     *
      * @param context
      * @param seeType 1从Y聊天锁按钮发起  2 从查看资料发起
      */
-    public static void showGoodsVipDlgOld(Context context, int seeType){
+    public static void showGoodsVipDlgOld(Context context, int seeType) {
         Intent intent = new Intent(context, GoodsVipDlgOld.class);
-        intent.putExtra("seetype",seeType);
+        intent.putExtra("seetype", seeType);
         context.startActivity(intent);
     }
 
