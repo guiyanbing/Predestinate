@@ -125,6 +125,7 @@ public class ImageLoader {
     public static <T> void loadRoundTop(final Context context, final T model, final ImageView view,
                                         int roundPx, int defResImg, final int errResImg) {
         roundedCornerTop.setRadius(roundPx);
+        view.setTag(R.string.view_url_tag_id,model);
         loadPicWithCallback(context,
                 defResImg,
                 new GlideCallback() {
@@ -151,6 +152,7 @@ public class ImageLoader {
     public static <T> void loadRound(final Context context, final T model, final ImageView view,
                                      int roundPx, int defResImg, final int errResImg) {
         roundedCorners.setRadius(roundPx);
+        view.setTag(R.string.view_url_tag_id,model);
         loadPicWithCallback(context,
                 defResImg,
                 new GlideCallback() {
@@ -187,6 +189,7 @@ public class ImageLoader {
                                       final int defResImg, final int errResImg, int borderWidth, int borderColor) {
         circleTransform.setBorderWidth(borderWidth);
         circleTransform.setBorderColor(borderColor);
+        view.setTag(R.string.view_url_tag_id,model);
         loadPicWithCallback(context,
                 defResImg,
                 new GlideCallback() {
@@ -217,6 +220,7 @@ public class ImageLoader {
                                     int defResImg, int errResImg,
                                     Transformation<Bitmap>... transformation) {
         try {
+            view.setTag(R.string.view_url_tag_id,model);
             loadPic(context, model, view, context.getResources().getDrawable(defResImg),
                     context.getResources().getDrawable(errResImg), transformation);
         } catch (Exception e) {
@@ -230,11 +234,11 @@ public class ImageLoader {
         try {
             //先加载默认图
             view.setImageDrawable(defResImg);
-
             //再去网络请求
             loadPicWithCallback(context, model, new GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
+                    if(view.getTag(R.string.view_url_tag_id) != null && view.getTag(R.string.view_url_tag_id) != model) return;
                     getDrawableBuilder(context, model)
                             .bitmapTransform(transformation)
                             .placeholder(defResImg)
