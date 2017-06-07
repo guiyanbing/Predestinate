@@ -20,6 +20,7 @@ import java.util.List;
  * Created by Su on 2017/5/26.
  */
 public class VideoHoriAdapter extends ExBaseAdapter<UserVideo> {
+
     private int params;
 
     public VideoHoriAdapter(Context context, int params, List<UserVideo> datas) {
@@ -48,9 +49,9 @@ public class VideoHoriAdapter extends ExBaseAdapter<UserVideo> {
         }
 
         UserVideo userVideo = getItem(position);
-        if(userVideo.isCanView()){
-            ImageLoader.loadAvatar(App.context, userVideo.getPic(), mHolder.img_media);
-        }else{
+        if (userVideo.isCanView()) {
+            ImageLoader.loadCenterCrop(App.context, userVideo.getPic(), mHolder.img_media);
+        } else {
             ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media, 8);
         }
         mHolder.img_shade.setVisibility(View.VISIBLE);

@@ -231,7 +231,7 @@
             android:theme="@style/No_Background" />
 
         <activity
-            android:name=".ui.user.check.secret.dialog.SecretVideoPlayerDlg"
+            android:name=".ui.user.check.secret.dialog.SecretVideoPlayerAct"
             android:screenOrientation="portrait" />
 
         <activity
