@@ -24,7 +24,6 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -38,7 +37,6 @@ import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.ui.discover.DiscoverFragment;
 import com.juxin.predestinate.ui.discover.DiscoverMFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
@@ -133,7 +131,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mail_num = (BadgeView) findViewById(R.id.mail_number);
         user_num = (BadgeView) findViewById(R.id.user_number);
         layout_main_bottom = findViewById(R.id.layout_main_bottom);
-        ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
     }
 
     /**
@@ -309,6 +306,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onStart() {
         super.onStart();
         registerNetReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
     }
 
     @Override

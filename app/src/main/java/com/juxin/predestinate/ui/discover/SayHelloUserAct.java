@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -130,6 +131,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
         //发送清消息列表打招呼的人角标
         if (ModuleMgr.getChatListMgr().getStrangerNew()) {
+            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
             ModuleMgr.getChatListMgr().setStrangerNew(false);
         }
     }

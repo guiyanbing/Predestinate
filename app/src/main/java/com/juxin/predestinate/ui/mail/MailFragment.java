@@ -17,6 +17,8 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -333,6 +335,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         }
 
         if (stringList.size() > 0) {
+//            ModuleMgr.getChatMgr().getUserInfoList(stringList, new ChatMsgInterface.InfoListComplete() {
+//                @Override
+//                public void onReqInfosComplete(List<UserInfoLightweight> infoLightweights) {
+//                    if(infoLightweights){
+//
+//                    }
+//                }
+//            });
             ModuleMgr.getChatMgr().getProFile(stringList);
         }
     }
