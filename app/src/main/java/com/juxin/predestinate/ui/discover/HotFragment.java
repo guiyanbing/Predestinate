@@ -103,7 +103,11 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
                         }
                     }
                 }
+
                 viewData.addAll(viewData.size(), list.getHotLists());
+                if (page == 1 && viewData.size() == 1) {
+
+                }
                 adapter.setData(viewData);
                 if (isFirst) {
                     cardsView.setAdapter(adapter);
