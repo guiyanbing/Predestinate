@@ -36,6 +36,18 @@ public class UserBasic extends BaseData implements Parcelable {
     private int scity;            // 城市代码
     private int sprovince;        // 省份代码
 
+    public static final Creator<UserBasic> CREATOR = new Creator<UserBasic>() {
+        @Override
+        public UserBasic createFromParcel(Parcel in) {
+            return new UserBasic(in);
+        }
+
+        @Override
+        public UserBasic[] newArray(int size) {
+            return new UserBasic[size];
+        }
+    };
+
     @Override
     public void parseJson(String s) {
         InfoConfig infoConfig = InfoConfig.getInstance();
@@ -313,15 +325,4 @@ public class UserBasic extends BaseData implements Parcelable {
         this.sprovince = in.readInt();
     }
 
-    public static final Creator<UserBasic> CREATOR = new Creator<UserBasic>() {
-        @Override
-        public UserBasic createFromParcel(Parcel source) {
-            return new UserBasic(source);
-        }
-
-        @Override
-        public UserBasic[] newArray(int size) {
-            return new UserBasic[size];
-        }
-    };
 }

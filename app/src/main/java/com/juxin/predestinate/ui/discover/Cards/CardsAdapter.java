@@ -199,8 +199,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
     }
 
     private void doSayhi(UserInfoHot infoHot, final int position) {
-        //todo 加是否打过招呼的字段 进行判断
-        if (ModuleMgr.getCenterMgr().isCanSayHi(context)/* && !infoHot.isSayHi()*/) {
+        if (ModuleMgr.getCenterMgr().isCanSayHi(context) && !infoHot.is_sayHello()) {
             ModuleMgr.getChatMgr().sendSayHelloMsg(String.valueOf(infoHot.getUid()), context.getString(R.string.say_hello_txt),
                     infoHot.getKf_id(),
                     ModuleMgr.getCenterMgr().isRobot(infoHot.getKf_id()) ?
@@ -208,14 +207,16 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                         @Override
                         public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                             PToast.showShort(context.getString(R.string.user_info_hi_suc));
-                            /*datas.get(position).setSayHello(true);*/
+                            datas.get(position).setIs_sayHello(true);
                         }
 
                         @Override
                         public void onSendFailed(NetData data) {
-
+                            PToast.showShort(context.getString(R.string.user_info_hi_fail));
                         }
                     });
+        } else  if (ModuleMgr.getCenterMgr().isCanSayHi(context) && infoHot.is_sayHello()){
+            PToast.showShort(context.getString(R.string.user_info_has_hi));
         }
     }
 
