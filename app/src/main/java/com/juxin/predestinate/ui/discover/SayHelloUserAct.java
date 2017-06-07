@@ -131,7 +131,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
         //发送清消息列表打招呼的人角标
         if (ModuleMgr.getChatListMgr().getStrangerNew()) {
-            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
             ModuleMgr.getChatListMgr().setStrangerNew(false);
         }
     }
