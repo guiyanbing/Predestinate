@@ -99,7 +99,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/user_info_video"
+                android:text="@string/user_info_look_at_her"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>

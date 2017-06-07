@@ -19,9 +19,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
-import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -36,7 +34,6 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -199,7 +196,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         ModuleMgr.getChatListMgr().updateFollow();
                         break;
                     case MyFriend_Msg:
-
                         break;
                     case Greet_Msg:
                         ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
@@ -270,8 +266,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                detectInfo(listMail);
                 mailFragmentAdapter.updateAllData();
+                TimerUtil.beginTime(new TimerUtil.CallBack() {
+                    @Override
+                    public void call() {
+                        detectInfo(listMail);
+                    }
+                }, 800);
                 break;
             default:
                 break;
@@ -313,7 +314,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (!timeUtil.check(10 * 1000)) {
+        if (!timeUtil.check(3 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();

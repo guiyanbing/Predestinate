@@ -16,6 +16,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
@@ -90,6 +91,11 @@ public class VideoAudioChatHelper {
      */
     public void inviteVAChat(final Activity context, long dstUid, int type) {
         isSend = true;
+
+        if(PSP.getInstance().getInt(Constant.APPEAR_TYPE, 0) == 0) {
+            UIShow.showLookAtHerDlg(context, dstUid);
+            return;
+        }
 
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(context);
@@ -249,6 +255,7 @@ public class VideoAudioChatHelper {
         bundle.putLong("vc_dst_uid", dstUid);
         bundle.putString("vc_self_info", PSP.getInstance().getString(INFO_SAVE_KEY, ""));
         bundle.putString("vc_gift_list",ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
+        bundle.putInt("vc_own",PSP.getInstance().getInt(Constant.APPEAR_TYPE,1));//1看自己，2不看自己
         return bundle;
     }
 

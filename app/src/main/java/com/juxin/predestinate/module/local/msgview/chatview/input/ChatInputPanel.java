@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -96,6 +98,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         showSendBtn(false);
 
         onClickChatGift();
+        onClickLookAtHer();
     }
 
     /**
@@ -425,6 +428,19 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             public void onClick(View view) {
                 closeAllInput();
                 UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
+            }
+        });
+    }
+
+    /**
+     * 看看她
+     */
+    private void onClickLookAtHer() {
+        getChatInstance().chatViewLayout.onClickLookAtHer(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeAllInput();
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
             }
         });
     }
