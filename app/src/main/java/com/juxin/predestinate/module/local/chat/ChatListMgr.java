@@ -90,6 +90,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
+    public boolean isContain(long userID) {
+        synchronized (msgList) {
+            for(BaseMessage temp : msgList){
+                if(userID == temp.getLWhisperID()){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     /**
      * 陌生人列表
      *

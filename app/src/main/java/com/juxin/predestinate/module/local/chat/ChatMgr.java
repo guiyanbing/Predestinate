@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -14,6 +15,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
@@ -36,14 +38,18 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -111,7 +117,7 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
-    public void updateOtherRead(String channelID, String whisperID, long sendID,BaseMessage message) {
+    public void updateOtherRead(String channelID, String whisperID, long sendID, BaseMessage message) {
         String whisperId = PSP.getInstance().getString("whisperId", "-1");
         ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
         if (!whisperId.equalsIgnoreCase(whisperID)) {
@@ -272,22 +278,22 @@ public class ChatMgr implements ModuleBase {
 
                     break;
                 }
-                case gift:{
+                case gift: {
                     final GiftMessage giftMessage = (GiftMessage) message;
 
                     ModuleMgr.getCommonMgr().sendGift(giftMessage.getWhisperID(), String.valueOf(giftMessage.getGiftID()),
                             giftMessage.getGiftCount(), giftMessage.getgType(), new RequestComplete() {
-                        @Override
-                        public void onRequestComplete(HttpResponse response) {
-                            SendGiftResultInfo info = new SendGiftResultInfo();
-                            info.parseJson(response.getResponseString());
-                            if(response.isOk()) {
-                                updateOk(giftMessage, null);
-                            }else {
-                                updateFail(giftMessage, null);
-                            }
-                        }
-                    });
+                                @Override
+                                public void onRequestComplete(HttpResponse response) {
+                                    SendGiftResultInfo info = new SendGiftResultInfo();
+                                    info.parseJson(response.getResponseString());
+                                    if (response.isOk()) {
+                                        updateOk(giftMessage, null);
+                                    } else {
+                                        updateFail(giftMessage, null);
+                                    }
+                                }
+                            });
                     break;
                 }
 
@@ -422,18 +428,14 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, long giftLogID) {
-
-    }
-
     /**
      * 发送礼物
-     * 发送中
-     * @param channelID
-     * @param whisperID
-     * @param giftID
-     * @param giftCount
-     * @param giftLogID
+     *
+     * @param channelID 目前没有用
+     * @param whisperID 对方ID
+     * @param giftID    礼物ID
+     * @param giftCount 礼物个数
+     * @param gType     来源
      */
     public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, int gType) {
         final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount);
@@ -449,9 +451,9 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 SendGiftResultInfo info = new SendGiftResultInfo();
                 info.parseJson(response.getResponseString());
-                if(response.isOk()) {
+                if (response.isOk()) {
                     updateOk(giftMessage, null);
-                }else {
+                } else {
                     updateFail(giftMessage, null);
                 }
             }
@@ -554,7 +556,7 @@ public class ChatMgr implements ModuleBase {
      */
     private void sendChatCanError() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        if(userDetail.isMan() && userDetail.getYcoin() < 79 ){
+        if (userDetail.isMan() && userDetail.getYcoin() < 79) {
             ModuleMgr.getChatListMgr().setTodayChatShow();
             Msg msg = new Msg();
             msg.setData(false);
@@ -835,8 +837,11 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if(!message.isSender() && message.getMsgID() > 0 && !message.isRu() && !MailSpecialID.getMailSpecialID(message.getLWhisperID())){
+                if (!message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
+                        !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
+                        (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
                     PLogger.printObject("chatMsg =" + message.toString());
+                    PLogger.printObject("1111111111111111 ChatMgr = " + ModuleMgr.getChatListMgr().getStrangerNew());
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
@@ -903,6 +908,19 @@ public class ChatMgr implements ModuleBase {
                 }
             }
         });
+    }
+
+    public void getUserInfoList(final List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
+        Observable<List<UserInfoLightweight>> observable = dbCenter.getCacheCenter().queryProfile(uids);
+        observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER));
+        observable.subscribe(new Action1<List<UserInfoLightweight>>() {
+            @Override
+            public void call(List<UserInfoLightweight> lightweights) {
+                PLogger.printObject("lightweight==222==" + lightweights);
+                listComplete.onReqInfosComplete(lightweights);
+            }
+        });
+
     }
 
     public void getProFile(List<Long> userIds) {
