@@ -740,21 +740,24 @@ public class CardsView extends LinearLayout {
             // 由于dx作为分母，此处保护处理
             dx = 1;
         }
-        if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
-            finalX = mWidth;
-            finalY = dy * (mCardWidth + initLeft) / dx + initTop;
-            flyType = SlideType.RIGHT;
-        } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
-            finalX = -mCardWidth;
-            finalY = dy * (mCardWidth + initLeft) / (-dx) + dy + initTop;
-            flyType = SlideType.LEFT;
+
+        if (mAdapter != null && mShowingIndex != (mAdapter.getCount()-1)){
+            if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
+                finalX = mWidth;
+                finalY = dy * (mCardWidth + initLeft) / dx + initTop;
+                flyType = SlideType.RIGHT;
+            } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
+                finalX = -mCardWidth;
+                finalY = dy * (mCardWidth + initLeft) / (-dx) + dy + initTop;
+                flyType = SlideType.LEFT;
+            }
+            if (finalY > mHeight) {
+                finalY = mHeight;
+            } else if (finalY < -mHeight / 2) {
+                finalY = -mHeight / 2;
+            }
         }
 
-        if (finalY > mHeight) {
-            finalY = mHeight;
-        } else if (finalY < -mHeight / 2) {
-            finalY = -mHeight / 2;
-        }
         startScrollTopView(finalX, finalY, SCROLL_DURATION, flyType);
     }
 
