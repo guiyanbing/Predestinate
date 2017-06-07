@@ -51,7 +51,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/28.
@@ -292,7 +291,7 @@ public class ChatMgr implements ModuleBase {
                     final GiftMessage giftMessage = (GiftMessage) message;
 
                     ModuleMgr.getCommonMgr().sendGift(giftMessage.getWhisperID(), String.valueOf(giftMessage.getGiftID()),
-                            giftMessage.getGiftCount(), giftMessage.getgType(), new RequestComplete() {
+                            giftMessage.getGiftCount(), giftMessage.getGType(), new RequestComplete() {
                                 @Override
                                 public void onRequestComplete(HttpResponse response) {
                                     SendGiftResultInfo info = new SendGiftResultInfo();

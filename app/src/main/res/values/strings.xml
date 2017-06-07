@@ -491,6 +491,10 @@
     <string name="chat_click_receive_gift">点击收礼</string>
     <string name="chat_click_send_gift">点击赠送</string>
     <string name="received_error">领取失败！</string>
+    <string name="gift_has_received">已领取</string>
+    <string name="gift_has_auto_received">已自动领取</string>
+    <string name="gift_click_to_receive">点击收礼</string>
+    <string name="send_you">送你</string>
 
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>

@@ -5,6 +5,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
@@ -62,7 +63,9 @@ public class ChatPanelGift extends ChatPanel {
             PLogger.d("------>gift list is empty or gift list doesn't have this gift_id.");
             return false;
         }
-        tv_gift_status.setText(msgData.getfStatus() == 0 ? "已领取" : "点击收礼");
+        tv_gift_status.setText(msg.isGiftAutoReceived() ? getContext().getString(R.string.gift_has_auto_received)
+                : (msgData.getfStatus() == 0 ? getContext().getString(R.string.gift_has_received)
+                : getContext().getString(R.string.gift_click_to_receive)));
         ImageLoader.loadAvatar(context, giftInfo.getPic(), iv_gift_img);
         tv_gift_hello.setText(isSender()
                 ? (ModuleMgr.getCenterMgr().getMyInfo().isMan()
@@ -71,15 +74,17 @@ public class ChatPanelGift extends ChatPanel {
                 : (ModuleMgr.getCenterMgr().getMyInfo().isMan()
                 ? getContext().getString(R.string.chat_gift_hello_man)
                 : getContext().getString(R.string.chat_gift_hello_woman)));
-        tv_gift_content.setText(Html.fromHtml("送你<font color='#FD698C'>"
+        tv_gift_content.setText(Html.fromHtml(getContext().getString(R.string.send_you)
+                + "<font color='#FD698C'>"
                 + (msg.getGiftCount() == 0 ? 1 : msg.getGiftCount()) +
-                "个" + giftInfo.getName() + "</font>"));
+                getContext().getString(R.string.num) + giftInfo.getName() + "</font>"));
         return true;
     }
 
     @Override
     public boolean onClickContent(final BaseMessage msgData, boolean longClick) {
-        if (msgData == null || !(msgData instanceof GiftMessage) || isSender() || msgData.getfStatus() == 0) {
+        if (msgData == null || !(msgData instanceof GiftMessage) || isSender()
+                || msgData.getfStatus() == 0 || ((GiftMessage) msgData).isGiftAutoReceived()) {
             return false;
         }
         msgData.setfStatus(0);
@@ -97,7 +102,7 @@ public class ChatPanelGift extends ChatPanel {
                 if (response.isOk()) {
                     long ret = ModuleMgr.getChatMgr().updateMsgFStatus(msg.getMsgID());
                     if (ret == MessageConstant.OK) {
-                        tv_gift_status.setText("已领取");
+                        tv_gift_status.setText(getContext().getString(R.string.gift_has_received));
                     }
                     // 往数据库插一条14提示消息，标识已接受礼物
                     TextMessage textMessage = new TextMessage();
@@ -108,7 +113,7 @@ public class ChatPanelGift extends ChatPanel {
                     textMessage.setType(BaseMessage.BaseMessageType.hint.getMsgType());
                     textMessage.setJsonStr(textMessage.getJson(textMessage));
                     ModuleMgr.getChatMgr().onLocalReceiving(textMessage);
-                }else {
+                } else {
                     msgData.setfStatus(1);
                 }
             }
