@@ -47,6 +47,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/28.
@@ -76,7 +77,7 @@ public class ChatMgr implements ModuleBase {
     /**
      * 退出程序的时候把发送中都更改为发送失败
      */
-    public void updateStatusFail(){
+    public void updateStatusFail() {
         dbCenter.getCenterFLetter().updateStatusFail();
         dbCenter.getCenterFMessage().updateStatusFail();
     }
@@ -913,12 +914,14 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void getUserInfoList(final List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
+    public void getUserInfoList(List<Long> uids, final ChatMsgInterface.InfoListComplete listComplete) {
+        PLogger.printObject("111getUserInfoList=111=" + uids.size());
         Observable<List<UserInfoLightweight>> observable = dbCenter.getCacheCenter().queryProfile(uids);
+        observable.subscribeOn(Schedulers.io());
         observable.subscribe(new Action1<List<UserInfoLightweight>>() {
             @Override
             public void call(List<UserInfoLightweight> lightweights) {
-                PLogger.printObject("lightweight==222==" + lightweights.size());
+                PLogger.printObject("111getUserInfoList=222=" + lightweights.size());
                 listComplete.onReqInfosComplete(lightweights);
             }
         }).unsubscribe();
@@ -945,7 +948,7 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights){
+    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights) {
         dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
     }
 

@@ -97,9 +97,9 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     // 底部功能按钮展示逻辑
     private void initBottom() {
+        ModuleMgr.getCenterMgr().reqVideoChatConfig(userDetail.getUid(), this); // 请求音视频开关配置
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
 
-        ModuleMgr.getCenterMgr().reqVideoChatConfig(userDetail.getUid(), this); // 请求音视频开关配置
         videoBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_video);
         voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
         sayHibottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_hi);
@@ -139,7 +139,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
-                    if (userDetail.isSayHello()) return;
                     handleSayHi();
                     break;
 
@@ -267,6 +266,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             if (response.isOk()) {
                 VideoConfig config = (VideoConfig) response.getBaseData();
                 footPanel.refreshChatPrice(config);
+                if (channel == CenterConstant.USER_CHECK_INFO_OWN) return;
                 if (config.getVideoChat() == 1) {  // 展示发视频
                     videoBottom.setVisibility(View.VISIBLE);
                 }

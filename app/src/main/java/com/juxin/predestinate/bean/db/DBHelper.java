@@ -22,17 +22,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(FLetter.getCreateTable());
         db.execSQL(FMessage.getCreateTable());
-        db.execSQL(FProfileCache.getCreateTable());
         db.execSQL(FMark.getCreateTable());
         db.execSQL(FUnRead.getCreateTable());
 
         db.execSQL(FProfileCache.getCreateTable());
         db.execSQL(FHttpCache.getCreateTable());
+
+      //  db.execSQL(FProfileCache.getIndex());
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 }

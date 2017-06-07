@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.FMessage;
@@ -17,6 +18,7 @@ import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -189,26 +191,30 @@ public class DBCacheCenter {
     }
 
     public Observable<List<UserInfoLightweight>> queryProfile(List<Long> userIDs) {
+        if(userIDs.size() < 1) return null;
+
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FProfileCache.FPROFILE_TABLE)
-                .append(" WHERE ").append(FProfileCache.COLUMN_USERID + " in ").append("( ");
-
-                for(int i = 0; i < userIDs.size(); i++){
-                    sql.append(userIDs.get(i));
-                    if((i+1) < userIDs.size()){
-                        sql.append(",");
-                    }
+                .append(" WHERE ");
+        if(userIDs.size() == 1){
+            sql.append(FProfileCache.COLUMN_USERID + " = ").append(userIDs.get(0));
+        }else {
+            sql.append(FProfileCache.COLUMN_USERID + " in ").append("( ");
+            for (int i = 0; i < userIDs.size(); i++) {
+                sql.append(userIDs.get(i));
+                if ((i + 1) < userIDs.size()) {
+                    sql.append(",");
                 }
+            }
+            sql.append(" )");
+        }
 
-        sql.append(" )");
-
+        PLogger.printObject("sql.to=" + sql.toString());
         return mDatabase.createQuery(FProfileCache.FPROFILE_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, List<UserInfoLightweight>>() {
             @Override
             public List<UserInfoLightweight> call(SqlBrite.Query query) {
                 Cursor cursor = query.run();
+                if (null == cursor) return null;
 
-                if (null == cursor) {
-                    return null;
-                }
                 List<UserInfoLightweight> infoLightweights = new ArrayList<UserInfoLightweight>();
                 try {
                     while (cursor.moveToNext()) {

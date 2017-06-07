@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * fletter 处理

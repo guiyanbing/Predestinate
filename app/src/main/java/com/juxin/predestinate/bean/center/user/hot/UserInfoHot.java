@@ -4,8 +4,6 @@ import android.os.Parcel;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
-import com.juxin.predestinate.bean.center.user.detail.UserDetail;
-import com.juxin.predestinate.module.logic.config.AreaConfig;
 
 import org.json.JSONObject;
 
@@ -40,6 +38,8 @@ public class UserInfoHot extends UserBasic {
 
     private int kf_id = 0; //不为0就是机器人
 
+    private boolean is_sayHello = false; //是否打过招呼
+
     public UserInfoHot() {
     }
 
@@ -67,12 +67,12 @@ public class UserInfoHot extends UserBasic {
         this.setOnlineState(jsonObject.optBoolean("is_online"));
         this.setLastOnLineTime(jsonObject.optString("last_online"));
         this.setNickname(jsonObject.optString("nickname"));
-        this.setMobileValidation(jsonObject.optInt("mobile_validation",0) == 1);
-        this.setIdcardValidation(jsonObject.optInt("idcard_validation",0) == 1);
-        this.setVideoBusy(jsonObject.optInt("video_busy",0) == 1);
+        this.setMobileValidation(jsonObject.optInt("mobile_validation", 0) == 1);
+        this.setIdcardValidation(jsonObject.optInt("idcard_validation", 0) == 1);
+        this.setVideoBusy(jsonObject.optInt("video_busy", 0) == 1);
         this.setPhotoNum(jsonObject.optInt("photonum"));
 
-        if(!jsonObject.isNull("videochatconfig")) {
+        if (!jsonObject.isNull("videochatconfig")) {
             JSONObject configJsonObj = jsonObject.optJSONObject("videochatconfig");
             this.setVideo_available(configJsonObj.optInt("videochat") == 1);
             this.setAudio_available(configJsonObj.optInt("audiochat") == 1);
@@ -177,11 +177,6 @@ public class UserInfoHot extends UserBasic {
         this.audioPrice = audioPrice;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
     public int getPhotoNum() {
         return photoNum;
     }
@@ -238,30 +233,55 @@ public class UserInfoHot extends UserBasic {
         isVideoBusy = videoBusy;
     }
 
+    public boolean is_sayHello() {
+        return is_sayHello;
+    }
+
+    public void setIs_sayHello(boolean is_sayHello) {
+        this.is_sayHello = is_sayHello;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoLightweight{" +
+                "time=" + time +
+                ", infoJson='" + infoJson + '\'' +
+                ", isVip=" + isVip +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeByte(this.isOk ? (byte) 1 : (byte) 0);
         dest.writeLong(this.time);
         dest.writeString(this.infoJson);
-        dest.writeInt(channel_uid);
-        dest.writeInt(photoNum);
-        dest.writeByte(onlineState?(byte)1:(byte)0);
-        dest.writeString(lastOnLineTime);
-        dest.writeByte(isVip?(byte)1:(byte)0);
-        dest.writeString(distance);
-        dest.writeByte(isMobileValidation?(byte)1:(byte)0);
-        dest.writeByte(isIdcardValidation?(byte)1:(byte)0);
-        dest.writeByte(isVideoValidation?(byte)1:(byte)0);
-        dest.writeByte(isVideoBusy?(byte)1:(byte)0);
-        dest.writeInt(videoPrice);
-        dest.writeInt(audioPrice);
-        dest.writeByte(video_available?(byte)1:(byte)0);
-        dest.writeByte(audio_available?(byte)1:(byte)0);
-        dest.writeInt(kf_id);
+        dest.writeInt(this.channel_uid);
+        dest.writeInt(this.photoNum);
+        dest.writeByte(this.onlineState ? (byte) 1 : (byte) 0);
+        dest.writeString(this.lastOnLineTime);
+        dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
+        dest.writeString(this.distance);
+        dest.writeByte(this.isMobileValidation ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isIdcardValidation ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isVideoValidation ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isVideoBusy ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.videoPrice);
+        dest.writeInt(this.audioPrice);
+        dest.writeByte(this.video_available ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.audio_available ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.kf_id);
+        dest.writeByte(this.is_sayHello ? (byte) 1 : (byte) 0);
     }
 
     protected UserInfoHot(Parcel in) {
         super(in);
+        this.isOk = in.readByte() != 0;
         this.time = in.readLong();
         this.infoJson = in.readString();
         this.channel_uid = in.readInt();
@@ -279,6 +299,7 @@ public class UserInfoHot extends UserBasic {
         this.video_available = in.readByte() != 0;
         this.audio_available = in.readByte() != 0;
         this.kf_id = in.readInt();
+        this.is_sayHello = in.readByte() != 0;
     }
 
     public static final Creator<UserInfoHot> CREATOR = new Creator<UserInfoHot>() {
@@ -292,14 +313,4 @@ public class UserInfoHot extends UserBasic {
             return new UserInfoHot[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "UserInfoLightweight{" +
-                "time=" + time +
-                ", infoJson='" + infoJson + '\'' +
-                ", isVip=" + isVip +
-                '}';
-    }
-
 }

@@ -100,7 +100,7 @@ public class MyFriendsAdapter extends ExBaseAdapter<UserInfoLightweight> {
         holder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
+                UIShow.showPrivateChatAct(getContext(), userInfo.getUid(), null);
             }
         });
 

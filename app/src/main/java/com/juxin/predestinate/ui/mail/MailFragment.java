@@ -265,8 +265,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                mailFragmentAdapter.updateAllData();
                 detectInfo(listMail);
+                mailFragmentAdapter.updateAllData();
                 break;
             default:
                 break;
@@ -332,11 +332,21 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (stringList.size() > 0) {
             ModuleMgr.getChatMgr().getUserInfoList(stringList, new ChatMsgInterface.InfoListComplete() {
                 @Override
-                public void onReqInfosComplete(List<UserInfoLightweight> infoLightweights) {
-                    if(infoLightweights.size() > 0){
-                        ModuleMgr.getChatMgr().updateUserInfoList(infoLightweights);
-                    }
-                    ModuleMgr.getChatMgr().getProFile(stringList);
+                public void onReqInfosComplete(final List<UserInfoLightweight> infoLightweights) {
+                    MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean ret = (infoLightweights != null && infoLightweights.size() > 0);
+                            if(ret) ModuleMgr.getChatMgr().updateUserInfoList(infoLightweights);
+
+                            TimerUtil.beginTime(new TimerUtil.CallBack() {
+                                @Override
+                                public void call() {
+                                    ModuleMgr.getChatMgr().getProFile(stringList);
+                                }
+                            }, ret ? 500 : 0);
+                        }
+                    });
                 }
             });
         }
