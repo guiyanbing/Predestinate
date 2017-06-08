@@ -162,6 +162,7 @@ public class ImageLoader {
 
     /**
      * 带占位图预处理样式的加载函数
+     *
      * @param context
      * @param model
      * @param view
@@ -209,6 +210,9 @@ public class ImageLoader {
             if (isInvalidTag(view, model))
                 return;
             view.setImageDrawable(defResImg);
+
+            if (model == null)
+                return;
 
             //再去网络请求
             loadPicWithCallback(context, model, new GlideCallback() {
@@ -297,21 +301,23 @@ public class ImageLoader {
 
     /**
      * 是否无效标记
+     *
      * @param view
      * @param model
      * @param <T>
      * @return
      */
-    private static <T> boolean isInvalidTag(ImageView view, T model){
-        return view.getTag(R.string.view_url_tag_id) != null && view.getTag(R.string.view_url_tag_id) != model;
+    private static <T> boolean isInvalidTag(ImageView view, T model) {
+        return view.getTag(R.string.view_url_tag_id) != model;
     }
 
     /**
      * 设置标记
+     *
      * @param view
      * @param model
      */
-    private static <T> void setImgTag(ImageView view, T model){
+    private static <T> void setImgTag(ImageView view, T model) {
         view.setTag(R.string.view_url_tag_id, model);
     }
 
