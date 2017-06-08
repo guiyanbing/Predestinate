@@ -7,7 +7,9 @@ var Turntable = Turntable || (function () {
     var _spec_list = ["唱首歌", "跳个舞", "撒个娇", "送我礼物", "卖个萌", "么么哒", "送我礼物", "学猫叫", "做鬼脸", "重来一次", "私密问题", "送我礼物"];
     var _listener = window.Eventuality({});
     window.platform.clientHandler = _listener;
+        window.platform.showLoading(true);
     window.platform.safeRequestNoUrl("Post", web.urlType.Go, web.urlMethod.GetMyTurnConfig,{}, {}, function (resp) {
+        window.platform.showLoading(false);
         if(resp.status !== "ok"){
             return;
         }
@@ -21,6 +23,7 @@ var Turntable = Turntable || (function () {
         if(jcmd !== "header_right_btn_click"){
             return;
         }
+        window.platform.showLoading(true);
         if(!valueChange){
             mui.toast('数据没有更改!');
             return;
@@ -29,6 +32,7 @@ var Turntable = Turntable || (function () {
             if(resp.status !== "ok"){
                 return;
             }
+            window.platform.showLoading(false);
             valueChange = false;
             mui.toast('数据保存成功!');
             console.log('testSet'+JSON.stringify(resp));
@@ -81,6 +85,7 @@ var Turntable = Turntable || (function () {
         return true;
     }
     that.disClick = function () {
+      //  window.platform.showLoading(true);
         mui.toast('送我礼物不可修改');
     }
     that.checkValue = function () {
