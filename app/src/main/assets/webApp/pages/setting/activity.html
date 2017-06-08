@@ -40,10 +40,7 @@
 <script src="../../lib/url-config.js"></script>
 <script type="text/javascript">
     function receivePhoneCharge() {
-      console.log('receive phone charge', web.pages.GetPhoneChargePage);
-      var url = web.pages.GetPhoneChargePage;
-      mui.toast("receive phone charge" + url);
-      window.platform.openWeb('话费领取', url);
+      window.platform.appSlideView(501);
     }
 </script>
 </html>

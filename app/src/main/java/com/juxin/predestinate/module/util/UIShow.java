@@ -99,6 +99,7 @@ import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
 import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
 import com.juxin.predestinate.ui.user.my.WantMoneyDlg;
+import com.juxin.predestinate.ui.user.my.RotarySetActivity;
 import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
 import com.juxin.predestinate.ui.user.my.WithDrawExplainAct;
 import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
@@ -418,11 +419,11 @@ public class UIShow {
      *
      * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context, int channel, UserDetail userProfile) {
-        Intent intent = new Intent(context, UserSecretAct.class);
+    public static void showUserSecretAct(FragmentActivity activity, int channel, UserDetail userProfile, int requestCode) {
+        Intent intent = new Intent(activity, UserSecretAct.class);
         intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, channel);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -866,7 +867,9 @@ public class UIShow {
      * 跳转到大转盘设置页面
      */
     public static void showRotaryActivity(Context context) {
-        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_ROTARY));
+        Intent intent = new Intent(context, RotarySetActivity.class);
+        intent.putExtra("url", WebUtil.jointUrl(Hosts.H5_ROTARY));
+        show(context, intent);
     }
 
     /**
@@ -1302,10 +1305,10 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context, UserVideo userVideo) {
-        Intent intent = new Intent(context, SecretGiftDlg.class);
+    public static void showSecretGiftDlg(FragmentActivity activity, UserVideo userVideo, int requestCode) {
+        Intent intent = new Intent(activity, SecretGiftDlg.class);
         intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -1368,7 +1371,7 @@ public class UIShow {
      * @param context
      * @param requestCode
      */
-    public static void showPhoneVerifyCompleteAct(final FragmentActivity context,final int requestCode) {
+    public static void showPhoneVerifyCompleteAct(final FragmentActivity context, final int requestCode) {
         context.startActivityForResult(new Intent(context, PhoneVerifyCompleteAct.class), requestCode);
     }
 

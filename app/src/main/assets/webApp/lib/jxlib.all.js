@@ -132,7 +132,8 @@ var CMD = {
   showLoading: 'show_data_loading',
   hideLoading: 'hide_data_loading',
   getAgentUrl: 'get_agent_url',
-  userBehavior: 'user_behavior'
+  userBehavior: 'user_behavior',
+  jumpToSmallSecretary: 'open_small_secretary'
 }; /**
     * Created by chuhaoyuan on 2016/11/2.
     */
@@ -339,6 +340,10 @@ var PlatformHelper = function PlatformHelper() {
     _executeCMD(CMD.jumpToQQService);
   };
 
+  that.jumpToSmallSecretary = function () {
+    _executeCMD(CMD.jumpToSmallSecretary);
+  };
+
   var _requestNative = function _requestNative(isSafe, method, url, params, body, cb) {
     var totalURL = url + _urlUtility2.default.ropeParamsString(params);
     var bodyString = JSON.stringify(body);
@@ -512,6 +517,7 @@ var PlatformHelper = function PlatformHelper() {
       event_Data: event_Data
     });
   };
+
 
   that.executeCMD = _executeCMD;
 

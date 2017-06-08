@@ -29,7 +29,7 @@ public class Hosts {
     // -------------------逻辑服务器地址 end------------------------
 
     // ---------------------H5 assets路径 start--------------------
-    private static final String H5_HOST = "file:///android_asset/webApp/YfbWebApp/pages/";
+    private static final String H5_HOST = "file:///android_asset/webApp/pages/";
     public static final String H5_RANKING = H5_HOST + "windRanking/windRanking.html";  // 排行榜
     public static final String H5_ACTION = H5_HOST + "setting/activity.html";          // 活动相关
     public static final String H5_PREPAID = H5_HOST + "prepaid/prepaid.html";          // 购买页面，根据type区分Y币和vip

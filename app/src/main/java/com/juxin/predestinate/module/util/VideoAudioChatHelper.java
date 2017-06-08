@@ -54,6 +54,7 @@ public class VideoAudioChatHelper {
     private static VideoAudioChatHelper instance;
     private DownloadPluginFragment downloadPluginFragment = new DownloadPluginFragment();
     private boolean isDownloading = false;
+    private int singleType;
 
     private VideoAudioChatHelper() {
     }
@@ -88,12 +89,14 @@ public class VideoAudioChatHelper {
      * @param dstUid
      * @param type
      * @param flag  判断是否显示进场dlg
+     * @param singleType  非默认情况值, 0:还没选择,1:自己露脸，2:自己不露脸
      */
-    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag) {
-        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType) {
+        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             UIShow.showLookAtHerDlg(context, dstUid);
             return;
         }
+        this.singleType = singleType;
         inviteVAChat(context, dstUid, type);
     }
 
@@ -265,7 +268,7 @@ public class VideoAudioChatHelper {
         bundle.putLong("vc_dst_uid", dstUid);
         bundle.putString("vc_self_info", PSP.getInstance().getString(INFO_SAVE_KEY, ""));
         bundle.putString("vc_gift_list",ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
-        bundle.putInt("vc_own",PSP.getInstance().getInt(Constant.APPEAR_TYPE,1));//1看自己，2不看自己
+        bundle.putInt("vc_own",singleType==0 ? 2 : singleType);//1看自己，2不看自己
         return bundle;
     }
 

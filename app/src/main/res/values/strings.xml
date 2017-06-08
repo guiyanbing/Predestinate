@@ -8,6 +8,8 @@
     <string name="tip">提示</string>
     <string name="exit">退出</string>
     <string name="send">发送</string>
+    <string name="edit">编辑</string>
+    <string name="save">保存</string>
     <string name="request_error">请求出错!</string>
 
     <!-- 主页Fragment -->
@@ -89,7 +91,7 @@
     <string name="user_info_hi">打招呼</string>
     <string name="user_info_hi_fail">打招呼失败</string>
     <string name="user_info_hi_suc">打招呼成功</string>
-    <string name="user_info_has_hi">已打招呼</string>
+    <string name="user_info_has_hi">不可以重复打招呼！</string>
     <string name="user_info_video">发视频</string>
     <string name="user_info_look_at_her">看看她</string>
     <string name="user_info_look_at_he">看看他</string>
@@ -241,7 +243,6 @@
     <string name="toast_userdetail_isnull">请完善您的资料</string>
     <string name="toast_login_iserror">登录失败，请稍候重试</string>
     <string name="toast_pwd_length_iserror">请设置8~20位密码</string>
-    <string name="toast_mobile_authok">手机认证成功</string>
     <string name="toast_resetpwd_ok">密码修改成功</string>
     <string name="toast_suggest_ok">提交成功，感谢您的支持</string>
     <string name="toast_job_isnull">请选择您的职业</string>
@@ -304,9 +305,6 @@
     <string name="user_self_info_age">年龄</string>
     <string name="user_self_info_addr">地区</string>
     <string name="user_self_info_sign">个性签名</string>
-    <string name="user_self_secret_edit">编辑</string>
-    <string name="user_self_secret_cancel">取消</string>
-    <string name="user_info_save">保存</string>
     <string name="user_info_edit_name">昵称修改</string>
     <string name="user_info_edit_sign">个性签名</string>
     <string name="user_info_edit_limit">%1$d/%2$d</string>

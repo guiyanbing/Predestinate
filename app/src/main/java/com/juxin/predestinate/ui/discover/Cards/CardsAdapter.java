@@ -101,7 +101,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 if (infoHot.isVideo_available()) {
-                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_video_tips));
                 }

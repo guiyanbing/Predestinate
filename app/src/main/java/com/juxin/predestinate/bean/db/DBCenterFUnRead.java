@@ -97,17 +97,21 @@ public class DBCenterFUnRead {
      * @return
      */
     private boolean isExist(String key) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FUnRead.FUNREAD_TABLE)
-                .append(" WHERE ")
-                .append(FUnRead.COLUMN_KEY + " = ?");
-        Cursor cursor = mDatabase.query(sql.toString(), key);
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.close();
-            return true;
-        } else {
-            if (cursor != null) cursor.close();
-            return false;
+        Cursor cursor = null;
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FUnRead.FUNREAD_TABLE)
+                    .append(" WHERE ")
+                    .append(FUnRead.COLUMN_KEY + " = ?");
+            cursor = mDatabase.query(sql.toString(), key);
+            if (cursor != null && cursor.moveToFirst()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.close(cursor);
         }
+        return false;
     }
 
     /**

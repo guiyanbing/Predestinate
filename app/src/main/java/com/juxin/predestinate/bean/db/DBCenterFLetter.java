@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -15,8 +16,10 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -32,8 +35,8 @@ public class DBCenterFLetter {
         this.mDatabase = database;
     }
 
-    public long storageData(BaseMessage message){
-       String whisperID = message.getWhisperID();
+    public long storageData(BaseMessage message) {
+        String whisperID = message.getWhisperID();
         if (!isExist(whisperID)) {//没有数据
             return insertLetter(message);
         } else {
@@ -43,9 +46,10 @@ public class DBCenterFLetter {
 
     /**
      * 多条消息插入
+     *
      * @param list
      */
-    public void insertLetter(List<BaseMessage> list){
+    public void insertLetter(List<BaseMessage> list) {
         BriteDatabase.Transaction transaction = mDatabase.newTransaction();
         try {
             for (BaseMessage item : list) {
@@ -59,6 +63,7 @@ public class DBCenterFLetter {
 
     /**
      * 单条消息插入
+     *
      * @param baseMessage
      * @return
      */
@@ -71,8 +76,8 @@ public class DBCenterFLetter {
             final ContentValues values = new ContentValues();
             values.put(FLetter.COLUMN_USERID, baseMessage.getWhisperID());
 
-            if(TextUtils.isEmpty(baseMessage.getInfoJson()))
-                 values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
+            if (TextUtils.isEmpty(baseMessage.getInfoJson()))
+                values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
 
             if (baseMessage.getKfID() != -1)
                 values.put(FLetter.COLUMN_KFID, baseMessage.getKfID());
@@ -86,14 +91,14 @@ public class DBCenterFLetter {
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
             return mDatabase.insert(FLetter.FLETTER_TABLE, values);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return MessageConstant.ERROR;
     }
 
-    public int updateLetter(BaseMessage baseMessage){
-        if(baseMessage == null){
+    public int updateLetter(BaseMessage baseMessage) {
+        if (baseMessage == null) {
             return MessageConstant.ERROR;
         }
         try {
@@ -116,14 +121,14 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
 
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
-            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", baseMessage.getWhisperID());
+            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return MessageConstant.ERROR;
     }
 
-    public boolean updateUserInfoLightList(List<UserInfoLightweight> lightweights){
+    public boolean updateUserInfoLightList(List<UserInfoLightweight> lightweights) {
         if (lightweights == null || lightweights.size() <= 0) {
             return false;
         }
@@ -145,11 +150,12 @@ public class DBCenterFLetter {
 
     /**
      * 更新个人资料
+     *
      * @param lightweight
      * @return
      */
-    public long updateUserInfoLight(UserInfoLightweight lightweight){
-        if(lightweight == null){
+    public long updateUserInfoLight(UserInfoLightweight lightweight) {
+        if (lightweight == null) {
             return MessageConstant.ERROR;
         }
         try {
@@ -159,7 +165,7 @@ public class DBCenterFLetter {
             if (lightweight.getInfoJson() != null)
                 values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
 
-            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", String.valueOf(lightweight.getUid()));
+            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", String.valueOf(lightweight.getUid()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,17 +173,21 @@ public class DBCenterFLetter {
     }
 
     private boolean isExist(String userid) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
-                .append(" WHERE ")
-                .append(FLetter.COLUMN_USERID + " = ?");
-        Cursor cursor = mDatabase.query(sql.toString(), userid);
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.close();
-            return true;
-        } else {
-            if (cursor != null) cursor.close();
-            return false;
+        Cursor cursor = null;
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
+                    .append(" WHERE ")
+                    .append(FLetter.COLUMN_USERID + " = ?");
+            cursor = mDatabase.query(sql.toString(), userid);
+            if (cursor != null && cursor.moveToFirst()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.close(cursor);
         }
+        return false;
     }
 
     public Observable<Boolean> isHaveMsg(String userid) {
@@ -221,6 +231,7 @@ public class DBCenterFLetter {
 
     /**
      * 查询 列表
+     *
      * @param sql
      * @return
      */
@@ -268,31 +279,33 @@ public class DBCenterFLetter {
 
     /**
      * 删除
+     *
      * @param whisperID 私聊ID
      * @return
      */
-    public int delete(long whisperID){
+    public int delete(long whisperID) {
         return mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
     }
 
     /**
      * 更新成内容
+     *
      * @param userid
      * @return
      */
-    public long updateContent(String userid){
+    public long updateContent(String userid) {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_CONTENT, new byte[0]);
         values.put(FLetter.COLUMN_TYPE, 0);
         values.put(FLetter.COLUMN_TIME, 0);
         values.put(FLetter.COLUMN_STATUS, 0);
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? ", userid);
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", userid);
     }
 
-    public long updateStatus(long userID){
+    public long updateStatus(long userID) {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ? AND "
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? AND "
                 + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
     }
 
@@ -304,17 +317,18 @@ public class DBCenterFLetter {
 
     /**
      * 发送成功或失败更新状态
+     *
      * @param userID
      * @param status
      * @return
      */
-    public long updateStatus(String userID, int status){
+    public long updateStatus(String userID, int status) {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID +  " = ?", userID);
+        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ?", userID);
     }
 
-    public Observable<List<BaseMessage>> deleteCommon(long delTime){
+    public Observable<List<BaseMessage>> deleteCommon(long delTime) {
         final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
                 .append(" WHERE ")
                 .append(FLetter.COLUMN_TIME + " < ")
@@ -329,14 +343,14 @@ public class DBCenterFLetter {
                 });
     }
 
-    public Observable<List<BaseMessage>> deleteKFID(){
-            final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
-                    .append(" WHERE ")
-                    .append(FLetter.COLUMN_KFID + " = ")
-                    .append(MessageConstant.KF_ID)
-                    .append(" AND ")
-                    .append(FLetter.COLUMN_USERID + " <> ")
-                    .append(MailSpecialID.customerService.getSpecialID());
+    public Observable<List<BaseMessage>> deleteKFID() {
+        final StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
+                .append(" WHERE ")
+                .append(FLetter.COLUMN_KFID + " = ")
+                .append(MessageConstant.KF_ID)
+                .append(" AND ")
+                .append(FLetter.COLUMN_USERID + " <> ")
+                .append(MailSpecialID.customerService.getSpecialID());
 
         return mDatabase.createQuery(FLetter.FLETTER_TABLE, sql.toString())
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {

@@ -630,7 +630,8 @@ public class ChatMgr implements ModuleBase {
      *
      * @param message
      */
-    public void onReceiving(BaseMessage message) {
+    public void onReceiving(BaseMessage message, boolean b) {
+        PLogger.printObject("onReceiving==" + b);
         message.setStatus(MessageConstant.UNREAD_STATUS);
         PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
@@ -834,9 +835,10 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if (!message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
+                if (ret && !message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
                         !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
                         (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
+                    PLogger.printObject("StrangerNew()=chatMgr=" + ModuleMgr.getChatListMgr().getStrangerNew());
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
@@ -1004,7 +1006,8 @@ public class ChatMgr implements ModuleBase {
             message.setType(type);
             message.setChannelID(null);
 
-            ModuleMgr.getChatMgr().onReceiving(message);
+            PLogger.printObject("offlineMessage=" + message.getType());
+            ModuleMgr.getChatMgr().onReceiving(message, false);
         } catch (Exception e) {
             e.printStackTrace();
         }

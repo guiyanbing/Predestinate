@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -71,6 +72,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         isCanBack(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_say_hello_user_act);
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getIsCanExKey(), true);
         initView();
         initData();
         MsgMgr.getInstance().attach(this);
@@ -119,12 +121,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         ignore_btn = (Button) findViewById(say_hello_users_all_ignore);
         del_btn.setOnClickListener(this);
         ignore_btn.setOnClickListener(this);
-
-        //发送清消息列表打招呼的人角标
-        if (ModuleMgr.getChatListMgr().getStrangerNew()) {
-            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
-            ModuleMgr.getChatListMgr().setStrangerNew(false);
-        }
     }
 
     private void initData() {
@@ -136,6 +132,12 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             showHasData();
         } else {
             showNoData();
+        }
+
+        //发送清消息列表打招呼的人角标
+        if (ModuleMgr.getChatListMgr().getStrangerNew()) {
+            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
+            ModuleMgr.getChatListMgr().setStrangerNew(false);
         }
     }
 
@@ -230,7 +232,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
-                initData();
+                if (PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getIsCanExKey(), false)) {
+                    initData();
+                }
                 break;
             default:
                 break;
@@ -242,13 +246,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     public void showHasData() {
         adapter.notifyDataSetChanged();
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(exListView);
-            }
-        }, 800);
-
+        detectInfo(exListView);
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
     }
@@ -366,7 +364,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     private void detectInfo(AbsListView view) {
         if (adapter == null) return;
-        if (!timeUtil.check(3 * 1000)) {
+        if (!timeUtil.check(10 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();
@@ -409,5 +407,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getIsCanExKey(), false);
     }
 }

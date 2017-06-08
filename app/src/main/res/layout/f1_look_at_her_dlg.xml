@@ -36,7 +36,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/px6_dp"
+        android:layout_height="@dimen/px3_dp"
         android:background="@color/bg_color" />
 
     <RelativeLayout
@@ -67,8 +67,8 @@
 
     <LinearLayout
         style="@style/common_list_item"
-        android:paddingBottom="@dimen/px35_dp"
-        android:paddingTop="@dimen/px35_dp"
+        android:paddingBottom="@dimen/px18_dp"
+        android:paddingTop="@dimen/px18_dp"
         android:gravity="right|center"
         android:orientation="horizontal">
 

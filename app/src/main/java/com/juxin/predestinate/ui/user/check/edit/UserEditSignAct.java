@@ -44,7 +44,7 @@ public class UserEditSignAct extends BaseActivity implements TextWatcher, OnClic
     private void initTitle() {
         setBackView();
         setTitle(getString(R.string.user_info_edit_sign));
-        setTitleRight(getString(R.string.user_info_save), this);
+        setTitleRight(getString(R.string.save), this);
     }
 
     private void initView() {

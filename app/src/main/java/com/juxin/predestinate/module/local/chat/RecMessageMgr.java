@@ -86,6 +86,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 jo.put("mt", 4);
                 JSONObject giftJo = object.getJSONObject("gift");
                 jo.put("gift_id", giftJo.getInt("gift_id"));
+                jo.put("num",giftJo.getInt("count"));
             }
 
             if (mtp == 26) {
@@ -155,7 +156,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                     //{"d":167075,"fid":110872922,"mct":"","media_tp":1,"mt":1495891670,"mtp":24,"ru":1,"tid":110872541,"vc_id":100000459,"vc_tp":1}
                     ModuleMgr.getChatMgr().onReceivingVideo((VideoMessage) message);
                 } else {
-                    ModuleMgr.getChatMgr().onReceiving(message);
+                    ModuleMgr.getChatMgr().onReceiving(message, true);
                 }
             } else {
                 ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);

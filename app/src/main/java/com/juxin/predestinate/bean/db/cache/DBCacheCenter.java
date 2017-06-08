@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -65,17 +66,21 @@ public class DBCacheCenter {
      * @return
      */
     private boolean isInfoExist(long userID) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FProfileCache.FPROFILE_TABLE)
-                .append(" WHERE ")
-                .append(FProfileCache.COLUMN_USERID + " = ?");
-        Cursor cursor = mDatabase.query(sql.toString(), String.valueOf(userID));
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.close();
-            return true;
-        } else {
-            if (cursor != null) cursor.close();
-            return false;
+        Cursor cursor = null;
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FProfileCache.FPROFILE_TABLE)
+                    .append(" WHERE ")
+                    .append(FProfileCache.COLUMN_USERID + " = ?");
+            cursor = mDatabase.query(sql.toString(), String.valueOf(userID));
+            if (cursor != null && cursor.moveToFirst()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.close(cursor);
         }
+        return false;
     }
 
     private void storageData(UserInfoLightweight lightweight, boolean aBoolean) {

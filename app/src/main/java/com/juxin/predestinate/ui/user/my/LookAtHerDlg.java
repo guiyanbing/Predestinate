@@ -24,11 +24,9 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
  * 作者:lc
  */
 public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickListener {
-    private static final int APPEAR_TYPE_OWN = 1;//自己露脸
-    private static final int APPEAR_TYPE_NO_OWN = 2;//自己不露脸
-
     private Context context;
     private long otherId;
+    private int selectVal;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -82,18 +80,26 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                 cb_own_disagree.setChecked(true);
                 break;
             case R.id.tv_select_ok:
-                if (cb_def_sel.isChecked()) {
-                    if (cb_own_agree.isChecked()) {
-                        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_OWN);
-                    } else if (cb_own_disagree.isChecked()) {
-                        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_NO_OWN);
+                if (cb_own_agree.isChecked()) {
+                    selectVal =  Constant.APPEAR_TYPE_OWN;
+                    if (cb_def_sel.isChecked()) {
+                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
+                    }
+                } else if (cb_own_disagree.isChecked()) {
+                    selectVal =  Constant.APPEAR_TYPE_NO_OWN;
+                    if (cb_def_sel.isChecked()) {
+                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                     }
                 }
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, false, selectVal);
                 dismiss();
                 break;
             default:
                 break;
         }
+    }
+
+    private void saveType(String type, int val) {
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(type), val);
     }
 }
