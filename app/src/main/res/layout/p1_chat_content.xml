@@ -35,6 +35,17 @@
                     android:scrollbars="none" />
 
                 <ImageView
+                    android:id="@+id/input_look_at_her"
+                    android:layout_width="@dimen/px150_dp"
+                    android:layout_height="@dimen/px150_dp"
+                    android:layout_above="@+id/input_giftview"
+                    android:layout_alignRight="@+id/chat_content_list"
+                    android:layout_marginBottom="@dimen/px35_dp"
+                    android:layout_marginRight="@dimen/px15_dp"
+                    android:src="@drawable/f1_look_at_her"
+                    android:visibility="gone"/>
+
+                <ImageView
                     android:id="@+id/input_giftview"
                     android:layout_width="@dimen/px150_dp"
                     android:layout_height="@dimen/px150_dp"
@@ -42,7 +53,7 @@
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px35_dp"
                     android:layout_marginRight="@dimen/px15_dp"
-                    android:src="@drawable/f1_fc_gift" />
+                    android:src="@drawable/f1_fc_gift_w" />
 
                 <LinearLayout
                     android:id="@+id/ll_chat_greeting_tips_container"

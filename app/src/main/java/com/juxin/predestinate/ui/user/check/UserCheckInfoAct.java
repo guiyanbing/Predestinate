@@ -46,7 +46,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private UserDetail userDetail;   // 用户资料
 
     private ScrollView scrollLayout;
-    private TextView tv_sayhi;
+    private TextView tv_sayhi,tv_look_look;
     private LinearLayout container, videoBottom, voiceBottom, sayHibottom, mGiftTipsContainerV;
 
     /* *********  panel **********/
@@ -106,6 +106,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         voiceBottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_voice);
         sayHibottom = (LinearLayout) findViewById(R.id.ll_userinfo_bottom_hi);
         tv_sayhi = (TextView) findViewById(R.id.tv_sayhello_text);
+        tv_look_look = (TextView) findViewById(R.id.tv_look_look);
 
         videoBottom.setOnClickListener(listener);
         voiceBottom.setOnClickListener(listener);
@@ -115,6 +116,12 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         findViewById(R.id.ll_userinfo_bottom_send).setOnClickListener(listener);
 
         if (userDetail == null) return;
+
+        if(userDetail.isMan()) {
+            tv_look_look.setText(R.string.user_info_look_at_he);
+        }else {
+            tv_look_look.setText(R.string.user_info_look_at_her);
+        }
 
         if (userDetail.isSayHello()) {   // 已打招呼
             initSayHi();
@@ -145,7 +152,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
-                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音

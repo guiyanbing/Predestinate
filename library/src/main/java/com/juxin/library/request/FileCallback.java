@@ -34,12 +34,12 @@ public class FileCallback implements Callback<ResponseBody> {
         this.filePath = filePath;
         this.listener = listener;
 
+        if (listener != null) listener.onStart(url, filePath);
         subscribeLoadProgress();// 订阅下载进度
     }
 
     @Override
     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-        if (listener != null) listener.onStart(url, filePath);
         try {
             saveFile(response);
         } catch (Exception e) {

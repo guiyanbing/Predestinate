@@ -91,6 +91,8 @@
     <string name="user_info_hi_suc">打招呼成功</string>
     <string name="user_info_has_hi">已打招呼</string>
     <string name="user_info_video">发视频</string>
+    <string name="user_info_look_at_her">看看她</string>
+    <string name="user_info_look_at_he">看看他</string>
     <string name="user_info_voice">发语音</string>
     <string name="user_info_age">%d岁</string>
     <string name="user_info_follow_count">关注 %d</string>
@@ -490,6 +492,10 @@
     <string name="chat_click_receive_gift">点击收礼</string>
     <string name="chat_click_send_gift">点击赠送</string>
     <string name="received_error">领取失败！</string>
+    <string name="gift_has_received">已领取</string>
+    <string name="gift_has_auto_received">已自动领取</string>
+    <string name="gift_click_to_receive">点击收礼</string>
+    <string name="send_you">送你</string>
 
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>

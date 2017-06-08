@@ -108,7 +108,7 @@ public class FileUtil {
      * @param filePath 文件路径
      * @return 带后缀的文件名
      */
-    public static String getFileName(String filePath) {
+    public static String getFileNameFromUrl(String filePath) {
         if (TextUtils.isEmpty(filePath)) return "";
 
         String fileName = "";

@@ -242,7 +242,13 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     public void showHasData() {
         adapter.notifyDataSetChanged();
-        detectInfo(exListView);
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                detectInfo(exListView);
+            }
+        }, 800);
+
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
     }
@@ -360,7 +366,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     private void detectInfo(AbsListView view) {
         if (adapter == null) return;
-        if (!timeUtil.check(10 * 1000)) {
+        if (!timeUtil.check(3 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();

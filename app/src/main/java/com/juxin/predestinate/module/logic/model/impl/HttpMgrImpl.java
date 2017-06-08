@@ -105,25 +105,25 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack downloadVideo(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getVideoDir() + System.currentTimeMillis() + ".mp4";
+        String filePath = DirType.getVideoDir() + FileUtil.getFileNameFromUrl(url) + ".mp4";
         return download(url, filePath, downloadListener);
     }
 
     @Override
     public HTCallBack downloadPic(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getImageDir() + System.currentTimeMillis() + ".jpg";
+        String filePath = DirType.getImageDir() + FileUtil.getFileNameFromUrl(url) + ".jpg";
         return download(url, filePath, downloadListener);
     }
 
     @Override
     public HTCallBack downloadVoice(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getVoiceDir() + System.currentTimeMillis() + ".amr";
+        String filePath = DirType.getVoiceDir() + FileUtil.getFileNameFromUrl(url) + ".amr";
         return download(url, filePath, downloadListener);
     }
 
     @Override
     public HTCallBack downloadApk(String url, DownloadListener downloadListener) {
-        String filePath = DirType.getApkDir() + System.currentTimeMillis() + ".apk";
+        String filePath = DirType.getApkDir() + FileUtil.getFileNameFromUrl(url) + ".apk";
         return download(url, filePath, downloadListener);
     }
 

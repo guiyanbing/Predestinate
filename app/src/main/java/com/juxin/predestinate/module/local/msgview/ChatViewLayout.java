@@ -35,7 +35,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ChatAdapter.ChatInstance chatInstance = null;
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
-    private ImageView input_giftview;
+    private ImageView input_giftview,input_look_at_her;
     public LinearLayout mGiftTipsContainerV;
 
     public ChatViewLayout(Context context) {
@@ -73,6 +73,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
 
         chatFixedTip = (ViewGroup) contentView.findViewById(R.id.chat_fixed_tip);
         chatFloatTip = (ViewGroup) contentView.findViewById(R.id.chat_float_tip);
+        input_look_at_her = (ImageView) contentView.findViewById(R.id.input_look_at_her);
         input_giftview = (ImageView) contentView.findViewById(R.id.input_giftview);
         mGiftTipsContainerV = (LinearLayout) contentView.findViewById(R.id.ll_chat_greeting_tips_container);
 
@@ -137,6 +138,10 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         input_giftview.setOnClickListener(listener);
     }
 
+    public void onClickLookAtHer(View.OnClickListener listener) {
+        input_look_at_her.setOnClickListener(listener);
+    }
+
     /**
      * 右上角添加固定提示。
      *
@@ -196,6 +201,10 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
 
     public void setInputGiftviewVisibility(int visibility){
         input_giftview.setVisibility(visibility);
+    }
+
+    public void setInputLookAtHerVisibility(int visibility){
+        input_look_at_her.setVisibility(visibility);
     }
 
     @Override

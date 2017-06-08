@@ -75,7 +75,7 @@
                 android:paddingLeft="@dimen/px15_dp"
                 android:text="对应11000Y币"
                 android:textColor="#999999"
-                android:textSize="@dimen/px39_sp" />
+                android:textSize="@dimen/px36_sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
                 android:paddingBottom="10dip"
                 android:text="话费领取规则  >"
                 android:textColor="@color/pay_tel_color"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="客服：电话0731-89746010"
+            android:text="客服电话：0731-89746010"
             android:textColor="#666666" />
     </RelativeLayout>
 </RelativeLayout>
