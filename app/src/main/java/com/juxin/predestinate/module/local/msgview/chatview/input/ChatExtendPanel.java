@@ -160,6 +160,17 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                 CommonGridBtnPanel.BTN_KEY.VIDEO.setEnable(config.isVideoChat());
                 CommonGridBtnPanel.BTN_KEY.VOICE.setPrice(config.getAudioPrice());
                 CommonGridBtnPanel.BTN_KEY.VOICE.setEnable(config.isVoiceChat());
+                if(config.isVoiceChat()){
+                    CommonGridBtnPanel.BTN_KEY.VOICE.setIcon(R.drawable.chat_input_grid_voice_selector);
+                }else{
+                    CommonGridBtnPanel.BTN_KEY.VOICE.setIcon(R.drawable.p1_add_c03);
+                }
+
+                if(config.isVideoChat()){
+                    CommonGridBtnPanel.BTN_KEY.VIDEO.setIcon(R.drawable.chat_input_grid_video_selector);
+                }else{
+                    CommonGridBtnPanel.BTN_KEY.VIDEO.setIcon(R.drawable.p1_add_b03);
+                }
                 chatExtendAdapter.notifyDataSetChanged();
             }
         }
