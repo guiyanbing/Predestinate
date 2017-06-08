@@ -28,7 +28,6 @@ import com.juxin.library.image.transform.RoundedCorners;
  * 基于Glide图片请求，处理类
  */
 public class ImageLoader {
-
     private static CenterCrop bitmapCenterCrop;
     private static FitCenter bitmapFitCenter;
     private static CircleTransform circleTransform;
@@ -67,18 +66,14 @@ public class ImageLoader {
     }
 
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view, int roundPx) {
-        loadRound(context, model, view, roundPx, R.drawable.default_head);
+        loadRound(context, model, view, roundPx, R.drawable.default_head, R.drawable.default_head);
     }
 
     /**
      * CenterCrop加载图片
      */
     public static <T> void loadCenterCrop(Context context, T model, ImageView view) {
-        loadCenterCrop(context, model, view, R.drawable.default_pic);
-    }
-
-    public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg) {
-        loadCenterCrop(context, model, view, defResImg, defResImg);
+        loadCenterCrop(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
     public static <T> void loadCenterCrop(Context context, T model, ImageView view, int defResImg, int errResImg) {
@@ -89,11 +84,7 @@ public class ImageLoader {
      * FitCenter加载图片
      */
     public static <T> void loadFitCenter(Context context, T model, ImageView view) {
-        loadFitCenter(context, model, view, R.drawable.default_pic);
-    }
-
-    public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg) {
-        loadFitCenter(context, model, view, defResImg, defResImg);
+        loadFitCenter(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
     public static <T> void loadFitCenter(Context context, T model, ImageView view, int defResImg, int errResImg) {
@@ -107,11 +98,6 @@ public class ImageLoader {
         loadRound(context, model, view, 8, R.drawable.default_pic, R.drawable.default_pic);
     }
 
-    public static <T> void loadRound(Context context, T model, ImageView view, int roundPx, int defResImg) {
-        loadRound(context, model, view, roundPx, defResImg, defResImg);
-    }
-
-
     /**
      * 图片圆角处理: 上面两个角
      */
@@ -123,54 +109,29 @@ public class ImageLoader {
     /**
      * @param roundPx 圆角弧度
      */
-    public static <T> void loadRoundTop(final Context context, final T model, final ImageView view,
-                                        int roundPx, int defResImg, final int errResImg) {
+    public static <T> void loadRoundTop(Context context, T model, ImageView view,
+                                        int roundPx, int defResImg, int errResImg) {
         roundedCornerTop.setRadius(roundPx);
-        view.setTag(R.string.view_url_tag_id, model);
-        loadPicWithCallback(context,
-                defResImg,
-                new GlideCallback() {
-                    @Override
-                    public void onResourceReady(final GlideDrawable defRes) {
-                        loadPicWithCallback(context,
-                                errResImg,
-                                new GlideCallback() {
-                                    @Override
-                                    public void onResourceReady(GlideDrawable errRes) {
-                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, roundedCornerTop);
-                                    }
-                                },
-                                bitmapCenterCrop, roundedCornerTop);
-                    }
-                },
-                bitmapCenterCrop, roundedCornerTop);
+        loadStylePic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCornerTop);
     }
-
 
     /**
      * @param roundPx 圆角弧度
      */
-    public static <T> void loadRound(final Context context, final T model, final ImageView view,
-                                     int roundPx, int defResImg, final int errResImg) {
+    public static <T> void loadRound(Context context, T model, ImageView view,
+                                     int roundPx, int defResImg, int errResImg) {
         roundedCorners.setRadius(roundPx);
-        view.setTag(R.string.view_url_tag_id, model);
-        loadPicWithCallback(context,
-                defResImg,
-                new GlideCallback() {
-                    @Override
-                    public void onResourceReady(final GlideDrawable defRes) {
-                        loadPicWithCallback(context,
-                                errResImg,
-                                new GlideCallback() {
-                                    @Override
-                                    public void onResourceReady(GlideDrawable errRes) {
-                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, roundedCorners);
-                                    }
-                                },
-                                bitmapCenterCrop, roundedCorners);
-                    }
-                },
-                bitmapCenterCrop, roundedCorners);
+        loadStylePic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
+    }
+
+    /**
+     * 加载为圆形图像
+     */
+    public static <T> void loadCircle(Context context, T model, ImageView view,
+                                      int defResImg, int errResImg, int borderWidth, int borderColor) {
+        circleTransform.setBorderWidth(borderWidth);
+        circleTransform.setBorderColor(borderColor);
+        loadStylePic(context, model, view, defResImg, errResImg, bitmapCenterCrop, circleTransform);
     }
 
     /**
@@ -184,44 +145,56 @@ public class ImageLoader {
     }
 
     /**
-     * 加载为圆形图像
-     */
-    public static <T> void loadCircle(final Context context, final T model, final ImageView view,
-                                      final int defResImg, final int errResImg, int borderWidth, int borderColor) {
-        circleTransform.setBorderWidth(borderWidth);
-        circleTransform.setBorderColor(borderColor);
-        view.setTag(R.string.view_url_tag_id, model);
-        loadPicWithCallback(context,
-                defResImg,
-                new GlideCallback() {
-                    @Override
-                    public void onResourceReady(final GlideDrawable defRes) {
-                        loadPicWithCallback(context,
-                                errResImg,
-                                new GlideCallback() {
-                                    @Override
-                                    public void onResourceReady(GlideDrawable errRes) {
-                                        loadPic(context, model, view, defRes, errRes, bitmapCenterCrop, circleTransform);
-                                    }
-                                }, bitmapCenterCrop, circleTransform);
-                    }
-                }, bitmapCenterCrop, circleTransform);
-    }
-
-    /**
      * 以静态图片展示Gif
      */
     public static <T> void loadGifAsBmp(Context context, T model, ImageView view) {
         loadGifAsBmp(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
     }
 
+    /**
+     * 带回调的加载
+     */
+    public static <T> void loadPicWithCallback(Context context, T model, GlideCallback callback) {
+        loadPicWithCallback(context, model, callback, (Transformation<Bitmap>[]) null);
+    }
+
     // ==================================== 内部私有调用 =============================================
+
+    /**
+     * 带占位图预处理样式的加载函数
+     *
+     * @param context
+     * @param model
+     * @param view
+     * @param defResImg
+     * @param errResImg
+     * @param transformation
+     * @param <T>
+     */
+    private static <T> void loadStylePic(final Context context, final T model, final ImageView view,
+                                         int defResImg, final int errResImg,
+                                         final Transformation<Bitmap>... transformation) {
+        setImgTag(view, model);
+        loadPicWithCallback(context, defResImg, new GlideCallback() {
+                    @Override
+                    public void onResourceReady(final GlideDrawable defRes) {
+                        loadPicWithCallback(context, errResImg, new GlideCallback() {
+                                    @Override
+                                    public void onResourceReady(GlideDrawable errRes) {
+                                        loadPic(context, model, view, defRes, errRes, transformation);
+                                    }
+                                },
+                                transformation);
+                    }
+                },
+                transformation);
+    }
 
     private static <T> void loadPic(Context context, T model, ImageView view,
                                     int defResImg, int errResImg,
                                     Transformation<Bitmap>... transformation) {
         try {
-            view.setTag(R.string.view_url_tag_id, model);
+            setImgTag(view, model);
             loadPic(context, model, view, context.getResources().getDrawable(defResImg),
                     context.getResources().getDrawable(errResImg), transformation);
         } catch (Exception e) {
@@ -234,12 +207,18 @@ public class ImageLoader {
                                     final Transformation<Bitmap>... transformation) {
         try {
             //先加载默认图
+            if (isInvalidTag(view, model))
+                return;
             view.setImageDrawable(defResImg);
+
+            if (model == null)
+                return;
+
             //再去网络请求
             loadPicWithCallback(context, model, new GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
-                    if (view.getTag(R.string.view_url_tag_id) != null && view.getTag(R.string.view_url_tag_id) != model)
+                    if (isInvalidTag(view, model))
                         return;
                     getDrawableBuilder(context, model)
                             .bitmapTransform(transformation)
@@ -255,12 +234,8 @@ public class ImageLoader {
     }
 
     /**
-     * 加载图片： 带回调
+     * 带回调的加载
      */
-    public static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback) {
-        loadPicWithCallback(context, model, callback, (Transformation<Bitmap>[]) null);
-    }
-
     private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
         try {
             if (isActDestroyed(context))
@@ -302,19 +277,19 @@ public class ImageLoader {
     }
 
     private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
-        return getDrawableRequest(context, model)
+        return getRequest(context, model)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 
     private static <T> BitmapRequestBuilder<T, Bitmap> getBitmapBuilder(Context context, T model) {
-        return getDrawableRequest(context, model)
+        return getRequest(context, model)
                 .asBitmap()
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
-    private static <T> DrawableTypeRequest<T> getDrawableRequest(Context context, T model) {
+    private static <T> DrawableTypeRequest<T> getRequest(Context context, T model) {
         return Glide.with(context).load(model);
     }
 
@@ -324,7 +299,31 @@ public class ImageLoader {
                 context instanceof Activity && ((Activity) context).isDestroyed();
     }
 
-    // 请求回调
+    /**
+     * 是否无效标记
+     *
+     * @param view
+     * @param model
+     * @param <T>
+     * @return
+     */
+    private static <T> boolean isInvalidTag(ImageView view, T model) {
+        return view.getTag(R.string.view_url_tag_id) != model;
+    }
+
+    /**
+     * 设置标记
+     *
+     * @param view
+     * @param model
+     */
+    private static <T> void setImgTag(ImageView view, T model) {
+        view.setTag(R.string.view_url_tag_id, model);
+    }
+
+    /**
+     * 请求回调
+     */
     public interface GlideCallback {
         void onResourceReady(GlideDrawable resource);
     }
