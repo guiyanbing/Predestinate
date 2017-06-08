@@ -88,11 +88,11 @@ public class VideoAudioChatHelper {
      * @param context
      * @param dstUid
      * @param type
-     * @param flag  判断是否显示进场dlg
-     * @param singleType  非默认情况值, 0:还没选择,1:自己露脸，2:自己不露脸
+     * @param flag       判断是否显示进场dlg
+     * @param singleType 非默认情况值, 0:还没选择,1:自己露脸，2:自己不露脸
      */
     public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType) {
-        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+        if (flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             UIShow.showLookAtHerDlg(context, dstUid);
             return;
         }
@@ -164,7 +164,7 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, int vcId, long dstUid, int chatType) {
-        startRtcInitActivity(activity, newBundle(vcId, dstUid, 2, chatType));
+        startRtcInitActivity(activity, newBundle(vcId, dstUid, 2, chatType, 0));
     }
 
     /**
@@ -233,8 +233,9 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             int vcID = resJo.optInt("vc_id");
+            int msgVer = resJo.optInt("confer_msgver");
             ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
-            Bundle bundle = newBundle(vcID, dstUid, 1, type);
+            Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             startRtcInitActivity(context, bundle);
             return;
         }
@@ -251,9 +252,10 @@ public class VideoAudioChatHelper {
      * @param dstUid     对方UID
      * @param inviteType 1邀请，2受邀
      * @param chatType   1视频，2音频
+     * @param msgVer     程序版本号
      * @return
      */
-    private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType) {
+    private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType, int msgVer) {
         int foreverType = PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0);
         Bundle bundle = new Bundle();
         bundle.putString("vc_get_user_url", UrlParam.reqUserInfoSummary.getFinalUrl());
@@ -268,8 +270,9 @@ public class VideoAudioChatHelper {
         bundle.putLong("vc_check_yellow_first", ModuleMgr.getCommonMgr().getCommonConfig().getCheckYellowFirst() * 1000);
         bundle.putLong("vc_dst_uid", dstUid);
         bundle.putString("vc_self_info", PSP.getInstance().getString(INFO_SAVE_KEY, ""));
-        bundle.putString("vc_gift_list",ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
-        bundle.putInt("vc_own",singleType==0 ? (foreverType == 0 ? 2: foreverType) : singleType);//1看自己，2不看自己
+        bundle.putString("vc_gift_list", ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
+        bundle.putInt("vc_own", singleType == 0 ? (foreverType == 0 ? 2 : foreverType) : singleType);//1看自己，2不看自己
+        bundle.putInt("vc_msg_ver", msgVer);
         return bundle;
     }
 
