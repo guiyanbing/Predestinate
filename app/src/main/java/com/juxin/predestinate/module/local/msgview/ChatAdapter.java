@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -8,6 +9,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
@@ -15,6 +17,7 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -27,8 +30,10 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 import java.lang.reflect.Constructor;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -281,7 +286,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (datas == null) return;
         if (datas.size() <= 0) return;
         BaseMessage mess = datas.get(datas.size() - 1);
-        if (mess == null) return;
+
         if (mess != null && (mess.getWhisperID() + "").equalsIgnoreCase(mess.getSendID() + "" )&& datas.size() > 0) {
             for (int i = datas.size()-1; i >= 0 && i < datas.size(); i--) {
                 BaseMessage message = datas.get(i);
@@ -428,8 +433,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
-                if (isMachine)
-                    onDataUpdate();
+                if (isMachine) onDataUpdate();
 
                 if (message.getSendID() != App.uid)
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));

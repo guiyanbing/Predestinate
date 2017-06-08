@@ -17,6 +17,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -318,8 +319,13 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             super.reset(msgData, sender);
 
             UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
-            // 更新头像
-            ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null) ? infoLightweight.getAvatar() : "", head);
+
+            if(msgData.getLWhisperID() == MailSpecialID.customerService.getSpecialID()){
+                ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null &&
+                        !TextUtils.isEmpty(infoLightweight.getAvatar())) ? infoLightweight.getAvatar() : R.drawable.f1_secretary_avatar, head);
+            }else {
+                ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null) ? infoLightweight.getAvatar() : "", head);
+            }
 
             if (chatpanel != null) {
                 updateStatus(ChatMsgType.getMsgType(msg.getType()), sender);
