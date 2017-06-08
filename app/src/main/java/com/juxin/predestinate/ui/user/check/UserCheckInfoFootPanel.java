@@ -134,4 +134,11 @@ public class UserCheckInfoFootPanel extends BasePanel {
         tv_audio_price.setText(getContext().getString(R.string.user_info_chat_voice, config.getAudioPrice()));
         iv_auth_video.setVisibility(config.isVerifyVideo() ? View.VISIBLE : View.GONE);
     }
+
+    /**
+     * 刷新私密视频状态
+     */
+    public void freshSecretVideo(){
+        videoPanel.refresh(userDetail);
+    }
 }

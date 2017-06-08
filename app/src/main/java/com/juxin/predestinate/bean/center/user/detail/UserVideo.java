@@ -52,6 +52,10 @@ public class UserVideo extends BaseData implements Parcelable {
         return open == 2;
     }
 
+    public void setCanView(){
+        open = 2;
+    }
+
     public String getContent() {
         return content;
     }

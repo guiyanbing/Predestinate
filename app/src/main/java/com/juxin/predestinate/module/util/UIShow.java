@@ -417,11 +417,11 @@ public class UIShow {
      *
      * @param userProfile 查看自己的时候传null
      */
-    public static void showUserSecretAct(Context context, int channel, UserDetail userProfile) {
-        Intent intent = new Intent(context, UserSecretAct.class);
+    public static void showUserSecretAct(FragmentActivity activity, int channel, UserDetail userProfile, int requestCode) {
+        Intent intent = new Intent(activity, UserSecretAct.class);
         intent.putExtra(CenterConstant.USER_CHECK_INFO_KEY, channel);
         intent.putExtra(CenterConstant.USER_CHECK_OTHER_KEY, userProfile);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -1301,10 +1301,10 @@ public class UIShow {
     /**
      * 查看视频：送礼弹框
      */
-    public static void showSecretGiftDlg(Context context, UserVideo userVideo) {
-        Intent intent = new Intent(context, SecretGiftDlg.class);
+    public static void showSecretGiftDlg(FragmentActivity activity, UserVideo userVideo, int requestCode) {
+        Intent intent = new Intent(activity, SecretGiftDlg.class);
         intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     /**

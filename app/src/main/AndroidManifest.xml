@@ -180,7 +180,6 @@
 
         <activity
             android:name=".ui.user.check.secret.UserSecretAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity

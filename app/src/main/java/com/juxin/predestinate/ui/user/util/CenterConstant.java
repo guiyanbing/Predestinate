@@ -11,6 +11,8 @@ public class CenterConstant {
     public static final String USER_CHECK_OTHER_KEY = "check_other_info"; // 查看TA人资料
     public static final String USER_CHECK_VIDEO_KEY = "check_other_video";// 查看TA人视频
 
+    public static final String USER_CHECK_UNLOCK_VIDEO_LIST_KEY = "check_other_video_id_list";// 解锁视频id列表
+
     public static final int USER_CHECK_INFO_OWN = 0x11;      // 查看自己资料
     public static final int USER_CHECK_INFO_OTHER = 0x12;    // 查看TA人资料
     public static final int USER_CHECK_CONNECT_OTHER = 0x13; // 查看TA人资料 联系方式

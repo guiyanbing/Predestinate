@@ -13,6 +13,7 @@ import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
 
 import java.io.Serializable;
 
@@ -116,7 +117,7 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
                 break;
 
             case EX_HORIZONTAL_VIDEO:
-                UIShow.showUserSecretAct(getContext(), channel, userDetail);
+                UIShow.showUserSecretAct((FragmentActivity)getContext(), channel, userDetail, UserCheckInfoAct.REQUEST_CODE_UNLOCK_VIDEO);
                 break;
         }
     }
