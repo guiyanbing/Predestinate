@@ -169,7 +169,6 @@ public class ChatMgr implements ModuleBase {
                 messageRet.parseJson(contents);
                 if (!messageRet.isOk() || !messageRet.isS()) return;
 
-
                 Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
                 observable.subscribe(new Action1<Boolean>() {
                     @Override

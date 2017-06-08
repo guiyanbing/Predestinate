@@ -511,6 +511,7 @@ public class BaseMessage implements IBaseMessage {
         parseInfoJson(this.getInfoJson());
         this.setKfID(bundle.getInt(FLetter.COLUMN_KFID));
         this.setStatus(bundle.getInt(FLetter.COLUMN_STATUS));
+        this.setcMsgID(bundle.getLong(FLetter.COLUMN_CMSGID));
         this.setRu(bundle.getInt(FLetter.COLUMN_RU));
         this.setTime(bundle.getLong(FLetter.COLUMN_TIME));
         this.setJsonStr(bundle.getString(FLetter.COLUMN_CONTENT));
