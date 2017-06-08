@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
@@ -15,7 +14,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,22 +50,6 @@ public class BaseMessage implements IBaseMessage {
                 if (messageType.getMsgType() == msgType) {
                     return messageType;
                 }
-            }
-            return null;
-        }
-
-        /**
-         * 获取消息对应的结构体
-         *
-         * @param type
-         * @return
-         */
-        public static Class<? extends BaseMessage> getMsgClass(int type) {
-            try {
-                BaseMessageType messageType = BaseMessageType.valueOf("Msg_" + type);
-                return messageType.msgClass;
-            } catch (Exception e) {
-                PLogger.d("Msg_" + type);
             }
             return null;
         }

@@ -100,10 +100,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 }
             }
         }
-
-        PLogger.printObject("updateData=" + message);
         datas.add(message);
-        SortList.sortListView(datas);
         notifyDataSetChanged();
     }
 
