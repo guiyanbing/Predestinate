@@ -41,8 +41,10 @@ dependencies {
 
     //retrofit:[https://github.com/square/retrofit]
     compile "com.squareup.retrofit2:retrofit:$rootProject.versions.libRetrofit"
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.versions.libRetrofit"
     compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.versions.libRetrofit"
+
+    //fast-json解析
+    compile 'com.alibaba:fastjson:1.2.31'
 
     //okhttp:[https://github.com/square/okhttp]
     compile "com.squareup.okhttp3:okhttp:$rootProject.versions.libOkhttp"

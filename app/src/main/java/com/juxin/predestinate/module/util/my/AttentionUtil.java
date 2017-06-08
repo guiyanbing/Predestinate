@@ -1,6 +1,6 @@
 package com.juxin.predestinate.module.util.my;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionList;
@@ -22,47 +22,42 @@ public class AttentionUtil {
     private static final String USERSKEY = "USERSKEY";
     public static final int MYATTENTION = 1;
     public static final int ATTENTIONME = 2;
-    private static Map<Long,AttentionUserDetail> userInfos = new HashMap<>();
+    private static Map<Long, AttentionUserDetail> userInfos = new HashMap<>();
     private static List<AttentionUserDetail> userDetails = new ArrayList<>();
     private static List<AttentionUserDetail> userMyDetails = new ArrayList<>();
 
     //初始化
-    public static void initUserDetails(){
+    public static void initUserDetails() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (userInfos.size()<=0){
-                    String jsonStr = PSP.getInstance().getString(USERSKEY+ App.uid,"");
-//                                Log.e("TTTTTTTJJJ111", jsonStr);
-//                                PSP.getInstance().remove(USERSKEY+ModuleMgr.getCenterMgr().getMyInfo().getUid());
+                if (userInfos.size() <= 0) {
+                    String jsonStr = PSP.getInstance().getString(USERSKEY + App.uid, "");
                     AttentionUserDetailList list = new AttentionUserDetailList();
                     list.parseJson(jsonStr);
                     List<AttentionUserDetail> userDetails = list.getAttentionUserDetailList();
-                    for (AttentionUserDetail detail:userDetails){
-                        userInfos.put(detail.getUid(),detail);
+                    for (AttentionUserDetail detail : userDetails) {
+                        userInfos.put(detail.getUid(), detail);
                     }
-//                    Log.e("TTTTTTTTTTTTPPP",userDetails.size()+"||"+userInfos.size());
                 }
             }
         }).start();
     }
 
-    public static void addUser(AttentionUserDetail userDetail){
+    public static void addUser(AttentionUserDetail userDetail) {
         userInfos.put(userDetail.getUid(), userDetail);
     }
 
-    public static AttentionUserDetail getUserDetail(Long uid){
+    public static AttentionUserDetail getUserDetail(Long uid) {
         return userInfos.get(uid);
     }
 
-    public static void saveUserDetails(){
-        Gson gson = new Gson();
+    public static void saveUserDetails() {
         List<AttentionUserDetail> userDetails = new ArrayList<>();
-        for (Long uid:userInfos.keySet()){
+        for (Long uid : userInfos.keySet()) {
             userDetails.add(userInfos.get(uid));
         }
-        String jsonStr = gson.toJson(userDetails);
-//        Log.e("TTTTTTTJJJ",jsonStr);
+        String jsonStr = JSON.toJSONString(userDetails);
         PSP.getInstance().put(USERSKEY + ModuleMgr.getCenterMgr().getMyInfo().getUid(), jsonStr);
     }
 
@@ -71,22 +66,22 @@ public class AttentionUtil {
      *
      * @return
      */
-    public static void updateUserDetails(String jsonStr){
+    public static void updateUserDetails(String jsonStr) {
         UserDetail detail = new UserDetail();
         AttentionUserDetail userDetail = new AttentionUserDetail();
         detail.parseJson(jsonStr);
         userDetail.parse(detail);
-        if (userInfos.containsKey(userDetail.getUid())){
-            userInfos.put(userDetail.getUid(),userDetail);
+        if (userInfos.containsKey(userDetail.getUid())) {
+            userInfos.put(userDetail.getUid(), userDetail);
             saveUserDetails();
         }
     }
 
-    public static void updateUserDetails(UserDetail detail){
+    public static void updateUserDetails(UserDetail detail) {
         AttentionUserDetail userDetail = new AttentionUserDetail();
         userDetail.parse(detail);
-        if (userInfos.containsKey(userDetail.getUid())){
-            userInfos.put(userDetail.getUid(),userDetail);
+        if (userInfos.containsKey(userDetail.getUid())) {
+            userInfos.put(userDetail.getUid(), userDetail);
             saveUserDetails();
         }
     }
@@ -96,18 +91,18 @@ public class AttentionUtil {
      *
      * @return
      */
-    public static List<AttentionUserDetail> HandleAttentionList(List<AttentionList.AttentionInfo> infos ,int attention){
-        if (attention == ATTENTIONME)
+    public static List<AttentionUserDetail> HandleAttentionList(List<AttentionList.AttentionInfo> infos, int attention) {
+        if (attention == ATTENTIONME) {
             userDetails.clear();
-        else
+        } else {
             userMyDetails.clear();
-        for (int i = 0 ;i < infos.size();i++){
+        }
+        for (int i = 0; i < infos.size(); i++) {
             AttentionUserDetail detail = getUserDetail(infos.get(i).getUid());
-//            Log.e("TTTTTTTTTTTTYYY",detail+"|||i="+i+"||uid="+infos.get(i).getUid());
-            if ( detail != null){
-                if (attention == ATTENTIONME){
+            if (detail != null) {
+                if (attention == ATTENTIONME) {
                     userDetails.add(detail);
-                }else {
+                } else {
                     userMyDetails.add(detail);
                 }
                 infos.remove(i);
@@ -115,9 +110,9 @@ public class AttentionUtil {
                 continue;
             }
         }
-        if (attention == ATTENTIONME){
+        if (attention == ATTENTIONME) {
             return userDetails;
-        }else {
+        } else {
             return userMyDetails;
         }
     }

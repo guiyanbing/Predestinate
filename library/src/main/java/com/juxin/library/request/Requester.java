@@ -13,7 +13,6 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 全局统一的网络请求工具类：retrofit
@@ -73,7 +72,6 @@ public class Requester {
                 .baseUrl(host)
                 .client(builder.build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())//此converter放在最后，因为不确定返回的数据是否为json
                 .build();
         return retrofit.create(service);
     }

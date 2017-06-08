@@ -98,6 +98,12 @@
 -keep class com.tencent.tbs.video.interfaces.**  {* ;}
 -keep class com.tencent.smtt.sdk.WebChromeClient$FileChooserParams {*;}
 
+# FastJson
+-dontwarn com.alibaba.fastjson.**
+-keep class com.alibaba.fastjson.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
