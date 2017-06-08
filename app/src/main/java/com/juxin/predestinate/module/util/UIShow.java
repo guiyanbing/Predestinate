@@ -98,8 +98,8 @@ import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsExplainAct;
 import com.juxin.predestinate.ui.user.my.RedBoxPhoneVerifyAct;
 import com.juxin.predestinate.ui.user.my.RedBoxRecordAct;
-import com.juxin.predestinate.ui.user.my.WantMoneyDlg;
 import com.juxin.predestinate.ui.user.my.RotarySetActivity;
+import com.juxin.predestinate.ui.user.my.WantMoneyDlg;
 import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
 import com.juxin.predestinate.ui.user.my.WithDrawExplainAct;
 import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
@@ -1416,9 +1416,9 @@ public class UIShow {
 
     /**
      * 女性进入首页索要礼物弹框
-     * @param context
      */
-    public static void showWantMoneyDlg(Context context){
+    public static void showWantMoneyDlg(Context context) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) return;
         WantMoneyDlg dlg = new WantMoneyDlg(context);
         dlg.show();
     }

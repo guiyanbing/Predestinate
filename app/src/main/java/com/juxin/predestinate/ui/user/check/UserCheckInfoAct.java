@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -21,7 +20,6 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -39,7 +37,7 @@ import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.*;
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
 
 /**
  * 查看用户资料详情
@@ -51,8 +49,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     private UserDetail userDetail;   // 用户资料
 
     private ScrollView scrollLayout;
-    private TextView tv_sayhi,tv_look_look;
-    private LinearLayout container, videoBottom, voiceBottom, sayHibottom, mGiftTipsContainerV;
+    private TextView tv_sayhi, tv_look_look;
+    private LinearLayout container, videoBottom, voiceBottom, sayHibottom;
 
     /* *********  panel **********/
     private UserCheckInfoHeadPanel headPanel;
@@ -84,7 +82,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail);
         container.addView(headPanel.getContentView());
-        mGiftTipsContainerV = (LinearLayout) findViewById(R.id.ll_chat_greeting_tips_container);
 
         footPanel = new UserCheckInfoFootPanel(this, channel, userDetail);
         footPanel.setSlideIgnoreView(this);
@@ -122,9 +119,9 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
         if (userDetail == null) return;
 
-        if(userDetail.isMan()) {
+        if (userDetail.isMan()) {
             tv_look_look.setText(R.string.user_info_look_at_he);
-        }else {
+        } else {
             tv_look_look.setText(R.string.user_info_look_at_her);
         }
 
@@ -267,12 +264,12 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     AttentionUtil.updateUserDetails(userDetail);
                     break;
             }
-        }else if(requestCode == REQUEST_CODE_UNLOCK_VIDEO && resultCode == RESULT_OK && data != null){
-            ArrayList<Long> unlockList = (ArrayList<Long>)data.getSerializableExtra(CenterConstant.USER_CHECK_UNLOCK_VIDEO_LIST_KEY);
+        } else if (requestCode == REQUEST_CODE_UNLOCK_VIDEO && resultCode == RESULT_OK && data != null) {
+            ArrayList<Long> unlockList = (ArrayList<Long>) data.getSerializableExtra(CenterConstant.USER_CHECK_UNLOCK_VIDEO_LIST_KEY);
             List<UserVideo> videoList = userDetail.getUserVideos();
-            for(Long id : unlockList) {
+            for (Long id : unlockList) {
                 for (UserVideo video : videoList) {
-                    if(video.getId() == id){
+                    if (video.getId() == id) {
                         video.setCanView();
                         break;
                     }
@@ -312,12 +309,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
             case MsgType.MT_MyInfo_Change:
                 userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 footPanel.refreshView(userDetail);
-                break;
-
-            case MsgType.MT_SEND_GIFT_FLAG:
-                if (!Constant.GIFT_INFO.equals((String) value)) return;
-                PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, false);
-                mGiftTipsContainerV.setVisibility(View.GONE);
                 break;
 
             default:

@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
@@ -35,8 +36,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ChatAdapter.ChatInstance chatInstance = null;
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
-    private ImageView input_giftview,input_look_at_her;
-    public LinearLayout mGiftTipsContainerV;
+    private ImageView input_giftview, input_look_at_her;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -75,7 +75,6 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         chatFloatTip = (ViewGroup) contentView.findViewById(R.id.chat_float_tip);
         input_look_at_her = (ImageView) contentView.findViewById(R.id.input_look_at_her);
         input_giftview = (ImageView) contentView.findViewById(R.id.input_giftview);
-        mGiftTipsContainerV = (LinearLayout) contentView.findViewById(R.id.ll_chat_greeting_tips_container);
 
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -134,7 +133,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         this.chatInstance.chatAdapter = chatAdapter;
     }
 
-    public void onClickChatGift(View.OnClickListener listener){
+    public void onClickChatGift(View.OnClickListener listener) {
         input_giftview.setOnClickListener(listener);
     }
 
@@ -199,11 +198,11 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         }
     }
 
-    public void setInputGiftviewVisibility(int visibility){
+    public void setInputGiftviewVisibility(int visibility) {
         input_giftview.setVisibility(visibility);
     }
 
-    public void setInputLookAtHerVisibility(int visibility){
+    public void setInputLookAtHerVisibility(int visibility) {
         input_look_at_her.setVisibility(visibility);
     }
 

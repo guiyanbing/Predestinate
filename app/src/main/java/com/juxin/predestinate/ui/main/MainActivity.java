@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -70,10 +69,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         initViews();
         initFragment();
-        initData();
+
         initListenerAndRequest();
-        showSayHelloDialog();
-        showWantMoneyDlgForGirl();
+        initData();
     }
 
     private void initData() {
@@ -89,10 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().getCustomerserviceContact();//获取客服联系信息
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
 
-        //初始化显示打招呼送礼提示，每次进入应用的时候重置
-        PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, true);
-        PSP.getInstance().put(FinalKey.SP_USER_INFO_SHOW_GIFT_GREETING_TIPS, true);
-
+        showSayHelloDialog();//判断男性展示一键打招呼弹窗
+        UIShow.showWantMoneyDlg(this);//判断女性展示索要礼物弹窗
     }
 
     /**
@@ -191,11 +187,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 ModuleMgr.getCommonMgr().showSayHelloDialog(MainActivity.this);
             }
         }, 3000);
-    }
-
-    private void showWantMoneyDlgForGirl() {
-        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan())
-            UIShow.showWantMoneyDlg(this);
     }
 
     @Override
@@ -300,8 +291,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
                 HashMap<String, Object> data = (HashMap<String, Object>) value;
                 int type = (int) data.get("type");
-                if (type == 0 || type == 2){
-                    PLogger.printObject("getOfflineMsg==333333333333333" );
+                if (type == 0 || type == 2) {
                     getOfflineMsg();
                 }
                 break;
@@ -349,7 +339,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()) {
-                PLogger.printObject("getOfflineMsg==111111111111" );
                 getOfflineMsg();
             }
         }
@@ -362,8 +351,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("getOfflineMsg==444444"+response.getResponseString());
-
                 PLogger.d("offlineMsg:  " + response.getResponseString());
                 if (!response.isOk()) return;
 
@@ -380,7 +367,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 // 服务器每次最多返50条，若超过则再次请求
                 if (offlineMsg.getMsgList().size() >= 50) {
-                    PLogger.printObject("getOfflineMsg==22222222222"+offlineMsg.getMsgList().size());
                     getOfflineMsg();
                     return;
                 }

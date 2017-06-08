@@ -28,18 +28,25 @@ public class CommonConfig extends BaseData {
     private int videochat_minute_cost;  //视频通话每分钟费用
     private String video_chat_apk_url;  //视频插件地址
     private int checkYellow;            //鉴黄检测间隔时间,单位秒
-    private int checkYellowFirst = 5; //鉴黄首次截图时间，单位秒
+    private int checkYellowFirst = 5;   //鉴黄首次截图时间，单位秒
     private boolean isVideoCallNeedVip; //发起视频聊天是否需要VIP
     private boolean isAudioCallNeedVip; //发起音频聊天是否需要VIP
 
     private PayTypeList payTypeList;    //支付方式控制
-    private int secretary_dialog;//小秘书对话框是否开放，1为开放，0为不开放
+    private int secretary_dialog;       //小秘书对话框是否开放，1为开放，0为不开放
 
     /**
      * @return 是否展示活动弹窗
      */
     public boolean canPushShow() {
         return pushshow == 1;
+    }
+
+    /**
+     * @return 小秘书对话框是否开放，暂时只判断是否为1
+     */
+    public boolean canSecretaryShow() {
+        return secretary_dialog == 1;
     }
 
     @Override
