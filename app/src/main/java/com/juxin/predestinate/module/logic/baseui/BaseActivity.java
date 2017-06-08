@@ -286,7 +286,6 @@ public class BaseActivity extends FragmentActivity {
         title_center_container.addView(container);
     }
 
-
     /**
      * 添加标题栏左边布局的填充view
      *

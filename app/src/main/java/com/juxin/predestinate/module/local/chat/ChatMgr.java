@@ -215,7 +215,7 @@ public class ChatMgr implements ModuleBase {
                     String localImg = commonMessage.getLocalImg();
                     if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
 
-                        if (!TextUtils.isEmpty(voiceUrl) && !FileUtil.isURL(voiceUrl)) {
+                        if (!TextUtils.isEmpty(voiceUrl) && FileUtil.isURL(voiceUrl)) {
                             sendMessage(commonMessage, null);
                         } else {
                             if (TextUtils.isEmpty(voiceUrl)) {
@@ -240,7 +240,7 @@ public class ChatMgr implements ModuleBase {
                             });
                         }
                     } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
-                        if (!TextUtils.isEmpty(img) && !FileUtil.isURL(img)) {
+                        if (!TextUtils.isEmpty(img) && FileUtil.isURL(img)) {
                             sendMessage(commonMessage, null);
                         } else {
                             if (TextUtils.isEmpty(img)) {
