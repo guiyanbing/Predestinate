@@ -11,18 +11,31 @@
         android:id="@+id/ll_video_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:background="@color/white"
+        android:visibility="gone"
+        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:text="视频聊天"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="视频聊天"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（自己露脸）"
+                android:textColor="@color/color_cccccc"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_video_price"
@@ -30,7 +43,52 @@
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
             android:text="0钻石/分"
-            android:textColor="#cccccc"
+            android:textColor="@color/color_cccccc"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_ededed" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_video_chat1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="视频聊天"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（自己不露脸）"
+                android:textColor="@color/color_cccccc"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_video_price1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="0钻石/分"
+            android:textColor="@color/color_cccccc"
             android:textSize="12sp" />
 
         <View
@@ -62,7 +120,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
             android:text="0钻石/分"
-            android:textColor="#cccccc"
+            android:textColor="@color/color_cccccc"
             android:textSize="12sp" />
 
         <View
@@ -84,7 +142,7 @@
         android:gravity="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
-        android:text="取消"
+        android:text="取 消"
         android:textColor="@color/black"
         android:textSize="14sp" />
 </LinearLayout>

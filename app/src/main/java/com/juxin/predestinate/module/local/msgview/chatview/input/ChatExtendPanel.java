@@ -113,7 +113,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
                         }
-                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                         break;
                     case VOICE://语音
                         if (config == null || !config.isVoiceChat()) {

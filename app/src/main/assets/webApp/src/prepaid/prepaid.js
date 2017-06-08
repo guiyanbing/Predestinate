@@ -62,7 +62,7 @@ var PrePaid = function () {
 
   that.ChatBtnClick = function () {
     console.log('chat btn click ');
-    window.platform.jumpToQQService();
+    window.platform.jumpToSmallSecretary();
   };
 
   var _lunbo = function (id, count) {
@@ -203,6 +203,31 @@ var PrePaid = function () {
     _vip_limit_count = Math.floor(vipHeight / MSG_HEIGHT);
     console.log('cell count', _yCoin_limit_count, _vip_limit_count);
   };
+  var _getService = function () {
+      window.platform.normalRequestNoUrl("Get",web.urlType.Php , web.urlMethod.ServicePhone, {}, {},function (data) {
+          console.log('service'+JSON.stringify(data));
+          var telPhoneY = document.querySelector('#tel-service-y');
+          var telPhoneVip = document.querySelector('#tel-service-vip');
+          if(data.result !== 'success'){
+              return;
+          }
+          servicePhone = data.tel;
+          telPhoneY.innerHTML ='客服电话' + servicePhone;
+          telPhoneVip.innerHTML ='客服电话' + servicePhone;
+      })
+  }
+  var _getYcoinSurplus = function () {
+      var ycoinSurplus = window.helper.getQueryString('ycoin_surplus') || 0;
+      var currentY = document.querySelector('#ycoin-surplus');
+      currentY.innerHTML = 'Y币余额：'+ ycoinSurplus;
+      console.log('yyy='+ycoinSurplus);
+  }
+  that.getFare= function () {
+      window.platform.appSlideView(503);
+  }
+  that.getYcoin = function () {
+    mui('.mui-slider').slider().gotoItem(0, 0);
+  };
 
   that.init = function (vipType) {
     mui.init();
@@ -211,6 +236,8 @@ var PrePaid = function () {
     _initBuyInfoList();
     _scrollInfoList();
     _initTotalPayData();
+    _getService();
+    _getYcoinSurplus();
     console.log('vip type ', vipType);
     if (vipType === 1) {
       // vip页面特殊处理

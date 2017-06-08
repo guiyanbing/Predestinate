@@ -45,7 +45,7 @@ public class DownloadProgressView extends View {
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DownloadProgress);
         progressColor = typedArray.getColor(R.styleable.DownloadProgress_progressColor, 0xffffffff);
-        max = typedArray.getInteger(R.styleable.DownloadProgress_max, -1);
+        max = typedArray.getInteger(R.styleable.DownloadProgress_max, 100);
         progress = typedArray.getInteger(R.styleable.DownloadProgress_progress, -1);
         type = typedArray.getInt(R.styleable.DownloadProgress_shapeType, TYPE_CIRCLE);
         typedArray.recycle();

@@ -15,6 +15,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -35,6 +36,9 @@ import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.os.Build.VERSION_CODES.*;
 
 /**
@@ -42,6 +46,7 @@ import static android.os.Build.VERSION_CODES.*;
  * Created by Su on 2016/5/30.
  */
 public class UserCheckInfoAct extends BaseActivity implements PObserver, RequestComplete {
+    public static final int REQUEST_CODE_UNLOCK_VIDEO = 100;//请求跳转到私密视频页面
     private int channel;  // 查看用户资料区分Tag，默认查看自己个人资料
     private UserDetail userDetail;   // 用户资料
 
@@ -152,7 +157,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
-                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音
@@ -261,6 +266,19 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     AttentionUtil.updateUserDetails(userDetail);
                     break;
             }
+        }else if(requestCode == REQUEST_CODE_UNLOCK_VIDEO && resultCode == RESULT_OK && data != null){
+            ArrayList<Long> unlockList = (ArrayList<Long>)data.getSerializableExtra(CenterConstant.USER_CHECK_UNLOCK_VIDEO_LIST_KEY);
+            List<UserVideo> videoList = userDetail.getUserVideos();
+            for(Long id : unlockList) {
+                for (UserVideo video : videoList) {
+                    if(video.getId() == id){
+                        video.setCanView();
+                        break;
+                    }
+                }
+            }
+            //刷新私密视频
+            footPanel.freshSecretVideo();
         }
     }
 

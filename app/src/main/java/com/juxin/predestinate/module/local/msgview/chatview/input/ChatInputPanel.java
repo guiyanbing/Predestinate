@@ -441,7 +441,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
             }
         });
     }

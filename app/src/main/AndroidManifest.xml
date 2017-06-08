@@ -177,10 +177,12 @@
             android:name=".ui.user.my.DemandRedPacketAct"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.user.my.RotarySetActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.check.secret.UserSecretAct"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity

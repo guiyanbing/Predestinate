@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.check.secret.dialog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -98,7 +99,11 @@ public class SecretGiftDlg extends BaseActivity implements View.OnClickListener 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    UIShow.showSecretVideoPlayerDlg(SecretGiftDlg.this, userVideo);
+
+                    userVideo.setCanView();
+                    Intent intent = new Intent();
+                    intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
+                    setResult(RESULT_OK, intent);
                     finish();
                     return;
                 }

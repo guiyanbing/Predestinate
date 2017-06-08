@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
@@ -54,7 +55,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
                 }
                 VideoMessage videoMessage = (VideoMessage) msgData;
                 if (videoMessage.isVideoMediaTp()) {
-                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                 } else {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
