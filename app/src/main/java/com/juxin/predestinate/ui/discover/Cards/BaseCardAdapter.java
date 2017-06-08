@@ -36,10 +36,4 @@ public abstract class BaseCardAdapter<T> {
     public int getVisibleCardCount() {
         return 3;
     }
-
-
-    public interface OnDataNeedReq {
-        void onNeedReq();
-    }
-
 }
