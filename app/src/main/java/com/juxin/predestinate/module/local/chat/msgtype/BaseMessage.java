@@ -36,6 +36,7 @@ public class BaseMessage implements IBaseMessage {
         wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息
         htmlText(TextMessage.class, 25),//HTML文本消息
+        autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
@@ -576,6 +577,7 @@ public class BaseMessage implements IBaseMessage {
             case html:
             case hint:
             case htmlText:
+            case autoUpdateHtml:
                 message = new TextMessage(bundle, true);
                 break;
             case hi:
@@ -586,9 +588,6 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle, true);
                 break;
-//            case sys:
-//                message = new SystemMessage(bundle, true);
-//                break;
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
@@ -615,6 +614,7 @@ public class BaseMessage implements IBaseMessage {
             case html:
             case hint:
             case htmlText:
+            case autoUpdateHtml:
                 message = new TextMessage(bundle);
                 break;
             case hi:
@@ -625,9 +625,6 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle);
                 break;
-//            case sys:
-//                message = new SystemMessage(bundle);
-//                break;
             case video:
                 message = new VideoMessage(bundle);
                 break;
@@ -692,18 +689,12 @@ public class BaseMessage implements IBaseMessage {
             case htmlText:
                 result = msg.getMsgDesc();
                 break;
-            case gift:
             case wantGift:
                 result = "[礼物]";
                 break;
-//            case sys:
-//                String content1 = msg.getMsgDesc();
-//                if (TextUtils.isEmpty(content1)) {
-//                    result = "[已读]";
-//                } else {
-//                    result = content1;
-//                }
-//                break;
+            case autoUpdateHtml:
+                result = "[系统消息]";
+                break;
             default:
                 result = msg.getMsgDesc();
                 break;
