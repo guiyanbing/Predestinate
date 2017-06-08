@@ -26,6 +26,7 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickListener {
     private Context context;
     private long otherId;
+    private int selectVal;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -80,17 +81,17 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                 break;
             case R.id.tv_select_ok:
                 if (cb_own_agree.isChecked()) {
-                    saveType(Constant.APPEAR_SINGLE_TYPE, Constant.APPEAR_TYPE_OWN);
+                    selectVal =  Constant.APPEAR_TYPE_OWN;
                     if (cb_def_sel.isChecked()) {
                         saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
                     }
                 } else if (cb_own_disagree.isChecked()) {
-                    saveType(Constant.APPEAR_SINGLE_TYPE, Constant.APPEAR_TYPE_NO_OWN);
+                    selectVal =  Constant.APPEAR_TYPE_NO_OWN;
                     if (cb_def_sel.isChecked()) {
                         saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                     }
                 }
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, false, selectVal);
                 dismiss();
                 break;
             default:
