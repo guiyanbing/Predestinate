@@ -3,8 +3,8 @@ package com.juxin.predestinate.module.local.statistics;
 import android.app.Activity;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.utils.EncryptUtil;
@@ -33,7 +33,6 @@ public class Statistics {
     private static final String BEHAVIOR_SESSION_ID_KEY = "BEHAVIOR_SESSION_ID_KEY";//用户行为sessionId存储key
     private static final String BEHAVIOR_ACCOUNT_KEY = "BEHAVIOR_ACCOUNT_KEY";//是否切换帐号登录存储key，存储用户uid
     private static final long BEHAVIOR_SESSION_TIME = 30 * 60 * 1000;//session有效时间：30分钟
-    private static final Gson gson = new Gson();
 
     /**
      * 客户端统计项
@@ -229,13 +228,13 @@ public class Statistics {
      */
     private static void sendStatistics(HashMap<String, Object> postParams) {
         if (postParams == null) postParams = new HashMap<>();
-        LinkedList<HashMap<String, Object>> cachedList = gson.fromJson(PCache.getInstance().getCache(BEHAVIOR_CACHE_KEY),
-                new TypeToken<LinkedList<HashMap<String, Object>>>() {
-                }.getType());
+        LinkedList<HashMap<String, Object>> cachedList = JSON.parseObject(PCache.getInstance().getCache(BEHAVIOR_CACHE_KEY),
+                new TypeReference<LinkedList<HashMap<String, Object>>>() {
+                });
         if (cachedList == null) cachedList = new LinkedList<>();
         if (cachedList.size() < 10) {
             cachedList.add(postParams);
-            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(cachedList));
+            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
             return;
         }
         if (NetworkUtils.isConnected(App.context)) {
@@ -246,26 +245,26 @@ public class Statistics {
             for (HashMap<String, Object> maps : cachedList) {
                 Map<String, Object> headBodyMap = new HashMap<>();
                 headBodyMap.put("headers", new HashMap<>());
-                headBodyMap.put("body", gson.toJsonTree(maps).toString());
+                headBodyMap.put("body", JSON.toJSONString(maps));
                 statisticsList.add(headBodyMap);
             }
             batchMap.put("data", statisticsList);
             final LinkedList<HashMap<String, Object>> tempList = cachedList;
 
-            PLogger.d("---Statistics--->" + gson.toJson(batchMap));
+            PLogger.d("---Statistics--->" + JSON.toJSONString(batchMap));
             ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.statistics, batchMap, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     if (response.isOk()) {
                         PCache.getInstance().deleteCache(BEHAVIOR_CACHE_KEY);
                     } else {
-                        PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(tempList));
+                        PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(tempList));
                     }
                 }
             });
         } else {
             cachedList.add(postParams);
-            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, gson.toJson(cachedList));
+            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
         }
     }
 }

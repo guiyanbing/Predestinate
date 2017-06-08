@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -375,7 +375,7 @@ public class CommonMgr implements ModuleBase {
         OutputStreamWriter out = null;
         try {
             out = new OutputStreamWriter(new FileOutputStream(file));//根据文件创建文件的输出流
-            out.write(new Gson().toJson(upMap));//向文件写入内容
+            out.write(JSON.toJSONString(upMap));//向文件写入内容
             out.flush();
         } catch (Exception e) {
             PLogger.printThrowable(e);

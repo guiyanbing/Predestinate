@@ -2,7 +2,7 @@ package com.juxin.predestinate.module.logic.model.impl;
 
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
@@ -264,9 +264,9 @@ public class HttpMgrImpl implements HttpMgr {
         String cacheUrl = url;
         if (RequestParam.CacheType.CT_Cache_Params == cacheType) {//用Url和Post请求参数作为缓存的key
             if (post_param != null) {
-                cacheUrl += new Gson().toJson(post_param);
+                cacheUrl += JSON.toJSONString(post_param);
             } else if (get_param != null) {
-                cacheUrl += new Gson().toJson(get_param);
+                cacheUrl += JSON.toJSONString(get_param);
             }
         }
         if (TextUtils.isEmpty(url)) return new HTCallBack();
