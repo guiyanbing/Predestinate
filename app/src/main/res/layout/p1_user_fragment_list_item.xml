@@ -14,7 +14,7 @@
             android:id="@+id/item_icon"
             style="@style/icon_middle_center"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/px35_dp" />
+            android:layout_marginLeft="@dimen/px35_dp"/>
 
         <!--<ImageView-->
             <!--android:id="@+id/img_badge"-->
@@ -22,9 +22,9 @@
             <!--android:layout_toRightOf="@id/item_icon"/>-->
         <com.juxin.library.unread.BadgeView
             android:id="@+id/item_badge"
-            style="@style/badge_num_big"
+            style="@style/badge_user_fragment"
             android:layout_toRightOf="@id/item_icon"
-            android:layout_marginTop="@dimen/px43_dp"
+            android:layout_marginTop="@dimen/px40_dp"
             android:text="10"/>
 
         <TextView
