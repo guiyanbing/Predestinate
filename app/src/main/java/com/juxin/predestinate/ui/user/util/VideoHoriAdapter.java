@@ -52,7 +52,7 @@ public class VideoHoriAdapter extends ExBaseAdapter<UserVideo> {
         if (userVideo.isCanView()) {
             ImageLoader.loadCenterCrop(App.context, userVideo.getPic(), mHolder.img_media);
         } else {
-            ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media, 8);
+            ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media);
         }
         mHolder.img_shade.setVisibility(View.VISIBLE);
         return convertView;

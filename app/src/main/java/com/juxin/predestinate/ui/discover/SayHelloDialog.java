@@ -64,8 +64,8 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     private void initData() {
         if (data.size() != 0) {
+            ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), iv_big);
             ImageLoader.loadCircleAvatar(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2));
-            ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), iv_big, 50);
             ImageLoader.loadAvatar(getActivity(), data.get(1).getAvatar(), iv_small1);
             ImageLoader.loadAvatar(getActivity(), data.get(2).getAvatar(), iv_small2);
             ImageLoader.loadAvatar(getActivity(), data.get(3).getAvatar(), iv_small3);
