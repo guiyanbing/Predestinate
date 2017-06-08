@@ -96,7 +96,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      */
     private String getContent(int type, JSONObject jsonObject) {
         if (type == NOTIFY_GIFT) return App.context.getString(R.string.notify_gift);
-        if (type == NOTIFY_UPDATE) return jsonObject.optString("mct");
+        if (type == NOTIFY_UPDATE) return App.context.getString(R.string.notify_system);
 
         if (type == NOTIFY_VIDEO && jsonObject.optInt("vc_tp") == 1) {
             return App.context.getString(R.string.notify_video, jsonObject.optInt("media_tp") == 1 ?
