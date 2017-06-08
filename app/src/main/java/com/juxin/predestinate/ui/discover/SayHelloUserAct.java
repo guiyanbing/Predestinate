@@ -119,6 +119,12 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         ignore_btn = (Button) findViewById(say_hello_users_all_ignore);
         del_btn.setOnClickListener(this);
         ignore_btn.setOnClickListener(this);
+
+        //发送清消息列表打招呼的人角标
+        if (ModuleMgr.getChatListMgr().getStrangerNew()) {
+            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
+            ModuleMgr.getChatListMgr().setStrangerNew(false);
+        }
     }
 
     private void initData() {
@@ -130,12 +136,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             showHasData();
         } else {
             showNoData();
-        }
-
-        //发送清消息列表打招呼的人角标
-        if (ModuleMgr.getChatListMgr().getStrangerNew()) {
-            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
-            ModuleMgr.getChatListMgr().setStrangerNew(false);
         }
     }
 
@@ -355,7 +355,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
 
 
     /**
@@ -387,14 +388,14 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         if (stringList.size() > 0) {
             Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
             observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-            .subscribe(new Action1<List<UserInfoLightweight>>() {
-                @Override
-                public void call(List<UserInfoLightweight> lightweights) {
-                    if(lightweights != null && lightweights.size() > 0){
-                        ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
-                    }
-                }
-            });
+                    .subscribe(new Action1<List<UserInfoLightweight>>() {
+                        @Override
+                        public void call(List<UserInfoLightweight> lightweights) {
+                            if (lightweights != null && lightweights.size() > 0) {
+                                ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
+                            }
+                        }
+                    });
 
             TimerUtil.beginTime(new TimerUtil.CallBack() {
                 @Override
@@ -403,5 +404,10 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                 }
             }, 800);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
