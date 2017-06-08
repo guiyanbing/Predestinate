@@ -43,7 +43,7 @@ public class UserSecretAdapter extends BaseRecyclerViewAdapter {
         if(data.isCanView()){
             ImageLoader.loadAvatar(App.context, data.getPic(), img_preview);
         }else{
-            ImageLoader.loadBlur(App.context, data.getPic(), img_preview, 8);
+            ImageLoader.loadBlur(App.context, data.getPic(), img_preview);
         }
         tv_hot.setText(String.valueOf(data.getViewTimes()));
         tv_time.setText(TimeUtil.getLongToMinuteTime(data.getDuration() * 1000l));

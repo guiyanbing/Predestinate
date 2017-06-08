@@ -43,7 +43,7 @@ public class ImageLoader {
         circleTransform = new CircleTransform(mContext);
         roundedCorners = new RoundedCorners(mContext, 8, 0, RoundedCorners.CornerType.ALL);
         roundedCornerTop = new RoundedCorners(mContext, 15, 0, RoundedCorners.CornerType.TOP);
-        blurImage = new BlurImage(context, 50);
+        blurImage = new BlurImage(context);
     }
 
     /**
@@ -136,9 +136,11 @@ public class ImageLoader {
 
     /**
      * 网络图片高斯模糊处理
-     *
-     * @param level 模糊等级
      */
+    public static <T> void loadBlur(Context context, T model, ImageView view) {
+        loadBlur(context, model, view, 8);
+    }
+
     public static <T> void loadBlur(Context context, T model, ImageView view, int level) {
         blurImage.setRadius(level);
         loadPic(context, model, view, R.drawable.default_pic, R.drawable.default_pic, bitmapCenterCrop, blurImage);
