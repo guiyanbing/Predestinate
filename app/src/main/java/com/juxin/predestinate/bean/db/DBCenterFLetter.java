@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -16,10 +15,8 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -35,12 +32,22 @@ public class DBCenterFLetter {
         this.mDatabase = database;
     }
 
-    public long storageData(BaseMessage message) {
-        String whisperID = message.getWhisperID();
-        if (!isExist(whisperID)) {//没有数据
+    public long storageData(final BaseMessage message) {
+        BaseMessage temp = isExist(message.getWhisperID());
+        if (temp == null) {//没有数据
             return insertLetter(message);
         } else {
             return updateLetter(message);
+//            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+//                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()){
+//                return updateLetter(message);
+//            }else {
+//                if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
+//                    return updateLetter(message);
+//                }
+//            }
+//
+//            return MessageConstant.OK;
         }
     }
 
@@ -86,7 +93,11 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_RU, baseMessage.getRu());
 
             values.put(FLetter.COLUMN_TYPE, baseMessage.getType());
-            values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
+            values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
+
+            if (baseMessage.getcMsgID() != -1)
+                values.put(FLetter.COLUMN_CMSGID, baseMessage.getcMsgID());
+
             values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
@@ -103,8 +114,6 @@ public class DBCenterFLetter {
         }
         try {
             final ContentValues values = new ContentValues();
-            values.put(FLetter.COLUMN_USERID, baseMessage.getWhisperID());
-
             if (baseMessage.getInfoJson() != null)
                 values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
 
@@ -114,6 +123,10 @@ public class DBCenterFLetter {
             if (baseMessage.getStatus() != -1)
                 values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
 
+            long cMsgID = baseMessage.getcMsgID();
+            if (cMsgID != -1)
+                values.put(FLetter.COLUMN_CMSGID, cMsgID);
+
             if (baseMessage.getRu() == MessageConstant.Ru_Friend)
                 values.put(FLetter.COLUMN_RU, baseMessage.getRu());
 
@@ -121,6 +134,7 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
 
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
+
             return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,7 +172,8 @@ public class DBCenterFLetter {
             return MessageConstant.ERROR;
         }
         try {
-            if (!isExist(String.valueOf(lightweight.getUid()))) return MessageConstant.ERROR;//没有数据
+            if (isExist(String.valueOf(lightweight.getUid())) == null)
+                return MessageConstant.ERROR;//没有数据
 
             final ContentValues values = new ContentValues();
             if (lightweight.getInfoJson() != null)
@@ -171,7 +186,7 @@ public class DBCenterFLetter {
         return MessageConstant.ERROR;
     }
 
-    private boolean isExist(String userid) {
+    private BaseMessage isExist(String userid) {
         Cursor cursor = null;
         try {
             StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
@@ -179,14 +194,26 @@ public class DBCenterFLetter {
                     .append(FLetter.COLUMN_USERID + " = ?");
             cursor = mDatabase.query(sql.toString(), userid);
             if (cursor != null && cursor.moveToFirst()) {
-                return true;
+                Bundle bundle = new Bundle();
+                bundle.putLong(FLetter._ID, CursorUtil.getLong(cursor, FMessage._ID));
+                bundle.putString(FLetter.COLUMN_USERID, CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
+                bundle.putString(FLetter.COLUMN_INFOJSON, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON));
+                bundle.putInt(FLetter.COLUMN_TYPE, CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
+                bundle.putInt(FLetter.COLUMN_KFID, CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
+                bundle.putInt(FLetter.COLUMN_STATUS, CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
+                bundle.putLong(FLetter.COLUMN_CMSGID, CursorUtil.getLong(cursor, FLetter.COLUMN_CMSGID));
+                bundle.putInt(FLetter.COLUMN_RU, CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
+                bundle.putLong(FLetter.COLUMN_TIME, CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
+                bundle.putString(FLetter.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+
+                return BaseMessage.parseToLetterMessage(bundle);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             CloseUtil.close(cursor);
         }
-        return false;
+        return null;
     }
 
     public Observable<Boolean> isHaveMsg(String userid) {
@@ -203,7 +230,6 @@ public class DBCenterFLetter {
                         try {
                             cursor = query.run();
                             if (cursor != null && cursor.moveToFirst()) {
-                                cursor.close();
                                 return true;
                             }
                         } catch (Exception e) {
@@ -222,7 +248,7 @@ public class DBCenterFLetter {
      * @return
      */
     public Observable<List<BaseMessage>> queryLetterList() {
-        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.ru, f.time, f.content, " +
+        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.cMsgID, f.ru, f.time, f.content, " +
                 "m.whisperID, m.num from " + FLetter.FLETTER_TABLE + " f left join (select whisperID,count(*) " +
                 "num from " + FMessage.FMESSAGE_TABLE + " where status = 10 group by whisperID) m on f.userID = m.whisperID";
         return queryBySqlFletter(sql);
@@ -260,6 +286,7 @@ public class DBCenterFLetter {
                 bundle.putInt(FLetter.COLUMN_TYPE, CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
                 bundle.putInt(FLetter.COLUMN_KFID, CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
                 bundle.putInt(FLetter.COLUMN_STATUS, CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
+                bundle.putLong(FLetter.COLUMN_CMSGID, CursorUtil.getLong(cursor, FLetter.COLUMN_CMSGID));
                 bundle.putInt(FLetter.COLUMN_RU, CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
                 bundle.putLong(FLetter.COLUMN_TIME, CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
                 bundle.putString(FLetter.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
@@ -298,6 +325,7 @@ public class DBCenterFLetter {
         values.put(FLetter.COLUMN_TYPE, 0);
         values.put(FLetter.COLUMN_TIME, 0);
         values.put(FLetter.COLUMN_STATUS, 0);
+        values.put(FLetter.COLUMN_CMSGID, 0);
         return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", userid);
     }
 

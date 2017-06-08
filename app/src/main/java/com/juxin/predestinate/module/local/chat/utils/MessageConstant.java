@@ -1,7 +1,5 @@
 package com.juxin.predestinate.module.local.chat.utils;
 
-import com.juxin.predestinate.module.logic.application.App;
-
 /**
  * 消息常量类
  * Created by Kind on 2017/5/24.

@@ -15,6 +15,7 @@ public class FLetter {
     public static final String COLUMN_TYPE = "type";// 消息类型
     public static final String COLUMN_KFID = "kfID";
     public static final String COLUMN_STATUS = "status";//默认插入是1
+    public static final String COLUMN_CMSGID = "cMsgID";// 客户端消息ID
     public static final String COLUMN_RU = "ru";//如果为1则为熟人消息，否则为0
     public static final String COLUMN_TIME = "time";
     public static final String COLUMN_CONTENT = "content";//json
@@ -30,6 +31,7 @@ public class FLetter {
                 COLUMN_TYPE + " TEXT," +
                 COLUMN_KFID + " INTEGER," +
                 COLUMN_STATUS + " INTEGER," +
+                COLUMN_CMSGID + " INTEGER," +
                 COLUMN_RU + " INTEGER," +
                 COLUMN_TIME + " TEXT," +
                 COLUMN_CONTENT + " BLOB, folder TEXT, field1 TEXT, field2 TEXT, field3 TEXT, field4 TEXT, field5 TEXT)";

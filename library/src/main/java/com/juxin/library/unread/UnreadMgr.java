@@ -18,9 +18,8 @@ package com.juxin.library.unread;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -56,8 +55,6 @@ public class UnreadMgr {
     public static final String Msg_Name_Key = "name";       //角标消息中角标名称的获取key
     public static final String Msg_Status_Key = "status";   //角标消息中角标增删状态的获取key
 
-    private Gson gson = new Gson();
-
     /* 未读消息的级联关系，每次添加新的层级角标之后在此进行配置 */
     private Map<String, String[]> parentMap = new HashMap<String, String[]>();
 
@@ -85,9 +82,9 @@ public class UnreadMgr {
         if (TextUtils.isEmpty(storeString)) return;
 
         try {
-            unreadMap = gson.fromJson(storeString, new TypeToken<Map<String, Unread>>() {
-            }.getType());
-        } catch (JsonSyntaxException e) {
+            unreadMap = JSON.parseObject(storeString, new TypeReference<Map<String, Unread>>() {
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (unreadMap == null) unreadMap = new HashMap<String, Unread>();
@@ -351,7 +348,7 @@ public class UnreadMgr {
      */
     private void castUnreadMsg(String key, boolean isAdd) {
         if (unreadListener != null)
-            unreadListener.onUnreadChange(key, isAdd, gson.toJson(unreadMap));
+            unreadListener.onUnreadChange(key, isAdd, JSON.toJSONString(unreadMap));
 
         Map<String, Object> msgMap = new HashMap<String, Object>();
         msgMap.put(Msg_Name_Key, key);
