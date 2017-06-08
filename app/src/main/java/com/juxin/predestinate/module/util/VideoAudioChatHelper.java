@@ -90,7 +90,7 @@ public class VideoAudioChatHelper {
      * @param flag  判断是否显示进场dlg
      */
     public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag) {
-        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), 0) == 0) {
+        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             UIShow.showLookAtHerDlg(context, dstUid);
             return;
         }
