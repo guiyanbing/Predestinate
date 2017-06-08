@@ -37,11 +37,17 @@ public class DBCenterFLetter {
         if (temp == null) {//没有数据
             return insertLetter(message);
         } else {
-            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                    || !message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
-                return updateLetter(message);
-            }
-            return MessageConstant.OK;
+            return updateLetter(message);
+//            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+//                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()){
+//                return updateLetter(message);
+//            }else {
+//                if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
+//                    return updateLetter(message);
+//                }
+//            }
+//
+//            return MessageConstant.OK;
         }
     }
 
