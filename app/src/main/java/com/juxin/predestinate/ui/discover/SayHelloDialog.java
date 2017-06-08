@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -66,17 +64,13 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     private void initData() {
         if (data.size() != 0) {
-            ImageLoader.loadPicWithCallback(getActivity(), data.get(0).getAvatar(), new ImageLoader.GlideCallback() {
-                @Override
-                public void onResourceReady(GlideDrawable resource) {
-                    ImageLoader.loadCircleAvatar(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2));
-                    ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), iv_big, 50);
-                }
-            });
+            ImageLoader.loadCircleAvatar(getActivity(), data.get(0).getAvatar(), iv_small, UIUtil.dip2px(getContext(), 2));
+            ImageLoader.loadBlur(getActivity(), data.get(0).getAvatar(), iv_big, 50);
             ImageLoader.loadAvatar(getActivity(), data.get(1).getAvatar(), iv_small1);
             ImageLoader.loadAvatar(getActivity(), data.get(2).getAvatar(), iv_small2);
             ImageLoader.loadAvatar(getActivity(), data.get(3).getAvatar(), iv_small3);
         } else {
+            ImageLoader.loadCircleAvatar(getActivity(), R.drawable.default_head, iv_small, UIUtil.dip2px(getContext(), 2));
             ImageLoader.loadAvatar(getActivity(), R.drawable.default_head, iv_small1);
             ImageLoader.loadAvatar(getActivity(), R.drawable.default_head, iv_small2);
             ImageLoader.loadAvatar(getActivity(), R.drawable.default_head, iv_small3);
