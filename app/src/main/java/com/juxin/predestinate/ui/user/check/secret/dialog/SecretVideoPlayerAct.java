@@ -6,10 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.github.florent37.viewanimator.AnimationListener;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
-import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.DownloadProgressView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserVideo;
@@ -18,14 +19,14 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.CountDownTextView;
 import com.juxin.predestinate.module.logic.baseui.custom.TextureVideoView;
 import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
 /**
  * 私密视频播放页
  * Created by Su on 2017/5/17.
  */
-public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickListener {
+public class SecretVideoPlayerAct extends BaseActivity implements View.OnClickListener, DownloadListener {
+
     private TextureVideoView tvv_player;
     private ImageView iv_pic, iv_start;
     private CountDownTextView tv_video_time;
@@ -64,38 +65,6 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
     }
 
     /**
-     * 下载小视频
-     */
-    private void downloadVideo() {
-        ModuleMgr.getHttpMgr().downloadVideo(userVideo.getVideo(), new DownloadListener() {
-            @Override
-            public void onStart(String url, String filePath) {
-                progress_bar.setVisibility(View.VISIBLE);
-                progress_bar.setProgress(0);
-            }
-
-            @Override
-            public void onProcess(String url, int process, long size) {
-                progress_bar.setProgress(process);
-            }
-
-            @Override
-            public void onSuccess(String url, String filePath) {
-                progress_bar.setVisibility(View.GONE);
-                videoLocalUrl = filePath;
-                playLocalVideo();
-            }
-
-            @Override
-            public void onFail(String url, Throwable throwable) {
-                progress_bar.setVisibility(View.GONE);
-                resetPlay();
-                PToast.showShort(getString(R.string.user_info_check_video_fail));
-            }
-        });
-    }
-
-    /**
      * 播放视频
      */
     private void playLocalVideo() {
@@ -106,12 +75,13 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
                 tvv_player.start();
                 tv_video_time.start();
                 iv_start.setVisibility(View.GONE);
-                TimerUtil.beginTime(new TimerUtil.CallBack() {//短暂延时之后取消遮罩，防止屏幕闪烁
+                ViewAnimator.animate(iv_pic).alpha(1, 0).duration(1000)
+                        .start().onStop(new AnimationListener.Stop() {
                     @Override
-                    public void call() {
+                    public void onStop() {
                         iv_pic.setVisibility(View.GONE);
                     }
-                }, 200);
+                });
             }
         });
 
@@ -130,7 +100,6 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
         tvv_player.stopPlayback();
         iv_pic.setVisibility(View.VISIBLE);
         iv_start.setVisibility(View.VISIBLE);
-        FileUtil.deleteFile(videoLocalUrl);
     }
 
     // 重置倒计时
@@ -154,8 +123,8 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
 
     private void onViewStart() {
         iv_start.setVisibility(View.GONE);
-        iv_pic.setVisibility(View.GONE);
-        downloadVideo();
+        progress_bar.setVisibility(View.VISIBLE);
+        ModuleMgr.getHttpMgr().downloadVideo(userVideo.getVideo(), this);//下载小视频
     }
 
     private CountDownTextView.OnCountDownListener tipsListener = new CountDownTextView.OnCountDownListener() {
@@ -168,5 +137,32 @@ public class SecretVideoPlayerDlg extends BaseActivity implements View.OnClickLi
             resetPlay();
         }
     };
+
+    // --------------------下载回调--------------------
+
+    @Override
+    public void onStart(String url, String filePath) {
+        progress_bar.setProgress(0);
+    }
+
+    @Override
+    public void onProcess(String url, int process, long size) {
+        progress_bar.setVisibility(View.VISIBLE);
+        progress_bar.setProgress(process);
+    }
+
+    @Override
+    public void onSuccess(String url, String filePath) {
+        progress_bar.setVisibility(View.GONE);
+        videoLocalUrl = filePath;
+        playLocalVideo();
+    }
+
+    @Override
+    public void onFail(String url, Throwable throwable) {
+        progress_bar.setVisibility(View.GONE);
+        resetPlay();
+        PToast.showShort(getString(R.string.user_info_check_video_fail));
+    }
 
 }

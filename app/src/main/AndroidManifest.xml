@@ -36,8 +36,8 @@
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:persistent="true"
+        android:supportsRtl="true"
         android:taskAffinity="com.juxin.predestinate.assist"
         android:theme="@style/AppTheme">
         <activity
@@ -231,7 +231,7 @@
             android:theme="@style/No_Background" />
 
         <activity
-            android:name=".ui.user.check.secret.dialog.SecretVideoPlayerDlg"
+            android:name=".ui.user.check.secret.dialog.SecretVideoPlayerAct"
             android:screenOrientation="portrait" />
 
         <activity
@@ -417,7 +417,7 @@
             android:theme="@style/No_Background" />
         <receiver android:name=".module.logic.notify.PluginReceiver">
             <intent-filter>
-                <action android:name="com.juxin.action.plugin"/>
+                <action android:name="com.juxin.action.plugin" />
             </intent-filter>
         </receiver>
     </application>

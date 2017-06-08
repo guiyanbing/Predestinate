@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -28,15 +27,11 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -49,7 +44,6 @@ import rx.schedulers.Schedulers;
 public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
-    private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //好友列表
 
@@ -67,10 +61,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public int getUnreadNumber() {
         return unreadNum;
-    }
-
-    public int getGreetNum() {
-        return greetNum;
     }
 
     /**
@@ -123,7 +113,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
-        greetNum = 0;
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
@@ -131,7 +120,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
-                    greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
                 PLogger.printObject("unreadNum="+ tmp.getNum());
@@ -322,7 +310,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         mAppComponent = null;
         msgList.clear();
         greetList.clear();
-        greetNum = 0;
         unreadNum = 0;
     }
 

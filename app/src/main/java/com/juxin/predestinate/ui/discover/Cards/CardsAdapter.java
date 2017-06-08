@@ -101,8 +101,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 if (infoHot.isVideo_available()) {
-                    PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE_SURE), true);
-                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_video_tips));
                 }

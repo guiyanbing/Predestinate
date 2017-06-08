@@ -86,7 +86,7 @@ import com.juxin.predestinate.ui.user.check.other.UserOtherSetAct;
 import com.juxin.predestinate.ui.user.check.secret.UserSecretAct;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
-import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerDlg;
+import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerAct;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
@@ -1319,7 +1319,7 @@ public class UIShow {
      * 查看视频：视频播放页
      */
     public static void showSecretVideoPlayerDlg(FragmentActivity context, UserVideo userVideo) {
-        Intent intent = new Intent(context, SecretVideoPlayerDlg.class);
+        Intent intent = new Intent(context, SecretVideoPlayerAct.class);
         intent.putExtra(CenterConstant.USER_CHECK_VIDEO_KEY, userVideo);
         context.startActivity(intent);
     }
