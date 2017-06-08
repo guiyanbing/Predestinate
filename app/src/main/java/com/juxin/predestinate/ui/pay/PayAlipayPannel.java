@@ -34,7 +34,7 @@ public class PayAlipayPannel extends BasePayPannel {
                 getPayGood().getPay_id(), getPayGood().getPay_money(), new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {
-                        PayWX payWX = new PayWX(response.getResponseString());
+                        PayWX payWX = new PayWX(response.getResponseString(),true);
                         if(!payWX.isOK()){
                             PToast.showShort("请求失败，请稍后再试");
                             return;
