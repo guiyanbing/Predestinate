@@ -109,7 +109,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             return;
         }
 
-        if ((userDetail.getGender() == 2)//女性用户
+        if (!userDetail.isMan() //女性用户
                 || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0
                 || (userDetail.getYcoin() > 79 && "0".equals(userDetail.getyCoinUserid())) //Y币 高于79 并且未绑定用户
                 || (userDetail.getYcoin() > 79 && String.valueOf(whisperID).equals(userDetail.getyCoinUserid())) //Y币高于79，并且是绑定用户
