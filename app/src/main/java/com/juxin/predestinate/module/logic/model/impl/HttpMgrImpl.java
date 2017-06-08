@@ -248,7 +248,6 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
-
         lock.lock();
 
         final UrlParam urlParam = requestParam.getUrlParam();
@@ -381,8 +380,6 @@ public class HttpMgrImpl implements HttpMgr {
                 if (requestCallback != null) requestCallback.onRequestComplete(result);
             }
         };
-
-
         httpResultCall.enqueue(rb);
         lock.unlock();
 

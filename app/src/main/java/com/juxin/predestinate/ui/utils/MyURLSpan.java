@@ -23,15 +23,15 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
  * Created by siow on 2017/5/8.
  */
 public class MyURLSpan extends ClickableSpan {
-    private final Context mContext;
+    private final static String URL_TYPE_UPLOAD_HEAD_PIC = "1";                         //上传头像
+    private final static String URL_TYPE_COMPLETE_INFO = "2";                           //完善资料
+    private final static String URL_TYPE_BIND_PHONE = "3";                              //绑定手机
+    private final static String URL_TYPE_CONNECT_QQ_SERVICE = "4";                      //QQ客服
+    private final static String URL_TYPE_VIDEO_CERTIFICATION = "video_certification";   //视频认证
+    private final static String URL_TYPE_RECHARGE_YB = "recharge_yb";                   //充值Y币
+    private final static String URL_TYPE_RECHARGE_VIP = "recharge_vip";                 //充值VIP
 
-    private final static String URL_TYPE_UPLOAD_HEAD_PIC = "1";//上传头像
-    private final static String URL_TYPE_COMPLETE_INFO = "2";//完善资料
-    private final static String URL_TYPE_BIND_PHONE = "3";//绑定手机
-    private final static String URL_TYPE_CONNECT_QQ_SERVICE = "4";//QQ客服
-    private final static String URL_TYPE_VIDEO_CERTIFICATION = "video_certification";//视频认证
-    private final static String URL_TYPE_RECHARGE_YB = "recharge_yb";//充值Y币
-    private final static String URL_TYPE_RECHARGE_VIP = "recharge_vip";//充值VIP
+    private final Context mContext;
     private String mUrl;
 
     private MyURLSpan(Context mContext, String url) {
@@ -70,7 +70,7 @@ public class MyURLSpan extends ClickableSpan {
             if (TextUtils.isEmpty(mUrl))
                 return;
 
-            switch (mUrl){
+            switch (mUrl) {
                 //上传头像
                 case URL_TYPE_UPLOAD_HEAD_PIC:
                     UIShow.showUserRegHeadUploadAct(mContext);
@@ -100,13 +100,12 @@ public class MyURLSpan extends ClickableSpan {
                     UIShow.showOpenVipActivity(mContext);
                     break;
                 default:
-                    int i = testDownExUrl(mUrl);
+                    int i = checkDownExUrl(mUrl);
                     //是否自定义下载协议
                     if (i >= 0) {
-                        String sUrl = mUrl.replace(DownExUrlHead[i], DownExUrlReplace[i]);
+                        String sUrl = mUrl.replace(DownExUrlProtocol[i], DownExUrlReplace[i]);
                         ModuleMgr.getHttpMgr().downloadApk(sUrl, downloadListener);
-                    }
-                    else
+                    } else
                         UIShow.showWebActivity(mContext, mUrl);
                     break;
             }
@@ -115,12 +114,17 @@ public class MyURLSpan extends ClickableSpan {
         }
     }
 
-    private final static String[] DownExUrlHead = {"downex://", "downex1://", "downex2://", "downex3://"};
+    private final static String[] DownExUrlProtocol = {"downex://", "downex1://", "downex2://", "downex3://"};
     private final static String[] DownExUrlReplace = {"http://", "http://", "ftp://", "https://"};
 
-    private int testDownExUrl(String url){
-        for (int i = DownExUrlHead.length - 1; i >= 0; i--) {
-            if (url.startsWith(DownExUrlHead[i]))
+    /**
+     * 检测URL是否自定义下载协议URL
+     * @param url
+     * @return -1 不是自定义下载协议URL  >= 0 自定义协议头在DownExUrlProtocol数组中的下标索引值
+     */
+    private int checkDownExUrl(String url) {
+        for (int i = DownExUrlProtocol.length - 1; i >= 0; i--) {
+            if (url.startsWith(DownExUrlProtocol[i]))
                 return i;
         }
         return -1;

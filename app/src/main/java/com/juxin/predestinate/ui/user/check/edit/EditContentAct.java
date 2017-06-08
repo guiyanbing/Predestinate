@@ -38,7 +38,7 @@ public class EditContentAct extends BaseActivity implements View.OnClickListener
     private void initTitle() {
         setBackView();
         setTitle(getString(R.string.user_info_edit_name));
-        setTitleRight(getString(R.string.user_info_save), this);
+        setTitleRight(getString(R.string.save), this);
         ModuleMgr.getCenterMgr().inputFilterSpace(editText);
         editText.setHint(getString(R.string.user_info_put_name));
     }

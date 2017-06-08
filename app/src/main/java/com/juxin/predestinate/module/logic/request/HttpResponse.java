@@ -17,7 +17,7 @@ import org.json.JSONObject;
 public class HttpResponse extends BaseData {
 
     private UrlParam urlParam;                  //请求信息
-    private String responseString = "";         //原始返回串
+    private String responseString = "{}";       //原始返回串
     private boolean serverResponse = false;     //服务器是否正常响应
     private String status = null;               //返回状态，ok表示成功返回数据。
     private BaseData baseData = null;           //返回的数据对象

@@ -112,12 +112,18 @@
     .lunbo ul li span{
         color:#5FC5F7;margin-right:10px;
     }
+    #vipQuarter,#vipMonth{margin-top:0 !important;}
+    .tel-fare-rule p,.tel-fare-rule a{font-size: 14px;}
+    @media screen and (max-width:370px){
+        .tel-fare-rule p,.tel-fare-rule a{font-size: 10px;}
+    }
+
 </style>
-<body  style="background-color: white; visibility: hidden">
+<body  style="background-color: white">
 <div class="mui-content">
     <div id="slider" class="mui-slider mui-fullscreen">
         <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" style="background-color: #ffffff;padding:0 12%;">
-            <a id="slierYCoin" class="mui-control-item" href="#BuyYCoin" style="text-align: center; height:50px;line-height: 50px;font-size: 18px;">
+            <a id="slierYCoin" class="mui-control-item  mui-active" href="#BuyYCoin" style="text-align: center; height:50px;line-height: 50px;font-size: 18px;">
                 购买Y币
             </a>
             <a id="slierVip" class="mui-control-item" href="#BuyVIP" style="text-align: center; height:50px;line-height: 50px;font-size: 18px;">
@@ -126,7 +132,7 @@
         </div>
         <div id="sliderProgressBar" class="mui-slider-progress-bar myself-slidebar mui-col-xs-6 mui-col-sm-6" style="z-index:9999;"></div>
         <div class="mui-slider-group" style="top: 52px">
-            <div id="BuyYCoin" class="mui-slider-item mui-control-content" style="border-top:none;">
+            <div id="BuyYCoin" class="mui-slider-item mui-control-content  mui-active" style="border-top:none;">
                 <div class="mui-scroll-wrapper">
                     <div class="mui-scroll">
                         <img src="../../assets/y_coin_hd.jpg">
@@ -135,8 +141,8 @@
                             <span style="color: #ee763a;">587680</span>
                             人
                         </div>
-                        <div class="mui-title" style="color: #9e9e9f; font-size: 14px">
-                            只购买Y币可以与1位MM无限制聊天
+                        <div class="mui-title" style="color: #9e9e9f; font-size: 14px;font-weight: normal;">
+                            聊天需要Y币，你当前<span id="ycoin-surplus" style="color:#fd698c;"></span>，请选择充值
                         </div>
                         <div class="mui-row">
                             <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
@@ -156,10 +162,17 @@
                                 </a>
                             </div>
                         </div>
-                        <button class="pay-btn" onclick="prePaid.payBtnClick()">
+                        <div class="mui-row tel-fare-rule" style="width:90%;margin-left: 5%; margin-top:155px;margin-bottom:5px; padding:10px;font-weight: normal;border:1px solid #ececec;background: #fbfbfb;border-radius:3px;">
+                            <p style="display:inline-block;margin-bottom:0;">充值11000Y币 <span style="color:#ff6600;">(赠送100元话费)</span></p>
+                            <a onclick="prePaid.getFare();" style="color:#47aaef;float:right;" href="#"> 话费领取规则 <img style="width:8px; margin-left:3px;margin-top:-2px; vertical-align: sub; display: inline-block;" src="../../assets/arrow.png" alt=""></a>
+                        </div>
+                        <button style="border:none;margin-bottom:5px;margin-top:10px !important;" class="pay-btn" onclick="prePaid.payBtnClick()">
                             <h5 style="color: white">立即支付</h5>
                         </button>
-                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">购买Y币用户</p>
+                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">已购买Y币用户
+                            <span id="tel-service-y" style="float:right;color:#ccc;"></span>
+                            <img style="width:19px; margin-right:3px;float:right;vertical-align: sub; display: inline-block;" src="../../assets/service_nub.png" alt="">
+                        </p>
                         <div id="lunboYCoin" class="lunbo">
                             <ul id="buyer-lists1">
                             </ul>
@@ -167,7 +180,7 @@
                     </div>
                 </div>
             </div>
-            <div id="BuyVIP" class="mui-slider-item mui-control-content  mui-active" style="border-top:none;">
+            <div id="BuyVIP" class="mui-slider-item mui-control-content" style="border-top:none;">
                 <div class="mui-scroll-wrapper">
                     <div class="mui-scroll">
                         <div class="buy-people-title" style="margin-top: 0px">
@@ -175,12 +188,13 @@
                             <span style="color: #ee763a;">587680</span>
                             人
                         </div>
-                        <div class="mui-title" style="color: #9e9e9f; font-size: 14px">
-                            开通VIP后可以无限制人数与MM聊天
+                        <div style="color: #9e9e9f; font-size: 14px;font-weight: normal;text-align:center;padding: 6px 0;">
+                            非VIP用户，当天只能与1人聊天
+                            <span style="color:#fd698c;display:block;margin-bottom:0 !important;">开通VIP可以解除聊天人数限制</span>
                         </div>
                         <div class="mui-row">
                             <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
-                                <a id="vipMonth" class="pictureBody" style="" href="#" onclick="prePaid.vipBtnClick(this.id)">
+                                <a id="vipMonth" class="pictureBody" href="#" onclick="prePaid.vipBtnClick(this.id)">
                                     <img style="width: 22px; height: 22px; margin-top: 5px; margin-left: 110px" src="../../assets/check_ico.png">
                                     <p class="pTop">30天</p>
                                     <p class="pMiddle">￥50</p>
@@ -188,7 +202,7 @@
                                 </a>
                             </div>
                             <div class="mui-col-xs-6 mui-col-sm-6" style="position: relative">
-                                <a id="vipQuarter" class="pictureBody" style="" href="#" onclick="prePaid.vipBtnClick(this.id)">
+                                <a id="vipQuarter" class="pictureBody" href="#" onclick="prePaid.vipBtnClick(this.id)">
                                     <img style="width: 22px; height: 22px; margin-top: 5px; margin-left: 115px" src="../../assets/check_ico.png">
                                     <p class="pTop">90天</p>
                                     <p class="pMiddle">￥100</p>
@@ -196,15 +210,21 @@
                                 </a>
                             </div>
                         </div>
-                        <button class="pay-btn" onclick="prePaid.payBtnClick()">
+                        <button class="pay-btn" style="border:none !important;margin-top:110px;" onclick="prePaid.payBtnClick()">
                             <h5 style="color: white">立即支付</h5>
                         </button>
-                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">热门特权</p>
-                        <div class="lunbo" style="height: 75px">
+                        <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">热门特权
+                            <span id="tel-service-vip" style="float:right;color:#ccc;"></span>
+                            <img style="width:19px; margin-right:3px;float:right;vertical-align: sub; display: inline-block;" src="../../assets/service_nub.png" alt="">
+                        </p>
+                        <div class="lunbo" style="height: 100px">
                             <ul>
-                                <li style="color: #000000"><span style="color: #fd698c">[特权01]</span>可与所有女用户聊天</li>
-                                <li style="color: #000000"><span style="color: #fd698c">[特权02]</span>购买Y币额外增送10%</li>
-                                <li style="color: #000000"><span style="color: #fd698c">[特权03]</span>聊天80Y币/条降至1Y币/条</li>
+                                <li style="color: #000000">
+                                    <span style="color: #fd698c;width:51px;">[特权01]</span>可与所有女用户聊天，聊天需要Y币。
+                                    <p style="padding-left:61px;color:#000;margin-bottom:0;">请选择<a onclick="prePaid.getYcoin();" style="color:#47aaef;margin-left:5px;" href="#">购买Y币 <img style="width:8px;vertical-align: middle;margin-top:-3px;" src="../../assets/arrow.png" alt=""> </a></p>
+                                </li>
+                                <li style="color: #000000"><span style="color: #fd698c;width:51px;">[特权02]</span>购买Y币额外增送10%</li>
+                                <li style="color: #000000"><span style="color: #fd698c;width:51px;">[特权03]</span>聊天80Y币/条降至1Y币/条</li>
                             </ul>
                         </div>
                         <p style="width:100%; color:#727171;font-size: 14px;margin:0;margin-top:10px; padding:5px 15px;background-color: #eee;">已充值vip用户</p>
@@ -219,7 +239,7 @@
     </div>
 </div>
 <div onclick="prePaid.ChatBtnClick()" style="width: 127px; height: 57px;position: absolute; bottom: 30px; right: 20px; z-index: 9999">
-    <img src="../../assets/vskf.png" style="width: 127px; height: 57px">
+    <img src="../../assets/kfimg.png" style="width: 127px; height: 57px">
 </div>
 </body>
 <script src="../../js/mui.min.js"></script>
@@ -230,9 +250,11 @@
 <script src="../../src/prepaid/prepaid.js"></script>
 <script type="text/javascript">
   var prePaid = null;
+  var type = window.helper.getQueryString('type') || 1;
   window.onload = function () {
     prePaid = PrePaid();
-    prePaid.init(1);
+    prePaid.init(parseInt(type) - 1);
   };
+
 </script>
 </html>
