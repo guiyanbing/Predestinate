@@ -218,6 +218,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                             sayHibottom.setClickable(false);
                             PToast.showShort(getString(R.string.user_info_hi_suc));
                             MsgMgr.getInstance().sendMsg(MsgType.MT_Say_HI_Notice, userDetail.getUid());
+                            userDetail.setSayHello(true);
                             initSayHi();
                         } else {
                             PToast.showShort(getString(R.string.user_info_hi_fail));

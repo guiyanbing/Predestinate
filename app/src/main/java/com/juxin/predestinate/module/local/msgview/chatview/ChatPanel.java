@@ -103,7 +103,7 @@ public abstract class ChatPanel extends ChatBasePanel implements ChatInterface.O
         }
 
         if (MailSpecialID.customerService.getSpecialID() != msgData.getLWhisperID()) {
-            UIShow.showCheckOtherInfoAct((FragmentActivity) getChatInstance().context, msgData.getLWhisperID());
+            UIShow.showCheckOtherInfoAct(getChatInstance().context, msgData.getLWhisperID());
         }
         return true;
     }

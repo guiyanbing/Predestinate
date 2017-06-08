@@ -82,6 +82,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
+        PLogger.printObject("StrangerNew()=adapter=" + ModuleMgr.getChatListMgr().getStrangerNew());
         baseMessage.setNum(ModuleMgr.getChatListMgr().getStrangerNew() ? 1 : 0);
         baseMessage.setName("打招呼的人");
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();

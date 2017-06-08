@@ -162,7 +162,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.FOLLOW_ME);
     }
 
-
     public boolean getStrangerNew() {
         return PSP.getInstance().getBoolean(getStrangerNewKey(), false);
     }
