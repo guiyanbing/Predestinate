@@ -7,8 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -17,10 +15,8 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -46,17 +42,21 @@ public class DBCenterFMessage {
     }
 
     private boolean isExist(long vcID) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
-                .append(" WHERE ")
-                .append(FMessage.COLUMN_SPECIALMSGID + " = ?");
-        Cursor cursor = mDatabase.query(sql.toString(), String.valueOf(vcID));
-        if (cursor != null && cursor.moveToFirst()) {
-            cursor.close();
-            return true;
-        } else {
-            if (cursor != null) cursor.close();
-            return false;
+        Cursor cursor = null;
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FMessage.FMESSAGE_TABLE)
+                    .append(" WHERE ")
+                    .append(FMessage.COLUMN_SPECIALMSGID + " = ?");
+            cursor = mDatabase.query(sql.toString(), String.valueOf(vcID));
+            if (cursor != null && cursor.moveToFirst()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.close(cursor);
         }
+        return false;
     }
 
     /**
@@ -340,8 +340,9 @@ public class DBCenterFMessage {
                 .map(new Func1<SqlBrite.Query, BaseMessage>() {
                     @Override
                     public BaseMessage call(SqlBrite.Query query) {
+                        Cursor cursor = null;
                         try {
-                            Cursor cursor = query.run();
+                            cursor = query.run();
                             if (cursor != null && cursor.moveToFirst()) {
                                 Bundle bundle = new Bundle();
                                 bundle.putLong(FMessage._ID, CursorUtil.getLong(cursor, FMessage._ID));
@@ -360,6 +361,8 @@ public class DBCenterFMessage {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }finally {
+                            CloseUtil.close(cursor);
                         }
                         return null;
                     }

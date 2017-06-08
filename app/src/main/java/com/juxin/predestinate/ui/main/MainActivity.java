@@ -293,8 +293,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
                 HashMap<String, Object> data = (HashMap<String, Object>) value;
                 int type = (int) data.get("type");
-                if (type == 0 || type == 2)
+                if (type == 0 || type == 2){
+                    PLogger.printObject("getOfflineMsg==333333333333333" );
                     getOfflineMsg();
+                }
                 break;
 
             default:
@@ -340,6 +342,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()) {
+                PLogger.printObject("getOfflineMsg==111111111111" );
                 getOfflineMsg();
             }
         }
@@ -352,6 +355,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                PLogger.printObject("getOfflineMsg==444444"+response.getResponseString());
+
                 PLogger.d("offlineMsg:  " + response.getResponseString());
                 if (!response.isOk()) return;
 
@@ -368,6 +373,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 // 服务器每次最多返50条，若超过则再次请求
                 if (offlineMsg.getMsgList().size() >= 50) {
+                    PLogger.printObject("getOfflineMsg==22222222222"+offlineMsg.getMsgList().size());
                     getOfflineMsg();
                     return;
                 }
