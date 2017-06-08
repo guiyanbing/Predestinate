@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -71,6 +72,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         isCanBack(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_say_hello_user_act);
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getIsCanExKey(), true);
         initView();
         initData();
         MsgMgr.getInstance().attach(this);
@@ -230,7 +232,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
-                initData();
+                if (PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getIsCanExKey(), false)) {
+                    initData();
+                }
                 break;
             default:
                 break;
@@ -242,13 +246,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     public void showHasData() {
         adapter.notifyDataSetChanged();
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(exListView);
-            }
-        }, 800);
-
+        detectInfo(exListView);
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
     }
@@ -355,7 +353,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
 
 
     /**
@@ -365,7 +364,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     private void detectInfo(AbsListView view) {
         if (adapter == null) return;
-        if (!timeUtil.check(3 * 1000)) {
+        if (!timeUtil.check(10 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();
@@ -387,14 +386,14 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         if (stringList.size() > 0) {
             Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
             observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-            .subscribe(new Action1<List<UserInfoLightweight>>() {
-                @Override
-                public void call(List<UserInfoLightweight> lightweights) {
-                    if(lightweights != null && lightweights.size() > 0){
-                        ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
-                    }
-                }
-            });
+                    .subscribe(new Action1<List<UserInfoLightweight>>() {
+                        @Override
+                        public void call(List<UserInfoLightweight> lightweights) {
+                            if (lightweights != null && lightweights.size() > 0) {
+                                ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
+                            }
+                        }
+                    });
 
             TimerUtil.beginTime(new TimerUtil.CallBack() {
                 @Override
@@ -403,5 +402,11 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                 }
             }, 800);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getIsCanExKey(), false);
     }
 }

@@ -124,6 +124,20 @@ public class PayWX extends BaseData implements Serializable {
         }
     }
 
+    public PayWX(String jsonStr, boolean isAlipay) {
+        if (TextUtils.isEmpty(jsonStr)) {
+            return;
+        }
+        JSONObject jsonObject = getJsonObject(jsonStr);
+        if (!jsonObject.isNull("param")) {
+            this.setOK(true);
+            this.setContent(jsonObject.optString("content"));
+            this.setParam(jsonObject.optString("param"));
+            this.setCupPayType(jsonObject.optInt("payType"));
+        }
+    }
+
+
     /**
      * 手机卡
      *
