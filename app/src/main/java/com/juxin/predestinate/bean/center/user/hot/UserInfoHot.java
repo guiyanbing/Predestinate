@@ -26,7 +26,7 @@ public class UserInfoHot extends UserBasic {
 
     private String distance; //距离
     private boolean isMobileValidation = false;//手机是否验证
-    private boolean isIdcardValidation = false;//身份证是否验证
+    private boolean isIdcardValidation = false;//身份证是否验证  0 未提交 1 待审核 2 审核通过 3 审核不通过
     private boolean isVideoValidation = false;//视频认证是否通过
     private boolean isVideoBusy = false;//是否正在视频或者音频中
 
@@ -68,7 +68,7 @@ public class UserInfoHot extends UserBasic {
         this.setLastOnLineTime(jsonObject.optString("last_online"));
         this.setNickname(jsonObject.optString("nickname"));
         this.setMobileValidation(jsonObject.optInt("mobile_validation", 0) == 1);
-        this.setIdcardValidation(jsonObject.optInt("idcard_validation", 0) == 1);
+        this.setIdcardValidation(jsonObject.optInt("idcard_validation", 0) == 2);
         this.setVideoBusy(jsonObject.optInt("video_busy", 0) == 1);
         this.setPhotoNum(jsonObject.optInt("photonum"));
 
