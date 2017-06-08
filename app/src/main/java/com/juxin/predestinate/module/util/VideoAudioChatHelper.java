@@ -254,6 +254,7 @@ public class VideoAudioChatHelper {
      * @return
      */
     private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType) {
+        int foreverType = PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0);
         Bundle bundle = new Bundle();
         bundle.putString("vc_get_user_url", UrlParam.reqUserInfoSummary.getFinalUrl());
         bundle.putString("vc_cookie", ModuleMgr.getLoginMgr().getCookieVerCode());
@@ -268,7 +269,7 @@ public class VideoAudioChatHelper {
         bundle.putLong("vc_dst_uid", dstUid);
         bundle.putString("vc_self_info", PSP.getInstance().getString(INFO_SAVE_KEY, ""));
         bundle.putString("vc_gift_list",ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
-        bundle.putInt("vc_own",singleType==0 ? 2 : singleType);//1看自己，2不看自己
+        bundle.putInt("vc_own",singleType==0 ? (foreverType == 0 ? 2: foreverType) : singleType);//1看自己，2不看自己
         return bundle;
     }
 
