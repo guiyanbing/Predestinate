@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,7 +33,6 @@ import com.juxin.predestinate.module.local.pay.CheckYCoinBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -74,12 +72,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         checkSingleState();
+        setContentView(R.layout.p1_privatechatact);
 
         whisperID = getIntent().getLongExtra("whisperID", 0);
         name = getIntent().getStringExtra("name");
         kf_id = getIntent().getIntExtra("kf_id", -1);
-        Log.d("_test", "whisperID = " + whisperID);
-        setContentView(R.layout.p1_privatechatact);
+        PLogger.d("------>whisperID: " + whisperID + " , name: " + name + " , kf_id: " + kf_id);
 
         initView();
         MsgMgr.getInstance().attach(this);
@@ -94,14 +92,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         //缘分小秘书
         if (MailSpecialID.customerService.getSpecialID() == whisperID) {
             privateChat.setInputGiftviewVisibility(View.GONE);
-            int iSecretary_dialog = ModuleMgr.getCommonMgr().getCommonConfig().getSecretary_dialog();
-            if (iSecretary_dialog == 1 ||
-                    (iSecretary_dialog == 0 &&
-                            (userDetail.isVip() ||
-                                    userDetail.getYcoin() > 0 ||
-                                    userDetail.getDiamondsSum() > 0
-                            )
-                    )) {
+            if (ModuleMgr.getCommonMgr().getCommonConfig().canSecretaryShow()
+                    || (userDetail.isVip() || userDetail.getYcoin() > 0 || userDetail.getDiamondsSum() > 0)) {
                 privateChat.getChatAdapter().showIsCanChat(true);//输入框显示
             } else {
                 privateChat.getChatAdapter().showInputGONE();//输入框不显示
@@ -109,7 +101,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             return;
         }
 
-        if ((userDetail.getGender() == 2)//女性用户
+        if (!userDetail.isMan() //女性用户
                 || (userDetail.isVip() && userDetail.getYcoin() > 0) //ip 并且Y币>0
                 || (userDetail.getYcoin() > 79 && "0".equals(userDetail.getyCoinUserid())) //Y币 高于79 并且未绑定用户
                 || (userDetail.getYcoin() > 79 && String.valueOf(whisperID).equals(userDetail.getyCoinUserid())) //Y币高于79，并且是绑定用户
@@ -384,11 +376,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         privateChat.getChatAdapter().showIsCanChat(false);
                     }
                 }
-                break;
-
-            case MsgType.MT_SEND_GIFT_FLAG:
-                if (!Constant.GIFT_CHAT.equals((String) value)) return;
-                PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false);
                 break;
 
             case MsgType.MT_MyInfo_Change://更新个人资料

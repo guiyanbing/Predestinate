@@ -35,6 +35,8 @@ public enum ChatMsgType {
 
     CMT_25(ChatPanelText.class, "HTML文本消息"),
 
+    CMT_28(ChatPanelText.class, "自动升级提示消息"),
+
 
     CMT_7("已读消息"),
 

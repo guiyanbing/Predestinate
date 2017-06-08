@@ -47,10 +47,6 @@ public class Constant {
     public static final String SETTING_AUDIO_CHAT = "setting_audio_chat";
     public static final boolean SETTING_AUDIO_CHAT_DEFAULT = true;
 
-    public static final String GIFT_CHAT = "GIFT_CHAT";
-    public static final String GIFT_INFO = "GIFT_INFO";
-
-    public static final String ASET_DATA = "getASet_Flag";
     // 图片
     public static final int INT_AVATAR = 101;       // 头像
     public static final int INT_ALBUM = 102;        // 相册

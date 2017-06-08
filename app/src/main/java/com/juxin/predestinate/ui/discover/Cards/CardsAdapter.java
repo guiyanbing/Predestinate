@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
@@ -217,7 +216,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                         }
                     });
         } else if (ModuleMgr.getCenterMgr().isCanSayHi(context) && infoHot.is_sayHello()) {
-            PToast.showShort(context.getString(R.string.user_info_has_hi));
+            PToast.showShort(context.getString(R.string.user_info_hi_repeat));
         }
     }
 

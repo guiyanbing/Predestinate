@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.db.FLetter;
@@ -15,7 +14,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +34,7 @@ public class BaseMessage implements IBaseMessage {
         wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息
         htmlText(TextMessage.class, 25),//HTML文本消息
+        autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
@@ -51,22 +50,6 @@ public class BaseMessage implements IBaseMessage {
                 if (messageType.getMsgType() == msgType) {
                     return messageType;
                 }
-            }
-            return null;
-        }
-
-        /**
-         * 获取消息对应的结构体
-         *
-         * @param type
-         * @return
-         */
-        public static Class<? extends BaseMessage> getMsgClass(int type) {
-            try {
-                BaseMessageType messageType = BaseMessageType.valueOf("Msg_" + type);
-                return messageType.msgClass;
-            } catch (Exception e) {
-                PLogger.d("Msg_" + type);
             }
             return null;
         }
@@ -576,6 +559,7 @@ public class BaseMessage implements IBaseMessage {
             case html:
             case hint:
             case htmlText:
+            case autoUpdateHtml:
                 message = new TextMessage(bundle, true);
                 break;
             case hi:
@@ -586,9 +570,6 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle, true);
                 break;
-//            case sys:
-//                message = new SystemMessage(bundle, true);
-//                break;
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
@@ -615,6 +596,7 @@ public class BaseMessage implements IBaseMessage {
             case html:
             case hint:
             case htmlText:
+            case autoUpdateHtml:
                 message = new TextMessage(bundle);
                 break;
             case hi:
@@ -625,9 +607,6 @@ public class BaseMessage implements IBaseMessage {
             case wantGift:
                 message = new GiftMessage(bundle);
                 break;
-//            case sys:
-//                message = new SystemMessage(bundle);
-//                break;
             case video:
                 message = new VideoMessage(bundle);
                 break;
@@ -692,18 +671,12 @@ public class BaseMessage implements IBaseMessage {
             case htmlText:
                 result = msg.getMsgDesc();
                 break;
-            case gift:
             case wantGift:
                 result = "[礼物]";
                 break;
-//            case sys:
-//                String content1 = msg.getMsgDesc();
-//                if (TextUtils.isEmpty(content1)) {
-//                    result = "[已读]";
-//                } else {
-//                    result = content1;
-//                }
-//                break;
+            case autoUpdateHtml:
+                result = "[系统消息]";
+                break;
             default:
                 result = msg.getMsgDesc();
                 break;
