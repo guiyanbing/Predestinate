@@ -56,8 +56,8 @@ public class Statistics {
         singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
-        singleMap.put("channel_id", ModuleMgr.getAppMgr().getMainChannelID() + "_"
-                + ModuleMgr.getAppMgr().getSubChannelID());//渠道编号<主渠道>_<子渠道>
+        singleMap.put("channel_id", ModuleMgr.getCenterMgr().getMyInfo().getChannel_uid() + "_"
+                + ModuleMgr.getCenterMgr().getMyInfo().getChannel_sid());//渠道编号<主渠道>_<子渠道>
         singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
         singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
         singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串
@@ -180,8 +180,8 @@ public class Statistics {
         singleMap.put("client_type", Constant.PLATFORM_TYPE);//客户端类型
         singleMap.put("version", String.valueOf(Constant.SUB_VERSION));//客户端标记号
         singleMap.put("build_ver", ModuleMgr.getAppMgr().getVerCode());//客户端打包版本号
-        singleMap.put("channel_id", ModuleMgr.getAppMgr().getMainChannelID() + "_"
-                + ModuleMgr.getAppMgr().getSubChannelID());//渠道编号<主渠道>_<子渠道>
+        singleMap.put("channel_id", ModuleMgr.getCenterMgr().getMyInfo().getChannel_uid() + "_"
+                + ModuleMgr.getCenterMgr().getMyInfo().getChannel_sid());//渠道编号<主渠道>_<子渠道>
         singleMap.put("package_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名
         singleMap.put("sign_name", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));//客户端签名
         singleMap.put("device_id", ModuleMgr.getAppMgr().getDeviceID());//设备标识符,获取失败返回空字符串

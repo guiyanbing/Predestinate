@@ -42,6 +42,8 @@ public class UserInfo extends UserBasic {
     private long memdatenum;        // 计算会员到期时间
     private String cell_phone;      // 认证的手机号
     private int giftfriendscnt;     // 赠礼好友数量
+    private int channel_uid;        // 用户来源主渠道id
+    private int channel_sid;        // 用户来源子渠道id
 
     // --------------- TA人字段 ------------------------
     private int kf_id;
@@ -73,6 +75,8 @@ public class UserInfo extends UserBasic {
         this.setComplete(detailObject.optString("complete"));
         this.setCell_phone(detailObject.optString("cell_phone"));
         this.setConcept(detailObject.optString("concept"));
+        this.setChannel_uid(detailObject.optInt("channel_uid"));
+        this.setChannel_sid(detailObject.optInt("channel_sid"));
 
         // D
         this.setDiamand(detailObject.optInt("diamand"));
@@ -514,6 +518,21 @@ public class UserInfo extends UserBasic {
         this.shareCode = shareCode;
     }
 
+    public int getChannel_uid() {
+        return channel_uid;
+    }
+
+    public void setChannel_uid(int channel_uid) {
+        this.channel_uid = channel_uid;
+    }
+
+    public int getChannel_sid() {
+        return channel_sid;
+    }
+
+    public void setChannel_sid(int channel_sid) {
+        this.channel_sid = channel_sid;
+    }
 
     public UserInfo() {
     }
@@ -557,6 +576,8 @@ public class UserInfo extends UserBasic {
         dest.writeLong(this.memdatenum);
         dest.writeString(this.cell_phone);
         dest.writeInt(this.giftfriendscnt);
+        dest.writeInt(this.channel_uid);
+        dest.writeInt(this.channel_sid);
         dest.writeInt(this.kf_id);
         dest.writeInt(this.distance);
         dest.writeInt(this.isfollow);
@@ -602,6 +623,8 @@ public class UserInfo extends UserBasic {
         this.memdatenum = in.readLong();
         this.cell_phone = in.readString();
         this.giftfriendscnt = in.readInt();
+        this.channel_uid = in.readInt();
+        this.channel_sid = in.readInt();
         this.kf_id = in.readInt();
         this.distance = in.readInt();
         this.isfollow = in.readInt();
