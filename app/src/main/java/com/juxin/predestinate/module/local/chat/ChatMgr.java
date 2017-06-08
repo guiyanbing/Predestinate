@@ -968,7 +968,7 @@ public class ChatMgr implements ModuleBase {
      * @param isOK            是否请求成功 true是成功
      * @param infoLightweight 个人资料数据
      */
-    private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
+    private synchronized void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.printObject(infoLightweight);
         for (Object key : infoMap.keySet()) {
             if (key.equals(userID)) {

@@ -16,6 +16,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -102,6 +103,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
         PLogger.printObject("updateData=" + message);
         datas.add(message);
+        SortList.sortListView(datas);
         notifyDataSetChanged();
     }
 

@@ -23,7 +23,7 @@ public class SortList {
 		Collections.sort(baseMessages, new Comparator<BaseMessage>() {
 			@Override
 			public int compare(BaseMessage arg0, BaseMessage arg1) {
-				return new Long(arg0.getId()).compareTo(arg1.getId());
+				return new Long(arg0.getTime()).compareTo(arg1.getTime());
 			}
 		});
 	}

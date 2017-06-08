@@ -166,7 +166,7 @@ public class CommonMgr implements ModuleBase {
         getParams.put("uid", App.uid);
         getParams.put("count", 50);
 
-        ModuleMgr.getHttpMgr().reqGetAndCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
     }
 
     /**
