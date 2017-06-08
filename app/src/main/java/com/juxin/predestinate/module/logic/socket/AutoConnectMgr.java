@@ -4,7 +4,7 @@ import android.os.DeadObjectException;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -66,7 +66,6 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * KeepAliveSocket封装了连接服务器、接收、发送数据等功能。
      */
     private KeepAliveSocket socket = null;
-    private Gson gson = new Gson();
 
     private ICSCallback iCSCallback = null;
     private volatile long uid = 0;//用户ID
@@ -173,7 +172,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * 重连，每次重连进行延时，防止刷服务器
      */
     protected void reConnect() {
-        if(uid == 0) return;
+        if (uid == 0) return;
 
         Observable.timer(getIncrementTime(), TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
             @Override
@@ -268,7 +267,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("ms", Constant.MS_TYPE);
         loginMap.put("imei", ModuleMgr.getAppMgr().getDeviceID());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
 
-        NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, gson.toJson(loginMap));
+        NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, JSON.toJSONString(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
         return data;
     }
@@ -283,7 +282,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         Map<String, Object> loopbackMap = new HashMap<>();
         loopbackMap.put("s", 0);
         loopbackMap.put("d", msgId);
-        return new NetData(uid, msgType, gson.toJson(loopbackMap));
+        return new NetData(uid, msgType, JSON.toJSONString(loopbackMap));
     }
 
     /**
@@ -379,7 +378,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         onStatusChange(TCPConstant.SOCKET_STATUS_Connected, "socket连接服务器成功");
         TimerUtil.resetIncreaseTime();
 
-        if(uid == 0){
+        if (uid == 0) {
             socket.disconnect(true);
             return;
         }
@@ -485,7 +484,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 long sender = contentObject.optLong("fid", -1);//发送者id
 
                 //消息接收反馈
-                if(data.getMsgType() >= TCPConstant.MSG_ID_SERVER_PUSH_START_INDEX
+                if (data.getMsgType() >= TCPConstant.MSG_ID_SERVER_PUSH_START_INDEX
                         && data.getMsgType() < TCPConstant.MSG_ID_SERVER_PUSH_END_INDEX) {
                     socket.sendPacket(getLoopbackData(TCPConstant.MSG_ID_PUSH_MESSAGE, msgId));
                 }

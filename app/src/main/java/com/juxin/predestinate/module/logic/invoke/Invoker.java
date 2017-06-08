@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -68,7 +68,6 @@ public class Invoker {
     public static final String JSCMD_gift_message = "gift_message";// 礼物信息
     public static final String JSCMD_turntable_activity = "turntable_activity";//启动关闭转盘
 
-    private Gson gson = new Gson();
     private WebAppInterface appInterface = new WebAppInterface(App.context, null);
     private Object webView;
 
@@ -128,7 +127,7 @@ public class Invoker {
         Map<String, Object> cmdMap = new HashMap<>();
         cmdMap.put("jcmd", cmd);
         cmdMap.put("data", data == null ? new HashMap<>() : data);
-        String url = "javascript:window.platform.appCommand('" + new Gson().toJson(cmdMap) + "')";
+        String url = "javascript:window.platform.appCommand('" + JSON.toJSONString(cmdMap) + "')";
         doInJS(url);
     }
 
@@ -273,7 +272,7 @@ public class Invoker {
             responseObject.put("is_vip", userInfo.isVip());
             responseObject.put("version", 2);//1为之前的缘分吧版本（礼物版），2为红包来了之后的缘分吧版本
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 根据uid获取用户信息
@@ -294,7 +293,7 @@ public class Invoker {
                     responseObject.put("gender", userDetail.getGender());
                     responseObject.put("is_vip", userDetail.isVip());
 
-                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
                 }
             });
         }
@@ -316,7 +315,7 @@ public class Invoker {
             responseObject.put("longitude", LocationMgr.getInstance().getPointD().longitude);
             responseObject.put("latitude", LocationMgr.getInstance().getPointD().latitude);
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 弹出模态对话框
@@ -452,7 +451,7 @@ public class Invoker {
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("devicemodel", android.os.Build.MODEL);//解密后的服务端返回（安卓注意大小写）
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 进入别人的个人中心页面
@@ -490,7 +489,7 @@ public class Invoker {
 //            responseObject.put("bank_auth_status", userInfo.getBankAuthStatus());
 //            responseObject.put("video_auth_status", userInfo.getVideoAuthStatus());
 
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 刷新个人详情
@@ -512,7 +511,7 @@ public class Invoker {
                     // 将选取的图片进行质量压缩并将二进制流转换为base64字符串
                     Map<String, Object> responseObject = new HashMap<>();
                     responseObject.put("imageData", BitmapUtil.imagePathToBase64(path[0]));//base64格式字符串
-                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject), false);
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject), false);
                 }
             });
         }
@@ -534,7 +533,7 @@ public class Invoker {
                 public void onUploadComplete(ArrayList<String> mediaUrls) {
                     Map<String, Object> responseObject = new HashMap<>();
                     responseObject.put("urlList", mediaUrls.toArray());
-                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+                    doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
                     for (String s : files) FileUtil.deleteFile(s);
                 }
             }, (String[]) files.toArray(new String[files.size()]));
@@ -563,7 +562,7 @@ public class Invoker {
             Map<String, Object> responseObject = new HashMap<>();
             //字符串 没有绑定 返回值空字符，绑定的返回手机号
             responseObject.put("num", userInfo.isVerifyCellphone() ? userInfo.getMobile() : "");
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 获取服务器请求url
@@ -590,7 +589,7 @@ public class Invoker {
             }
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("url", url);
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // H5页面用户行为统计
@@ -618,7 +617,7 @@ public class Invoker {
             //TODO 客户端弹窗，选择用户之后回调js，以下内容在弹窗确认点击回调中实现
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("target_id", "");//TODO 被选择人uid
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 获取鱼分享：分享鱼。分享成功后，回调js
@@ -629,7 +628,7 @@ public class Invoker {
 
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("share_success", true);//分享成功或者是失败//TODO 以下内容在分享成功回调中实现
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
         // 领取金币并分享：分享金币领取状态。分享成功后，回调js
@@ -640,7 +639,7 @@ public class Invoker {
 
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("share_success", true);//分享成功或者是失败//TODO 以下内容在分享成功回调中实现
-            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), gson.toJson(responseObject));
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
     }
 
