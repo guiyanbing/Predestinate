@@ -659,6 +659,7 @@
     <string name="hot_card_audio_tips">对方未开启语音聊天</string>
     <string name="hot_card_nodata_top_tip">非常抱歉\n一大波美女帅哥在排队中...</string>
     <string name="hot_card_nodata_bottom_tip">暂时还没出现符合条件的用户噢~</string>
+    <string name="hot_card_last_item_tip">没有更多用户了噢~</string>
 
 
     <string name="hot_card_price_vip">您非VIP会员，不可以直接发信！可以先给她打个招呼，等待她的回复！</string>

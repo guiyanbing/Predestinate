@@ -31,6 +31,15 @@ import java.util.List;
 
 public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
 
+    private boolean isNear = false;
+
+    public boolean isNear() {
+        return isNear;
+    }
+
+    public void setNear(boolean near) {
+        isNear = near;
+    }
 
     public DiscoverAdapter(Context context, List<UserInfoLightweight> datas) {
         super(context, datas);
@@ -124,6 +133,25 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
                 holder.tv_call.setVisibility(View.GONE);
             }
         }
+
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            if (!isNear()) {
+                if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                    showSayHello(holder, userInfo, position);
+                } else {
+                    showOnline(holder, userInfo);
+                }
+            } else {
+                if (ModuleMgr.getCenterMgr().isRobot(getItem(0).getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                    showSayHello(holder, userInfo, position);
+                } else {
+                    showOnline(holder, userInfo);
+                }
+            }
+        } else {
+            showSayHello(holder, userInfo, position);
+        }
+
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             if (ModuleMgr.getCenterMgr().isRobot(userInfo.getKf_id()) && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
