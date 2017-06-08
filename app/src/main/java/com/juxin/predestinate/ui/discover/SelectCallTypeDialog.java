@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +31,9 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
 
     private long mOtherUserId;
     private Context mContext;
-    private TextView tv_video_price, tv_audio_price, tv_cancel;
-    private LinearLayout ll_dlg, ll_video_chat, ll_audio_chat;
+    private TextView tv_video_price,tv_video_price1,tv_audio_price,tv_cancel;
+    private RelativeLayout rl_video_chat,rl_video_chat1;
+    private LinearLayout ll_dlg, ll_audio_chat;
 
     public SelectCallTypeDialog(Context context, long otherUserId) {
         super(context);
@@ -58,13 +60,16 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
         View view = inflater.inflate(R.layout.dialog_select_call_type, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         ll_dlg = (LinearLayout) view.findViewById(R.id.ll_dlg);
-        ll_video_chat = (LinearLayout) view.findViewById(R.id.ll_video_chat);
+        rl_video_chat = (RelativeLayout) view.findViewById(R.id.rl_video_chat);
+        rl_video_chat1 = (RelativeLayout) view.findViewById(R.id.rl_video_chat1);
         ll_audio_chat = (LinearLayout) view.findViewById(R.id.ll_audio_chat);
         tv_video_price = (TextView) view.findViewById(R.id.tv_video_price);
+        tv_video_price1 = (TextView) view.findViewById(R.id.tv_video_price1);
         tv_audio_price = (TextView) view.findViewById(R.id.tv_audio_price);
         tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
 
-        ll_video_chat.setOnClickListener(this);
+        rl_video_chat.setOnClickListener(this);
+        rl_video_chat1.setOnClickListener(this);
         ll_audio_chat.setOnClickListener(this);
         tv_cancel.setOnClickListener(this);
 
@@ -82,6 +87,7 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
                 dialogWindow.setAttributes(lp);
+                setCanceledOnTouchOutside(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,14 +97,17 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ll_video_chat:
+            case R.id.rl_video_chat:
+                //邀请视频聊天
+                startVa(VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                break;
 
+            case R.id.rl_video_chat1:
                 //邀请视频聊天
                 startVa(VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 break;
 
             case R.id.ll_audio_chat:
-
                 //邀请音频聊天
                 startVa(VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 break;
@@ -143,10 +152,13 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
                     } else {
                         ll_dlg.setVisibility(View.VISIBLE);
                         if (config.getVideoChat() == 1) {
-                            ll_video_chat.setVisibility(View.VISIBLE);
+                            rl_video_chat.setVisibility(View.VISIBLE);
+                            rl_video_chat1.setVisibility(View.VISIBLE);
                             tv_video_price.setText(config.getVideoPrice() + "钻石/分");
+                            tv_video_price1.setText(config.getVideoPrice() + "钻石/分");
                         } else {
-                            ll_video_chat.setVisibility(View.GONE);
+                            rl_video_chat.setVisibility(View.GONE);
+                            rl_video_chat1.setVisibility(View.GONE);
                         }
 
                         if (config.getVoiceChat() == 1) {
