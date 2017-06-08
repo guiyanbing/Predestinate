@@ -6,23 +6,18 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
-import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -42,10 +37,10 @@ public class DBCenterFLetter {
         if (temp == null) {//没有数据
             return insertLetter(message);
         } else {
-            if(message.isSender() && (message.getcMsgID() >= temp.getcMsgID())){
+            if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
                 return updateLetter(message);
             }
-           return MessageConstant.OK;
+            return MessageConstant.OK;
         }
     }
 
@@ -91,7 +86,7 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_RU, baseMessage.getRu());
 
             values.put(FLetter.COLUMN_TYPE, baseMessage.getType());
-            values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());// 1.发送成功2.发送失败3.发送中 10.未读11.已读
+            values.put(FLetter.COLUMN_STATUS, baseMessage.getStatus());
 
             if (baseMessage.getcMsgID() != -1)
                 values.put(FLetter.COLUMN_CMSGID, baseMessage.getcMsgID());
@@ -112,8 +107,6 @@ public class DBCenterFLetter {
         }
         try {
             final ContentValues values = new ContentValues();
-            values.put(FLetter.COLUMN_USERID, baseMessage.getWhisperID());
-
             if (baseMessage.getInfoJson() != null)
                 values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(baseMessage.getInfoJson()));
 
@@ -172,7 +165,8 @@ public class DBCenterFLetter {
             return MessageConstant.ERROR;
         }
         try {
-            if (isExist(String.valueOf(lightweight.getUid())) == null) return MessageConstant.ERROR;//没有数据
+            if (isExist(String.valueOf(lightweight.getUid())) == null)
+                return MessageConstant.ERROR;//没有数据
 
             final ContentValues values = new ContentValues();
             if (lightweight.getInfoJson() != null)
@@ -229,7 +223,6 @@ public class DBCenterFLetter {
                         try {
                             cursor = query.run();
                             if (cursor != null && cursor.moveToFirst()) {
-                                cursor.close();
                                 return true;
                             }
                         } catch (Exception e) {
