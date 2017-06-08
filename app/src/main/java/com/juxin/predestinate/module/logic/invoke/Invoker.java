@@ -66,6 +66,7 @@ public class Invoker {
     public static final String JSCMD_turntable_result = "turntable_result";// 转盘转动结果(同步他人客户端开始抽奖)
     public static final String JSCMD_chat_message = "chat_message";// 聊天信息
     public static final String JSCMD_gift_message = "gift_message";// 礼物信息
+    public static final String JSCMD_turntable_activity = "turntable_activity";//启动关闭转盘
 
     private Gson gson = new Gson();
     private WebAppInterface appInterface = new WebAppInterface(App.context, null);

@@ -42,6 +42,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
     private final MyHandler m_Handler = new MyHandler(this);
     private SendEnableThread sendthread = null;
     private String qq;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +104,8 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
             return;
         }
         tv_customerservice_desc.setText(getResources().getString(R.string.txt_customerservice_bind_desc));
-        ((TextView)findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
-        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("("+ contactBean.getWork_time()+")");
+        ((TextView) findViewById(R.id.tv_customerservice_phone)).setText(contactBean.getTel());
+        ((TextView) findViewById(R.id.tv_customerservice_worktime)).setText("(" + contactBean.getWork_time() + ")");
         qq = contactBean.getQq();
     }
 
@@ -127,7 +128,7 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 }
                 break;
             case R.id.ll_customerservice_btn://客服小秘书
-                UIShow.showPrivateChatAct(PhoneVerifyAct.this, MailSpecialID.customerService.getSpecialID(),"");
+                UIShow.showPrivateChatAct(PhoneVerifyAct.this, MailSpecialID.customerService.getSpecialID(), "");
                 break;
             default:
                 break;
@@ -175,11 +176,9 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 sendthread.start();
             }
         } else if (response.getUrlParam() == UrlParam.mobileAuth) {
-            if (!response.isOk()) {
-                PToast.showLong(response.getMsg());
-                return;
-            }
-            PToast.showShort(getResources().getString(R.string.toast_mobile_authok));
+            PToast.showLong(response.getMsg());
+            if (!response.isOk()) return;
+
             ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
             ModuleMgr.getCenterMgr().getMyInfo().setMobile(phone);
             UIShow.showPhoneVerifyCompleteAct(PhoneVerifyAct.this, MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);

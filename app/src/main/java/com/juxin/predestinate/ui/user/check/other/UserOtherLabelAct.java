@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.flow.TagAdapter;
 import com.juxin.predestinate.module.logic.baseui.flow.TagFlowLayout;
@@ -38,7 +37,7 @@ public class UserOtherLabelAct extends BaseActivity implements View.OnClickListe
     private void initTitle() {
         setBackView();
         setTitle(getString(R.string.user_other_label));
-        setTitleRight(getString(R.string.user_info_save), this);
+        setTitleRight(getString(R.string.save), this);
     }
 
     private void initView() {
