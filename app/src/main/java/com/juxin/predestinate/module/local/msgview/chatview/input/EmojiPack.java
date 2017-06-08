@@ -113,7 +113,7 @@ public class EmojiPack {
     private EmojiItem addPattern(String smile, String desc) {
         EmojiItem emojiItem = new EmojiItem();
 
-        emojiItem.key = "[" + key + "_" + smile + "]";
+        emojiItem.key = "[" + desc + "]";
         emojiItem.desc = desc;
         emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
         emojiItem.resId = UIUtil.getResIdFromDrawable(prefix + smile);
