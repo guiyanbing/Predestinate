@@ -81,12 +81,12 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                 break;
             case R.id.tv_select_ok:
                 if (cb_own_agree.isChecked()) {
-                    selectVal =  Constant.APPEAR_TYPE_OWN;
+                    selectVal = Constant.APPEAR_TYPE_OWN;
                     if (cb_def_sel.isChecked()) {
                         saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
                     }
                 } else if (cb_own_disagree.isChecked()) {
-                    selectVal =  Constant.APPEAR_TYPE_NO_OWN;
+                    selectVal = Constant.APPEAR_TYPE_NO_OWN;
                     if (cb_def_sel.isChecked()) {
                         saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                     }

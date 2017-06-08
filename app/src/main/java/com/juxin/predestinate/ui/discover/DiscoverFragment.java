@@ -93,6 +93,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         exListView.setPullLoadEnable(true);
         exListView.addHeaderView(mViewTop);
         adapter = new DiscoverAdapter(getActivity(), infos);
+        adapter.setNear(false);
         exListView.setAdapter(adapter);
         exListView.setHeaderStr(null, null);
         exListView.setHeaderHintType(2);
@@ -129,12 +130,14 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 switch (position) {
                     case Look_All: //查看全部
                         isNearPage = false;
+                        adapter.setNear(false);
                         setGroupSayhiBtn(false);
                         onRefresh();
                         dialog.dismiss();
                         break;
                     case Look_Near: //只看附近的人
                         isNearPage = true;
+                        adapter.setNear(true);
                         onRefresh();
                         dialog.dismiss();
                         break;
@@ -244,7 +247,11 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     }
                     adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
-                    setGroupSayhiBtn(true);
+                    if (!ModuleMgr.getCenterMgr().isRobot(infos.get(0).getKf_id())) {
+                        setGroupSayhiBtn(false);
+                    } else {
+                        setGroupSayhiBtn(true);
+                    }
                 } else {
                     customStatusListView.showNoData("暂无数据", "重试", new View.OnClickListener() {
                         @Override
@@ -268,14 +275,22 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     }
                     adapter.notifyDataSetChanged();
                     customStatusListView.showExListView();
-                    setGroupSayhiBtn(true);
+                    if (!ModuleMgr.getCenterMgr().isRobot(infos.get(0).getKf_id())) {
+                        setGroupSayhiBtn(false);
+                    } else {
+                        setGroupSayhiBtn(true);
+                    }
                 }
             }
         } else {
             if (infos.size() != 0) {
                 adapter.notifyDataSetChanged();
                 customStatusListView.showExListView();
-                setGroupSayhiBtn(true);
+                if (!ModuleMgr.getCenterMgr().isRobot(infos.get(0).getKf_id())) {
+                    setGroupSayhiBtn(false);
+                } else {
+                    setGroupSayhiBtn(true);
+                }
             } else {
                 customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
                     @Override
@@ -405,7 +420,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
      */
     private void setGroupSayhiBtn(boolean isCanShow) {
         //我是VIP的时候不显示
-        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+        if (ModuleMgr.getCenterMgr().getMyInfo().isVip() || !ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             groupSayhiBtn.setVisibility(View.GONE);
         } else {  //非VIP附近的人显示
             if (!isNearPage) {

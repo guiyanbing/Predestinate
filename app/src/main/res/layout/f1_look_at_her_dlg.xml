@@ -16,6 +16,7 @@
     <RelativeLayout
         android:id="@+id/rl_own_agree"
         style="@style/center_set_item">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +24,7 @@
             android:gravity="center"
             android:text="自己露脸"
             android:textColor="@color/text_zhuyao_black"
-            android:textSize="@dimen/px46_sp" />
+            android:textSize="@dimen/px45_sp" />
 
         <CheckBox
             android:id="@+id/cb_own_agree"
@@ -31,7 +32,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/p1_look_select_bg"
-            android:button="@null" />
+            android:button="@null"
+            android:clickable="false" />
     </RelativeLayout>
 
     <View
@@ -42,6 +44,7 @@
     <RelativeLayout
         android:id="@+id/rl_own_disagree"
         style="@style/center_set_item">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +52,7 @@
             android:gravity="center"
             android:text="自己不露脸"
             android:textColor="@color/text_zhuyao_black"
-            android:textSize="@dimen/px46_sp" />
+            android:textSize="@dimen/px45_sp" />
 
         <CheckBox
             android:id="@+id/cb_own_disagree"
@@ -57,7 +60,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/p1_look_select_bg"
-            android:button="@null" />
+            android:button="@null"
+            android:clickable="false" />
     </RelativeLayout>
 
     <View
@@ -67,14 +71,14 @@
 
     <LinearLayout
         style="@style/common_list_item"
-        android:paddingBottom="@dimen/px18_dp"
-        android:paddingTop="@dimen/px18_dp"
         android:gravity="right|center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/px25_dp"
+        android:paddingTop="@dimen/px25_dp">
 
         <CheckBox
             android:id="@+id/cb_def_sel"
-            style="@style/icon_middle_center"
+            style="@style/icon_small"
             android:layout_marginRight="@dimen/px18_dp"
             android:background="@drawable/p1_def_look_select"
             android:button="@null" />
@@ -84,7 +88,7 @@
             android:layout_height="wrap_content"
             android:text="以后默认此选项"
             android:textColor="@color/text_ciyao_gray"
-            android:textSize="@dimen/px34_sp" />
+            android:textSize="@dimen/px36_sp" />
     </LinearLayout>
 
     <View
@@ -100,5 +104,5 @@
         android:paddingTop="@dimen/px35_dp"
         android:text="确 定"
         android:textColor="@color/theme_color_red"
-        android:textSize="@dimen/px46_sp" />
+        android:textSize="@dimen/px45_sp" />
 </LinearLayout>

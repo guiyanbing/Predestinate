@@ -32,12 +32,10 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
     private List<UserInfoHot> datas;
     private Context context;
     private ViewHoder vh;
-    private OnDataNeedReq onDataNeedReq;
 
-    public CardsAdapter(List<UserInfoHot> datas, Context context, OnDataNeedReq onDataNeedReq) {
+    public CardsAdapter(List<UserInfoHot> datas, Context context) {
         this.datas = datas;
         this.context = context;
-        this.onDataNeedReq = onDataNeedReq;
     }
 
     public void setData(List<UserInfoHot> datas) {
@@ -61,12 +59,6 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             return;
         }
 
-        //判断是否需要请求数据
-        if (position + 4 >= datas.size()) {
-            if (onDataNeedReq != null) {
-                onDataNeedReq.onNeedReq();
-            }
-        }
 
         final UserInfoHot infoHot = datas.get(position);
         PLogger.d("onBindData=====> infoHot == " + infoHot.toString());
@@ -216,7 +208,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                         }
                     });
         } else if (ModuleMgr.getCenterMgr().isCanSayHi(context) && infoHot.is_sayHello()) {
-            PToast.showShort(context.getString(R.string.user_info_has_hi));
+            PToast.showShort(context.getString(R.string.user_info_hi_repeat));
         }
     }
 

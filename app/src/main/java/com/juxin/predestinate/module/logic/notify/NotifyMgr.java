@@ -68,6 +68,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     private final int NOTIFY_COMMON = BaseMessage.BaseMessageType.common.getMsgType();    //文本消息:2
     private final int NOTIFY_GIFT = BaseMessage.BaseMessageType.gift.getMsgType();        //礼物消息:10
     private final int NOTIFY_VIDEO = BaseMessage.BaseMessageType.video.getMsgType();      //音视频消息:24
+    private final int NOTIFY_UPDATE = BaseMessage.BaseMessageType.autoUpdateHtml.getMsgType();//自动升级提示
 
     /**
      * 进行聊天消息通知
@@ -81,7 +82,8 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         JSONObject jsonObject = JsonUtil.getJsonObject(message.getJsonStr());
         int type = jsonObject.optInt("mtp");
         PLogger.d("------>Msg type: " + type);
-        if (type != NOTIFY_COMMON && type != NOTIFY_GIFT && type != NOTIFY_VIDEO) return;
+        if (type != NOTIFY_COMMON && type != NOTIFY_GIFT
+                && type != NOTIFY_VIDEO && type != NOTIFY_UPDATE) return;
 
         show(message, getContent(type, jsonObject));
     }
@@ -94,6 +96,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      */
     private String getContent(int type, JSONObject jsonObject) {
         if (type == NOTIFY_GIFT) return App.context.getString(R.string.notify_gift);
+        if (type == NOTIFY_UPDATE) return App.context.getString(R.string.notify_system);
 
         if (type == NOTIFY_VIDEO && jsonObject.optInt("vc_tp") == 1) {
             return App.context.getString(R.string.notify_video, jsonObject.optInt("media_tp") == 1 ?

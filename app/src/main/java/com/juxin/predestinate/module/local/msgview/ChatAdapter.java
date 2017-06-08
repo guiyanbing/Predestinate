@@ -277,11 +277,21 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onDataUpdate(){
         isMachine = true;
         if (chatInstance.chatContentAdapter == null) return;
-        List<BaseMessage> datas = chatInstance.chatContentAdapter.getList();
-        if (datas == null) return;
+        if (chatInstance.chatContentAdapter.getList() == null) return;
+        List<BaseMessage> datas = new ArrayList<>();
+        datas.addAll(chatInstance.chatContentAdapter.getList());
         if (datas.size() <= 0) return;
-        BaseMessage mess = datas.get(datas.size() - 1);
-        if (mess == null) return;
+        BaseMessage mess = null;
+        for (int i = datas.size()-1 ;i > 0 && i < datas.size();i--){
+            mess = datas.get(datas.size() - 1);
+            if (mess == null) continue;
+            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(mess.getType());
+            if (messageType != BaseMessage.BaseMessageType.hint){
+                break;
+            }
+            datas.remove(datas.size()-1);
+        }
+
         if (mess != null && (mess.getWhisperID() + "").equalsIgnoreCase(mess.getSendID() + "" )&& datas.size() > 0) {
             for (int i = datas.size()-1; i >= 0 && i < datas.size(); i--) {
                 BaseMessage message = datas.get(i);
@@ -428,8 +438,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
-                if (isMachine)
-                    onDataUpdate();
+                if (isMachine) onDataUpdate();
 
                 if (message.getSendID() != App.uid)
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
@@ -470,7 +479,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return chatMsgType.getPanelClass() != null;
     }
 
-    public ChatPanel getItemPanel(ChatPanel itemPanel, BaseMessage baseMsg, ChatAdapter.ChatInstance chatInstance, boolean sender) {
+    public ChatPanel getItemPanel(ChatPanel itemPanel, BaseMessage baseMsg, ChatInstance chatInstance, boolean sender) {
         if (baseMsg == null) {
             return null;
         }

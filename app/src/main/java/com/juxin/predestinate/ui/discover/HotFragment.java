@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.juxin.library.log.PToast;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
@@ -14,7 +15,6 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.ui.discover.Cards.BaseCardAdapter;
 import com.juxin.predestinate.ui.discover.Cards.CardsAdapter;
 import com.juxin.predestinate.ui.discover.Cards.CardsView;
 
@@ -25,7 +25,7 @@ import java.util.List;
  * Created by zhang on 2017/6/6.
  */
 
-public class HotFragment extends BaseFragment implements RequestComplete, BaseCardAdapter.OnDataNeedReq, CardsView.CardsSlideListener {
+public class HotFragment extends BaseFragment implements RequestComplete, CardsView.CardsSlideListener {
 
     private CustomFrameLayout hot_frame;
     private CardsView cardsView;
@@ -40,6 +40,8 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
     private int nowPosition = 0;
 
     private boolean isFirst = true;
+
+    private boolean isNeedReq = false;
 
     @Nullable
     @Override
@@ -70,7 +72,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
         hot_frame = (CustomFrameLayout) findViewById(R.id.hot_frame);
         hot_frame.setList(new int[]{R.id.common_loading, R.id.hot_card_nodata, R.id.hot_card_layout});
         cardsView = (CardsView) findViewById(R.id.hot_card_view);
-        adapter = new CardsAdapter(viewData, getContext(), this);
+        adapter = new CardsAdapter(viewData, getContext());
         cardsView.setCardsSlideListener(this);
         showLoading();
     }
@@ -83,6 +85,11 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
 
             if (list.getHotLists().size() != 0) {
                 isRef = list.isRef();
+                if (isRef && page == 1 && list.getHotLists().size() < 4) {
+                    isNeedReq = false;
+                } else {
+                    isNeedReq = true;
+                }
                 if (isRef) {
                     if (nowPosition < viewData.size()) {
                         List<UserInfoHot> temp = new ArrayList<>();
@@ -133,14 +140,15 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
         }
     }
 
-    @Override
-    public void onNeedReq() {
-        loadMoreData();
-    }
 
     @Override
     public void onShow(int index) {
         nowPosition = index;
+        //判断是否需要请求数据
+        if (index + 3 >= viewData.size() && isNeedReq) {
+            loadMoreData();
+        }
+
     }
 
     @Override
@@ -155,8 +163,16 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
 
     }
 
+    @Override
+    public void onLastCardBack() {
+        PToast.showShort(getString(R.string.hot_card_last_item_tip));
+    }
+
     private void showNodata() {
         hot_frame.show(R.id.hot_card_nodata);
+        if (viewData.size() != 0) {
+            viewData.clear();
+        }
     }
 
     private void showCardView() {
@@ -166,4 +182,5 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
     private void showLoading() {
         hot_frame.show(R.id.common_loading);
     }
+
 }

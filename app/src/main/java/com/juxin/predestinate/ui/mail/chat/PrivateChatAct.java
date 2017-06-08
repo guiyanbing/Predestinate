@@ -198,6 +198,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     private void setNickName(String nickName) {
         String str = whisperID + "";
+
+        if(whisperID == MailSpecialID.customerService.getSpecialID()){
+            str = MailSpecialID.customerService.getSpecialIDName();
+        }
+
         if (!TextUtils.isEmpty(nickName)) {
             str = nickName;
         }

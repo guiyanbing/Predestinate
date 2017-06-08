@@ -314,7 +314,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (!timeUtil.check(3 * 1000)) {
+        if (!timeUtil.check(4 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();

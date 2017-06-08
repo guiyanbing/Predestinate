@@ -26,6 +26,7 @@ web.urlMethod = {
   CheckPhoneNum: 'user/bindCellPhone',
   GetActivity: 'user/Activity',
   QQServiceNum: 'user/serviceQQ',
+  ServicePhone: 'user/getserviceqq',
   ReceiveActivity: 'user/receiveActivity',
   GetMyTurnConfig: 'xs/minigame/GetMyTurnConfig',
   GetOtherTurnConfig: 'xs/minigame/GetTurnConfig',

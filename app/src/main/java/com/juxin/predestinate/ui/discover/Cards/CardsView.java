@@ -59,6 +59,7 @@ public class CardsView extends LinearLayout {
     private int mInitialMotionY;
     private int mInitialMotionX;
     private final int SCROLL_DURATION = 300; // scroll back duration
+    private final int MININUMS_LIDING_DISTANCE = 16;//最小滑动距离
     private boolean hasTouchTopView;
     private VelocityTracker mVelocityTracker;
     private float mMaxVelocity;
@@ -164,7 +165,7 @@ public class CardsView extends LinearLayout {
         int tmpIndex = 0;
         for (int i = mShowingIndex; i < mShowingIndex + cardVisibleCount; i++) {
             tmpIndex = i - mShowingIndex;
-            if (tmpIndex >= viewList.size() ) {
+            if (tmpIndex >= viewList.size()) {
                 return;
             }
             View childView = viewList.get(tmpIndex);
@@ -438,6 +439,9 @@ public class CardsView extends LinearLayout {
         }
         if (flyType != SlideType.NONE && mCardsSlideListener != null) {
             mCardsSlideListener.onCardVanish(mShowingIndex, flyType);
+        } else if (mAdapter != null && mShowingIndex == (mAdapter.getCount() - 1) &&
+                (Math.abs(dx) > MININUMS_LIDING_DISTANCE || Math.abs(dy) > MININUMS_LIDING_DISTANCE)) {
+            mCardsSlideListener.onLastCardBack();
         }
     }
 
@@ -479,8 +483,10 @@ public class CardsView extends LinearLayout {
      */
     private float clampMag(float value, float absMin, float absMax) {
         final float absValue = Math.abs(value);
-        if (absValue < absMin) return 0;
-        if (absValue > absMax) return value > 0 ? absMax : -absMax;
+        if (absValue < absMin)
+            return 0;
+        if (absValue > absMax)
+            return value > 0 ? absMax : -absMax;
         return value;
     }
 
@@ -529,7 +535,7 @@ public class CardsView extends LinearLayout {
         LayoutParams lp = (LayoutParams) child.getLayoutParams();
         int width = child.getMeasuredWidth();
         int height = child.getMeasuredHeight();
-        this.childHeight = height/2;
+        this.childHeight = height / 2;
 
         int gravity = lp.gravity;
         if (gravity == -1) {
@@ -570,11 +576,11 @@ public class CardsView extends LinearLayout {
         }
         child.layout(childLeft, childTop, childLeft + width, childTop + height);
 
-        int offset = (int)(yOffsetStep * index + childHeight*scaleOffsetStep*index);
+        int offset = (int) (yOffsetStep * index + childHeight * scaleOffsetStep * index);
         float scale = 1 - scaleOffsetStep * index;
         float alpha = 1.0f * (100 - alphaOffsetStep * index) / 100;
         if (index == viewList.size() - 1 && viewList.size() > 1) {
-            offset = (int)(yOffsetStep * (index - 1) + childHeight*scaleOffsetStep*(index-1));
+            offset = (int) (yOffsetStep * (index - 1) + childHeight * scaleOffsetStep * (index - 1));
             scale = 1 - scaleOffsetStep * (index - 1);
             alpha = 1.0f * (100 - alphaOffsetStep * (index - 1)) / 100;
         }
@@ -704,11 +710,11 @@ public class CardsView extends LinearLayout {
     private void ajustLinkageViewItem(View changedView, float rate, int index) {
         int changeIndex = viewList.indexOf(changedView);
 
-        int initPosY = (int)(yOffsetStep * index + childHeight*scaleOffsetStep*index) ;
+        int initPosY = (int) (yOffsetStep * index + childHeight * scaleOffsetStep * index);
         float initScale = 1 - scaleOffsetStep * index;
         float initAlpha = 1.0f * (100 - alphaOffsetStep * index) / 100;
 
-        int nextPosY = (int)(yOffsetStep * (index - 1) + childHeight*scaleOffsetStep*(index-1));
+        int nextPosY = (int) (yOffsetStep * (index - 1) + childHeight * scaleOffsetStep * (index - 1));
         float nextScale = 1 - scaleOffsetStep * (index - 1);
         float nextAlpha = 1.0f * (100 - alphaOffsetStep * (index - 1)) / 100;
 
@@ -741,7 +747,7 @@ public class CardsView extends LinearLayout {
             dx = 1;
         }
 
-        if (mAdapter != null && mShowingIndex != (mAdapter.getCount()-1)){
+        if (mAdapter != null && mShowingIndex != (mAdapter.getCount() - 1)) {
             if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
                 finalX = mWidth;
                 finalY = dy * (mCardWidth + initLeft) / dx + initTop;
@@ -850,6 +856,11 @@ public class CardsView extends LinearLayout {
          * @param index         点击到的index
          */
         void onItemClick(View cardImageView, int index);
+
+        /**
+         * 最后一张卡片返回回调
+         */
+        void onLastCardBack();
     }
 
     /**

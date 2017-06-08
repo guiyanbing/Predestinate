@@ -39,6 +39,8 @@ public class KeepAliveSocket {
     private OutputStream output;
     private PacketWriter packetWriter;
     private PackerReader packerReader;
+    private String host;
+    private int port;
 
     private boolean wantClose = false;
 
@@ -91,7 +93,8 @@ public class KeepAliveSocket {
     }
 
     public KeepAliveSocket(String host, int port) {
-        address = new InetSocketAddress(host, port);
+        this.host = host;
+        this.port = port;
 //        socketConnectCondition = socketStateLock.newCondition();
     }
 
@@ -101,7 +104,6 @@ public class KeepAliveSocket {
 
     public void connect() {
 //        checkAndWaitForConnect();
-
         if (state == SocketState.CONNECTING || state == SocketState.CONNECTED_SUCCESS) {
             PLogger.d("Socket already connected");
             return;
@@ -110,6 +112,9 @@ public class KeepAliveSocket {
         setState(SocketState.CONNECTING);
 
         try {
+            if(address == null) {
+                address = new InetSocketAddress(host, port);
+            }
 //            socketStateLock.lock();
             socket = SocketFactory.getDefault().createSocket();
             socket.connect(address, TCPConstant.SOCKET_CONNECT_TIMEOUT);

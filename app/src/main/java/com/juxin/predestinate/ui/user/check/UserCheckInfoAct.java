@@ -197,7 +197,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
      */
     private void handleSayHi() {
         if (userDetail.isSayHello()) {
-            PToast.showShort(getString(R.string.user_info_has_hi));
+            PToast.showShort(getString(R.string.user_info_hi_repeat));
             return;
         }
 
