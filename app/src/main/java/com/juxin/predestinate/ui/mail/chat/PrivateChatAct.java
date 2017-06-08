@@ -91,11 +91,19 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void checkIsCanSendMsg() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
 
-        if (MailSpecialID.customerService.getSpecialID() == whisperID){
+        //缘分小秘书
+        if (MailSpecialID.customerService.getSpecialID() == whisperID) {
             privateChat.setInputGiftviewVisibility(View.GONE);
-            if (userDetail.isVip() || userDetail.getYcoin() > 0 || userDetail.getDiamondsSum() > 0) {//缘分小秘书
+            int iSecretary_dialog = ModuleMgr.getCommonMgr().getCommonConfig().getSecretary_dialog();
+            if (iSecretary_dialog == 1 ||
+                    (iSecretary_dialog == 0 &&
+                            (userDetail.isVip() ||
+                                    userDetail.getYcoin() > 0 ||
+                                    userDetail.getDiamondsSum() > 0
+                            )
+                    )) {
                 privateChat.getChatAdapter().showIsCanChat(true);//输入框显示
-            }else {
+            } else {
                 privateChat.getChatAdapter().showInputGONE();//输入框不显示
             }
             return;
@@ -232,7 +240,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
-                    if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID){
+                    if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID) {
                         privateChat.getChatAdapter().onDataUpdate();
                     }
                     name = infoLightweight.getShowName();

@@ -33,6 +33,7 @@ public class CommonConfig extends BaseData {
     private boolean isAudioCallNeedVip; //发起音频聊天是否需要VIP
 
     private PayTypeList payTypeList;    //支付方式控制
+    private int secretary_dialog;//小秘书对话框是否开放，1为开放，0为不开放
 
     /**
      * @return 是否展示活动弹窗
@@ -63,6 +64,8 @@ public class CommonConfig extends BaseData {
         isVideoCallNeedVip = jsonObject.optInt("videochat_call_vip") == 1;
         isAudioCallNeedVip = jsonObject.optInt("audiochat_call_vip") == 1;
         checkYellowFirst = jsonObject.optInt("frist_screenshot");
+
+        secretary_dialog = jsonObject.optInt("secretary_dialog");
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
@@ -136,6 +139,10 @@ public class CommonConfig extends BaseData {
         return checkYellowFirst;
     }
 
+    public int getSecretary_dialog() {
+        return secretary_dialog;
+    }
+
     @Override
     public String toString() {
         return "CommonConfig{" +
@@ -154,6 +161,7 @@ public class CommonConfig extends BaseData {
                 ", checkYellow=" + checkYellow +
                 ", isVideoCallNeedVip=" + isVideoCallNeedVip +
                 ", isAudioCallNeedVip=" + isAudioCallNeedVip +
+                ", secretary_dialog=" + secretary_dialog +
                 ", payTypeList=" + payTypeList +
                 '}';
     }
