@@ -21,9 +21,13 @@ public class Constant {
     public static String WEIXIN_APP_ID = "wxab302910f007a8ed";//聚鑫 //"wxc56bbddc3c2e0c18";//APPID
     public final static String WEIXIN_App_Key = "xCNyzKceB8szwWmUqT4laGqK5SapQn5L";
 
+    public static final int APPEAR_TYPE_OWN = 1;//自己露脸
+    public static final int APPEAR_TYPE_NO_OWN = 2;//自己不露脸
+
     // -----------------------私有K-V-----------------------
     public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
-    public static final String APPEAR_TYPE = "appear_type"; //出场方式
+    public static final String APPEAR_FOREVER_TYPE = "appear_forever_type"; //默认出场方式
+    public static final String APPEAR_SINGLE_TYPE = "appear_single_type"; //单选出场方式
 
     // -------------------------K-V---------------------------
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏

@@ -13,8 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -99,11 +101,13 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
         switch (v.getId()) {
             case R.id.rl_video_chat:
                 //邀请视频聊天
+                PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_SINGLE_TYPE), Constant.APPEAR_TYPE_OWN);
                 startVa(VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 break;
 
             case R.id.rl_video_chat1:
                 //邀请视频聊天
+                PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_SINGLE_TYPE), Constant.APPEAR_TYPE_NO_OWN);
                 startVa(VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 break;
 

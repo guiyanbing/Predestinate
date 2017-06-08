@@ -24,9 +24,6 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
  * 作者:lc
  */
 public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickListener {
-    private static final int APPEAR_TYPE_OWN = 1;//自己露脸
-    private static final int APPEAR_TYPE_NO_OWN = 2;//自己不露脸
-
     private Context context;
     private long otherId;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
@@ -84,9 +81,15 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
             case R.id.tv_select_ok:
                 if (cb_def_sel.isChecked()) {
                     if (cb_own_agree.isChecked()) {
-                        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_OWN);
+                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
                     } else if (cb_own_disagree.isChecked()) {
-                        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), APPEAR_TYPE_NO_OWN);
+                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
+                    }
+                }else {
+                    if (cb_own_agree.isChecked()) {
+                        saveType(Constant.APPEAR_SINGLE_TYPE, Constant.APPEAR_TYPE_OWN);
+                    } else if (cb_own_disagree.isChecked()) {
+                        saveType(Constant.APPEAR_SINGLE_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                     }
                 }
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
@@ -95,5 +98,9 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
             default:
                 break;
         }
+    }
+
+    private void saveType(String type, int val) {
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(type), val);
     }
 }

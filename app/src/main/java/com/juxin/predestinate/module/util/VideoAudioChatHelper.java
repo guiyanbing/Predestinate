@@ -90,7 +90,7 @@ public class VideoAudioChatHelper {
      * @param flag  判断是否显示进场dlg
      */
     public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag) {
-        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+        if(flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             UIShow.showLookAtHerDlg(context, dstUid);
             return;
         }
@@ -265,7 +265,7 @@ public class VideoAudioChatHelper {
         bundle.putLong("vc_dst_uid", dstUid);
         bundle.putString("vc_self_info", PSP.getInstance().getString(INFO_SAVE_KEY, ""));
         bundle.putString("vc_gift_list",ModuleMgr.getCommonMgr().getGiftLists().getStrGiftConfig());
-        bundle.putInt("vc_own",PSP.getInstance().getInt(Constant.APPEAR_TYPE,1));//1看自己，2不看自己
+        bundle.putInt("vc_own",PSP.getInstance().getInt(Constant.APPEAR_SINGLE_TYPE,1));//1看自己，2不看自己
         return bundle;
     }
 
