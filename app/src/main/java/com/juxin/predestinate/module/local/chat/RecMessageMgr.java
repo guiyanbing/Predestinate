@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.content.Intent;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -11,6 +12,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,39 +69,39 @@ public class RecMessageMgr implements IMProxy.IMListener {
         }
     }
 
-    private void notifyPlugin(JSONObject object){
+    private void notifyPlugin(JSONObject object) {
         try {
             int mtp = object.getInt("mtp");
             String mct = object.optString("mct");
             long fid = object.optLong("fid");
             JSONObject jo = null;
-            if(mtp == 2 && !TextUtils.isEmpty(mct)){
+            if (mtp == 2 && !TextUtils.isEmpty(mct)) {
                 jo = new JSONObject();
-                jo.put("mt",2);
-                jo.put("text",mct);
+                jo.put("mt", 2);
+                jo.put("text", mct);
             }
 
-            if(mtp == 10){
+            if (mtp == 10) {
                 jo = new JSONObject();
-                jo.put("mt",4);
+                jo.put("mt", 4);
                 JSONObject giftJo = object.getJSONObject("gift");
-                jo.put("gift_id",giftJo.getInt("gift_id"));
+                jo.put("gift_id", giftJo.getInt("gift_id"));
             }
 
-            if(mtp == 26){
+            if (mtp == 26) {
                 jo = new JSONObject();
-                jo.put("mt",6);
-                jo.put("ctype",object.getInt("ctype"));// 1关闭视频 2打开视频
+                jo.put("mt", 6);
+                jo.put("ctype", object.getInt("ctype"));// 1关闭视频 2打开视频
             }
 
-            if(mtp == 27){
+            if (mtp == 27) {
                 jo = new JSONObject();
-                jo.put("mt",5);
+                jo.put("mt", 5);
                 JSONObject dataJo = object.getJSONObject("g_data");
-                jo.put("wave_index",dataJo.getInt("wave_index"));
+                jo.put("wave_index", dataJo.getInt("wave_index"));
             }
-            if(jo != null) {
-                jo.put("fid",fid);
+            if (jo != null) {
+                jo.put("fid", fid);
                 Intent intent = new Intent("com.juxin.action.plugin");
                 intent.putExtra("extra_json", jo.toString());
                 App.context.sendBroadcast(intent);
@@ -109,7 +111,8 @@ public class RecMessageMgr implements IMProxy.IMListener {
         }
     }
 
-    private void onSaveSendUI(boolean isSave, BaseMessage message, boolean group, long msgID, String groupId, long senderID, String jsonStr, int type) throws JSONException {
+    private void onSaveSendUI(boolean isSave, BaseMessage message, boolean group, long msgID,
+                              String groupId, long senderID, String jsonStr, int type) throws JSONException {
         PLogger.d(message.getWhisperID());
         message.setSendID(senderID);
         message.setMsgID(msgID);
@@ -146,7 +149,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                     }
 
                     //3拒绝或取消 4挂断（挂断可能会收到不止一次）
-                    if(videoMessage.getVideoTp() == 3 || videoMessage.getVideoTp() == 4){
+                    if (videoMessage.getVideoTp() == 3 || videoMessage.getVideoTp() == 4) {
                         VideoAudioChatHelper.getInstance().resetSend();
                     }
                     //{"d":167075,"fid":110872922,"mct":"","media_tp":1,"mt":1495891670,"mtp":24,"ru":1,"tid":110872541,"vc_id":100000459,"vc_tp":1}
