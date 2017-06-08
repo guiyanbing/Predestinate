@@ -7,20 +7,21 @@
         android:id="@+id/cus_top_title_view"
         android:layout_width="@dimen/px130_dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/cus_top_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:paddingLeft="@dimen/px22_dp"
-        android:paddingRight="@dimen/px22_dp"
+        android:layout_toRightOf="@+id/cus_top_title_view"
         android:ellipsize="end"
         android:gravity="center"
         android:maxLength="9"
         android:maxLines="1"
+        android:paddingLeft="@dimen/px22_dp"
+        android:paddingRight="@dimen/px22_dp"
         android:text="别；是；中国国"
-        android:layout_toRightOf="@+id/cus_top_title_view"
         android:textColor="@color/white"
         android:textSize="@dimen/px52_sp" />
 
@@ -29,8 +30,8 @@
         android:layout_width="@dimen/px130_dp"
         android:layout_height="@dimen/px53_dp"
         android:layout_centerVertical="true"
-        android:paddingTop="@dimen/px3_dp"
         android:layout_toRightOf="@+id/cus_top_title"
+        android:paddingTop="@dimen/px3_dp"
         android:visibility="gone">
 
         <ImageView
@@ -54,7 +55,6 @@
             android:text="Top3"
             android:textColor="@color/white"
             android:textSize="@dimen/px26_sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 </RelativeLayout>
-
