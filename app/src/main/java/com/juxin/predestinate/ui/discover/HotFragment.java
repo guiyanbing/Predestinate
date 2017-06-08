@@ -155,6 +155,11 @@ public class HotFragment extends BaseFragment implements RequestComplete, BaseCa
 
     }
 
+    @Override
+    public void onLastCardBack() {
+
+    }
+
     private void showNodata() {
         hot_frame.show(R.id.hot_card_nodata);
     }

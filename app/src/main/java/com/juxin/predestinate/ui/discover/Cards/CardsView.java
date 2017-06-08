@@ -438,6 +438,8 @@ public class CardsView extends LinearLayout {
         }
         if (flyType != SlideType.NONE && mCardsSlideListener != null) {
             mCardsSlideListener.onCardVanish(mShowingIndex, flyType);
+        }else if (mAdapter != null && mShowingIndex == (mAdapter.getCount()-1)){
+            mCardsSlideListener.onLastCardBack();
         }
     }
 
@@ -850,6 +852,11 @@ public class CardsView extends LinearLayout {
          * @param index         点击到的index
          */
         void onItemClick(View cardImageView, int index);
+
+        /**
+         * 最后一张卡片返回回调
+         */
+        void onLastCardBack();
     }
 
     /**

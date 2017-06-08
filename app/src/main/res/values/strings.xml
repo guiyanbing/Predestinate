@@ -91,7 +91,8 @@
     <string name="user_info_hi">打招呼</string>
     <string name="user_info_hi_fail">打招呼失败</string>
     <string name="user_info_hi_suc">打招呼成功</string>
-    <string name="user_info_has_hi">不可以重复打招呼！</string>
+    <string name="user_info_has_hi">已打招呼</string>
+    <string name="user_info_hi_repeat">不可以重复打招呼！</string>
     <string name="user_info_video">发视频</string>
     <string name="user_info_look_at_her">看看她</string>
     <string name="user_info_look_at_he">看看他</string>

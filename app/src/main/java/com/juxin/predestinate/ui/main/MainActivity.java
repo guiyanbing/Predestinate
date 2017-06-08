@@ -78,7 +78,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (!response.isOk()) return;
+                if (!response.isOk())
+                    return;
                 ModuleMgr.getCommonMgr().setVideoVerify((VideoVerifyBean) response.getBaseData());
                 VideoAudioChatHelper.getInstance().checkDownloadPlugin(MainActivity.this);
             }
@@ -86,6 +87,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().checkUpdate(this, false);//检查应用升级
         ModuleMgr.getCommonMgr().getCustomerserviceContact();//获取客服联系信息
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
+
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size()<=0)
+            ModuleMgr.getCommonMgr().requestGiftList(null);
 
         showSayHelloDialog();//判断男性展示一键打招呼弹窗
         UIShow.showWantMoneyDlg(this);//判断女性展示索要礼物弹窗

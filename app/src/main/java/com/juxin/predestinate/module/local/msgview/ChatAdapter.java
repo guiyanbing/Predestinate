@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -9,7 +8,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.TypeConvertUtil;
-import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
@@ -17,7 +15,6 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -30,10 +27,8 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
-import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
 import java.lang.reflect.Constructor;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -282,10 +277,20 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onDataUpdate(){
         isMachine = true;
         if (chatInstance.chatContentAdapter == null) return;
-        List<BaseMessage> datas = chatInstance.chatContentAdapter.getList();
-        if (datas == null) return;
+        if (chatInstance.chatContentAdapter.getList() == null) return;
+        List<BaseMessage> datas = new ArrayList<>();
+        datas.addAll(chatInstance.chatContentAdapter.getList());
         if (datas.size() <= 0) return;
-        BaseMessage mess = datas.get(datas.size() - 1);
+        BaseMessage mess = null;
+        for (int i = datas.size()-1 ;i > 0 && i < datas.size();i--){
+            mess = datas.get(datas.size() - 1);
+            if (mess == null) continue;
+            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(mess.getType());
+            if (messageType != BaseMessage.BaseMessageType.hint){
+                break;
+            }
+            datas.remove(datas.size()-1);
+        }
 
         if (mess != null && (mess.getWhisperID() + "").equalsIgnoreCase(mess.getSendID() + "" )&& datas.size() > 0) {
             for (int i = datas.size()-1; i >= 0 && i < datas.size(); i--) {
@@ -474,7 +479,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         return chatMsgType.getPanelClass() != null;
     }
 
-    public ChatPanel getItemPanel(ChatPanel itemPanel, BaseMessage baseMsg, ChatAdapter.ChatInstance chatInstance, boolean sender) {
+    public ChatPanel getItemPanel(ChatPanel itemPanel, BaseMessage baseMsg, ChatInstance chatInstance, boolean sender) {
         if (baseMsg == null) {
             return null;
         }
