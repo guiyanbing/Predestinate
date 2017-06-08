@@ -9,4 +9,7 @@
     <string name="refresh_done">refresh done</string>
     <string name="loading_done">loading done</string>
     <string name="listview_header_last_time">last update：</string>
+
+    <!-- ImageLoader标识ImageView tag用id-->
+    <string name="view_url_tag_id"></string>
 </resources>

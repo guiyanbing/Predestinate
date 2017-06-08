@@ -78,7 +78,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         whisperID = getIntent().getLongExtra("whisperID", 0);
         name = getIntent().getStringExtra("name");
         kf_id = getIntent().getIntExtra("kf_id", -1);
-        PSP.getInstance().put("kf_idid", kf_id);
         Log.d("_test", "whisperID = " + whisperID);
         setContentView(R.layout.p1_privatechatact);
 
@@ -233,7 +232,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
-                    PSP.getInstance().put("kf_idid", kf_id);
+                    if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID){
+                        privateChat.getChatAdapter().onDataUpdate();
+                    }
                     name = infoLightweight.getShowName();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
@@ -241,19 +242,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID) {
+            privateChat.setInputLookAtHerVisibility(View.VISIBLE);
             initHeadView();
             initFollow();
             isShowTopPhone();
         }
 
-        //VIP男用户展示浮动提示
-        if (ModuleMgr.getCenterMgr().getMyInfo().isVip() && ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1
-                && PSP.getInstance().getBoolean(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false) && MailSpecialID.customerService.getSpecialID() != whisperID) {
-            privateChat.mGiftTipsContainerV.setVisibility(View.VISIBLE);
-        }
-
         //状态栏 + 标题 +（关注TA、查看手机）// （去掉滚动条高度） 高度
-        if (ModuleMgr.getCenterMgr().getMyInfo().getGender() == 1 && MailSpecialID.customerService.getSpecialID() != whisperID)
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID)
             PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getViewHeight(privatechat_head) + UIUtil.getStatusHeight(this));
         else
             PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getStatusHeight(this));
@@ -385,7 +381,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             case MsgType.MT_SEND_GIFT_FLAG:
                 if (!Constant.GIFT_CHAT.equals((String) value)) return;
                 PSP.getInstance().put(FinalKey.SP_CHAT_SHOW_GIFT_GREETING_TIPS, false);
-                privateChat.mGiftTipsContainerV.setVisibility(View.GONE);
                 break;
 
             case MsgType.MT_MyInfo_Change://更新个人资料
@@ -408,7 +403,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        PSP.getInstance().put("kf_idid", -1);
         super.onDestroy();
         privateChat.getChatAdapter().detach();
         lastActivity = null;

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
+
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
@@ -12,6 +14,7 @@ import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.ViewPagerAdapter;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -110,7 +113,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
                         }
-                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true);
                         break;
                     case VOICE://语音
                         if (config == null || !config.isVoiceChat()) {

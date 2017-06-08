@@ -126,7 +126,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     /**
      * 角标
-     *
      * @param msgData
      */
     protected void setUnreadnum(BaseMessage msgData) {
@@ -169,7 +168,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
             case 3: // 发送中
                 long time = msgData.getCurrentTime() - msgData.getTime();
-                if (time <= 90000){
+                if (time <= 90000) {
                     item_last_status.setText("发送中");
                     break;
                 }

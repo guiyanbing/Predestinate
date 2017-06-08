@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.chat;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.Msg;
@@ -51,7 +50,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/28.
@@ -127,20 +125,9 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param sendID
      */
-    public void updateOtherRead(String channelID, String whisperID, long sendID, BaseMessage message) {
-        String whisperId = PSP.getInstance().getString("whisperId", "-1");
+    public void updateOtherRead(String channelID, String whisperID, long sendID, SystemMessage message) {
         ModuleMgr.getChatListMgr().updateToReadPrivate(Long.valueOf(whisperID));
-        if (!whisperId.equalsIgnoreCase(whisperID)) {
-            updateOtherSideRead(channelID, whisperID, sendID + "");
-            PSP.getInstance().put(whisperID + "id", true);
-        } else {
-            PSP.getInstance().put(whisperID + "id", false);
-            SystemMessage systemMessage = new SystemMessage();
-            systemMessage.setChannelID(channelID);
-            systemMessage.setWhisperID(whisperId);
-            systemMessage.setSendID(sendID);
-            onChatMsgUpdate(channelID, whisperID, true, message);
-        }
+        ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getFid() + "", message.getTid() + "");
     }
 
     public long updateToReadVoice(long msgID) {
@@ -292,7 +279,7 @@ public class ChatMgr implements ModuleBase {
                     final GiftMessage giftMessage = (GiftMessage) message;
 
                     ModuleMgr.getCommonMgr().sendGift(giftMessage.getWhisperID(), String.valueOf(giftMessage.getGiftID()),
-                            giftMessage.getGiftCount(), giftMessage.getgType(), new RequestComplete() {
+                            giftMessage.getGiftCount(), giftMessage.getGType(), new RequestComplete() {
                                 @Override
                                 public void onRequestComplete(HttpResponse response) {
                                     SendGiftResultInfo info = new SendGiftResultInfo();

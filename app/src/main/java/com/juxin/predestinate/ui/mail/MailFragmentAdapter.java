@@ -61,9 +61,8 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Follow_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
-        int num = ModuleMgr.getChatListMgr().getFollowNum();
         int followCount = ModuleMgr.getCenterMgr().getMyInfo().getFollowmecount();
-        baseMessage.setNum(num);
+        baseMessage.setNum(ModuleMgr.getChatListMgr().getFollowNum());
         baseMessage.setName("谁关注我");
         baseMessage.setAboutme(followCount > 0 ? "共有" + followCount + "位关注我" : "暂时还没有人关注我");
         baseMessage.setLocalAvatar(R.drawable.f1_sgzw_ico);
@@ -83,8 +82,6 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
-
-        PLogger.printObject("1111111111111111 MailFragmentAdapter = " + ModuleMgr.getChatListMgr().getStrangerNew());
         baseMessage.setNum(ModuleMgr.getChatListMgr().getStrangerNew() ? 1 : 0);
         baseMessage.setName("打招呼的人");
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();

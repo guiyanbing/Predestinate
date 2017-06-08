@@ -2,7 +2,9 @@ package com.juxin.predestinate.module.local.chat.msgtype;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,10 +18,10 @@ public class GiftMessage extends BaseMessage {
 
     private int giftID;
     private int giftCount;
-    private long giftLogID;
+    private long giftLogID;//礼物流水id，用于进行礼物接收
+    private int giftReceived;//标识礼物是否已经由服务器自动接收
 
-    //临时发送用的
-    private int gType;
+    private int gType;//临时发送字段
 
     public GiftMessage() {
         super();
@@ -29,7 +31,7 @@ public class GiftMessage extends BaseMessage {
         super(channelID, whisperID);
         this.setGiftID(giftID);
         this.setGiftCount(giftCount);
-    //    this.setGiftLogID(giftLogID);
+        //    this.setGiftLogID(giftLogID);
         this.setType(BaseMessageType.gift.getMsgType());
     }
 
@@ -63,6 +65,7 @@ public class GiftMessage extends BaseMessage {
             tmpGift.put("count", ((GiftMessage) message).getGiftCount());
             tmpGift.put("gift_id", ((GiftMessage) message).getGiftID());
             tmpGift.put("gift_log_id", ((GiftMessage) message).getGiftLogID());
+            tmpGift.put("recved", ((GiftMessage) message).getGiftReceived());
             json.put("gift", tmpGift);
 
             return json.toString();
@@ -109,11 +112,19 @@ public class GiftMessage extends BaseMessage {
         this.giftLogID = giftLogID;
     }
 
-    public int getgType() {
+    public int getGiftReceived() {
+        return giftReceived;
+    }
+
+    public void setGiftReceived(int giftReceived) {
+        this.giftReceived = giftReceived;
+    }
+
+    public int getGType() {
         return gType;
     }
 
-    public void setgType(int gType) {
+    public void setGType(int gType) {
         this.gType = gType;
     }
 
@@ -138,6 +149,14 @@ public class GiftMessage extends BaseMessage {
             this.setGiftCount(giftJSON.optInt("count"));
             this.setGiftID(giftJSON.optInt("gift_id"));
             this.setGiftLogID(giftJSON.optLong("gift_log_id"));
+            this.setGiftReceived(giftJSON.optInt("recved"));
         }
+    }
+
+    /**
+     * @return 该条礼物是否由服务器自动接收[视频通话的礼物会由服务器自动接收]
+     */
+    public boolean isGiftAutoReceived() {
+        return giftReceived == 1;
     }
 }
