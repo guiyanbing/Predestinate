@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.base;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -21,7 +19,6 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -154,39 +151,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public void setList(List<BaseMessage> datas) {
-        if (datas != null && datas.size() > 0) {
-            int size = datas.size();
-            long id = PSP.getInstance().getLong("xiaoxi" + datas.get(0).getWhisperID() + datas.get(0).getChannelID(), 0);
-            int kfID = PSP.getInstance().getInt("kf_idid", 0);
-            BaseMessage message = datas.get(size - 1);
-            Log.e("TTTTTTTTTTTTTTPPP","id="+id+"||"+"kfid="+kfID+"||"+ message.getMsgID()+"|||"+datas.get(0).getWhisperID());
-            if (kfID != 0 && message != null) {//当聊天对象为机器人时
-                for (int i = size - 1; i >= 0; i--) {
-                    BaseMessage mess = datas.get(i);
-                    if (mess == null)
-                        continue;//为null此次循环结束
-                    if (message.getSendID() == App.uid && mess.getStatus() == MessageConstant.READ_STATUS)
-                        break;//已读结束
-                    if (message.getSendID() == App.uid && mess.getStatus() == MessageConstant.OK_STATUS) {
-                        mess.setStatus(MessageConstant.READ_STATUS);
-                        continue;
-                    }
-                    message = mess;
-                    PSP.getInstance().put("xiaoxi" + message.getWhisperID() + message.getChannelID(), message.getMsgID());
-                }
-            } else {//当聊天对象不为机器人时
-                for (int i = size - 1; i >= 0; i--) {
-                    BaseMessage mess = datas.get(i);
-                    if (mess == null)
-                        continue;//为null此次循环结束
-                    if (mess.getLWhisperID() == App.uid && mess.getStatus() == MessageConstant.READ_STATUS)
-                        break;//已读结束
-                    if (id >= mess.getMsgID() && mess.getStatus() == MessageConstant.OK_STATUS) {
-                        datas.get(i).setStatus(MessageConstant.READ_STATUS);
-                    }
-                }
-            }
-        }
         super.setList(datas);
     }
 
@@ -201,7 +165,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         public ChatViewHolder custom = new ChatCustomHolder();
 
         public void reset(boolean sender, BaseMessage msgData, BaseMessage preMsgData) {
-            if (msgData == null) return;
+            if (msgData == null)
+                return;
 
             String tipTime = "";
             if (preMsgData != null) {
@@ -312,7 +277,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
          * @param viewGroup
          */
         public void showLayout(boolean sender, ViewGroup viewGroup) {
-            if (chatpanel == null || viewGroup == null) return;
+            if (chatpanel == null || viewGroup == null)
+                return;
 
             if (chatpanel.isShowParentLayout()) {
                 if (sender) {

@@ -78,7 +78,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         whisperID = getIntent().getLongExtra("whisperID", 0);
         name = getIntent().getStringExtra("name");
         kf_id = getIntent().getIntExtra("kf_id", -1);
-        PSP.getInstance().put("kf_idid", kf_id);
         Log.d("_test", "whisperID = " + whisperID);
         setContentView(R.layout.p1_privatechatact);
 
@@ -233,7 +232,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
 
                     kf_id = infoLightweight.getKf_id();
-                    PSP.getInstance().put("kf_idid", kf_id);
+                    if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID){
+                        privateChat.getChatAdapter().onDataUpdate();
+                    }
                     name = infoLightweight.getShowName();
                     privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
@@ -402,7 +403,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onDestroy() {
-        PSP.getInstance().put("kf_idid", -1);
         super.onDestroy();
         privateChat.getChatAdapter().detach();
         lastActivity = null;

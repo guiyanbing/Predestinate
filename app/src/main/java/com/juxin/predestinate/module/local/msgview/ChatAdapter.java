@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
@@ -26,11 +27,13 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -270,6 +273,28 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         }
     }
 
+    private boolean isMachine = false;
+    public void onDataUpdate(){
+        isMachine = true;
+        if (chatInstance.chatContentAdapter == null) return;
+        List<BaseMessage> datas = chatInstance.chatContentAdapter.getList();
+        if (datas == null) return;
+        if (datas.size() <= 0) return;
+        BaseMessage mess = datas.get(datas.size() - 1);
+        if (mess == null) return;
+        if (mess != null && (mess.getWhisperID() + "").equalsIgnoreCase(mess.getSendID() + "" )&& datas.size() > 0) {
+            for (int i = datas.size()-1; i >= 0 && i < datas.size(); i--) {
+                BaseMessage message = datas.get(i);
+                if (message == null)
+                    continue;
+                if (!(message.getWhisperID() + "").equalsIgnoreCase(message.getSendID() + "") && message.getStatus() == MessageConstant.OK_STATUS) {
+                    ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getWhisperID() + "", message.getSendID() + "");
+                    return;
+                }
+            }
+        }
+    }
+
     public ChatInterface.OnUserInfoListener getOnUserInfoListener() {
         return onUserInfoListener;
     }
@@ -366,6 +391,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
+                        if (isMachine)
+                            onDataUpdate();
                     }
                 });
     }
@@ -374,8 +401,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * 反注册消息模块，解除绑定。
      */
     public void detach() {
-        long id = PSP.getInstance().getLong("xiaoxi" + whisperId + channelId, 0);
-        ModuleMgr.getChatMgr().updateOtherSideRead(null, whisperId, App.uid + "", id);
         ModuleMgr.getChatMgr().detachChatListener(this);
         ChatMediaPlayer.getInstance().stopPlayVoice();
 
@@ -403,6 +428,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
+                if (isMachine)
+                    onDataUpdate();
 
                 if (message.getSendID() != App.uid)
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
@@ -410,21 +437,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {
                     case CMT_7:{
-                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                List<BaseMessage> messages = getChatInstance().chatContentAdapter.getList();
-                                int size = messages.size();
-                                if (size > 0 && messages.get(size - 1) != null) {
-                                    PSP.getInstance().put("xiaoxi" + messages.get(size - 1).getWhisperID() + messages.get(size - 1).getChannelID(), messages.get(size - 1).getMsgID());
-                                }
-                                chatInstance.chatContentAdapter.setList(messages);
-                                moveToBottom();
-                            }
-                        });
 
                         }
-                        break;
                 }
             }
 
