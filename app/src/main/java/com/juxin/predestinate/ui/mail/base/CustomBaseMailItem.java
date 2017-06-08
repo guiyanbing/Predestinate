@@ -17,6 +17,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
 import com.juxin.predestinate.module.util.JsonUtil;
@@ -94,13 +95,24 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      */
     public void showData(BaseMessage msgData) {
         PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
-        ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
+        long uid = msgData.getLWhisperID();
+
+        if(uid == MailSpecialID.customerService.getSpecialID() && TextUtils.isEmpty(msgData.getAvatar())){
+            ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_secretary_avatar, item_headpic);
+        }else {
+            ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
+        }
 
         String nickname = msgData.getName();
+
         if (!TextUtils.isEmpty(nickname)) {
             item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
         } else {
-            item_nickname.setText(String.valueOf(msgData.getLWhisperID()));
+            if(uid == MailSpecialID.customerService.getSpecialID()){
+                item_nickname.setText(MailSpecialID.customerService.getSpecialIDName());
+            }else {
+                item_nickname.setText(String.valueOf(uid));
+            }
         }
 
         item_certification.setVisibility(GONE);
