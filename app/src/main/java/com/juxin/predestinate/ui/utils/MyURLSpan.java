@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.request.DownloadListener;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.UIShow;
@@ -30,6 +31,7 @@ public class MyURLSpan extends ClickableSpan {
     private final static String URL_TYPE_VIDEO_CERTIFICATION = "video_certification";   //视频认证
     private final static String URL_TYPE_RECHARGE_YB = "recharge_yb";                   //充值Y币
     private final static String URL_TYPE_RECHARGE_VIP = "recharge_vip";                 //充值VIP
+    private final static String URL_TYPE_CHECK_UPDATE = "check_update";                 //检查升级
 
     private final Context mContext;
     private String mUrl;
@@ -98,6 +100,10 @@ public class MyURLSpan extends ClickableSpan {
                 //充值VIP
                 case URL_TYPE_RECHARGE_VIP:
                     UIShow.showOpenVipActivity(mContext);
+                    break;
+                //检查升级
+                case URL_TYPE_CHECK_UPDATE:
+                    ModuleMgr.getCommonMgr().checkUpdate((FragmentActivity) App.getActivity(), true);
                     break;
                 default:
                     int i = checkDownExUrl(mUrl);
