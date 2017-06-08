@@ -7,37 +7,107 @@
     android:orientation="vertical"
     android:visibility="gone">
 
-    <LinearLayout
-        android:id="@+id/ll_video_chat"
+    <RelativeLayout
+        android:id="@+id/rl_video_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:gravity="center"
-        android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/ll_video_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:text="视频聊天"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="视频聊天"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_video_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="0钻石/分"
+                android:textColor="#cccccc"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_video_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="0钻石/分"
-            android:textColor="#cccccc"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="（自己露脸）"
+            android:paddingRight="@dimen/dp_10"
+            android:textColor="@color/theme_color_red"
             android:textSize="12sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_below="@+id/ll_video_chat"
             android:background="@color/color_ededed" />
-    </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_video_chat1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/ll_video_chat1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="视频聊天"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_video_price1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="0钻石/分"
+                android:textColor="#cccccc"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="（自己不露脸）"
+            android:paddingRight="@dimen/dp_10"
+            android:textColor="@color/theme_color_red"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/ll_video_chat1"
+            android:background="@color/color_ededed" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_audio_chat"
@@ -84,7 +154,7 @@
         android:gravity="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
-        android:text="取消"
+        android:text="取 消"
         android:textColor="@color/black"
         android:textSize="14sp" />
 </LinearLayout>
