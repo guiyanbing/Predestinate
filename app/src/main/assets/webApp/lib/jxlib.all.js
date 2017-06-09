@@ -133,7 +133,8 @@ var CMD = {
   hideLoading: 'hide_data_loading',
   getAgentUrl: 'get_agent_url',
   userBehavior: 'user_behavior',
-  jumpToSmallSecretary: 'open_small_secretary'
+  jumpToSmallSecretary: 'open_small_secretary',
+  showToast: 'show_toast'
 }; /**
     * Created by chuhaoyuan on 2016/11/2.
     */
@@ -241,6 +242,12 @@ var PlatformHelper = function PlatformHelper() {
     _executeCMD(CMD.playSound, {
       game: game,
       url: url
+    });
+  };
+
+  that.showToast = function (message) {
+    _executeCMD(CMD.showToast, {
+      content: message
     });
   };
 
@@ -517,7 +524,6 @@ var PlatformHelper = function PlatformHelper() {
       event_Data: event_Data
     });
   };
-
 
   that.executeCMD = _executeCMD;
 

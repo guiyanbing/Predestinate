@@ -10,6 +10,7 @@ import com.juxin.library.controls.smarttablayout.PagerItem;
 import com.juxin.library.controls.smarttablayout.SmartTabLayout;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
@@ -55,6 +56,26 @@ public class MyAttentionAct extends BaseActivity {
         ((LinearLayout) stlTitles.getTabStrip()).setGravity(Gravity.CENTER_HORIZONTAL);//标题居中
         stlTitles.setCustomTabView(R.layout.f1_custom_table_view, R.id.tv_left_tab);//设置自定义标题
         stlTitles.setViewPager(vpViewChange);//设置viewpager
+        stlTitles.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0){
+                    StatisticsMessage.meFollow();
+                }else {
+                    StatisticsMessage.followMe();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     //添加两个panel

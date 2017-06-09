@@ -4,6 +4,9 @@
 
 var PrePaid = function () {
   var that = {};
+  var _eventType = '';
+  var _price = null;
+
   const PAGES = {
     yCoin: 1,
     vip: 2
@@ -41,21 +44,29 @@ var PrePaid = function () {
   that.payBtnClick = function () {
     var payInfo = null;
     if (_currentPage === PAGES.yCoin) {
+      _eventType =  'pay_y_btnljzf';
       if (_yCoinId === CARD_TYPES.yCoin100) {
         payInfo = defines.payInfo.yCoin100;
+        _price = 100;
       } else {
         payInfo = defines.payInfo.yCoin50;
+        _price = 50;
       }
     } else {
+      _eventType = 'pay_vip_btnljzf'
       if (_vipId === CARD_TYPES.vipQuarter) {
         payInfo = defines.payInfo.vipQuarter;
+        _price = 100;
       } else {
         payInfo = defines.payInfo.vipMonth;
+        _price = 50;
+
       }
     }
 
     if (payInfo) {
       window.platform.startPay(payInfo.pay_id, parseInt(payInfo.payNum), payInfo.payName);
+      window.platform.userBehavior('',_eventType,{price:_price});
     }
 
   };
@@ -63,6 +74,7 @@ var PrePaid = function () {
   that.ChatBtnClick = function () {
     console.log('chat btn click ');
     window.platform.jumpToSmallSecretary();
+    window.platform.userBehavior('','pay_zixun','');
   };
 
   var _lunbo = function (id, count) {

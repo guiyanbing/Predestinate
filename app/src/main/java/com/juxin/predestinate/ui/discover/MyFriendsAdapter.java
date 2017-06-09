@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.util.UIShow;
@@ -94,6 +95,7 @@ public class MyFriendsAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showPrivateChatAct(getContext(), userInfo.getUid(), null);
+                StatisticsMessage.openFirendChat(userInfo.getUid(), ModuleMgr.getChatListMgr().getNoReadNum(userInfo.getUid()));
             }
         });
 
@@ -101,6 +103,7 @@ public class MyFriendsAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showPrivateChatAct(getContext(), userInfo.getUid(), null);
+                StatisticsMessage.openFirendChat(userInfo.getUid(), ModuleMgr.getChatListMgr().getNoReadNum(userInfo.getUid()));
             }
         });
 

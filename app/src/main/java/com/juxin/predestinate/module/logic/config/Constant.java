@@ -28,6 +28,7 @@ public class Constant {
     // -----------------------私有K-V-----------------------
     public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
     public static final String APPEAR_FOREVER_TYPE = "appear_forever_type"; //默认出场方式
+    public static final String FLIP_ALBUM_UID = "flip_album_uid";//被查看的相册用户id
 
     // -------------------------K-V---------------------------
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏

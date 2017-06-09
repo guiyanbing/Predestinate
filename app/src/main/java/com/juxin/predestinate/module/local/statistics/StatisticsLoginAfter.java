@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by IQQ on 2017/6/9.
  */
 
-public class StatisticsPayAndLoginAfter {
+public class StatisticsLoginAfter {
     //    公共组件-登录后引导
     //    登录后引导->一键打招呼,登录后引导(男用户)
     public static void sayHi(List<UserInfoLightweight> data) {
@@ -26,10 +26,5 @@ public class StatisticsPayAndLoginAfter {
     //登录后引导->如何赚钱,登录后引导(女用户)(普通点击)
     public static void moneyHelp() {
         Statistics.userBehavior(SendPoint.login_guide_moneyhelp);
-    }
-
-    //我的->我的Y币->充值页面->充值咨询按钮(普通点击)(网页暂时不加)
-    public static void payZixun(){
-        Statistics.userBehavior(SendPoint.pay_zixun);
     }
 }

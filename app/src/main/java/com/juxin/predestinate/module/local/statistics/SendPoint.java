@@ -37,6 +37,10 @@ public enum SendPoint {
     menu_faxian_fengyunbang_mlb_bz,             // 发现->风云榜->魅力榜->本周排名
     menu_faxian_fengyunbang_mlb_bz_downrefresh, // 发现->风云榜->魅力榜->本周排名->下拉刷新
 
+    menu_fengyunbang,                           //风云榜(普通点击)
+    menu_fengyunbang_bz,                        //菜单->风云榜->本周(普通点击)
+    menu_fengyunbang_sz,                        //菜单->风云榜->上周(普通点击)
+
     // --------------消息---------------
     menu_xiaoxi_myfriend,                   // 消息->我的好友
     menu_xiaoxi_myfriend_lahei,             // 消息->我的好友->黑名单
@@ -140,6 +144,14 @@ public enum SendPoint {
     userinfo_navalbum_rightflip,    // 右翻相册
     userinfo_more_lahei,            // 拉黑
     userinfo_more_laheiandreport,   // 拉黑并举报
+
+    userinfo_more_setting_remark,           //用户资料->更多->备注名(传递最新备注信息)
+    userinfo_more_setting_clear,            //用户资料->更多->清空聊天记录(普通点击,外层传递touid)
+    userinfo_more_setting_shield,           //用户资料->更多->屏蔽(普通点击,外层传递touid)
+    userinfo_more_setting_jubao,            //用户资料->更多->举报(普通点击,外层传递touid)
+    userinfo_more_setting_jubao_submit,     //用户资料->更多->举报->提交按钮(上传举报资料)
+    userinfo_face,                          //用户资料->点击用户头像(普通点击,外层传递touid)
+
 
     // --------------视频语音框--------------
     video_close,// 视频挂断(传递to_uid)
