@@ -53,10 +53,16 @@ public class UserFragment extends BaseFragment implements PObserver {
     @Override
     public void onResume() {
         super.onResume();
-        if (headPanel != null && footPanel != null){
+        if (headPanel != null && footPanel != null) {
             headPanel.refreshView();
             footPanel.refreshView();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 
     @Override

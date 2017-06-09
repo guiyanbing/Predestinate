@@ -62,6 +62,7 @@ public class CenterMgr implements ModuleBase, PObserver {
 
     @Override
     public void release() {
+        MsgMgr.getInstance().detach(this);
     }
 
     @Override
@@ -122,12 +123,12 @@ public class CenterMgr implements ModuleBase, PObserver {
      * @param complete
      */
     public void mobileAuthEx(String mobile, String code, RequestComplete complete) {
-        HashMap<String,Object> map  = new HashMap<>();
-        map.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());
-        map.put("time",ModuleMgr.getAppMgr().getSecondTime());
-        map.put("tel",mobile);
-        map.put("verifycode",code);
-        Statistics.userBehavior(SendPoint.menu_me_meauth_telauth_btnverify,map);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        map.put("time", ModuleMgr.getAppMgr().getSecondTime());
+        map.put("tel", mobile);
+        map.put("verifycode", code);
+        Statistics.userBehavior(SendPoint.menu_me_meauth_telauth_btnverify, map);
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("cellPhone", mobile);
         getParams.put("verifyCode", code);

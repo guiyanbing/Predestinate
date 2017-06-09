@@ -61,6 +61,7 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
 
     @Override
     public void release() {
+        MsgMgr.getInstance().detach(this);
         ChatSpecialMgr.getChatSpecialMgr().detachUnreadMsgListener(this);
     }
 

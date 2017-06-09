@@ -64,23 +64,18 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.discover_fragment);
-//        setTopView();
+
         initView();
         onRefresh(); //默认加载全部
         MsgMgr.getInstance().attach(this);
         return getContentView();
     }
 
-    private void setTopView() {
-        setTitle(getString(R.string.discover_title));
-        setTitleRightImg(R.drawable.f1_discover_select_ico, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDiscoverSelectDialog();
-            }
-        });
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
-
 
     private void initView() {
         groupSayhiBtn = (Button) findViewById(R.id.discover_group_sayhi_btn);
@@ -170,17 +165,14 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
 
-                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                if (lightweightList.getUserInfos().size() != 0) {
                     //统计
                     if (page == 1) {
                         DisCoverStatistics.onRecomendRefresh(lightweightList.getLightweightLists(), isNearPage);
                     }
 
-                    /**
-                     * ref 如果是 true 并且请求的如果非第一页
-                     * 那么返回来的就是第一页 应该把之前的数据都清掉
-                     * 把返回的数据作为第一页
-                     */
+                    //ref 如果是 true 并且请求的如果非第一页
+                    //那么返回来的就是第一页 应该把之前的数据都清掉，把返回的数据作为第一页
                     if (page == 1 || lightweightList.isRef()) {
                         if (infos.size() != 0) {
                             infos.clear();
@@ -249,7 +241,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             if (!response.isCache()) {
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
-                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                if (lightweightList.getUserInfos().size() != 0) {
                     if (infos.size() != 0) {
                         infos.clear();
                         //统计
@@ -279,7 +271,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             } else {
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
-                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                if (lightweightList.getUserInfos().size() != 0) {
                     if (infos.size() != 0) {
                         infos.clear();
                     }

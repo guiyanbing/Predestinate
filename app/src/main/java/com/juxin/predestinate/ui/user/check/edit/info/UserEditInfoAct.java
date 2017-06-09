@@ -29,6 +29,7 @@ public class UserEditInfoAct extends BaseActivity implements PObserver {
 
         initTitle();
         initPanel();
+        MsgMgr.getInstance().attach(this);
     }
 
     private void initTitle() {
@@ -50,8 +51,6 @@ public class UserEditInfoAct extends BaseActivity implements PObserver {
         container.addView(headPanel.getContentView());
         container.addView(basePanel.getContentView());
         container.addView(detailPanel.getContentView());
-
-        MsgMgr.getInstance().attach(this);
     }
 
     @Override
@@ -63,5 +62,11 @@ public class UserEditInfoAct extends BaseActivity implements PObserver {
                 detailPanel.refreshView();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 }
