@@ -27,7 +27,7 @@
 <div class="mui-content">
     <ul class="mui-table-view">
         <li class="mui-table-view-cell border-bottom">
-            <a class="mui-navigate-right" href="#" onclick="window.platform.openWeb('书城', web.pages.Novel)">
+            <a class="mui-navigate-right" href="#" onclick="action()">
                 <img class="mui-media-object mui-pull-left" src="../../assets/book_ico.png" style="margin-right: 30px">
                 <div class="mui-media-body border-left">
                     <h4 class="title-margin-left" style="font-size: 18px; " >书城</h4>
@@ -41,4 +41,10 @@
 <script src="../../js/mui.min.js"></script>
 <script src="../../lib/url-config.js"></script>
 <script src="../../lib/jxlib.all.js"></script>
+<script>
+    function action() {
+      window.platform.openWeb('书城', web.pages.Novel);
+      window.platform.userBehavior('','menu_book','');
+    }
+</script>
 </html>
