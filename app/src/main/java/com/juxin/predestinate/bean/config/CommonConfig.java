@@ -1,6 +1,9 @@
 package com.juxin.predestinate.bean.config;
 
+import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.module.logic.config.Hosts;
 
 import org.json.JSONObject;
 
@@ -14,7 +17,8 @@ public class CommonConfig extends BaseData {
 
     private String service_qq;      //客服QQ
     private String entrance_url;    //暂时为书城地址
-    private String extra_url;       //暂时为广场地址
+    private String extra_url;       //1.0旧版广场地址
+    private String square_url;      //广场地址
     private int minmoney;           //最小提现金额（分）
 
     private String push_url;        //活动页面地址
@@ -55,6 +59,7 @@ public class CommonConfig extends BaseData {
         service_qq = jsonObject.optString("service_qq");
         entrance_url = jsonObject.optString("entrance_url");
         extra_url = jsonObject.optString("extra_url");
+        square_url = jsonObject.optString("square_url");
         minmoney = jsonObject.optInt("mmoney");
 
         push_url = jsonObject.optString("push_url");
@@ -88,6 +93,10 @@ public class CommonConfig extends BaseData {
 
     public String getExtra_url() {
         return extra_url;
+    }
+
+    public String getSquare_url() {
+        return TextUtils.isEmpty(square_url) ? Hosts.LOCAL_SQUARE_URL : square_url;
     }
 
     public int getMinmoney() {
