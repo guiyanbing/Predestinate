@@ -37,6 +37,27 @@ public enum SendPoint {
     menu_faxian_fengyunbang_mlb_bz,             // 发现->风云榜->魅力榜->本周排名
     menu_faxian_fengyunbang_mlb_bz_downrefresh, // 发现->风云榜->魅力榜->本周排名->下拉刷新
 
+    menu_faxian_tuijian,                        //发现->推荐(普通点击)
+    menu_faxian_hot,                            //发现->热门(普通点击)
+    menu_faxian_downrefresh,                    //发现->下拉刷新(传递用户列表)
+    menu_faxian_viewuserinfo,           //发现->查看用户资料
+    menu_faxian_tuijian_more_viewall,           //发现->更多->发现->更多->查看全部(普通点击)
+    menu_faxian_tuijian_more_viewfujin,         //发现->更多->发现->更多->只看附近的人(普通点击)
+    menu_faxian_tuijian_more_cancel,            //发现->更多->发现->更多->取消(普通点击)
+    menu_faxian_tuijian_fujin_sayhello,         //发现->热门->只看附近的人->打招呼
+    menu_faxian_tuijian_fujin_batchsayhello,    //发现->热门->只看附近的人->群打招呼
+    menu_faxian_hot_viewuserinfo,               //发现->热门->查看用户资料(外层传递touid)
+    menu_faxian_hot_picturenum,                 //发现->热门->图片数量按钮
+    menu_faxian_hot_btnvideo,                   //发现->热门->发视频按钮
+    menu_faxian_hot_btnvoice,                   //发现->热门->发语音按钮
+    menu_faxian_hot_btnsendmessage,             //发现->热门->发私信
+    menu_faxian_hot_btngirl,                    //发现->热门->发礼物
+    menu_faxian_hot_btngirl_zongsong,           //发现->热门->发礼物->赠送
+    menu_faxian_hot_btngirl_zongsong_ljcz,      //发现->热门->发礼物->赠送->立即充值
+    menu_faxian_hot_btngirl_pay,                //发现->热门->发礼物->充值(普通点击,外层传递touid)
+    menu_faxian_hot_slideremove,                //发现->热门->发礼物->滑动移除一个用户(普通点击,外层传递touid)
+
+
     menu_fengyunbang,                           //风云榜(普通点击)
     menu_fengyunbang_bz,                        //菜单->风云榜->本周(普通点击)
     menu_fengyunbang_sz,                        //菜单->风云榜->上周(普通点击)

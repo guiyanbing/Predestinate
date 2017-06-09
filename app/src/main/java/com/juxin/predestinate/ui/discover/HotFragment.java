@@ -162,7 +162,9 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
 
     @Override
     public void onCardVanish(int index, CardsView.SlideType type) {
-
+        //统计
+        int position = index % viewData.size();
+        DisCoverStatistics.onHotRemove(viewData.get(position).getUid());
     }
 
     @Override

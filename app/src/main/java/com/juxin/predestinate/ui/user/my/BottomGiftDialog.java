@@ -23,11 +23,13 @@ import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
+import com.juxin.predestinate.ui.discover.DisCoverStatistics;
 import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
@@ -38,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 送礼物弹框
@@ -64,6 +65,8 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private GiftPopView gpvPop;
     private int num;
     private Context mContext;
+
+    private int fromTag = -1;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -125,8 +128,14 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 dismiss();
                 break;
             case R.id.bottom_gif_txv_pay://跳转充值页面
-                Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay);
-                UIShow.showGoodsDiamondDialog(getContext());
+                if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) { //在热门界面打开
+                    //统计
+                    UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid);
+                    DisCoverStatistics.onClickGiftPay(uid);
+                } else {
+                    Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay);
+                    UIShow.showGoodsDiamondDialog(getContext());
+                }
                 break;
             case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
                 int needStone = Integer.valueOf(txvNeedStone.getText().toString());
@@ -138,10 +147,17 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     PToast.showShort(getContext().getString(R.string.please_select_a_gift));
                     return;
                 }
-                Map<String,Object> map = new HashMap<>();
-                map.put("gift_id",arrGifts.get(position).getId());
-                map.put("price",arrGifts.get(position).getMoney());
-                Statistics.userBehavior(SendPoint.chatframe_tool_gift_give,uid,map);
+                Map<String, Object> map = new HashMap<>();
+                map.put("gift_id", arrGifts.get(position).getId());
+                map.put("price", arrGifts.get(position).getMoney());
+                Statistics.userBehavior(SendPoint.chatframe_tool_gift_give, uid, map);
+
+                //统计
+                if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) {
+                    DisCoverStatistics.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
+                }
+
+
                 ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);
 
                 dismiss();
@@ -322,5 +338,13 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
             arrGifts = ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts();
             initGridView();
         }
+    }
+
+    public int getFromTag() {
+        return fromTag;
+    }
+
+    public void setFromTag(int fromTag) {
+        this.fromTag = fromTag;
     }
 }
