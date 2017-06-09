@@ -16,6 +16,9 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -96,6 +99,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         public void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.ll_edit:
+                    Statistics.userBehavior(SendPoint.userinfo_face, userDetail.getUid());
                     if (channel == CenterConstant.USER_SET_FROM_CHAT) {
                         UIShow.showCheckOtherInfoAct(UserOtherSetAct.this, userDetail);
                         return;
@@ -110,16 +114,19 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                         @Override
                         public void editFinish(String text) {
                             tempRemark = text;
+                            Statistics.userBehavior(SendPoint.userinfo_more_setting_remark, userDetail.getUid(), Statistics.addRemark(text));
                             ModuleMgr.getCenterMgr().reqSetRemarkName(userDetail.getUid(), text, UserOtherSetAct.this);
                         }
                     });
                     break;
 
                 case R.id.rl_clear:     // 清空聊天记录
+                    Statistics.userBehavior(SendPoint.userinfo_more_setting_clear, userDetail.getUid());
                     clearRecord();
                     break;
 
                 case R.id.rl_complain:  // 投诉，跳转举报
+                    Statistics.userBehavior(SendPoint.userinfo_more_setting_jubao, userDetail.getUid());
                     UIShow.showDefriendAct(userDetail.getUid(), UserOtherSetAct.this);
                     break;
             }
@@ -167,6 +174,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    Statistics.userBehavior(SendPoint.userinfo_more_setting_shield, userDetail.getUid());
                     if (shieldBarStatus) {
                         shieldBarStatus = false;
                         shieldBar.setProgress(0);
@@ -249,6 +257,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
             return;
         }
         ModuleMgr.getCenterMgr().reqRemoveBlack(userDetail.getUid(), this);
+        StatisticsMessage.blackRemove(userDetail.getUid());
     }
 
     /**

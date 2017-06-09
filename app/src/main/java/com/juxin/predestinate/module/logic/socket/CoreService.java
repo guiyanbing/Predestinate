@@ -11,8 +11,6 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
 import com.juxin.library.utils.NetworkUtils;
-import com.juxin.predestinate.module.local.statistics.Statistics;
-import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.ExTimerUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 
@@ -33,10 +31,6 @@ public class CoreService extends Service {
         Intent intent = new Intent(this, CoreService.class);
         intent.putExtra("timer", "60");
         ExTimerUtil.startRepeatTimer(this, intent, TCPConstant.Heartbeat_Time);//每隔60s发送一次心跳消息
-
-        Intent timer_5min = new Intent(this, CoreService.class);
-        timer_5min.putExtra("timer", "70");
-        ExTimerUtil.startRepeatTimer(this, timer_5min, Constant.CHAT_RESEND_TIME);//5min定时调用
     }
 
     @Nullable
@@ -50,8 +44,6 @@ public class CoreService extends Service {
         if (intent != null) {
             if ("60".equals(intent.getStringExtra("timer"))) {//心跳
                 AutoConnectMgr.getInstance().heartbeat();
-            } else if ("70".equals(intent.getStringExtra("timer"))) {
-                Statistics.location();
             }
         }
         return super.onStartCommand(intent, flags, startId);

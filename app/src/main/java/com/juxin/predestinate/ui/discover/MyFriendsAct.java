@@ -10,6 +10,7 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
@@ -51,6 +52,7 @@ public class MyFriendsAct extends BaseActivity implements RequestComplete, ExLis
         setTitleRight(getResources().getString(R.string.my_friend_righ_title), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                StatisticsMessage.blackUser();
                 UIShow.showMyDefriends(MyFriendsAct.this);
             }
         });

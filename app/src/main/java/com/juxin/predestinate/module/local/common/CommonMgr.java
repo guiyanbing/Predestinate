@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -62,6 +63,7 @@ public class CommonMgr implements ModuleBase {
 
     @Override
     public void init() {
+        Statistics.loopLocation();
     }
 
     @Override
@@ -407,8 +409,8 @@ public class CommonMgr implements ModuleBase {
                 JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
                 try {
                     ModuleMgr.getLoginMgr().addLoginUser(
-                            Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
-                            EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
+                            Long.parseLong(EncryptUtil.decryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
+                            EncryptUtil.decryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
                 } catch (Exception e) {
                     PLogger.printThrowable(e);
                 }

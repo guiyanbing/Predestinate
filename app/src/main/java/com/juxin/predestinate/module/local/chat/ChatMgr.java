@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -35,14 +36,19 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -961,12 +967,14 @@ public class ChatMgr implements ModuleBase {
      */
     private synchronized void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.printObject(infoLightweight);
-        for (Object key : infoMap.keySet()) {
-            if (key.equals(userID)) {
-                ChatMsgInterface.InfoComplete infoComplete = infoMap.get(key);
+        Set<Map.Entry<Long, ChatMsgInterface.InfoComplete>> entrys = infoMap.entrySet();
+        for(Iterator i = entrys.iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry)i.next();
+            if (userID == (Long)entry.getKey()) {
+                ChatMsgInterface.InfoComplete infoComplete = (ChatMsgInterface.InfoComplete) entry.getValue();
                 infoComplete.onReqComplete(isOK, infoLightweight);
                 if (isRemove) {
-                    infoMap.remove(key);
+                    i.remove();
                 }
                 return;
             }
@@ -998,7 +1006,7 @@ public class ChatMgr implements ModuleBase {
             message.setChannelID(null);
 
             PLogger.printObject("offlineMessage=" + message.getType());
-            if(message.isSave()){
+            if (message.isSave()) {
                 ModuleMgr.getChatMgr().onReceiving(message);
             }
         } catch (Exception e) {

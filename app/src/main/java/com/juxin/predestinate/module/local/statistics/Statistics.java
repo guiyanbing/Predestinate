@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.local.location.LocationMgr;
@@ -45,7 +46,20 @@ public class Statistics {
     }
 
     /**
-     * 向大数据发送位置统计：5min一次
+     * 每隔5min发送一次定位信息
+     */
+    public static void loopLocation() {
+        MsgMgr.getInstance().delay(new Runnable() {
+            @Override
+            public void run() {
+                location();
+                loopLocation();
+            }
+        }, Constant.CHAT_RESEND_TIME, false);
+    }
+
+    /**
+     * 向大数据发送位置统计
      */
     public static void location() {
         if (ModuleMgr.getCenterMgr().getMyInfo().getUid() == 0) return;
@@ -147,6 +161,45 @@ public class Statistics {
         postParams.put("topic", StatisticPoint.InstallVideoPlugin);//统计项名称
         postParams.put("message", singleMap);//统计项数据内容
         sendStatistics(postParams);
+    }
+
+    /**
+     * 点击用户信息相册
+     */
+    public static  Map<String, Object> addUserInfoAlbum(String picture, int index, boolean isOpen) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("picture", picture);
+        tjMap.put("picture_index", index);
+        tjMap.put("success", isOpen);
+        return tjMap;
+    }
+
+    /**
+     * 相册左右滑动
+     */
+    public static  Map<String, Object> addAlbumFlip(String picture) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("picture", picture);
+        return tjMap;
+    }
+
+    /**
+     * 相册左右滑动
+     */
+    public static  Map<String, Object> addRemark(String remark) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("remark", remark);
+        return tjMap;
+    }
+
+    /**
+     * 资料设置举报
+     */
+    public static  Map<String, Object> addInfoReport(String type, String content) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("type", type);
+        tjMap.put("content", content);
+        return tjMap;
     }
 
     /**

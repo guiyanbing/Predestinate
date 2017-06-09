@@ -18,6 +18,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.album.help.AlbumHelper;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -166,6 +168,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
                     ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this, true);
+                Statistics.userBehavior(SendPoint.menu_me_meauth_videoauth_capturepicture);
                 break;
             case R.id.tv_make_video:
                 if (isMakeing)
@@ -179,6 +182,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
                     UIShow.showRecordVideoAct(this, VideoUploadResult);
+                Statistics.userBehavior(SendPoint.menu_me_meauth_videoauth_capturevideo);
                 break;
             case R.id.iv_auth_video:
                 Video.videoPlay(this);

@@ -37,6 +37,10 @@ public enum SendPoint {
     menu_faxian_fengyunbang_mlb_bz,             // 发现->风云榜->魅力榜->本周排名
     menu_faxian_fengyunbang_mlb_bz_downrefresh, // 发现->风云榜->魅力榜->本周排名->下拉刷新
 
+    menu_fengyunbang,                           //风云榜(普通点击)
+    menu_fengyunbang_bz,                        //菜单->风云榜->本周(普通点击)
+    menu_fengyunbang_sz,                        //菜单->风云榜->上周(普通点击)
+
     // --------------消息---------------
     menu_xiaoxi_myfriend,                   // 消息->我的好友
     menu_xiaoxi_myfriend_lahei,             // 消息->我的好友->黑名单
@@ -65,7 +69,6 @@ public enum SendPoint {
     menu_me_meauth_telauth_btnverifycode,   // 获取验证码
     menu_me_meauth_telauth_btnverify,       // 立即验证按钮
     menu_me_avatar,                         // 上传头像
-    menu_me_qdjl,                           // 抢夺记录
     menu_me_sgzw,                           // 谁关注我
     menu_me_money,                          // 我的钱包
     menu_me_money_withdraw,                 // 立即提现
@@ -75,14 +78,12 @@ public enum SendPoint {
     menu_me_redpackage_sylw,                //我要赚红包->索要礼物(普通点击)
     menu_me_redpackage_sylw_send,           //我要赚红包->索要礼物->发送按钮
     menu_me_redpackage_sylw_voice,          //我要赚红包->索要礼物->按住说话按钮(普通点击)
-    //menu_me_redpackage_dzp, //我的->我要赚红包->开心大转盘(普通点击)
-    //menu_me_redpackage_dzp_save, //我的->我要赚红包->开心大转盘->保存按钮
+    menu_me_redpackage_dzp, //我的->我要赚红包->开心大转盘(普通点击)
     menu_me_y,                              // 我的Y币
     menu_me_gem,                            // 我的钻石
     menu_me_gem_explain,                    // 钻石说明
     menu_me_gem_btnpay,                     // 点击钻石支付按钮
     menu_me_gift,                           // 我的礼物
-    menu_me_zjlf,                           // 最近来访
     menu_me_profile,                        // 个人资料
     menu_me_album,                          // 我的相册
     menu_me_setting,                        // 设置中心
@@ -143,6 +144,14 @@ public enum SendPoint {
     userinfo_navalbum_rightflip,    // 右翻相册
     userinfo_more_lahei,            // 拉黑
     userinfo_more_laheiandreport,   // 拉黑并举报
+
+    userinfo_more_setting_remark,           //用户资料->更多->备注名(传递最新备注信息)
+    userinfo_more_setting_clear,            //用户资料->更多->清空聊天记录(普通点击,外层传递touid)
+    userinfo_more_setting_shield,           //用户资料->更多->屏蔽(普通点击,外层传递touid)
+    userinfo_more_setting_jubao,            //用户资料->更多->举报(普通点击,外层传递touid)
+    userinfo_more_setting_jubao_submit,     //用户资料->更多->举报->提交按钮(上传举报资料)
+    userinfo_face,                          //用户资料->点击用户头像(普通点击,外层传递touid)
+
 
     // --------------视频语音框--------------
     video_close,// 视频挂断(传递to_uid)

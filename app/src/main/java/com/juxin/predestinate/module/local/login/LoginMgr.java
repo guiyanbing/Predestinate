@@ -14,6 +14,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.RegResult;
 import com.juxin.predestinate.bean.start.UP;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -175,6 +177,14 @@ public class LoginMgr implements ModuleBase {
      * 账号注册
      */
     public void onRegister(final Activity context, UrlParam urlParam, String nickname, int age, final int gender) {
+        HashMap<String,Object> map  = new HashMap<>();
+        map.put("uid",0);
+        map.put("time",ModuleMgr.getAppMgr().getSecondTime());
+        map.put("nick",nickname);
+        map.put("age",age);
+        map.put("sex",gender);
+        map.put("msg","");
+        Statistics.userBehavior(SendPoint.regist_btnreg);
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("flag", Constant.REG_FLAG);
         postParams.put("user_client_type", Constant.PLATFORM_TYPE);
@@ -218,6 +228,13 @@ public class LoginMgr implements ModuleBase {
      * 登录
      */
     public void onLogin(final Activity context, final long uid, final String pwd) {
+        HashMap<String,Object> map  = new HashMap<>();
+        map.put("uid",uid);
+        map.put("time",ModuleMgr.getAppMgr().getSecondTime());
+        map.put("username",uid);
+        map.put("password",pwd);
+        map.put("msg","");
+        Statistics.userBehavior(SendPoint.login_btnlogin,map);
         HashMap<String, Object> userAccount = new HashMap<>();
         userAccount.put("username", uid);
 //        userAccount.put("pwd", EncryptUtil.md5(pwd));

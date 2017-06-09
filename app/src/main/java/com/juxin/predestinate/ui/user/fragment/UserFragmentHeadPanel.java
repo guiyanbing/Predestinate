@@ -15,6 +15,8 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -127,6 +129,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
         switch (v.getId()) {
             case R.id.user_head://上传头像
                 ImgSelectUtil.getInstance().pickPhoto(getContext(), this);
+                Statistics.userBehavior(SendPoint.menu_me_avatar);
                 break;
             case R.id.user_nick://修改昵称
                 EditPopupWindow popupWindow = new EditPopupWindow(getContext(), EditKey.s_key_nickName, user_nick);

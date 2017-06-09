@@ -13,7 +13,7 @@ public class ChatExtend {
     private List<CommonGridBtnPanel.BTN_KEY> chatExtendDatas = null;
 
     public ChatExtend() {
-        chatExtendDatas = new ArrayList<CommonGridBtnPanel.BTN_KEY>();
+        chatExtendDatas = new ArrayList<>();
 
         chatExtendDatas.add(CommonGridBtnPanel.BTN_KEY.IMG);
         chatExtendDatas.add(CommonGridBtnPanel.BTN_KEY.VIDEO);

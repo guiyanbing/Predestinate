@@ -15,6 +15,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -26,6 +28,7 @@ import com.juxin.predestinate.module.util.UIShow;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * 手机验证页面
@@ -119,6 +122,12 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 if (validPhone()) {
                     ModuleMgr.getCenterMgr().reqVerifyCodeEx(phone, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                    HashMap<String,Object> map  = new HashMap<>();
+                    map.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());
+                    map.put("time",ModuleMgr.getAppMgr().getSecondTime());
+                    map.put("tel",phone);
+                    map.put("verifycode","");
+                  Statistics.userBehavior(SendPoint.menu_me_meauth_telauth_btnverifycode,map);
                 }
                 break;
             case R.id.btn_phoneverify_ok:

@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -93,10 +95,12 @@ public class UserFragmentFunctionPanel extends BasePanel {
             switch (v.getId()) {
                 case R.id.ll_vip_privilege: // 开通vip
                     UIShow.showOpenVipActivity(getContext());
+                    Statistics.userBehavior(SendPoint.menu_me_vippay);
                     break;
 
                 case R.id.ll_immortal_verify: // 真人认证
                     UIShow.showMyAuthenticationAct((FragmentActivity) getContext(), 103);
+                    Statistics.userBehavior(SendPoint.menu_me_meauth);
                     break;
             }
         }

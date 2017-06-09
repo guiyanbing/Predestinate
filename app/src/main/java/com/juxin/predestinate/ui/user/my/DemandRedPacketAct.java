@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.QunCountInfo;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -50,6 +52,7 @@ public class DemandRedPacketAct extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.demand_red_packet_tv_askfor_gift_send://索要礼物弹框
+                Statistics.userBehavior(SendPoint.menu_me_redpackage_sylw);
                 dialog = null;
                 if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
                     dialog = new AskForGiftDialog(DemandRedPacketAct.this);
@@ -74,6 +77,7 @@ public class DemandRedPacketAct extends BaseActivity implements View.OnClickList
                 break;
             case R.id.demand_red_packet_ll_askfor_gift_setting:
                 UIShow.showRotaryActivity(this);
+                Statistics.userBehavior(SendPoint.menu_me_redpackage_dzp);
                 break;
             default:
                 break;
