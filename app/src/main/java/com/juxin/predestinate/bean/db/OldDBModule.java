@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage.BaseMessageType;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
@@ -81,7 +80,7 @@ public class OldDBModule {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
         BriteDatabase db = provideDB(App.context);
         QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM " + MESSAGE_LIST_TABLE +
-                " WHERE msg_type <> 0 and login_id=" + uid);
+                " WHERE msg_type <> 0 and other_id <> 9999 and login_id=" + uid);
         query.subscribe(new Action1<SqlBrite.Query>() {
             @Override
             public void call(SqlBrite.Query query) {
@@ -93,8 +92,6 @@ public class OldDBModule {
                     while (cursor.moveToNext()) {
                         try {
                             long other_id = Long.parseLong(cursor.getString(INDEX_COLUMN_OTHER_ID));
-                            if (MailSpecialID.customerService.getSpecialID() == other_id)
-                                continue;
                             int type = cursor.getInt(INDEX_COLUMN_MSG_TYPE);
                             //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
                             int msg_status = cursor.getInt(INDEX_COLUMN_STATUS);
@@ -190,16 +187,20 @@ public class OldDBModule {
                                 message.setStatus(new_status);
                             }
 
-                            //receive_send_status == 0 ? other_id : login_id
-                            message.setSendID(receive_send_status == 0 ? other_id : login_id);
-                            //(receive_send_status == 0 ? login_id : other_id) + ""
+                            message.setSendID(other_id);
                             message.setWhisperID(other_id + "");
-                            message.setMsgID(msgID);
                             message.setType(type);
                             message.setTime(time);
                             message.setDataSource(MessageConstant.ONE);
                             message.setChannelID(null);
-                            message.setContent(message.getJson(message));
+
+                            String jsonstr = message.getJson(message);
+                            if (receive_send_status == 0) {
+                                JSONObject json = new JSONObject(message.getJson(message));
+                                json.put("fid", other_id);
+                                jsonstr = json.toString();
+                            }
+                            message.setJsonStr(jsonstr);
                             if (dbCenter.insertMsg(message) != MessageConstant.ERROR)
                                 c2++;
                         } catch (Exception ee) {
