@@ -13,6 +13,7 @@ import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
@@ -454,29 +455,32 @@ public class CommonMgr implements ModuleBase {
     /**
      * 显示一键打招呼对话框
      *
-     * @param context
+     * @param context FragmentActivity实例
      */
     public void showSayHelloDialog(final FragmentActivity context) {
         if (sayHelloDialog.isShowing()) {
             return;
         }
-        PLogger.d("showSayHelloDialog === isVip = " + ModuleMgr.getCenterMgr().getMyInfo().isVip());
-        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan()
+                && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
             getSayHiList(new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
                     if (response.isOk()) {
                         UserInfoLightweightList list = new UserInfoLightweightList();
                         list.parseJsonSayhi(response.getResponseString());
+
+                        // 2017.6.10 服务器返回结构为空的时候不展示一键打招呼弹框
+                        ArrayList<UserInfoLightweight> lightweightLists = list.getLightweightLists();
+                        if (lightweightLists.isEmpty()) return;
+                        
                         sayHelloDialog.showDialog(context);
-                        sayHelloDialog.setData(list.getLightweightLists());
+                        sayHelloDialog.setData(lightweightLists);
                     }
                 }
             });
         }
     }
-
 
     //============================== 小友模块相关接口 =============================
 

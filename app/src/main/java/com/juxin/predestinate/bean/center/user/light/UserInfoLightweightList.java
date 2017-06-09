@@ -2,7 +2,6 @@ package com.juxin.predestinate.bean.center.user.light;
 
 import android.text.TextUtils;
 
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.net.BaseData;
 
 import org.json.JSONArray;
@@ -33,17 +32,14 @@ public class UserInfoLightweightList extends BaseData {
 
     /**
      * 正常解析用户简略信息
-     *
-     * @param jsonStr
      */
     @Override
     public void parseJson(String jsonStr) {
         if (!TextUtils.isEmpty(jsonStr)) {
-            PLogger.d("UserInfoLightweightList parseJson ---- jsonStr " + jsonStr);
             String jsonData = getJsonObject(jsonStr).optString("res");
             JSONObject object = getJsonObject(jsonData);
-            JSONArray jsonArray = object.optJSONArray("list");
-            this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+            this.lightweightLists = (ArrayList<UserInfoLightweight>)
+                    getBaseDataList(object.optJSONArray("list"), UserInfoLightweight.class);
             if (object.has("ref")) {
                 setRef(object.optBoolean("ref"));
             }
@@ -52,27 +48,21 @@ public class UserInfoLightweightList extends BaseData {
 
     /**
      * 仅用于解析好友列表
-     *
-     * @param jsonStr
      */
     public void parseJsonFriends(String jsonStr) {
         if (!TextUtils.isEmpty(jsonStr)) {
-            PLogger.d("UserInfoLightweightList parseJsonFriends ---- jsonStr " + jsonStr);
             String jsonData = getJsonObject(jsonStr).optString("res");
             setTotalcnt(getJsonObject(jsonData).optInt("totalcnt"));
-            JSONArray jsonArray = getJsonObject(jsonData).optJSONArray("friends");
-            this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
+            this.lightweightLists = (ArrayList<UserInfoLightweight>)
+                    getBaseDataList(getJsonObject(jsonData).optJSONArray("friends"), UserInfoLightweight.class);
         }
     }
 
     /**
      * 仅用于解析一键打招呼的用户列表
-     *
-     * @param jsonStr
      */
     public void parseJsonSayhi(String jsonStr) {
         if (!TextUtils.isEmpty(jsonStr)) {
-            PLogger.d("UserInfoLightweightList parseJsonSayhi ---- jsonStr " + jsonStr);
             JSONArray jsonArray = getJsonObject(jsonStr).optJSONArray("content");
             this.lightweightLists = (ArrayList<UserInfoLightweight>) getBaseDataList(jsonArray, UserInfoLightweight.class);
         }
@@ -80,8 +70,6 @@ public class UserInfoLightweightList extends BaseData {
 
     /**
      * 轻量级个人资料
-     *
-     * @param jsonObject
      */
     public void parseJsonSummary(JSONObject jsonObject) {
         if (jsonObject == null || jsonObject.isNull("res")) return;
@@ -94,7 +82,6 @@ public class UserInfoLightweightList extends BaseData {
             lightweightLists.add(lightweight);
         }
     }
-
 
     public ArrayList<UserInfoLightweight> getUserInfos() {
         Iterator<UserInfoLightweight> infos = lightweightLists.iterator();
