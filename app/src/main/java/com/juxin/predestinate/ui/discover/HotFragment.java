@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
@@ -85,11 +86,14 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
 
             if (list.getHotLists().size() != 0) {
                 isRef = list.isRef();
-                if (isRef && page == 1 && list.getHotLists().size() < 4) {
+                if (isRef && page == 1 && list.getHotLists().size() < 10) {
                     isNeedReq = false;
                 } else {
                     isNeedReq = true;
                 }
+
+                PLogger.d("HotFragment======》  --- isNeedReq = " + isNeedReq + " --- isRef = " + isRef);
+
                 if (isRef) {
                     if (nowPosition < viewData.size()) {
                         List<UserInfoHot> temp = new ArrayList<>();
@@ -110,8 +114,12 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
                         }
                     }
                 }
+                PLogger.d("HotFragment======》  --- nowPosition = " + nowPosition + " --- viewData size = " + viewData.size());
                 viewData.addAll(viewData.size(), list.getHotLists());
                 adapter.setData(viewData);
+
+                PLogger.d("HotFragment======》  --- nowPosition = " + nowPosition + " --- viewData size = " + viewData.size());
+                adapter.setNeedrReq(isNeedReq);
                 if (isFirst) {
                     cardsView.setAdapter(adapter);
                     isFirst = false;
@@ -143,9 +151,10 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
 
     @Override
     public void onShow(int index) {
-        nowPosition = index;
+        int position = index % viewData.size();
+        nowPosition = position;
         //判断是否需要请求数据
-        if (index + 3 >= viewData.size() && isNeedReq) {
+        if (position + 3 >= viewData.size() && isNeedReq) {
             loadMoreData();
         }
 
@@ -153,9 +162,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
 
     @Override
     public void onCardVanish(int index, CardsView.SlideType type) {
-        if (index + 1 == viewData.size()) {
-            showNodata();
-        }
+
     }
 
     @Override

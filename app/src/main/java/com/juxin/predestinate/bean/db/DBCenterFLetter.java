@@ -185,7 +185,7 @@ public class DBCenterFLetter {
         return MessageConstant.ERROR;
     }
 
-    private BaseMessage isExist(String userid) {
+    public BaseMessage isExist(String userid) {
         Cursor cursor = null;
         try {
             StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
