@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.WebPanel;
 import com.juxin.predestinate.module.logic.config.Hosts;
@@ -70,9 +72,11 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.this_week://通过jcmd打开本周排行榜
+                Statistics.userBehavior(SendPoint.menu_fengyunbang_bz);
                 onChecked(TYPE_THIS_WEEK);
                 break;
             case R.id.last_week://通过jcmd打开上周排行榜
+                Statistics.userBehavior(SendPoint.menu_fengyunbang_sz);
                 onChecked(TYPE_LAST_WEEK);
                 break;
         }

@@ -197,9 +197,9 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
         long uid = PSP.getInstance().getLong(Constant.FLIP_ALBUM_UID, 0);
         if(uid != 0) {
             if(currentPosition < position) {
-                Statistics.userBehavior(SendPoint.userinfo_navalbum_leftflip, uid, Statistics.addAlbumFlip(uid, photoList.get(position).getPic()));
+                Statistics.userBehavior(SendPoint.userinfo_navalbum_leftflip, uid, Statistics.addAlbumFlip(photoList.get(position).getPic()));
             }else {
-                Statistics.userBehavior(SendPoint.userinfo_navalbum_rightflip, uid, Statistics.addAlbumFlip(uid, photoList.get(position).getPic()));
+                Statistics.userBehavior(SendPoint.userinfo_navalbum_rightflip, uid, Statistics.addAlbumFlip(photoList.get(position).getPic()));
             }
         }
         currentPosition = position;

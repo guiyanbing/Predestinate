@@ -105,13 +105,13 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
                 PSP.getInstance().put(Constant.FLIP_ALBUM_UID, info.getUid());
                 String picture = userDetail.getUserPhotos().get(position).getPic();
                 if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
-                    Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(userDetail.getUid(),picture,position+1,true));
+                    Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(picture,position+1,true));
                     UIShow.showPhotoOfSelf((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                     return;
                 }
 
                 if (!info.isMan()) {
-                    Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(userDetail.getUid(),picture,position+1,true));
+                    Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(picture,position+1,true));
                     UIShow.showPhotoOfOther((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                     return;
                 }
@@ -120,7 +120,7 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
                     showVipTips();
                     return;
                 }
-                Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(userDetail.getUid(),picture,position+1,true));
+                Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(picture,position+1,true));
                 UIShow.showPhotoOfOther((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                 break;
 
