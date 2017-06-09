@@ -60,6 +60,7 @@ public class UserEditInfoAct extends BaseActivity implements PObserver {
                 headPanel.refreshView();
                 basePanel.refreshView();
                 detailPanel.refreshView();
+                setTitle(ModuleMgr.getCenterMgr().getMyInfo().getNickname());
                 break;
         }
     }
