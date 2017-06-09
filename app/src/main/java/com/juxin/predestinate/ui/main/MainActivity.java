@@ -23,6 +23,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -205,6 +206,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 switchContent(mailFragment);
                 break;
             case R.id.rank_layout:
+                Statistics.userBehavior(SendPoint.menu_fengyunbang);
                 switchContent(rankFragment);
                 break;
             case R.id.plaza_layout:

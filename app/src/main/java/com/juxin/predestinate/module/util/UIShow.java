@@ -600,9 +600,7 @@ public class UIShow {
 
                         @Override
                         public void onSubmit() {
-                            if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                                activity.moveTaskToBack(activity.isTaskRoot());
-                            }
+                            APKUtil.launchApp(App.context, appUpdate.getPackage_name());
                         }
                     }, App.getResource().getString(R.string.update_has_install),
                     App.getResource().getString(R.string.tip), "",
