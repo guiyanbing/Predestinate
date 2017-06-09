@@ -9,7 +9,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -624,8 +623,7 @@ public class ChatMgr implements ModuleBase {
      *
      * @param message
      */
-    public void onReceiving(BaseMessage message, boolean b) {
-        PLogger.printObject("onReceiving==" + b);
+    public void onReceiving(BaseMessage message) {
         message.setStatus(MessageConstant.UNREAD_STATUS);
         PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
@@ -1000,7 +998,7 @@ public class ChatMgr implements ModuleBase {
             message.setChannelID(null);
 
             PLogger.printObject("offlineMessage=" + message.getType());
-            ModuleMgr.getChatMgr().onReceiving(message, false);
+            ModuleMgr.getChatMgr().onReceiving(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
