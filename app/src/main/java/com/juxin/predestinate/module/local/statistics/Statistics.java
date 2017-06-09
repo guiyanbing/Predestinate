@@ -83,7 +83,7 @@ public class Statistics {
     private static boolean isSwitchAccount() {
         String account = PSP.getInstance().getString(BEHAVIOR_ACCOUNT_KEY, "");
         if (TextUtils.isEmpty(account) || ModuleMgr.getLoginMgr().getUid() == TypeConvertUtil.toLong(account)) {
-            PSP.getInstance().put(BEHAVIOR_ACCOUNT_KEY, ModuleMgr.getLoginMgr().getUid());
+            PSP.getInstance().put(BEHAVIOR_ACCOUNT_KEY, String.valueOf(ModuleMgr.getLoginMgr().getUid()));
             return false;
         }
         return true;

@@ -134,7 +134,7 @@ public class WebPanel extends BasePanel {
     }
 
     /**
-     * 清除webView引用并置空
+     * 清除webView引用并置空，最好在引用webPanel页面的super.onDestroy()之前进行调用
      */
     public void clearReference() {
         if (webView != null) {
