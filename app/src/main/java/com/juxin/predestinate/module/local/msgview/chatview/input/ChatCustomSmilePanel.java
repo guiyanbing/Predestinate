@@ -71,6 +71,15 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         initData();
     }
 
+    /**
+     * 解绑监听
+     */
+    public void detach() {
+        MsgMgr.getInstance().detach(this);
+    }
+
+    // ----------------------------私有方法------------------------------
+
     private void initView() {
         viewPager = (ViewPager) findViewById(R.id.chat_panel_viewpager);
     }
@@ -81,17 +90,17 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                 ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getAllViews());
                 viewPager.setAdapter(viewPagerAdapter);
                 initPointsView(viewPager, viewPagerAdapter.getCount(), true);
-                if(null != items) {
-                    if(items.size() == 1) {
+                if (null != items) {
+                    if (items.size() == 1) {
                         mOutDelTv.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         mOutDelTv.setVisibility(View.VISIBLE);
                     }
-                }else {
+                } else {
                     mOutDelTv.setVisibility(View.GONE);
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -109,9 +118,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
 
     private View getChildView(int index) throws Exception {
         List<SmileItem> listTemp = getPageRes(index);
-        if (listTemp == null) {
-            return null;
-        }
+        if (listTemp == null) return null;
 
         View view = View.inflate(getContext(), R.layout.p1_chat_smile_grid, null);
         synchronized (listTemp) {
@@ -134,9 +141,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * @return 指定页的资源信息。
      */
     private List<SmileItem> getPageRes(int index) throws Exception {
-        if (items == null) {
-            return null;
-        }
+        if (items == null) return null;
 
         List<SmileItem> listTemp;
         synchronized (items) {
@@ -144,13 +149,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
             int start = index * pageResNum;
             int offset = listTemp.size() - start;
 
-            if (offset <= 0) {
-                return null;
-            }
-
-            if (offset > pageResNum) {
-                offset = pageResNum;
-            }
+            if (offset <= 0) return null;
+            if (offset > pageResNum) offset = pageResNum;
 
             listTemp = listTemp.subList(start, start + offset);
         }
@@ -224,10 +224,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                         PToast.showShort("表情添加失败");
                         return;
                     }
-                    if (null == items) {
-                        return;
-                    }
-//                    items.add(new SmileItem(url));
+                    if (null == items) return;
+
                     optItems(new SmileItem(url), 0);
                     PToast.showShort("表情添加成功");
                     initData();
@@ -243,12 +241,9 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      */
     @Override
     public void delCEmoji(final String url, final int curPage, final int positon) {
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-        if(isFastClick()) {
-            return;
-        }
+        if (TextUtils.isEmpty(url)) return;
+        if (isFastClick()) return;
+
         ModuleMgr.getCommonMgr().delCustomFace(url, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -257,10 +252,8 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
                         PToast.showShort("表情删除失败");
                         return;
                     }
-                    if (null == items) {
-                        return;
-                    }
-//                    items.remove(curPage * pageResNum + positon);
+                    if (null == items) return;
+
                     optItems(null, curPage * pageResNum + positon);
                     PToast.showShort("表情删除成功");
                     initData();
@@ -273,9 +266,9 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
 
     private void optItems(SmileItem smileItem, int positon) {
         synchronized (items) {
-            if(null != smileItem) {
+            if (null != smileItem) {
                 items.add(smileItem);
-            }else {
+            } else {
                 items.remove(positon);
             }
         }
@@ -283,14 +276,10 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
 
     @Override
     public void onMessage(String key, Object value) {
-        if (null == value) {
-            return;
-        }
+        if (null == value) return;
         switch (key) {
             case MsgType.MT_ADD_CUSTOM_SMILE:
-                if(isFastClick()) {
-                    return;
-                }
+                if (isFastClick()) return;
                 addCFace((String) value);
                 break;
 
@@ -302,7 +291,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
     private boolean isFastClick() {
         boolean isFastClick = false;
         long curTime = System.currentTimeMillis();
-        if(curTime - mLastTime < 1000) {
+        if (curTime - mLastTime < 1000) {
             isFastClick = true;
             PToast.showShort("操作太快，请稍后");
         }

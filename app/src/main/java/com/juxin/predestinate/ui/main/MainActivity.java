@@ -329,6 +329,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
+    }
+
     // ------------------------ 离线消息处理 暂时放在这 Start--------------------------
     private NetReceiver netReceiver = new NetReceiver();
     private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息

@@ -39,11 +39,8 @@ public class ChatMsgInterface {
         void onReqInfosComplete(List<UserInfoLightweight> infoLightweights);
     }
 
-    /**
-     * 删除列表中的某个用户
-     */
-    public interface DelChatUserComplete {//接口
-        void onReqChatUser(boolean ret);
+    public interface DBMsgListener {
+        void onDBMsgListener(long ret);
     }
 
     public interface MsgListener {

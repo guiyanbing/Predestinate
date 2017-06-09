@@ -65,11 +65,11 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
         initData();
         initView();
+        MsgMgr.getInstance().attach(this);
     }
 
     private void initData() {
         channel = getIntent().getIntExtra(CenterConstant.USER_CHECK_INFO_KEY, CenterConstant.USER_CHECK_INFO_OWN);
-
         if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
             userDetail = ModuleMgr.getCenterMgr().getMyInfo();
             return;
@@ -79,7 +79,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
     private void initView() {
         initTitle();
-        MsgMgr.getInstance().attach(this);
         scrollLayout = (ScrollView) findViewById(R.id.layout_scroll);
         container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserCheckInfoHeadPanel(this, channel, userDetail);
@@ -253,6 +252,12 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
         super.onResume();
         if (channel == CenterConstant.USER_CHECK_CONNECT_OTHER)
             scrollToBottom();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 
     @Override

@@ -101,7 +101,6 @@ public class DBCenter {
                 }
             }
         }
-
         return centerFmessage.updateMsg(message);
     }
 
