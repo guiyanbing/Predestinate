@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.InputUtils;
@@ -45,11 +44,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     private View bg = null;
     private View input_monthly = null;
 
-    private ChatBigSmileMatchingPanel matchingPanel = null;
-
     public ChatInputPanel(Context context, ChatAdapter.ChatInstance chatInstance) {
         super(context, chatInstance);
-
         chatInstance.chatInputPanel = this;
         setContentView(R.layout.p1_chat_input);
         initView();
@@ -79,9 +75,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatBtnText.setOnClickListener(this);
 
         chatBtnExpression.setOnClickListener(this);
-
         chatVoiceRecord.setOnClickListener(this);
-//        chatTextEdit.setOnClickListener(this);
 
         chatTextEdit.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -271,7 +265,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         boolean empty = TextUtils.isEmpty(s);
 
         showSendBtn(!empty);
-        showMatchingSmile(s);
     }
 
     @Override
@@ -284,29 +277,13 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     public void sendSystemMsgTyping() {
         if (getChatInstance().chatAdapter.isTyping()) {
             getChatInstance().chatAdapter.setTyping(false);
-            //     ModuleMgr.getMsgCommonMgr().sendSystemMsgTyping(getChatInstance().chatAdapter.getWhisperId(), "", getChatInstance().chatAdapter.getIsKF_ID(), null);
         }
     }
 
     public void sendSystemMsgCancelInput() {
         if (!getChatInstance().chatAdapter.isTyping()) {
             getChatInstance().chatAdapter.setTyping(true);
-            //    ModuleMgr.getMsgCommonMgr().sendSystemMsgCancelInput(getChatInstance().chatAdapter.getWhisperId(), "", getChatInstance().chatAdapter.getIsKF_ID(), null);
         }
-    }
-
-    /**
-     * 调用前，key必须用TextUtils.isEmpty(key)进行判断。
-     *
-     * @param key
-     */
-    public void showMatchingSmile(CharSequence key) {
-        if (matchingPanel == null) {
-            matchingPanel = new ChatBigSmileMatchingPanel(getContext(), getChatInstance());
-            getChatInstance().chatViewLayout.addFloatView(matchingPanel);
-        }
-
-        matchingPanel.reset(key);
     }
 
     /**
@@ -341,6 +318,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 打开表情面板。
      */
     public void showChatExpression() {
+        chatTextEdit.setVisibility(View.VISIBLE);
+
         Statistics.userBehavior(SendPoint.chatframe_tool_face);
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(false);
@@ -356,8 +335,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     private void onClickChatTextEdit() {
         getChatInstance().chatExtendPanel.show(false);
         getChatInstance().chatSmilePanel.show(false);
-
-        showMatchingSmile(chatTextEdit.getText().toString());
 
         // 键盘弹出需要时间
         MsgMgr.getInstance().delay(new Runnable() {
@@ -386,9 +363,6 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             getChatInstance().chatExtendPanel.show(false);
             getChatInstance().chatSmilePanel.show(false);
 
-            if (matchingPanel != null) {
-                matchingPanel.show(false);
-            }
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }
@@ -411,15 +385,10 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             String channelID = getChatInstance().chatAdapter.getChannelId();
             String whisperID = getChatInstance().chatAdapter.getWhisperId();
 
-//            if (!ModuleMgr.getCommonMgr().headRemindOnChat()) {
-//                return;
-//            }
             ModuleMgr.getChatMgr().sendTextMsg(channelID, whisperID, context);
 
             chatTextEdit.setText("");
             sendSystemMsgCancelInput();
-
-            //      MediaUtils.playSound(R.raw.send_msg);
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }
