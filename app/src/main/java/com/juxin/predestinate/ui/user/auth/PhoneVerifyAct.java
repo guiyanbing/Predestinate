@@ -52,8 +52,6 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         setContentView(R.layout.f1_activity_phoneverify);
         setBackView(getResources().getString(R.string.title_phone_certification));
         initView();
-        // 手机验证
-//		AppCfg.getAppCfg().onSava(this, 31);
     }
 
     private static class MyHandler extends Handler {
@@ -112,7 +110,6 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         qq = contactBean.getQq();
     }
 
-
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_open_qq_btn://在线客服qq交流
@@ -132,8 +129,8 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 break;
             case R.id.btn_phoneverify_ok:
                 if (validInput()) {
-                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
                 }
                 break;
             case R.id.ll_customerservice_btn://客服小秘书
@@ -167,6 +164,11 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LoadingDialog.closeLoadingDialog();
+    }
 
     @Override
     public void onRequestComplete(HttpResponse response) {

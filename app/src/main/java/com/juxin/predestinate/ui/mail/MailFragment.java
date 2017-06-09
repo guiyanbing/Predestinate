@@ -80,7 +80,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         setTitleRightImgGone();
         View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
         mail_title_right_text = (TextView) title_right.findViewById(R.id.mail_title_right_text);
-        mail_title_right_text.setText("编辑");
+        mail_title_right_text.setText(getString(R.string.edit));
         setTitleRightContainer(title_right);
         title_right.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +153,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onSwipeChooseOpened() {
         ((MainActivity) getActivity()).onGoneBottom(false);
         mail_bottom.setVisibility(View.VISIBLE);
-        mail_title_right_text.setText("取消");
+        mail_title_right_text.setText(getString(R.string.cancel));
         isGone = true;
         ondisplayTitleLeft();
     }
@@ -162,7 +162,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onSwipeChooseClosed() {
         ((MainActivity) getActivity()).onGoneBottom(true);
         mail_bottom.setVisibility(View.GONE);
-        mail_title_right_text.setText("编辑");
+        mail_title_right_text.setText(getString(R.string.edit));
         isGone = false;
         onhideTitleLeft();
     }
