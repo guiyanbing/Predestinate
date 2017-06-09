@@ -94,7 +94,7 @@ public class ChatMgr implements ModuleBase {
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperList();
+            ModuleMgr.getChatListMgr().getWhisperList(false);
         }
     }
 
@@ -690,7 +690,7 @@ public class ChatMgr implements ModuleBase {
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperList();
+            ModuleMgr.getChatListMgr().getWhisperList(false);
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID, Long.valueOf(whisperID));
@@ -832,7 +832,6 @@ public class ChatMgr implements ModuleBase {
                 if (ret && !message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
                         !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
                         (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
-                    PLogger.printObject("StrangerNew()=chatMgr=" + ModuleMgr.getChatListMgr().getStrangerNew());
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 

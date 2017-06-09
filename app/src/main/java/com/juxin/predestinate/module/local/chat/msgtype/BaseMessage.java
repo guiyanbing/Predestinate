@@ -95,7 +95,7 @@ public class BaseMessage implements IBaseMessage {
     private long sendID;// 发送ID
     private long msgID = -1;//服务器消息ID
     private long cMsgID = -1;//客户端消息ID
-    private long specialMsgID = -1;//客户端消息ID
+    private long specialMsgID = -1;//特殊消息ID，对消息而言
     private long time;
     private String content;//具体内容
     private String jsonStr;//json串
