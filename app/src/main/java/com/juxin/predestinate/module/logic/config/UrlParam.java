@@ -35,6 +35,7 @@ public enum UrlParam {
     checkUpdate("public/checkupNew", null, true),//检查软件升级
     staticConfig("public/getASet", null, false),//检查服务器静态配置
     statistics(Hosts.FATE_IT_GO, "x/hdp/Action2", null, false),//大数据统计
+    locationStatistics(Hosts.FATE_IT_GO, "xs/location/UpdateUserPosition", null, false),//位置信息统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
     reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
 

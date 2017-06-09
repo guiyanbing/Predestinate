@@ -9,6 +9,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
@@ -41,6 +42,35 @@ public class Statistics {
         Shutdown,               // APP关闭事件日志
         InstallVideoPlugin,     // 安装语音视频插件
         UserBehavior,           // 客户端用户行为日志
+    }
+
+    /**
+     * 向大数据发送位置统计：5min一次
+     */
+    public static void location() {
+        if (ModuleMgr.getCenterMgr().getMyInfo().getUid() == 0) return;
+
+        LocationMgr.PointD pointD = LocationMgr.getInstance().getPointD();
+        String province = pointD.province;
+        if (TextUtils.isEmpty(province) || "null".equals(province)) return;
+
+        Map<String, Object> requestObject = new HashMap<>();
+        requestObject.put("longitude", pointD.longitude);
+        requestObject.put("latitude", pointD.latitude);
+        requestObject.put("country_code", pointD.countryCode);
+        requestObject.put("province", province);
+        requestObject.put("city_code", pointD.city);
+        requestObject.put("district", pointD.district);
+        requestObject.put("street_number", pointD.streetNum);
+        requestObject.put("building_id", pointD.buildID);
+
+        PLogger.d("------>" + JSON.toJSONString(requestObject));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.locationStatistics, requestObject, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---locationStatistics--->" + response.getResponseString());
+            }
+        });
     }
 
     /**
