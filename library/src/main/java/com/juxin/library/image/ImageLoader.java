@@ -24,6 +24,8 @@ import com.juxin.library.image.transform.BlurImage;
 import com.juxin.library.image.transform.CircleTransform;
 import com.juxin.library.image.transform.RoundedCorners;
 
+import java.util.Arrays;
+
 /**
  * 基于Glide图片请求，处理类
  */
@@ -176,7 +178,8 @@ public class ImageLoader {
     private static <T> void loadStylePic(final Context context, final T model, final ImageView view,
                                          int defResImg, final int errResImg,
                                          final Transformation<Bitmap>... transformation) {
-        setImgTag(view, model);
+        if(!isInvalidTag(view,model,transformation)) return;
+        setImgTag(view, model,transformation);
         loadPicWithCallback(context, defResImg, new GlideCallback() {
                     @Override
                     public void onResourceReady(final GlideDrawable defRes) {
@@ -196,7 +199,8 @@ public class ImageLoader {
                                     int defResImg, int errResImg,
                                     Transformation<Bitmap>... transformation) {
         try {
-            setImgTag(view, model);
+            if(!isInvalidTag(view,model,transformation)) return;
+            setImgTag(view, model,transformation);
             loadPic(context, model, view, context.getResources().getDrawable(defResImg),
                     context.getResources().getDrawable(errResImg), transformation);
         } catch (Exception e) {
@@ -209,7 +213,7 @@ public class ImageLoader {
                                     final Transformation<Bitmap>... transformation) {
         try {
             //先加载默认图
-            if (isInvalidTag(view, model))
+            if (isInvalidTag(view, model,transformation))
                 return;
             view.setImageDrawable(defResImg);
 
@@ -220,11 +224,11 @@ public class ImageLoader {
             loadPicWithCallback(context, model, new GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
-                    if (isInvalidTag(view, model))
+                    if (isInvalidTag(view, model,transformation))
                         return;
                     getDrawableBuilder(context, model)
                             .bitmapTransform(transformation)
-                            .placeholder(defResImg)
+//                            .placeholder(defResImg)
                             .error(errResImg)
                             .diskCacheStrategy(resource.isAnimated() ? DiskCacheStrategy.SOURCE : DiskCacheStrategy.ALL)
                             .into(view);
@@ -308,8 +312,9 @@ public class ImageLoader {
      * @param <T>
      * @return
      */
-    private static <T> boolean isInvalidTag(ImageView view, T model) {
-        return view.getTag(R.string.view_url_tag_id) != model;
+    private static <T> boolean isInvalidTag(ImageView view, T model, Object[] trans) {
+        return (model != null ? !model.equals(view.getTag(R.string.view_url_tag_id)):view.getTag(R.string.view_url_tag_id) != model)
+                || !Arrays.equals((Object[])view.getTag(R.string.view_trans_tag_id),trans);
     }
 
     /**
@@ -317,9 +322,11 @@ public class ImageLoader {
      *
      * @param view
      * @param model
+     * @param trans
      */
-    private static <T> void setImgTag(ImageView view, T model) {
+    private static <T> void setImgTag(ImageView view, T model, Object[] trans) {
         view.setTag(R.string.view_url_tag_id, model);
+        view.setTag(R.string.view_trans_tag_id, trans);
     }
 
     /**
