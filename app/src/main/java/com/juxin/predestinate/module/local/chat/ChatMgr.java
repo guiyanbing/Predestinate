@@ -41,6 +41,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -966,12 +967,14 @@ public class ChatMgr implements ModuleBase {
      */
     private synchronized void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.printObject(infoLightweight);
-        for (Object key : infoMap.keySet()) {
-            if (key.equals(userID)) {
-                ChatMsgInterface.InfoComplete infoComplete = infoMap.get(key);
+        Set<Map.Entry<Long, ChatMsgInterface.InfoComplete>> entrys = infoMap.entrySet();
+        for(Iterator i = entrys.iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry)i.next();
+            if (userID == (Long)entry.getKey()) {
+                ChatMsgInterface.InfoComplete infoComplete = (ChatMsgInterface.InfoComplete) entry.getValue();
                 infoComplete.onReqComplete(isOK, infoLightweight);
                 if (isRemove) {
-                    infoMap.remove(key);
+                    i.remove();
                 }
                 return;
             }

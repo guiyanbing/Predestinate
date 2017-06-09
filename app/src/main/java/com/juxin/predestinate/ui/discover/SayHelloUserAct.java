@@ -367,8 +367,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (adapter == null) return;
-        if (!timeUtil.check(10 * 1000)) {
+        if (adapter == null || !timeUtil.check(4 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();

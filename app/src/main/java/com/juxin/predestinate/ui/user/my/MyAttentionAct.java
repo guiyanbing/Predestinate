@@ -23,7 +23,7 @@ import java.util.List;
  * 我的关注
  * Created by zm on 2017/5/4
  */
-public class MyAttentionAct extends BaseActivity{
+public class MyAttentionAct extends BaseActivity {
 
     private SmartTabLayout stlTitles;
     private ViewPager vpViewChange;
@@ -45,17 +45,18 @@ public class MyAttentionAct extends BaseActivity{
     }
 
     //初始化数据
-    private void initView(){
+    private void initView() {
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.my_attention));
         stlTitles = (SmartTabLayout) findViewById(R.id.my_attention_stl_titles);
         vpViewChange = (ViewPager) findViewById(R.id.my_attention_vPager);
         initViewsList();
         initViewPager();
-        ((LinearLayout)stlTitles.getTabStrip()).setGravity(Gravity.CENTER_HORIZONTAL);//标题居中
+        ((LinearLayout) stlTitles.getTabStrip()).setGravity(Gravity.CENTER_HORIZONTAL);//标题居中
         stlTitles.setCustomTabView(R.layout.f1_custom_table_view, R.id.tv_left_tab);//设置自定义标题
         stlTitles.setViewPager(vpViewChange);//设置viewpager
     }
+
     //添加两个panel
     private void initViewsList() {
         panls.add(new AttentionMePanel(this));
@@ -72,9 +73,9 @@ public class MyAttentionAct extends BaseActivity{
     @Override
     protected void onResume() {//重新刷新界面
         super.onResume();
-        if (panls.size()==2&&panls.get(0)!=null&&panls.get(1)!=null){
-            ((AttentionMePanel)panls.get(0)).reFreshUI();
-            ((MyAttentionPanel)panls.get(1)).reFreshUI();
+        if (panls.size() == 2 && panls.get(0) != null && panls.get(1) != null) {
+            ((AttentionMePanel) panls.get(0)).reFreshUI();
+            ((MyAttentionPanel) panls.get(1)).reFreshUI();
         }
     }
 }
