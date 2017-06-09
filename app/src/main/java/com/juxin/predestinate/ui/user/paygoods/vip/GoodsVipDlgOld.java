@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -28,11 +31,12 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
+    private int seetype;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int seetype = getIntent().getIntExtra("seetype", 1);
+        seetype = getIntent().getIntExtra("seetype", 1);
         if (seetype == 2) {
             setContentView(R.layout.f1_goods_vip2_dialog_old);
         } else {
@@ -81,6 +85,13 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
+                String payPoint = PSP.getInstance().getString("payPoint","");
+                if(seetype == 2){
+                    if("mobile".equals(payPoint))
+                        Statistics.userBehavior(SendPoint.chatframe_nav_tel_vippay_btnqrzf);
+                    if("wx".equals(payPoint))
+                        Statistics.userBehavior(SendPoint.chatframe_nav_weixin_vippay_btnqrzf);
+                }
                 UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 break;
         }
