@@ -39,7 +39,7 @@ public class Common {
             if (!savePath.endsWith(File.separator))
                 savePath = savePath + File.separator;
 
-            savePath = savePath + context.getResources().getString(R.string.app_name);
+            savePath = savePath + context.getResources().getString(R.string.app_storage_name);
 
             if (!TextUtils.isEmpty(dir)) {
                 if (!dir.startsWith(File.separator))
