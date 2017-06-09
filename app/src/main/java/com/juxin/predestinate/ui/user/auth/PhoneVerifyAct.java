@@ -117,8 +117,8 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
                 break;
             case R.id.btn_phoneverify_begin:
                 if (validPhone()) {
-                    ModuleMgr.getCenterMgr().reqVerifyCodeEx(phone, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                    ModuleMgr.getCenterMgr().reqVerifyCodeEx(phone, this);
                     HashMap<String,Object> map  = new HashMap<>();
                     map.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());
                     map.put("time",ModuleMgr.getAppMgr().getSecondTime());
