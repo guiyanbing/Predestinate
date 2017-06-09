@@ -246,9 +246,14 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     public void showHasData() {
         adapter.notifyDataSetChanged();
-        detectInfo(exListView);
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                detectInfo(exListView);
+            }
+        }, 800);
     }
 
     /**

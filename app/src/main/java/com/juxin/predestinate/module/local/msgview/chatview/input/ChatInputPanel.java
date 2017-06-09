@@ -18,6 +18,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
@@ -338,6 +340,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 打开表情面板。
      */
     public void showChatExpression() {
+        Statistics.userBehavior(SendPoint.chatframe_tool_face);
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(false);
         getChatInstance().chatSmilePanel.showToggle();
@@ -395,6 +398,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      */
     private void onClickChatSend() {
         try {
+            Statistics.userBehavior(SendPoint.chatframe_tool_btnsend);
             String context = chatTextEdit.getText().toString().trim();
             if (TextUtils.isEmpty(context)) return;
 
@@ -427,6 +431,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         getChatInstance().chatViewLayout.onClickChatGift(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Statistics.userBehavior(SendPoint.chatframe_tool_btngift);
                 closeAllInput();
                 UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
             }
