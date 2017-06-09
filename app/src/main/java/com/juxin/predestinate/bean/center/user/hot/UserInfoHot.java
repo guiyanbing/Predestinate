@@ -71,6 +71,7 @@ public class UserInfoHot extends UserBasic {
         this.setIdcardValidation(jsonObject.optInt("idcard_validation", 0) == 2);
         this.setVideoBusy(jsonObject.optInt("video_busy", 0) == 1);
         this.setPhotoNum(jsonObject.optInt("photonum"));
+        this.setIs_sayHello(jsonObject.optBoolean("isSayHello"));
 
         if (!jsonObject.isNull("videochatconfig")) {
             JSONObject configJsonObj = jsonObject.optJSONObject("videochatconfig");
