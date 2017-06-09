@@ -16,6 +16,9 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsPayAndLoginAfter;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -23,8 +26,11 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by zhang on 2017/5/8.
@@ -115,6 +121,8 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
             switch (msg.what) {
                 case SAY_HELLO_MSG_WHAT:
                     toSayHello();
+                    //统计
+                    StatisticsPayAndLoginAfter.sayHi(data);
                     break;
             }
         }
