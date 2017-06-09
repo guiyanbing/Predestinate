@@ -135,6 +135,7 @@ public class OldDBModule {
                                 giftMessage.setfStatus(bundle.getBoolean("giftReceived") ? 0 : 1);
                                 break;
                             case video:
+                                msgID = bundle.getLong("d");
                                 VideoMessage videoMessage = (VideoMessage) message;
                                 videoMessage.setVideoID((int) bundle.getLong("vc_id"));
                                 videoMessage.setSpecialMsgID(bundle.getLong("vc_id"));
@@ -149,10 +150,6 @@ public class OldDBModule {
                                 break;
                         }
 
-                        if (messageType == BaseMessageType.video){
-                            msgID = bundle.getLong("d");
-                            message.setSpecialMsgID(bundle.getLong("vc_id"));
-                        }
                         //0接收  1发送
                         if (receive_send_status == 0) {
                             message.setMsgID(msgID);
