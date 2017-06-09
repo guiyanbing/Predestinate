@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -77,42 +79,52 @@ public class UserFragmentFootPanel extends BasePanel implements BaseRecyclerView
         switch (position) {
             case CenterItemID.i_Center_item_1: // 我的主页
                 UIShow.showCheckOwnInfoAct(getContext());
+//                Statistics.userBehavior(SendPoint.menu_me_profile);
                 break;
 
             case CenterItemID.i_Center_item_2: // 谁关注我
                 UIShow.showMyAttentionAct(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_sgzw);
                 break;
 
             case CenterItemID.i_Center_item_3: // 我的钱包
                 UIShow.showRedBoxRecordAct(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_money);
                 break;
 
             case CenterItemID.i_Center_item_4:// 我要赚红包
                 UIShow.showDemandRedPacketAct(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_redpackage);
                 break;
 
             case CenterItemID.i_Center_item_5:// 我的Y币
                 UIShow.showBuyCoinActivity(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_y);
                 break;
 
             case CenterItemID.i_Center_item_6:// 我的钻石
                 UIShow.showMyDiamondsAct(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_gem);
                 break;
 
             case CenterItemID.i_Center_item_7:// 我的礼物
                 UIShow.showMyGiftActivity(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_gift);
                 break;
 
             case CenterItemID.i_Center_item_8:// 个人资料
                 UIShow.showUserEditInfoAct(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_profile);
                 break;
 
             case CenterItemID.i_Center_item_9:// 我的相册
                 UIShow.showUserPhotoAct(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_album);
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心
                 UIShow.showUserSetAct((Activity) getContext(), 100);
+                Statistics.userBehavior(SendPoint.menu_me_setting);
                 break;
         }
     }

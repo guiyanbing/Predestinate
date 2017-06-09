@@ -22,6 +22,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -120,6 +122,12 @@ public class CenterMgr implements ModuleBase, PObserver {
      * @param complete
      */
     public void mobileAuthEx(String mobile, String code, RequestComplete complete) {
+        HashMap<String,Object> map  = new HashMap<>();
+        map.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        map.put("time",ModuleMgr.getAppMgr().getSecondTime());
+        map.put("tel",mobile);
+        map.put("verifycode",code);
+        Statistics.userBehavior(SendPoint.menu_me_meauth_telauth_btnverify,map);
         HashMap<String, Object> getParams = new HashMap<>();
         getParams.put("cellPhone", mobile);
         getParams.put("verifyCode", code);

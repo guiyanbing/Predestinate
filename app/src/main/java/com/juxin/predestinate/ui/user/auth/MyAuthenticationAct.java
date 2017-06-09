@@ -10,6 +10,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -121,9 +123,11 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 } else {//手机认证完成页
                     UIShow.showPhoneVerifyCompleteAct(MyAuthenticationAct.this, AUTHENTICSTION_REQUESTCODE);
                 }
+                Statistics.userBehavior(SendPoint.menu_me_meauth_telauth);
                 break;
             case R.id.ll_auth_video://自拍认证
                 UIShow.showMyAuthenticationVideoAct(this, authForVodeo);
+                Statistics.userBehavior(SendPoint.menu_me_meauth_videoauth);
                 break;
             case R.id.ll_auth_id://身份认证
                 UIShow.showIDCardAuthenticationAct(this, authIDCard);

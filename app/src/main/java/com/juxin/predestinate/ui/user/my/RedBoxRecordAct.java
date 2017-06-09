@@ -17,6 +17,8 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
@@ -81,6 +83,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
             public void onClick(View v) {
                 //跳转到提现说明页
                 UIShow.showWithDrawExplainAct(RedBoxRecordAct.this);
+                Statistics.userBehavior(SendPoint.menu_me_money_explain);
             }
         });
     }
@@ -106,6 +109,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.wode_wallet_tv_draw:
+                Statistics.userBehavior(SendPoint.menu_me_money_withdraw);
                 String money = tvMoney.getText().toString().trim();
                 float minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()/100f;
 //                Log.e("TTTTTTTTTT",ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()+"|||");

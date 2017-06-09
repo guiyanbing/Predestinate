@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.Diamond;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -50,6 +52,7 @@ public class MyDiamondsAct extends BaseActivity{
             public void onClick(View v) {
                 //跳转到钻石说明页
                 UIShow.showMyDiamondsExplainAct(MyDiamondsAct.this);
+                Statistics.userBehavior(SendPoint.menu_me_gem_explain);
             }
         });
         initData();

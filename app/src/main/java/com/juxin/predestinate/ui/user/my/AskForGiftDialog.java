@@ -25,6 +25,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -132,7 +134,7 @@ public class AskForGiftDialog extends Dialog implements OnClickListener, GiftHel
             int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
-
+                    Statistics.userBehavior(SendPoint.menu_me_redpackage_sylw_voice);
                     if (timeCount == 0 || System.currentTimeMillis() - timeCount > 500) {
                         recordPanel.onTouch(action, 0f);
                     } else {
@@ -283,6 +285,7 @@ public class AskForGiftDialog extends Dialog implements OnClickListener, GiftHel
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_gift_main_send:
+                Statistics.userBehavior(SendPoint.menu_me_redpackage_sylw_send);
                 if (null == selectGift) {
                     PToast.showShort(mContext.getString(R.string.please_select_a_gift));
                 } else {

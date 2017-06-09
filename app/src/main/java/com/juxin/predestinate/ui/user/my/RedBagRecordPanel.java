@@ -12,6 +12,8 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.RedOneKeyList;
 import com.juxin.predestinate.bean.my.RedbagList;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
@@ -169,6 +171,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
     public void onClick(View v) {//单击事件
         LoadingDialog.show((FragmentActivity)mContext);
         ModuleMgr.getCommonMgr().reqAddredonekey(ModuleMgr.getCenterMgr().getMyInfo().getUid(),this);//一键入袋
+        Statistics.userBehavior(SendPoint.menu_me_money_onekey);
     }
 
     private String testData(){
