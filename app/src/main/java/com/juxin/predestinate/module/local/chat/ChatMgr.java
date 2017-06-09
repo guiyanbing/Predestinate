@@ -998,7 +998,9 @@ public class ChatMgr implements ModuleBase {
             message.setChannelID(null);
 
             PLogger.printObject("offlineMessage=" + message.getType());
-            ModuleMgr.getChatMgr().onReceiving(message);
+            if(message.isSave()){
+                ModuleMgr.getChatMgr().onReceiving(message);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
