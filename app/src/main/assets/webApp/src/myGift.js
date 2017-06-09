@@ -84,12 +84,14 @@ var MyGift = MyGift || (function ($) {
         var giftSendTotal = document.getElementById('giftSendTotal');
         giftRecieveTotal.innerText = _giftNum;
         giftSendTotal.innerText = _giftNum;
+        var table=null;
+        var cells=null;
         if (tabindex === 0) {
-          var table = document.body.querySelector('#scroll1 .mui-scroll .mui-table-view');
-          var cells = document.body.querySelectorAll('.mui-table-view-cell');
+           table = document.body.querySelector('#scroll1 .mui-scroll .mui-table-view');
+           cells = table.querySelectorAll('.mui-table-view-cell');
         }else {
-          var table = document.body.querySelector('#scroll2 .mui-scroll .mui-table-view');
-          var cells = document.body.querySelectorAll('.mui-table-view-cell');
+           table = document.body.querySelector('#scroll2 .mui-scroll .mui-table-view');
+           cells = table.querySelectorAll('.mui-table-view-cell');
         }
 
         for (var j = 0;j <cells.length;j++) {

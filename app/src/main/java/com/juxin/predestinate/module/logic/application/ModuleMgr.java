@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.local.msgview.PhizMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
+import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.media.MediaMgr;
 import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
@@ -72,6 +73,9 @@ public final class ModuleMgr {
         PLogger.d("---processName--->" + processName);
         if (processName.equals(packageName)) {//主进程
             preInit(context);
+
+            int runCount = PSP.getInstance().getInt(FinalKey.APP_RUN_COUNT, 0);
+            PSP.getInstance().put(FinalKey.APP_RUN_COUNT, ++runCount);
 
             LockScreenMgr.getInstance().registerReceiver();//注册锁屏弹窗
             getLoginMgr().initCookie();
