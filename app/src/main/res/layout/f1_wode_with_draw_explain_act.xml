@@ -92,18 +92,12 @@
             android:textColor="@color/color_727171"
             android:text="@string/withdrawal_instructions_four"/>
     </RelativeLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom|right">
 
-        <ImageView
-            android:id="@+id/wode_with_vip_kf"
-            android:layout_width="104dp"
-            android:layout_height="46dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/f1_ic_recharge_consult" />
-    </LinearLayout>
+
+        <include layout="@layout/f1_customerservice_btn" />
+    </RelativeLayout>
 </LinearLayout>

@@ -9,7 +9,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
@@ -94,7 +93,7 @@ public class ChatMgr implements ModuleBase {
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperList();
+            ModuleMgr.getChatListMgr().getWhisperList(false);
         }
     }
 
@@ -624,8 +623,7 @@ public class ChatMgr implements ModuleBase {
      *
      * @param message
      */
-    public void onReceiving(BaseMessage message, boolean b) {
-        PLogger.printObject("onReceiving==" + b);
+    public void onReceiving(BaseMessage message) {
         message.setStatus(MessageConstant.UNREAD_STATUS);
         PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
@@ -690,7 +688,7 @@ public class ChatMgr implements ModuleBase {
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperList();
+            ModuleMgr.getChatListMgr().getWhisperList(false);
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID, Long.valueOf(whisperID));
@@ -832,7 +830,6 @@ public class ChatMgr implements ModuleBase {
                 if (ret && !message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
                         !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
                         (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
-                    PLogger.printObject("StrangerNew()=chatMgr=" + ModuleMgr.getChatListMgr().getStrangerNew());
                     ModuleMgr.getChatListMgr().setStrangerNew(true);
                 }
 
@@ -1001,7 +998,9 @@ public class ChatMgr implements ModuleBase {
             message.setChannelID(null);
 
             PLogger.printObject("offlineMessage=" + message.getType());
-            ModuleMgr.getChatMgr().onReceiving(message, false);
+            if(message.isSave()){
+                ModuleMgr.getChatMgr().onReceiving(message);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -35,8 +35,9 @@
                 android:padding="@dimen/px13_dp">
 
                 <ImageView
-                    style="@style/icon_small"
-                    android:background="@drawable/p1_add_a02" />
+                    android:layout_width="@dimen/px50_dp"
+                    android:layout_height="@dimen/px35_dp"
+                    android:background="@drawable/f1_simg_ico" />
 
                 <TextView
                     android:id="@+id/hot_card_img_num"
@@ -155,6 +156,7 @@
                     android:background="@drawable/f1_userinfo_video" />
 
                 <TextView
+                    android:id="@+id/hot_card_to_video_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/px2_dp"

@@ -237,17 +237,21 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="@dimen/px46_dp"
-                            android:layout_height="@dimen/px50_dp"
-                            android:background="@drawable/p1_qq_kefu"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/px20_dp"
                             android:textSize="@dimen/px32_sp"
                             android:textColor="@color/color_999999"
-                            android:text="@string/contact_kefu"/>
+                            android:text="@string/txt_customerservice_phone"/>
+                        <TextView
+                            android:id="@+id/id_card_tv_kefu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px20_dp"
+                            android:textSize="@dimen/px32_sp"
+                            android:textColor="@color/color_999999"
+                            android:text="0731-89746010"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

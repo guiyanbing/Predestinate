@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -110,6 +112,7 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
+                Statistics.userBehavior(SendPoint.chatframe_nav_y_ypay_btnqrzf);
                 UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 break;
         }

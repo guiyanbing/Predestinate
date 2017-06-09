@@ -610,6 +610,15 @@ public class Invoker {
 
         // ------------------------------游戏用cmd---------------------------------
 
+        // 获取当前视频通话时长
+        public void get_video_time(String data) {
+            PLogger.d("---get_video_time--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            Map<String, Object> responseObject = new HashMap<>();
+            responseObject.put("timespan", 0);//TODO 当前通话时长(秒数)
+            doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
+        }
+
         // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid
         public void choose_friend(String data) {
             PLogger.d("---choose_friend--->" + data);

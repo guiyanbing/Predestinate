@@ -12,6 +12,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.ViewPagerAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -102,6 +104,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             @Override
                             public void onComplete(String... path) {
                                 if (path.length > 0) {
+                                    Statistics.userBehavior(SendPoint.chatframe_tool_prcture);
                                     //TODO 发送图片
                                     ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
                                 }
@@ -109,6 +112,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                         });
                         break;
                     case VIDEO://视频聊天
+                        Statistics.userBehavior(SendPoint.chatframe_tool_video);
                         if (config == null || !config.isVideoChat()) {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
@@ -116,6 +120,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                         break;
                     case VOICE://语音
+                        Statistics.userBehavior(SendPoint.chatframe_tool_voice);
                         if (config == null || !config.isVoiceChat()) {
                             PToast.showShort(getContext().getString(R.string.user_other_not_voice_chat));
                             return;

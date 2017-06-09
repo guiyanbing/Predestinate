@@ -33,6 +33,8 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
     private Context context;
     private ViewHoder vh;
 
+    private boolean isNeedrReq = false;
+
     public CardsAdapter(List<UserInfoHot> datas, Context context) {
         this.datas = datas;
         this.context = context;
@@ -45,7 +47,14 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
 
     @Override
     public int getCount() {
-        return datas.size();
+        if (isNeedrReq()) {
+            return datas.size();
+        } else {
+            if (datas.size() == 1) {
+                return datas.size();
+            }
+            return Integer.MAX_VALUE;
+        }
     }
 
     @Override
@@ -54,10 +63,11 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
     }
 
     @Override
-    public void onBindData(final int position, View cardview) {
+    public void onBindData(final int index, View cardview) {
         if (datas == null || datas.size() == 0) {
             return;
         }
+        final int position = index % datas.size();
 
 
         final UserInfoHot infoHot = datas.get(position);
@@ -84,6 +94,13 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.iv_auth_user.setVisibility(infoHot.isIdcardValidation() ? View.VISIBLE : View.GONE);
         vh.iv_auth_phone.setVisibility(infoHot.isMobileValidation() ? View.VISIBLE : View.GONE);
         vh.iv_auth_video.setVisibility(infoHot.isVideoValidation() ? View.VISIBLE : View.GONE);
+
+        if (!infoHot.isMan()) {
+            vh.tv_to_video.setText(context.getResources().getString(R.string.user_info_look_at_her));
+        } else {
+            vh.tv_to_video.setText(context.getResources().getString(R.string.user_info_look_at_he));
+        }
+
         //发视频
         vh.lin_to_video.setBackgroundResource(!infoHot.isVideo_available() ?
                 R.drawable.f1_card_infor_item_bg : R.drawable.f1_card_infor_item_unbg);
@@ -158,7 +175,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         private LinearLayout lin_imgs_view;
         private TextView tv_img_num;
         private ImageView iv_avatar;
-        private TextView tv_name, tv_age, tv_online, tv_video_price, tv_voice_price;
+        private TextView tv_name, tv_age, tv_online, tv_video_price, tv_voice_price, tv_to_video;
 
         private ImageView iv_auth_user, iv_auth_phone, iv_auth_video;
 
@@ -183,7 +200,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             iv_auth_video = (ImageView) view.findViewById(R.id.hot_card_auth_video);
 
             lin_to_video = (LinearLayout) view.findViewById(R.id.hot_card_to_video);
-
+            tv_to_video = (TextView) view.findViewById(R.id.hot_card_to_video_text);
             lin_to_voice = (LinearLayout) view.findViewById(R.id.hot_card_to_voice);
             lin_to_message = (LinearLayout) view.findViewById(R.id.hot_card_to_message);
             lin_to_gift = (LinearLayout) view.findViewById(R.id.hot_card_to_gift);
@@ -212,4 +229,12 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         }
     }
 
+
+    public boolean isNeedrReq() {
+        return isNeedrReq;
+    }
+
+    public void setNeedrReq(boolean needrReq) {
+        isNeedrReq = needrReq;
+    }
 }

@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -62,6 +63,7 @@ public class CommonMgr implements ModuleBase {
 
     @Override
     public void init() {
+        Statistics.loopLocation();
     }
 
     @Override
