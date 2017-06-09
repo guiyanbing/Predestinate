@@ -229,7 +229,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void updateToReadAll() {
         long ret = dbCenter.updateToReadAll();
         if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+            getWhisperList(false);
         }
     }
 
@@ -238,7 +238,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             return;
         }
         dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperList();
+        getWhisperList(false);
     }
 
     /**
@@ -249,23 +249,31 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long updateToReadPrivate(long userID) {
         long ret = dbCenter.getCenterFLetter().updateStatus(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+            getWhisperList(false);
         }
         return ret;
     }
 
-    public void getWhisperList() {
+    public void getWhisperList(boolean isUnsubscribe) {
+        PLogger.printObject("getWhisperList====1");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
         listObservable.observeOn(AndroidSchedulers.mainThread());
-        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-                PLogger.printObject("getWhisperList====1" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
+
+        if(!isUnsubscribe){
+            listObservable.subscribe(action1).unsubscribe();
+        }else {
+            listObservable.subscribe(action1);
+        }
     }
+
+    Action1 action1 = new Action1<List<BaseMessage>>() {
+        @Override
+        public void call(List<BaseMessage> baseMessages) {
+            PLogger.printObject("getWhisperList====2" + baseMessages.size());
+            updateListMsg(baseMessages);
+        }
+    };
 
     @Override
     public void onMessage(String key, Object value) {
@@ -278,7 +286,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-                            getWhisperList();
+                            getWhisperList(false);
                         }
                     });
                 }
@@ -300,7 +308,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
             PLogger.d("uid=======" + App.uid);
-            getWhisperList();
+            getWhisperList(true);
             ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
         }
     }
