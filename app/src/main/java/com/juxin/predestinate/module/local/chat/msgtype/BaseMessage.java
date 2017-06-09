@@ -672,6 +672,7 @@ public class BaseMessage implements IBaseMessage {
             case htmlText:
                 result = msg.getMsgDesc();
                 break;
+            case gift:
             case wantGift:
                 result = "[礼物]";
                 break;
