@@ -196,6 +196,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 onClickChatSend();
                 break;
             case R.id.input_monthly:
+                Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact);
                 String otherID = getChatInstance().chatAdapter.getWhisperId();
                 UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 if (!otherID.equals(userDetail.getyCoinUserid()) &&
