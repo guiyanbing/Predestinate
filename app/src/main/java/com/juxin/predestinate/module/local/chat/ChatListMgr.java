@@ -366,6 +366,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 .appModule(new AppModule((Application) App.getContext()))
                 .dBModule(new DBModule(App.uid))
                 .build();
+
+        MsgMgr.getInstance().sendMsg(MsgType.MT_DB_Init_Ok, null);
     }
 
     /**
