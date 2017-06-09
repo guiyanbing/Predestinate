@@ -409,8 +409,8 @@ public class CommonMgr implements ModuleBase {
                 JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
                 try {
                     ModuleMgr.getLoginMgr().addLoginUser(
-                            Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
-                            EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
+                            Long.parseLong(EncryptUtil.decryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
+                            EncryptUtil.decryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
                 } catch (Exception e) {
                     PLogger.printThrowable(e);
                 }
