@@ -20,7 +20,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -267,7 +266,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_Friend_Num_Notice:
                 if(isHidden()) return;
 
-                showAllData(1500);
+                showAllData(1300);
                 break;
             default:
                 break;
@@ -393,8 +392,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if(!isHidden()){
-            showAllData(1500);
+            showAllData(1300);
         }
-        PLogger.printObject("hidden=" + hidden);
     }
 }
