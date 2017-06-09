@@ -35,8 +35,8 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     private static final int SAY_HELLO_MSG_WHAT = 100;
 
-    private List<UserInfoLightweight> data = new ArrayList<>();
-    private List<UserInfoLightweight> tmp = new ArrayList<>();
+    private List<UserInfoLightweight> data = new ArrayList<>();  //外部不准调用该函数 此函数会动态改变长度
+    private List<UserInfoLightweight> tmp = new ArrayList<>(); //外部调用、回调调用 用此函数
 
     private ImageView iv_big;
     private ImageView iv_small1;
@@ -117,7 +117,7 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
                 case SAY_HELLO_MSG_WHAT:
                     toSayHello();
                     //统计
-                    StatisticsLoginAfter.sayHi(data);
+                    StatisticsLoginAfter.sayHi(tmp);
                     break;
             }
         }
