@@ -134,7 +134,7 @@ public class ChatMgr implements ModuleBase {
      *
      * @param otherID
      */
-    public void sendVideoMsgLocalSimulation(String otherID, int type, int videoID) {
+    public void sendVideoMsgLocalSimulation(String otherID, int type, long videoID) {
         final VideoMessage videoMessage = new VideoMessage(null, otherID, type, videoID, 3, 3);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
         videoMessage.setDataSource(MessageConstant.FOUR);
@@ -470,24 +470,24 @@ public class ChatMgr implements ModuleBase {
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
 
-//                if (!messageRet.isOk() || !messageRet.isS()) {
-//                    updateFail(message, messageRet);
-//                } else {
-//                    checkPermissions(message);
-//                    updateOk(message, messageRet);
-//                    sendMessageRefreshYcoin();
-//                }
-//                onInternalPro(messageRet);
+                //                if (!messageRet.isOk() || !messageRet.isS()) {
+                //                    updateFail(message, messageRet);
+                //                } else {
+                //                    checkPermissions(message);
+                //                    updateOk(message, messageRet);
+                //                    sendMessageRefreshYcoin();
+                //                }
+                //                onInternalPro(messageRet);
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
 
-                if(messageRet.isOk() && messageRet.isS()){
+                if (messageRet.isOk() && messageRet.isS()) {
                     checkPermissions(message);
                     updateOk(message, messageRet);
                     sendMessageRefreshYcoin();
-                }else {
-                    if(MessageRet.MSG_CODE_PULL_BLACK == messageRet.getS()){
+                } else {
+                    if (MessageRet.MSG_CODE_PULL_BLACK == messageRet.getS()) {
                         updateFailBlacklist(message, messageRet);
-                    }else {
+                    } else {
                         updateFail(message, messageRet);
                     }
                     onInternalPro(messageRet);
