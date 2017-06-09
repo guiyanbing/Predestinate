@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.ui.utils.Common;
 
 import java.io.File;
 

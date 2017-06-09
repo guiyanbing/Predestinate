@@ -33,7 +33,7 @@ public class Popup extends DialogFragment {
     private FragmentActivity activity;
 
     public Popup() {
-        this((FragmentActivity) App.activity);
+        this((FragmentActivity) App.getActivity());
     }
 
     /**
@@ -114,8 +114,8 @@ public class Popup extends DialogFragment {
     @CallSuper
     public void show() {
         synchronized (this) {
-            if (isAdded()) {
-                Log.e("Popup", "show: ------>the popup dialog has added to window,it's returned without showing.");
+            if (activity == null || activity.isFinishing() || isAdded()) {
+                Log.e("Popup", "show: ------>activity is finish or the popup dialog has added to window, it's returned without showing.");
                 return;
             }
             try {

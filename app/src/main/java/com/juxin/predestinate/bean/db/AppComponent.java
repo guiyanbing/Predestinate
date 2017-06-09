@@ -19,4 +19,6 @@ public interface AppComponent {
     void inject(ChatMgr chatMgr);
 
     void inject(UnreadMgrImpl unreadMgr);
+
+    void inject(OldDBModule oldDBModule);
 }

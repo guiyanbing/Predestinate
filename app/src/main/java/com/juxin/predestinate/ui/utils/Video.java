@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.DirType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,15 +42,15 @@ public class Video {
     }
 
     public static String getPicPath() {
-        return Common.getCahceDir("videopic") + ModuleMgr.getCenterMgr().getMyInfo().getUid() + ".jpg";
+        return DirType.getImageDir() + ModuleMgr.getCenterMgr().getMyInfo().getUid() + ".jpg";
     }
 
 
     public static String getVideoPath() {
-        return Common.getCahceDir("videopic") + ModuleMgr.getCenterMgr().getMyInfo().getUid() + ".mp4";
+        return DirType.getVideoDir() + ModuleMgr.getCenterMgr().getMyInfo().getUid() + ".mp4";
     }
 
-    public static boolean isHaveVideo(){
+    public static boolean isHaveVideo() {
         return new File(getVideoPath()).exists();
     }
 
@@ -80,7 +81,7 @@ public class Video {
         }
     }
 
-    public static void  videoPlay(Context context){
+    public static void videoPlay(Context context) {
         Uri uri = Uri.parse(getVideoPath());
         //调用系统自带的播放器
         Intent intent = new Intent(Intent.ACTION_VIEW);

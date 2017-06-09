@@ -14,12 +14,11 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.utils.Common;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +58,7 @@ public class WepayQRCodeAct extends BaseActivity implements OnClickListener {
 
     private void setPagerTitle() {
         setTitle("微信支付");
-   }
+    }
 
     private void initData() {
     }
@@ -134,19 +133,14 @@ public class WepayQRCodeAct extends BaseActivity implements OnClickListener {
         switch (v.getId()) {
             case R.id.pay_wx_save:
                 saveToPhoto();
-                UIShow.showWxpayOpenWx(this,URI);
+                UIShow.showWxpayOpenWx(this, URI);
                 break;
         }
     }
 
-
-
-
-
-
     public void saveViewToGallery(Context context, View view) {
         // 首先保存图片
-        String path = Common.getCahceDir("img");
+        String path = DirType.getImageDir();
         String fileName = "0qr_" + System.currentTimeMillis() + ".jpg";
         File file = new File(path, fileName);
         try {
