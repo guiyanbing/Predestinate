@@ -80,7 +80,7 @@ public class OldDBModule {
         ModuleMgr.getChatListMgr().getAppComponent().inject(this);
         BriteDatabase db = provideDB(App.context);
         QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM " + MESSAGE_LIST_TABLE +
-                " WHERE type <> 0 and login_id=" + uid);
+                " WHERE msg_type <> 0 and login_id=" + uid);
         query.subscribe(new Action1<SqlBrite.Query>() {
             @Override
             public void call(SqlBrite.Query query) {
