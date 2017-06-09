@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -17,17 +18,16 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.ui.utils.Common;
 import com.juxin.predestinate.ui.utils.DownloadPluginFragment;
 
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
@@ -182,8 +182,8 @@ public class VideoAudioChatHelper {
 
         isDownloading = true;
         HttpMgr httpMgr = new HttpMgrImpl();
-        String apkFile = Common.getCahceDir("apk") + Long.toString(new Date().getTime()) + ".apk";//AppCfg.ASet.getVideo_chat_apk_url()
         String downUrl = TextUtils.isEmpty(ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url()) ? TEST_URL : ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url();
+        String apkFile = DirType.getApkDir() + FileUtil.getFileNameFromUrl(downUrl);//AppCfg.ASet.getVideo_chat_apk_url()
         httpMgr.download(downUrl, apkFile, new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {
