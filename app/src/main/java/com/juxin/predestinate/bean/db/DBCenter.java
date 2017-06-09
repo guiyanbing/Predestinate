@@ -63,6 +63,18 @@ public class DBCenter {
         return ret;
     }
 
+    public void insertListMsg(List<BaseMessage> list) {
+        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+        try {
+            for (BaseMessage item : list) {
+                insertMsg(item);
+            }
+            transaction.markSuccessful();
+        } finally {
+            transaction.end();
+        }
+    }
+
     /**
      * 更新
      * @param message

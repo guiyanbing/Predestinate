@@ -19,9 +19,6 @@ public class TextMessage extends BaseMessage {
     private int sayHelloType;
     private String htm;//HTM文字
 
-    //关注状态1为关注2为取消关注
-    private int gz;
-
     public TextMessage() {
         super();
     }

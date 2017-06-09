@@ -621,7 +621,7 @@ public class ChatMgr implements ModuleBase {
             message.setMsgID(MessageConstant.NumNo);
             message.setTime(getTime());
         }
-        message.setStatus(MessageConstant.FAIL_STATUS);
+        message.setStatus(status);
         long upRet = dbCenter.updateMsg(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
     }
@@ -655,6 +655,14 @@ public class ChatMgr implements ModuleBase {
         message.setStatus(MessageConstant.UNREAD_STATUS);
         PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
+    }
+
+    /**
+     * 批量接收消息
+     * @param baseMessageList
+     */
+    public void onReceivingList(List<BaseMessage> baseMessageList) {
+        dbCenter.insertListMsg(baseMessageList);
     }
 
     /**
@@ -987,18 +995,23 @@ public class ChatMgr implements ModuleBase {
      * @param isOK            是否请求成功 true是成功
      * @param infoLightweight 个人资料数据
      */
-    private synchronized void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
+    private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.printObject(infoLightweight);
-        Set<Map.Entry<Long, ChatMsgInterface.InfoComplete>> entrys = infoMap.entrySet();
-        for(Iterator i = entrys.iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry)i.next();
-            if (userID == (Long)entry.getKey()) {
-                ChatMsgInterface.InfoComplete infoComplete = (ChatMsgInterface.InfoComplete) entry.getValue();
-                infoComplete.onReqComplete(isOK, infoLightweight);
-                if (isRemove) {
-                    i.remove();
+        synchronized (infoMap) {
+            if (infoMap.size() <= 0) return;
+            ChatMsgInterface.InfoComplete infoComplete = null;
+            for (Object key : infoMap.keySet()) {
+                if (key.equals(userID)) {
+                    ChatMsgInterface.InfoComplete temp = infoMap.get(key);
+                    if(temp != null){
+                        temp.onReqComplete(isOK, infoLightweight);
+                        infoComplete = temp;
+                    }
                 }
-                return;
+            }
+
+            if (isRemove && infoComplete != null) {
+                infoMap.remove(infoComplete);
             }
         }
     }
@@ -1029,7 +1042,7 @@ public class ChatMgr implements ModuleBase {
 
             PLogger.printObject("offlineMessage=" + message.getType());
             if (message.isSave()) {
-                ModuleMgr.getChatMgr().onReceiving(message);
+                onReceiving(message);
             }
         } catch (Exception e) {
             e.printStackTrace();
