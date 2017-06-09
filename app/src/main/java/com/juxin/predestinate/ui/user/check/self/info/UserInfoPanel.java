@@ -144,16 +144,28 @@ public class UserInfoPanel extends BasePanel {
             if (contactValues[i - count] != null) {
                 int auth = TypeConvertUtil.toInt(contactValues[i - count].split("-")[1], 0);
                 String value = contactValues[i - count].split("-")[0];
-                userInfoList.get(i).setValue(TextUtils.isEmpty(value) ? notFill : limits(auth));
-                userInfoList.get(i).setContact(value);
+                userInfoList.get(i).setValue(limits(auth));
+                if(limitsForVisiable(auth)) {//判断是否可见内容
+                    userInfoList.get(i).setContact(value);
+                }else{
+                    userInfoList.get(i).setContact("");
+                }
             }
         }
     }
 
     private String limits(int auth) {
-        return auth == 2 ? secretStr : userDetail.isMan() ?
-                getContext().getString(R.string.user_edit_info_open) :
-                getContext().getString(R.string.user_edit_info_just_vip_open);
+        if(auth == 1){//对VIP公开
+            return ModuleMgr.getCenterMgr().getMyInfo().isVip() ? getContext().getString(R.string.user_edit_info_open) :
+                    getContext().getString(R.string.user_edit_info_just_vip_open);
+        }else{
+            return ModuleMgr.getCenterMgr().getMyInfo().isVip() ? secretStr :
+                    getContext().getString(R.string.user_edit_info_just_vip_open);
+        }
+    }
+
+    private boolean limitsForVisiable(int auth) {
+        return auth ==1 && ModuleMgr.getCenterMgr().getMyInfo().isVip()? true:false;
     }
 
     //****************************************************************************************
