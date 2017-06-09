@@ -55,7 +55,7 @@ public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
                 UIShow.showPayListAct((FragmentActivity) mContext, info.getPid());
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-                map.put("time", ModuleMgr.getAppMgr().getTime());
+                map.put("time", ModuleMgr.getAppMgr().getSecondTime());
                 map.put("gem_num", info.getNum());
                 Statistics.userBehavior(SendPoint.menu_me_gem_btnpay, map);
 
