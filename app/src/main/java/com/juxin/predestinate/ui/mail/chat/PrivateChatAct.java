@@ -343,12 +343,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
             case R.id.chat_title_phone://手机
                 Statistics.userBehavior(SendPoint.chatframe_nav_tel);
-                PSP.getInstance().put("payPoint","mobile");
+                PSP.getInstance().put("payPoint", "mobile");
                 checkAndShowVip();
                 break;
             case R.id.chat_title_wx://微信
                 Statistics.userBehavior(SendPoint.chatframe_nav_weixin);
-                PSP.getInstance().put("payPoint","wx");
+                PSP.getInstance().put("payPoint", "wx");
                 checkAndShowVip();
                 break;
             case R.id.chat_title_yb://Y币
@@ -410,6 +410,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        MsgMgr.getInstance().detach(this);
         privateChat.getChatAdapter().detach();
         lastActivity = null;
     }

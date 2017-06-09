@@ -44,6 +44,7 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -325,6 +326,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onStop() {
         unregisterReceiver(netReceiver);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 
     // ------------------------ 离线消息处理 暂时放在这 Start--------------------------

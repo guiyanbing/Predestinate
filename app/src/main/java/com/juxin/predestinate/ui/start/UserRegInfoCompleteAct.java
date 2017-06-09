@@ -77,10 +77,9 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     }
 
     private void initData() {
-        MsgMgr.getInstance().attach(this);
         PSP.getInstance().put("recommendDate", TimeUtil.getData());
         postParams = new HashMap<>();
-        ifUpHead = getIntent().getIntExtra("gender",1) == 1;
+        ifUpHead = getIntent().getIntExtra("gender", 1) == 1;
     }
 
     private void initView() {
@@ -135,6 +134,8 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         rl_height_choose.setOnClickListener(this);
         user_reg_info_complete_submit.setOnClickListener(this);
         rl_marry_choose.setOnClickListener(this);
+
+        MsgMgr.getInstance().attach(this);
     }
 
     private String defValue;
@@ -257,5 +258,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                 ImageLoader.loadCircleAvatar(this, ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), img_reg_info_upload_photo);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 }
