@@ -95,12 +95,16 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
                 discover_recommend.setChecked(true);
                 discover_hot.setChecked(false);
                 switchContent(discoverFragment);
+                //统计
+                DisCoverStatistics.onClickRecommend();
                 break;
             case R.id.discover_hot:
                 setTitleRightImgGone();
                 discover_recommend.setChecked(false);
                 discover_hot.setChecked(true);
                 switchContent(hotFragment);
+                //统计
+                DisCoverStatistics.onClickHot();
                 break;
             default:
                 break;

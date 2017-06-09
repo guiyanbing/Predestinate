@@ -58,14 +58,14 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
         switch (v.getId()) {
             case R.id.bt_send_code:
                 if (checkPhone()) {
-                    ModuleMgr.getLoginMgr().reqForgotsms(phone, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                    ModuleMgr.getLoginMgr().reqForgotsms(phone, this);
                 }
                 break;
             case R.id.bt_submit:
                 if (checkPhone() && checkSubmitInfo()) {
-                    ModuleMgr.getLoginMgr().forgotPassword(phone, code, pwd, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                    ModuleMgr.getLoginMgr().forgotPassword(phone, code, pwd, this);
                 }
                 break;
 

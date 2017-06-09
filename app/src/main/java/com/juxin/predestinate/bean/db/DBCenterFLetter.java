@@ -6,18 +6,23 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
+import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -45,9 +50,35 @@ public class DBCenterFLetter {
                     return updateLetter(message);
                 }
             }
-
             return MessageConstant.OK;
         }
+    }
+
+    /**
+     * 插入
+     * @param message
+     * @param dbMsgListener
+     * @return
+     */
+    public void storageData(final BaseMessage message, final ChatMsgInterface.DBMsgListener dbMsgListener) {
+        Observable<BaseMessage> observable = isExistEx(message.getWhisperID());
+        observable.subscribe(new Action1<BaseMessage>() {
+            @Override
+            public void call(BaseMessage temp) {
+                if (temp == null) {
+                    dbMsgListener.onDBMsgListener(insertLetter(message));
+                } else {
+                    if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                            && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
+                        dbMsgListener.onDBMsgListener(updateLetter(message));
+                    } else {
+                        if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
+                            dbMsgListener.onDBMsgListener(updateLetter(message));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -210,6 +241,40 @@ public class DBCenterFLetter {
             CloseUtil.close(cursor);
         }
         return null;
+    }
+
+
+    public Observable<BaseMessage> isExistEx(String userid) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
+                .append(" WHERE ").append(FLetter.COLUMN_USERID + " = ").append(userid);
+
+        return mDatabase.createQuery(FLetter.COLUMN_USERID, sql.toString())
+                .map(new Func1<SqlBrite.Query, BaseMessage>() {
+                    @Override
+                    public BaseMessage call(SqlBrite.Query query) {
+                        Cursor cursor = query.run();
+                        try {
+                            if (cursor != null && cursor.moveToFirst()) {
+                                BaseMessage message = new BaseMessage();
+                                message.setWhisperID(CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
+                                message.setInfoJson(CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON));
+                                message.setType(CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
+                                message.setKfID(CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
+                                message.setStatus(CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
+                                message.setcMsgID(CursorUtil.getLong(cursor, FLetter.COLUMN_CMSGID));
+                                message.setRu(CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
+                                message.setTime(CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
+                                message.setJsonStr(CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                                return message;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            CloseUtil.close(cursor);
+                        }
+                        return null;
+                    }
+                });
     }
 
     public Observable<Boolean> isHaveMsg(String userid) {

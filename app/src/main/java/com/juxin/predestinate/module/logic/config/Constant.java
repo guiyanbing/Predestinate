@@ -114,8 +114,10 @@ public class Constant {
      * 4为向机器人单点打招呼(包括首页和详细资料页等)
      */
     public static final int SAY_HELLO_TYPE_ONLY = 4;
-
     //============= 打招呼类型 end =============\\
+
+    //===================打开送礼物界面的来源 ===========\\
+    public static final int OPEN_GIFT_FROM_HOT = 1;  //热门
 
     /**
      * 退出登录resultcode

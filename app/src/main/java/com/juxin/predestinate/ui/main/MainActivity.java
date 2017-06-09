@@ -42,8 +42,10 @@ import com.juxin.predestinate.ui.discover.DiscoverMFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,7 +113,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
         plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
-                "http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/square/square.html");// TODO: 2017/5/3
+                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url());
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
@@ -299,7 +301,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
                 HashMap<String, Object> data = (HashMap<String, Object>) value;
                 int type = (int) data.get("type");
-                if (type == 0 || type == 2) {
+                if ((type == 0 || type == 2) && checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL)) {
                     getOfflineMsg();
                 }
                 break;
@@ -327,9 +329,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
+    }
+
     // ------------------------ 离线消息处理 暂时放在这 Start--------------------------
     private NetReceiver netReceiver = new NetReceiver();
     private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
+    private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
+    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
 
     /**
      * 注册网络变化监听广播
@@ -346,7 +356,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public class NetReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()) {
+            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
+                    && checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL)) {
                 getOfflineMsg();
             }
         }

@@ -171,6 +171,8 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
+                //统计
+                DisCoverStatistics.onRecomendViewuser(userInfo.getUid(), position, isNear);
             }
         });
 
@@ -178,6 +180,8 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
+                //统计
+                DisCoverStatistics.onRecomendViewuser(userInfo.getUid(), position, isNear);
             }
         });
         return convertView;
@@ -229,6 +233,10 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
                                     }
                                 });
                     }
+
+                    ///统计
+                    DisCoverStatistics.onSayHello(userInfo.getUid(), position, isNear);
+
                 }
             });
         }

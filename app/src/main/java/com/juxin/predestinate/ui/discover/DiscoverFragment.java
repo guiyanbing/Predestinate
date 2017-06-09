@@ -27,8 +27,10 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static android.view.View.GONE;
 
@@ -42,7 +44,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     private static final int Look_All = 0; //查看全部
     private static final int Look_Near = 1; //只看附近的人
 
-    private static final int Group_sayHai_Msg = 100; //只看附近的人
+    private static final int Group_sayHai_Msg = 100; //群打招呼
 
     private ExListView exListView;
     private CustomStatusListView customStatusListView;
@@ -62,23 +64,18 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.discover_fragment);
-//        setTopView();
+
         initView();
         onRefresh(); //默认加载全部
         MsgMgr.getInstance().attach(this);
         return getContentView();
     }
 
-    private void setTopView() {
-        setTitle(getString(R.string.discover_title));
-        setTitleRightImg(R.drawable.f1_discover_select_ico, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDiscoverSelectDialog();
-            }
-        });
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
-
 
     private void initView() {
         groupSayhiBtn = (Button) findViewById(R.id.discover_group_sayhi_btn);
@@ -133,12 +130,16 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         adapter.setNear(false);
                         setGroupSayhiBtn(false);
                         onRefresh();
+                        //统计
+                        DisCoverStatistics.onClickLookAll();
                         dialog.dismiss();
                         break;
                     case Look_Near: //只看附近的人
                         isNearPage = true;
                         adapter.setNear(true);
                         onRefresh();
+                        //统计
+                        DisCoverStatistics.onClickLookNear();
                         dialog.dismiss();
                         break;
                 }
@@ -164,18 +165,21 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
 
-                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
-                    /**
-                     * ref 如果是 true 并且请求的如果非第一页
-                     * 那么返回来的就是第一页 应该把之前的数据都清掉
-                     * 把返回的数据作为第一页
-                     */
+                if (lightweightList.getUserInfos().size() != 0) {
+                    //统计
+                    if (page == 1) {
+                        DisCoverStatistics.onRecomendRefresh(lightweightList.getLightweightLists(), isNearPage);
+                    }
+
+                    //ref 如果是 true 并且请求的如果非第一页
+                    //那么返回来的就是第一页 应该把之前的数据都清掉，把返回的数据作为第一页
                     if (page == 1 || lightweightList.isRef()) {
                         if (infos.size() != 0) {
                             infos.clear();
                         }
                         page = 1;
                     }
+
                     infos.addAll(lightweightList.getUserInfos());
                     if (infos.size() < 10) {
                         exListView.setPullLoadEnable(false);
@@ -237,9 +241,11 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             if (!response.isCache()) {
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
-                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                if (lightweightList.getUserInfos().size() != 0) {
                     if (infos.size() != 0) {
                         infos.clear();
+                        //统计
+                        DisCoverStatistics.onRecomendRefresh(lightweightList.getLightweightLists(), isNearPage);
                     }
                     infos.addAll(lightweightList.getUserInfos());
                     if (infos.size() < 10) {
@@ -265,7 +271,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             } else {
                 UserInfoLightweightList lightweightList = new UserInfoLightweightList();
                 lightweightList.parseJson(response.getResponseString());
-                if (lightweightList != null && lightweightList.getUserInfos().size() != 0) {
+                if (lightweightList.getUserInfos().size() != 0) {
                     if (infos.size() != 0) {
                         infos.clear();
                     }
@@ -317,6 +323,8 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         }
     }
 
+    Map<Integer, Long> onclickData = null;
+
     private void doGroupSayHi() {
         if (isHasNoSayHi()) {
             if (ModuleMgr.getCenterMgr().isCanGroupSayHi(getActivity())) {
@@ -326,6 +334,18 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         } else {
             PToast.showShort(getString(R.string.say_hi_group_refresh));
         }
+
+        //统计
+        onclickData = new HashMap<>();
+        if (infos.size() != 0) {
+            for (int i = 0; i < infos.size(); i++) {
+                if (!infos.get(i).isSayHello()) {
+                    onclickData.put(i, infos.get(i).getUid());
+                }
+            }
+        }
+        DisCoverStatistics.onNearGroupSayHello(onclickData);
+
     }
 
     /**

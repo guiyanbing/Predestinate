@@ -449,15 +449,6 @@ public class CommonMgr implements ModuleBase {
         return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
-    /**
-     * 是否执行某个事件的key
-     *
-     * @return
-     */
-    public String getIsCanExKey() {
-        return "IsCanExKey_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
-    }
-
     private SayHelloDialog sayHelloDialog = new SayHelloDialog();
 
     /**

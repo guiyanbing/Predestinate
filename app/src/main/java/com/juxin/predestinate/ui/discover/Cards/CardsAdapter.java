@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.discover.DisCoverStatistics;
 
 import java.util.List;
 
@@ -83,8 +84,20 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(context, infoHot.getUid());
+                //统计
+                DisCoverStatistics.onHotViewUser(infoHot.getUid(), position);
             }
         });
+
+        vh.lin_imgs_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UIShow.showCheckOtherInfoAct(context, infoHot.getUid());
+                //统计
+                DisCoverStatistics.onClickHotImgNum(infoHot.getUid(), infoHot.getPhotoNum());
+            }
+        });
+
 
         vh.tv_img_num.setText(infoHot.getPhotoNum() + "");
         ImageLoader.loadRoundTop(context, infoHot.getAvatar(), vh.iv_avatar);
@@ -113,6 +126,9 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_video_tips));
                 }
+
+                //统计
+                DisCoverStatistics.onClickHotVideo(infoHot.getUid());
             }
         });
         //发语音
@@ -127,6 +143,9 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_audio_tips));
                 }
+
+                //统计
+                DisCoverStatistics.onClickHotVoice(infoHot.getUid());
             }
         });
         //发私聊
@@ -148,6 +167,9 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                         }
                     }, context.getString(R.string.hot_card_price_vip), "", context.getString(R.string.hot_card_price_cancle), context.getString(R.string.hot_card_price_sure), true, R.color.text_zhuyao_black);
                 }
+
+                //统计
+                DisCoverStatistics.onClickHotMsg(infoHot.getUid());
             }
         });
         //送礼物
@@ -155,6 +177,9 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 UIShow.showBottomGiftDlg(context, infoHot.getUid());
+
+                //统计
+                DisCoverStatistics.onClickHotGif(infoHot.getUid());
             }
         });
 

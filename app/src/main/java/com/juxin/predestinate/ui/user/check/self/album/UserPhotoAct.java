@@ -29,8 +29,8 @@ import java.util.List;
  * 我的相册
  * Created by Su on 2017/5/10.
  */
-
 public class UserPhotoAct extends BaseActivity implements ImgSelectUtil.OnChooseCompleteListener, AdapterView.OnItemClickListener, PObserver {
+
     private GridView grid_photo;
     private AlbumAdapter albumAdapter;
 
@@ -44,6 +44,7 @@ public class UserPhotoAct extends BaseActivity implements ImgSelectUtil.OnChoose
         setBackView(getString(R.string.user_info_photo));
 
         initView();
+        MsgMgr.getInstance().attach(this);
     }
 
     private void initView() {
@@ -62,8 +63,6 @@ public class UserPhotoAct extends BaseActivity implements ImgSelectUtil.OnChoose
         albumAdapter = new AlbumAdapter(this, userPhotoList, columnWidth);
         grid_photo.setAdapter(albumAdapter);
         grid_photo.setOnItemClickListener(this);
-
-        MsgMgr.getInstance().attach(this);
     }
 
     private void refreshView() {
@@ -109,5 +108,11 @@ public class UserPhotoAct extends BaseActivity implements ImgSelectUtil.OnChoose
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 }

@@ -85,6 +85,8 @@ public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnC
         switch (view.getId()) {
             case R.id.discover_select_cancle:
                 dismiss();
+                //统计
+                DisCoverStatistics.onClickCancle();
                 break;
         }
     }
