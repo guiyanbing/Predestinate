@@ -62,7 +62,6 @@ public class MsgMgr {
             detach(preObserver);
         }
 
-        PLogger.d("------>attach[" + observer.toString() + "], attached-size[" + rxDisposable.size() + "]");
         Disposable disposable = RxBus.getInstance().toFlowable(Msg.class)
                 .onBackpressureBuffer().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -81,6 +80,7 @@ public class MsgMgr {
         if (rxDisposable.add(disposable)) {
             classObserverMap.put(observer.getClass(), observer);
             observerDisposableMap.put(observer, disposable);
+            PLogger.d("------>attach[" + observer.getClass() + "], attached-size[" + rxDisposable.size() + "]");
         }
     }
 
@@ -91,9 +91,11 @@ public class MsgMgr {
      */
     public void detach(PObserver observer) {
         if (observer == null) return;
+
         Disposable disposable = observerDisposableMap.remove(observer);
         if (disposable != null) {
             rxDisposable.remove(disposable);
+            PLogger.d("------>detach[" + observer.getClass() + "], attached-size[" + rxDisposable.size() + "]");
         }
     }
 

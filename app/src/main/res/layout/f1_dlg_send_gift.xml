@@ -52,7 +52,7 @@
             android:id="@+id/tv_send_gift_my_diamonds"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/px15_dp"
+            android:layout_marginBottom="@dimen/px30_dp"
             android:gravity="center"
             android:text="钻石余额：1111111"
             android:textColor="@color/color_C7C7C7"

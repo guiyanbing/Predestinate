@@ -306,6 +306,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
                 break;
 
+            case MsgType.MT_Unread_change:
+                ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
+                break;
+
             default:
                 break;
         }

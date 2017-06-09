@@ -21,8 +21,8 @@ import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
  * 我的
  * Created by Kind on 2017/3/20.
  */
-
 public class UserFragment extends BaseFragment implements PObserver {
+
     private UserFragmentHeadPanel headPanel;
     private UserFragmentFootPanel footPanel;
     private CheckIntervalTimeUtil checkIntervalTimeUtil;
@@ -50,13 +50,17 @@ public class UserFragment extends BaseFragment implements PObserver {
         MsgMgr.getInstance().attach(this);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void refreshView() {
         if (headPanel != null && footPanel != null) {
             headPanel.refreshView();
             footPanel.refreshView();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshView();
     }
 
     @Override
@@ -75,19 +79,19 @@ public class UserFragment extends BaseFragment implements PObserver {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            refreshView();
+
             if (checkIntervalTimeUtil.check(60 * 1000) || (App.uid > 0 && ModuleMgr.getCenterMgr().getMyInfo().getUid() <= 0)) {
                 ModuleMgr.getCenterMgr().reqMyInfo();
             }
         }
     }
 
-
     @Override
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
-                headPanel.refreshView();
-                footPanel.refreshView();
+                refreshView();
                 break;
         }
     }
