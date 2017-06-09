@@ -73,13 +73,13 @@ public class OldDBModule {
         if (!OldDBHelper.isExitsDB())
             return;
         BriteDatabase db = provideDB(context);
-        QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM ?", MESSAGE_LIST_TABLE);
+        QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM " + MESSAGE_LIST_TABLE);
         query.subscribe(new Action1<SqlBrite.Query>() {
             @Override
             public void call(SqlBrite.Query query) {
-                Cursor cursor = query.run();
-
+                Cursor cursor = null;
                 try {
+                    cursor = query.run();
                     int c1 = cursor.getCount();
                     int c2 = 0;
                     while (cursor.moveToNext()) {
@@ -173,7 +173,7 @@ public class OldDBModule {
                                     new_status = MessageConstant.READ_STATUS;
                                     break;
                                 case 4:
-                                    // TODO: 2017/6/9 拉黑拒绝
+                                    new_status = MessageConstant.BLACKLIST_STATUS;
                                     break;
                                 default:
                                     break;
@@ -201,7 +201,7 @@ public class OldDBModule {
                         cursor.close();
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     public static Bundle getContentMap(BaseMessageType messageType, String content) {
@@ -213,7 +213,7 @@ public class OldDBModule {
                 bundle.putString("msg", content);
                 return bundle;
             }
-            
+
             JSONObject msgJSO = new JSONObject(JSONTokener(content));
             bundle.putString("msg", msgJSO.optString("msg"));
             switch (messageType) {

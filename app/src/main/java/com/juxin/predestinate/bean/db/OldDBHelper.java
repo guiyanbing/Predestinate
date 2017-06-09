@@ -3,7 +3,10 @@ package com.juxin.predestinate.bean.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.text.TextUtils;
 
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.ui.utils.Common;
 
 import java.io.File;
@@ -13,15 +16,22 @@ import java.io.File;
  */
 
 public class OldDBHelper extends SQLiteOpenHelper {
+    private static final String UPDATE_CACHE_PATH = Environment.getExternalStorageDirectory().getAbsoluteFile() + File.separator + "xiaou" + File.separator;
     private static final String DBNAME = "weshot.db";
     private static final int VERSION = 9;
 
     public static String getDBPath(){
-        return Common.getCahceDir() + DBNAME + ".bak";
+        String path = App.context.getDatabasePath(DBNAME).getPath();
+        if (new File(path).exists())
+            return path;
+        path = UPDATE_CACHE_PATH + DBNAME + ".jpg";
+        if (new File(path).exists())
+            return path;
+        return null;
     }
 
     public static boolean isExitsDB(){
-        return new File(getDBPath()).exists();
+        return !TextUtils.isEmpty(getDBPath());
     }
 
     public OldDBHelper(Context context) {
