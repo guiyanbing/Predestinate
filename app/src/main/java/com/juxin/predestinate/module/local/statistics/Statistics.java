@@ -143,9 +143,9 @@ public class Statistics {
      * 用户行为统计
      *
      * @param sendPoint 统计点
-     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     * @param fixParams 行为修正参考参数，map格式，内部拼接成json格式字符串
      */
-    public static void userBehavior(SendPoint sendPoint, String fixParams) {
+    public static void userBehavior(SendPoint sendPoint, Map<String, Object> fixParams) {
         userBehavior(sendPoint, 0, fixParams);
     }
 
@@ -154,10 +154,10 @@ public class Statistics {
      *
      * @param sendPoint 统计点
      * @param to_uid    与其产生交互的用户uid
-     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     * @param fixParams 行为修正参考参数，map格式，内部拼接成json格式字符串
      */
-    public static void userBehavior(SendPoint sendPoint, long to_uid, String fixParams) {
-        userBehavior(sendPoint.toString(), to_uid, fixParams);
+    public static void userBehavior(SendPoint sendPoint, long to_uid, Map<String, Object> fixParams) {
+        userBehavior(sendPoint.toString(), to_uid, fixParams == null ? "{}" : JSON.toJSONString(fixParams));
     }
 
     /**
