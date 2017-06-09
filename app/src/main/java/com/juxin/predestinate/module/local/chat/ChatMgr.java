@@ -470,24 +470,24 @@ public class ChatMgr implements ModuleBase {
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
 
-//                if (!messageRet.isOk() || !messageRet.isS()) {
-//                    updateFail(message, messageRet);
-//                } else {
-//                    checkPermissions(message);
-//                    updateOk(message, messageRet);
-//                    sendMessageRefreshYcoin();
-//                }
-//                onInternalPro(messageRet);
+                //                if (!messageRet.isOk() || !messageRet.isS()) {
+                //                    updateFail(message, messageRet);
+                //                } else {
+                //                    checkPermissions(message);
+                //                    updateOk(message, messageRet);
+                //                    sendMessageRefreshYcoin();
+                //                }
+                //                onInternalPro(messageRet);
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
 
-                if(messageRet.isOk() && messageRet.isS()){
+                if (messageRet.isOk() && messageRet.isS()) {
                     checkPermissions(message);
                     updateOk(message, messageRet);
                     sendMessageRefreshYcoin();
-                }else {
-                    if(MessageRet.MSG_CODE_PULL_BLACK == messageRet.getS()){
+                } else {
+                    if (MessageRet.MSG_CODE_PULL_BLACK == messageRet.getS()) {
                         updateFailBlacklist(message, messageRet);
-                    }else {
+                    } else {
                         updateFail(message, messageRet);
                     }
                     onInternalPro(messageRet);
@@ -621,7 +621,7 @@ public class ChatMgr implements ModuleBase {
             message.setMsgID(MessageConstant.NumNo);
             message.setTime(getTime());
         }
-        message.setStatus(MessageConstant.FAIL_STATUS);
+        message.setStatus(status);
         long upRet = dbCenter.updateMsg(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
     }
