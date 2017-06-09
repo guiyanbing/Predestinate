@@ -9,7 +9,6 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
-import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
@@ -81,9 +80,9 @@ public class Statistics {
      * @return 用户切换帐号登录-false，同一帐号登录-true
      */
     private static boolean isSwitchAccount() {
-        String account = PSP.getInstance().getString(BEHAVIOR_ACCOUNT_KEY, "");
-        if (TextUtils.isEmpty(account) || ModuleMgr.getLoginMgr().getUid() == TypeConvertUtil.toLong(account)) {
-            PSP.getInstance().put(BEHAVIOR_ACCOUNT_KEY, String.valueOf(ModuleMgr.getLoginMgr().getUid()));
+        long account = PSP.getInstance().getLong(BEHAVIOR_ACCOUNT_KEY, -1);
+        if (account == -1 || ModuleMgr.getLoginMgr().getUid() == account) {
+            PSP.getInstance().put(BEHAVIOR_ACCOUNT_KEY, ModuleMgr.getLoginMgr().getUid());
             return false;
         }
         return true;
