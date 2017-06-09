@@ -163,7 +163,7 @@ public class VideoAudioChatHelper {
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
-    public void openInvitedActivity(Activity activity, int vcId, long dstUid, int chatType) {
+    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType) {
         startRtcInitActivity(activity, newBundle(vcId, dstUid, 2, chatType, 0));
     }
 
@@ -232,7 +232,7 @@ public class VideoAudioChatHelper {
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
-            int vcID = resJo.optInt("vc_id");
+            long vcID = resJo.optLong("vc_id");
             int msgVer = resJo.optInt("confer_msgver");
             ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
@@ -255,14 +255,14 @@ public class VideoAudioChatHelper {
      * @param msgVer     程序版本号
      * @return
      */
-    private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType, int msgVer) {
+    private Bundle newBundle(long vcId, long dstUid, int inviteType, int chatType, int msgVer) {
         int foreverType = PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0);
         Bundle bundle = new Bundle();
         bundle.putString("vc_get_user_url", UrlParam.reqUserInfoSummary.getFinalUrl());
         bundle.putString("vc_cookie", ModuleMgr.getLoginMgr().getCookieVerCode());
         bundle.putInt("vc_chat_type", chatType);
         bundle.putInt("vc_invite_type", inviteType);
-        bundle.putInt("vc_id", vcId);
+        bundle.putLong("vc_id", vcId);
         bundle.putInt("vc_project", 1);
         bundle.putString("vc_channel", JniUtil.GetEncryptString("juxin_live_" + vcId));
         bundle.putString("vc_uid", ModuleMgr.getCenterMgr().getMyInfo().getUid() + "");

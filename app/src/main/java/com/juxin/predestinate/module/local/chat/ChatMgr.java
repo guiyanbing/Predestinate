@@ -138,7 +138,7 @@ public class ChatMgr implements ModuleBase {
      *
      * @param otherID
      */
-    public void sendVideoMsgLocalSimulation(String otherID, int type, int videoID) {
+    public void sendVideoMsgLocalSimulation(String otherID, int type, long videoID) {
         final VideoMessage videoMessage = new VideoMessage(null, otherID, type, videoID, 3, 3);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
         videoMessage.setDataSource(MessageConstant.FOUR);
