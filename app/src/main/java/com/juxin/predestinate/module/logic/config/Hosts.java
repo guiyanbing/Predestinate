@@ -9,7 +9,7 @@ public class Hosts {
     // --------------------逻辑服务器地址 start-----------------------
     public static String NO_HOST = "no_host";
 
-    public static int SERVER_TYPE = 1;//0-正式服，1-测试服，对应以上几个host-array的position
+    public static int SERVER_TYPE = 0;//0-正式服，1-测试服，对应以上几个host-array的position
 
     private static final String[] TCP_HOST = {"sc.app.yuanfenba.net", "123.59.187.33"};
     private static final String[] PHP_HOST = {"http://api2.app.yuanfenba.net/", "http://test.api2.app.yuanfenba.net/"};
@@ -37,4 +37,9 @@ public class Hosts {
     public static final String H5_BILL = H5_HOST + "setting/tollCollection.html";      // 话费领取
     public static final String H5_ROTARY = H5_HOST + "turntable/turntable.html";       // 大转盘设置
     // ---------------------H5 assets路径 end--------------------
+
+    // -----------------------备份地址 start---------------------------
+    // 广场本地备份地址
+    public static final String LOCAL_SQUARE_URL = "http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/square/square.html";
+    // -----------------------备份地址 end---------------------------
 }
