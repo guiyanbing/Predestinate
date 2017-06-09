@@ -189,8 +189,8 @@ public class OldDBModule {
                                 message.setStatus(new_status);
                             }
 
-                            message.setSendID(receive_send_status == 0 ? other_id : login_id);
-                            message.setWhisperID((receive_send_status == 0 ? login_id : other_id) + "");
+                            message.setSendID(receive_send_status == 0 ? other_id : login_id);//receive_send_status == 0 ? other_id : login_id
+                            message.setWhisperID(other_id + "");//(receive_send_status == 0 ? login_id : other_id) + ""
                             message.setMsgID(msgID);
                             message.setType(type);
                             message.setTime(time);
