@@ -1,7 +1,6 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -36,9 +35,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,9 +43,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -139,7 +134,7 @@ public class ChatMgr implements ModuleBase {
      *
      * @param otherID
      */
-    public void sendVideoMsgLocalSimulation(String otherID, int type, int videoID) {
+    public void sendVideoMsgLocalSimulation(String otherID, int type, long videoID) {
         final VideoMessage videoMessage = new VideoMessage(null, otherID, type, videoID, 3, 3);
         videoMessage.setStatus(MessageConstant.OK_STATUS);
         videoMessage.setDataSource(MessageConstant.FOUR);
@@ -475,15 +470,28 @@ public class ChatMgr implements ModuleBase {
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
 
-                if (!messageRet.isOk() || !messageRet.isS()) {
-                    updateFail(message, messageRet);
-                } else {
+                //                if (!messageRet.isOk() || !messageRet.isS()) {
+                //                    updateFail(message, messageRet);
+                //                } else {
+                //                    checkPermissions(message);
+                //                    updateOk(message, messageRet);
+                //                    sendMessageRefreshYcoin();
+                //                }
+                //                onInternalPro(messageRet);
+                PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
+
+                if (messageRet.isOk() && messageRet.isS()) {
                     checkPermissions(message);
                     updateOk(message, messageRet);
                     sendMessageRefreshYcoin();
+                } else {
+                    if (MessageRet.MSG_CODE_PULL_BLACK == messageRet.getS()) {
+                        updateFailBlacklist(message, messageRet);
+                    } else {
+                        updateFail(message, messageRet);
+                    }
+                    onInternalPro(messageRet);
                 }
-                onInternalPro(messageRet);
-                PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
             }
 
             @Override
@@ -592,6 +600,20 @@ public class ChatMgr implements ModuleBase {
     }
 
     private void updateFail(BaseMessage message, MessageRet messageRet) {
+        updateFail(message, messageRet, MessageConstant.FAIL_STATUS);
+    }
+
+    private void updateFailBlacklist(BaseMessage message, MessageRet messageRet) {
+        updateFail(message, messageRet, MessageConstant.BLACKLIST_STATUS);
+    }
+
+    /**
+     * 发送失败
+     * @param message
+     * @param messageRet
+     * @param status
+     */
+    private void updateFail(BaseMessage message, MessageRet messageRet, int status) {
         if (messageRet != null && messageRet.getMsgId() > 0) {
             message.setMsgID(messageRet.getMsgId());
             message.setTime(messageRet.getTm());
@@ -599,7 +621,7 @@ public class ChatMgr implements ModuleBase {
             message.setMsgID(MessageConstant.NumNo);
             message.setTime(getTime());
         }
-        message.setStatus(MessageConstant.FAIL_STATUS);
+        message.setStatus(status);
         long upRet = dbCenter.updateMsg(message);
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), upRet != MessageConstant.ERROR, message);
     }
@@ -633,6 +655,14 @@ public class ChatMgr implements ModuleBase {
         message.setStatus(MessageConstant.UNREAD_STATUS);
         PLogger.printObject(message);
         pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
+    }
+
+    /**
+     * 批量接收消息
+     * @param baseMessageList
+     */
+    public void onReceivingList(List<BaseMessage> baseMessageList) {
+        dbCenter.insertListMsg(baseMessageList);
     }
 
     /**
@@ -965,18 +995,23 @@ public class ChatMgr implements ModuleBase {
      * @param isOK            是否请求成功 true是成功
      * @param infoLightweight 个人资料数据
      */
-    private synchronized void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
+    private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.printObject(infoLightweight);
-        Set<Map.Entry<Long, ChatMsgInterface.InfoComplete>> entrys = infoMap.entrySet();
-        for(Iterator i = entrys.iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry)i.next();
-            if (userID == (Long)entry.getKey()) {
-                ChatMsgInterface.InfoComplete infoComplete = (ChatMsgInterface.InfoComplete) entry.getValue();
-                infoComplete.onReqComplete(isOK, infoLightweight);
-                if (isRemove) {
-                    i.remove();
+        synchronized (infoMap) {
+            if (infoMap.size() <= 0) return;
+            ChatMsgInterface.InfoComplete infoComplete = null;
+            for (Object key : infoMap.keySet()) {
+                if (key.equals(userID)) {
+                    ChatMsgInterface.InfoComplete temp = infoMap.get(key);
+                    if(temp != null){
+                        temp.onReqComplete(isOK, infoLightweight);
+                        infoComplete = temp;
+                    }
                 }
-                return;
+            }
+
+            if (isRemove && infoComplete != null) {
+                infoMap.remove(infoComplete);
             }
         }
     }
@@ -1007,7 +1042,7 @@ public class ChatMgr implements ModuleBase {
 
             PLogger.printObject("offlineMessage=" + message.getType());
             if (message.isSave()) {
-                ModuleMgr.getChatMgr().onReceiving(message);
+                onReceiving(message);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -37,11 +37,11 @@ public class DBCenterFLetter {
         if (temp == null) {//没有数据
             return insertLetter(message);
         } else {
-            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()){
+            if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
                 return updateLetter(message);
-            }else {
-                if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
+            } else {
+                if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
                     return updateLetter(message);
                 }
             }
@@ -189,23 +189,20 @@ public class DBCenterFLetter {
         Cursor cursor = null;
         try {
             StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
-                    .append(" WHERE ")
-                    .append(FLetter.COLUMN_USERID + " = ?");
+                    .append(" WHERE ").append(FLetter.COLUMN_USERID + " = ?");
             cursor = mDatabase.query(sql.toString(), userid);
             if (cursor != null && cursor.moveToFirst()) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(FLetter._ID, CursorUtil.getLong(cursor, FMessage._ID));
-                bundle.putString(FLetter.COLUMN_USERID, CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
-                bundle.putString(FLetter.COLUMN_INFOJSON, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON));
-                bundle.putInt(FLetter.COLUMN_TYPE, CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
-                bundle.putInt(FLetter.COLUMN_KFID, CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
-                bundle.putInt(FLetter.COLUMN_STATUS, CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
-                bundle.putLong(FLetter.COLUMN_CMSGID, CursorUtil.getLong(cursor, FLetter.COLUMN_CMSGID));
-                bundle.putInt(FLetter.COLUMN_RU, CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
-                bundle.putLong(FLetter.COLUMN_TIME, CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
-                bundle.putString(FLetter.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
-
-                return BaseMessage.parseToLetterMessage(bundle);
+                BaseMessage message = new BaseMessage();
+                message.setWhisperID(CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
+                message.setInfoJson(CursorUtil.getBlobToString(cursor, FLetter.COLUMN_INFOJSON));
+                message.setType(CursorUtil.getInt(cursor, FLetter.COLUMN_TYPE));
+                message.setKfID(CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
+                message.setStatus(CursorUtil.getInt(cursor, FLetter.COLUMN_STATUS));
+                message.setcMsgID(CursorUtil.getLong(cursor, FLetter.COLUMN_CMSGID));
+                message.setRu(CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
+                message.setTime(CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
+                message.setJsonStr(CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                return message;
             }
         } catch (Exception e) {
             e.printStackTrace();
