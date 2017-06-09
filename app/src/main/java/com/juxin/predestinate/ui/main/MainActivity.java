@@ -23,6 +23,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -75,6 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initData() {
+        Statistics.startUp();
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -88,7 +90,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().getCustomerserviceContact();//获取客服联系信息
         UIShow.showWebPushDialog(this);//内部根据在线配置判断是否展示活动推送弹窗
 
-        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size()<=0)
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() <= 0)
             ModuleMgr.getCommonMgr().requestGiftList(null);
 
         showSayHelloDialog();//判断男性展示一键打招呼弹窗
@@ -261,6 +263,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             long doubleExitTime = System.currentTimeMillis();
             if (doubleExitTime - firstExitTime < 2000) {
+                Statistics.shutDown();
                 finish();//假退出，只关闭当前页面
             } else {
                 firstExitTime = doubleExitTime;
