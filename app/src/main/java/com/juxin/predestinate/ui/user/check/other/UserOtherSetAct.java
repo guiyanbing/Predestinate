@@ -16,6 +16,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -249,6 +250,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
             return;
         }
         ModuleMgr.getCenterMgr().reqRemoveBlack(userDetail.getUid(), this);
+        StatisticsMessage.blackRemove(userDetail.getUid());
     }
 
     /**

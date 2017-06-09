@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.local.statistics.StatisticsPayAndLoginAfter;
+import com.juxin.predestinate.module.local.statistics.StatisticsLoginAfter;
 import com.juxin.predestinate.module.util.UIShow;
 
 
@@ -63,7 +63,7 @@ public class WantMoneyDlg extends Dialog {
             @Override
             public void onClick(View v) {
                 UIShow.showDemandRedPacketAct(context);
-                StatisticsPayAndLoginAfter.moneyHelp();
+                StatisticsLoginAfter.moneyHelp();
                 dismiss();
             }
         });

@@ -20,6 +20,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -216,9 +218,11 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 switch (mailMsgID) {
                     case Follow_Msg://谁关注我
                         UIShow.showMyAttentionAct(getContext());
+                        StatisticsMessage.whoFollowMe();
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());
+                        StatisticsMessage.firendClick();
                         break;
                     case Greet_Msg://打招呼的人
                         UIShow.showSayHelloUserAct(getActivity());
@@ -226,6 +230,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 }
             } else {
                 UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKfID());
+                StatisticsMessage.openChat(message.getLWhisperID(), ModuleMgr.getChatListMgr().getNoReadNum(message.getLWhisperID()));
             }
         }
     }
@@ -288,6 +293,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 setTitleLeftContainerRemoveAll();
                 listMail.smoothCloseChooseView();
                 mailDelInfoList.clear();
+                StatisticsMessage.deleteUser(mailDelInfoList);
                 break;
             case R.id.mail_all_ignore:
                 //忽略所有未读消息
