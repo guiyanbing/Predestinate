@@ -186,7 +186,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         cus_top_img_phone = (ImageView) baseTitleViewRight.findViewById(R.id.cus_top_title_img_phone);
         cus_top_img_phone.setOnClickListener(this);
 
-
         setNickName(name);
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//缘分小秘书
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
@@ -201,7 +200,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private void setNickName(String nickName) {
         String str = whisperID + "";
 
-        if(whisperID == MailSpecialID.customerService.getSpecialID()){
+        if (whisperID == MailSpecialID.customerService.getSpecialID()) {
             str = MailSpecialID.customerService.getSpecialIDName();
         }
 
@@ -243,7 +242,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         privateChat.getChatAdapter().onDataUpdate();
                     }
                     name = infoLightweight.getShowName();
-                    privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
             }
         });

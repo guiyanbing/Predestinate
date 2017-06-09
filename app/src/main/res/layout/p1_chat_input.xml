@@ -96,8 +96,6 @@
                     style="@style/chat_input_text_edit" />
             </FrameLayout>
 
-            <!--<View style="@style/divider_line_vertical" />-->
-
             <ImageView
                 android:id="@+id/chat_expression"
                 style="@style/chat_input_btn"

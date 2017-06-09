@@ -195,7 +195,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return isTodayChat.equals("") || !isTodayChat.equals(currentData);
     }
 
-
     /**
      * 批量删除消息
      *
@@ -227,8 +226,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * 更新已读
      */
     public void updateToReadAll() {
-        long ret = dbCenter.updateToReadAll();
-        if (ret != MessageConstant.ERROR) {
+        if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
             getWhisperList(false);
         }
     }

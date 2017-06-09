@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.util.TimeUtil;
 import java.io.File;
 
 /**
+ * 录语音
  * Created by Kind on 2017/3/31.
  */
 
