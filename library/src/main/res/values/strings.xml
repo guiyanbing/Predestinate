@@ -12,4 +12,5 @@
 
     <!-- ImageLoader标识ImageView tag用id-->
     <string name="view_url_tag_id"></string>
+    <string name="view_trans_tag_id"></string>
 </resources>
