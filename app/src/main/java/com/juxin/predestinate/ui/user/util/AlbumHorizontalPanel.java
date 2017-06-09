@@ -5,12 +5,16 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.UserCheckInfoAct;
@@ -98,12 +102,16 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
         switch (showType) {
             case EX_HORIZONTAL_ALBUM:
                 UserDetail info = ModuleMgr.getCenterMgr().getMyInfo();
+                PSP.getInstance().put(Constant.FLIP_ALBUM_UID, info.getUid());
+                String picture = userDetail.getUserPhotos().get(position).getPic();
                 if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+                    Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(userDetail.getUid(),picture,position+1,true));
                     UIShow.showPhotoOfSelf((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                     return;
                 }
 
                 if (!info.isMan()) {
+                    Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(userDetail.getUid(),picture,position+1,true));
                     UIShow.showPhotoOfOther((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                     return;
                 }
@@ -112,7 +120,7 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
                     showVipTips();
                     return;
                 }
-
+                Statistics.userBehavior(SendPoint.userinfo_album, userDetail.getUid(), Statistics.addUserInfoAlbum(userDetail.getUid(),picture,position+1,true));
                 UIShow.showPhotoOfOther((FragmentActivity) getContext(), (Serializable) userDetail.getUserPhotos(), position);
                 break;
 

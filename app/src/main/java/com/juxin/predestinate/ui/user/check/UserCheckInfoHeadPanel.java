@@ -15,6 +15,8 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
@@ -112,6 +114,7 @@ public class UserCheckInfoHeadPanel extends BasePanel implements IMProxy.SendCal
                     break;
 
                 case R.id.ll_guanzhu:       // 关注星标
+                    Statistics.userBehavior(SendPoint.userinfo_btnfollow, userDetail.getUid());
                     handleFollow();
                     break;
             }
