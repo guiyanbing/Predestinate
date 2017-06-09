@@ -65,7 +65,6 @@ public enum SendPoint {
     menu_me_meauth_telauth_btnverifycode,   // 获取验证码
     menu_me_meauth_telauth_btnverify,       // 立即验证按钮
     menu_me_avatar,                         // 上传头像
-    menu_me_qdjl,                           // 抢夺记录
     menu_me_sgzw,                           // 谁关注我
     menu_me_money,                          // 我的钱包
     menu_me_money_withdraw,                 // 立即提现
@@ -75,14 +74,12 @@ public enum SendPoint {
     menu_me_redpackage_sylw,                //我要赚红包->索要礼物(普通点击)
     menu_me_redpackage_sylw_send,           //我要赚红包->索要礼物->发送按钮
     menu_me_redpackage_sylw_voice,          //我要赚红包->索要礼物->按住说话按钮(普通点击)
-    //menu_me_redpackage_dzp, //我的->我要赚红包->开心大转盘(普通点击)
-    //menu_me_redpackage_dzp_save, //我的->我要赚红包->开心大转盘->保存按钮
+    menu_me_redpackage_dzp, //我的->我要赚红包->开心大转盘(普通点击)
     menu_me_y,                              // 我的Y币
     menu_me_gem,                            // 我的钻石
     menu_me_gem_explain,                    // 钻石说明
     menu_me_gem_btnpay,                     // 点击钻石支付按钮
     menu_me_gift,                           // 我的礼物
-    menu_me_zjlf,                           // 最近来访
     menu_me_profile,                        // 个人资料
     menu_me_album,                          // 我的相册
     menu_me_setting,                        // 设置中心

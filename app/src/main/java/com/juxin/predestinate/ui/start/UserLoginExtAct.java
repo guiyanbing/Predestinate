@@ -20,6 +20,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.local.login.LoginMgr;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.BaseUtil;
@@ -124,6 +126,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
                 endAnimate();
                 break;
             case R.id.txt_user_login_toReg://免费注册
+                Statistics.userBehavior(SendPoint.login_freereg);
                 UIShow.showUserRegInfoAct(this);
                 finish();
                 break;

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.local.location.LocationMgr;
@@ -45,7 +46,20 @@ public class Statistics {
     }
 
     /**
-     * 向大数据发送位置统计：5min一次
+     * 每隔5min发送一次定位信息
+     */
+    public static void loopLocation() {
+        MsgMgr.getInstance().delay(new Runnable() {
+            @Override
+            public void run() {
+                location();
+                loopLocation();
+            }
+        }, Constant.CHAT_RESEND_TIME, false);
+    }
+
+    /**
+     * 向大数据发送位置统计
      */
     public static void location() {
         if (ModuleMgr.getCenterMgr().getMyInfo().getUid() == 0) return;

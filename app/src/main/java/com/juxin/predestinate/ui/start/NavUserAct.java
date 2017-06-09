@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -35,10 +37,12 @@ public class NavUserAct extends BaseActivity {
             switch (v.getId()) {
                 case R.id.btn_user_nav_login:
                     UIShow.showUserLoginExtAct(NavUserAct.this);
+                    Statistics.userBehavior(SendPoint.welcome_login);
                     break;
 
                 case R.id.btn_user_nav_reg:
                     UIShow.showUserRegInfoAct(NavUserAct.this);
+                    Statistics.userBehavior(SendPoint.welcome_regist);
                     break;
                 default:
                     break;
