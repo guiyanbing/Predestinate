@@ -2,14 +2,29 @@ package com.juxin.predestinate.bean.db;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage.BaseMessageType;
+import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 
+import org.json.JSONObject;
+
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by siow on 2017/5/19.
@@ -27,18 +42,36 @@ public class OldDBModule {
     public static final int INDEX_COLUMN_TIME = 5;
     public static final int INDEX_COLUMN_RECEIVE_SEND_STATUS = 6;
     public static final int INDEX_COLUMN_STATUS = 7;
-    //	public static final int INDEX_COLUMN_CONTENT_ID = 8;
     public static final int INDEX_COLUMN_MSG_TYPE = 9;
+    private static OldDBModule instance;
+
+    public static OldDBModule getInstance() {
+        if (instance == null) {
+            synchronized (OldDBModule.class) {
+                if (instance == null) {
+                    instance = new OldDBModule();
+                }
+            }
+        }
+        return instance;
+    }
+
+    @Inject
+    DBCenter dbCenter;
 
     @Singleton
     private BriteDatabase provideDB(Context context) {
         final SqlBrite.Builder builder = new SqlBrite.Builder();
         OldDBHelper oldDBHelper = new OldDBHelper(context);
-        BriteDatabase db = builder.build().wrapDatabaseHelper(oldDBHelper, rx.schedulers.Schedulers.io());
+        BriteDatabase db = builder.build().wrapDatabaseHelper(oldDBHelper, Schedulers.io());
         return db;
     }
 
-    public void getMsgData(Context context) {
+    public void updateDB(Context context) {
+        if (ModuleMgr.getAppMgr().appRunCount() > 1)
+            return;
+        if (!OldDBHelper.isExitsDB())
+            return;
         BriteDatabase db = provideDB(context);
         QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM ?", MESSAGE_LIST_TABLE);
         query.subscribe(new Action1<SqlBrite.Query>() {
@@ -47,16 +80,120 @@ public class OldDBModule {
                 Cursor cursor = query.run();
 
                 try {
+                    int c1 = cursor.getCount();
+                    int c2 = 0;
                     while (cursor.moveToNext()) {
-//                message.setLogin_id(cursor.getString(INDEX_COLUMN_LOGIN_ID));
-//                message.setMsg_id(cursor.getLong(INDEX_COLUMN_MSG_ID));
-//                message.setOther_id(cursor.getString(INDEX_COLUMN_OTHER_ID));
-//                message.setContent(cursor.getString(INDEX_COLUMN_CONTENT));
-//                message.setTime(cursor.getString(INDEX_COLUMN_TIME));
-//                message.setReceive_send_status(cursor.getInt(INDEX_COLUMN_RECEIVE_SEND_STATUS));
-//                message.setMsg_status(cursor.getInt(INDEX_COLUMN_STATUS));
-//                message.setMsg_type(cursor.getInt(INDEX_COLUMN_MSG_TYPE));
+                        int type = cursor.getInt(INDEX_COLUMN_MSG_TYPE);
+                        //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
+                        int msg_status = cursor.getInt(INDEX_COLUMN_STATUS);
+                        int receive_send_status = cursor.getInt(INDEX_COLUMN_RECEIVE_SEND_STATUS);//0接收  1发送
+                        long msgID = cursor.getLong(INDEX_COLUMN_MSG_ID);
+                        long login_id = Long.parseLong(cursor.getString(INDEX_COLUMN_LOGIN_ID));
+                        long other_id = Long.parseLong(cursor.getString(INDEX_COLUMN_OTHER_ID));
+                        long time = Long.parseLong(cursor.getString(INDEX_COLUMN_TIME));
+                        String content = cursor.getString(INDEX_COLUMN_CONTENT);
+
+                        BaseMessageType messageType = BaseMessageType.valueOf(type);
+                        if (messageType == null)
+                            continue;
+
+                        BaseMessage message = messageType.msgClass.newInstance();
+                        Bundle bundle = getContentMap(messageType, content);
+
+                        switch (messageType) {
+                            case hi:
+                            case common:
+                                CommonMessage commonMessage = (CommonMessage) message;
+                                commonMessage.setMsgDesc(bundle.getString("msg")); //消息内容
+                                //图片
+                                commonMessage.setImg(bundle.getString("imageUrl"));
+                                //语音
+                                commonMessage.setVoiceUrl(bundle.getString("voiceUrl"));
+                                commonMessage.setVoiceLen(bundle.getInt("voiceLen"));
+                                commonMessage.setVoiceUserid(bundle.getLong("voiceUid"));
+                                //视频
+                                commonMessage.setVideoUrl(bundle.getString("videoUrl"));
+                                commonMessage.setVideoLen(bundle.getInt("videoLen"));
+                                commonMessage.setVideoThumb(bundle.getString("videoThumb"));
+                                commonMessage.setVideoWidth(bundle.getInt("videoThumbWidth"));
+                                commonMessage.setVideoHeight(bundle.getInt("videoThumbHeight"));
+                                break;
+                            case hint:
+                            case html:
+                            case htmlText:
+                            case autoUpdateHtml:
+                                TextMessage textMessage = (TextMessage) message;
+                                textMessage.setHtm(bundle.getString("htm"));
+                                textMessage.setMsgDesc(bundle.getString("msg"));
+                                break;
+                            case gift:
+                            case wantGift:
+                                GiftMessage giftMessage = (GiftMessage) message;
+                                giftMessage.setGiftID(bundle.getInt("gift_id"));
+                                giftMessage.setGiftCount(bundle.getInt("count"));
+                                giftMessage.setGiftLogID(bundle.getLong("gift_log_id"));
+                                giftMessage.setfStatus(bundle.getBoolean("giftReceived") ? 0 : 1);
+                                break;
+                            case video:
+                                VideoMessage videoMessage = (VideoMessage) message;
+                                videoMessage.setVideoID((int) bundle.getLong("vc_id"));
+                                videoMessage.setSpecialMsgID(bundle.getLong("vc_id"));
+                                videoMessage.setVideoTp(bundle.getInt("vc_tp"));
+                                videoMessage.setVideoMediaTp(bundle.getInt("media_tp"));
+                                videoMessage.setVideoVcEscCode(bundle.getInt("vc_esc_code"));
+                                videoMessage.setVideoVcTalkTime(bundle.getInt("vc_talk_time"));
+                                videoMessage.setVc_channel_key(bundle.getString("vc_channel_key"));
+                                break;
+                            default:
+                                message.setMsgDesc(bundle.getString("msg"));
+                                break;
+                        }
+
+                        if (messageType == BaseMessageType.video){
+                            msgID = bundle.getLong("d");
+                            message.setSpecialMsgID(bundle.getLong("vc_id"));
+                        }
+                        //0接收  1发送
+                        if (receive_send_status == 0) {
+                            message.setMsgID(msgID);
+                            message.setStatus(MessageConstant.READ_STATUS);
+                        } else {
+                            //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
+                            int new_status = 0;
+                            switch (msg_status){
+                                case 0:
+                                case 2:
+                                    new_status = MessageConstant.FAIL_STATUS;
+                                    break;
+                                case 1:
+                                case 5:
+                                    new_status = MessageConstant.OK_STATUS;
+                                    break;
+                                case 3:
+                                    new_status = MessageConstant.READ_STATUS;
+                                    break;
+                                case 4:
+                                    // TODO: 2017/6/9 拉黑拒绝
+                                    break;
+                                default:
+                                    break;
+                            }
+                            message.setcMsgID(msgID);
+                            message.setStatus(new_status);
+                        }
+
+                        message.setSendID(receive_send_status == 0 ? other_id : login_id);
+                        message.setWhisperID((receive_send_status == 0 ? login_id : other_id) + "");
+                        message.setMsgID(msgID);
+                        message.setType(type);
+                        message.setTime(time);
+                        message.setDataSource(MessageConstant.ONE);
+                        message.setChannelID(null);
+
+                        if (dbCenter.insertMsg(message) != MessageConstant.ERROR)
+                            c2++;
                     }
+                    Log.d("aaa", "c1:" + c1 + ", c2:" + c2);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -67,29 +204,96 @@ public class OldDBModule {
         });
     }
 
-//    public List<Message_List> query_Message_List(String login_id, String other_id, int offset, int maxResult) {
-//        List<Message_List> message_Lists = new ArrayList<Message_List>();
-//        Cursor cursor = mSQLiteDatabase.query(MESSAGE_LIST_TABLE, null, "login_id = ? and other_id = ?", new String[]{login_id, other_id},
-//                null, null, "_id desc", offset + "," + maxResult);
-//        try {
-//            while (cursor.moveToNext()) {
-//                Message_List message = new Message_List();
-//                message.setLogin_id(cursor.getString(INDEX_COLUMN_LOGIN_ID));
-//                message.setMsg_id(cursor.getLong(INDEX_COLUMN_MSG_ID));
-//                message.setOther_id(cursor.getString(INDEX_COLUMN_OTHER_ID));
-//                message.setContent(cursor.getString(INDEX_COLUMN_CONTENT));
-//                message.setTime(cursor.getString(INDEX_COLUMN_TIME));
-//                message.setReceive_send_status(cursor.getInt(INDEX_COLUMN_RECEIVE_SEND_STATUS));
-//                message.setMsg_status(cursor.getInt(INDEX_COLUMN_STATUS));
-//                message.setMsg_type(cursor.getInt(INDEX_COLUMN_MSG_TYPE));
-//                message_Lists.add(message);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (cursor != null)
-//                cursor.close();
-//        }
-//        return message_Lists;
-//    }
+    public static Bundle getContentMap(BaseMessageType messageType, String content) {
+        Bundle bundle = new Bundle();
+        try {
+            if (TextUtils.isEmpty(content) ||
+                    (content.charAt(0) != '{') ||
+                    (content.charAt(content.length() - 1) != '}')) {
+                bundle.putString("msg", content);
+                return bundle;
+            }
+            
+            JSONObject msgJSO = new JSONObject(JSONTokener(content));
+            bundle.putString("msg", msgJSO.optString("msg"));
+            switch (messageType) {
+                case common:
+                case hi:
+                    if (!msgJSO.isNull("voice")) {
+                        String voiceUrl = msgJSO.optJSONObject("voice").optString("url");
+                        if (!TextUtils.isEmpty(voiceUrl) && !voiceUrl.endsWith(".amr"))
+                            voiceUrl = voiceUrl + ".amr";
+                        bundle.putString("voiceUrl", voiceUrl);
+                        bundle.putInt("voiceLen", Integer.parseInt(msgJSO.optJSONObject("voice").optString("len")));
+                        bundle.putLong("voiceUid", Long.parseLong(msgJSO.optJSONObject("voice").optString("voice_userid")));
+                        //bundle.putString("voiceMod", msgJSO.optJSONObject("voice").optString("mod"));
+                    } else if (!msgJSO.isNull("video")) {
+                        bundle.putString("videoUrl", msgJSO.optJSONObject("video").optString("url"));
+                        bundle.putInt("videoLen", Integer.parseInt(msgJSO.optJSONObject("video").optString("len")));
+                        bundle.putString("videoThumb", msgJSO.optJSONObject("video").optString("thumb"));
+                        bundle.putInt("videoThumbWidth", msgJSO.optJSONObject("video").optInt("width"));
+                        bundle.putInt("videoThumbHeight", msgJSO.optJSONObject("video").optInt("height"));
+                    } else if (!msgJSO.isNull("image")) {
+                        bundle.putString("imageUrl", msgJSO.optString("image"));
+                    }
+                    break;
+                case gift:
+                    if (msgJSO.isNull("gift")){
+                        JSONObject jsc = msgJSO.optJSONObject("gift");
+                        bundle.putInt("gift_id", jsc.optInt("gift_id"));
+                        bundle.putInt("count", jsc.optInt("count"));
+                        bundle.putLong("gift_log_id", jsc.optLong("gift_log_id"));
+                        bundle.putBoolean("giftReceived", jsc.optBoolean("received"));
+                        bundle.putString("giftUrl", msgJSO.optString("gift_url"));
+                        bundle.putString("giftInfo", msgJSO.optString("info"));
+                    }
+                    break;
+                case wantGift:
+                    if (!msgJSO.isNull("give_gift")) {
+                        JSONObject jsc = msgJSO.optJSONObject("give_gift");
+                        bundle.putInt("gift_id", jsc.optInt("gift_id"));
+                    }
+                    break;
+                case hint:
+                    break;
+                case html:
+                case htmlText:
+                case autoUpdateHtml:
+                    if (!msgJSO.isNull("htm"))
+                        bundle.putString("htm", msgJSO.optString("htm"));
+                    break;
+                case video:
+                    bundle.putString("tid", msgJSO.optString("tid"));// 发给谁的Id
+                    bundle.putString("fid", msgJSO.optString("fid")); // 发消息人的Id
+                    bundle.putLong("d", Long.parseLong(msgJSO.optString("d"))); // 消息ID
+                    bundle.putString("mt", msgJSO.optString("mt")); // 消息时间（时间戳）
+                    bundle.putLong("vc_id", msgJSO.optLong("vc_id"));//视频聊天ID，一次视频聊天过程的唯一标识
+                    bundle.putInt("vc_tp", msgJSO.optInt("vc_tp"));//请求类型，1邀请加入聊天，2同意加入 3拒绝加入 4挂断（挂断可能会收到不止一次）
+                    bundle.putInt("media_tp", msgJSO.optInt("media_tp"));//[opt]媒体类型只在vc_tp=1邀请加入聊天时会包含此字段， 1视频, 2语音
+                    bundle.putInt("vc_esc_code", msgJSO.optInt("vc_esc_code"));//[opt]拒绝或取消 只在vc_tp=3 时生效 1未接通，对方无应答 2接收方拒绝 3发送方取消
+                    bundle.putInt("vc_talk_time", msgJSO.optInt("vc_talk_time"));//[opt]聊天耗时 单位秒 只在  vc_tp=4挂断时有效
+                    bundle.putString("vc_channel_key", msgJSO.optString("vc_channel_key"));//[opt]视频聊天要用的的channel_key 只在  vc_tp=2同意时有效
+                    bundle.putInt("receive_send_status", msgJSO.optInt("receive_send_status"));
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+        }
+
+        return bundle;
+    }
+
+    // 如果是4.0以下版本调用这个方法BOM
+    public static String JSONTokener(String in) {
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < 14) {// 14为4.0
+            // consume an optional byte order mark (BOM) if it exists
+            if (in != null && in.startsWith("\ufeff")) {
+                in = in.substring(1);
+            }
+            return in;
+        }
+        return in;
+    }
 }

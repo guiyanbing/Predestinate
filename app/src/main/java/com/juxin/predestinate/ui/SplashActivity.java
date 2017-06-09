@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -33,6 +34,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initData() {
+        OldDBModule.getInstance().updateDB(this);//
         LocationMgr.getInstance().start();//启动定位
         ModuleMgr.getCommonMgr().updateUsers();//软件升级U-P读取
         ModuleMgr.getCommonMgr().requestStaticConfig();//请求一些在线配置信息
