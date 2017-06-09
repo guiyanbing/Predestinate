@@ -6,9 +6,11 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.UnreadMgr;
 import com.juxin.predestinate.bean.db.DBCenter;
+import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 import org.json.JSONObject;

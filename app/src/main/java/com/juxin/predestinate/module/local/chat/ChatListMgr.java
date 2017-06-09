@@ -15,6 +15,7 @@ import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
+import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -327,6 +328,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void login() {
         if (App.uid > 0) {
             initAppComponent();
+            //升级数据库
+            OldDBModule.getInstance().updateDB(App.uid);
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
             PLogger.d("uid=======" + App.uid);
