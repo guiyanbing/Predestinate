@@ -85,6 +85,7 @@ public class VideoAudioChatHelper {
 
     /**
      * 邀请对方音频或视频聊天
+     *
      * @param context
      * @param dstUid
      * @param type
@@ -152,7 +153,9 @@ public class VideoAudioChatHelper {
      */
     public void checkDownloadPlugin(FragmentActivity activity) {
         VideoVerifyBean verifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
-        if ((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat()) && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
+        if (((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat())
+                && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
+                || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version())
             downloadVideoPlugin(activity);
     }
 
