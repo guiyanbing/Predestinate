@@ -45,7 +45,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
-    private List<BaseMessage> greetList = new ArrayList<>(); //好友列表
+    private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
 
     @Inject
     DBCenter dbCenter;
@@ -93,6 +93,22 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 }
             }
             return false;
+        }
+    }
+
+    /**
+     * 获取角标数
+     * @param userID
+     * @return
+     */
+    public int getNoReadNum(long userID) {
+        synchronized (msgList) {
+            for(BaseMessage temp : msgList){
+                if(userID == temp.getLWhisperID()){
+                    return temp.getNum();
+                }
+            }
+            return 0;
         }
     }
 
@@ -195,7 +211,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return isTodayChat.equals("") || !isTodayChat.equals(currentData);
     }
 
-
     /**
      * 批量删除消息
      *
@@ -227,9 +242,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * 更新已读
      */
     public void updateToReadAll() {
-        long ret = dbCenter.updateToReadAll();
-        if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+        if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
+            getWhisperList(false);
         }
     }
 
@@ -238,7 +252,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             return;
         }
         dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperList();
+        getWhisperList(false);
     }
 
     /**
@@ -249,23 +263,31 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long updateToReadPrivate(long userID) {
         long ret = dbCenter.getCenterFLetter().updateStatus(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperList();
+            getWhisperList(false);
         }
         return ret;
     }
 
-    public void getWhisperList() {
+    public void getWhisperList(boolean isUnsubscribe) {
+        PLogger.printObject("getWhisperList====1");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
         listObservable.observeOn(AndroidSchedulers.mainThread());
-        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-                PLogger.printObject("getWhisperList====1" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
+
+        if(!isUnsubscribe){
+            listObservable.subscribe(action1).unsubscribe();
+        }else {
+            listObservable.subscribe(action1);
+        }
     }
+
+    Action1 action1 = new Action1<List<BaseMessage>>() {
+        @Override
+        public void call(List<BaseMessage> baseMessages) {
+            PLogger.printObject("getWhisperList====2" + baseMessages.size());
+            updateListMsg(baseMessages);
+        }
+    };
 
     @Override
     public void onMessage(String key, Object value) {
@@ -278,7 +300,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-                            getWhisperList();
+                            getWhisperList(false);
                         }
                     });
                 }
@@ -300,7 +322,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
             PLogger.d("uid=======" + App.uid);
-            getWhisperList();
+            getWhisperList(true);
             ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
         }
     }

@@ -19,6 +19,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -33,7 +35,10 @@ import com.juxin.predestinate.ui.user.my.view.GiftPopView;
 import com.juxin.predestinate.ui.user.my.view.PageIndicatorView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 送礼物弹框
@@ -120,6 +125,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 dismiss();
                 break;
             case R.id.bottom_gif_txv_pay://跳转充值页面
+                Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay);
                 UIShow.showGoodsDiamondDialog(getContext());
                 break;
             case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
@@ -132,6 +138,10 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     PToast.showShort(getContext().getString(R.string.please_select_a_gift));
                     return;
                 }
+                Map<String,Object> map = new HashMap<>();
+                map.put("gift_id",arrGifts.get(position).getId());
+                map.put("price",arrGifts.get(position).getMoney());
+                Statistics.userBehavior(SendPoint.chatframe_tool_gift_give,uid,map);
                 ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);
 
                 dismiss();

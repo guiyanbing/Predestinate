@@ -30,6 +30,8 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatViewLayout;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.pay.CheckYCoinBean;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -184,7 +186,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         cus_top_img_phone = (ImageView) baseTitleViewRight.findViewById(R.id.cus_top_title_img_phone);
         cus_top_img_phone.setOnClickListener(this);
 
-
         setNickName(name);
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//缘分小秘书
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
@@ -199,7 +200,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private void setNickName(String nickName) {
         String str = whisperID + "";
 
-        if(whisperID == MailSpecialID.customerService.getSpecialID()){
+        if (whisperID == MailSpecialID.customerService.getSpecialID()) {
             str = MailSpecialID.customerService.getSpecialIDName();
         }
 
@@ -241,7 +242,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         privateChat.getChatAdapter().onDataUpdate();
                     }
                     name = infoLightweight.getShowName();
-                    privateChat.getChatAdapter().setKf_id(infoLightweight.getKf_id());
                 }
             }
         });
@@ -309,6 +309,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.chat_title_attention: {//关注
+                Statistics.userBehavior(SendPoint.chatframe_nav_follow);
                 String content = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
                 if (!TextUtils.isEmpty(content) && !"null".equals(content))
                     content = "[" + content + "]" + getString(R.string.just_looking_for_you);
@@ -341,12 +342,17 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.chat_title_phone://手机
+                Statistics.userBehavior(SendPoint.chatframe_nav_tel);
+                PSP.getInstance().put("payPoint","mobile");
                 checkAndShowVip();
                 break;
             case R.id.chat_title_wx://微信
+                Statistics.userBehavior(SendPoint.chatframe_nav_weixin);
+                PSP.getInstance().put("payPoint","wx");
                 checkAndShowVip();
                 break;
             case R.id.chat_title_yb://Y币
+                Statistics.userBehavior(SendPoint.chatframe_nav_y);
                 UIShow.showGoodsYCoinDlgOld(this);
                 break;
             case R.id.cus_top_title_img_phone://音视频

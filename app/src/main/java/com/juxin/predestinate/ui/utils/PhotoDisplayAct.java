@@ -11,16 +11,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserPhoto;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
@@ -190,6 +194,14 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
 
     @Override
     public void onPageSelected(int position) {
+        long uid = PSP.getInstance().getLong(Constant.FLIP_ALBUM_UID, 0);
+        if(uid != 0) {
+            if(currentPosition < position) {
+                Statistics.userBehavior(SendPoint.userinfo_navalbum_leftflip, uid, Statistics.addAlbumFlip(photoList.get(position).getPic()));
+            }else {
+                Statistics.userBehavior(SendPoint.userinfo_navalbum_rightflip, uid, Statistics.addAlbumFlip(photoList.get(position).getPic()));
+            }
+        }
         currentPosition = position;
         btn_photo_display_title.setText("照片  " + (position + 1) + "/" + photoList.size());
     }

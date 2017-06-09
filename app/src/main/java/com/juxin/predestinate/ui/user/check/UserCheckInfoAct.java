@@ -16,6 +16,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.detail.UserVideo;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -141,6 +143,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
+                    Statistics.userBehavior(SendPoint.userinfo_btnsendmessage, userDetail.getUid());
                     UserDetail info = ModuleMgr.getCenterMgr().getMyInfo();
                     if (info.isMan() && !info.isVip()) {
                         showVipTips();
@@ -150,18 +153,22 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     break;
 
                 case R.id.ll_userinfo_bottom_hi:    // 底部打招呼
+                    Statistics.userBehavior(SendPoint.userinfo_btnsayhello, userDetail.getUid());
                     handleSayHi();
                     break;
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
+                    Statistics.userBehavior(SendPoint.userinfo_btnvideo, userDetail.getUid());
                     VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音
+                    Statistics.userBehavior(SendPoint.userinfo_btnvoice, userDetail.getUid());
                     VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
+                    Statistics.userBehavior(SendPoint.userinfo_btngirl);
                     UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userDetail.getUid());
                     break;
             }

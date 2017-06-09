@@ -17,6 +17,8 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -89,10 +91,18 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
                     if (userDetail.getGender() != 2) {//不是女生需要开通vip
                         if (!userDetail.isVip()) {
                             createOpenVipDialog(getContext().getString(R.string.open_the_vip_can_be_operation));//提示开通vip
+                            StatisticsMessage.followMeToVip(userDetail.getUid());
                             return;
+                        }else {
+                            if(info.getType() != 0){
+                                StatisticsMessage.followMeToCancel(userDetail.getUid());
+                            }else {
+                                StatisticsMessage.followMeToFollow(userDetail.getUid());
+                            }
                         }
                     }
                 }
+
                 if (!NetworkUtils.isConnected(getContext())) {//未联网返回
                     PToast.showShort(getContext().getString(R.string.net_error_check_your_net));
                     return;
@@ -256,6 +266,7 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
     public void onItemClick(View convertView, int position) {
         //跳转他人资料页
         UIShow.showCheckOtherInfoAct(getContext(), getItem(position).getUid());
+        StatisticsMessage.seeFollowUserInfo(getItem(position).getUid());
     }
 
 

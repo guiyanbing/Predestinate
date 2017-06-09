@@ -60,19 +60,19 @@ public class CoreService extends Service {
         public void login(long uid, String token) throws RemoteException {
             AutoConnectMgr.getInstance().login(uid, token);
 
-            if(netWorkChangeReceiver == null){
+            if (netWorkChangeReceiver == null) {
                 netWorkChangeReceiver = new NetWorkChangeReceiver();
             }
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            registerReceiver(netWorkChangeReceiver,intentFilter);
+            registerReceiver(netWorkChangeReceiver, intentFilter);
         }
 
         @Override
         public void logout() throws RemoteException {
             AutoConnectMgr.getInstance().logout();
 
-            if(netWorkChangeReceiver != null){
+            if (netWorkChangeReceiver != null) {
                 unregisterReceiver(netWorkChangeReceiver);
             }
         }
@@ -93,10 +93,10 @@ public class CoreService extends Service {
         }
     }
 
-    private class NetWorkChangeReceiver extends BroadcastReceiver{
+    private class NetWorkChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(NetworkUtils.isConnected(context)){
+            if (NetworkUtils.isConnected(context)) {
                 TimerUtil.resetIncreaseTime();
                 AutoConnectMgr.getInstance().reConnect();
             }

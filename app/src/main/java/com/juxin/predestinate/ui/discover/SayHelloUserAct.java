@@ -136,7 +136,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
         //发送清消息列表打招呼的人角标
         if (ModuleMgr.getChatListMgr().getStrangerNew()) {
-            PLogger.printObject("1111111111111111 SayHelloUserAct = " + ModuleMgr.getChatListMgr().getStrangerNew());
             ModuleMgr.getChatListMgr().setStrangerNew(false);
         }
     }
@@ -246,9 +245,14 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      */
     public void showHasData() {
         adapter.notifyDataSetChanged();
-        detectInfo(exListView);
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                detectInfo(exListView);
+            }
+        }, 800);
     }
 
     /**
@@ -363,8 +367,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (adapter == null) return;
-        if (!timeUtil.check(10 * 1000)) {
+        if (adapter == null || !timeUtil.check(4 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();

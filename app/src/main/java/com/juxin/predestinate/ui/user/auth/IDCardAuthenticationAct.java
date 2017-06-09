@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
+import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -40,6 +41,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private EditText eitBankCardId;
     private EditText eitBankBranch;
     private TextView tvBankCardId;
+    private TextView tvKeFu;
     private LinearLayout llOpenBank,llBankBranch;
     private RadioButton rbZhi;
     private RadioButton rbYin;
@@ -65,6 +67,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private void initView() {
         mIdCardVerifyStatusInfo = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo();
         tvTitleInfo = (TextView) findViewById(R.id.id_card_tv_titile_info);
+        tvKeFu = (TextView) findViewById(R.id.id_card_tv_kefu);
         eitName = (EditText) findViewById(R.id.id_card_eit_name);
         eitIdCard = (EditText) findViewById(R.id.id_card_eit_id_card);
         eitOpenBank = (EditText) findViewById(R.id.id_card_eit_open_bank);
@@ -85,6 +88,8 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         rbZhi.setOnClickListener(this);
         rbYin.setOnClickListener(this);
         rbZhi.setChecked(true);
+        ContactBean contactBean = ModuleMgr.getCommonMgr().getContactBean();
+        tvKeFu.setText(contactBean.getTel());
         setBg();
         if (mIdCardVerifyStatusInfo.getStatus() == 1){
             llAudit.setVisibility(View.VISIBLE);
@@ -252,7 +257,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.id_card_ll_kefu:
-                UIShow.showQQService(this);
+//                UIShow.showQQService(this);
                 break;
             case R.id.id_card_rb_zhi:
                 rbYin.setChecked(false);

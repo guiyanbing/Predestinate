@@ -63,21 +63,46 @@ public class DBCenter {
         return ret;
     }
 
+    public void insertListMsg(List<BaseMessage> list) {
+        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+        try {
+            for (BaseMessage item : list) {
+                insertMsg(item);
+            }
+            transaction.markSuccessful();
+        } finally {
+            transaction.end();
+        }
+    }
+
     /**
      * 更新
-     * @param baseMessage
+     * @param message
      * @return
      */
-    public long updateMsg(BaseMessage baseMessage) {
-        String userID = baseMessage.getWhisperID();
+    public long updateMsg(BaseMessage message) {
+        String userID = message.getWhisperID();
         if (TextUtils.isEmpty(userID)) return MessageConstant.ERROR;
 
-        if(BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()){
-            long ret = centerFLetter.updateStatus(userID, baseMessage.getStatus());
-            if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+        if(BaseMessage.BaseMessageType.hint.getMsgType() != message.getType()){
+
+            BaseMessage temp = centerFLetter.isExist(message.getWhisperID());
+            if (temp == null) return MessageConstant.ERROR;  //没有数据
+
+            if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()){
+                long ret = centerFLetter.updateStatus(userID, message.getStatus());
+
+                if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+            }else {
+                if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
+                    long ret =  centerFLetter.updateStatus(userID, message.getStatus());
+                    if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+                }
+            }
         }
 
-        return centerFmessage.updateMsg(baseMessage);
+        return centerFmessage.updateMsg(message);
     }
 
     public DBCenterFLetter getCenterFLetter() {

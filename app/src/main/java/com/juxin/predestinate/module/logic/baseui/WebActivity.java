@@ -65,8 +65,8 @@ public class WebActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (webPanel != null) webPanel.clearReference();
+        super.onDestroy();
     }
 
     /**

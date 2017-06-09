@@ -7,9 +7,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.NetworkUtils;
-import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.cache.PCache;
@@ -42,6 +43,48 @@ public class Statistics {
         Shutdown,               // APP关闭事件日志
         InstallVideoPlugin,     // 安装语音视频插件
         UserBehavior,           // 客户端用户行为日志
+    }
+
+    /**
+     * 每隔5min发送一次定位信息
+     */
+    public static void loopLocation() {
+        MsgMgr.getInstance().delay(new Runnable() {
+            @Override
+            public void run() {
+                location();
+                loopLocation();
+            }
+        }, Constant.CHAT_RESEND_TIME, false);
+    }
+
+    /**
+     * 向大数据发送位置统计
+     */
+    public static void location() {
+        if (ModuleMgr.getCenterMgr().getMyInfo().getUid() == 0) return;
+
+        LocationMgr.PointD pointD = LocationMgr.getInstance().getPointD();
+        String province = pointD.province;
+        if (TextUtils.isEmpty(province) || "null".equals(province)) return;
+
+        Map<String, Object> requestObject = new HashMap<>();
+        requestObject.put("longitude", pointD.longitude);
+        requestObject.put("latitude", pointD.latitude);
+        requestObject.put("country_code", pointD.countryCode);
+        requestObject.put("province", province);
+        requestObject.put("city_code", pointD.city);
+        requestObject.put("district", pointD.district);
+        requestObject.put("street_number", pointD.streetNum);
+        requestObject.put("building_id", pointD.buildID);
+
+        PLogger.d("------>" + JSON.toJSONString(requestObject));
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.locationStatistics, requestObject, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---locationStatistics--->" + response.getResponseString());
+            }
+        });
     }
 
     /**
@@ -81,8 +124,8 @@ public class Statistics {
      * @return 用户切换帐号登录-false，同一帐号登录-true
      */
     private static boolean isSwitchAccount() {
-        String account = PSP.getInstance().getString(BEHAVIOR_ACCOUNT_KEY, "");
-        if (TextUtils.isEmpty(account) || ModuleMgr.getLoginMgr().getUid() == TypeConvertUtil.toLong(account)) {
+        long account = PSP.getInstance().getLong(BEHAVIOR_ACCOUNT_KEY, -1);
+        if (account == -1 || ModuleMgr.getLoginMgr().getUid() == account) {
             PSP.getInstance().put(BEHAVIOR_ACCOUNT_KEY, ModuleMgr.getLoginMgr().getUid());
             return false;
         }
@@ -121,6 +164,45 @@ public class Statistics {
     }
 
     /**
+     * 点击用户信息相册
+     */
+    public static  Map<String, Object> addUserInfoAlbum(String picture, int index, boolean isOpen) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("picture", picture);
+        tjMap.put("picture_index", index);
+        tjMap.put("success", isOpen);
+        return tjMap;
+    }
+
+    /**
+     * 相册左右滑动
+     */
+    public static  Map<String, Object> addAlbumFlip(String picture) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("picture", picture);
+        return tjMap;
+    }
+
+    /**
+     * 相册左右滑动
+     */
+    public static  Map<String, Object> addRemark(String remark) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("remark", remark);
+        return tjMap;
+    }
+
+    /**
+     * 资料设置举报
+     */
+    public static  Map<String, Object> addInfoReport(String type, String content) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("type", type);
+        tjMap.put("content", content);
+        return tjMap;
+    }
+
+    /**
      * 用户行为统计
      *
      * @param sendPoint 统计点
@@ -143,9 +225,9 @@ public class Statistics {
      * 用户行为统计
      *
      * @param sendPoint 统计点
-     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     * @param fixParams 行为修正参考参数，map格式，内部拼接成json格式字符串
      */
-    public static void userBehavior(SendPoint sendPoint, String fixParams) {
+    public static void userBehavior(SendPoint sendPoint, Map<String, Object> fixParams) {
         userBehavior(sendPoint, 0, fixParams);
     }
 
@@ -154,10 +236,10 @@ public class Statistics {
      *
      * @param sendPoint 统计点
      * @param to_uid    与其产生交互的用户uid
-     * @param fixParams 行为修正参考参数，拼接成json格式字符串，如{"to_uid":80429386,"index":3}
+     * @param fixParams 行为修正参考参数，map格式，内部拼接成json格式字符串
      */
-    public static void userBehavior(SendPoint sendPoint, long to_uid, String fixParams) {
-        userBehavior(sendPoint.toString(), to_uid, fixParams);
+    public static void userBehavior(SendPoint sendPoint, long to_uid, Map<String, Object> fixParams) {
+        userBehavior(sendPoint.toString(), to_uid, fixParams == null ? "{}" : JSON.toJSONString(fixParams));
     }
 
     /**

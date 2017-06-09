@@ -81,8 +81,7 @@ var tollCollection = tollCollection || (function () {
       });
     };
     that.buyNow = function () {
-      var url = web.pages.PrePaidPage;
-      window.platform.openWeb('立即购买', url);
+      window.platform.appSlideView(502);
     };
     //按钮动作
     that.getPhoneCash = function () {

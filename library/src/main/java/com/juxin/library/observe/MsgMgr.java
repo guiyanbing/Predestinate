@@ -5,12 +5,14 @@ import com.juxin.library.log.PLogger;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -23,6 +25,8 @@ public class MsgMgr {
     private static MsgMgr instance = new MsgMgr();
 
     private CompositeDisposable rxDisposable = new CompositeDisposable();//订阅中心
+    private ConcurrentHashMap<PObserver,Disposable> observerDisposableMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Class,PObserver> classObserverMap = new ConcurrentHashMap<>();
 
     public static MsgMgr getInstance() {
         return instance;
@@ -130,8 +134,15 @@ public class MsgMgr {
             PLogger.e("------>PObserver is null.");
             return;
         }
+
+        //移除前一个添加的相同的类
+        PObserver preObsever = classObserverMap.get(observer.getClass());
+        if(preObsever != null){
+            dettach(preObsever);
+        }
+
         PLogger.d("------>attach[" + observer.toString() + "], attached-size[" + rxDisposable.size() + "]");
-        rxDisposable.add(RxBus.getInstance().toFlowable(Msg.class)
+        Disposable disposable =RxBus.getInstance().toFlowable(Msg.class)
                 .onBackpressureBuffer().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Msg>() {
@@ -144,7 +155,24 @@ public class MsgMgr {
                     public void accept(Throwable throwable) throws Exception {
                         PLogger.printThrowable(throwable);
                     }
-                }));
+                });
+
+        boolean addResult = rxDisposable.add(disposable);
+        if(addResult){
+            classObserverMap.put(observer.getClass(),observer);
+            observerDisposableMap.put(observer, disposable);
+        }
+    }
+
+    /**
+     * 解除绑定消息通知
+     * @param observer
+     */
+    public void dettach(PObserver observer){
+        Disposable disposable = observerDisposableMap.remove(observer);
+        if(disposable != null){
+            rxDisposable.remove(disposable);
+        }
     }
 
     /**

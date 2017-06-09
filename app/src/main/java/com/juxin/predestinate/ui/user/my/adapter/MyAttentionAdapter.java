@@ -13,6 +13,7 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
@@ -90,6 +91,7 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
     public void onItemClick(View convertView, int position) {
         //跳转他人资料页
         UIShow.showCheckOtherInfoAct(getContext(), getItem(position).getUid());
+        StatisticsMessage.seeFollowUserInfo(getItem(position).getUid());
     }
 
 //    private void handleFollowSuccess() {
@@ -156,6 +158,7 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
         mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                StatisticsMessage.cancelFollow(info.getUid());
                 if (!NetworkUtils.isConnected(getContext())) {
                     PToast.showShort(getContext().getString(R.string.tip_net_error));
                     return;

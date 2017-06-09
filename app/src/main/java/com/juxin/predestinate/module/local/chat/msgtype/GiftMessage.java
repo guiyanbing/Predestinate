@@ -31,7 +31,6 @@ public class GiftMessage extends BaseMessage {
         super(channelID, whisperID);
         this.setGiftID(giftID);
         this.setGiftCount(giftCount);
-        //    this.setGiftLogID(giftLogID);
         this.setType(BaseMessageType.gift.getMsgType());
     }
 

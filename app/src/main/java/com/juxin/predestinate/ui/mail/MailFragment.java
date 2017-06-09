@@ -20,6 +20,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -120,13 +121,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listview_footer.setOnClickListener(null);
         mailFragmentAdapter = new MailFragmentAdapter(getContext(), null);
         listMail.setAdapter(mailFragmentAdapter);
-        mailFragmentAdapter.updateAllData();
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(listMail);
-            }
-        }, 800);
+        showAllData(800);
 
         listMail.setPullLoadEnable(false);
         listMail.setMenuCreator(new SwipeMenuCreator() {
@@ -216,9 +211,11 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 switch (mailMsgID) {
                     case Follow_Msg://谁关注我
                         UIShow.showMyAttentionAct(getContext());
+                        StatisticsMessage.whoFollowMe();
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());
+                        StatisticsMessage.firendClick();
                         break;
                     case Greet_Msg://打招呼的人
                         UIShow.showSayHelloUserAct(getActivity());
@@ -226,6 +223,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 }
             } else {
                 UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKfID());
+                StatisticsMessage.openChat(message.getLWhisperID(), ModuleMgr.getChatListMgr().getNoReadNum(message.getLWhisperID()));
             }
         }
     }
@@ -266,13 +264,9 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                mailFragmentAdapter.updateAllData();
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        detectInfo(listMail);
-                    }
-                }, 800);
+                if(isHidden()) return;
+
+                showAllData(1300);
                 break;
             default:
                 break;
@@ -288,6 +282,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 setTitleLeftContainerRemoveAll();
                 listMail.smoothCloseChooseView();
                 mailDelInfoList.clear();
+                StatisticsMessage.deleteUser(mailDelInfoList);
                 break;
             case R.id.mail_all_ignore:
                 //忽略所有未读消息
@@ -363,12 +358,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        detectInfo(view);
-                    }
-                }, 200);
+                showAllData(200);
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
@@ -386,5 +376,23 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
+
+    private void showAllData(int time){
+        mailFragmentAdapter.updateAllData();
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                detectInfo(listMail);
+            }
+        }, time);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!isHidden()){
+            showAllData(1300);
+        }
     }
 }

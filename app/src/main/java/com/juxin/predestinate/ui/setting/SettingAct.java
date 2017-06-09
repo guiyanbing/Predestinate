@@ -14,6 +14,8 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -146,6 +148,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.setting_message:// 消息
+                Statistics.userBehavior(SendPoint.menu_me_setting_newmsgalert);
                 if (Message_Status) {
                     Message_Status = false;
                     PSP.getInstance().put(Constant.SETTING_MESSAGE, Message_Status);
@@ -157,6 +160,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.setting_vibration:// 震动
+                Statistics.userBehavior(SendPoint.menu_me_setting_shockalert);
                 if (Vibration_Status) {
                     Vibration_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VIBRATION, Vibration_Status);
@@ -168,6 +172,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.setting_voice:// 声音
+                Statistics.userBehavior(SendPoint.menu_me_setting_soundalert);
                 if (Voice_Status) {
                     Voice_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VOICE, Voice_Status);
@@ -179,6 +184,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.setting_quit_message:// 退出消息
+                Statistics.userBehavior(SendPoint.menu_me_setting_exitmsgalert);
                 if (Quit_Message_Status) {
                     Quit_Message_Status = false;
                     PSP.getInstance().put(Constant.SETTING_QUIT_MESSAGE, Quit_Message_Status);
@@ -190,25 +196,32 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.setting_modifypwd: // 修改密码
+                Statistics.userBehavior(SendPoint.menu_me_setting_modifypassword);
                 UIShow.showModifyAct(this);
                 break;
             case R.id.setting_feedback:// 意见反馈
+                Statistics.userBehavior(SendPoint.menu_me_setting_feedback);
                 UIShow.showSuggestAct(this);
                 break;
             case R.id.setting_update:// 软件更新
+                Statistics.userBehavior(SendPoint.menu_me_setting_checkupdates);
                 ModuleMgr.getCommonMgr().checkUpdate(this, true);//检查应用升级
                 break;
 
             case R.id.setting_action:// 活动相关
+                Statistics.userBehavior(SendPoint.menu_me_setting_huodong);
                 UIShow.showActionActivity(this);
                 break;
             case R.id.setting_about:// 关于
+                Statistics.userBehavior(SendPoint.menu_me_setting_about);
                 UIShow.showAboutAct(SettingAct.this);
                 break;
             case R.id.setting_clear_cache:// 清除缓存
+                Statistics.userBehavior(SendPoint.menu_me_setting_clearcache);
                 clearAppCache();
                 break;
             case R.id.setting_logoff:// 退出登录
+                Statistics.userBehavior(SendPoint.menu_me_setting_signout);
                 PickerDialogUtil.showSimpleTipDialog(this, new SimpleTipDialog.ConfirmListener() {
                     @Override
                     public void onCancel() {
@@ -221,6 +234,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 }, getResources().getString(R.string.dal_exit_content), getResources().getString(R.string.dal_exit_title), getResources().getString(R.string.cancel), getResources().getString(R.string.ok), true);
                 break;
             case R.id.setting_video_switch: {//视频通话开关
+                Statistics.userBehavior(SendPoint.menu_me_setting_enablevideo);
                 if (validChange()) {
                     if (videoStatus) {
                         videoStatus = false;
@@ -236,6 +250,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 break;
             }
             case R.id.setting_audio_switch: {//语音通话开关
+                Statistics.userBehavior(SendPoint.menu_me_setting_enablevoice);
                 if (validChange()) {
                     if (audioStatus) {
                         audioStatus = false;
@@ -299,8 +314,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             return true;
         } else {
             VideoAudioChatHelper.getInstance().downloadVideoPlugin(SettingAct.this);
+            return false;
         }
-        return true;
     }
 
 

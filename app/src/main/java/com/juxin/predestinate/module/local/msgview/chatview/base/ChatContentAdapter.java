@@ -10,13 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
-import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
@@ -338,6 +336,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         private void updateStatus(ChatMsgType msgType, boolean sender) {
+            status.setClickable(false);
             if (!sender) {
                 status.setVisibility(View.GONE);
                 statusProgress.setVisibility(View.GONE);
@@ -357,14 +356,11 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             statusImg.setVisibility(View.GONE);
             statusError.setVisibility(View.GONE);
-            if (msg.getStatus() != MessageConstant.SENDING_STATUS)
-                statusProgress.setVisibility(View.GONE);
-
-            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
-            if (messageType != BaseMessage.BaseMessageType.common && messageType != BaseMessage.BaseMessageType.gift) {
-                status.setVisibility(View.GONE);
-                return;
+            if (msg.getStatus() != MessageConstant.SENDING_STATUS){
+                statusProgress.setVisibility(View.VISIBLE);
+                status.setVisibility(View.INVISIBLE);
             }
+
             switch (msg.getStatus()) {
                 case 1: // 发送成功
                     status.setText("送达");
@@ -372,10 +368,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 case 2: // 发送失败
                     status.setText("失败");
-                    break;
-
-                case 3: // 发送中
-                    status.setText("发送中");
+                    status.setClickable(true);
                     break;
 
                 case 11: // 已读
@@ -391,14 +384,23 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 statusProgress.setVisibility(View.VISIBLE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.GONE);
-            } else if (msg.getStatus() == 2) {//发送失败
+            }else if(msg.getStatus() == 4){
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
+            }else if (msg.getStatus() == 2) {//发送失败
+                statusProgress.setVisibility(View.GONE);
+                status.setVisibility(View.VISIBLE);
+                statusError.setVisibility(View.GONE);
             } else {
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
                 statusError.setVisibility(View.GONE);
+            }
+
+            BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msg.getType());
+            if (messageType != BaseMessage.BaseMessageType.common && messageType != BaseMessage.BaseMessageType.gift) {
+                status.setVisibility(View.GONE);
             }
         }
 
@@ -413,7 +415,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 case R.id.chat_item_status:
                     if (chatpanel != null) {
-                        chatpanel.onClickStatus(msg);
+                        chatpanel.onClickErrorResend(msg);
                     }
                     break;
 
@@ -423,9 +425,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     }
                     break;
                 case R.id.chat_item_status_error:
-                    if (chatpanel != null) {
-                        chatpanel.onClickErrorResend(msg);
-                    }
+
                     break;
                 default:
                     break;
