@@ -88,8 +88,8 @@ public class RankFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (webPanel != null) webPanel.clearReference();
+        super.onDestroy();
     }
 
     /**

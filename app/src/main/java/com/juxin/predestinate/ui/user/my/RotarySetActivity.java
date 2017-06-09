@@ -66,8 +66,8 @@ public class RotarySetActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (webPanel != null) webPanel.clearReference();
+        super.onDestroy();
     }
 
     /**
