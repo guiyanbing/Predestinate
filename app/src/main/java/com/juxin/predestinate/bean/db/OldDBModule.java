@@ -14,7 +14,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
