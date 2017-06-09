@@ -14,6 +14,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -92,7 +93,7 @@ public class OldDBModule {
                     while (cursor.moveToNext()) {
                         try {
                             long other_id = Long.parseLong(cursor.getString(INDEX_COLUMN_OTHER_ID));
-                            if ("9999".equals(other_id))
+                            if (MailSpecialID.customerService.getSpecialID() == other_id)
                                 continue;
                             int type = cursor.getInt(INDEX_COLUMN_MSG_TYPE);
                             //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
