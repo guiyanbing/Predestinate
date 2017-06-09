@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 
@@ -24,14 +25,14 @@ public class WithDrawExplainAct extends BaseActivity implements View.OnClickList
     private void initView() {
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.withdrawal_instructions));
-        findViewById(R.id.wode_with_vip_kf).setOnClickListener(this);
+        findViewById(R.id.ll_customerservice_btn).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.wode_with_vip_kf:
-                UIShow.showQQService(WithDrawExplainAct.this);
+            case R.id.ll_customerservice_btn:
+                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), "");
                 break;
 
             default:
