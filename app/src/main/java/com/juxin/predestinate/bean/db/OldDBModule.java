@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage.BaseMessageType;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
@@ -70,9 +71,9 @@ public class OldDBModule {
     }
 
     public void updateDB(long uid) {
-//        if (PSP.getInstance().getBoolean("updateDB_" + uid, false))
-//            return;
-//        PSP.getInstance().put("updateDB_" + uid, true);
+        if (PSP.getInstance().getBoolean("updateDB_" + uid, false))
+            return;
+        PSP.getInstance().put("updateDB_" + uid, true);
 
         if (!OldDBHelper.isExitsDB())
             return;
