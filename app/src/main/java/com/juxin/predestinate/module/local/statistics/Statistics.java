@@ -164,6 +164,28 @@ public class Statistics {
     }
 
     /**
+     * 点击用户信息相册
+     */
+    public static  Map<String, Object> addUserInfoAlbum(Long toUid, String picture, int index, boolean isOpen) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("to_uid", toUid);
+        tjMap.put("picture", picture);
+        tjMap.put("picture_index", index);
+        tjMap.put("success", isOpen);
+        return tjMap;
+    }
+
+    /**
+     * 相册左右滑动
+     */
+    public static  Map<String, Object> addAlbumFlip(Long toUid, String picture) {
+        Map<String, Object> tjMap = new HashMap<>();
+        tjMap.put("to_uid", toUid);
+        tjMap.put("picture", picture);
+        return tjMap;
+    }
+
+    /**
      * 用户行为统计
      *
      * @param sendPoint 统计点

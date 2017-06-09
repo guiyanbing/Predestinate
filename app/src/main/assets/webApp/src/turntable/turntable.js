@@ -23,16 +23,17 @@ var Turntable = Turntable || (function () {
         if(jcmd !== "header_right_btn_click"){
             return;
         }
-        window.platform.showLoading(true);
         if(!valueChange){
             mui.toast('数据没有更改!');
             return;
         }
+      window.platform.showLoading(true);
         window.platform.safeRequestNoUrl("Post", web.urlType.Go, web.urlMethod.SetTurnConfig,{}, {configs:_spec_list}, function (resp) {
+          window.platform.showLoading(false);
             if(resp.status !== "ok"){
                 return;
             }
-            window.platform.showLoading(false);
+            window.platform.userBehavior('','menu_me_redpackage_dzp_save',{items:_spec_list});
             valueChange = false;
             mui.toast('数据保存成功!');
             console.log('testSet'+JSON.stringify(resp));

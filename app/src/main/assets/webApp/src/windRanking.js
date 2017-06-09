@@ -49,23 +49,26 @@ var Ranking = Ranking || (function ($) {
         _getWindRankData();
       });
 
-      document.getElementById('slider').addEventListener('slide', function (e) {
+        var _tabFlag = false;
+        document.getElementById('slider').addEventListener('slide', function (e) {
 
         if (e.detail.slideNumber === 0) {
           _tabIndex = 0;
         } else if (e.detail.slideNumber === 1) {
           _tabIndex = 1;
-
         }
-        _getWindRankData();
+          _tabFlag = true;
+          _getWindRankData();
       });
       var _currentRefreshAPI = null;
+      var _pullRefreshFlag = false;
       var _resetPageRefresh = function () {
         var ele = document.getElementById('scroll' + (_tabIndex + 1));
         _currentRefreshAPI = $(ele).pullRefresh({
           down: {
             callback: function () {
               var self = this;
+              _pullRefreshFlag = true;
               _getWindRankData();
               self.endPulldownToRefresh();
             }
@@ -217,6 +220,55 @@ var Ranking = Ranking || (function ($) {
           }
         });
       }
+      var count = function (data) {
+        console.log('dataListMap'+ JSON.stringify(data.list));
+        if(!data.list){
+          data.list = [];
+        };
+        var uidList= [];
+        for(var i=0;i<data.list.length;i++){
+          uidList.push(data.list[i].uid);
+        };
+        console.log('dataListMapUid'+ JSON.stringify(uidList));
+        if(_w ===''){
+          if(_tabFlag){
+            if(_tabIndex===0){
+              window.platform.userBehavior('','menu_fengyunbang_bz_mlb',uidList);
+            }else if (_tabIndex===1) {
+              window.platform.userBehavior('','menu_fengyunbang_bz_thb',uidList);
+            };
+            _tabFlag = false;
+          }
+
+          if(_pullRefreshFlag){
+            if(_tabIndex===0){
+              window.platform.userBehavior('','menu_fengyunbang_bz_mlb_downrefresh',uidList);
+            }else if(_tabIndex===1){
+              window.platform.userBehavior('','menu_fengyunbang_bz_thb_downrefresh',uidList);
+            }else
+            _pullRefreshFlag = false;
+          }
+
+        }else {
+          if(_tabFlag){
+            if(_tabIndex===0){
+              window.platform.userBehavior('','menu_fengyunbang_sz_mlb',uidList);
+            }else if (_tabIndex===1) {
+              window.platform.userBehavior('','menu_fengyunbang_sz_thb',uidList);
+            };
+            _tabFlag = false;
+          }
+
+          if(_pullRefreshFlag){
+            if(_tabIndex===0){
+              window.platform.userBehavior('','menu_fengyunbang_sz_mlb_downrefresh',uidList);
+            }else if(_tabIndex===1){
+              window.platform.userBehavior('','menu_fengyunbang_sz_thb_downrefresh',uidList);
+            };
+            _pullRefreshFlag = false;
+          }
+        }
+      };
       var _rankRequest = function (cb) {
         /*var list = [];
         var length = 5 + 10 * _tabIndex;
@@ -243,14 +295,19 @@ var Ranking = Ranking || (function ($) {
                 _typeUrl = 'MostSendList'
             }
             window.platform.normalRequestNoUrl("Get", web.urlType.Php, web.urlMethod[_typeUrl], params, {}, function (resp) {
-                _showLoading(false);
-                if (resp.result === 'error') {
+              console.log('resp' + JSON.stringify(resp));
+              _showLoading(false);
+              console.log("testWord");
+
+              if (resp.result === 'error') {
                     mui.toast(resp.content);
                     return;
                 }
                 if (cb) {
                     cb(resp);
                 }
+
+              count(resp);
             });
         });
 
