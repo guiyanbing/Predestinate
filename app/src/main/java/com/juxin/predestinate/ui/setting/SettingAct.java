@@ -314,8 +314,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             return true;
         } else {
             VideoAudioChatHelper.getInstance().downloadVideoPlugin(SettingAct.this);
+            return false;
         }
-        return true;
     }
 
 
