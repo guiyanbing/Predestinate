@@ -12,6 +12,7 @@ import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHotList;
+import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.request.HttpResponse;

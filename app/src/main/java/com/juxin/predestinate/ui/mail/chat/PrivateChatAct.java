@@ -309,12 +309,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.chat_title_attention: {//关注
-                Statistics.userBehavior(SendPoint.chatframe_nav_follow);
+                Statistics.userBehavior(SendPoint.chatframe_nav_follow, whisperID);
+
                 String content = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
-                if (!TextUtils.isEmpty(content) && !"null".equals(content))
+                if (!TextUtils.isEmpty(content) && !"null".equals(content)) {
                     content = "[" + content + "]" + getString(R.string.just_looking_for_you);
-                else
+                } else {
                     content = getString(R.string.just_looking_for_you);
+                }
                 ModuleMgr.getChatMgr().sendAttentionMsg(whisperID, content, kf_id, isFollow ? 2 : 1, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -342,18 +344,18 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.chat_title_phone://手机
-                Statistics.userBehavior(SendPoint.chatframe_nav_tel);
+                Statistics.userBehavior(SendPoint.chatframe_nav_tel, whisperID);
                 PSP.getInstance().put("payPoint", "mobile");
                 checkAndShowVip();
                 break;
             case R.id.chat_title_wx://微信
-                Statistics.userBehavior(SendPoint.chatframe_nav_weixin);
+                Statistics.userBehavior(SendPoint.chatframe_nav_weixin, whisperID);
                 PSP.getInstance().put("payPoint", "wx");
                 checkAndShowVip();
                 break;
             case R.id.chat_title_yb://Y币
-                Statistics.userBehavior(SendPoint.chatframe_nav_y);
-                UIShow.showGoodsYCoinDlgOld(this);
+                Statistics.userBehavior(SendPoint.chatframe_nav_y, whisperID);
+                UIShow.showGoodsYCoinDlgOld(this, whisperID);
                 break;
             case R.id.cus_top_title_img_phone://音视频
                 new SelectCallTypeDialog(this, whisperID);
@@ -365,7 +367,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
             UIShow.showCheckOtherInfoAct(this, whisperID);
         } else {
-            UIShow.showGoodsVipDlgOld(this, 2);
+            UIShow.showGoodsVipDlgOld(this, 2, whisperID);
         }
     }
 

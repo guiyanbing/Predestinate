@@ -81,10 +81,8 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
     private void checkAndShowVipStatus(Boolean isVip, ImageView imgVipStatus, TextView tvNickName) {
         if (isVip) {
             imgVipStatus.setVisibility(View.VISIBLE);
-//            tvNickName.setTextColor(getContext().getResources().getColor(R.color.color_F36D8E));
         } else {
             imgVipStatus.setVisibility(View.GONE);
-//            tvNickName.setTextColor(getContext().getResources().getColor(R.color.usersnickname));
         }
     }
 
@@ -93,30 +91,6 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
         UIShow.showCheckOtherInfoAct(getContext(), getItem(position).getUid());
         StatisticsMessage.seeFollowUserInfo(getItem(position).getUid());
     }
-
-//    private void handleFollowSuccess() {
-//        switch (followType) {
-//            case 1:
-//                follow += 1;
-//                PToast.showShort(mContext.getResources().getString(R.string.user_info_follow_suc));
-//                iv_follow.setImageResource(R.drawable.f1_followed_star);
-//                user_follow.setText(mContext.getString(R.string.user_info_follow_count, follow));
-//                if (userProfile != null) {
-//                    userProfile.setIsFollowed(1);
-//                }
-//                break;
-//
-//            case 2:
-//                follow -= 1;
-//                PToast.showShort(mContext.getResources().getString(R.string.user_info_unfollow_suc));
-//                iv_follow.setImageResource(R.drawable.f1_follow_star);
-//                user_follow.setText(mContext.getString(R.string.user_info_follow_count, follow));
-//                if (userProfile != null) {
-//                    userProfile.setIsFollowed(0);
-//                }
-//                break;
-//        }
-//    }
 
     private void handleFollowFail() {
         String msg = "";
@@ -177,7 +151,6 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
                         MessageRet messageRet = new MessageRet();
                         messageRet.parseJson(contents);
-//                        Log.e("TTTTTTTTTTTTT11111", contents + "|||");
 
                         if (messageRet.getS() == 0) {
                             int mPosition = getPosition(info);
@@ -195,19 +168,6 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
                         handleFollowFail();
                     }
                 });
-
-//                ModuleMgr.getCommonMgr().unfollow(info.getUid(), new RequestComplete() {
-//                    @Override
-//                    public void onRequestComplete(HttpResponse response) {
-//                        //        Log.e("TTTTTTTTTMM",response.getResponseString()+"||"+ postion);
-//                        if (response.isOk()) {
-//                            int mPosition = getPosition(info);
-//                            getList().get(mPosition).setType(0);
-//                            getList().remove(mPosition);
-//                            MyAttentionAdapter.this.notifyItemRemoved(mPosition+1);
-//                        }
-//                    }
-//                });
             }
         });
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -218,23 +178,6 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
         });
         return convertView;
     }
-
-//    @Override
-//    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-//        MessageRet messageRet = new MessageRet();
-//        messageRet.parseJson(contents);
-//
-//        if (messageRet.getS() == 0) {
-//            handleFollowSuccess();
-//        } else {
-//            handleFollowFail();
-//        }
-//    }
-//
-//    @Override
-//    public void onSendFailed(NetData data) {
-//        handleFollowFail();
-//    }
 
     class MyViewHolder {
 

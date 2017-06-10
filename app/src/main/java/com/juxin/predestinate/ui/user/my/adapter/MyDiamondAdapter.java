@@ -10,14 +10,10 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.Diamond;
-import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewAdapter;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
-
-import java.util.HashMap;
 
 
 /**
@@ -52,13 +48,9 @@ public class MyDiamondAdapter extends BaseRecyclerViewAdapter<Diamond> {
         vh.tv_price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//跳转支付列表
-                UIShow.showPayListAct((FragmentActivity) mContext, info.getPid());
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
-                map.put("time", ModuleMgr.getAppMgr().getSecondTime());
-                map.put("gem_num", info.getNum());
-                Statistics.userBehavior(SendPoint.menu_me_gem_btnpay, map);
+                StatisticsUser.centerGemPay(info.getNum());
 
+                UIShow.showPayListAct((FragmentActivity) mContext, info.getPid());
             }
         });
     }

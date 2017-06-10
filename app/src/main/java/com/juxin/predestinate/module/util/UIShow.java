@@ -1318,20 +1318,15 @@ public class UIShow {
 
     /**
      * 老：VIP充值弹框
-     */
-    public static void showGoodsVipDlgOld(Context context) {
-        context.startActivity(new Intent(context, GoodsVipDlgOld.class));
-    }
-
-    /**
-     * 老：VIP充值弹框
      *
      * @param context
      * @param seeType 1从Y聊天锁按钮发起  2 从查看资料发起
+     * @param to_uid  产生交互的uid
      */
-    public static void showGoodsVipDlgOld(Context context, int seeType) {
+    public static void showGoodsVipDlgOld(Context context, int seeType, long to_uid) {
         Intent intent = new Intent(context, GoodsVipDlgOld.class);
         intent.putExtra("seetype", seeType);
+        intent.putExtra("to_uid", to_uid);
         context.startActivity(intent);
     }
 
@@ -1350,9 +1345,13 @@ public class UIShow {
 
     /**
      * 老：Y币充值弹框
+     *
+     * @param to_uid 产生交互的uid
      */
-    public static void showGoodsYCoinDlgOld(Context context) {
-        context.startActivity(new Intent(context, GoodsYCoinDlgOld.class));
+    public static void showGoodsYCoinDlgOld(Context context, long to_uid) {
+        Intent intent = new Intent(context, GoodsYCoinDlgOld.class);
+        intent.putExtra("to_uid", to_uid);
+        context.startActivity(intent);
     }
 
     /**

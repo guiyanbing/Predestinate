@@ -218,7 +218,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());
-                        StatisticsMessage.firendClick();
+                        StatisticsMessage.friendClick();
                         break;
                     case Greet_Msg://打招呼的人
                         UIShow.showSayHelloUserAct(getActivity());

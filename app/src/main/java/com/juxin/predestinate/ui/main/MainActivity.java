@@ -201,9 +201,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.discovery_layout:
+                Statistics.userBehavior(SendPoint.menu_faxian);
                 switchContent(discoverMFragment);
                 break;
             case R.id.mail_layout:
+                Statistics.userBehavior(SendPoint.menu_xiaoxi);
                 switchContent(mailFragment);
                 break;
             case R.id.rank_layout:
@@ -211,9 +213,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 switchContent(rankFragment);
                 break;
             case R.id.plaza_layout:
+                Statistics.userBehavior(SendPoint.menu_guangchang);
                 switchContent(plazaFragment);
                 break;
             case R.id.user_layout:
+                Statistics.userBehavior(SendPoint.menu_me);
                 switchContent(userFragment);
                 break;
         }

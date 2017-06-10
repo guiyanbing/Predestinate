@@ -17,7 +17,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.module.local.chat.MessageRet;
-import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
@@ -93,10 +92,10 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
                             createOpenVipDialog(getContext().getString(R.string.open_the_vip_can_be_operation));//提示开通vip
                             StatisticsMessage.followMeToVip(userDetail.getUid());
                             return;
-                        }else {
-                            if(info.getType() != 0){
+                        } else {
+                            if (info.getType() != 0) {
                                 StatisticsMessage.followMeToCancel(userDetail.getUid());
-                            }else {
+                            } else {
                                 StatisticsMessage.followMeToFollow(userDetail.getUid());
                             }
                         }
@@ -108,18 +107,13 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
                     return;
                 }
                 // 执行关注Class
-//                LoadingDialog.show((FragmentActivity) mContext);
                 followType = info.getType() + 1;
-//                if (info.getType() == 0) { //未关注他时
-//                    ModuleMgr.getCommonMgr().follow(info.getUid(), AttentionMeAdapter.this);//关注他
-//                    return;
-//                }
-//                ModuleMgr.getCommonMgr().unfollow(info.getUid(), AttentionMeAdapter.this);//已关注时取消关注
                 String content;
-                if (!TextUtils.isEmpty(info.getNickname()) && !"null".equals(info.getNickname()))
+                if (!TextUtils.isEmpty(info.getNickname()) && !"null".equals(info.getNickname())) {
                     content = "[" + info.getNickname() + "]刚刚关注了你";
-                else
+                } else {
                     content = "刚刚关注了你";
+                }
                 ModuleMgr.getChatMgr().sendAttentionMsg(info.getUid(), content, info.getKf_id(), followType, new IMProxy.SendCallBack() {
                     @Override
                     public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -226,10 +220,8 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
     private void checkAndShowVipStatus(Boolean isVip, ImageView imgVipStatus, TextView tvNickName) {
         if (isVip) {
             imgVipStatus.setVisibility(View.VISIBLE);
-//            tvNickName.setTextColor(getContext().getResources().getColor(R.color.color_F36D8E));
         } else {
             imgVipStatus.setVisibility(View.GONE);
-//            tvNickName.setTextColor(getContext().getResources().getColor(R.color.usersnickname));
         }
     }
 
@@ -266,9 +258,8 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
     public void onItemClick(View convertView, int position) {
         //跳转他人资料页
         UIShow.showCheckOtherInfoAct(getContext(), getItem(position).getUid());
-        StatisticsMessage.seeFollowUserInfo(getItem(position).getUid());
+        StatisticsMessage.followMeToSeeUserInfo(getItem(position).getUid());
     }
-
 
     class MyViewHolder {
 

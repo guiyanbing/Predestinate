@@ -11,6 +11,7 @@ import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.BaseRecyclerViewHolder;
@@ -119,7 +120,7 @@ public class UserFragmentFootPanel extends BasePanel implements BaseRecyclerView
 
             case CenterItemID.i_Center_item_9:// 我的相册
                 UIShow.showUserPhotoAct(getContext());
-                Statistics.userBehavior(SendPoint.menu_me_album);
+                StatisticsUser.centerAlbum();
                 break;
 
             case CenterItemID.i_Center_item_10:// 设置中心

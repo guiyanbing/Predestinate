@@ -11,7 +11,7 @@ import com.juxin.library.log.PSP;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -28,15 +28,18 @@ import org.json.JSONObject;
  * Created by Su on 2017/5/5.
  */
 public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener {
+
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
     private int seetype;
+    private long to_uid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         seetype = getIntent().getIntExtra("seetype", 1);
+        to_uid = getIntent().getLongExtra("to_uid", 0);
         if (seetype == 2) {
             setContentView(R.layout.f1_goods_vip2_dialog_old);
         } else {
@@ -85,12 +88,20 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
-                String payPoint = PSP.getInstance().getString("payPoint","");
-                if(seetype == 2){
-                    if("mobile".equals(payPoint))
-                        Statistics.userBehavior(SendPoint.chatframe_nav_tel_vippay_btnqrzf);
-                    if("wx".equals(payPoint))
-                        Statistics.userBehavior(SendPoint.chatframe_nav_weixin_vippay_btnqrzf);
+                String payPoint = PSP.getInstance().getString("payPoint", "");
+                if (seetype == 2) {
+                    if ("mobile".equals(payPoint)) {
+                        StatisticsMessage.chatNavConfirmPay(
+                                SendPoint.chatframe_nav_tel_vippay_btnqrzf,
+                                to_uid, payTypePanel.getPayType(),
+                                payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
+                    }
+                    if ("wx".equals(payPoint)) {
+                        StatisticsMessage.chatNavConfirmPay(
+                                SendPoint.chatframe_nav_weixin_vippay_btnqrzf,
+                                to_uid, payTypePanel.getPayType(),
+                                payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
+                    }
                 }
                 UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 break;

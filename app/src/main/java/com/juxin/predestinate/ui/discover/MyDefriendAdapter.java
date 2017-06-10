@@ -79,7 +79,7 @@ public class MyDefriendAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
-                StatisticsMessage.blackUserinfo(userInfo.getUid());
+                StatisticsMessage.blackUserInfo(userInfo.getUid());
             }
         });
         return convertView;

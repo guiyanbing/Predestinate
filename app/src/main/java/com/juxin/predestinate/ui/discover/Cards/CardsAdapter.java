@@ -21,7 +21,7 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.ui.discover.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
 
 import java.util.List;
 

@@ -15,8 +15,8 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.third.recyclerholder.CustomRecyclerView;
-import com.juxin.predestinate.ui.user.my.view.DividerItemDecoration;
 import com.juxin.predestinate.ui.user.my.adapter.MyDiamondAdapter;
+import com.juxin.predestinate.ui.user.my.view.DividerItemDecoration;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * 我的钻石页面
  * Created by zm on 2017/4/19
  */
-public class MyDiamondsAct extends BaseActivity{
+public class MyDiamondsAct extends BaseActivity {
 
     private TextView tvDiamondSum;
     private CustomRecyclerView crlList;
@@ -38,7 +38,7 @@ public class MyDiamondsAct extends BaseActivity{
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         setBackView(R.id.base_title_back);
         tvDiamondSum = (TextView) findViewById(R.id.wode_diamond_txv_sum);
         crlList = (CustomRecyclerView) findViewById(R.id.wode_diamond_crl_list);
@@ -50,16 +50,16 @@ public class MyDiamondsAct extends BaseActivity{
         setTitleRight(getString(R.string.explain), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Statistics.userBehavior(SendPoint.menu_me_gem_explain);
                 //跳转到钻石说明页
                 UIShow.showMyDiamondsExplainAct(MyDiamondsAct.this);
-                Statistics.userBehavior(SendPoint.menu_me_gem_explain);
             }
         });
         initData();
     }
 
     private void initData() {
-        tvDiamondSum.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()+"");
+        tvDiamondSum.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
         mMyDiamondAdapter = new MyDiamondAdapter(this);
         List<Diamond> dataList = ModuleMgr.getCommonMgr().getCommonConfig().getDiamondList();
         rlvList.setAdapter(mMyDiamondAdapter);

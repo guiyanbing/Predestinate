@@ -19,8 +19,10 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
+import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -29,7 +31,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.my.GiftHelper;
-import com.juxin.predestinate.ui.discover.DisCoverStatistics;
 import com.juxin.predestinate.ui.user.my.adapter.GiftAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
@@ -37,9 +38,7 @@ import com.juxin.predestinate.ui.user.my.view.GiftPopView;
 import com.juxin.predestinate.ui.user.my.view.PageIndicatorView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 送礼物弹框
@@ -133,7 +132,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid);
                     DisCoverStatistics.onClickGiftPay(uid);
                 } else {
-                    Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay);
+                    Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay, uid);
                     UIShow.showGoodsDiamondDialog(getContext());
                 }
                 break;
@@ -147,17 +146,12 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                     PToast.showShort(getContext().getString(R.string.please_select_a_gift));
                     return;
                 }
-                Map<String, Object> map = new HashMap<>();
-                map.put("gift_id", arrGifts.get(position).getId());
-                map.put("price", arrGifts.get(position).getMoney());
-                Statistics.userBehavior(SendPoint.chatframe_tool_gift_give, uid, map);
+                StatisticsMessage.chatGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
 
                 //统计
                 if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) {
                     DisCoverStatistics.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
                 }
-
-
                 ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);
 
                 dismiss();

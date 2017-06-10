@@ -39,8 +39,6 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     public static String REDBOXMONEY = "REDBOXMONEY";//键
     private int authResult = 103, authForVodeo = 104,authIDCard = 105;
 
-    private CustomRecyclerView crlList;
-    private RecyclerView rlvList;
     private TextView tvMoney;
     private TextView tvWithdraw;
     private TextView tvTips;
@@ -112,7 +110,6 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
                 Statistics.userBehavior(SendPoint.menu_me_money_withdraw);
                 String money = tvMoney.getText().toString().trim();
                 float minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()/100f;
-//                Log.e("TTTTTTTTTT",ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()+"|||");
                 if (Float.valueOf(money) <= minMoney) {
                     PToast.showShort(getString(R.string.withdraw_tips) +minMoney + getString(R.string.head_unit));
                     return;
@@ -121,7 +118,6 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
                 int status = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getStatus();
                 if (!ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()){//是否绑定了手机号
                     UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);
-                    //                    UIShow.showPhoneVerify_Act(RedBoxRecordAct.this, ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone(), authResult);//验证手机
                     break;
                 }
                 if (status <= 0){//是否进行了身份认证

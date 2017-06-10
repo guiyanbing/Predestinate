@@ -72,7 +72,6 @@ public class AttentionMePanel extends BasePanel implements RequestComplete, ExLi
             if (response.isOk()) {
                 mUserDetails.clear();
                 AttentionList lists = new AttentionList();
-//                lists.parseJson(testData());
                 lists.parseJson(response.getResponseString());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
@@ -115,14 +114,12 @@ public class AttentionMePanel extends BasePanel implements RequestComplete, ExLi
         userInfos.parseJsonSummary(JsonUtil.getJsonObject(response.getResponseString()));
         List<UserInfoLightweight> userList = userInfos.getLightweightLists();
         int size = userList.size();
-//        Log.e("TTTTTTTTTTTGG",response.getResponseString()+"|||"+size);
         for (int i = 0; i < size; i++) {
             AttentionUserDetail userDetail = new AttentionUserDetail();
             userDetail.parseJs(userList.get(i));
             mUserDetails.add(userDetail);//添加到数据列表
             AttentionUtil.addUser(userDetail);//添加到缓存列表
             if (i == size - 1) {
-//                                Log.e("TTTTTTTTTTTTT000",count+"|||");
                 AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
@@ -143,31 +140,5 @@ public class AttentionMePanel extends BasePanel implements RequestComplete, ExLi
     @Override
     public void onLoadMore() {//加载更多
 
-    }
-
-    //此方法只用于测试使用
-    private String testData() {
-        String str = "{\n" +
-                "    \"result\": \"success\",\n" +
-                "    \"item\": [\n" +
-                "        {\n" +
-                "            \"uid\": 333245,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 122821207,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 123950396,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 110872194,\n" +
-                "            \"time\": 1423042627\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        return str;
     }
 }

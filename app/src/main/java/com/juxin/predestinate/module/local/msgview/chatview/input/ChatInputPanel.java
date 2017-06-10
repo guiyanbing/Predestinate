@@ -9,16 +9,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.InputUtils;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
@@ -169,6 +172,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.chat_voice:
+                Statistics.userBehavior(SendPoint.chatframe_tool_btnvoice,
+                        TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
                 onClickChatVoice();
                 break;
             case R.id.chat_text:
@@ -190,14 +195,18 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 onClickChatSend();
                 break;
             case R.id.input_monthly:
-                Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact);
+                Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact,
+                        TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
+
                 String otherID = getChatInstance().chatAdapter.getWhisperId();
                 UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 if (!otherID.equals(userDetail.getyCoinUserid()) &&
                         (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
-                    UIShow.showGoodsVipDlgOld(getContext(),1);
+                    UIShow.showGoodsVipDlgOld(getContext(), 1,
+                            TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
                 } else {
-                    UIShow.showGoodsYCoinDlgOld(getContext());
+                    UIShow.showGoodsYCoinDlgOld(getContext(),
+                            TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
                 }
                 break;
         }
@@ -318,9 +327,10 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      * 打开表情面板。
      */
     public void showChatExpression() {
-        chatTextEdit.setVisibility(View.VISIBLE);
+        Statistics.userBehavior(SendPoint.chatframe_tool_face,
+                TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
 
-        Statistics.userBehavior(SendPoint.chatframe_tool_face);
+        chatTextEdit.setVisibility(View.VISIBLE);
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(false);
         getChatInstance().chatSmilePanel.showToggle();
@@ -373,8 +383,10 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      */
     private void onClickChatSend() {
         try {
-            Statistics.userBehavior(SendPoint.chatframe_tool_btnsend);
             String context = chatTextEdit.getText().toString().trim();
+            StatisticsMessage.chatSendBtn(context,
+                    TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
+
             if (TextUtils.isEmpty(context)) return;
 
             if (context.length() > Constant.CHAT_TEXT_LIMIT) {
@@ -401,7 +413,9 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         getChatInstance().chatViewLayout.onClickChatGift(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Statistics.userBehavior(SendPoint.chatframe_tool_btngift);
+                Statistics.userBehavior(SendPoint.chatframe_tool_btngift,
+                        TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
+
                 closeAllInput();
                 UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
             }

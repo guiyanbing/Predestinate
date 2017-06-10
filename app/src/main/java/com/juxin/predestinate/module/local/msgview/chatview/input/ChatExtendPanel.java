@@ -6,8 +6,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.GridView;
 
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -23,6 +23,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,15 +105,16 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             @Override
                             public void onComplete(String... path) {
                                 if (path.length > 0) {
-                                    Statistics.userBehavior(SendPoint.chatframe_tool_prcture);
-                                    //TODO 发送图片
+                                    Statistics.userBehavior(SendPoint.chatframe_tool_prcture,
+                                            TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
                                     ModuleMgr.getChatMgr().sendImgMsg(chatAdapter.getChannelId(), chatAdapter.getWhisperId(), path[0]);
                                 }
                             }
                         });
                         break;
                     case VIDEO://视频聊天
-                        Statistics.userBehavior(SendPoint.chatframe_tool_video);
+                        Statistics.userBehavior(SendPoint.chatframe_tool_video,
+                                TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
                         if (config == null || !config.isVideoChat()) {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
@@ -120,7 +122,8 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
                         break;
                     case VOICE://语音
-                        Statistics.userBehavior(SendPoint.chatframe_tool_voice);
+                        Statistics.userBehavior(SendPoint.chatframe_tool_voice,
+                                TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
                         if (config == null || !config.isVoiceChat()) {
                             PToast.showShort(getContext().getString(R.string.user_other_not_voice_chat));
                             return;
@@ -165,15 +168,15 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                 CommonGridBtnPanel.BTN_KEY.VIDEO.setEnable(config.isVideoChat());
                 CommonGridBtnPanel.BTN_KEY.VOICE.setPrice(config.getAudioPrice());
                 CommonGridBtnPanel.BTN_KEY.VOICE.setEnable(config.isVoiceChat());
-                if(config.isVoiceChat()){
+                if (config.isVoiceChat()) {
                     CommonGridBtnPanel.BTN_KEY.VOICE.setIcon(R.drawable.chat_input_grid_voice_selector);
-                }else{
+                } else {
                     CommonGridBtnPanel.BTN_KEY.VOICE.setIcon(R.drawable.p1_add_c03);
                 }
 
-                if(config.isVideoChat()){
+                if (config.isVideoChat()) {
                     CommonGridBtnPanel.BTN_KEY.VIDEO.setIcon(R.drawable.chat_input_grid_video_selector);
-                }else{
+                } else {
                     CommonGridBtnPanel.BTN_KEY.VIDEO.setIcon(R.drawable.p1_add_b03);
                 }
                 chatExtendAdapter.notifyDataSetChanged();
