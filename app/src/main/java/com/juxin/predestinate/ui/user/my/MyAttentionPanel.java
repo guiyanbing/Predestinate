@@ -10,7 +10,6 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.my.AttentionList;
 import com.juxin.predestinate.bean.my.AttentionUserDetail;
-import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.CustomStatusListView;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
@@ -66,14 +65,12 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
     public void onRequestComplete(HttpResponse response) {
         rvList.stopRefresh();
         rvList.stopLoadMore();
-//        Log.e("TTTTTTTTTTFF", response.getResponseString() + "|||" + response.isOk());
         crvView.showExListView();
         if (response.getUrlParam() == UrlParam.getFollowing) {
             if (response.isOk()) {
                 mUserDetails.clear();
                 AttentionList lists = new AttentionList();
                 lists.parseJson(response.getResponseString());
-//                lists.parseJson(testData());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
                 mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos, AttentionUtil.MYATTENTION));
@@ -116,7 +113,6 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
         userInfos.parseJsonSummary(JsonUtil.getJsonObject(response.getResponseString()));
         List<UserInfoLightweight> userList = userInfos.getLightweightLists();
         int size = userList.size();
-//        Log.e("TTTTTTTTTTTGG", response.getResponseString() + "|||" + size);
         for (int i = 0; i < size; i++) {
             AttentionUserDetail userDetail = new AttentionUserDetail();
             userDetail.parseJs(userList.get(i));
@@ -124,7 +120,6 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
             mUserDetails.add(userDetail);//添加到数据列表
             AttentionUtil.addUser(userDetail);//添加到缓存列表
             if (i == size - 1) {
-//                Log.e("TTTTTTTTTTTTT000",count+"|||");
                 AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
@@ -144,27 +139,6 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
     @Override
     public void onLoadMore() {//加载更多
 
-    }
-
-    private String testData() {
-        String str = "{\n" +
-                "    \"result\": \"success\",\n" +
-                "    \"item\": [\n" +
-                "        {\n" +
-                "            \"uid\": 333245,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 122821207,\n" +
-                "            \"time\": 1423042627\n" +
-                "        },\n" +
-                "{\n" +
-                "            \"uid\": 123950396,\n" +
-                "            \"time\": 1423042627\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        return str;
     }
 
 }

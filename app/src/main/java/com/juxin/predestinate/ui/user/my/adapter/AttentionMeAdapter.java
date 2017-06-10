@@ -57,20 +57,17 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
             mHolder = (MyViewHolder) convertView.getTag();
         }
         final AttentionUserDetail info = getItem(position);
-        mHolder.imgHead.setImageResource(R.drawable.f1_userheadpic_weishangchuan);//头像
-        checkAndShowAvatarStatus(info.getAvatar_status(), mHolder.imgHead, info.getAvatar());
+
+        ImageLoader.loadAvatar(getContext(), info.getAvatar(), mHolder.imgHead);
         mHolder.tvNickname.setText(info.getShowName());//昵称
-        checkAndShowVipStatus(info.is_vip(), mHolder.imVipState, mHolder.tvNickname);
-        if (info.getAge() <= 0)
-            mHolder.tvAge.setText(R.string.loading);
-        else mHolder.tvAge.setText(info.getAge() + getContext().getString(R.string.age));//年龄
-        checkAndShowCityValue(AreaConfig.getInstance().getCityNameByID(Integer.valueOf(info.getCity())), mHolder.tvDiqu);//地区
+        mHolder.imVipState.setVisibility(info.is_vip() ? View.VISIBLE : View.GONE);
+
+        mHolder.tvAge.setVisibility(info.getAge() <= 0 ? View.GONE : View.VISIBLE);
+        mHolder.tvAge.setText(info.getAge() + getContext().getString(R.string.age));//年龄
+
+        mHolder.tvDiqu.setText(AreaConfig.getInstance().getCityNameByID(info.getCity()));
         mHolder.tvpiccount.setText(info.getPhotoNum() + getContext().getString(R.string.check_info_album));
-        if (info.getType() == 0) {
-            mHolder.tvconcern.setText(R.string.attention_ta);
-        } else {
-            mHolder.tvconcern.setText(R.string.cancel_the_attention);
-        }
+        mHolder.tvconcern.setText(info.getType() == 0 ? R.string.attention_ta : R.string.cancel_the_attention);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +77,6 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
         });
 
         mHolder.tvconcern.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
@@ -198,39 +194,6 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
         });
         dialog.setContentView(view);
         dialog.show();
-    }
-
-    private void checkAndShowAvatarStatus(int status, ImageView img, String avatar) {
-        switch (status) {
-            case 0:// 正在审核
-                img.setImageResource(R.drawable.f1_otheruserheadpic_shenhezhong);
-                break;
-            case 1:// 审核通过
-                ImageLoader.loadAvatar(getContext(), avatar, img);
-                break;
-            case 2:// 未通过
-                img.setImageResource(R.drawable.f1_otheruserheadpic_weitongguo);
-                break;
-            default:
-                ImageLoader.loadAvatar(getContext(), avatar, img);
-                break;
-        }
-    }
-
-    private void checkAndShowVipStatus(Boolean isVip, ImageView imgVipStatus, TextView tvNickName) {
-        if (isVip) {
-            imgVipStatus.setVisibility(View.VISIBLE);
-        } else {
-            imgVipStatus.setVisibility(View.GONE);
-        }
-    }
-
-    private void checkAndShowCityValue(String city, TextView tvCity) {
-        if (city == null) {
-            tvCity.setText("");
-        } else {
-            tvCity.setText(city);
-        }
     }
 
     @Override

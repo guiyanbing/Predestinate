@@ -24,6 +24,9 @@ public class WebFragment extends BaseFragment {
     private String title, url;
     private WebPanel webPanel;
 
+    public WebFragment() {
+    }
+
     public WebFragment(String title, String url) {
         this.title = title;
         this.url = url;
