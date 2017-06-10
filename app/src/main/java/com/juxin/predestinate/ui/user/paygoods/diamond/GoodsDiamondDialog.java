@@ -14,7 +14,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
@@ -101,7 +101,7 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
                 UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 //统计
                 if (fromTag == Constant.OPEN_GIFT_FROM_HOT) {
-                    DisCoverStatistics.onPayGift(touid, payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),
+                    StatisticsDiscovery.onPayGift(touid, payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),
                             payGoods.getCommodityList().get(goodsPanel.getPosition()).getPrice(), type);
                 }
                 break;

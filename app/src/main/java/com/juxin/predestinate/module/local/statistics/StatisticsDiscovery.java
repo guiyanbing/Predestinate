@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.statistics;
 import com.alibaba.fastjson.JSON;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ import java.util.Map;
  * 发现统计
  * Created by zhang on 2017/6/9.
  */
-public class DisCoverStatistics {
+public class StatisticsDiscovery {
 
     /**
      * 发现->推荐(普通点击)
@@ -216,23 +215,9 @@ public class DisCoverStatistics {
      * @param payType
      */
     public static void onPayGift(long touid, int gem_num, String price, int payType) {
-        String type = "";
-        switch (payType) {
-            case GoodsConstant.PAY_TYPE_WECHAT:
-                type = "weixin";
-                break;
-            case GoodsConstant.PAY_TYPE_ALIPAY:
-                type = "zhifubao";
-                break;
-            case GoodsConstant.PAY_TYPE_OTHER:
-                type = "other";
-                break;
-            default:
-                break;
-        }
         Map<String, Object> params = new HashMap<>();
         params.put("to_uid_tag", "");//推荐系统预留推荐用户AB反馈标签当前返回空字符串
-        params.put("pay_type", type);//支付方式微信/支付宝/其他支付(weixin,zhifubao,other)
+        params.put("pay_type", StatisticsMessage.getPayType(payType));//支付方式微信/支付宝/其他支付(weixin,zhifubao,other)
         params.put("price", price);//人民币金额(钻石对应的金额)
         params.put("gem_num", gem_num);//钻石数量
         Statistics.userBehavior(SendPoint.menu_faxian_hot_btngirl_zongsong_ljcz, touid, params);

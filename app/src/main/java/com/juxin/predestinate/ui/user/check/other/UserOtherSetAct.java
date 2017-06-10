@@ -19,6 +19,7 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -28,8 +29,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
-import com.juxin.predestinate.ui.user.check.edit.custom.EditPopupWindow;
 import com.juxin.predestinate.ui.user.check.edit.EditKey;
+import com.juxin.predestinate.ui.user.check.edit.custom.EditPopupWindow;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -114,7 +115,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                         @Override
                         public void editFinish(String text) {
                             tempRemark = text;
-                            Statistics.userBehavior(SendPoint.userinfo_more_setting_remark, userDetail.getUid(), Statistics.addRemark(text));
+                            StatisticsUser.userRemark(userDetail.getUid(), text);
                             ModuleMgr.getCenterMgr().reqSetRemarkName(userDetail.getUid(), text, UserOtherSetAct.this);
                         }
                     });

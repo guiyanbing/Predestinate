@@ -11,17 +11,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.start.UP;
 import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.BaseUtil;
@@ -72,7 +71,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
                 List<UP> userList = loginMgr.getUserList();
                 et_pwd.setText("");
                 for (int i = 0; i < userList.size(); i++) {
-                    if (s.toString().equals(userList.get(i).getUid()+"")) {
+                    if (s.toString().equals(userList.get(i).getUid() + "")) {
                         et_pwd.setText(userList.get(i).getPw());
                         return;
                     }
@@ -112,6 +111,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_user_login_submit://登录
+                StatisticsUser.userLogin(et_uid.getText().toString(), et_pwd.getText().toString());
                 if (validInput()) loginMgr.onLogin(this, chosenUID, chosenPwd);
                 break;
             case R.id.img_user_login_arrow:

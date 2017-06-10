@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -77,10 +78,11 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
                 }, InfoConfig.getInstance().getAgeN().getShow(), "18岁", "年龄");
                 break;
             case R.id.btn_reg_info_submit:
+                StatisticsUser.userRegister(nickname, age, gender);
                 if (validInput()) {
-                    LoadingDialog.show(this,getResources().getString(R.string.loading_reg));
+                    LoadingDialog.show(this, getResources().getString(R.string.loading_reg));
                     ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
-                    ModuleMgr.getLoginMgr().onRegister(this,urlParam, nickname, age, gender);
+                    ModuleMgr.getLoginMgr().onRegister(this, urlParam, nickname, age, gender);
                 }
                 break;
             default:

@@ -149,7 +149,7 @@ public class StatisticsMessage {
      * @param payType 支付类型
      * @return 支付类型
      */
-    private static String getPayType(int payType) {
+    public static String getPayType(int payType) {
         String type;
         switch (payType) {
             case GoodsConstant.PAY_TYPE_WECHAT:

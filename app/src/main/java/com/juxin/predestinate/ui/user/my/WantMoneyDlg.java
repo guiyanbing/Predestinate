@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.local.statistics.StatisticsLoginAfter;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.util.UIShow;
 
 
@@ -35,7 +36,6 @@ public class WantMoneyDlg extends Dialog {
 
 
     private int getNum(String key, int size) {
-
         int tmp = PSP.getInstance().getInt(key, 0);
         int num = 0;
         if (0 != tmp) {
@@ -62,8 +62,8 @@ public class WantMoneyDlg extends Dialog {
         findViewById(R.id.dlg_wangmoney_tv_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Statistics.userBehavior(SendPoint.login_guide_moneyhelp);
                 UIShow.showDemandRedPacketAct(context);
-                StatisticsLoginAfter.moneyHelp();
                 dismiss();
             }
         });
@@ -75,6 +75,4 @@ public class WantMoneyDlg extends Dialog {
             }
         });
     }
-
-
 }

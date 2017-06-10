@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.discover.DiscoverSelect;
-import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 
 import java.util.ArrayList;
@@ -87,7 +87,7 @@ public class DiscoverSelectDialog extends BaseDialogFragment implements View.OnC
             case R.id.discover_select_cancle:
                 dismiss();
                 //统计
-                DisCoverStatistics.onClickCancel();
+                StatisticsDiscovery.onClickCancel();
                 break;
         }
     }

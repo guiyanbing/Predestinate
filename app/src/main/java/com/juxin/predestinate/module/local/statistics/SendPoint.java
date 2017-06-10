@@ -106,8 +106,6 @@ public enum SendPoint {
     chatframe_tool_prcture,         // 聊天框->工具栏->图片按钮(普通点击)
     chatframe_tool_video,           // 聊天框->工具栏->视频聊天按钮(普通点击)
     chatframe_tool_voice,           // 聊天框->工具栏->语音聊天按钮(普通点击)
-    chatframe_more_lahei,           // 聊天框->更多->拉黑菜单//TODO
-    chatframe_more_laheiandreport,  // 聊天框->更多->拉黑并举报菜单//TODO
     chatframe_nav_follow,           // 关注TA
     chatframe_nav_y,                // 查看Y币
     chatframe_nav_tel,              // 查看手机
@@ -116,7 +114,7 @@ public enum SendPoint {
     // --------------聊天框(礼物和充值相关)统计项---------------
     chatframe_tool_gift_pay,                //礼物框充值钻石链接
     chatframe_tool_gift_give,               //赠送按钮
-    chatframe_tool_gift_give_btnljcz,       //立即充值//TODO
+    chatframe_tool_gift_give_btnljcz,       //立即充值//// TODO: 2017/6/11  
     chatframe_nav_y_ypay_btnqrzf,           //聊天框->导航栏->Y币->Y币充值确认支付按钮
     chatframe_nav_tel_vippay_btnqrzf,       //聊天框->导航栏->查看手机->vip开通确认支付按钮
     chatframe_nav_weixin_vippay_btnqrzf,    //聊天框->导航栏->查看微信->vip开通确认支付按钮
@@ -134,12 +132,9 @@ public enum SendPoint {
     userinfo_btngirl,               // 礼物按钮
     userinfo_btnvideo,              // 发视频
     userinfo_btnvoice,              // 发语音
-    userinfo_btnredpackage,         // 去抢红包
     userinfo_album,                 // 相册按钮(传递to_uid,第几张照片,照片index)
     userinfo_navalbum_leftflip,     // 左翻相册
     userinfo_navalbum_rightflip,    // 右翻相册
-    userinfo_more_lahei,            // 拉黑
-    userinfo_more_laheiandreport,   // 拉黑并举报
 
     userinfo_more_setting_remark,           //用户资料->更多->备注名(传递最新备注信息)
     userinfo_more_setting_clear,            //用户资料->更多->清空聊天记录(普通点击,外层传递touid)
@@ -149,9 +144,9 @@ public enum SendPoint {
     userinfo_face,                          //用户资料->点击用户头像(普通点击,外层传递touid)
 
 
-    // --------------视频语音框--------------
-    video_close,// 视频挂断(传递to_uid)
-    voice_close,// 语音挂断(传递to_uid)
+    // --------------视频语音框（插件实现）--------------
+//    video_close,// 视频挂断(传递to_uid)
+//    voice_close,// 语音挂断(传递to_uid)
 //    voice_tool_chat//视频语音框->工具栏->聊天
 //    voice_tool_voice_enable//视频语音框->工具栏->开启语音
 //    voice_tool_voice_disable//视频语音框->工具栏->关闭语音

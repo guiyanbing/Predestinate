@@ -164,45 +164,6 @@ public class Statistics {
     }
 
     /**
-     * 点击用户信息相册
-     */
-    public static  Map<String, Object> addUserInfoAlbum(String picture, int index, boolean isOpen) {
-        Map<String, Object> tjMap = new HashMap<>();
-        tjMap.put("picture", picture);
-        tjMap.put("picture_index", index);
-        tjMap.put("success", isOpen);
-        return tjMap;
-    }
-
-    /**
-     * 相册左右滑动
-     */
-    public static  Map<String, Object> addAlbumFlip(String picture) {
-        Map<String, Object> tjMap = new HashMap<>();
-        tjMap.put("picture", picture);
-        return tjMap;
-    }
-
-    /**
-     * 相册左右滑动
-     */
-    public static  Map<String, Object> addRemark(String remark) {
-        Map<String, Object> tjMap = new HashMap<>();
-        tjMap.put("remark", remark);
-        return tjMap;
-    }
-
-    /**
-     * 资料设置举报
-     */
-    public static  Map<String, Object> addInfoReport(String type, String content) {
-        Map<String, Object> tjMap = new HashMap<>();
-        tjMap.put("type", type);
-        tjMap.put("content", content);
-        return tjMap;
-    }
-
-    /**
      * 用户行为统计
      *
      * @param sendPoint 统计点

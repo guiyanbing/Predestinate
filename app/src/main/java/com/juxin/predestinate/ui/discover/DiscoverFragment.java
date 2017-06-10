@@ -16,7 +16,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
-import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -132,7 +132,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         setGroupSayhiBtn(false);
                         onRefresh();
                         //统计
-                        DisCoverStatistics.onClickLookAll();
+                        StatisticsDiscovery.onClickLookAll();
                         dialog.dismiss();
                         break;
                     case Look_Near: //只看附近的人
@@ -140,7 +140,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                         adapter.setNear(true);
                         onRefresh();
                         //统计
-                        DisCoverStatistics.onClickLookNear();
+                        StatisticsDiscovery.onClickLookNear();
                         dialog.dismiss();
                         break;
                 }
@@ -169,7 +169,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 if (lightweightList.getUserInfos().size() != 0) {
                     //统计
                     if (page == 1) {
-                        DisCoverStatistics.onRecommendRefresh(lightweightList.getLightweightLists(), isNearPage);
+                        StatisticsDiscovery.onRecommendRefresh(lightweightList.getLightweightLists(), isNearPage);
                     }
 
                     //ref 如果是 true 并且请求的如果非第一页
@@ -246,7 +246,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     if (infos.size() != 0) {
                         infos.clear();
                         //统计
-                        DisCoverStatistics.onRecommendRefresh(lightweightList.getLightweightLists(), isNearPage);
+                        StatisticsDiscovery.onRecommendRefresh(lightweightList.getLightweightLists(), isNearPage);
                     }
                     infos.addAll(lightweightList.getUserInfos());
                     if (infos.size() < 10) {
@@ -345,7 +345,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 }
             }
         }
-        DisCoverStatistics.onNearGroupSayHello(onclickData);
+        StatisticsDiscovery.onNearGroupSayHello(onclickData);
 
     }
 

@@ -12,7 +12,7 @@ import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHotList;
-import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -165,7 +165,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
     public void onCardVanish(int index, CardsView.SlideType type) {
         //统计
         int position = index % viewData.size();
-        DisCoverStatistics.onHotRemove(viewData.get(position).getUid());
+        StatisticsDiscovery.onHotRemove(viewData.get(position).getUid());
     }
 
     @Override

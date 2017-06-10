@@ -19,7 +19,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
-import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
@@ -130,7 +130,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) { //在热门界面打开
                     //统计
                     UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid);
-                    DisCoverStatistics.onClickGiftPay(uid);
+                    StatisticsDiscovery.onClickGiftPay(uid);
                 } else {
                     Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay, uid);
                     UIShow.showGoodsDiamondDialog(getContext());
@@ -150,7 +150,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
 
                 //统计
                 if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) {
-                    DisCoverStatistics.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
+                    StatisticsDiscovery.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
                 }
                 ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);
 

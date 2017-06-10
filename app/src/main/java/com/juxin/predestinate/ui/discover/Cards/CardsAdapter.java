@@ -21,7 +21,7 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.module.local.statistics.DisCoverStatistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 
 import java.util.List;
 
@@ -85,7 +85,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(context, infoHot.getUid());
                 //统计
-                DisCoverStatistics.onHotViewUser(infoHot.getUid(), position);
+                StatisticsDiscovery.onHotViewUser(infoHot.getUid(), position);
             }
         });
 
@@ -94,7 +94,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(context, infoHot.getUid());
                 //统计
-                DisCoverStatistics.onClickHotImgNum(infoHot.getUid(), infoHot.getPhotoNum());
+                StatisticsDiscovery.onClickHotImgNum(infoHot.getUid(), infoHot.getPhotoNum());
             }
         });
 
@@ -128,7 +128,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 }
 
                 //统计
-                DisCoverStatistics.onClickHotVideo(infoHot.getUid());
+                StatisticsDiscovery.onClickHotVideo(infoHot.getUid());
             }
         });
         //发语音
@@ -145,7 +145,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 }
 
                 //统计
-                DisCoverStatistics.onClickHotVoice(infoHot.getUid());
+                StatisticsDiscovery.onClickHotVoice(infoHot.getUid());
             }
         });
         //发私聊
@@ -169,7 +169,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 }
 
                 //统计
-                DisCoverStatistics.onClickHotMsg(infoHot.getUid());
+                StatisticsDiscovery.onClickHotMsg(infoHot.getUid());
             }
         });
         //送礼物
@@ -179,7 +179,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
                 UIShow.showBottomGiftDlg(context, infoHot.getUid());
 
                 //统计
-                DisCoverStatistics.onClickHotGif(infoHot.getUid());
+                StatisticsDiscovery.onClickHotGif(infoHot.getUid());
             }
         });
 
