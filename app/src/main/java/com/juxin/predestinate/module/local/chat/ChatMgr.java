@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -35,14 +36,18 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -270,7 +275,6 @@ public class ChatMgr implements ModuleBase {
                 }
                 case gift: {
                     final GiftMessage giftMessage = (GiftMessage) message;
-
                     ModuleMgr.getCommonMgr().sendGift(giftMessage.getWhisperID(), String.valueOf(giftMessage.getGiftID()),
                             giftMessage.getGiftCount(), giftMessage.getGType(), new RequestComplete() {
                                 @Override
@@ -468,15 +472,6 @@ public class ChatMgr implements ModuleBase {
                 }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
-
-                //                if (!messageRet.isOk() || !messageRet.isS()) {
-                //                    updateFail(message, messageRet);
-                //                } else {
-                //                    checkPermissions(message);
-                //                    updateOk(message, messageRet);
-                //                    sendMessageRefreshYcoin();
-                //                }
-                //                onInternalPro(messageRet);
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
 
                 if (messageRet.isOk() && messageRet.isS()) {
@@ -608,6 +603,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 发送失败
+     *
      * @param message
      * @param messageRet
      * @param status
@@ -658,6 +654,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 批量接收消息
+     *
      * @param baseMessageList
      */
     public void onReceivingList(List<BaseMessage> baseMessageList) {
@@ -1002,7 +999,7 @@ public class ChatMgr implements ModuleBase {
             for (Object key : infoMap.keySet()) {
                 if (key.equals(userID)) {
                     ChatMsgInterface.InfoComplete temp = infoMap.get(key);
-                    if(temp != null){
+                    if (temp != null) {
                         temp.onReqComplete(isOK, infoLightweight);
                         infoComplete = temp;
                     }

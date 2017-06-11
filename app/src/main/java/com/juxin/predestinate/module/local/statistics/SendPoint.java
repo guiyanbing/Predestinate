@@ -145,22 +145,22 @@ public enum SendPoint {
 
 
     // --------------视频语音框（插件实现）--------------
-//    video_close,// 视频挂断(传递to_uid)
-//    voice_close,// 语音挂断(传递to_uid)
-//    voice_tool_chat//视频语音框->工具栏->聊天
-//    voice_tool_voice_enable//视频语音框->工具栏->开启语音
-//    voice_tool_voice_disable//视频语音框->工具栏->关闭语音
-//    voice_tool_dzp//视频语音框->工具栏->大转盘
-//    voice_tool_dzp_loop//视频语音框->工具栏->大转盘->转
-//    voice_tool_gift//视频语音框->工具栏->礼物
-//    voice_tool_gift_give//视频语音框->工具栏->礼物->赠送
-//    voice_tool_ps//视频语音框->工具栏->美颜
-//    voice_tool_avatar//视频语音框->工具栏->头像
-//    voice_tool_closeall//视频语音框->工具栏->关闭结束聊天
-//    voice_tool_closevideo//视频语音框->工具栏->关闭自己摄像头
-//    voice_tool_enablevideo//视频语音框->工具栏->开启自己摄像头
-//    voice_tool_switch//视频语音框->工具栏->切换
-//    voice_tool_send//视频语音框->工具栏->发送消息
+//    video_close,                // 视频挂断(传递to_uid)
+//    voice_close,                // 语音挂断(传递to_uid)
+//    voice_tool_chat,            //视频语音框->工具栏->聊天
+//    voice_tool_voice_enable,    //视频语音框->工具栏->开启语音
+//    voice_tool_voice_disable,   //视频语音框->工具栏->关闭语音
+//    voice_tool_dzp,             //视频语音框->工具栏->大转盘
+//    voice_tool_dzp_loop,        //视频语音框->工具栏->大转盘->转
+//    voice_tool_gift,            //视频语音框->工具栏->礼物
+//    voice_tool_gift_give,       //视频语音框->工具栏->礼物->赠送
+//    voice_tool_ps,              //视频语音框->工具栏->美颜
+//    voice_tool_avatar,          //视频语音框->工具栏->头像
+//    voice_tool_closeall,        //视频语音框->工具栏->关闭结束聊天
+//    voice_tool_closevideo,      //视频语音框->工具栏->关闭自己摄像头
+//    voice_tool_enablevideo,     //视频语音框->工具栏->开启自己摄像头
+//    voice_tool_switch,          //视频语音框->工具栏->切换
+//    voice_tool_send,            //视频语音框->工具栏->发送消息
 
     // --------------欢迎页---------------
     welcome_login,  //登录按钮

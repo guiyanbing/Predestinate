@@ -473,7 +473,7 @@ public class CommonMgr implements ModuleBase {
                         // 2017.6.10 服务器返回结构为空的时候不展示一键打招呼弹框
                         ArrayList<UserInfoLightweight> lightweightLists = list.getLightweightLists();
                         if (lightweightLists.isEmpty()) return;
-                        
+
                         sayHelloDialog.showDialog(context);
                         sayHelloDialog.setData(lightweightLists);
                     }
@@ -668,18 +668,16 @@ public class CommonMgr implements ModuleBase {
      * @param touid    赠送对象UId
      * @param giftid   礼物Id
      * @param giftnum  礼物数量（不填为1）
-     * @param gtype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
-     *                 //     * @param begid     索要Id
+     * @param gtype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频，5音视频插件 （不填为1）
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid, int giftnum, int gtype, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
         getParams.put("giftnum", giftnum);
         getParams.put("gtype", gtype);
-        //        getParams.put("begid", begid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.sendGift, getParams, complete);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(gtype == 5 ? UrlParam.sendReceiveGift : UrlParam.sendGift, getParams, complete);
     }
 
     /**

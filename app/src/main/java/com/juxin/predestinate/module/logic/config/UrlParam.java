@@ -131,6 +131,8 @@ public enum UrlParam {
     qunFa(Hosts.FATE_IT_GO, "xs/discovery/Qunfa", null, true),
     // 索要礼物群发
     sendGift("gift/sendGift", true),
+    // 发送自动接收的礼物
+    sendReceiveGift("gift/sendReceiveGift", true),
     //女用户群发累计发送的用户数
     qunCount(Hosts.FATE_IT_GO, "xs/discovery/QunCount", null, true),
     // 我关注的列表
