@@ -42,6 +42,7 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.discover.SelectCallTypeDialog;
+import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.my.view.GiftMessageInfoView;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
@@ -247,7 +248,16 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
 
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID) {
-            privateChat.setInputLookAtHerVisibility(View.VISIBLE);
+            ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if(!response.isOk())
+                        return;
+                    VideoConfig config = (VideoConfig) response.getBaseData();
+                    if(config.isVideoChat())
+                        privateChat.setInputLookAtHerVisibility(View.VISIBLE);
+                }
+            });
             initHeadView();
             initFollow();
             isShowTopPhone();
