@@ -276,6 +276,8 @@
     <string name="daltitle_inccome">月收入</string>
     <string name="daltitle_height">身高</string>
     <string name="daltitle_marry">婚姻状态</string>
+    <string name="daltitle_age">年龄</string>
+    <string name="dal_age_default">18岁</string>
 
     <!--LoadingDialog显示文字-->
     <string name="loading_reg">正在自动注册，请稍后</string>
