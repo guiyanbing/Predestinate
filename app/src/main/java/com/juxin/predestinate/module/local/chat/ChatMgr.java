@@ -52,6 +52,7 @@ import rx.Observable;
 import rx.functions.Action1;
 
 /**
+ * 消息处理管理类
  * Created by Kind on 2017/3/28.
  */
 public class ChatMgr implements ModuleBase {
@@ -498,7 +499,6 @@ public class ChatMgr implements ModuleBase {
             }
         });
     }
-
 
     private void sendMessageRefreshYcoin() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();

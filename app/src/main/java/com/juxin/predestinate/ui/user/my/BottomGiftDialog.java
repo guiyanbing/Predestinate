@@ -19,9 +19,9 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
-import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
@@ -65,7 +65,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private int num;
     private Context mContext;
 
-    private int fromTag = -1;
+    private int fromTag = Constant.OPEN_FROM_INFO;
 
     public BottomGiftDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -127,19 +127,18 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 dismiss();
                 break;
             case R.id.bottom_gif_txv_pay://跳转充值页面
-                if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) { //在热门界面打开
-                    //统计
-                    UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid);
+                if (getFromTag() == Constant.OPEN_FROM_HOT) { //在热门界面打开
                     StatisticsDiscovery.onClickGiftPay(uid);
-                } else {
+                } else if (getFromTag() == Constant.OPEN_FROM_CHAT_FRAME) {
                     Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay, uid);
-                    UIShow.showGoodsDiamondDialog(getContext());
                 }
+                UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid);
                 break;
             case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
                 int needStone = Integer.valueOf(txvNeedStone.getText().toString());
                 if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) {
-                    UIShow.showGoodsDiamondDialog(getContext(), needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand());
+                    UIShow.showGoodsDiamondDialog(getContext(), needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand(),
+                            getFromTag(), uid);
                     return;
                 }
                 if (position == -1) {//为选择礼物
@@ -149,7 +148,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 StatisticsMessage.chatGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
 
                 //统计
-                if (getFromTag() == Constant.OPEN_GIFT_FROM_HOT) {
+                if (getFromTag() == Constant.OPEN_FROM_HOT) {
                     StatisticsDiscovery.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
                 }
                 ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);

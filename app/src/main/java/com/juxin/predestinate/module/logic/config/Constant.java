@@ -97,7 +97,7 @@ public class Constant {
     public static String U_IS_VIDEO_IMG_URL;
     public static String U_IS_VIDEO_VIDEO_URL;
 
-    //============= 打招呼类型 start =============\\
+    //============= 打招呼类型 start =============
     /**
      * 0为普通
      */
@@ -114,10 +114,13 @@ public class Constant {
      * 4为向机器人单点打招呼(包括首页和详细资料页等)
      */
     public static final int SAY_HELLO_TYPE_ONLY = 4;
-    //============= 打招呼类型 end =============\\
+    //============= 打招呼类型 end =============
 
-    //===================打开送礼物界面的来源 ===========\\
-    public static final int OPEN_GIFT_FROM_HOT = 1;  //热门
+    //===================打开来源 ===========
+    public static final int OPEN_FROM_HOT = 1;         //热门打开送礼物
+    public static final int OPEN_FROM_CHAT_FRAME = 2;  //私聊页打开送礼物
+    public static final int OPEN_FROM_INFO = 3;        //个人资料页打开送礼物
+    public static final int OPEN_FROM_CHAT_PLUGIN = 4; //音视频时钻石不足弹窗
 
     /**
      * 退出登录resultcode

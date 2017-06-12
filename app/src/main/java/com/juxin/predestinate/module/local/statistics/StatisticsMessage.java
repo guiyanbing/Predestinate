@@ -116,7 +116,7 @@ public class StatisticsMessage {
     }
 
     /**
-     * 聊天框->工具栏->礼物按钮->赠送按钮->立即充值
+     * 聊天框->工具栏->礼物按钮->赠送按钮(礼物的ID,位置)
      *
      * @param to_uid  产生交互的uid
      * @param gift_id 礼物ID
@@ -127,6 +127,22 @@ public class StatisticsMessage {
         map.put("gift_id", gift_id);
         map.put("price", gemNum / 10);
         Statistics.userBehavior(SendPoint.chatframe_tool_gift_give, to_uid, map);
+    }
+
+    /**
+     * 聊天框->工具栏->礼物按钮->赠送按钮->立即充值
+     *
+     * @param to_uid  产生交互的uid
+     * @param payType 支付方式微信/支付宝/其他支付
+     * @param gem_num 选中的钻石数量
+     * @param price   人民币金额
+     */
+    public static void chatGiveGiftPay(long to_uid, int payType, int gem_num, double price) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("payType", getPayType(payType));
+        map.put("gem_num", gem_num);
+        map.put("price", (int) (price / 100));//元
+        Statistics.userBehavior(SendPoint.chatframe_tool_gift_give_btnljcz, to_uid, map);
     }
 
     /**

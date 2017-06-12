@@ -619,6 +619,16 @@ public class Invoker {
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
 
+        // 转盘开始转动
+        public void turntable_start_rotate(String data) {
+            PLogger.d("---turntable_start_rotate--->" + data);
+        }
+
+        // 转盘停止转动
+        public void turntable_stop_rotate(String data) {
+            PLogger.d("---turntable_stop_rotate--->" + data);
+        }
+
         // 选择好友：app显示玩家列表，用户选择其中一个玩家，并回调其uid
         public void choose_friend(String data) {
             PLogger.d("---choose_friend--->" + data);

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
@@ -19,7 +20,7 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.GiftHelper;
 
 
-public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,RequestComplete,GiftHelper.OnRequestGiftListCallback {
+public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, RequestComplete, GiftHelper.OnRequestGiftListCallback {
     private String channelId;
     private String otherId;
     private Context mContext;
@@ -30,13 +31,13 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
     private int gifId;
     private GiftsList.GiftInfo giftBean;
 
-    public DiamondSendGiftDlg(Context context, int giftid,String OtherId) {
+    public DiamondSendGiftDlg(Context context, int giftid, String OtherId) {
         super(context, R.style.dialog);
         mContext = context;
         this.gifId = giftid;
         initView(context);
         giftBean = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid);
-        if (giftBean == null){
+        if (giftBean == null) {
             ModuleMgr.getCommonMgr().requestGiftList(this);
         }
         otherId = OtherId;
@@ -62,7 +63,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
         setCanceledOnTouchOutside(true);
     }
 
-    private void initData(){
+    private void initData() {
         giftBean = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(gifId);
         giftNotFind();
         giftPic = giftBean.getPic();
@@ -71,8 +72,8 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
         ImageLoader.loadAvatar(mContext, giftPic, iv_pic);
     }
 
-    private void giftNotFind(){
-        if(null == giftBean){
+    private void giftNotFind() {
+        if (null == giftBean) {
             PToast.showShort(mContext.getString(R.string.gift_not_find));
             dismiss();
             return;
@@ -85,17 +86,9 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
             case R.id.btn_diamond_ok:
                 int dec = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftBean.getMoney();
                 if (dec >= 0) {//赠送礼物
-                    //            if (null != iGiftSend) {
-                    //                iGiftSend.onSend(giftBean);
-                    //            }
-//                    ModuleMgr.getCommonMgr().sendGift(otherId, giftBean.getId() + "",1,3, this);
-                    ModuleMgr.getChatMgr().sendGiftMsg("", otherId, giftBean.getId(),1,3);
+                    ModuleMgr.getChatMgr().sendGiftMsg("", otherId, giftBean.getId(), 1, 3);
                 } else {
-                    //            if (null != iGiftSend) {
-                    //                iGiftSend.onSendToPay(giftBean);
-                    //            }
-                    //            UIHelper.showDiamondsNormalDlg((Activity) mContext, otherId, channelId, Math.abs(dec));
-                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec));
+                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec), -1, TypeConvertUtil.toLong(otherId));
                 }
                 dismiss();
                 break;
@@ -108,12 +101,12 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener,R
         info.parseJson(response.getResponseString());
         ModuleMgr.getCenterMgr().getMyInfo().setDiamand(info.getDiamand());
         ModuleMgr.getChatMgr().sendGiftMsg(null, otherId + "", gifId, 1, 0);
-        PToast.showShort(info.getMsg()+"");
+        PToast.showShort(info.getMsg() + "");
     }
 
     @Override
     public void onRequestGiftListCallback(boolean isOk) {
-        if (isOk){
+        if (isOk) {
             initData();
             return;
         }

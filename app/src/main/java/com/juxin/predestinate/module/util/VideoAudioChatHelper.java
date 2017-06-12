@@ -281,7 +281,8 @@ public class VideoAudioChatHelper {
         }
 
         int code = jo.optInt("code");
-        if (code == 3003) UIShow.showGoodsDiamondDialog(context);
+        if (code == 3003)
+            UIShow.showGoodsDiamondDialogAndTag(context, Constant.OPEN_FROM_CHAT_PLUGIN, dstUid);
         PToast.showShort(TextUtils.isEmpty(jo.optString("msg")) ? "数据异常" : jo.optString("msg"));
     }
 

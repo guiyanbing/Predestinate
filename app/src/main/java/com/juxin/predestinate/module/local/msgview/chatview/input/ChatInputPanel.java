@@ -417,7 +417,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                         TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
 
                 closeAllInput();
-                UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId());
+                UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId(), Constant.OPEN_FROM_CHAT_FRAME);
             }
         });
     }

@@ -168,7 +168,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
                     Statistics.userBehavior(SendPoint.userinfo_btngirl);
-                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userDetail.getUid());
+                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userDetail.getUid(), Constant.OPEN_FROM_INFO);
                     break;
             }
         }

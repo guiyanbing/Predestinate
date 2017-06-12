@@ -13,6 +13,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -21,10 +22,8 @@ import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 
 import java.util.List;
-
 
 /**
  * Created by zm .
@@ -176,7 +175,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.lin_to_gift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showBottomGiftDlg(context, infoHot.getUid());
+                UIShow.showBottomGiftDlg(context, infoHot.getUid(), Constant.OPEN_FROM_HOT);
 
                 //统计
                 StatisticsDiscovery.onClickHotGif(infoHot.getUid());

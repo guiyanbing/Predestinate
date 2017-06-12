@@ -114,7 +114,7 @@ public enum SendPoint {
     // --------------聊天框(礼物和充值相关)统计项---------------
     chatframe_tool_gift_pay,                //礼物框充值钻石链接
     chatframe_tool_gift_give,               //赠送按钮
-    chatframe_tool_gift_give_btnljcz,       //立即充值//// TODO: 2017/6/11  
+    chatframe_tool_gift_give_btnljcz,       //聊天框->送礼物弹窗->充值->立即充值
     chatframe_nav_y_ypay_btnqrzf,           //聊天框->导航栏->Y币->Y币充值确认支付按钮
     chatframe_nav_tel_vippay_btnqrzf,       //聊天框->导航栏->查看手机->vip开通确认支付按钮
     chatframe_nav_weixin_vippay_btnqrzf,    //聊天框->导航栏->查看微信->vip开通确认支付按钮

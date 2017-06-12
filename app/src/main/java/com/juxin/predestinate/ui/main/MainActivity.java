@@ -82,8 +82,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (!response.isOk())
-                    return;
+                if (!response.isOk()) return;
                 ModuleMgr.getCommonMgr().setVideoVerify((VideoVerifyBean) response.getBaseData());
                 VideoAudioChatHelper.getInstance().checkDownloadPlugin(MainActivity.this);
             }
@@ -397,7 +396,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     getOfflineMsg();
                     return;
                 }
-                dispatchlastOfflineAVMap();
+                dispatchLastOfflineAVMap();
             }
         });
     }
@@ -424,7 +423,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * 处理最新的音视频离线消息
      */
-    public static void dispatchlastOfflineAVMap() {
+    public static void dispatchLastOfflineAVMap() {
         if (lastOfflineAVMap.size() == 0) return;
         if (BaseUtil.isScreenLock(App.context)) return;
 

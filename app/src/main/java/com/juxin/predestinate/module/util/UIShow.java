@@ -953,12 +953,13 @@ public class UIShow {
      * @param context
      * @param to_id   他人id
      */
-    public static void showBottomGiftDlg(final Context context, final long to_id) {
+    public static void showBottomGiftDlg(final Context context, final long to_id, final int from_tag) {
         dialog = null;
         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
             dialog = new BottomGiftDialog();
             dialog.setToId(to_id);
             dialog.setCtx(context);
+            dialog.setFromTag(from_tag);
             dialog.showDialog((FragmentActivity) context);
         } else {
             LoadingDialog.show((FragmentActivity) context);
@@ -971,6 +972,7 @@ public class UIShow {
                             dialog = new BottomGiftDialog();
                             dialog.setToId(to_id);
                             dialog.setCtx(context);
+                            dialog.setFromTag(from_tag);
                             dialog.showDialog((FragmentActivity) context);
                         }
                     } else {
@@ -980,44 +982,6 @@ public class UIShow {
             });
         }
     }
-
-
-    /**
-     * 消息页面送礼物底部弹框
-     *
-     * @param context
-     * @param to_id   他人id
-     */
-    public static void showBottomGiftDlgAndTag(final Context context, final long to_id, final int tag) {
-        dialog = null;
-        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
-            dialog = new BottomGiftDialog();
-            dialog.setFromTag(tag);
-            dialog.setToId(to_id);
-            dialog.setCtx(context);
-            dialog.showDialog((FragmentActivity) context);
-        } else {
-            LoadingDialog.show((FragmentActivity) context);
-            ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
-                @Override
-                public void onRequestGiftListCallback(boolean isOk) {
-                    LoadingDialog.closeLoadingDialog();
-                    if (isOk) {
-                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
-                            dialog = new BottomGiftDialog();
-                            dialog.setFromTag(tag);
-                            dialog.setToId(to_id);
-                            dialog.setCtx(context);
-                            dialog.showDialog((FragmentActivity) context);
-                        }
-                    } else {
-                        PToast.showShort(context.getString(R.string.net_error_retry));
-                    }
-                }
-            });
-        }
-    }
-
 
     /**
      * 看看她
@@ -1258,13 +1222,6 @@ public class UIShow {
     // -----------------------各种充值弹框跳转 start----------------------------
 
     /**
-     * 普通送礼钻石充值弹框
-     */
-    public static void showGoodsDiamondDialog(Context context) {
-        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL);
-    }
-
-    /**
      * @param context
      * @param fromTag 打开充值来源 （统计用 可选）
      * @param touid   是否因为某个用户充值 （统计用 可选）
@@ -1278,15 +1235,8 @@ public class UIShow {
      *
      * @param needDiamond 所需钻石差值
      */
-    public static void showGoodsDiamondDialog(Context context, int needDiamond) {
-        showGoodsDiamondDialog(context, needDiamond, GoodsConstant.DLG_DIAMOND_GIFT_SHORT);
-    }
-
-    private static void showGoodsDiamondDialog(Context context, int needDiamond, int type) {
-        Intent intent = new Intent(context, GoodsDiamondDialog.class);
-        intent.putExtra(GoodsConstant.DLG_TYPE_KEY, type);
-        intent.putExtra(GoodsConstant.DLG_GIFT_NEED, needDiamond);
-        context.startActivity(intent);
+    public static void showGoodsDiamondDialog(Context context, int needDiamond, int fromTag, long touid) {
+        showGoodsDiamondDialog(context, needDiamond, GoodsConstant.DLG_DIAMOND_GIFT_SHORT, fromTag, touid);
     }
 
     /**

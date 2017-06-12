@@ -10,11 +10,12 @@ import android.widget.TextView;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
@@ -38,7 +39,6 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
 
     private int fromTag = -1; //打开来源
     private long touid = -1; //是否因为某个用户充值 （统计用 可选）
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,9 +100,13 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
             case R.id.btn_recharge:  // 充值
                 UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 //统计
-                if (fromTag == Constant.OPEN_GIFT_FROM_HOT) {
+                if (fromTag == Constant.OPEN_FROM_HOT) {
                     StatisticsDiscovery.onPayGift(touid, payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),
                             payGoods.getCommodityList().get(goodsPanel.getPosition()).getPrice(), type);
+                } else if (fromTag == Constant.OPEN_FROM_CHAT_FRAME) {
+                    StatisticsMessage.chatGiveGiftPay(touid, type,
+                            payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),
+                            payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
                 }
                 break;
         }
