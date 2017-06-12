@@ -516,6 +516,11 @@ public class BaseMessage implements IBaseMessage {
         this.setTime(bundle.getLong(FLetter.COLUMN_TIME));
         this.setJsonStr(bundle.getString(FLetter.COLUMN_CONTENT));
         this.setNum(bundle.getInt(FLetter.Num));
+
+        JSONObject object = getJsonObj();
+        if(!object.isNull("fid")){
+            this.setSendID(object.optLong("fid"));
+        }
     }
 
     /**
