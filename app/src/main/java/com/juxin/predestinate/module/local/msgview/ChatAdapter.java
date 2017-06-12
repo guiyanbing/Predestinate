@@ -378,6 +378,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         SortList.sortListView(baseMessages);//排序
                         List<BaseMessage> listTemp = new ArrayList<>();
 
+                        if (baseMessages.size() < 20) {
+                            chatInstance.chatListView.setPullRefreshEnable(false);
+                        }
                         if (baseMessages.size() > 0) {
                             for (BaseMessage baseMessage : baseMessages) {
                                 if (isShowMsg(baseMessage)) {
@@ -415,15 +418,12 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
         PLogger.printObject(message);
-        boolean show = false;
-        boolean isUpdate = true;
-
         if (ret) {
             if (message.getTime() == 0) {
                 message.setTime(ModuleMgr.getAppMgr().getTime());
             }
 
-            show = isShowMsg(message);
+            boolean show = isShowMsg(message);
 
             PLogger.printObject("onChatUpdate=" + message);
             if (show) {
@@ -446,8 +446,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
              * 本地模拟消息
              * 接收的网络消息
              */
-            if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
-                    || (message.getDataSource() == MessageConstant.TWO && show)) {
+            if (message.getDataSource() == MessageConstant.FOUR || (message.getDataSource() == MessageConstant.TWO && show)) {
                 ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
             }
         }
