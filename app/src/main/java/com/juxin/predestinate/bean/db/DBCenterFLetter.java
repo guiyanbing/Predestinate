@@ -431,7 +431,7 @@ public class DBCenterFLetter {
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override
                     public List<BaseMessage> call(SqlBrite.Query query) {
-                        return convertFletter(query.run());
+                        return convertFletter(query);
                     }
                 });
     }
@@ -449,20 +449,19 @@ public class DBCenterFLetter {
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override
                     public List<BaseMessage> call(SqlBrite.Query query) {
-                        return convertFletter(query.run());
+                        return convertFletter(query);
                     }
                 });
     }
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private List<BaseMessage> convertFletter(Cursor cursor) {
-        if (null == cursor) {
-            return null;
-        }
+    private List<BaseMessage> convertFletter(SqlBrite.Query query) {
+        Cursor cursor = null;
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
-            while (cursor.moveToNext()) {
+            cursor = query.run();
+            while (cursor != null && cursor.moveToNext()) {
                 BaseMessage message = new BaseMessage();
                 message.setWhisperID(CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
                 message.setKfID(CursorUtil.getInt(cursor, FLetter.COLUMN_KFID));
