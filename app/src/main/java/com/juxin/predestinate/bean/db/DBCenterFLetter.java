@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -17,10 +16,8 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -42,18 +39,13 @@ public class DBCenterFLetter {
         if (temp == null) {//没有数据
             return insertLetter(message);
         } else {
-            //TODO
-//            if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-//                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-//                return updateLetter(message);
-//            } else {
-//                if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-//                    return updateLetter(message);
-//                }
-//            }
-
-            if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
+            if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
                 return updateLetter(message);
+            } else {
+                if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
+                    return updateLetter(message);
+                }
             }
             return MessageConstant.OK;
         }
@@ -80,6 +72,7 @@ public class DBCenterFLetter {
                         if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
                             dbMsgListener.onDBMsgListener(updateLetter(message));
                         }
+                        dbMsgListener.onDBMsgListener(MessageConstant.OK);
                     }
                 }
             }

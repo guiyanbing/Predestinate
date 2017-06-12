@@ -68,7 +68,6 @@ public class VideoMessage extends BaseMessage {
             json.put("mt", getCurrentTime());
             json.put("d", message.getMsgID());
 
-
             json.put("vc_id", ((VideoMessage) message).getVideoID());
             json.put("vc_tp", ((VideoMessage) message).getVideoTp());
             json.put("media_tp", ((VideoMessage) message).getVideoMediaTp());
