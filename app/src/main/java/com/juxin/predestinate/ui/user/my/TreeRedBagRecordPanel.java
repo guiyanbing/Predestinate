@@ -112,7 +112,7 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
         crvView.showExListView();
         rvList.stopRefresh();
         rvList.stopLoadMore();
-        if (response.getUrlParam() == UrlParam.reqRedbagList) {
+        if (response.getUrlParam() == UrlParam.reqTreeRedbagList) {
             RedbagList redbagList = new RedbagList();
             redbagList.parseJson(response.getResponseString());
             if (response.isOk()) {
@@ -153,13 +153,13 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
                 tv_sum_tip.setText("可放入零钱金额已达" + oneKeyNum / 100 + "元");
             }else {
                 butOneKey.setEnabled(false);
-                tv_sum_tip.setText("可放入零钱金额不足" + (int) Math.floor(mMinMoney) + "元");
+                tv_sum_tip.setText("可放入零钱金额不足" + (int) Math.floor(mMinMoney / 100) + "元");
             }
             showCollect();
         } else {
             butOneKey.setEnabled(false);
             tv_sum_tip.setVisibility(View.VISIBLE);
-            tv_sum_tip.setText("可放入零钱金额不足" + (int) Math.floor(mMinMoney) + "元");
+            tv_sum_tip.setText("可放入零钱金额不足" + (int) Math.floor(mMinMoney / 100) + "元");
             tv_sum_tip.setTextColor(Color.parseColor("#e3b382"));
             showNoData();
         }

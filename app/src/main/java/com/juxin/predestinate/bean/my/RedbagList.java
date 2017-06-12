@@ -76,7 +76,7 @@ public class RedbagList extends BaseData {
             this.setCreate_time(jsonObject.optString("create_time"));
             this.setType(jsonObject.optInt("type"));
             this.setRank(jsonObject.optInt("rank"));
-            this.setRank(jsonObject.optInt("frozen"));
+            this.setFrozen(jsonObject.optInt("frozen"));
         }
 
         public long getId() {
