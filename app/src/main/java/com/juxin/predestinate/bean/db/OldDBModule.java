@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -110,7 +109,8 @@ public class OldDBModule {
                         continue;
 
                     BaseMessage message = messageType.msgClass.newInstance();
-                    Bundle bundle = getContentMap(messageType, content);
+                    //从content解析出数据存放到bundle
+                    Bundle bundle = getBundleFromContent(messageType, content);
                     //填充bundle里的数据到message
                     setBundleToMessage(messageType, message, bundle);
 
@@ -227,7 +227,7 @@ public class OldDBModule {
         }
     }
 
-    private Bundle getContentMap(BaseMessageType messageType, String content) {
+    private Bundle getBundleFromContent(BaseMessageType messageType, String content) {
         Bundle bundle = new Bundle();
         try {
             if (TextUtils.isEmpty(content) ||
