@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 
 import com.bumptech.glide.BitmapRequestBuilder;
@@ -178,8 +179,8 @@ public class ImageLoader {
     private static <T> void loadStylePic(final Context context, final T model, final ImageView view,
                                          int defResImg, final int errResImg,
                                          final Transformation<Bitmap>... transformation) {
-        if(!isInvalidTag(view,model,transformation)) return;
-        setImgTag(view, model,transformation);
+        if (!isInvalidTag(view, model, transformation)) return;
+        setImgTag(view, model, transformation);
         loadPicWithCallback(context, defResImg, new GlideCallback() {
                     @Override
                     public void onResourceReady(final GlideDrawable defRes) {
@@ -199,10 +200,10 @@ public class ImageLoader {
                                     int defResImg, int errResImg,
                                     Transformation<Bitmap>... transformation) {
         try {
-            if(!isInvalidTag(view,model,transformation)) return;
-            setImgTag(view, model,transformation);
-            loadPic(context, model, view, context.getResources().getDrawable(defResImg),
-                    context.getResources().getDrawable(errResImg), transformation);
+            if (!isInvalidTag(view, model, transformation)) return;
+            setImgTag(view, model, transformation);
+            loadPic(context, model, view, defResImg > 0 ? ContextCompat.getDrawable(context, defResImg): null,
+                    errResImg > 0 ? ContextCompat.getDrawable(context, errResImg) : null, transformation);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -213,7 +214,7 @@ public class ImageLoader {
                                     final Transformation<Bitmap>... transformation) {
         try {
             //先加载默认图
-            if (isInvalidTag(view, model,transformation))
+            if (isInvalidTag(view, model, transformation))
                 return;
             view.setImageDrawable(defResImg);
 
@@ -224,7 +225,7 @@ public class ImageLoader {
             loadPicWithCallback(context, model, new GlideCallback() {
                 @Override
                 public void onResourceReady(GlideDrawable resource) {
-                    if (isInvalidTag(view, model,transformation))
+                    if (isInvalidTag(view, model, transformation))
                         return;
                     getDrawableBuilder(context, model)
                             .bitmapTransform(transformation)
@@ -313,8 +314,8 @@ public class ImageLoader {
      * @return
      */
     private static <T> boolean isInvalidTag(ImageView view, T model, Object[] trans) {
-        return (model != null ? !model.equals(view.getTag(R.string.view_url_tag_id)):view.getTag(R.string.view_url_tag_id) != model)
-                || !Arrays.equals((Object[])view.getTag(R.string.view_trans_tag_id),trans);
+        return (model != null ? !model.equals(view.getTag(R.string.view_url_tag_id)) : view.getTag(R.string.view_url_tag_id) != model)
+                || !Arrays.equals((Object[]) view.getTag(R.string.view_trans_tag_id), trans);
     }
 
     /**
