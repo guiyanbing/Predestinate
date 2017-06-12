@@ -856,12 +856,6 @@ public class ChatMgr implements ModuleBase {
                     specialMgr.onWhisperMsgUpdate(message);
                 }
 
-                if (ret && !message.isSender() && message.getMsgID() > 0 && !message.isRu() &&
-                        !MailSpecialID.getMailSpecialID(message.getLWhisperID()) &&
-                        (!ModuleMgr.getChatListMgr().isContain(message.getLWhisperID()))) {
-                    ModuleMgr.getChatListMgr().setStrangerNew(true);
-                }
-
                 //角标消息更改
                 if (App.uid != message.getSendID() && UnreadReceiveMsgType.getUnreadReceiveMsgID(message.getType()) != null) {
                     specialMgr.updateUnreadMsg(message);

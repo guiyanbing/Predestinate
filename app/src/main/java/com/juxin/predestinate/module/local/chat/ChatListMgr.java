@@ -51,6 +51,7 @@ import rx.schedulers.Schedulers;
 public class ChatListMgr implements ModuleBase, PObserver {
 
     private int unreadNum = 0;
+    private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
 
@@ -69,6 +70,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public int getUnreadNumber() {
         return unreadNum;
+    }
+
+
+    public int getGreetNum() {
+        return greetNum;
     }
 
     /**
@@ -138,6 +144,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
+        greetNum = 0;
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
@@ -145,6 +152,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
+                    greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
                 PLogger.printObject("unreadNum=" + tmp.getNum());
@@ -185,19 +193,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public void updateFollow() {
         ModuleMgr.getUnreadMgr().resetUnreadByKey(UnreadMgrImpl.FOLLOW_ME);
-    }
-
-    public boolean getStrangerNew() {
-        return PSP.getInstance().getBoolean(getStrangerNewKey(), false);
-    }
-
-    public String getStrangerNewKey() {
-        return MessageConstant.Stranger_New + App.uid;
-    }
-
-    public void setStrangerNew(boolean strangerNew) {
-        PSP.getInstance().put(getStrangerNewKey(), strangerNew);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_Stranger_New, null);
     }
 
     //是否能聊天
@@ -349,6 +344,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         mAppComponent = null;
         msgList.clear();
         greetList.clear();
+        greetNum = 0;
         unreadNum = 0;
     }
 

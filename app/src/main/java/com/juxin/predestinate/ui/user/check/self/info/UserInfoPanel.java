@@ -145,9 +145,9 @@ public class UserInfoPanel extends BasePanel {
                 int auth = TypeConvertUtil.toInt(contactValues[i - count].split("-")[1], 0);
                 String value = contactValues[i - count].split("-")[0];
                 userInfoList.get(i).setValue(limits(auth));
-                if(limitsForVisiable(auth)) {//判断是否可见内容
+                if (limitsForVisiable(auth)) {//判断是否可见内容
                     userInfoList.get(i).setContact(value);
-                }else{
+                } else {
                     userInfoList.get(i).setContact("");
                 }
             }
@@ -155,17 +155,27 @@ public class UserInfoPanel extends BasePanel {
     }
 
     private String limits(int auth) {
-        if(auth == 1){//对VIP公开
-            return ModuleMgr.getCenterMgr().getMyInfo().isVip() ? getContext().getString(R.string.user_edit_info_open) :
-                    getContext().getString(R.string.user_edit_info_just_vip_open);
-        }else{
-            return ModuleMgr.getCenterMgr().getMyInfo().isVip() ? secretStr :
-                    getContext().getString(R.string.user_edit_info_just_vip_open);
+        // 男性用户
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            return auth == 1 ? getContext().getString(R.string.user_edit_info_just_vip_open) : secretStr;
         }
+
+        return auth == 1 ? getContext().getString(R.string.user_edit_info_open) : secretStr;
     }
 
     private boolean limitsForVisiable(int auth) {
-        return auth ==1 && ModuleMgr.getCenterMgr().getMyInfo().isVip()? true:false;
+        // 保密状态，男女用户均不显示内容
+        if (auth != 1) {
+            return false;
+        }
+
+        // 男Vip用户显示公开内容， 非Vip不显示内容
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            return ModuleMgr.getCenterMgr().getMyInfo().isVip();
+        }
+
+        // 女用户显示
+        return true;
     }
 
     //****************************************************************************************
