@@ -745,7 +745,7 @@ public class UIShow {
      * @param commodity_Id 订单
      * @param payType      类型
      */
-    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final int payType) {
+    public static void showPayAlipayt(final FragmentActivity activity, final int commodity_Id, final int payType) {
         LoadingDialog.show(activity, "生成订单中");
         ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
             @Override
@@ -757,6 +757,8 @@ public class UIShow {
                     PToast.showShort("支付出错，请重试！");
                     return;
                 }
+
+                payGood.setPay_id(commodity_Id);
 
                 if (payType == GoodsConstant.PAY_TYPE_WECHAT) {//微信支付
                     LoadingDialog.closeLoadingDialog();
@@ -771,7 +773,7 @@ public class UIShow {
                                 LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
                                     @Override
                                     public void call() {
-                                        PayWX payWX = new PayWX(response.getResponseString());
+                                        PayWX payWX = new PayWX(response.getResponseString(),true);
                                         if (!payWX.isOK()) {
                                             PToast.showShort("支付出错，请重试！");
                                             return;
