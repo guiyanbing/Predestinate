@@ -124,7 +124,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listview_footer.setOnClickListener(null);
         mailFragmentAdapter = new MailFragmentAdapter(getContext(), null);
         listMail.setAdapter(mailFragmentAdapter);
-        showAllData(800, 1);
+        showAllData(800);
 
         listMail.setPullLoadEnable(false);
         listMail.setMenuCreator(new SwipeMenuCreator() {
@@ -269,7 +269,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_Friend_Num_Notice:
                 if (isHidden()) return;
 
-                showAllData(1300, 2);
+                showAllData(1300);
                 break;
             default:
                 break;
@@ -361,7 +361,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
-                showAllData(200, 3);
+                showAllData(200);
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
@@ -381,8 +381,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
 
-    private void showAllData(int time, int i) {
-        PLogger.printObject("teim===" + i);
+    private void showAllData(int time) {
         mailFragmentAdapter.updateAllData();
         TimerUtil.beginTime(new TimerUtil.CallBack() {
             @Override
@@ -396,7 +395,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!isHidden()) {
-            showAllData(1300, 4);
+            showAllData(1300);
         }
     }
 
