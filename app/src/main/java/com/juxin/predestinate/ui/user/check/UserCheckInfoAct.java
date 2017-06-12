@@ -186,7 +186,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
             @Override
             public void onSubmit() {
-                UIShow.showOpenVipActivity(UserCheckInfoAct.this);
+                UIShow.showBuyCoinActivity(UserCheckInfoAct.this);
             }
         }, getString(R.string.hot_card_price_vip), "", getString(R.string.hot_card_price_cancle), getString(R.string.hot_card_price_sure), true, R.color.text_zhuyao_black);
     }

@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -14,6 +15,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.item.CustomMailItem;
 import com.juxin.predestinate.ui.mail.item.MailItemType;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +53,8 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
     public void updateAllData() {
         List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getMsgList();
         PLogger.d("messageLists=多少人=" + messageLists.size());
-        for (BaseMessage temp : messageLists){
-            if (MailSpecialID.customerService.getSpecialID() == temp.getLWhisperID()){
+        for (BaseMessage temp : messageLists) {
+            if (MailSpecialID.customerService.getSpecialID() == temp.getLWhisperID()) {
                 temp.setWeight(MessageConstant.Great_Weight);
             }
         }
@@ -82,8 +84,7 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
         baseMessage.setWhisperID(String.valueOf(MailMsgID.Greet_Msg.type));
         baseMessage.setWeight(MessageConstant.Max_Weight);
         baseMessage.setMailItemStyle(MailItemType.Mail_Item_Other.type);
-        PLogger.printObject("StrangerNew()=adapter=" + ModuleMgr.getChatListMgr().getStrangerNew());
-        baseMessage.setNum(ModuleMgr.getChatListMgr().getStrangerNew() ? 1 : 0);
+        baseMessage.setNum(ModuleMgr.getChatListMgr().getGreetNum());
         baseMessage.setName("打招呼的人");
         int geetNum = ModuleMgr.getChatListMgr().getGeetList().size();
         baseMessage.setAboutme(geetNum > 0 ? "共有" + geetNum + "位打招呼的人" : "暂时还没有打招呼的人");

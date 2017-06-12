@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -129,11 +130,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             showHasData();
         } else {
             showNoData();
-        }
-
-        //发送清消息列表打招呼的人角标
-        if (ModuleMgr.getChatListMgr().getStrangerNew()) {
-            ModuleMgr.getChatListMgr().setStrangerNew(false);
         }
     }
 
@@ -399,6 +395,18 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                     ModuleMgr.getChatMgr().getProFile(stringList);
                 }
             }, 800);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PLogger.d("SayHelloUserAct -- onResume == setmTouchPosition");
+        if (adapter != null && adapter.getList() != null && adapter.getList().size() != 0) {
+            if (exListView != null) {
+                exListView.setmTouchPosition(-2);
+                PLogger.d("SayHelloUserAct -- onResume == getmTouchPosition == " + exListView.getmTouchPosition());
+            }
         }
     }
 

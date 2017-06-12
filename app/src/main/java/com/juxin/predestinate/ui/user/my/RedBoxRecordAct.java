@@ -87,11 +87,13 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
     }
     //添加两个panel
     private void initViewsList() {
+        panls.add(new TreeRedBagRecordPanel(this));
         panls.add(new RedBagRecordPanel(this));
         panls.add(new WithDrawRecordPanel(this));
         listViews = new ArrayList<>();
-        listViews.add(new PagerItem(getString(R.string.income_details), panls.get(0).getContentView()));
-        listViews.add(new PagerItem(getString(R.string.withdraw_record), panls.get(1).getContentView()));
+        listViews.add(new PagerItem(getString(R.string.tree_income_details), panls.get(0).getContentView()));
+        listViews.add(new PagerItem(getString(R.string.income_details), panls.get(1).getContentView()));
+        listViews.add(new PagerItem(getString(R.string.withdraw_record), panls.get(2).getContentView()));
     }
 
     private void initViewPager() {

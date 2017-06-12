@@ -562,6 +562,7 @@
     <string name="my_diamonds_explain">我的钻石</string>
     <string name="explain">说明</string>
     <string name="my_red">我的钱包</string>
+    <string name="tree_income_details">摇钱树红包</string>
     <string name="income_details">收入详情</string>
     <string name="withdraw_record">提现记录</string>
     <string name="phone_verify">手机号验证</string>
@@ -663,10 +664,9 @@
     <string name="hot_card_nodata_bottom_tip">暂时还没出现符合条件的用户噢~</string>
     <string name="hot_card_last_item_tip">没有更多用户了噢~</string>
 
-
-    <string name="hot_card_price_vip">您非VIP会员，不可以直接发信！可以先给她打个招呼，等待她的回复！</string>
+    <string name="hot_card_price_vip">您没有Y币，不可以直接发信！可以先给她打个招呼，等待她的回复！</string>
     <string name="hot_card_price_cancle">给她打招呼</string>
-    <string name="hot_card_price_sure">去开通</string>
+    <string name="hot_card_price_sure">去购买Y币</string>
 
     <!-- 发现end -->
 
@@ -756,4 +756,7 @@
     <string name="cache_state_huge">有大量缓存，建议清除</string>
     <!-- =================缓存数据 end================= -->
     <string name="dlg_need_vip">您非VIP会员，不可以直接发起视频和语音通话</string>
+    <!-- =================支付 start================= -->
+    <string name="pay_alipay_not_install">支付出错，请检查支付宝是否安装！</string>
+    <!-- =================支付 end================= -->
 </resources>

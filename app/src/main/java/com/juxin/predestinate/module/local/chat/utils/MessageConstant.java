@@ -42,6 +42,4 @@ public class MessageConstant {
     public static final int UNREAD_STATUS = 10;//未读
     public static final int READ_STATUS = 11;//对方已读
 
-
-    public static final String Stranger_New = "Stranger_New"; //默认的人
 }
