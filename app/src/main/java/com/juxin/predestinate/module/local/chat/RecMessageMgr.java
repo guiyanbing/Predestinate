@@ -82,11 +82,13 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
 
             if (mtp == 10) {
-                jo = new JSONObject();
-                jo.put("mt", 4);
                 JSONObject giftJo = object.getJSONObject("gift");
-                jo.put("gift_id", giftJo.getInt("gift_id"));
-                jo.put("num",giftJo.getInt("count"));
+                if(giftJo.getInt("recved") == 1){
+                    jo = new JSONObject();
+                    jo.put("mt", 4);
+                    jo.put("gift_id", giftJo.getInt("gift_id"));
+                    jo.put("num",giftJo.getInt("count"));
+                }
             }
 
             if (mtp == 26) {

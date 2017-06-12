@@ -396,6 +396,11 @@
             android:name="com.switfpass.pay.activity.PayResultActivity"
             android:exported="true"
             android:launchMode="singleTop" />
+
+        <!--卓越支付wap-->
+        <activity android:name="com.zy.activity.PayWxWapActivity" />
+        <!---卓越支付wap end-->
+
         <!-- ============== 微信其它支付结束 ==================== -->
 
         <!-- 支付宝 -->
