@@ -113,6 +113,11 @@ public class PayWX extends BaseData implements Serializable {
                         this.setJsonParamPost(jsoC.optJSONObject("param_post"));
                     }
                     break;
+                case 12:
+                    if (!jsonObject.isNull("payData")) {
+                        this.setJsonParamPost(jsonObject.optJSONObject("payData"));
+                    }
+                    break;
             }
             return;
         }
