@@ -329,7 +329,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (App.uid > 0) {
             initAppComponent();
             //升级数据库
-            OldDBModule.getInstance().updateDB(App.uid);
+            new OldDBModule().updateDB(App.uid);
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
             PLogger.d("uid=======" + App.uid);

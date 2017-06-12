@@ -33,30 +33,17 @@ import rx.schedulers.Schedulers;
  */
 
 public class OldDBModule {
-    public static final String MESSAGE_LIST_TABLE = "message_list";
+    private static final String MESSAGE_LIST_TABLE = "message_list";
 
-    public static final int INDEX_ID = 0;
-    public static final int INDEX_COLUMN_LOGIN_ID = 1;
-    public static final int INDEX_COLUMN_MSG_ID = 2;
-    public static final int INDEX_COLUMN_OTHER_ID = 3;
+    private static final int INDEX_COLUMN_LOGIN_ID = 1;
+    private static final int INDEX_COLUMN_MSG_ID = 2;
+    private static final int INDEX_COLUMN_OTHER_ID = 3;
 
-    public static final int INDEX_COLUMN_CONTENT = 4;
-    public static final int INDEX_COLUMN_TIME = 5;
-    public static final int INDEX_COLUMN_RECEIVE_SEND_STATUS = 6;
-    public static final int INDEX_COLUMN_STATUS = 7;
-    public static final int INDEX_COLUMN_MSG_TYPE = 9;
-    private static OldDBModule instance;
-
-    public static OldDBModule getInstance() {
-        if (instance == null) {
-            synchronized (OldDBModule.class) {
-                if (instance == null) {
-                    instance = new OldDBModule();
-                }
-            }
-        }
-        return instance;
-    }
+    private static final int INDEX_COLUMN_CONTENT = 4;
+    private static final int INDEX_COLUMN_TIME = 5;
+    private static final int INDEX_COLUMN_RECEIVE_SEND_STATUS = 6;
+    private static final int INDEX_COLUMN_STATUS = 7;
+    private static final int INDEX_COLUMN_MSG_TYPE = 9;
 
     @Inject
     DBCenter dbCenter;
@@ -65,10 +52,13 @@ public class OldDBModule {
     private BriteDatabase provideDB(Context context) {
         final SqlBrite.Builder builder = new SqlBrite.Builder();
         OldDBHelper oldDBHelper = new OldDBHelper(context);
-        BriteDatabase db = builder.build().wrapDatabaseHelper(oldDBHelper, Schedulers.io());
-        return db;
+        return builder.build().wrapDatabaseHelper(oldDBHelper, Schedulers.io());
     }
 
+    /**
+     * 升级数据库
+     * @param uid
+     */
     public void updateDB(long uid) {
         if (PSP.getInstance().getBoolean("updateDB_" + uid, false))
             return;
@@ -84,141 +74,160 @@ public class OldDBModule {
         query.subscribe(new Action1<SqlBrite.Query>() {
             @Override
             public void call(SqlBrite.Query query) {
-                Cursor cursor = null;
-                try {
-                    cursor = query.run();
-                    int c1 = cursor.getCount();
-                    int c2 = 0;
-                    while (cursor.moveToNext()) {
-                        try {
-                            long other_id = Long.parseLong(cursor.getString(INDEX_COLUMN_OTHER_ID));
-                            int type = cursor.getInt(INDEX_COLUMN_MSG_TYPE);
-                            //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
-                            int msg_status = cursor.getInt(INDEX_COLUMN_STATUS);
-                            int receive_send_status = cursor.getInt(INDEX_COLUMN_RECEIVE_SEND_STATUS);//0接收  1发送
-                            long msgID = cursor.getLong(INDEX_COLUMN_MSG_ID);
-                            long login_id = Long.parseLong(cursor.getString(INDEX_COLUMN_LOGIN_ID));
-                            long time = Long.parseLong(cursor.getString(INDEX_COLUMN_TIME));
-                            String content = cursor.getString(INDEX_COLUMN_CONTENT);
-
-                            BaseMessageType messageType = BaseMessageType.valueOf(type);
-                            if (messageType == null)
-                                continue;
-
-                            BaseMessage message = messageType.msgClass.newInstance();
-                            Bundle bundle = getContentMap(messageType, content);
-
-                            switch (messageType) {
-                                case hi:
-                                case common:
-                                    CommonMessage commonMessage = (CommonMessage) message;
-                                    commonMessage.setMsgDesc(bundle.getString("msg")); //消息内容
-                                    //图片
-                                    commonMessage.setImg(bundle.getString("imageUrl"));
-                                    //语音
-                                    commonMessage.setVoiceUrl(bundle.getString("voiceUrl"));
-                                    commonMessage.setVoiceLen(bundle.getInt("voiceLen"));
-                                    commonMessage.setVoiceUserid(bundle.getLong("voiceUid"));
-                                    //视频
-                                    commonMessage.setVideoUrl(bundle.getString("videoUrl"));
-                                    commonMessage.setVideoLen(bundle.getInt("videoLen"));
-                                    commonMessage.setVideoThumb(bundle.getString("videoThumb"));
-                                    commonMessage.setVideoWidth(bundle.getInt("videoThumbWidth"));
-                                    commonMessage.setVideoHeight(bundle.getInt("videoThumbHeight"));
-                                    break;
-                                case hint:
-                                case html:
-                                case htmlText:
-                                case autoUpdateHtml:
-                                    TextMessage textMessage = (TextMessage) message;
-                                    textMessage.setHtm(bundle.getString("htm"));
-                                    textMessage.setMsgDesc(bundle.getString("msg"));
-                                    break;
-                                case gift:
-                                case wantGift:
-                                    GiftMessage giftMessage = (GiftMessage) message;
-                                    giftMessage.setGiftID(bundle.getInt("gift_id"));
-                                    giftMessage.setGiftCount(bundle.getInt("count"));
-                                    giftMessage.setGiftLogID(bundle.getLong("gift_log_id"));
-                                    giftMessage.setfStatus(bundle.getBoolean("giftReceived") ? 0 : 1);
-                                    break;
-                                case video:
-                                    msgID = bundle.getLong("d");
-                                    VideoMessage videoMessage = (VideoMessage) message;
-                                    videoMessage.setVideoID((int) bundle.getLong("vc_id"));
-                                    videoMessage.setSpecialMsgID(bundle.getLong("vc_id"));
-                                    videoMessage.setVideoTp(bundle.getInt("vc_tp"));
-                                    videoMessage.setVideoMediaTp(bundle.getInt("media_tp"));
-                                    videoMessage.setVideoVcEscCode(bundle.getInt("vc_esc_code"));
-                                    videoMessage.setVideoVcTalkTime(bundle.getInt("vc_talk_time"));
-                                    videoMessage.setVc_channel_key(bundle.getString("vc_channel_key"));
-                                    break;
-                                default:
-                                    message.setMsgDesc(bundle.getString("msg"));
-                                    break;
-                            }
-
-                            //0接收  1发送
-                            if (receive_send_status == 0) {
-                                message.setMsgID(msgID);
-                                message.setStatus(MessageConstant.READ_STATUS);
-                            } else {
-                                //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
-                                int new_status = 0;
-                                switch (msg_status) {
-                                    case 0:
-                                    case 2:
-                                        new_status = MessageConstant.FAIL_STATUS;
-                                        break;
-                                    case 1:
-                                    case 5:
-                                        new_status = MessageConstant.OK_STATUS;
-                                        break;
-                                    case 3:
-                                        new_status = MessageConstant.READ_STATUS;
-                                        break;
-                                    case 4:
-                                        new_status = MessageConstant.BLACKLIST_STATUS;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                message.setcMsgID(msgID);
-                                message.setStatus(new_status);
-                            }
-
-                            message.setSendID(receive_send_status == 0 ? other_id : login_id);
-                            message.setWhisperID(other_id + "");
-                            message.setType(type);
-                            message.setTime(time);
-                            message.setDataSource(MessageConstant.ONE);
-                            message.setChannelID(null);
-
-                            String jsonstr = message.getJson(message);
-                            if (receive_send_status == 0) {
-                                JSONObject json = new JSONObject(message.getJson(message));
-                                json.put("fid", other_id);
-                                jsonstr = json.toString();
-                            }
-                            message.setJsonStr(jsonstr);
-                            if (dbCenter.insertMsg(message) != MessageConstant.ERROR)
-                                c2++;
-                        } catch (Exception ee) {
-                            ee.printStackTrace();
-                        }
-                    }
-                    Log.d("aaa", "c1:" + c1 + ", c2:" + c2);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (cursor != null)
-                        cursor.close();
-                }
+                convertRecord(query);
             }
         }).unsubscribe();
     }
 
-    public static Bundle getContentMap(BaseMessageType messageType, String content) {
+    /**
+     * 数据库记录转换
+     * @param query
+     */
+    private void convertRecord(SqlBrite.Query query) {
+        Cursor cursor = null;
+        try {
+            cursor = query.run();
+            if (cursor == null)
+                return;
+            int c1 = cursor.getCount();
+            int c2 = 0;
+            while (cursor.moveToNext()) {
+                try {
+                    int type = cursor.getInt(INDEX_COLUMN_MSG_TYPE);
+                    //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
+                    int msg_status = cursor.getInt(INDEX_COLUMN_STATUS);
+                    //0接收  1发送
+                    int receive_send_status = cursor.getInt(INDEX_COLUMN_RECEIVE_SEND_STATUS);
+                    long msgID = cursor.getLong(INDEX_COLUMN_MSG_ID);
+                    long login_id = Long.parseLong(cursor.getString(INDEX_COLUMN_LOGIN_ID));
+                    long other_id = Long.parseLong(cursor.getString(INDEX_COLUMN_OTHER_ID));
+                    long time = Long.parseLong(cursor.getString(INDEX_COLUMN_TIME));
+                    String content = cursor.getString(INDEX_COLUMN_CONTENT);
+
+                    BaseMessageType messageType = BaseMessageType.valueOf(type);
+                    if (messageType == null)
+                        continue;
+
+                    BaseMessage message = messageType.msgClass.newInstance();
+                    //从content解析出数据存放到bundle
+                    Bundle bundle = getBundleFromContent(messageType, content);
+                    //填充bundle里的数据到message
+                    setBundleToMessage(messageType, message, bundle);
+
+                    //视频、语音的真正消息ID需特殊处理，不是从数据库里取出来的
+                    if (messageType == BaseMessageType.video)
+                        msgID = bundle.getLong("d");
+
+                    //0接收  1发送
+                    if (receive_send_status == 0) {
+                        message.setMsgID(msgID);
+                        message.setStatus(MessageConstant.READ_STATUS);
+                    } else {
+                        //发送端：0正在发送1送达2失败3已读4警告图标5无标记状态
+                        int new_status = 0;
+                        switch (msg_status) {
+                            case 0:
+                            case 2:
+                                new_status = MessageConstant.FAIL_STATUS;
+                                break;
+                            case 1:
+                            case 5:
+                                new_status = MessageConstant.OK_STATUS;
+                                break;
+                            case 3:
+                                new_status = MessageConstant.READ_STATUS;
+                                break;
+                            case 4:
+                                new_status = MessageConstant.BLACKLIST_STATUS;
+                                break;
+                            default:
+                                break;
+                        }
+                        message.setcMsgID(msgID);
+                        message.setStatus(new_status);
+                    }
+
+                    message.setSendID(receive_send_status == 0 ? other_id : login_id);
+                    message.setWhisperID(other_id + "");
+                    message.setType(type);
+                    message.setTime(time);
+                    message.setDataSource(MessageConstant.ONE);
+                    message.setChannelID(null);
+
+                    String jsonStr = message.getJson(message);
+                    if (receive_send_status == 0) {
+                        JSONObject json = new JSONObject(message.getJson(message));
+                        json.put("fid", other_id);
+                        jsonStr = json.toString();
+                    }
+                    message.setJsonStr(jsonStr);
+                    if (dbCenter.insertMsg(message) != MessageConstant.ERROR)
+                        c2++;
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                }
+            }
+            Log.d("aaa", "c1:" + c1 + ", c2:" + c2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+    }
+
+    private void setBundleToMessage(BaseMessageType messageType, BaseMessage message, Bundle bundle){
+        switch (messageType) {
+            case hi:
+            case common:
+                CommonMessage commonMessage = (CommonMessage) message;
+                commonMessage.setMsgDesc(bundle.getString("msg")); //消息内容
+                //图片
+                commonMessage.setImg(bundle.getString("imageUrl"));
+                //语音
+                commonMessage.setVoiceUrl(bundle.getString("voiceUrl"));
+                commonMessage.setVoiceLen(bundle.getInt("voiceLen"));
+                commonMessage.setVoiceUserid(bundle.getLong("voiceUid"));
+                //视频
+                commonMessage.setVideoUrl(bundle.getString("videoUrl"));
+                commonMessage.setVideoLen(bundle.getInt("videoLen"));
+                commonMessage.setVideoThumb(bundle.getString("videoThumb"));
+                commonMessage.setVideoWidth(bundle.getInt("videoThumbWidth"));
+                commonMessage.setVideoHeight(bundle.getInt("videoThumbHeight"));
+                break;
+            case hint:
+            case html:
+            case htmlText:
+            case autoUpdateHtml:
+                TextMessage textMessage = (TextMessage) message;
+                textMessage.setHtm(bundle.getString("htm"));
+                textMessage.setMsgDesc(bundle.getString("msg"));
+                break;
+            case gift:
+            case wantGift:
+                GiftMessage giftMessage = (GiftMessage) message;
+                giftMessage.setGiftID(bundle.getInt("gift_id"));
+                giftMessage.setGiftCount(bundle.getInt("count"));
+                giftMessage.setGiftLogID(bundle.getLong("gift_log_id"));
+                giftMessage.setfStatus(bundle.getBoolean("giftReceived") ? 0 : 1);
+                break;
+            case video:
+                VideoMessage videoMessage = (VideoMessage) message;
+                videoMessage.setVideoID((int) bundle.getLong("vc_id"));
+                videoMessage.setSpecialMsgID(bundle.getLong("vc_id"));
+                videoMessage.setVideoTp(bundle.getInt("vc_tp"));
+                videoMessage.setVideoMediaTp(bundle.getInt("media_tp"));
+                videoMessage.setVideoVcEscCode(bundle.getInt("vc_esc_code"));
+                videoMessage.setVideoVcTalkTime(bundle.getInt("vc_talk_time"));
+                videoMessage.setVc_channel_key(bundle.getString("vc_channel_key"));
+                break;
+            default:
+                message.setMsgDesc(bundle.getString("msg"));
+                break;
+        }
+    }
+
+    private Bundle getBundleFromContent(BaseMessageType messageType, String content) {
         Bundle bundle = new Bundle();
         try {
             if (TextUtils.isEmpty(content) ||
@@ -293,13 +302,14 @@ public class OldDBModule {
                     break;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return bundle;
     }
 
     // 如果是4.0以下版本调用这个方法BOM
-    public static String JSONTokener(String in) {
+    private String JSONTokener(String in) {
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion < 14) {// 14为4.0
             // consume an optional byte order mark (BOM) if it exists
