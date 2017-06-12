@@ -64,9 +64,9 @@ public class AppMgrImpl implements AppMgr {
             simo = mTm.getSimOperator();
             mac = NetworkUtils.getMacAddress(App.context);
 
-            UMChannel = PkgHelper.getMarket(App.context, App.context.getResources().getString(R.string.app_name) + "_2_999");
-            mainChannelID = PkgHelper.getMainChannel(App.context, "2"); //appInfo.metaData.getInt("sUID");
-            subChannelID = PkgHelper.getSubChannel(App.context, "999"); //appInfo.metaData.getInt("sID");
+            UMChannel = PkgHelper.getMarket(App.context, App.context.getResources().getString(R.string.app_name) + "_1000_1000");
+            mainChannelID = PkgHelper.getMainChannel(App.context, "1000"); //appInfo.metaData.getInt("sUID");
+            subChannelID = PkgHelper.getSubChannel(App.context, "1000"); //appInfo.metaData.getInt("sID");
 
             // 获取签名
             List<PackageInfo> apps = packageManager.getInstalledPackages(PackageManager.GET_SIGNATURES);
