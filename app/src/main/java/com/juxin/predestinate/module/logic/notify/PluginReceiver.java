@@ -33,6 +33,10 @@ public class PluginReceiver extends BroadcastReceiver {
                             ModuleMgr.getChatMgr().sendGiftMsg(null, jo.optString("tid"), jo.optInt("giftid"),
                                     jo.optInt("giftnum"), jo.optInt("gtype"));
                             break;
+                        case 7://更改消息状态
+                            ModuleMgr.getChatMgr().sendMailReadedMsg(null,jo.optLong("tid"));
+                            ModuleMgr.getChatMgr().updateLocalReadStatus(null, jo.optString("tid"), jo.optLong("msgId"));
+                            break;
                         default:
                             break;
                     }

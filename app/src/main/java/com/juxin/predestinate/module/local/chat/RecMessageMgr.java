@@ -105,6 +105,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
             if (jo != null) {
                 jo.put("fid", fid);
+                jo.put("msgId",object.getLong("d"));
                 Intent intent = new Intent("com.juxin.action.plugin");
                 intent.putExtra("extra_json", jo.toString());
                 App.context.sendBroadcast(intent);
