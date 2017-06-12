@@ -103,7 +103,8 @@ public enum UrlParam {
     uploadFile(Hosts.FATE_IT_HTTP_PIC, "index/upload", UpLoadResult.class, false),
 
     //============================== 用户资料模块相关接口 =============================
-    //客户端获得用户红包列表
+    //摇钱树红包列表
+    reqTreeRedbagList("fruit/redbaglisttree", RedbagList.class, true),
     reqRedbagList("fruit/redbaglist", RedbagList.class, true),
     //客户端用户红包入袋fruit/addredonekey
     reqAddredTotal("fruit/addredtotalnew", false),

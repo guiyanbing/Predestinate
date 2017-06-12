@@ -681,6 +681,17 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
+     * 摇钱树红包列表
+     *
+     * @param complete 请求完成后回调
+     */
+    public void getTreeRedbagList(RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<String, Object>();
+        postParams.put("uid", App.uid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheNoEncHttp(UrlParam.reqTreeRedbagList, postParams, complete);
+    }
+
+    /**
      * 客户端获得用户红包列表
      *
      * @param complete 请求完成后回调

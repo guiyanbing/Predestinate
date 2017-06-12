@@ -16,6 +16,7 @@ public class RedbagList extends BaseData {
     private List redbagLists;
     private String status;
     private double total;
+    private int onekeynum;
 
     public boolean isOk() {
         if ("ok".equalsIgnoreCase(status))
@@ -40,11 +41,21 @@ public class RedbagList extends BaseData {
         return redbagLists;
     }
 
+    public int getOnekeynum() {
+        return onekeynum;
+    }
+
+    public void setOnekeynum(int onekeynum) {
+        this.onekeynum = onekeynum;
+    }
+
     @Override
     public void parseJson(String s) {
         JSONObject jsonObject = getJsonObject(s);
         if (jsonObject.has("total"))
             this.setTotal(jsonObject.optDouble("total"));
+        if (jsonObject.has("onekeynum"))
+            this.setOnekeynum(jsonObject.optInt("onekeynum"));
         redbagLists = getBaseDataList(jsonObject.optJSONArray("result"), RedbagInfo.class);
     }
 
@@ -55,6 +66,7 @@ public class RedbagList extends BaseData {
         private String create_time;
         private int type;
         private int rank;
+        private int frozen;
 
         @Override
         public void parseJson(String s) {
@@ -64,6 +76,7 @@ public class RedbagList extends BaseData {
             this.setCreate_time(jsonObject.optString("create_time"));
             this.setType(jsonObject.optInt("type"));
             this.setRank(jsonObject.optInt("rank"));
+            this.setRank(jsonObject.optInt("frozen"));
         }
 
         public long getId() {
@@ -104,6 +117,14 @@ public class RedbagList extends BaseData {
 
         public void setRank(int rank) {
             this.rank = rank;
+        }
+
+        public int getFrozen() {
+            return frozen;
+        }
+
+        public void setFrozen(int frozen) {
+            this.frozen = frozen;
         }
 
         @Override

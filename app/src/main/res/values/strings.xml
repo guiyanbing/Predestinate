@@ -562,6 +562,7 @@
     <string name="my_diamonds_explain">我的钻石</string>
     <string name="explain">说明</string>
     <string name="my_red">我的钱包</string>
+    <string name="tree_income_details">摇钱树红包</string>
     <string name="income_details">收入详情</string>
     <string name="withdraw_record">提现记录</string>
     <string name="phone_verify">手机号验证</string>
