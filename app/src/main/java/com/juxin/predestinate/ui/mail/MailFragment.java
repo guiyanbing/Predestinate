@@ -400,6 +400,18 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        PLogger.d("MailFragment -- onResume == setmTouchPosition");
+        if (mailFragmentAdapter != null && mailFragmentAdapter.getList() != null && mailFragmentAdapter.getList().size() != 0) {
+            if (listMail != null)
+                listMail.setmTouchPosition(-2);
+
+            PLogger.d("MailFragment -- onResume == getmTouchPosition == " + listMail.getmTouchPosition());
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         MsgMgr.getInstance().detach(this);
