@@ -162,7 +162,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
 
                         @Override
                         public void onSubmit() {
-                            UIShow.showOpenVipActivity(context);
+                            UIShow.showBuyCoinActivity(context);
                         }
                     }, context.getString(R.string.hot_card_price_vip), "", context.getString(R.string.hot_card_price_cancle), context.getString(R.string.hot_card_price_sure), true, R.color.text_zhuyao_black);
                 }
