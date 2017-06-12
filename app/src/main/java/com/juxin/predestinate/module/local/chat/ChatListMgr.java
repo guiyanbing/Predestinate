@@ -16,6 +16,7 @@ import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.OldDBModule;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -251,7 +252,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
-            getWhisperList(false);
+            getWhisperListUnsubscribe();
         }
     }
 
@@ -260,7 +261,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             return;
         }
         dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperList(false);
+        getWhisperListUnsubscribe();
     }
 
     /**
@@ -272,31 +273,37 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long updateToReadPrivate(long userID) {
         long ret = dbCenter.getCenterFLetter().updateStatus(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperList(false);
+            getWhisperListUnsubscribe();
         }
         return ret;
     }
 
-    public void getWhisperList(boolean isUnsubscribe) {
+    public void getWhisperList() {
         PLogger.printObject("getWhisperList====1");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.subscribeOn(Schedulers.io());
         listObservable.observeOn(AndroidSchedulers.mainThread());
-
-        if (!isUnsubscribe) {
-            listObservable.subscribe(action1).unsubscribe();
-        } else {
-            listObservable.subscribe(action1);
-        }
+        listObservable.subscribe(new Action1<List<BaseMessage>>() {
+            @Override
+            public void call(List<BaseMessage> baseMessages) {
+                PLogger.printObject("getWhisperList====2" + baseMessages.size());
+                updateListMsg(baseMessages);
+            }
+        });
     }
 
-    Action1 action1 = new Action1<List<BaseMessage>>() {
-        @Override
-        public void call(List<BaseMessage> baseMessages) {
-            PLogger.printObject("getWhisperList====2" + baseMessages.size());
-            updateListMsg(baseMessages);
-        }
-    };
+    public void getWhisperListUnsubscribe() {
+        PLogger.printObject("getWhisperList====1");
+        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
+        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+                .subscribe(new Action1<List<BaseMessage>>() {
+                    @Override
+                    public void call(List<BaseMessage> baseMessages) {
+                        PLogger.printObject("getWhisperList=un===2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                });
+    }
 
     @Override
     public void onMessage(String key, Object value) {
@@ -309,7 +316,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-                            getWhisperList(false);
+                            getWhisperListUnsubscribe();
                         }
                     });
                 }
@@ -333,7 +340,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
             PLogger.d("uid=======" + App.uid);
-            getWhisperList(true);
+            getWhisperList();
             ModuleMgr.getChatMgr().deleteMessageKFIDHour(48);
         }
     }
