@@ -20,7 +20,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView;
-import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 
@@ -158,7 +157,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         if (msgData.getType() == BaseMessage.BaseMessageType.hint.getMsgType() || msgData.getLWhisperID() == MailMsgID.Greet_Msg.type) {
             return;
         }
-        if (JsonUtil.getJsonObject(msgData.getJsonStr()).has("fid")) return;
+        if (!msgData.isSender()) return;
         item_last_status.setVisibility(View.VISIBLE);
 
         BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(msgData.getType());

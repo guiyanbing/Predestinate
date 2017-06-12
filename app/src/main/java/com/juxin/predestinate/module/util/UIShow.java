@@ -758,6 +758,11 @@ public class UIShow {
                     return;
                 }
 
+                if (payType == GoodsConstant.PAY_TYPE_OTHER) {//其他支付
+                    UIShow.showPayListAct(activity, commodity_Id);
+                    return;
+                }
+
                 payGood.setPay_id(commodity_Id);
 
                 if (payType == GoodsConstant.PAY_TYPE_WECHAT) {//微信支付
