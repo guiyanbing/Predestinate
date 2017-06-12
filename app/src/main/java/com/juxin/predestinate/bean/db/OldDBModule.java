@@ -154,7 +154,13 @@ public class OldDBModule {
                     message.setDataSource(MessageConstant.ONE);
                     message.setChannelID(null);
 
-                    message.setJsonStr(message.getJson(message));
+                    String jsonStr = message.getJson(message);
+                    if (receive_send_status == 0) {
+                        JSONObject json = new JSONObject(message.getJson(message));
+                        json.put("fid", other_id);
+                        jsonStr = json.toString();
+                    }
+                    message.setJsonStr(jsonStr);
                     if (dbCenter.insertMsg(message) != MessageConstant.ERROR)
                         c2++;
                 } catch (Exception ee) {
