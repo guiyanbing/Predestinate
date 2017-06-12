@@ -745,7 +745,7 @@ public class UIShow {
      * @param commodity_Id 订单
      * @param payType      类型
      */
-    public static void showPayAlipayt(final FragmentActivity activity, int commodity_Id, final int payType) {
+    public static void showPayAlipayt(final FragmentActivity activity, final int commodity_Id, final int payType) {
         LoadingDialog.show(activity, "生成订单中");
         ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
             @Override
@@ -755,6 +755,11 @@ public class UIShow {
                 if (!payGood.isOK()) {
                     LoadingDialog.closeLoadingDialog();
                     PToast.showShort("支付出错，请重试！");
+                    return;
+                }
+
+                if (payType == GoodsConstant.PAY_TYPE_OTHER) {//其他支付
+                    UIShow.showPayListAct(activity, commodity_Id);
                     return;
                 }
 
