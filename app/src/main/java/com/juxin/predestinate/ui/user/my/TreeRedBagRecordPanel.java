@@ -148,7 +148,7 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
         tv_sum_tip.setTextColor(Color.parseColor("#e3b382"));
         if (mRedbagInfos != null && !mRedbagInfos.isEmpty()) {
             mTreeRedBagTabAdapter.setList(mRedbagInfos);
-            if(oneKeyNum / 100 >= ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney()) {
+            if(oneKeyNum / 100 >= mMinMoney / 100) {
                 butOneKey.setEnabled(true);
                 tv_sum_tip.setText("可放入零钱金额已达" + oneKeyNum / 100 + "元");
             }else {
