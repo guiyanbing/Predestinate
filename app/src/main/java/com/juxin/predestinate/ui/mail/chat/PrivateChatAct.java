@@ -87,6 +87,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         checkReply();
 
         checkIsCanSendMsg();
+        ModuleMgr.getPhizMgr().reqCustomFace();
     }
 
     public void checkIsCanSendMsg() {
