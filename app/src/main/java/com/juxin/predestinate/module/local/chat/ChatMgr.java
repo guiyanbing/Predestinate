@@ -1,7 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -36,18 +36,14 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -304,7 +300,8 @@ public class ChatMgr implements ModuleBase {
      * @param whisperID
      * @param content
      */
-    public void sendTextMsg(String channelID, String whisperID, String content) {
+    public void sendTextMsg(String channelID, String whisperID, @Nullable String content) {
+        PLogger.printObject("whisperID=" + whisperID + "1-content=" + content);
         CommonMessage commonMessage = new CommonMessage(channelID, whisperID, content);
         commonMessage.setStatus(MessageConstant.SENDING_STATUS);
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
@@ -341,7 +338,7 @@ public class ChatMgr implements ModuleBase {
         IMProxy.getInstance().send(new NetData(App.uid, message.getType(), message.toMailReadedJson()), sendCallBack);
     }
 
-    public void sendImgMsg(String channelID, String whisperID, String img_url) {
+    public void sendImgMsg(String channelID, String whisperID, @Nullable String img_url) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, img_url, null);
         commonMessage.setLocalImg(BitmapUtil.getSmallBitmapAndSave(img_url, DirType.getImageDir()));
         commonMessage.setStatus(MessageConstant.SENDING_STATUS);
@@ -378,7 +375,7 @@ public class ChatMgr implements ModuleBase {
     }
 
     //语音消息
-    public void sendVoiceMsg(String channelID, String whisperID, String url, int length) {
+    public void sendVoiceMsg(String channelID, String whisperID, @Nullable String url, @Nullable int length) {
         final CommonMessage commonMessage = new CommonMessage(channelID, whisperID, url, length);
         commonMessage.setLocalVoiceUrl(url);
         commonMessage.setStatus(MessageConstant.SENDING_STATUS);
@@ -432,7 +429,7 @@ public class ChatMgr implements ModuleBase {
      * @param giftCount 礼物个数
      * @param gType     来源
      */
-    public void sendGiftMsg(String channelID, String whisperID, int giftID, int giftCount, int gType) {
+    public void sendGiftMsg(String channelID, String whisperID, @Nullable int giftID, @Nullable int giftCount, @Nullable int gType) {
         final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount);
         giftMessage.setStatus(MessageConstant.SENDING_STATUS);
         giftMessage.setJsonStr(giftMessage.getJson(giftMessage));
