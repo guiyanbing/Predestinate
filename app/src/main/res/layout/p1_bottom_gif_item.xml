@@ -19,8 +19,7 @@
             android:id="@+id/bottom_gif_item_img"
             android:layout_width="@dimen/px140_dp"
             android:layout_height="@dimen/px140_dp"
-            android:layout_marginTop="@dimen/px30_dp"
-            android:background="@drawable/p1_gift01"/>
+            android:layout_marginTop="@dimen/px30_dp"/>
         <TextView
             android:id="@+id/bottom_gif_item_txvneedstone"
             android:layout_width="wrap_content"

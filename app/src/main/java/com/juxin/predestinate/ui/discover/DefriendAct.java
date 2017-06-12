@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.discover.DefriendType;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -64,6 +65,7 @@ public class DefriendAct extends BaseActivity implements DefriendAdapter.OnSelec
                     PToast.showCenterShort("请选择举报类型");
                 } else {
                     String detail = TextUtils.isEmpty(editText.getText().toString()) ? "" : editText.getText().toString();
+                    StatisticsUser.userReport(tuid, toTypeName, detail);
                     ModuleMgr.getCommonMgr().complainBlack(tuid, toTypeName, detail, DefriendAct.this);
                 }
             }

@@ -53,6 +53,7 @@ public class DemandRedPacketAct extends BaseActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.demand_red_packet_tv_askfor_gift_send://索要礼物弹框
                 Statistics.userBehavior(SendPoint.menu_me_redpackage_sylw);
+                
                 dialog = null;
                 if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
                     dialog = new AskForGiftDialog(DemandRedPacketAct.this);

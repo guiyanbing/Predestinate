@@ -40,8 +40,8 @@ import java.io.FileInputStream;
  * 视频认证
  * IQQ
  */
-
 public class MyAuthenticationVideoAct extends BaseActivity implements View.OnClickListener {
+
     private Context context;
     private static final int PhotoUploadResult = 10001;
     private static final int VideoUploadResult = 10002;
@@ -62,7 +62,6 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         initView();
         getStatus();
     }
-
 
     private void initView() {
         ivAuthPic = (ImageView) findViewById(R.id.iv_auth_pic);
@@ -152,7 +151,6 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         ivAuthVideo.setOnClickListener(this);
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -163,22 +161,19 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                 ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this, true);
                 break;
             case R.id.iv_pic:
-                if (isMakeing)
-                    return;
+                if (isMakeing) return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
                     ImgSelectUtil.getInstance().takePhoto(MyAuthenticationVideoAct.this, true);
                 Statistics.userBehavior(SendPoint.menu_me_meauth_videoauth_capturepicture);
                 break;
             case R.id.tv_make_video:
-                if (isMakeing)
-                    return;
+                if (isMakeing) return;
                 isMakeing = true;
                 UIShow.showRecordVideoAct(this, VideoUploadResult);
                 break;
             case R.id.iv_video:
-                if (isMakeing)
-                    return;
+                if (isMakeing) return;
                 isMakeing = true;
                 if (videoVerifyBean.getStatus() == 0)
                     UIShow.showRecordVideoAct(this, VideoUploadResult);
@@ -220,9 +215,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         if (FileUtil.isExist(sSmallPath)) {
             uploadAuthPic(sSmallPath);
         }
-
     }
-
 
     private void checkAndShowSubmit() {
         if (isMakePhotoOK && isMakeVideoOk) {
@@ -258,7 +251,6 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
             }
         });
     }
-
 
     private void VideoUpload(String sPath) {
         ModuleMgr.getMediaMgr().sendHttpFile(Constant.UPLOAD_TYPE_VIDEO, sPath, new RequestComplete() {

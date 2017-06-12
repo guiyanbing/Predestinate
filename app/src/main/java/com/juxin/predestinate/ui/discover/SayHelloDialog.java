@@ -16,7 +16,7 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.module.local.statistics.StatisticsLoginAfter;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -35,8 +35,8 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
 
     private static final int SAY_HELLO_MSG_WHAT = 100;
 
-    private List<UserInfoLightweight> data = new ArrayList<>();
-    private List<UserInfoLightweight> tmp = new ArrayList<>();
+    private List<UserInfoLightweight> data = new ArrayList<>();  //外部不准调用该函数 此函数会动态改变长度
+    private List<UserInfoLightweight> tmp = new ArrayList<>(); //外部调用、回调调用 用此函数
 
     private ImageView iv_big;
     private ImageView iv_small1;
@@ -115,9 +115,8 @@ public class SayHelloDialog extends BaseDialogFragment implements View.OnClickLi
             super.handleMessage(msg);
             switch (msg.what) {
                 case SAY_HELLO_MSG_WHAT:
+                    StatisticsUser.dailyOneKeySayHi(tmp);
                     toSayHello();
-                    //统计
-                    StatisticsLoginAfter.sayHi(data);
                     break;
             }
         }

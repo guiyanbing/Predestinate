@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
+import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -17,17 +18,16 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.impl.HttpMgrImpl;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.ui.utils.Common;
 import com.juxin.predestinate.ui.utils.DownloadPluginFragment;
 
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
@@ -85,6 +85,7 @@ public class VideoAudioChatHelper {
 
     /**
      * 邀请对方音频或视频聊天
+     *
      * @param context
      * @param dstUid
      * @param type
@@ -152,7 +153,9 @@ public class VideoAudioChatHelper {
      */
     public void checkDownloadPlugin(FragmentActivity activity) {
         VideoVerifyBean verifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
-        if ((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat()) && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
+        if (((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat())
+                && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
+                || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version())
             downloadVideoPlugin(activity);
     }
 
@@ -163,7 +166,7 @@ public class VideoAudioChatHelper {
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
-    public void openInvitedActivity(Activity activity, int vcId, long dstUid, int chatType) {
+    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType) {
         startRtcInitActivity(activity, newBundle(vcId, dstUid, 2, chatType, 0));
     }
 
@@ -179,8 +182,8 @@ public class VideoAudioChatHelper {
 
         isDownloading = true;
         HttpMgr httpMgr = new HttpMgrImpl();
-        String apkFile = Common.getCahceDir("apk") + Long.toString(new Date().getTime()) + ".apk";//AppCfg.ASet.getVideo_chat_apk_url()
         String downUrl = TextUtils.isEmpty(ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url()) ? TEST_URL : ModuleMgr.getCommonMgr().getCommonConfig().getVideo_chat_apk_url();
+        String apkFile = DirType.getApkDir() + FileUtil.getFileNameFromUrl(downUrl);//AppCfg.ASet.getVideo_chat_apk_url()
         httpMgr.download(downUrl, apkFile, new DownloadListener() {
             @Override
             public void onStart(String url, String filePath) {
@@ -232,7 +235,7 @@ public class VideoAudioChatHelper {
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
-            int vcID = resJo.optInt("vc_id");
+            long vcID = resJo.optLong("vc_id");
             int msgVer = resJo.optInt("confer_msgver");
             ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
@@ -255,14 +258,14 @@ public class VideoAudioChatHelper {
      * @param msgVer     程序版本号
      * @return
      */
-    private Bundle newBundle(int vcId, long dstUid, int inviteType, int chatType, int msgVer) {
+    private Bundle newBundle(long vcId, long dstUid, int inviteType, int chatType, int msgVer) {
         int foreverType = PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0);
         Bundle bundle = new Bundle();
         bundle.putString("vc_get_user_url", UrlParam.reqUserInfoSummary.getFinalUrl());
         bundle.putString("vc_cookie", ModuleMgr.getLoginMgr().getCookieVerCode());
         bundle.putInt("vc_chat_type", chatType);
         bundle.putInt("vc_invite_type", inviteType);
-        bundle.putInt("vc_id", vcId);
+        bundle.putLong("vc_id", vcId);
         bundle.putInt("vc_project", 1);
         bundle.putString("vc_channel", JniUtil.GetEncryptString("juxin_live_" + vcId));
         bundle.putString("vc_uid", ModuleMgr.getCenterMgr().getMyInfo().getUid() + "");

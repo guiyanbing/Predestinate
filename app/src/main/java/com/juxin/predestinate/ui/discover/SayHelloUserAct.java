@@ -11,8 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.juxin.library.log.PLogger;
-import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -48,7 +46,6 @@ import static com.juxin.predestinate.module.logic.application.App.getActivity;
  * 打招呼的人
  * Created by zhang on 2017/5/22.
  */
-
 public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemClickListener,
         PObserver, XListView.IXListViewListener, View.OnClickListener,
         SwipeListView.OnSwipeItemClickedListener, AbsListView.OnScrollListener {
@@ -72,7 +69,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         isCanBack(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_say_hello_user_act);
-        PSP.getInstance().put(ModuleMgr.getCommonMgr().getIsCanExKey(), true);
+
         initView();
         initData();
         MsgMgr.getInstance().attach(this);
@@ -231,9 +228,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_User_List_Msg_Change:
-                if (PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getIsCanExKey(), false)) {
-                    initData();
-                }
+                initData();
                 break;
             default:
                 break;
@@ -367,8 +362,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (adapter == null) return;
-        if (!timeUtil.check(10 * 1000)) {
+        if (adapter == null || !timeUtil.check(4 * 1000)) {
             return;
         }
         final List<Long> stringList = new ArrayList<>();
@@ -411,6 +405,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PSP.getInstance().put(ModuleMgr.getCommonMgr().getIsCanExKey(), false);
+        MsgMgr.getInstance().detach(this);
     }
 }

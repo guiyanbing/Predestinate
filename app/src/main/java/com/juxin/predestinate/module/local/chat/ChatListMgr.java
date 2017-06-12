@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -14,6 +15,7 @@ import com.juxin.predestinate.bean.db.AppModule;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
+import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -27,11 +29,15 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -57,6 +63,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     @Override
     public void release() {
+        MsgMgr.getInstance().detach(this);
     }
 
     public int getUnreadNumber() {
@@ -87,8 +94,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public boolean isContain(long userID) {
         synchronized (msgList) {
-            for(BaseMessage temp : msgList){
-                if(userID == temp.getLWhisperID()){
+            for (BaseMessage temp : msgList) {
+                if (userID == temp.getLWhisperID()) {
                     return true;
                 }
             }
@@ -98,13 +105,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 获取角标数
+     *
      * @param userID
      * @return
      */
     public int getNoReadNum(long userID) {
         synchronized (msgList) {
-            for(BaseMessage temp : msgList){
-                if(userID == temp.getLWhisperID()){
+            for (BaseMessage temp : msgList) {
+                if (userID == temp.getLWhisperID()) {
                     return temp.getNum();
                 }
             }
@@ -138,7 +146,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetList.add(tmp);
                 }
                 unreadNum += tmp.getNum();
-                PLogger.printObject("unreadNum="+ tmp.getNum());
+                PLogger.printObject("unreadNum=" + tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
@@ -257,6 +265,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 更新私聊列表状态
+     *
      * @param userID
      * @return
      */
@@ -274,9 +283,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
         listObservable.subscribeOn(Schedulers.io());
         listObservable.observeOn(AndroidSchedulers.mainThread());
 
-        if(!isUnsubscribe){
+        if (!isUnsubscribe) {
             listObservable.subscribe(action1).unsubscribe();
-        }else {
+        } else {
             listObservable.subscribe(action1);
         }
     }
@@ -293,10 +302,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_Unread_change:
-                if ( App.uid <= 0) return;
+                if (App.uid <= 0) return;
                 Map<String, Object> msgMap = (Map<String, Object>) value;
                 String Msg_Name_Key = (String) msgMap.get(UnreadMgr.Msg_Name_Key);
-                if(Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)){
+                if (Msg_Name_Key.equals(UnreadMgrImpl.FOLLOW_ME)) {
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
@@ -316,9 +325,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    private void login(){
+    private void login() {
         if (App.uid > 0) {
             initAppComponent();
+            //升级数据库
+            OldDBModule.getInstance().updateDB(App.uid);
             getAppComponent().inject(this);
             ModuleMgr.getChatMgr().inject();
             PLogger.d("uid=======" + App.uid);
@@ -355,6 +366,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 .appModule(new AppModule((Application) App.getContext()))
                 .dBModule(new DBModule(App.uid))
                 .build();
+
+        MsgMgr.getInstance().sendMsg(MsgType.MT_DB_Init_Ok, null);
     }
 
     /**
@@ -412,7 +425,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private void setSystemMsg(BaseMessage message) {
         if (message != null && !(message instanceof SystemMessage)) return;
         SystemMessage mess = (SystemMessage) message;
-        if(mess != null){
+        if (mess != null) {
             switch (mess.getXtType()) {
                 case 3:
                     ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(), mess);

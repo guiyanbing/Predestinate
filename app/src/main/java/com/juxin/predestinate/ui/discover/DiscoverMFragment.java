@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 
@@ -95,12 +96,16 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
                 discover_recommend.setChecked(true);
                 discover_hot.setChecked(false);
                 switchContent(discoverFragment);
+                //统计
+                StatisticsDiscovery.onClickRecommend();
                 break;
             case R.id.discover_hot:
                 setTitleRightImgGone();
                 discover_recommend.setChecked(false);
                 discover_hot.setChecked(true);
                 switchContent(hotFragment);
+                //统计
+                StatisticsDiscovery.onClickHot();
                 break;
             default:
                 break;

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -19,13 +20,14 @@ import com.juxin.predestinate.module.logic.baseui.picker.picker.OptionPicker;
 import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
  * 注册页面
  * Created YAO on 2017/4/19.
  */
 
-public class UserRegInfoAct extends BaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class UserRegInfoAct extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
     private EditText et_nickname;
     private TextView txt_reg_info_age;
@@ -58,35 +60,39 @@ public class UserRegInfoAct extends BaseActivity implements View.OnClickListener
     }
 
     private void initEvent() {
-        txt_reg_info_age.setOnClickListener(this);
-        bt_submit.setOnClickListener(this);
+        txt_reg_info_age.setOnClickListener(clickListener);
+        bt_submit.setOnClickListener(clickListener);
         rg_gender.setOnCheckedChangeListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.txt_reg_info_age:
-                PickerDialogUtil.showOptionPickerDialog(this, new OptionPicker.OnOptionPickListener() {
-                    @Override
-                    public void onOptionPicked(String option) {
-                        age = InfoConfig.getInstance().getAgeN().getSubmitWithShow(option);
-                        ageVlaue = option;
-                        txt_reg_info_age.setText(ageVlaue);
+    private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
+        @Override
+        public void onNoDoubleClick(View v) {
+            switch (v.getId()) {
+                case R.id.txt_reg_info_age:
+                    PickerDialogUtil.showOptionPickerDialog(UserRegInfoAct.this, new OptionPicker.OnOptionPickListener() {
+                        @Override
+                        public void onOptionPicked(String option) {
+                            age = InfoConfig.getInstance().getAgeN().getSubmitWithShow(option);
+                            ageVlaue = option;
+                            txt_reg_info_age.setText(ageVlaue);
+                        }
+                    }, InfoConfig.getInstance().getAgeN().getShow(), getResources().getString(R.string.dal_age_default), getResources().getString(R.string.daltitle_age));
+                    break;
+                case R.id.btn_reg_info_submit:
+                    StatisticsUser.userRegister(nickname, age, gender);
+                    if (validInput()) {
+                        LoadingDialog.show(UserRegInfoAct.this, getResources().getString(R.string.loading_reg));
+                        ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
+                        ModuleMgr.getLoginMgr().onRegister(UserRegInfoAct.this, urlParam, nickname, age, gender);
                     }
-                }, InfoConfig.getInstance().getAgeN().getShow(), "18岁", "年龄");
-                break;
-            case R.id.btn_reg_info_submit:
-                if (validInput()) {
-                    LoadingDialog.show(this,getResources().getString(R.string.loading_reg));
-                    ModuleMgr.getCenterMgr().getMyInfo().setGender(gender);
-                    ModuleMgr.getLoginMgr().onRegister(this,urlParam, nickname, age, gender);
-                }
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
         }
-    }
+    };
+
 
     /**
      * 检查用户输入的信息是否有误

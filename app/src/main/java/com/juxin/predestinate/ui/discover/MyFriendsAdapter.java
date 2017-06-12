@@ -95,7 +95,7 @@ public class MyFriendsAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showPrivateChatAct(getContext(), userInfo.getUid(), null);
-                StatisticsMessage.openFirendChat(userInfo.getUid(), ModuleMgr.getChatListMgr().getNoReadNum(userInfo.getUid()));
+                StatisticsMessage.openFriendChat(userInfo.getUid(), ModuleMgr.getChatListMgr().getNoReadNum(userInfo.getUid()));
             }
         });
 
@@ -103,7 +103,7 @@ public class MyFriendsAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showPrivateChatAct(getContext(), userInfo.getUid(), null);
-                StatisticsMessage.openFirendChat(userInfo.getUid(), ModuleMgr.getChatListMgr().getNoReadNum(userInfo.getUid()));
+                StatisticsMessage.openFriendChat(userInfo.getUid(), ModuleMgr.getChatListMgr().getNoReadNum(userInfo.getUid()));
             }
         });
 

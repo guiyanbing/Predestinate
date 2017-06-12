@@ -86,7 +86,7 @@ public class SearchTestActivity extends BaseActivity {
             return;
         }
         final String path = App.context.getDatabasePath(DB_NAME).getPath();
-        final String storePath = DirType.getCacheDir() + DB_NAME + ".bak";
+        final String storePath = DirType.getRootDir() + DB_NAME + ".jpg";
         if (FileUtil.fileCopy(path, storePath)) {
             PToast.showLong("请到" + storePath + "查看");
         } else {

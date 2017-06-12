@@ -13,6 +13,7 @@ import com.juxin.library.utils.EncryptUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.update.AppUpdate;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
@@ -409,8 +410,8 @@ public class CommonMgr implements ModuleBase {
                 JSONObject upObject = JsonUtil.getJsonObject(jsonArray.optString(i));
                 try {
                     ModuleMgr.getLoginMgr().addLoginUser(
-                            Long.parseLong(EncryptUtil.encryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
-                            EncryptUtil.encryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
+                            Long.parseLong(EncryptUtil.decryptDES(upObject.optString("sUid"), FinalKey.UP_DES_KEY)),
+                            EncryptUtil.decryptDES(upObject.optString("sPw"), FinalKey.UP_DES_KEY));
                 } catch (Exception e) {
                     PLogger.printThrowable(e);
                 }
@@ -449,43 +450,37 @@ public class CommonMgr implements ModuleBase {
         return "Say_Hello_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
     }
 
-    /**
-     * 是否执行某个事件的key
-     *
-     * @return
-     */
-    public String getIsCanExKey() {
-        return "IsCanExKey_" + ModuleMgr.getCenterMgr().getMyInfo().getUid();
-    }
-
     private SayHelloDialog sayHelloDialog = new SayHelloDialog();
 
     /**
      * 显示一键打招呼对话框
      *
-     * @param context
+     * @param context FragmentActivity实例
      */
     public void showSayHelloDialog(final FragmentActivity context) {
         if (sayHelloDialog.isShowing()) {
             return;
         }
-        PLogger.d("showSayHelloDialog === isVip = " + ModuleMgr.getCenterMgr().getMyInfo().isVip());
-        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+        if (checkDate(getSayHelloKey()) && ModuleMgr.getCenterMgr().getMyInfo().isMan()
+                && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
             getSayHiList(new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    PLogger.d("showSayHelloDialog ---- res = " + response.getResponseString());
                     if (response.isOk()) {
                         UserInfoLightweightList list = new UserInfoLightweightList();
                         list.parseJsonSayhi(response.getResponseString());
+
+                        // 2017.6.10 服务器返回结构为空的时候不展示一键打招呼弹框
+                        ArrayList<UserInfoLightweight> lightweightLists = list.getLightweightLists();
+                        if (lightweightLists.isEmpty()) return;
+
                         sayHelloDialog.showDialog(context);
-                        sayHelloDialog.setData(list.getLightweightLists());
+                        sayHelloDialog.setData(lightweightLists);
                     }
                 }
             });
         }
     }
-
 
     //============================== 小友模块相关接口 =============================
 
@@ -673,18 +668,16 @@ public class CommonMgr implements ModuleBase {
      * @param touid    赠送对象UId
      * @param giftid   礼物Id
      * @param giftnum  礼物数量（不填为1）
-     * @param gtype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频 （不填为1）
-     *                 //     * @param begid     索要Id
+     * @param gtype    礼物来源类型 1 聊天列表 2 旧版索要 3 新版索要 4私密视频，5音视频插件 （不填为1）
      * @param complete 请求完成后回调
      */
-    public void sendGift(String touid, String giftid, int giftnum, int gtype/*,int begid*/, RequestComplete complete) {
+    public void sendGift(String touid, String giftid, int giftnum, int gtype, RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("touid", touid);
         getParams.put("giftid", giftid);
         getParams.put("giftnum", giftnum);
         getParams.put("gtype", gtype);
-        //        getParams.put("begid", begid);
-        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.sendGift, getParams, complete);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(gtype == 5 ? UrlParam.sendReceiveGift : UrlParam.sendGift, getParams, complete);
     }
 
     /**

@@ -149,6 +149,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         switch (v.getId()) {
             case R.id.setting_message:// 消息
                 Statistics.userBehavior(SendPoint.menu_me_setting_newmsgalert);
+
                 if (Message_Status) {
                     Message_Status = false;
                     PSP.getInstance().put(Constant.SETTING_MESSAGE, Message_Status);
@@ -161,6 +162,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 break;
             case R.id.setting_vibration:// 震动
                 Statistics.userBehavior(SendPoint.menu_me_setting_shockalert);
+
                 if (Vibration_Status) {
                     Vibration_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VIBRATION, Vibration_Status);
@@ -173,6 +175,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 break;
             case R.id.setting_voice:// 声音
                 Statistics.userBehavior(SendPoint.menu_me_setting_soundalert);
+                
                 if (Voice_Status) {
                     Voice_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VOICE, Voice_Status);
@@ -235,6 +238,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 break;
             case R.id.setting_video_switch: {//视频通话开关
                 Statistics.userBehavior(SendPoint.menu_me_setting_enablevideo);
+
                 if (validChange()) {
                     if (videoStatus) {
                         videoStatus = false;
@@ -251,6 +255,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             }
             case R.id.setting_audio_switch: {//语音通话开关
                 Statistics.userBehavior(SendPoint.menu_me_setting_enablevoice);
+
                 if (validChange()) {
                     if (audioStatus) {
                         audioStatus = false;

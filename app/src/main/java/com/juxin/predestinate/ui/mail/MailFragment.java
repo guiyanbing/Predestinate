@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -20,7 +21,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -34,8 +34,10 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -78,7 +80,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         setTitleRightImgGone();
         View title_right = LayoutInflater.from(getActivity()).inflate(R.layout.f1_mail_title_right, null);
         mail_title_right_text = (TextView) title_right.findViewById(R.id.mail_title_right_text);
-        mail_title_right_text.setText("编辑");
+        mail_title_right_text.setText(getString(R.string.edit));
         setTitleRightContainer(title_right);
         title_right.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,13 +124,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listview_footer.setOnClickListener(null);
         mailFragmentAdapter = new MailFragmentAdapter(getContext(), null);
         listMail.setAdapter(mailFragmentAdapter);
-        mailFragmentAdapter.updateAllData();
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(listMail);
-            }
-        }, 800);
+        showAllData(800);
 
         listMail.setPullLoadEnable(false);
         listMail.setMenuCreator(new SwipeMenuCreator() {
@@ -157,7 +153,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onSwipeChooseOpened() {
         ((MainActivity) getActivity()).onGoneBottom(false);
         mail_bottom.setVisibility(View.VISIBLE);
-        mail_title_right_text.setText("取消");
+        mail_title_right_text.setText(getString(R.string.cancel));
         isGone = true;
         ondisplayTitleLeft();
     }
@@ -166,7 +162,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onSwipeChooseClosed() {
         ((MainActivity) getActivity()).onGoneBottom(true);
         mail_bottom.setVisibility(View.GONE);
-        mail_title_right_text.setText("编辑");
+        mail_title_right_text.setText(getString(R.string.edit));
         isGone = false;
         onhideTitleLeft();
     }
@@ -222,7 +218,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                     case MyFriend_Msg://我的好友
                         UIShow.showMyFriendsAct(getActivity());
-                        StatisticsMessage.firendClick();
+                        StatisticsMessage.friendClick();
                         break;
                     case Greet_Msg://打招呼的人
                         UIShow.showSayHelloUserAct(getActivity());
@@ -239,7 +235,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void selectAll() {
         mailDelInfoList.clear();
         if (mailFragmentAdapter != null && mailFragmentAdapter.mailItemOrdinarySize() > 0) {
-            if(mail_delete != null){
+            if (mail_delete != null) {
                 mail_delete.setEnabled(true);
             }
             mailDelInfoList.addAll(mailFragmentAdapter.mailItemOrdinary());
@@ -271,13 +267,9 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                mailFragmentAdapter.updateAllData();
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        detectInfo(listMail);
-                    }
-                }, 800);
+                if (isHidden()) return;
+
+                showAllData(1300);
                 break;
             default:
                 break;
@@ -344,14 +336,14 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (stringList.size() > 0) {
             Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
             observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-            .subscribe(new Action1<List<UserInfoLightweight>>() {
-                @Override
-                public void call(List<UserInfoLightweight> lightweights) {
-                    if(lightweights != null && lightweights.size() > 0){
-                        ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
-                    }
-                }
-            });
+                    .subscribe(new Action1<List<UserInfoLightweight>>() {
+                        @Override
+                        public void call(List<UserInfoLightweight> lightweights) {
+                            if (lightweights != null && lightweights.size() > 0) {
+                                ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
+                            }
+                        }
+                    });
 
             TimerUtil.beginTime(new TimerUtil.CallBack() {
                 @Override
@@ -364,17 +356,12 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onScrollStateChanged(final AbsListView view, int scrollState) {
-        if(mailFragmentAdapter == null) return;
+        if (mailFragmentAdapter == null) return;
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        detectInfo(view);
-                    }
-                }, 200);
+                showAllData(200);
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
@@ -392,5 +379,29 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    }
+
+    private void showAllData(int time) {
+        mailFragmentAdapter.updateAllData();
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
+                detectInfo(listMail);
+            }
+        }, time);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!isHidden()) {
+            showAllData(1300);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
     }
 }

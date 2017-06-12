@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class VideoMessage extends BaseMessage {
 
-    private int videoID;//视频聊天ID，一次视频聊天过程的唯一标识
+    private long videoID;//视频聊天ID，一次视频聊天过程的唯一标识
     // 3,4存本地
     private int videoTp;//请求类型，1邀请加入聊天，2同意加入  3拒绝或取消 4挂断（挂断可能会收到不止一次）
     private int videoMediaTp;//现在所有消息都会包含此字段 1视频, 2语音
@@ -34,7 +34,7 @@ public class VideoMessage extends BaseMessage {
         super();
     }
 
-    public VideoMessage(String channelID, String whisperID, int type, int videoID, int videoTp, int videoVcEscCode) {
+    public VideoMessage(String channelID, String whisperID, int type, long videoID, int videoTp, int videoVcEscCode) {
         super(channelID, whisperID);
         this.setVideoID(videoID);
         this.setSpecialMsgID(videoID);
@@ -82,11 +82,11 @@ public class VideoMessage extends BaseMessage {
         return null;
     }
 
-    public int getVideoID() {
+    public long getVideoID() {
         return videoID;
     }
 
-    public void setVideoID(int videoID) {
+    public void setVideoID(long videoID) {
         this.videoID = videoID;
     }
 
@@ -162,7 +162,7 @@ public class VideoMessage extends BaseMessage {
     }
 
     private void parseVideoJson(JSONObject object) {
-        this.setVideoID(object.optInt("vc_id"));
+        this.setVideoID(object.optLong("vc_id"));
         this.setSpecialMsgID(getVideoID());
         this.setVideoTp(object.optInt("vc_tp"));
         this.setVideoMediaTp(object.optInt("media_tp"));

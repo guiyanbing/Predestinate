@@ -30,7 +30,7 @@ import java.util.List;
  * 收入详情
  * Created by zm on 2017/4/25
  */
-public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExListView.IXListViewListener,View.OnClickListener{
+public class RedBagRecordPanel extends BasePanel implements RequestComplete, ExListView.IXListViewListener, View.OnClickListener {
 
     private Context mContext;
     //有关控件
@@ -38,7 +38,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
     private CustomStatusListView crvView;
     private ExListView rvList;
     private LinearLayout llSummary;
-    private TextView tvData,tvPath,tvMoney,tvStatus;
+    private TextView tvData, tvPath, tvMoney, tvStatus;
     private TextView tvNoData;
     //数据相关
     private List<RedbagList.RedbagInfo> mRedbagInfos;
@@ -52,12 +52,13 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
         reqData();
         crvView.showLoading();
     }
+
     //请求数据
     private void reqData() {
         ModuleMgr.getCommonMgr().getRedbagList(this);//请求收入详情列表
     }
 
-    private void initView(){
+    private void initView() {
         butOneKey = (Button) findViewById(R.id.wode_record_panel_btn_one_key);
         crvView = (CustomStatusListView) findViewById(R.id.wode_record_panel_crv_list);
         llSummary = (LinearLayout) findViewById(R.id.withdraw_ll_summary);
@@ -69,13 +70,11 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
         tvNoData.setVisibility(View.GONE);
         llSummary.setVisibility(View.GONE);
         butOneKey.setOnClickListener(this);
+
         rvList = crvView.getExListView();
-//        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-//        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
-//                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         rvList.setHeaderStr(getContext().getString(R.string.xlistview_header_hint_normal),
-               getContext().getString(R.string.xlistview_header_hint_loading));
-        mRedBagTabAdapter = new RedBagTabAdapter(mContext,this);
+                getContext().getString(R.string.xlistview_header_hint_loading));
+        mRedBagTabAdapter = new RedBagTabAdapter(mContext, this);
         rvList.setAdapter(mRedBagTabAdapter);
         rvList.setPullLoadEnable(false);
         rvList.setXListViewListener(this);
@@ -87,7 +86,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
         for (int i = 0; i < mRedbagInfos.size(); i++) {
             money += mRedbagInfos.get(i).getMoney();
         }
-        return Util.formatMoneyUtils(money*100f);
+        return Util.formatMoneyUtils(money * 100f);
     }
 
     //请求数据返回
@@ -98,30 +97,26 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
         crvView.showExListView();
         rvList.stopRefresh();
         rvList.stopLoadMore();
-        if (response.getUrlParam() == UrlParam.reqRedbagList){
-//            Log.e("TTTTTTTT", response.getResponseString()+"|||"+response.isOk());
+        if (response.getUrlParam() == UrlParam.reqRedbagList) {
             RedbagList redbagList = new RedbagList();
-
-//            redbagList.parseJson(testData());
             redbagList.parseJson(response.getResponseString());
-            if (response.isOk()){
-                ((RedBoxRecordAct)context).refreshView(redbagList.getTotal());
+            if (response.isOk()) {
+                ((RedBoxRecordAct) context).refreshView(redbagList.getTotal());
                 mRedbagInfos = redbagList.getRedbagLists();
-//                Log.e("TTTTTTTTVV",mRedbagInfos.size()+"|||");
                 handleData();
                 return;
             }
-            if (mRedbagInfos != null && !mRedbagInfos.isEmpty()){
+            if (mRedbagInfos != null && !mRedbagInfos.isEmpty()) {
                 return;
             }
-        }else if (response.getUrlParam() == UrlParam.reqAddredonekey){
-            if (response.isOk()){
+        } else if (response.getUrlParam() == UrlParam.reqAddredonekey) {
+            if (response.isOk()) {
                 RedOneKeyList redOneKeyList = (RedOneKeyList) response.getBaseData();
-                ((RedBoxRecordAct)context).refreshView(redOneKeyList.getSum());
+                ((RedBoxRecordAct) context).refreshView(redOneKeyList.getSum());
                 mRedbagInfos = redOneKeyList.getRedbagFailLists();
-                if(redOneKeyList.getSucnum() == 0) {
+                if (redOneKeyList.getSucnum() == 0) {
                     PToast.showShort(mContext.getString(R.string.no_add_redbag));
-                }else {
+                } else {
                     PToast.showShort(mContext.getString(R.string.succeed) + redOneKeyList.getSucnum() + mContext.getString(R.string.hour_into_the_bag));
                 }
                 handleData();
@@ -131,28 +126,31 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
         }
         showNoData();
     }
+
     //处理数据
-    public void handleData(){
-        if (mRedbagInfos != null && !mRedbagInfos.isEmpty()){
+    public void handleData() {
+        if (mRedbagInfos != null && !mRedbagInfos.isEmpty()) {
             mRedBagTabAdapter.setList(mRedbagInfos);
             butOneKey.setEnabled(true);
             showCollect();
-        }else {
+        } else {
             butOneKey.setEnabled(false);
             showNoData();
         }
     }
+
     //暂无数据
-    private void showNoData(){
+    private void showNoData() {
         llSummary.setVisibility(View.GONE);
         tvNoData.setVisibility(View.VISIBLE);
     }
+
     //汇总ui显示设置
-    public void showCollect(){
+    public void showCollect() {
         llSummary.setVisibility(View.VISIBLE);
         tvData.setText(R.string.summary);
         tvPath.setText("--");
-        tvMoney.setText(getSumMoney()+"");
+        tvMoney.setText(getSumMoney() + "");
         tvStatus.setText("--");
     }
 
@@ -169,35 +167,8 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete,ExLi
 
     @Override
     public void onClick(View v) {//单击事件
-        LoadingDialog.show((FragmentActivity)mContext);
-        ModuleMgr.getCommonMgr().reqAddredonekey(ModuleMgr.getCenterMgr().getMyInfo().getUid(),this);//一键入袋
+        LoadingDialog.show((FragmentActivity) mContext);
+        ModuleMgr.getCommonMgr().reqAddredonekey(ModuleMgr.getCenterMgr().getMyInfo().getUid(), this);//一键入袋
         Statistics.userBehavior(SendPoint.menu_me_money_onekey);
-    }
-
-    private String testData(){
-        String str = "{\n" +
-                "  \"status\": \"ok\",\n" +
-                "  \"total\": \"20\",\n" +
-                "  \"result\":[{\n" +
-                "        \"id\":\"2\",\n" +
-                "        \"money\":\"300\",\n" +
-                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
-                "        \"type\":\"1\",\n" +
-                "        \"rank\":0\n" +
-                "  },{\n" +
-                "        \"id\":\"3\",\n" +
-                "        \"money\":\"300\",\n" +
-                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
-                "        \"type\":\"2\",\n" +
-                "        \"rank\":0\n" +
-                "  },{\n" +
-                "        \"id\":\"4\",\n" +
-                "        \"money\":\"300\",\n" +
-                "        \"create_time\":\"2016-11-04 10:14:23\",\n" +
-                "        \"type\":\"3\",\n" +
-                "        \"rank\":0\n" +
-                "  }]\n" +
-                "}";
-        return str;
     }
 }

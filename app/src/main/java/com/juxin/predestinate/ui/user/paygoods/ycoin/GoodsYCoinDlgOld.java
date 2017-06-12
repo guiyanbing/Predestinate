@@ -12,7 +12,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
@@ -31,9 +31,11 @@ import org.json.JSONObject;
  * Created by Su on 2017/5/5.
  */
 public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListener {
+
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
+    private long to_uid;
 
     private TextView tv_tips; // 充值优惠提示信息
     private TextView tv_ycoin;
@@ -42,6 +44,8 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_goods_ycoin_dialog_old);
+        to_uid = getIntent().getLongExtra("to_uid", 0);
+
         initView();
     }
 
@@ -111,8 +115,9 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_recharge:  // 充值
-                Statistics.userBehavior(SendPoint.chatframe_nav_y_ypay_btnqrzf);
+            case R.id.btn_recharge:// 充值
+                StatisticsMessage.chatNavConfirmPay(SendPoint.chatframe_nav_y_ypay_btnqrzf, to_uid, payTypePanel.getPayType(),
+                        payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
                 UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
                 break;
         }

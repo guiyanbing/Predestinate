@@ -600,9 +600,7 @@ public class UIShow {
 
                         @Override
                         public void onSubmit() {
-                            if (APKUtil.launchApp(App.context, appUpdate.getPackage_name())) {
-                                activity.moveTaskToBack(activity.isTaskRoot());
-                            }
+                            APKUtil.launchApp(App.context, appUpdate.getPackage_name());
                         }
                     }, App.getResource().getString(R.string.update_has_install),
                     App.getResource().getString(R.string.tip), "",
@@ -983,6 +981,44 @@ public class UIShow {
         }
     }
 
+
+    /**
+     * 消息页面送礼物底部弹框
+     *
+     * @param context
+     * @param to_id   他人id
+     */
+    public static void showBottomGiftDlgAndTag(final Context context, final long to_id, final int tag) {
+        dialog = null;
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
+            dialog = new BottomGiftDialog();
+            dialog.setFromTag(tag);
+            dialog.setToId(to_id);
+            dialog.setCtx(context);
+            dialog.showDialog((FragmentActivity) context);
+        } else {
+            LoadingDialog.show((FragmentActivity) context);
+            ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
+                @Override
+                public void onRequestGiftListCallback(boolean isOk) {
+                    LoadingDialog.closeLoadingDialog();
+                    if (isOk) {
+                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
+                            dialog = new BottomGiftDialog();
+                            dialog.setFromTag(tag);
+                            dialog.setToId(to_id);
+                            dialog.setCtx(context);
+                            dialog.showDialog((FragmentActivity) context);
+                        }
+                    } else {
+                        PToast.showShort(context.getString(R.string.net_error_retry));
+                    }
+                }
+            });
+        }
+    }
+
+
     /**
      * 看看她
      * 出场方式选项
@@ -1229,6 +1265,15 @@ public class UIShow {
     }
 
     /**
+     * @param context
+     * @param fromTag 打开充值来源 （统计用 可选）
+     * @param touid   是否因为某个用户充值 （统计用 可选）
+     */
+    public static void showGoodsDiamondDialogAndTag(Context context, int fromTag, long touid) {
+        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL, fromTag, touid);
+    }
+
+    /**
      * 送礼钻石充值弹框
      *
      * @param needDiamond 所需钻石差值
@@ -1245,6 +1290,22 @@ public class UIShow {
     }
 
     /**
+     * @param context
+     * @param needDiamond
+     * @param type
+     * @param fromTag     打开来源
+     * @param touid       是否因为某个用户充值 （统计用 可选）
+     */
+    private static void showGoodsDiamondDialog(Context context, int needDiamond, int type, int fromTag, long touid) {
+        Intent intent = new Intent(context, GoodsDiamondDialog.class);
+        intent.putExtra(GoodsConstant.DLG_TYPE_KEY, type);
+        intent.putExtra(GoodsConstant.DLG_GIFT_NEED, needDiamond);
+        intent.putExtra(GoodsConstant.DLG_OPEN_FROM, fromTag);
+        intent.putExtra(GoodsConstant.DLG_OPEN_TOUID, touid);
+        context.startActivity(intent);
+    }
+
+    /**
      * VIP充值弹框
      *
      * @param rechargeType VIP充值类型
@@ -1257,20 +1318,15 @@ public class UIShow {
 
     /**
      * 老：VIP充值弹框
-     */
-    public static void showGoodsVipDlgOld(Context context) {
-        context.startActivity(new Intent(context, GoodsVipDlgOld.class));
-    }
-
-    /**
-     * 老：VIP充值弹框
      *
      * @param context
      * @param seeType 1从Y聊天锁按钮发起  2 从查看资料发起
+     * @param to_uid  产生交互的uid
      */
-    public static void showGoodsVipDlgOld(Context context, int seeType) {
+    public static void showGoodsVipDlgOld(Context context, int seeType, long to_uid) {
         Intent intent = new Intent(context, GoodsVipDlgOld.class);
         intent.putExtra("seetype", seeType);
+        intent.putExtra("to_uid", to_uid);
         context.startActivity(intent);
     }
 
@@ -1289,9 +1345,13 @@ public class UIShow {
 
     /**
      * 老：Y币充值弹框
+     *
+     * @param to_uid 产生交互的uid
      */
-    public static void showGoodsYCoinDlgOld(Context context) {
-        context.startActivity(new Intent(context, GoodsYCoinDlgOld.class));
+    public static void showGoodsYCoinDlgOld(Context context, long to_uid) {
+        Intent intent = new Intent(context, GoodsYCoinDlgOld.class);
+        intent.putExtra("to_uid", to_uid);
+        context.startActivity(intent);
     }
 
     /**

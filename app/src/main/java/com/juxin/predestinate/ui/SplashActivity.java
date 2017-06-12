@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;

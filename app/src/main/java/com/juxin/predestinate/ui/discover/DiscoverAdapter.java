@@ -14,6 +14,7 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.module.local.statistics.StatisticsDiscovery;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -171,6 +172,8 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
+                //统计
+                StatisticsDiscovery.onRecommendViewUser(userInfo.getUid(), position, isNear);
             }
         });
 
@@ -178,6 +181,8 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
             @Override
             public void onClick(View view) {
                 UIShow.showCheckOtherInfoAct(getContext(), userInfo.getUid());
+                //统计
+                StatisticsDiscovery.onRecommendViewUser(userInfo.getUid(), position, isNear);
             }
         });
         return convertView;
@@ -229,6 +234,10 @@ public class DiscoverAdapter extends ExBaseAdapter<UserInfoLightweight> {
                                     }
                                 });
                     }
+
+                    ///统计
+                    StatisticsDiscovery.onSayHello(userInfo.getUid(), position, isNear);
+
                 }
             });
         }

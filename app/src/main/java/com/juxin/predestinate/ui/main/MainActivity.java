@@ -23,6 +23,7 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -41,6 +42,7 @@ import com.juxin.predestinate.ui.discover.DiscoverMFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 
@@ -111,7 +113,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
         plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
-                "http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/square/square.html");// TODO: 2017/5/3
+                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url());
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
@@ -199,18 +201,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.discovery_layout:
+                Statistics.userBehavior(SendPoint.menu_faxian);
                 switchContent(discoverMFragment);
                 break;
             case R.id.mail_layout:
+                Statistics.userBehavior(SendPoint.menu_xiaoxi);
                 switchContent(mailFragment);
                 break;
             case R.id.rank_layout:
+                Statistics.userBehavior(SendPoint.menu_fengyunbang);
                 switchContent(rankFragment);
                 break;
             case R.id.plaza_layout:
+                Statistics.userBehavior(SendPoint.menu_guangchang);
                 switchContent(plazaFragment);
                 break;
             case R.id.user_layout:
+                Statistics.userBehavior(SendPoint.menu_me);
                 switchContent(userFragment);
                 break;
         }
@@ -298,9 +305,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
                 HashMap<String, Object> data = (HashMap<String, Object>) value;
                 int type = (int) data.get("type");
-                if (type == 0 || type == 2) {
+                if ((type == 0 || type == 2) && checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL)) {
                     getOfflineMsg();
                 }
+                break;
+
+            case MsgType.MT_Unread_change:
+                ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
                 break;
 
             default:
@@ -326,9 +337,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().detach(this);
+    }
+
     // ------------------------ 离线消息处理 暂时放在这 Start--------------------------
     private NetReceiver netReceiver = new NetReceiver();
     private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
+    private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
+    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
 
     /**
      * 注册网络变化监听广播
@@ -345,7 +364,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public class NetReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()) {
+            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
+                    && checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL)) {
                 getOfflineMsg();
             }
         }

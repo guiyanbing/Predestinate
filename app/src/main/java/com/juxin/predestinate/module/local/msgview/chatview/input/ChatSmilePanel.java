@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -13,6 +14,7 @@ import com.juxin.predestinate.module.local.msgview.smile.SmileItem;
 import com.juxin.predestinate.module.local.msgview.smile.SmilePackage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.HorizontalListView;
+
 import java.util.List;
 
 /**
@@ -54,7 +56,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
 
     private void addView_Package_Default() {
         smilePackageLayouts.removeAllViews();
-        if(null == chatSmileDefPanel)
+        if (null == chatSmileDefPanel)
             chatSmileDefPanel = new ChatDefaultSmilePanel(getContext(), getChatInstance());
 
         smilePackageLayouts.addView(chatSmileDefPanel.getContentView());
@@ -63,7 +65,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
     private void addView_Package_Custom(List<SmileItem> items) {
         smilePackageLayouts.removeAllViews();
 
-        if(null == chatSmileCustomPanel) {
+        if (null == chatSmileCustomPanel) {
             chatSmileCustomPanel = new ChatCustomSmilePanel(getContext(), getChatInstance(), tv_custom_face_del);
         }
         chatSmileCustomPanel.setData(items);
@@ -103,6 +105,13 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         } catch (Exception e) {
             PLogger.printThrowable(e);
         }
+    }
+
+    /**
+     * 解绑监听
+     */
+    public void detach() {
+        if (chatSmileCustomPanel != null) chatSmileCustomPanel.detach();
     }
 
     @Override

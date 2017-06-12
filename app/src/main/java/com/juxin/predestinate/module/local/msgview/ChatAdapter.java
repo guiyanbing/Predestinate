@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
@@ -26,11 +27,13 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -257,7 +260,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     private boolean isMachine = false;
-    public void onDataUpdate(){
+
+    public void onDataUpdate() {
         isMachine = true;
         if (chatInstance.chatContentAdapter == null) return;
         if (chatInstance.chatContentAdapter.getList() == null) return;
@@ -265,18 +269,18 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         datas.addAll(chatInstance.chatContentAdapter.getList());
         if (datas.size() <= 0) return;
         BaseMessage mess = null;
-        for (int i = datas.size()-1 ;i > 0 && i < datas.size();i--){
+        for (int i = datas.size() - 1; i > 0 && i < datas.size(); i--) {
             mess = datas.get(datas.size() - 1);
             if (mess == null) continue;
             BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(mess.getType());
-            if (messageType != BaseMessage.BaseMessageType.hint){
+            if (messageType != BaseMessage.BaseMessageType.hint) {
                 break;
             }
-            datas.remove(datas.size()-1);
+            datas.remove(datas.size() - 1);
         }
 
-        if (mess != null && (mess.getWhisperID() + "").equalsIgnoreCase(mess.getSendID() + "" )&& datas.size() > 0) {
-            for (int i = datas.size()-1; i >= 0 && i < datas.size(); i--) {
+        if (mess != null && (mess.getWhisperID() + "").equalsIgnoreCase(mess.getSendID() + "") && datas.size() > 0) {
+            for (int i = datas.size() - 1; i >= 0 && i < datas.size(); i--) {
                 BaseMessage message = datas.get(i);
                 if (message == null)
                     continue;
@@ -336,7 +340,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             return;
         }
         getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
-     //   chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
     }
 
     /**
@@ -401,6 +405,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (getChatInstance() != null && getChatInstance().chatInputPanel != null) {
             getChatInstance().chatInputPanel.sendSystemMsgCancelInput();
         }
+        //关闭页面的时候detach表情面板的监听
+        if (getChatInstance() != null && getChatInstance().chatSmilePanel != null) {
+            getChatInstance().chatSmilePanel.detach();
+        }
         PSP.getInstance().put("whisperId", "-1");
     }
 
@@ -428,9 +436,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {
-                    case CMT_7:{
+                    case CMT_7: {
 
-                        }
+                    }
                 }
             }
 
@@ -585,7 +593,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onLoadMore() {}
+    public void onLoadMore() {
+    }
 
     /**
      * 是否可以聊天

@@ -12,6 +12,7 @@ import com.juxin.library.R;
 import java.util.List;
 
 /**
+ * 路马灯
  * Created by Kind on 2017/1/6.
  */
 

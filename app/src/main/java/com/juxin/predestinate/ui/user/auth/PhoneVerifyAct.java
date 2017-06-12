@@ -15,8 +15,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
-import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -28,7 +27,6 @@ import com.juxin.predestinate.module.util.UIShow;
 
 import java.lang.Thread.State;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
 
 /**
  * 手机验证页面
@@ -52,8 +50,6 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         setContentView(R.layout.f1_activity_phoneverify);
         setBackView(getResources().getString(R.string.title_phone_certification));
         initView();
-        // 手机验证
-//		AppCfg.getAppCfg().onSava(this, 31);
     }
 
     private static class MyHandler extends Handler {
@@ -112,28 +108,25 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         qq = contactBean.getQq();
     }
 
-
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_open_qq_btn://在线客服qq交流
                 UIShow.showQQService(PhoneVerifyAct.this, qq);
                 break;
             case R.id.btn_phoneverify_begin:
+                StatisticsUser.userPhoneVerify(edtPhone.getText().toString(), et_code.getText().toString(), false);
+
                 if (validPhone()) {
-                    ModuleMgr.getCenterMgr().reqVerifyCodeEx(phone, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
-                    HashMap<String,Object> map  = new HashMap<>();
-                    map.put("uid",ModuleMgr.getCenterMgr().getMyInfo().getUid());
-                    map.put("time",ModuleMgr.getAppMgr().getSecondTime());
-                    map.put("tel",phone);
-                    map.put("verifycode","");
-                  Statistics.userBehavior(SendPoint.menu_me_meauth_telauth_btnverifycode,map);
+                    ModuleMgr.getCenterMgr().reqVerifyCodeEx(phone, this);
                 }
                 break;
             case R.id.btn_phoneverify_ok:
+                StatisticsUser.userPhoneVerify(edtPhone.getText().toString(), et_code.getText().toString(), true);
+
                 if (validInput()) {
-                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
+                    ModuleMgr.getCenterMgr().mobileAuthEx(phone, code, this);
                 }
                 break;
             case R.id.ll_customerservice_btn://客服小秘书
@@ -167,6 +160,11 @@ public class PhoneVerifyAct extends BaseActivity implements OnClickListener, Req
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LoadingDialog.closeLoadingDialog();
+    }
 
     @Override
     public void onRequestComplete(HttpResponse response) {
