@@ -20,7 +20,6 @@ import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
-import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -34,7 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
@@ -77,47 +75,48 @@ public class VideoAudioChatHelper {
         return instance;
     }
 
-    private List<Long> getLongList(){
-        try{
-            String tmpStr = PSP.getInstance().getString("VCID"+ App.uid, "");
-            if(!TextUtils.isEmpty(tmpStr)){
-                return JSON.parseObject(tmpStr, new TypeReference<List<Long>>(){});
+    private List<Long> getLongList() {
+        try {
+            String tmpStr = PSP.getInstance().getString("VCID" + App.uid, "");
+            if (!TextUtils.isEmpty(tmpStr)) {
+                return JSON.parseObject(tmpStr, new TypeReference<List<Long>>() {
+                });
             }
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         return new ArrayList<>();
     }
 
-    public boolean isContain(long vcID){
+    public boolean isContain(long vcID) {
         List<Long> longList = getLongList();
-        if(longList.size() <= 0){
+        if (longList.size() <= 0) {
             return false;
         }
 
-        for (long tmp : longList){
-            if(vcID == tmp){
+        for (long tmp : longList) {
+            if (vcID == tmp) {
                 return true;
             }
         }
         return false;
     }
 
-    public void remove(long vcID){
+    public void remove(long vcID) {
         List<Long> longList = getLongList();
-        if(longList.size() > 0){
+        if (longList.size() > 0) {
             longList.remove(vcID);
-            PSP.getInstance().put("VCID"+ App.uid, JSON.toJSONString(longList));
+            PSP.getInstance().put("VCID" + App.uid, JSON.toJSONString(longList));
         }
     }
 
-    public void addvcID(long vcID){
+    public void addvcID(long vcID) {
         List<Long> longList = getLongList();
-        if(longList == null){
+        if (longList == null) {
             longList = new ArrayList<>();
         }
 
         longList.add(vcID);
-        PSP.getInstance().put("VCID"+ App.uid, JSON.toJSONString(longList));
+        PSP.getInstance().put("VCID" + App.uid, JSON.toJSONString(longList));
     }
 
 
@@ -189,10 +188,17 @@ public class VideoAudioChatHelper {
      */
     public void checkDownloadPlugin(FragmentActivity activity) {
         VideoVerifyBean verifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
-        if (((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat())
-                && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO))
-                || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version())
+        if ((verifyBean.getBooleanAudiochat() || verifyBean.getBooleanVideochat())
+                && !ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
             downloadVideoPlugin(activity);
+            return;
+        }
+
+        // 女号，检测版本升级
+        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan()
+                && ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
+            downloadVideoPlugin(activity);
+        }
     }
 
     /**
