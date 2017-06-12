@@ -763,6 +763,8 @@ public class UIShow {
                     return;
                 }
 
+                payGood.setPay_id(commodity_Id);
+
                 if (payType == GoodsConstant.PAY_TYPE_WECHAT) {//微信支付
                     LoadingDialog.closeLoadingDialog();
                     new PayWeixinUtils(activity).onPayment(payGood);
@@ -776,7 +778,7 @@ public class UIShow {
                                 LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
                                     @Override
                                     public void call() {
-                                        PayWX payWX = new PayWX(response.getResponseString());
+                                        PayWX payWX = new PayWX(response.getResponseString(),true);
                                         if (!payWX.isOK()) {
                                             PToast.showShort("支付出错，请重试！");
                                             return;
