@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+
 import com.alipay.sdk.app.PayTask;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
+import com.juxin.predestinate.R;
 import com.juxin.predestinate.ui.pay.PayListAct;
 
 /**
@@ -29,8 +31,12 @@ public class PayAlipayUtils {
 
     public void pay(int payType, final String payInfo) {
         if (payType == 2) {
-            Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(payInfo));
-            activity.startActivity(intent);
+            try {
+                Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(payInfo));
+                activity.startActivity(intent);
+            } catch (Exception e) {
+                PToast.showShort(R.string.pay_alipay_not_install);
+            }
             return;
         }
 
@@ -74,8 +80,8 @@ public class PayAlipayUtils {
                         if (TextUtils.equals(resultStatus, "8000")) {
                             PToast.showShort("支付结果确认中");
                             //更新信息
-                           // UpdateInfo updateInfo = new UpdateInfo(activity, UIHelper.PAYMENTACT);
-                           // updateInfo.updateInfo();
+                            // UpdateInfo updateInfo = new UpdateInfo(activity, UIHelper.PAYMENTACT);
+                            // updateInfo.updateInfo();
                         } else {
                             PToast.showShort("支付失败");
 
