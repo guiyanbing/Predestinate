@@ -82,11 +82,13 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
 
             if (mtp == 10) {
-                jo = new JSONObject();
-                jo.put("mt", 4);
                 JSONObject giftJo = object.getJSONObject("gift");
-                jo.put("gift_id", giftJo.getInt("gift_id"));
-                jo.put("num",giftJo.getInt("count"));
+                if(giftJo.getInt("recved") == 1){
+                    jo = new JSONObject();
+                    jo.put("mt", 4);
+                    jo.put("gift_id", giftJo.getInt("gift_id"));
+                    jo.put("num",giftJo.getInt("count"));
+                }
             }
 
             if (mtp == 26) {
@@ -145,13 +147,13 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()) {
                     VideoMessage videoMessage = (VideoMessage) message;
                     //   reMsg-jsonStr={"d":167211,"fid":110872900,"mct":"","media_tp":1,"mt":1496199691,"mtp":24,"ru":1,"tid":110872803,"vc_esc_code":3,"vc_id":100000496,"vc_tp":3}
-                    if (VideoAudioChatHelper.getInstance().isSend()) {//发送方
+                    if (VideoAudioChatHelper.getInstance().isContain(videoMessage.getVideoID())) {//发送方
                         message.setSendID(App.uid);
                     }
 
                     //3拒绝或取消 4挂断（挂断可能会收到不止一次）
                     if (videoMessage.getVideoTp() == 3 || videoMessage.getVideoTp() == 4) {
-                        VideoAudioChatHelper.getInstance().resetSend();
+                        VideoAudioChatHelper.getInstance().remove(videoMessage.getVideoID());
                     }
                     //{"d":167075,"fid":110872922,"mct":"","media_tp":1,"mt":1495891670,"mtp":24,"ru":1,"tid":110872541,"vc_id":100000459,"vc_tp":1}
                     ModuleMgr.getChatMgr().onReceivingVideo((VideoMessage) message);

@@ -318,7 +318,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
 
-            if(msgData.getLWhisperID() == MailSpecialID.customerService.getSpecialID()){
+            if(msgData.getLWhisperID() == MailSpecialID.customerService.getSpecialID() && !msgData.isSender()){
                 ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null &&
                         !TextUtils.isEmpty(infoLightweight.getAvatar())) ? infoLightweight.getAvatar() : R.drawable.f1_secretary_avatar, head);
             }else {

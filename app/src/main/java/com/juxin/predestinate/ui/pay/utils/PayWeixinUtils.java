@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.pay.wepayother.third.JXWechatPay;
 import com.juxin.predestinate.ui.pay.wepayother.third.ZFWechatPay;
+import com.juxin.predestinate.ui.pay.wepayother.third.ZYWechatPay;
 import com.switfpass.pay.MainApplication;
 import com.switfpass.pay.activity.PayPlugin;
 import com.switfpass.pay.bean.RequestMsg;
@@ -127,6 +128,9 @@ public class PayWeixinUtils {
                 break;
             case 11:
                 UIShow.showWePayForH5(context,payWX.getPayData());
+                break;
+            case 12:
+                ZYWechatPay.Pay(context, payWX.getJsonParamPost());
                 break;
             default:
                 PToast.showShort("不支持的支付类型！");

@@ -260,4 +260,8 @@ public static java.lang.String TABLENAME;
 
 -dontwarn com.third.wa5.sdk.*
 -keep class com.third.wa5.sdk.**{*;}
+
+
+-dontwarn com.zy.*
+-keep class com.zy.**{*;}
 # ==============第三方支付 end================

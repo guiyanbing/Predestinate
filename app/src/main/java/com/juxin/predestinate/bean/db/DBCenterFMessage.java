@@ -37,7 +37,15 @@ public class DBCenterFMessage {
         if (!isExist(message.getSpecialMsgID())) {//没有数据
             return insertMsg(message);
         } else {
-            return updateMsgVideo(message);
+            if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
+                return insertMsg(message);
+            }else {
+                if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
+                    return insertMsg(message);
+                }
+                return MessageConstant.ERROR;
+            }
+           // return updateMsgVideo(message);
         }
     }
 
@@ -456,6 +464,10 @@ public class DBCenterFMessage {
      */
     public int delete(long whisperID) {
         return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
+    }
+
+    public int deleteMsgID(long vcID) {
+        return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(vcID));
     }
 
     public int delete(long whisperID, long time) {
