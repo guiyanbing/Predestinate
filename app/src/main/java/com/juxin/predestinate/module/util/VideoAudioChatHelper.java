@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
@@ -15,8 +17,10 @@ import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
+import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
@@ -28,7 +32,10 @@ import com.juxin.predestinate.ui.utils.DownloadPluginFragment;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
 import static com.juxin.predestinate.module.logic.application.App.context;
@@ -70,18 +77,49 @@ public class VideoAudioChatHelper {
         return instance;
     }
 
-    private boolean isSend = false;
-
-    /**
-     * 重置发起方uid，每次收到音视频挂断消息时进行调用
-     */
-    public void resetSend() {
-        this.isSend = false;
+    private List<Long> getLongList(){
+        try{
+            String tmpStr = PSP.getInstance().getString("VCID"+ App.uid, "");
+            if(!TextUtils.isEmpty(tmpStr)){
+                return JSON.parseObject(tmpStr, new TypeReference<List<Long>>(){});
+            }
+        }catch (Exception e){
+        }
+        return new ArrayList<>();
     }
 
-    public boolean isSend() {
-        return isSend;
+    public boolean isContain(long vcID){
+        List<Long> longList = getLongList();
+        if(longList.size() <= 0){
+            return false;
+        }
+
+        for (long tmp : longList){
+            if(vcID == tmp){
+                return true;
+            }
+        }
+        return false;
     }
+
+    public void remove(long vcID){
+        List<Long> longList = getLongList();
+        if(longList.size() > 0){
+            longList.remove(vcID);
+            PSP.getInstance().put("VCID"+ App.uid, JSON.toJSONString(longList));
+        }
+    }
+
+    public void addvcID(long vcID){
+        List<Long> longList = getLongList();
+        if(longList == null){
+            longList = new ArrayList<>();
+        }
+
+        longList.add(vcID);
+        PSP.getInstance().put("VCID"+ App.uid, JSON.toJSONString(longList));
+    }
+
 
     /**
      * 邀请对方音频或视频聊天
@@ -109,8 +147,6 @@ public class VideoAudioChatHelper {
      * @param type    1为视频{@link #TYPE_VIDEO_CHAT TYPE_VIDEO_CHAT}，2为音频{@link #TYPE_AUDIO_CHAT TYPE_AUDIO_CHAT}
      */
     public void inviteVAChat(final Activity context, long dstUid, int type) {
-        isSend = true;
-
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(context);
             return;
@@ -236,6 +272,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             long vcID = resJo.optLong("vc_id");
+            addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
             ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
