@@ -83,7 +83,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         paylist_help_txt = (TextView) findViewById(R.id.paylist_help_txt);
         findViewById(R.id.paylist_help).setOnClickListener(this);
 
-        pay_listView.addView(payAlipayWebPannel.getContentView());
+        //pay_listView.addView(payAlipayWebPannel.getContentView());
         pay_listView.addView(payPhonecardPannel.getContentView());
     }
 
