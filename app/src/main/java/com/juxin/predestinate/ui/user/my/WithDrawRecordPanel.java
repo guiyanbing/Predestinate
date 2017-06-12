@@ -52,9 +52,6 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete, E
         tvNoData = (TextView) findViewById(R.id.withdraw_record_panel_tv_data_tip);
         tvNoData.setVisibility(View.GONE);
         rvList = crvView.getExListView();
-//        rvList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-//        rvList.addItemDecoration(new DividerItemDecoration(getContext(),
-//                DividerItemDecoration.VERTICAL_LIST, R.drawable.p1_decoration_px1));
         rvList.setHeaderStr(getContext().getString(R.string.xlistview_header_hint_normal),
                 getContext().getString(R.string.xlistview_header_hint_loading));
         mRedBagTabAdapter = new WithDrawTabAdapter(mContext);
@@ -69,12 +66,9 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete, E
     public void onRequestComplete(HttpResponse response) {
         rvList.stopRefresh();
         rvList.stopLoadMore();
-//        Log.e("TTTTTTTTTTFF", response.getResponseString() + "|||" + response.isOk());
         crvView.showExListView();
         if (response.isOk()) {
             WithdrawList withdrawList = new WithdrawList();
-
-//            withdrawList.parseJson(testData());
             withdrawList.parseJson(response.getResponseString());
             mWithdrawInfos = withdrawList.getRedbagLists();
             ((RedBoxRecordAct) context).refreshView(withdrawList.getTotal());
@@ -87,7 +81,6 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete, E
             return;
         }
         if (mWithdrawInfos != null && !mWithdrawInfos.isEmpty()) {
-            showNoData();
             return;
         }
         showNoData();
@@ -109,30 +102,5 @@ public class WithDrawRecordPanel extends BasePanel implements RequestComplete, E
     @Override
     public void onLoadMore() {//加载更多
 
-    }
-
-    private String testData() {
-        String str = "{\n" +
-                "  \"status\": \"ok\",\n" +
-                "  \"total\": \"20\",\n" +
-                "  \"result\":[{\n" +
-                "                    \"id\":\"1\",\n" +
-                "                    \"money\":\"300\",\n" +
-                "                    \"create_time\":\"2016-11-04 10:14:23\",\n" +
-                "                    \"status\":\"1\"\n" +
-                "             }\n" +
-                ",{\n" +
-                "                    \"id\":\"2\",\n" +
-                "                    \"money\":\"300\",\n" +
-                "                    \"create_time\":\"2016-11-04 10:14:23\",\n" +
-                "                    \"status\":\"2\"\n" +
-                "             },{\n" +
-                "                    \"id\":\"3\",\n" +
-                "                    \"money\":\"300\",\n" +
-                "                    \"create_time\":\"2016-11-04 10:14:23\",\n" +
-                "                    \"status\":\"3\"\n" +
-                "             }]\n" +
-                "}";
-        return str;
     }
 }

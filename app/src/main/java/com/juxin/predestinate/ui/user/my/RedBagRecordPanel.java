@@ -109,6 +109,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete, ExL
             if (mRedbagInfos != null && !mRedbagInfos.isEmpty()) {
                 return;
             }
+            showNoData();
         } else if (response.getUrlParam() == UrlParam.reqAddredonekey) {
             if (response.isOk()) {
                 RedOneKeyList redOneKeyList = (RedOneKeyList) response.getBaseData();
@@ -123,8 +124,8 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete, ExL
                 return;
             }
             PToast.showShort(response.getMsg());
+            return;
         }
-        showNoData();
     }
 
     //处理数据
