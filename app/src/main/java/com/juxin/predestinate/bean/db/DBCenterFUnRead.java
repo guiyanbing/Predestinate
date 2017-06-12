@@ -63,8 +63,8 @@ public class DBCenterFUnRead {
             final ContentValues values = new ContentValues();
             values.put(FUnRead.COLUMN_KEY, key);
 
-            if(TextUtils.isEmpty(content))
-                values.put(FUnRead.COLUMN_KEY, ByteUtil.toBytesUTF(content));
+            if(!TextUtils.isEmpty(content))
+                values.put(FUnRead.COLUMN_CONTENT, ByteUtil.toBytesUTF(content));
 
             return mDatabase.insert(FUnRead.FUNREAD_TABLE, values);
         }catch (Exception e) {
