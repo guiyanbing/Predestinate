@@ -120,7 +120,7 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         List<SmileItem> listTemp = getPageRes(index);
         if (listTemp == null) return null;
 
-        View view = View.inflate(getContext(), R.layout.p1_chat_smile_grid, null);
+        View view = View.inflate(getContext(), R.layout.p1_chat_cus_smile_grid, null);
         synchronized (listTemp) {
             GridView gv = (GridView) view.findViewById(R.id.chat_panel_gridview);
             gv.setNumColumns(pageResNum / 2);
