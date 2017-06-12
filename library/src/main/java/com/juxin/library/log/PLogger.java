@@ -16,7 +16,9 @@ public class PLogger {
     private static final int STACK = 4;
 
     public static void init(boolean isDebug) {
-        XLog.init(isDebug ? LogLevel.ALL : LogLevel.NONE);
+        if (!isDebug) return;//正式环境不打印任何信息
+
+        XLog.init(LogLevel.ALL);
     }
 
     public static void v(String msg) {
