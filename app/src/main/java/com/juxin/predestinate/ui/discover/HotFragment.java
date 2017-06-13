@@ -35,6 +35,8 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
 
     private List<UserInfoHot> viewData = new ArrayList<>();
 
+    private int cachDataSize = 10;
+
     private int page = 0;
 
     private boolean isRef = false;
@@ -87,7 +89,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
 
             if (list.getHotLists().size() != 0) {
                 isRef = list.isRef();
-                if (isRef && page == 1 && list.getHotLists().size() < 10) {
+                if (isRef && page == 1 && list.getHotLists().size() < cachDataSize) {
                     isNeedReq = false;
                 } else {
                     isNeedReq = true;
@@ -156,7 +158,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
             int position = index % viewData.size();
             nowPosition = position;
             //判断是否需要请求数据
-            if (position + 3 >= viewData.size() && isNeedReq) {
+            if (position + cachDataSize >= viewData.size() && isNeedReq) {
                 loadMoreData();
             }
         }
