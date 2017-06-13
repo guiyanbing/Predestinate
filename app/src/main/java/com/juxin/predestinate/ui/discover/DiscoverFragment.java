@@ -459,14 +459,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     }
 
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-
-        }
-    }
-
     /**
      * 刷新首页
      */
