@@ -38,14 +38,17 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
     private int cachDataSize = 10;
 
     private int page = 0;
-
+    //是否需要重新加载数据
     private boolean isRef = false;
 
     private int nowPosition = 0;
 
+    //是否是首次加载数据
     private boolean isFirst = true;
-
+    //是否可以继续加载数据
     private boolean isNeedReq = false;
+    //请求锁，确保不会多次请求
+    private boolean isCanReq = false;
 
     @Nullable
     @Override
@@ -68,6 +71,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
             ModuleMgr.getCommonMgr().reqUserInfoHotList(page, true, this);
         } else {
             page++;
+            isCanReq = false;
             ModuleMgr.getCommonMgr().reqUserInfoHotList(page, false, this);
         }
     }
@@ -86,7 +90,6 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
         if (response.isOk()) {
             UserInfoHotList list = new UserInfoHotList();
             list.parseJson(response.getResponseString());
-
             if (list.getHotLists().size() != 0) {
                 isRef = list.isRef();
                 if (isRef && page == 1 && list.getHotLists().size() < cachDataSize) {
@@ -138,6 +141,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
         } else {
             showNodata();
         }
+        isCanReq = true;
     }
 
 
@@ -158,7 +162,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
             int position = index % viewData.size();
             nowPosition = position;
             //判断是否需要请求数据
-            if (position + cachDataSize >= viewData.size() && isNeedReq) {
+            if (position + cachDataSize >= viewData.size() && isNeedReq && isCanReq) {
                 loadMoreData();
             }
         }
