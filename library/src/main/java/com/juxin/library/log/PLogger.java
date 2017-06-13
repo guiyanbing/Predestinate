@@ -12,7 +12,6 @@ import com.elvishew.xlog.XLog;
  * Created by ZRP on 2016/9/8.
  */
 public class PLogger {
-
     private static final int STACK = 4;
 
     public static void init(boolean isDebug) {
@@ -62,15 +61,17 @@ public class PLogger {
      * @return 当前调用日志打印的环境信息
      */
     private static String getLogEnvironment(int stack) {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StringBuffer sb = new StringBuffer();
-
-        sb.append(Thread.currentThread().getStackTrace()[stack - 1].getMethodName());
-        sb.append("_");
-        sb.append(getSimpleName(Thread.currentThread().getStackTrace()[stack].getClassName()));
-        sb.append("_");
-        sb.append(Thread.currentThread().getStackTrace()[stack].getMethodName());
-        sb.append("_LineNumber[");
-        sb.append(Thread.currentThread().getStackTrace()[stack].getLineNumber());
+        if (stackTrace.length > stack) {
+            sb.append(stackTrace[stack - 1].getMethodName());
+            sb.append("_");
+            sb.append(getSimpleName(stackTrace[stack].getClassName()));
+            sb.append("_");
+            sb.append(stackTrace[stack].getMethodName());
+            sb.append("_LineNumber[");
+            sb.append(stackTrace[stack].getLineNumber());
+        }
         sb.append("]_MainThreadName[");
         sb.append(Looper.getMainLooper().getThread().getName());
         sb.append("]_CurrentThreadName[");
