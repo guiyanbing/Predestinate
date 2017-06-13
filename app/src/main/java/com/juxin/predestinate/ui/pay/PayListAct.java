@@ -15,6 +15,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
+
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public static boolean bPayOkFlag;
 
     private PayGood payGood;
-    private BasePayPannel payAlipayPannel, payWXPannel,  payPhonecardPannel, payAlipayWebPannel;
+    private BasePayPannel payAlipayPannel, payWXPannel, payPhonecardPannel, payAlipayWebPannel;
 
     private TextView paylist_help_txt;
     private boolean help_txt = true;
@@ -62,7 +63,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
 
         PayTypeList payTypeList = ModuleMgr.getCommonMgr().getCommonConfig().getPayTypeList();
         List<PayTypeList.PayType> payTypes = payTypeList.getPayTypes();
-        if (payTypes.size() > 0) {
+        if (null != payTypes && payTypes.size() > 0) {
             for (PayTypeList.PayType temp : payTypes) {
 
                 if (GoodsConstant.PAY_TYPE_WECHAT_NAME.equals(temp.getName())) { // 微信支付
