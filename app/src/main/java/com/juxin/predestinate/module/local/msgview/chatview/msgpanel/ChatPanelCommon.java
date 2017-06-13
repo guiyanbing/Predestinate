@@ -193,9 +193,14 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String content = msg.getMsgDesc();
         if (TextUtils.isEmpty(content)) setVisibility(View.GONE);
 
-        MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text,
-                (msg.getLWhisperID() == MailSpecialID.customerService.getSpecialID()
-                        ? content.replaceAll("缘份吧", getContext().getString(R.string.app_name)) : content));
+        if (BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()) {
+            MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text,
+                    (msg.getLWhisperID() == MailSpecialID.customerService.getSpecialID()
+                            ? content.replaceAll("缘份吧", getContext().getString(R.string.app_name)) : content));
+        } else {
+            chat_item_text.setTextContent(msg.getMsgDesc());
+        }
+
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
 
