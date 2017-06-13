@@ -483,7 +483,7 @@
     <string name="notify_media">给您发了一条%s消息，请查收！</string>
     <string name="notify_system">收到一条系统消息！</string>
 
-    <string name="message_xiaou">缘分吧消息</string>
+    <string name="message_xiaou">缘份吧消息</string>
     <string name="message_close">关闭</string>
     <string name="message_replay">回复</string>
     <string name="message_empty_warn">消息不能为空</string>
