@@ -19,7 +19,6 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.ChatMsgType;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
-import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
@@ -380,21 +379,30 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     break;
             }
 
-            if (msg.getStatus() == 3 && ((msg.getTime() + Constant.CHAT_RESEND_TIME) > ModuleMgr.getAppMgr().getTime())) {//发送中,
-                statusProgress.setVisibility(View.VISIBLE);
-                status.setVisibility(View.GONE);
-                statusError.setVisibility(View.GONE);
+            if (msg.getStatus() == 3) {//发送中,
+                long time = msg.getCurrentTime() - msg.getTime();
+                if (time >= 90000) {
+                    status.setClickable(true);
+                    status.setText("失败");
+                    statusProgress.setVisibility(View.GONE);
+                    status.setVisibility(View.VISIBLE);
+                }else {
+                    statusProgress.setVisibility(View.VISIBLE);
+                    status.setVisibility(View.GONE);
+                    statusError.setVisibility(View.GONE);
+                }
             }else if(msg.getStatus() == 4){
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
-            }else if (msg.getStatus() == 2) {//发送失败
+            }else if (msg.getStatus() == MessageConstant.OK_STATUS || msg.getStatus() == MessageConstant.FAIL_STATUS
+                    || msg.getStatus() ==MessageConstant.READ_STATUS) {//发送失败
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
                 statusError.setVisibility(View.GONE);
             } else {
                 statusProgress.setVisibility(View.GONE);
-                status.setVisibility(View.VISIBLE);
+                status.setVisibility(View.GONE);
                 statusError.setVisibility(View.GONE);
             }
 

@@ -25,8 +25,6 @@ import com.juxin.library.image.transform.BlurImage;
 import com.juxin.library.image.transform.CircleTransform;
 import com.juxin.library.image.transform.RoundedCorners;
 
-import java.util.Arrays;
-
 /**
  * 基于Glide图片请求，处理类
  */
@@ -321,7 +319,7 @@ public class ImageLoader {
 
         Object trans_obj = view.getTag(R.string.view_trans_tag_id);
         int trans_tag = trans_obj == null ? 0 : (int) trans_obj;
-        if (trans == null ? 0 != trans_tag : getObjAryHashCode(trans) != trans_tag)
+        if (trans == null ? 0 != trans_tag : getArrayHash(trans) != trans_tag)
             return true;
 
         return false;
@@ -336,14 +334,20 @@ public class ImageLoader {
      */
     private static <T> void setImgTag(ImageView view, T model, Object[] trans) {
         view.setTag(R.string.view_url_tag_id, model == null ? 0 : model.hashCode());
-        view.setTag(R.string.view_trans_tag_id, trans == null ? 0 : getObjAryHashCode(trans));
+        view.setTag(R.string.view_trans_tag_id, trans == null ? 0 : getArrayHash(trans));
     }
 
-    private static int getObjAryHashCode(Object[] trans){
-        String aryHashStr = "";
+    /**
+     * 按存储对象的Hash值计算Array的Hash值
+     * @param trans
+     * @return
+     */
+    private static int getArrayHash(Object[] trans){
+        int objHash = 0;
         for (Object tran: trans)
-            aryHashStr = aryHashStr + tran.hashCode() + ",";
-        return aryHashStr.hashCode();
+            objHash = objHash ^ tran.hashCode();
+
+        return objHash;
     }
 
     /**

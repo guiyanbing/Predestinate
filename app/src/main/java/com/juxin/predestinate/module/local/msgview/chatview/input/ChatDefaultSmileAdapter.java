@@ -1,6 +1,8 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -8,6 +10,8 @@ import android.widget.ImageView;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -36,8 +40,15 @@ public class ChatDefaultSmileAdapter extends ExBaseAdapter<EmojiPack.EmojiItem> 
         EmojiPack.EmojiItem smileItem = getItem(position);
 
         vh.smile.setTag(smileItem.key);
-        PLogger.printObject("smileItem.resId=" + smileItem.resId);
-        vh.smile.setImageResource(smileItem.resId);
+
+        try {
+            Bitmap mBitmap = BitmapFactory.decodeStream(getContext().getAssets().open(smileItem.name));
+           // PLogger.printObject("smileItem.resId=" + smileItem.resId);
+            vh.smile.setImageBitmap(mBitmap);
+           // vh.smile.setImageResource(smileItem.resId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return convertView;
     }
 

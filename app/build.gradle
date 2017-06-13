@@ -65,7 +65,7 @@ android {
         release {
             minifyEnabled true
             zipAlignEnabled true
-            // shrinkResources true//是否优化资源文件// 2017-6-2 表情图片是通过反射进行调用的优化资源文件之后会被清除
+            shrinkResources true//是否优化资源文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), cPrjProguard
         }
     }

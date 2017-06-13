@@ -20,6 +20,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
@@ -189,11 +190,17 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
      */
     private void onTextDisplayContent(CommonMessage msg) {
         chat_item_customFrameLayout.show(R.id.chat_item_text);
+        String content = msg.getMsgDesc();
+        if (TextUtils.isEmpty(content)) setVisibility(View.GONE);
+
         if (BaseMessage.BaseMessageType.hi.getMsgType() == msg.getType()) {
-            MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text, msg.getMsgDesc());
+            MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text,
+                    (msg.getLWhisperID() == MailSpecialID.customerService.getSpecialID()
+                            ? content.replaceAll("缘份吧", getContext().getString(R.string.app_name)) : content));
         } else {
             chat_item_text.setTextContent(msg.getMsgDesc());
         }
+
         chat_item_text.setTextColor(isSender() ? Color.WHITE : getContext().getResources().getColor(R.color.color_666666));
     }
 

@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.baseui.custom;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -12,6 +13,11 @@ import android.text.style.ImageSpan;
  */
 
 public class VerticalImageSpan extends ImageSpan{
+
+
+    public VerticalImageSpan(Context context, Bitmap b) {
+        super(context, b);
+    }
 
     public VerticalImageSpan(Drawable drawable) {
         super(drawable);

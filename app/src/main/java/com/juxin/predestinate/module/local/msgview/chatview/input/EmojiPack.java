@@ -1,16 +1,17 @@
 package com.juxin.predestinate.module.local.msgview.chatview.input;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.custom.VerticalImageSpan;
-import com.juxin.predestinate.module.util.UIUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -116,7 +117,8 @@ public class EmojiPack {
         emojiItem.key = "[" + desc + "]";
         emojiItem.desc = desc;
         emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-        emojiItem.resId = UIUtil.getResIdFromDrawable(prefix + smile);
+     //   emojiItem.resId = UIUtil.getResIdFromDrawable(prefix + smile);
+        emojiItem.name = "face/" + prefix + smile + ".png";
         return emojiItem;
     }
 
@@ -168,17 +170,20 @@ public class EmojiPack {
 
                 if (set) {
                     hasChanges = true;
-                    VerticalImageSpan imageSpan;
-
-                    if (-1 == size) {
-                        imageSpan = new VerticalImageSpan(context, emoticon.resId);
-                    } else {
-                        Drawable drawable = context.getResources().getDrawable(emoticon.resId);
-                        drawable.setBounds(0, 0, size, size);
-                        imageSpan = new VerticalImageSpan(drawable);
+                    VerticalImageSpan imageSpan = null;
+                    try {
+                        Bitmap mBitmap = BitmapFactory.decodeStream(context.getAssets().open(emoticon.name));
+                        if (-1 == size) {
+                            imageSpan = new VerticalImageSpan(context, mBitmap);
+                        } else {
+                            Drawable drawable = new BitmapDrawable(mBitmap);
+                            drawable.setBounds(0, 0, size, size);
+                            imageSpan = new VerticalImageSpan(drawable);
+                        }
+                        spannable.setSpan(imageSpan, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-
-                    spannable.setSpan(imageSpan, matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
         }
@@ -223,14 +228,14 @@ public class EmojiPack {
      *
      * @param smile
      */
-    public static EmojiItem createEmojiItem(String key, String smile, Integer resId) {
-        EmojiItem emojiItem = new EmojiItem();
-
-        emojiItem.key = "[" + key + "_" + smile + "]";
-        emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-        emojiItem.resId = resId;
-        return emojiItem;
-    }
+//    public static EmojiItem createEmojiItem(String key, String smile, Integer resId) {
+//        EmojiItem emojiItem = new EmojiItem();
+//
+//        emojiItem.key = "[" + key + "_" + smile + "]";
+//        emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
+//        emojiItem.resId = resId;
+//        return emojiItem;
+//    }
 
     /**
      * 通过正则表达式匹配。
@@ -240,7 +245,8 @@ public class EmojiPack {
 
         emojiItem.key = "[default_common_delete_smile]";
         emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-        emojiItem.resId = UIUtil.getResIdFromDrawable("common_delete_smile");
+      //  emojiItem.resId = UIUtil.getResIdFromDrawable("common_delete_smile");
+        emojiItem.name = "face/common_delete_smile.png";
         return emojiItem;
     }
 
@@ -248,7 +254,8 @@ public class EmojiPack {
         public String key = null;
         public String desc = null;
         public Pattern pattern = null;
-        public Integer resId = 0;
+      //  public Integer resId = 0;
+        public String name = null;
 
         public boolean isDeleteBtn() {
             return "[default_common_delete_smile]".equals(key);

@@ -104,11 +104,6 @@ public class DBCenter {
                     if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
                 }
             }
-//
-//            if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
-//                long ret =  centerFLetter.updateStatus(userID, message.getStatus());
-//                if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
-//            }
         }
         return centerFmessage.updateMsg(message);
     }

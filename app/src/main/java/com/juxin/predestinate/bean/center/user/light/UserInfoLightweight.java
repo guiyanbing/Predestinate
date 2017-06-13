@@ -329,11 +329,6 @@ public class UserInfoLightweight extends UserBasic {
         this.last_onLine = last_onLine;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
     public int getPhotoNum() {
         return photoNum;
     }
@@ -343,24 +338,86 @@ public class UserInfoLightweight extends UserBasic {
     }
 
     @Override
+    public String toString() {
+        return "UserInfoLightweight{" +
+                "isOk=" + isOk +
+                ", time=" + time +
+                ", infoJson='" + infoJson + '\'' +
+                ", channel_uid=" + channel_uid +
+                ", group=" + group +
+                ", isOnline=" + isOnline +
+                ", photoNum=" + photoNum +
+                ", remark='" + remark + '\'' +
+                ", isVip=" + isVip +
+                ", isAuth=" + isAuth +
+                ", signname='" + signname + '\'' +
+                ", distance='" + distance + '\'' +
+                ", video_available=" + video_available +
+                ", audio_available=" + audio_available +
+                ", video_busy=" + video_busy +
+                ", isSayHello=" + isSayHello +
+                ", heartNum=" + heartNum +
+                ", kf_id=" + kf_id +
+                ", top=" + top +
+                ", topType=" + topType +
+                ", last_onLine='" + last_onLine + '\'' +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeByte(this.isOk ? (byte) 1 : (byte) 0);
         dest.writeLong(this.time);
         dest.writeString(this.infoJson);
+        dest.writeInt(this.channel_uid);
+        dest.writeInt(this.group);
+        dest.writeByte(this.isOnline ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.photoNum);
         dest.writeString(this.remark);
         dest.writeByte(this.isVip ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isAuth ? (byte) 1 : (byte) 0);
         dest.writeString(this.signname);
+        dest.writeString(this.distance);
+        dest.writeByte(this.video_available ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.audio_available ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.video_busy ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isSayHello ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.heartNum);
+        dest.writeInt(this.kf_id);
+        dest.writeInt(this.top);
+        dest.writeInt(this.topType);
+        dest.writeString(this.last_onLine);
     }
 
     protected UserInfoLightweight(Parcel in) {
         super(in);
+        this.isOk = in.readByte() != 0;
         this.time = in.readLong();
         this.infoJson = in.readString();
+        this.channel_uid = in.readInt();
+        this.group = in.readInt();
+        this.isOnline = in.readByte() != 0;
+        this.photoNum = in.readInt();
         this.remark = in.readString();
         this.isVip = in.readByte() != 0;
         this.isAuth = in.readByte() != 0;
         this.signname = in.readString();
+        this.distance = in.readString();
+        this.video_available = in.readByte() != 0;
+        this.audio_available = in.readByte() != 0;
+        this.video_busy = in.readByte() != 0;
+        this.isSayHello = in.readByte() != 0;
+        this.heartNum = in.readInt();
+        this.kf_id = in.readInt();
+        this.top = in.readInt();
+        this.topType = in.readInt();
+        this.last_onLine = in.readString();
     }
 
     public static final Creator<UserInfoLightweight> CREATOR = new Creator<UserInfoLightweight>() {
@@ -374,17 +431,4 @@ public class UserInfoLightweight extends UserBasic {
             return new UserInfoLightweight[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "UserInfoLightweight{" +
-                "time=" + time +
-                ", infoJson='" + infoJson + '\'' +
-                ", remark='" + remark + '\'' +
-                ", isVip=" + isVip +
-                ", isAuth=" + isAuth +
-                ", signname='" + signname + '\'' +
-                '}';
-    }
-
 }

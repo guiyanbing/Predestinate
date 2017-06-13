@@ -6,8 +6,9 @@ var Turntable = Turntable || (function () {
     var valueChange = false;
     var _spec_list = ["唱首歌", "跳个舞", "撒个娇", "送我礼物", "卖个萌", "么么哒", "送我礼物", "学猫叫", "做鬼脸", "重来一次", "私密问题", "送我礼物"];
     var _listener = window.Eventuality({});
+    var _inputs = [];
     window.platform.clientHandler = _listener;
-        window.platform.showLoading(true);
+    window.platform.showLoading(true);
     window.platform.safeRequestNoUrl("Post", web.urlType.Go, web.urlMethod.GetMyTurnConfig,{}, {}, function (resp) {
         window.platform.showLoading(false);
         if(resp.status !== "ok"){
@@ -23,10 +24,10 @@ var Turntable = Turntable || (function () {
         if(jcmd !== "header_right_btn_click"){
             return;
         }
-        if(!valueChange){
-            mui.toast('数据没有更改!');
+        if(!_checkSaveValue()){
             return;
         }
+      console.log('save list ' + _spec_list)
       window.platform.showLoading(true);
         window.platform.safeRequestNoUrl("Post", web.urlType.Go, web.urlMethod.SetTurnConfig,{}, {configs:_spec_list}, function (resp) {
           window.platform.showLoading(false);
@@ -88,28 +89,65 @@ var Turntable = Turntable || (function () {
     that.disClick = function () {
       //  window.platform.showLoading(true);
         mui.toast('送我礼物不可修改');
+    };
+    // setTimeout(function () {
+    //   var data = {
+    //     jcmd: 'header_right_btn_click',
+    //     data : {
+    //
+    //     }
+    //   };
+    //   window.platform.appCommand(JSON.stringify(data));
+    // }, 10 * 1000);
+
+    var _checkSaveValue = function () {
+      for (var i = 0; i <  _inputs.length; i++) {
+        if (!_checkEndValue(_inputs[i])) {
+            return false;
+            break;
+        }
+      }
+      if (!valueChange) {
+        mui.toast('数据没有更改!');
+          return false;
+      }
+      return true;
+    };
+    
+    var _checkEndValue = function (input) {
+      var currValue = input.value;
+      if (!currValue || currValue.trim() == "" || !checkIsChinese(currValue)) {
+        input.value = input.getAttribute('placeholder');
+        mui.toast('输入内容错误');
+        return false;
+      } else if (currValue.length < 2) {
+        mui.toast('至少输入两个汉字');
+        input.value = input.getAttribute('placeholder');
+        return false;
+      } else {
+        var index = input.getAttribute('id');
+       console.log('当前' , input.value , input.getAttribute('id'));
+       if (_spec_list[index] !== input.value) {
+         _spec_list[index] = input.value;
+         console.log('hhh',_spec_list[index]);
+         valueChange = true;
+       }
+        return true;
+      }
     }
     that.checkValue = function () {
-        var input = document.querySelectorAll(".mui-input-row input");
-        for (var i in input) {
-            input[i].onblur = function () {
-                var currValue = this.value;
-                if (!currValue || currValue.trim() == "" || !checkIsChinese(currValue)) {
-                    this.value = this.getAttribute('placeholder');
-                } else if (currValue.length < 2) {
-                    mui.toast('至少输入两个汉字');
-                    this.value = this.getAttribute('placeholder');
-                } else {
-                    var index = this.getAttribute('id');
-                    //mui.toast('当前' + this.value + this.getAttribute('id'));
-                    _spec_list[index] = this.value;
-                    console.log('hhh',_spec_list[index]);
-                    valueChange = true;
-                }
-                console.log('test',_spec_list);
-            }
+      _inputs = document.querySelectorAll(".mui-input-row input");
+      console.log('inputs ', _inputs.length);
+        for (var i = 0; i < _inputs.length; i++) {
+          var index = _inputs[i].getAttribute('id');
+          _inputs[i].value = _spec_list[index];
+          _inputs[i].onchange = function () {
+                var self = this;
+                _checkEndValue(self);
+            };
         }
     };
+    // _specListHtml();
     return that;
 })();
 
