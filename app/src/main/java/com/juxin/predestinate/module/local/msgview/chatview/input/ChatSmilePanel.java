@@ -98,6 +98,7 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
                 if (name.equals(smilePackage.getName())) {
                     chatSmileAdapter.setCheckPosition(position);
                     addView(smilePackage);
+                    break;
                 }
 
                 ++position;
