@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.view.BasePanel;
@@ -86,6 +88,9 @@ public class WebPanelPayH5 extends BasePanel {
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.webView, R.id.common_net_error, R.id.common_loading});
         customFrameLayout.showOfIndex(FRAME_LOADING);
+
+        ImageLoader.loadFitCenter(getContext(), R.drawable.f1_loading_h5, (ImageView) findViewById(R.id.loading_gif), 0, 0);
+
         findViewById(R.id.error_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

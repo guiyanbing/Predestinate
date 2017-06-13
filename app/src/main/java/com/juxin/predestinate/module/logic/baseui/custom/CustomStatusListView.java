@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
@@ -79,7 +80,7 @@ public class CustomStatusListView extends LinearLayout {
      * 显示loading
      */
     public void showLoading() {
-        customFrameLayout.show(R.id.common_loading);
+        customFrameLayout.showLoading(R.id.common_loading, R.id.loading_gif, R.drawable.p1_loading);
     }
 
     /**
