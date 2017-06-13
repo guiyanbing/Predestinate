@@ -30,6 +30,7 @@ public class GoodsConstant {
     public static final int DLG_DIAMOND_GIFT_SHORT = 1;     // 送礼钻石不足弹框
     public static final String DLG_OPEN_FROM = "frome_tag"; //打开弹框的来源（统计用 可选）
     public static final String DLG_OPEN_TOUID = "frome_touid"; //是否因为某个用户充值 （统计用 可选）
+    public static final String DLG_OPEN_CHANNEL_UID = "channel_uid"; //是否因为某个用户充值渠道uid （统计用 可选）
 
 
     // vip弹框类型

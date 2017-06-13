@@ -34,12 +34,14 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
     private GoodsPayTypePanel payTypePanel; // 支付方式
     private int seetype;
     private long to_uid;
+    private String channel_uid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         seetype = getIntent().getIntExtra("seetype", 1);
         to_uid = getIntent().getLongExtra("to_uid", 0);
+        channel_uid = getIntent().getStringExtra("channel_uid");
         if (seetype == 2) {
             setContentView(R.layout.f1_goods_vip2_dialog_old);
         } else {

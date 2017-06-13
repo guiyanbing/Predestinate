@@ -54,6 +54,7 @@ import java.util.List;
  */
 public class PrivateChatAct extends BaseActivity implements View.OnClickListener, PObserver {
 
+    private UserInfoLightweight userInfoLightweight = new UserInfoLightweight();
     private long whisperID = 0;
     private String name;
     private boolean isFollow = false;
@@ -229,6 +230,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
+                    userInfoLightweight = infoLightweight;
                     setNickName(infoLightweight.getShowName());
                     if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setImageResource(R.drawable.f1_topc02);
@@ -252,10 +254,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    if(!response.isOk())
+                    if (!response.isOk())
                         return;
                     VideoConfig config = (VideoConfig) response.getBaseData();
-                    if(config.isVideoChat())
+                    if (config.isVideoChat())
                         privateChat.setInputLookAtHerVisibility(View.VISIBLE);
                 }
             });
@@ -366,10 +368,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.chat_title_yb://Y币
                 Statistics.userBehavior(SendPoint.chatframe_nav_y, whisperID);
-                UIShow.showGoodsYCoinDlgOld(this, whisperID);
+                UIShow.showGoodsYCoinDlgOld(this, whisperID, String.valueOf(userInfoLightweight.getChannel_uid()));
                 break;
             case R.id.cus_top_title_img_phone://音视频
-                new SelectCallTypeDialog(this, whisperID);
+                new SelectCallTypeDialog(this, whisperID, String.valueOf(userInfoLightweight.getChannel_uid()));
                 break;
         }
     }
@@ -378,7 +380,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
             UIShow.showCheckOtherInfoAct(this, whisperID);
         } else {
-            UIShow.showGoodsVipDlgOld(this, 2, whisperID);
+            UIShow.showGoodsVipDlgOld(this, 2, whisperID, String.valueOf(userInfoLightweight.getChannel_uid()));
         }
     }
 

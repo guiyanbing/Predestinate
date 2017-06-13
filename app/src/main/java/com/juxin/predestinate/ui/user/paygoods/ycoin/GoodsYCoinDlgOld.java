@@ -36,6 +36,7 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
     private long to_uid;
+    private String channel_uid;
 
     private TextView tv_tips; // 充值优惠提示信息
     private TextView tv_ycoin;
@@ -45,6 +46,7 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_goods_ycoin_dialog_old);
         to_uid = getIntent().getLongExtra("to_uid", 0);
+        channel_uid = getIntent().getStringExtra("channel_uid");
 
         initView();
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
@@ -24,6 +25,8 @@ public class ChatPanelVideo extends ChatPanel {
 
     private ImageView chat_item_type_img;
     private TextView chat_item_video_text;
+
+    private UserInfoLightweight infoLightweight;
 
     public ChatPanelVideo(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
         super(context, chatInstance, R.layout.f1_chat_item_panel_audio, sender);
@@ -47,6 +50,7 @@ public class ChatPanelVideo extends ChatPanel {
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
         if (msgData == null || !(msgData instanceof VideoMessage)) return false;
 
+        this.infoLightweight = infoLightweight;
         VideoMessage videoMessage = (VideoMessage) msgData;
         chat_item_type_img.setImageResource(videoMessage.isVideoMediaTp()
                 ? (isSender() ? R.drawable.f1_chat_video_right : R.drawable.f1_chat_video_left)
@@ -54,7 +58,7 @@ public class ChatPanelVideo extends ChatPanel {
         chat_item_video_text.setText(VideoMessage.getVideoChatContent(
                 videoMessage.getEmLastStatus(), videoMessage.getVideoVcTalkTime(), videoMessage.isSender()));
 
-        PLogger.printObject("tp="+ videoMessage.getVideoTp() +":code="+ videoMessage.getVideoVcEscCode());
+        PLogger.printObject("tp=" + videoMessage.getVideoTp() + ":code=" + videoMessage.getVideoVcEscCode());
         return true;
     }
 
@@ -64,9 +68,15 @@ public class ChatPanelVideo extends ChatPanel {
 
         // 如果是别人发起的音视频，点击之后更新小红点已读状态
         ModuleMgr.getChatMgr().updateMsgFStatus(msgData.getMsgID());
+
+        String channel_uid = "";
+        if (infoLightweight != null) {
+            channel_uid = String.valueOf(infoLightweight.getChannel_uid());
+        }
+
         // 发起音视频
         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) App.getActivity(), msgData.getLWhisperID(),
-                ((VideoMessage) msgData).isVideoMediaTp() ? VideoAudioChatHelper.TYPE_VIDEO_CHAT : VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                ((VideoMessage) msgData).isVideoMediaTp() ? VideoAudioChatHelper.TYPE_VIDEO_CHAT : VideoAudioChatHelper.TYPE_AUDIO_CHAT, channel_uid);
         return true;
     }
 }

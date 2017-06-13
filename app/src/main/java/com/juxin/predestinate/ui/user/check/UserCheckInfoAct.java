@@ -158,17 +158,19 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
 
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
                     Statistics.userBehavior(SendPoint.userinfo_btnvideo, userDetail.getUid());
-                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
+                            Constant.APPEAR_TYPE_NO, String.valueOf(userDetail.getChannel_uid()));
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音
                     Statistics.userBehavior(SendPoint.userinfo_btnvoice, userDetail.getUid());
-                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(),
+                            VideoAudioChatHelper.TYPE_AUDIO_CHAT, String.valueOf(userDetail.getChannel_uid()));
                     break;
 
                 case R.id.iv_gift:                  // 底部礼物悬浮框
                     Statistics.userBehavior(SendPoint.userinfo_btngirl);
-                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userDetail.getUid(), Constant.OPEN_FROM_INFO);
+                    UIShow.showBottomGiftDlg(UserCheckInfoAct.this, userDetail.getUid(), Constant.OPEN_FROM_INFO, String.valueOf(userDetail.getChannel_uid()));
                     break;
             }
         }

@@ -922,10 +922,10 @@ public class UIShow {
      * @param giftid  要送的礼物id
      * @param to_id   统计id
      */
-    public static void showDiamondSendGiftDlg(final Context context, final int giftid, final String to_id) {
+    public static void showDiamondSendGiftDlg(final Context context, final int giftid, final String to_id, final String channel_uid) {
         dlg = null;
         if (ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid) != null) {
-            dlg = new DiamondSendGiftDlg(context, giftid, to_id);
+            dlg = new DiamondSendGiftDlg(context, giftid, to_id, channel_uid);
             dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
             dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -937,7 +937,7 @@ public class UIShow {
             public void onRequestGiftListCallback(boolean isOk) {
                 if (isOk) {
                     if (ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftid) != null) {
-                        dlg = new DiamondSendGiftDlg(context, giftid, to_id);
+                        dlg = new DiamondSendGiftDlg(context, giftid, to_id, channel_uid);
                         dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
                         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -960,11 +960,11 @@ public class UIShow {
      * @param context
      * @param to_id   他人id
      */
-    public static void showBottomGiftDlg(final Context context, final long to_id, final int from_tag) {
+    public static void showBottomGiftDlg(final Context context, final long to_id, final int from_tag, final String channel_uid) {
         dialog = null;
         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
             dialog = new BottomGiftDialog();
-            dialog.setToId(to_id);
+            dialog.setToId(to_id, channel_uid);
             dialog.setCtx(context);
             dialog.setFromTag(from_tag);
             dialog.showDialog((FragmentActivity) context);
@@ -977,7 +977,7 @@ public class UIShow {
                     if (isOk) {
                         if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
                             dialog = new BottomGiftDialog();
-                            dialog.setToId(to_id);
+                            dialog.setToId(to_id, channel_uid);
                             dialog.setCtx(context);
                             dialog.setFromTag(from_tag);
                             dialog.showDialog((FragmentActivity) context);
@@ -994,10 +994,10 @@ public class UIShow {
      * 看看她
      * 出场方式选项
      */
-    public static void showLookAtHerDlg(final Context context, long otherId) {
+    public static void showLookAtHerDlg(final Context context, long otherId, String channel_uid) {
         LookAtHerDlg dialog = new LookAtHerDlg();
         dialog.setContext(context);
-        dialog.setOtherId(otherId);
+        dialog.setOtherId(otherId, channel_uid);
         dialog.showDialog((FragmentActivity) context);
     }
 
@@ -1233,8 +1233,8 @@ public class UIShow {
      * @param fromTag 打开充值来源 （统计用 可选）
      * @param touid   是否因为某个用户充值 （统计用 可选）
      */
-    public static void showGoodsDiamondDialogAndTag(Context context, int fromTag, long touid) {
-        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL, fromTag, touid);
+    public static void showGoodsDiamondDialogAndTag(Context context, int fromTag, long touid, String channel_uid) {
+        showGoodsDiamondDialog(context, 0, GoodsConstant.DLG_DIAMOND_NORMAL, fromTag, touid, channel_uid);
     }
 
     /**
@@ -1242,8 +1242,8 @@ public class UIShow {
      *
      * @param needDiamond 所需钻石差值
      */
-    public static void showGoodsDiamondDialog(Context context, int needDiamond, int fromTag, long touid) {
-        showGoodsDiamondDialog(context, needDiamond, GoodsConstant.DLG_DIAMOND_GIFT_SHORT, fromTag, touid);
+    public static void showGoodsDiamondDialog(Context context, int needDiamond, int fromTag, long touid, String channel_uid) {
+        showGoodsDiamondDialog(context, needDiamond, GoodsConstant.DLG_DIAMOND_GIFT_SHORT, fromTag, touid, channel_uid);
     }
 
     /**
@@ -1252,13 +1252,15 @@ public class UIShow {
      * @param type
      * @param fromTag     打开来源
      * @param touid       是否因为某个用户充值 （统计用 可选）
+     * @param channel_uid  是否因为某个用户充值渠道id （统计用 可选）
      */
-    private static void showGoodsDiamondDialog(Context context, int needDiamond, int type, int fromTag, long touid) {
+    private static void showGoodsDiamondDialog(Context context, int needDiamond, int type, int fromTag, long touid, String channel_uid) {
         Intent intent = new Intent(context, GoodsDiamondDialog.class);
         intent.putExtra(GoodsConstant.DLG_TYPE_KEY, type);
         intent.putExtra(GoodsConstant.DLG_GIFT_NEED, needDiamond);
         intent.putExtra(GoodsConstant.DLG_OPEN_FROM, fromTag);
         intent.putExtra(GoodsConstant.DLG_OPEN_TOUID, touid);
+        intent.putExtra(GoodsConstant.DLG_OPEN_CHANNEL_UID, channel_uid);
         context.startActivity(intent);
     }
 
@@ -1280,10 +1282,11 @@ public class UIShow {
      * @param seeType 1从Y聊天锁按钮发起  2 从查看资料发起
      * @param to_uid  产生交互的uid
      */
-    public static void showGoodsVipDlgOld(Context context, int seeType, long to_uid) {
+    public static void showGoodsVipDlgOld(Context context, int seeType, long to_uid, String channel_uid) {
         Intent intent = new Intent(context, GoodsVipDlgOld.class);
         intent.putExtra("seetype", seeType);
         intent.putExtra("to_uid", to_uid);
+        intent.putExtra("channel_uid", channel_uid);
         context.startActivity(intent);
     }
 
@@ -1305,9 +1308,10 @@ public class UIShow {
      *
      * @param to_uid 产生交互的uid
      */
-    public static void showGoodsYCoinDlgOld(Context context, long to_uid) {
+    public static void showGoodsYCoinDlgOld(Context context, long to_uid, String channel_uid) {
         Intent intent = new Intent(context, GoodsYCoinDlgOld.class);
         intent.putExtra("to_uid", to_uid);
+        intent.putExtra("channel_uid", channel_uid);
         context.startActivity(intent);
     }
 

@@ -119,7 +119,10 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
                         }
-                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
+
+                        String channel_uid = String.valueOf(chatAdapter.getUserInfo(chatAdapter.getLWhisperId()).getChannel_uid());
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                                true, Constant.APPEAR_TYPE_NO, channel_uid);
                         break;
                     case VOICE://语音
                         Statistics.userBehavior(SendPoint.chatframe_tool_voice,
@@ -128,7 +131,10 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_voice_chat));
                             return;
                         }
-                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+
+                        long whisperId  = chatAdapter.getLWhisperId();
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_AUDIO_CHAT,
+                                String.valueOf(chatAdapter.getUserInfo(whisperId).getChannel_uid()));
                         break;
                 }
             }
