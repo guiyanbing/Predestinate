@@ -24,6 +24,7 @@ public class PhizMgr implements ModuleBase {
     @Override
     public void init() {
         initPanel();
+        reqCustomFace();
     }
 
     @Override
@@ -32,6 +33,12 @@ public class PhizMgr implements ModuleBase {
     }
 
     public List<SmilePackage> getPackages() {
+        if(packages == null) {
+            packages = new ArrayList<>();
+        }
+        if(packages.size() == 0) {
+            initPanel();
+        }
         return packages;
     }
 
@@ -45,7 +52,7 @@ public class PhizMgr implements ModuleBase {
         smilePackage.setName("自定义");
         smilePackage.setType("customface");
         finalSmilePackage = smilePackage;
-        packages.add(smilePackage);
+        packages.add(finalSmilePackage);
     }
 
     /**
@@ -57,6 +64,9 @@ public class PhizMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     try {
+                        if(finalSmilePackage == null) {
+                            return;
+                        }
                         finalSmilePackage.parseJsonSmileItem(response.getResponseString());
                     } catch (JSONException e) {
                         e.printStackTrace();
