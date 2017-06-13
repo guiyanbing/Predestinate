@@ -78,7 +78,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initData() {
+        Statistics.activeStatistic();
         Statistics.startUp();
+
         ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -200,22 +202,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.discovery_layout:
+                Statistics.userOnline("discovery");
                 Statistics.userBehavior(SendPoint.menu_faxian);
                 switchContent(discoverMFragment);
                 break;
             case R.id.mail_layout:
+                Statistics.userOnline("mail");
                 Statistics.userBehavior(SendPoint.menu_xiaoxi);
                 switchContent(mailFragment);
                 break;
             case R.id.rank_layout:
+                Statistics.userOnline("rank");
                 Statistics.userBehavior(SendPoint.menu_fengyunbang);
                 switchContent(rankFragment);
                 break;
             case R.id.plaza_layout:
+                Statistics.userOnline("plaza");
                 Statistics.userBehavior(SendPoint.menu_guangchang);
                 switchContent(plazaFragment);
                 break;
             case R.id.user_layout:
+                Statistics.userOnline("info");
                 Statistics.userBehavior(SendPoint.menu_me);
                 switchContent(userFragment);
                 break;
@@ -339,6 +346,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Statistics.userOnline("exit");
         MsgMgr.getInstance().detach(this);
     }
 
