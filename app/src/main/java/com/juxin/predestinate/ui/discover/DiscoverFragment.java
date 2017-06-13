@@ -60,6 +60,8 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
     private boolean isNearPage = false;
 
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -453,6 +455,15 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                     groupSayhiBtn.setVisibility(View.GONE);
                 }
             }
+        }
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+
         }
     }
 
