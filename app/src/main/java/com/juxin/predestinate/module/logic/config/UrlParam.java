@@ -32,8 +32,11 @@ public enum UrlParam {
     getserviceqq("user/getserviceqq", ContactBean.class, true),//获取客服信息
     //================================ 配置项 ==================================
     CMDRequest(""),//cmd请求中默认拼接内容为空，通过resetHost方式进行使用
-    checkUpdate("public/checkupNew", null, true),//检查软件升级
-    staticConfig("public/getASet", null, false),//检查服务器静态配置
+    checkUpdate("public/checkupNew", null, true),   //检查软件升级
+    staticConfig("public/getASet", null, false),    //检查服务器静态配置
+    userOnline("user/userOnline", true),//php旧版用户应用内行为统计
+    activeStatistic("Behav/act", true), //php旧版用户应用激活统计
+    payStatistic("user/ppc", true),     //php旧版用户充值统计
     statistics(Hosts.FATE_IT_GO, "x/hdp/Action2", null, false),//大数据统计
     locationStatistics(Hosts.FATE_IT_GO, "xs/location/UpdateUserPosition", null, false),//位置信息统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
