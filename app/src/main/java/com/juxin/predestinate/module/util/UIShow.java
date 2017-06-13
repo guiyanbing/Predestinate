@@ -25,6 +25,7 @@ import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -745,7 +746,7 @@ public class UIShow {
      * @param commodity_Id 订单
      * @param payType      类型
      */
-    public static void showPayAlipayt(final FragmentActivity activity, final int commodity_Id, final int payType) {
+    public static void showPayAlipayt(final FragmentActivity activity, final int commodity_Id, final int payType, long uid, String channel_uid) {
         LoadingDialog.show(activity, "生成订单中");
         ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
             @Override

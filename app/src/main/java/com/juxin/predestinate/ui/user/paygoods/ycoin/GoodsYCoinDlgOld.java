@@ -120,7 +120,8 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
             case R.id.btn_recharge:// 充值
                 StatisticsMessage.chatNavConfirmPay(SendPoint.chatframe_nav_y_ypay_btnqrzf, to_uid, payTypePanel.getPayType(),
                         payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
-                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
+                        to_uid, channel_uid);
                 break;
         }
     }

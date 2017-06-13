@@ -105,7 +105,8 @@ public class GoodsVipDlgOld extends BaseActivity implements View.OnClickListener
                                 payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
                     }
                 }
-                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
+                        to_uid, channel_uid);
                 break;
         }
     }

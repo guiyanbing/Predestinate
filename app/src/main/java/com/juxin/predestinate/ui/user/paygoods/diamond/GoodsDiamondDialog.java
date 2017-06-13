@@ -100,7 +100,8 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
-                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
+                        touid, channel_uid);
                 //统计
                 if (fromTag == Constant.OPEN_FROM_HOT) {
                     StatisticsDiscovery.onPayGift(touid, payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),
