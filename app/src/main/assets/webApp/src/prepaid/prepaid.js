@@ -172,8 +172,7 @@ var PrePaid = function () {
           time++;
           count = _getTimeRage(length);
         }
-      }
-      ;
+      };
       ele.innerHTML = html;
     });
   };
@@ -209,6 +208,8 @@ var PrePaid = function () {
     var bottom = 25;
     var yHeight = slider.offsetHeight - scrolls[0].offsetHeight - topHeight - bottom ;
     var vipHeight = slider.offsetHeight - scrolls[1].offsetHeight - topHeight - bottom  ;
+    yHeight = Math.max(75, yHeight);
+    vipHeight = Math.max(75 , vipHeight);
     yLunbo.setAttribute('style', 'height:' + yHeight + 'px');
     vipLunbo.setAttribute('style', 'height:' + vipHeight + 'px');
     _yCoin_limit_count = Math.floor(yHeight / MSG_HEIGHT);
