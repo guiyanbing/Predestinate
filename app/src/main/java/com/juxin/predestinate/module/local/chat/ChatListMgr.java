@@ -298,7 +298,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         PLogger.printObject("getWhisperList=un===2" + baseMessages.size());
                         updateListMsg(baseMessages);
                     }
-                }).unsubscribe();
+                });
     }
 
     @Override
