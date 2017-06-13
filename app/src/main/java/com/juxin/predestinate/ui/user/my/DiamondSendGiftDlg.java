@@ -23,6 +23,7 @@ import com.juxin.predestinate.module.util.my.GiftHelper;
 public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, RequestComplete, GiftHelper.OnRequestGiftListCallback {
     private String channelId;
     private String otherId;
+    private String channel_uid; // 统计用
     private Context mContext;
     private TextView tv_diamonds, tv_gift_diamonds;
     private ImageView iv_pic;
@@ -31,7 +32,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, 
     private int gifId;
     private GiftsList.GiftInfo giftBean;
 
-    public DiamondSendGiftDlg(Context context, int giftid, String OtherId) {
+    public DiamondSendGiftDlg(Context context, int giftid, String OtherId, String channel_uid) {
         super(context, R.style.dialog);
         mContext = context;
         this.gifId = giftid;
@@ -41,6 +42,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, 
             ModuleMgr.getCommonMgr().requestGiftList(this);
         }
         otherId = OtherId;
+        this.channel_uid = channel_uid;
         initData();
     }
 
@@ -88,7 +90,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, 
                 if (dec >= 0) {//赠送礼物
                     ModuleMgr.getChatMgr().sendGiftMsg("", otherId, giftBean.getId(), 1, 3);
                 } else {
-                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec), -1, TypeConvertUtil.toLong(otherId));
+                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec), -1, TypeConvertUtil.toLong(otherId), channel_uid);
                 }
                 dismiss();
                 break;

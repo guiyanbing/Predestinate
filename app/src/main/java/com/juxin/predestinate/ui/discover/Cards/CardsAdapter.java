@@ -121,7 +121,8 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 if (infoHot.isVideo_available()) {
-                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
+                            Constant.APPEAR_TYPE_NO, String.valueOf(infoHot.getChannel_uid()));
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_video_tips));
                 }
@@ -138,7 +139,8 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
             @Override
             public void onClick(View view) {
                 if (infoHot.isAudio_available()) {
-                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, infoHot.getUid(),
+                            VideoAudioChatHelper.TYPE_AUDIO_CHAT, String.valueOf(infoHot.getChannel_uid()));
                 } else {
                     PToast.showShort(context.getString(R.string.hot_card_audio_tips));
                 }
@@ -175,7 +177,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.lin_to_gift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UIShow.showBottomGiftDlg(context, infoHot.getUid(), Constant.OPEN_FROM_HOT);
+                UIShow.showBottomGiftDlg(context, infoHot.getUid(), Constant.OPEN_FROM_HOT, String.valueOf(infoHot.getChannel_uid()));
 
                 //统计
                 StatisticsDiscovery.onClickHotGif(infoHot.getUid());

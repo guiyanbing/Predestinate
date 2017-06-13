@@ -17,6 +17,7 @@ import com.juxin.library.utils.InputUtils;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
@@ -195,18 +196,22 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 onClickChatSend();
                 break;
             case R.id.input_monthly:
-                Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact,
-                        TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
+                try {
+                    long otherID = TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId());
+                    long channel_uid = getChatInstance().chatAdapter.getUserInfo(otherID).getChannel_uid();
 
-                String otherID = getChatInstance().chatAdapter.getWhisperId();
-                UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-                if (!otherID.equals(userDetail.getyCoinUserid()) &&
-                        (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
-                    UIShow.showGoodsVipDlgOld(getContext(), 1,
-                            TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
-                } else {
-                    UIShow.showGoodsYCoinDlgOld(getContext(),
-                            TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
+                    Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact, otherID);
+
+                    UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+                    if (otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) &&
+                            (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
+                        UIShow.showGoodsVipDlgOld(getContext(), 1,
+                                otherID, String.valueOf(channel_uid));
+                    } else {
+                        UIShow.showGoodsYCoinDlgOld(getContext(),
+                                otherID, String.valueOf(channel_uid));
+                    }
+                } catch (Exception e) {
                 }
                 break;
         }
@@ -417,7 +422,11 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                         TypeConvertUtil.toLong(getChatInstance().chatAdapter.getWhisperId()));
 
                 closeAllInput();
-                UIShow.showBottomGiftDlg(getContext(), getChatInstance().chatAdapter.getLWhisperId(), Constant.OPEN_FROM_CHAT_FRAME);
+
+                long otherId = getChatInstance().chatAdapter.getLWhisperId();
+
+                UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(otherId);
+                UIShow.showBottomGiftDlg(getContext(), otherId, Constant.OPEN_FROM_CHAT_FRAME, String.valueOf(info.getChannel_uid()));
             }
         });
     }
@@ -430,7 +439,11 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), getChatInstance().chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
+
+                long whisperId = getChatInstance().chatAdapter.getLWhisperId();
+                long channel_uid = getChatInstance().chatAdapter.getUserInfo(whisperId).getChannel_uid();
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
+                        Constant.APPEAR_TYPE_NO, String.valueOf(channel_uid));
             }
         });
     }

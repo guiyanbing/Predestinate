@@ -196,7 +196,8 @@ public class GoodsVipDialog extends BaseActivity implements View.OnClickListener
                 break;
 
             case R.id.btn_recharge:  // 充值
-                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
+                        0, "");
                 break;
         }
     }

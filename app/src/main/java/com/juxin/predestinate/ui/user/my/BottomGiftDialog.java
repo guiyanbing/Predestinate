@@ -52,6 +52,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
     private PageIndicatorView pageIndicatorView;
     private List<GiftsList.GiftInfo> arrGifts = new ArrayList();
     private long uid;//收礼物的uid
+    private String channel_uid;  // 统计用
     private int position = -1;
     private int pageCount;
     private List<GridView> mLists;
@@ -132,13 +133,13 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 } else if (getFromTag() == Constant.OPEN_FROM_CHAT_FRAME) {
                     Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay, uid);
                 }
-                UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid);
+                UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid, channel_uid);
                 break;
             case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
                 int needStone = Integer.valueOf(txvNeedStone.getText().toString());
                 if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) {
                     UIShow.showGoodsDiamondDialog(getContext(), needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand(),
-                            getFromTag(), uid);
+                            getFromTag(), uid, channel_uid);
                     return;
                 }
                 if (position == -1) {//为选择礼物
@@ -164,8 +165,9 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         }
     }
 
-    public void setToId(long to_id) {
+    public void setToId(long to_id, String channel_uid) {
         this.uid = to_id;//设置接收礼物方的uid
+        this.channel_uid = channel_uid;
     }
 
     /**
