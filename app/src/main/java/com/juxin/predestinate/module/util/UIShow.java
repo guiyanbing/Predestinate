@@ -748,6 +748,7 @@ public class UIShow {
      */
     public static void showPayAlipayt(final FragmentActivity activity, final int commodity_Id, final int payType, long uid, String channel_uid) {
         LoadingDialog.show(activity, "生成订单中");
+        Statistics.payStatistic(String.valueOf(uid), channel_uid);
         ModuleMgr.getCommonMgr().reqGenerateOrders(commodity_Id, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
