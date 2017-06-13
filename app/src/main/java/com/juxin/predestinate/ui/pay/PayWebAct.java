@@ -29,7 +29,9 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UrlEnc;
+
 import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ import java.util.regex.Pattern;
  * Created by Kind on 2017/4/26.
  */
 
-public class PayWebAct extends BaseActivity{
+public class PayWebAct extends BaseActivity {
 
     private WebView payalipay_web_webview;
     private PayGood payGood;
@@ -67,7 +69,9 @@ public class PayWebAct extends BaseActivity{
         initView();
     }
 
-    /** * 模拟点击某个指定坐标作用在View上 * @param view * @param x * @param y */
+    /**
+     * 模拟点击某个指定坐标作用在View上 * @param view * @param x * @param y
+     */
     public void clickView(View view, float x, float y) {
         long downTime = SystemClock.uptimeMillis();
         MotionEvent downEvent = MotionEvent.obtain(downTime, downTime, MotionEvent.ACTION_DOWN, x, y, 0);
@@ -92,7 +96,7 @@ public class PayWebAct extends BaseActivity{
                 initData();
             }
         });
-        customFrameLayout.show(R.id.common_loading);
+        customFrameLayout.showLoading(R.id.common_loading, R.id.loading_gif, R.drawable.p1_loading);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -115,7 +119,7 @@ public class PayWebAct extends BaseActivity{
 
         // 获取hash参数
         Map<String, Object> getParams = new HashMap<String, Object>();
-     //   getParams.put("ts", TimeUtil.getCurrentTimeMil());
+        //   getParams.put("ts", TimeUtil.getCurrentTimeMil());
         getParams.put("productid", payGood.getPay_id() + "");// 订单ID
         getParams.put("subject", payGood.getPay_name());// 标题
         getParams.put("body", "androidwap-" + payGood.getPay_name());
@@ -130,7 +134,7 @@ public class PayWebAct extends BaseActivity{
             e.printStackTrace();
         }
 
-        String url = UrlEnc.appendUrl(UrlParam.reqAliWapPay.getFinalUrl(), getParams, null ,true);
+        String url = UrlEnc.appendUrl(UrlParam.reqAliWapPay.getFinalUrl(), getParams, null, true);
         synCookies(url);
         payalipay_web_webview.loadUrl(url);
         payalipay_web_webview.requestFocus();
@@ -148,7 +152,7 @@ public class PayWebAct extends BaseActivity{
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 1:{
+                case 1: {
                     String html = (String) msg.obj;
 
                     int start = html.indexOf("<pre");
@@ -168,7 +172,7 @@ public class PayWebAct extends BaseActivity{
                                     // 更新信息
                                     getUpdateInfo();
                                     PToast.showShort(jsonObject.optString("content"));
-                                }else{
+                                } else {
                                     PToast.showShort(jsonObject.optString("content"));
                                     PayWebAct.this.finish();
                                 }
@@ -179,7 +183,7 @@ public class PayWebAct extends BaseActivity{
                             }
                             return;
                         }
-                    }else{
+                    } else {
                         PToast.showShort("支付出错");
                         PayWebAct.this.finish();
                     }
@@ -191,14 +195,14 @@ public class PayWebAct extends BaseActivity{
         }
     };
 
-    private void getUpdateInfo(){
-        LoadingDialog.show(this,"更新中...");
+    private void getUpdateInfo() {
+        LoadingDialog.show(this, "更新中...");
         ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 LoadingDialog.closeLoadingDialog();
                 JSONObject jsonObject = response.getResponseJson();
-                if(!jsonObject.isNull("userDetail")){
+                if (!jsonObject.isNull("userDetail")) {
                     PToast.showShort("更新失败!");
                 }
                 PayWebAct.this.setResult(Constant.PAY_ALIPAY_WEB_ACT);

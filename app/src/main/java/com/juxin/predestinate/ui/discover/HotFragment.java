@@ -200,7 +200,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
     }
 
     private void showLoading() {
-        hot_frame.show(R.id.common_loading);
+        hot_frame.showLoading(R.id.common_loading, R.id.loading_gif, R.drawable.p1_loading);
     }
 
 }
