@@ -96,6 +96,7 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
                 discover_recommend.setChecked(true);
                 discover_hot.setChecked(false);
                 switchContent(discoverFragment);
+                discoverFragment.refreshList();
                 //统计
                 StatisticsDiscovery.onClickRecommend();
                 break;

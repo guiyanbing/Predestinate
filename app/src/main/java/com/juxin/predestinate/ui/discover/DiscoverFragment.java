@@ -456,4 +456,15 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         }
     }
 
+    /**
+     * 刷新首页
+     */
+    public void refreshList() {
+        onRefresh();
+        if (adapter != null && adapter.getList() != null && adapter.getList().size() != 0) {
+            exListView.setSelection(0);
+        }
+    }
+
+
 }
