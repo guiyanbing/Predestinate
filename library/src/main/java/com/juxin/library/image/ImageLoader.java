@@ -25,8 +25,6 @@ import com.juxin.library.image.transform.BlurImage;
 import com.juxin.library.image.transform.CircleTransform;
 import com.juxin.library.image.transform.RoundedCorners;
 
-import java.util.Arrays;
-
 /**
  * 基于Glide图片请求，处理类
  */
@@ -314,8 +312,17 @@ public class ImageLoader {
      * @return
      */
     private static <T> boolean isInvalidTag(ImageView view, T model, Object[] trans) {
-        return (model != null ? !model.equals(view.getTag(R.string.view_url_tag_id)) : view.getTag(R.string.view_url_tag_id) != model)
-                || !Arrays.equals((Object[]) view.getTag(R.string.view_trans_tag_id), trans);
+        Object url_obj = view.getTag(R.string.view_url_tag_id);
+        int url_tag = url_obj == null ? 0 : (int) url_obj;
+        if (model == null ? 0 != url_tag : model.hashCode() != url_tag)
+            return true;
+
+        Object trans_obj = view.getTag(R.string.view_trans_tag_id);
+        int trans_tag = trans_obj == null ? 0 : (int) trans_obj;
+        if (trans == null ? 0 != trans_tag : getArrayHash(trans) != trans_tag)
+            return true;
+
+        return false;
     }
 
     /**
@@ -326,8 +333,21 @@ public class ImageLoader {
      * @param trans
      */
     private static <T> void setImgTag(ImageView view, T model, Object[] trans) {
-        view.setTag(R.string.view_url_tag_id, model);
-        view.setTag(R.string.view_trans_tag_id, trans);
+        view.setTag(R.string.view_url_tag_id, model == null ? 0 : model.hashCode());
+        view.setTag(R.string.view_trans_tag_id, trans == null ? 0 : getArrayHash(trans));
+    }
+
+    /**
+     * 按存储对象的Hash值计算Array的Hash值
+     * @param trans
+     * @return
+     */
+    private static int getArrayHash(Object[] trans){
+        int objHash = 0;
+        for (Object tran: trans)
+            objHash = objHash ^ tran.hashCode();
+
+        return objHash;
     }
 
     /**

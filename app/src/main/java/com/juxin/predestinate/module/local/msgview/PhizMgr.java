@@ -18,10 +18,12 @@ import java.util.List;
 
 public class PhizMgr implements ModuleBase {
 
+    private SmilePackage finalSmilePackage;
     private List<SmilePackage> packages = new ArrayList<>();
 
     @Override
     public void init() {
+        initPanel();
         reqCustomFace();
     }
 
@@ -31,13 +33,16 @@ public class PhizMgr implements ModuleBase {
     }
 
     public List<SmilePackage> getPackages() {
+        if(packages == null) {
+            packages = new ArrayList<>();
+        }
+        if(packages.size() == 0) {
+            initPanel();
+        }
         return packages;
     }
 
-    /**
-     * 自定义表情
-     */
-    private void reqCustomFace() {
+    private void initPanel() {
         SmilePackage smilePackage = new SmilePackage();
         smilePackage.setName("默认");
         smilePackage.setType("smallface");
@@ -46,13 +51,22 @@ public class PhizMgr implements ModuleBase {
         smilePackage = new SmilePackage();
         smilePackage.setName("自定义");
         smilePackage.setType("customface");
+        finalSmilePackage = smilePackage;
+        packages.add(finalSmilePackage);
+    }
 
-        final SmilePackage finalSmilePackage = smilePackage;
+    /**
+     * 自定义表情
+     */
+    public void reqCustomFace() {
         ModuleMgr.getCommonMgr().reqCustomFace(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
                     try {
+                        if(finalSmilePackage == null) {
+                            return;
+                        }
                         finalSmilePackage.parseJsonSmileItem(response.getResponseString());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -61,7 +75,6 @@ public class PhizMgr implements ModuleBase {
                 PLogger.printObject(response.getResponseJson());
             }
         });
-        packages.add(smilePackage);
     }
 
     /**

@@ -53,6 +53,10 @@ public class DBCenter {
     public long insertMsg(BaseMessage baseMessage) {
         if (TextUtils.isEmpty(baseMessage.getWhisperID())) return MessageConstant.ERROR;
 
+        if(BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()){
+            baseMessage.setStatus(MessageConstant.READ_STATUS);
+        }
+
         long ret = centerFmessage.insertMsg(baseMessage);
         if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
 
@@ -88,7 +92,7 @@ public class DBCenter {
 
             BaseMessage temp = centerFLetter.isExist(message.getWhisperID());
             if (temp == null) return MessageConstant.ERROR;  //没有数据
-//TODO
+
             if(BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
                     && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()){
                 long ret = centerFLetter.updateStatus(userID, message.getStatus());
@@ -100,11 +104,6 @@ public class DBCenter {
                     if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
                 }
             }
-//
-//            if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())){
-//                long ret =  centerFLetter.updateStatus(userID, message.getStatus());
-//                if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
-//            }
         }
         return centerFmessage.updateMsg(message);
     }

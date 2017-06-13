@@ -133,6 +133,7 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
             case R.id.floating_tip:
             case R.id.btn_reply:
                 finish();
+                if (simpleData == null || simpleData.getUid() == 0) return;
                 Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + ",\"nickname\":" + simpleData.getNickname() + "}");
                 break;
         }

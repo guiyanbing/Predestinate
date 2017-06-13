@@ -21,6 +21,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -288,7 +289,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void getWhisperListUnsubscribe() {
-        PLogger.printObject("getWhisperList====1");
+        PLogger.printObject("getWhisperList====2");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
         listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
                 .subscribe(new Action1<List<BaseMessage>>() {

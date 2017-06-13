@@ -23,14 +23,13 @@ public class PayWebActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         isCanBack(false);
-        String url = getIntent().getStringExtra("url");
-        setTitle(getString(R.string.goods_pay_weixin1));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_web_activity);
         View base_title = findViewById(R.id.base_title);
         base_title.setVisibility(View.VISIBLE);
         setBackView();
-
+        String url = getIntent().getStringExtra("url");
+        setTitle(getString(R.string.goods_pay_weixin1));
         LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
         webPanel = new WebPanelPayH5(this, url, true);
         webPanel.setWebListener(new WebPanelPayH5.WebListener() {

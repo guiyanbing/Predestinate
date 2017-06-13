@@ -161,6 +161,8 @@ public class SmilePackage extends BaseData {
         if (!jsonObject.isNull("list")) {
             if(items == null){
                 items = new ArrayList<>();
+            }else {
+                items.clear();
             }
             JSONArray jsonArray = jsonObject.optJSONArray("list");
             if (null != jsonArray) {
