@@ -311,7 +311,7 @@ public class ImageLoader {
      * @param <T>
      * @return
      */
-    private static <T> boolean isInvalidTag(ImageView view, T model, Object... trans) {
+    private static <T> boolean isInvalidTag(ImageView view, T model, Object[] trans) {
         Object url_obj = view.getTag(R.string.view_url_tag_id);
         int url_tag = url_obj == null ? 0 : (int) url_obj;
         if (model == null ? 0 != url_tag : model.hashCode() != url_tag)
@@ -332,7 +332,7 @@ public class ImageLoader {
      * @param model
      * @param trans
      */
-    private static <T> void setImgTag(ImageView view, T model, Object... trans) {
+    private static <T> void setImgTag(ImageView view, T model, Object[] trans) {
         view.setTag(R.string.view_url_tag_id, model == null ? 0 : model.hashCode());
         view.setTag(R.string.view_trans_tag_id, trans == null ? 0 : getArrayHash(trans));
     }
@@ -342,7 +342,7 @@ public class ImageLoader {
      * @param trans
      * @return
      */
-    private static int getArrayHash(Object... trans){
+    private static int getArrayHash(Object[] trans){
         int objHash = 0;
         for (Object tran: trans)
             objHash = objHash ^ tran.hashCode();
