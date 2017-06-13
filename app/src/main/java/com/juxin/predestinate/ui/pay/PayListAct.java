@@ -10,10 +10,12 @@ import android.widget.TextView;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.PayTypeList;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.ui.user.auth.PhoneVerifyAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.List;
@@ -92,7 +94,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.paylist_qq: {
-                UIShow.showQQService(this);
+                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(),"");
             }
             case R.id.paylist_help: {
                 if (help_txt) {
