@@ -95,6 +95,10 @@ public class DiscoverMFragment extends BaseFragment implements View.OnClickListe
                 setTitleRightImgVisible();
                 discover_recommend.setChecked(true);
                 discover_hot.setChecked(false);
+                //在当前页的时候 点击刷新
+                if (current == discoverFragment) {
+                    discoverFragment.refreshList();
+                }
                 switchContent(discoverFragment);
                 //统计
                 StatisticsDiscovery.onClickRecommend();
