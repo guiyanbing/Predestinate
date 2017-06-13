@@ -60,9 +60,9 @@ public class Statistics {
      * @param tplId 交互对方channel_uid
      */
     public static void payStatistic(String uid, String tplId) {
-        if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(tplId) ||
-                "0".equals(uid) || "0".equals(tplId)) return;
+        if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(tplId)) return;
 
+        PLogger.d("------>" + uid + "/" + tplId);
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("id", uid);
         getParams.put("tplId", tplId);

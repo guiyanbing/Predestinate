@@ -2,9 +2,11 @@ package com.juxin.predestinate.bean.center.user.light;
 
 import android.os.Parcel;
 import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.center.user.detail.UserBasic;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.logic.config.AreaConfig;
+
 import org.json.JSONObject;
 
 /**
@@ -13,7 +15,6 @@ import org.json.JSONObject;
  */
 public class UserInfoLightweight extends UserBasic {
 
-    private boolean isOk = false;
     private long time;
     private String infoJson;    //存储json
 
@@ -100,12 +101,12 @@ public class UserInfoLightweight extends UserBasic {
         this.setGroup(jsonObject.optInt("group"));
         this.setOnline(jsonObject.optBoolean("is_online"));
         this.setLast_onLine(jsonObject.optString("last_online"));
+
+        parseJson(jsonObject);
     }
 
     public void parseJson(JSONObject jsonObject) {
         if (jsonObject == null) return;
-
-        this.setOk(true);
         this.setInfoJson(jsonObject.toString());
 
         this.setUid(jsonObject.optLong("uid"));
@@ -116,7 +117,6 @@ public class UserInfoLightweight extends UserBasic {
         this.setSignname(jsonObject.optString("about"));
         this.setAge(jsonObject.optInt("age"));
         this.setRemark(jsonObject.optString("remark"));
-
 
         this.setHeight(jsonObject.optInt("height"));
         this.setKf_id(jsonObject.optInt("kf_id"));
@@ -134,7 +134,7 @@ public class UserInfoLightweight extends UserBasic {
         this.setGroup(jsonObject.optInt("group"));
         this.setOnline(jsonObject.optBoolean("isOnline"));
 
-        if(!jsonObject.isNull("videochatConfig")) {
+        if (!jsonObject.isNull("videochatConfig")) {
             JSONObject configJsonObj = jsonObject.optJSONObject("videochatConfig");
             if (!configJsonObj.isNull("video_available")) {
                 this.setVideo_available(configJsonObj.optInt("video_available") == 1);
@@ -149,7 +149,6 @@ public class UserInfoLightweight extends UserBasic {
         }
     }
 
-
     public void parseUserInfoLightweight(long userID, String infoJson, long time) {
         this.setUid(userID);
         this.setTime(time);
@@ -161,14 +160,6 @@ public class UserInfoLightweight extends UserBasic {
      */
     public String getShowName() {
         return TextUtils.isEmpty(remark) ? getNickname() : remark;
-    }
-
-    public boolean isOk() {
-        return isOk;
-    }
-
-    public void setOk(boolean ok) {
-        isOk = ok;
     }
 
     public long getTime() {
@@ -340,8 +331,7 @@ public class UserInfoLightweight extends UserBasic {
     @Override
     public String toString() {
         return "UserInfoLightweight{" +
-                "isOk=" + isOk +
-                ", time=" + time +
+                "time=" + time +
                 ", infoJson='" + infoJson + '\'' +
                 ", channel_uid=" + channel_uid +
                 ", group=" + group +
@@ -372,7 +362,6 @@ public class UserInfoLightweight extends UserBasic {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeByte(this.isOk ? (byte) 1 : (byte) 0);
         dest.writeLong(this.time);
         dest.writeString(this.infoJson);
         dest.writeInt(this.channel_uid);
@@ -397,7 +386,6 @@ public class UserInfoLightweight extends UserBasic {
 
     protected UserInfoLightweight(Parcel in) {
         super(in);
-        this.isOk = in.readByte() != 0;
         this.time = in.readLong();
         this.infoJson = in.readString();
         this.channel_uid = in.readInt();
