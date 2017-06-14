@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.util.SparseArray;
 import android.widget.ImageView;
 
 import com.bumptech.glide.BitmapRequestBuilder;
@@ -35,6 +36,7 @@ public class ImageLoader {
     private static RoundedCorners roundedCorners;
     private static RoundedCorners roundedCornerTop;
     private static BlurImage blurImage;
+    private static SparseArray<Drawable> cache = new SparseArray<>();//替换图缓存
 
     public static void init(Context context) {
         Context mContext = context.getApplicationContext();
@@ -177,8 +179,10 @@ public class ImageLoader {
     private static <T> void loadStylePic(final Context context, final T model, final ImageView view,
                                          int defResImg, final int errResImg,
                                          final Transformation<Bitmap>... transformation) {
-        if (!isInvalidTag(view, model, transformation)) return;
+        if (!isInvalidTag(view, model, transformation))
+            return;
         setImgTag(view, model, transformation);
+
         loadPicWithCallback(context, defResImg, new GlideCallback() {
                     @Override
                     public void onResourceReady(final GlideDrawable defRes) {
@@ -198,9 +202,10 @@ public class ImageLoader {
                                     int defResImg, int errResImg,
                                     Transformation<Bitmap>... transformation) {
         try {
-            if (!isInvalidTag(view, model, transformation)) return;
+            if (!isInvalidTag(view, model, transformation))
+                return;
             setImgTag(view, model, transformation);
-            loadPic(context, model, view, defResImg > 0 ? ContextCompat.getDrawable(context, defResImg): null,
+            loadPic(context, model, view, defResImg > 0 ? ContextCompat.getDrawable(context, defResImg) : null,
                     errResImg > 0 ? ContextCompat.getDrawable(context, errResImg) : null, transformation);
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,10 +246,19 @@ public class ImageLoader {
     /**
      * 带回调的加载
      */
-    private static <T> void loadPicWithCallback(final Context context, T model, final GlideCallback callback, Transformation<Bitmap>... transformation) {
+    private static <T> void loadPicWithCallback(final Context context, final T model, final GlideCallback callback, final Transformation<Bitmap>... transformation) {
         try {
             if (isActDestroyed(context))
                 return;
+
+            if (model instanceof Integer) {
+                int key = getCacheKey((Integer) model, transformation);
+                Drawable drawable = cache.get(key);
+                if (drawable != null && callback != null) {
+                    callback.onResourceReady((GlideDrawable) drawable);
+                    return;
+                }
+            }
 
             DrawableRequestBuilder<T> builder = getDrawableBuilder(context, model);
 
@@ -254,6 +268,11 @@ public class ImageLoader {
             builder.into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                    if (model instanceof Integer) {
+                        int key = getCacheKey((Integer) model, transformation);
+                        cache.put(key, resource);
+                    }
+
                     if (isActDestroyed(context))
                         return;
 
@@ -339,15 +358,20 @@ public class ImageLoader {
 
     /**
      * 按存储对象的Hash值计算Array的Hash值
+     *
      * @param trans
      * @return
      */
-    private static int getArrayHash(Object[] trans){
+    private static int getArrayHash(Object[] trans) {
         int objHash = 0;
-        for (Object tran: trans)
+        for (Object tran : trans)
             objHash = objHash ^ tran.hashCode();
 
         return objHash;
+    }
+
+    private static int getCacheKey(int resId, Object[] trans) {
+        return getArrayHash(trans) ^ resId;
     }
 
     /**
