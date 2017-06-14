@@ -30,6 +30,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ChineseFilter;
 import com.juxin.predestinate.module.util.JsonUtil;
+import com.juxin.predestinate.module.util.LiveHelper;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.main.MainActivity;
@@ -620,7 +621,8 @@ public class Invoker {
             dataObject.optString("download_url");//插件下载地址
             dataObject.optString("package_name");//安装包名
             dataObject.optString("entrance");//入口文件，即插件需要调起的activity路径
-            // TODO: 2017/6/14 判断是否安装三方直播插件，如果安装进行调起；如果未安装，进行文件存储并下载
+            LiveHelper.openLiveRoom(dataObject.optString("anchor_id"),dataObject.optString("video_url"),dataObject.optString("image_url"),
+                    dataObject.optString("download_url"),dataObject.optString("package_name"),dataObject.optString("entrance"));
         }
 
         // ------------------------------游戏用cmd---------------------------------
