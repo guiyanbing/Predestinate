@@ -81,11 +81,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Statistics.activeStatistic();
         Statistics.startUp();
 
-        ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
+        ModuleMgr.getCommonMgr().requestVideochatConfig(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (!response.isOk()) return;
-                ModuleMgr.getCommonMgr().setVideoVerify((VideoVerifyBean) response.getBaseData());
                 VideoAudioChatHelper.getInstance().checkDownloadPlugin(MainActivity.this);
             }
         });

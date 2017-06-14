@@ -51,14 +51,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         InitPreference();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ModuleMgr.getCommonMgr().requestVideochatConfig();
-    }
-
     private void initView() {
-        videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
+        ModuleMgr.getCommonMgr().requestVideochatConfig();
         findViewById(R.id.setting_modifypwd).setOnClickListener(this);
         findViewById(R.id.setting_message).setOnClickListener(this);
         findViewById(R.id.setting_vibration).setOnClickListener(this);
@@ -72,7 +66,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         findViewById(R.id.setting_quit_message).setOnClickListener(this);
         findViewById(R.id.setting_video_switch).setOnClickListener(this);
         findViewById(R.id.setting_audio_switch).setOnClickListener(this);
-
 
         setting_clear_cache_tv = (TextView) findViewById(R.id.setting_clear_cache_tv);
         setting_account = (TextView) findViewById(R.id.setting_account);
@@ -95,6 +88,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
     }
 
     private void InitPreference() {
+        videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
         if (PSP.getInstance().getBoolean(Constant.SETTING_MESSAGE, Constant.SETTING_MESSAGE_DEFAULT)) {
             Message_Status = true;
             setting_message_iv.setBackgroundResource(R.drawable.f1_setting_ok);
@@ -324,7 +318,6 @@ public class SettingAct extends BaseActivity implements OnClickListener {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -372,6 +365,4 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             }
         }.start();
     }
-
-
 }
