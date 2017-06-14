@@ -96,6 +96,7 @@ public class LoadingDialog extends BottomPopup {
                 Drawable drawable = loadingDialog.loading_gif.getDrawable();
                 if (drawable != null && drawable instanceof GifDrawable)
                     ((GifDrawable) drawable).stop();
+                loadingDialog.loading_gif.setImageDrawable(null);
             }
             loadingDialog.dismiss();
             loadingDialog = null;

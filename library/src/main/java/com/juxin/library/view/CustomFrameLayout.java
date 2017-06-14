@@ -167,6 +167,7 @@ public class CustomFrameLayout extends FrameLayout {
         if (drawable == null || !(drawable instanceof GifDrawable))
             return;
         ((GifDrawable) drawable).stop();
+        ((ImageView) img).setImageDrawable(null);
     }
 
     public interface OnShowChangeListener {
