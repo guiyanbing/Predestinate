@@ -52,11 +52,13 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     @Override
     public void showData(BaseMessage msgData) {
         this.msgData = msgData;
-        if (!TextUtils.isEmpty(msgData.getAvatar())) {
-            ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
-        } else {
-            item_headpic.setImageResource(msgData.getLocalAvatar());
-        }
+
+        ImageLoader.loadRoundAvatar(getContext(), !TextUtils.isEmpty(msgData.getAvatar()) ? msgData.getAvatar() : msgData.getLocalAvatar(), item_headpic);
+//        if (!TextUtils.isEmpty(msgData.getAvatar())) {
+//            ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
+//        } else {
+//            item_headpic.setImageResource(msgData.getLocalAvatar());
+//        }
 
         String nickname = msgData.getName();
         if (!TextUtils.isEmpty(nickname)) {
