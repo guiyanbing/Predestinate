@@ -10,6 +10,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCu
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCustomSimple;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGift;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGiveMeGift;
+import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelSysNotice;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelText;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelUpgrade;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelVideo;
@@ -38,6 +39,8 @@ public enum ChatMsgType {
     CMT_25(ChatPanelText.class, "HTML文本消息"),
 
     CMT_28(ChatPanelText.class, "自动升级提示消息"),
+
+    CMT_29(ChatPanelSysNotice.class, "系统消息"),
 
     CMT_Max(ChatPanelUpgrade.class, "该版本不能显示的消息"),
 
@@ -121,7 +124,7 @@ public enum ChatMsgType {
     public static Class<? extends ChatPanel> getPanelClass(int type) {
         try {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
-            if(type > MessageConstant.Msg_Max_Version){
+            if(MessageConstant.isMaxVersionMsg(type)){
                 chatMsgType = ChatMsgType.valueOf("CMT_Max");
             }
             return chatMsgType.panelClass;
@@ -140,7 +143,7 @@ public enum ChatMsgType {
     public static String getPanelClassName(int type) {
         try {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
-            if(type > MessageConstant.Msg_Max_Version){
+            if(MessageConstant.isMaxVersionMsg(type)){
                 chatMsgType = ChatMsgType.valueOf("CMT_Max");
             }
             return chatMsgType.panelClass.getSimpleName();
@@ -176,7 +179,7 @@ public enum ChatMsgType {
     public static Class<? extends NotifyBasePanel> getNotifyPanelClass(int type) {
         try {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
-            if(type > MessageConstant.Msg_Max_Version){
+            if(MessageConstant.isMaxVersionMsg(type)){
                 chatMsgType = ChatMsgType.valueOf("CMT_Max");
             }
             return chatMsgType.notifyPanelClass;
@@ -226,7 +229,7 @@ public enum ChatMsgType {
      */
     public static ChatMsgType getMsgType(int type) {
         try {
-            if(type > MessageConstant.Msg_Max_Version){
+            if(MessageConstant.isMaxVersionMsg(type)){
                 return ChatMsgType.valueOf("CMT_Max");
             }
             return ChatMsgType.valueOf("CMT_" + type);

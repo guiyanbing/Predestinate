@@ -1,16 +1,16 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
-import android.widget.TextView;
-
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.ui.utils.MyURLSpan;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 
 /**
  * 升级展示
@@ -18,26 +18,23 @@ import com.juxin.predestinate.ui.utils.MyURLSpan;
  */
 public class ChatPanelUpgrade extends ChatPanel {
 
-    private TextView chat_item_text;
-
     public ChatPanelUpgrade(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
-        super(context, chatInstance, R.layout.f1_chat_item_panel_text, sender);
+        super(context, chatInstance, R.layout.f1_chat_item_panel_upgrade, sender);
     }
 
     @Override
     public void initView() {
-        chat_item_text = (TextView) findViewById(R.id.chat_item_text);
+        findViewById(R.id.chat_item_text_upgrade).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ModuleMgr.getCommonMgr().checkUpdate((FragmentActivity) App.getActivity(), true);
+            }
+        });
     }
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !(msgData instanceof TextMessage)) return false;
-        TextMessage msg = (TextMessage) msgData;
-
-        MyURLSpan.addClickToTextViewLink(App.getActivity(), chat_item_text,
-                msg.getType() == BaseMessage.BaseMessageType.htmlText.getMsgType()
-                        || msg.getType() == BaseMessage.BaseMessageType.autoUpdateHtml.getMsgType()
-                        ? msg.getHtm() : msg.getMsgDesc());
+        if (msgData == null || !MessageConstant.isMaxVersionMsg(msgData.getType())) return false;
         return true;
     }
 }

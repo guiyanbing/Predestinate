@@ -175,7 +175,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 break;
             case R.id.setting_voice:// 声音
                 Statistics.userBehavior(SendPoint.menu_me_setting_soundalert);
-                
+
                 if (Voice_Status) {
                     Voice_Status = false;
                     PSP.getInstance().put(Constant.SETTING_VOICE, Voice_Status);
@@ -315,7 +315,8 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 return false;
             }
         }
-        if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) == ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
+        if (ApkUnit.getAppIsInstall(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO)
+                && ApkUnit.getInstallAppVer(SettingAct.this, VideoAudioChatHelper.PACKAGE_PLUGIN_VIDEO) >= ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             return true;
         } else {
             VideoAudioChatHelper.getInstance().downloadVideoPlugin(SettingAct.this);

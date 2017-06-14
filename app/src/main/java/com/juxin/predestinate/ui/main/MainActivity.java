@@ -113,8 +113,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         discoverMFragment = new DiscoverMFragment();
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
-        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
-                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url());
+        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),"http://test.game.xiaoyaoai.cn:30081/static/yfb-test/pages/square/square.html"
+                );//ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url()
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
