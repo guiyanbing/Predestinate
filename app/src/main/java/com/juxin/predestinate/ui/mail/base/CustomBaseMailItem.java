@@ -93,7 +93,6 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
      * @param msgData
      */
     public void showData(BaseMessage msgData) {
-        PLogger.printObject("user-list---" + msgData.getAvatar() + "===" + msgData.getName());
         long uid = msgData.getLWhisperID();
 
         if(uid == MailSpecialID.customerService.getSpecialID() && TextUtils.isEmpty(msgData.getAvatar())){

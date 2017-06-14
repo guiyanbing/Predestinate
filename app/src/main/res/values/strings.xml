@@ -742,6 +742,11 @@
     <string name="bt_return_loginact">手机号登录</string>
     <string name="bt_customerservice_chat">客服服务</string>
 
+    <string name="sys_mess_act">公告</string>
+    <string name="updata_mess">版本升级消息</string>
+    <string name="sys_mess_content">你当前版本过低，为了能正常使用，请立即升级到最新版本。</string>
+    <string name="sys_mess_btn_text">点击升级</string>
+
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>
     <string name="update_has_install">检测到新版已安装，请点击跳转</string>

@@ -320,7 +320,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         int firs = view.getFirstVisiblePosition();
         int last = view.getLastVisiblePosition();
 
-        PLogger.printObject("detectInfo-----" + "firs=" + firs + "--last=" + last);
         for (int i = firs; i < last; i++) {
             BaseMessage message = mailFragmentAdapter.getItem(i);
             if (message == null || MailMsgID.getMailMsgID(message.getLWhisperID()) != null) {

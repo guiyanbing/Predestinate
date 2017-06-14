@@ -110,6 +110,8 @@
   **[] $VALUES;
   public *;
 }
+# Glide okhttp
+-keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
 
 # okhttp
 -dontwarn okio.**

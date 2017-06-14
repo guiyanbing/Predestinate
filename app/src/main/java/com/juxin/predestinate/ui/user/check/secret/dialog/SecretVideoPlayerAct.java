@@ -88,7 +88,6 @@ public class SecretVideoPlayerAct extends BaseActivity implements View.OnClickLi
         tvv_player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                iv_start.setVisibility(View.VISIBLE);
                 resetPlay();
                 return true;
             }
