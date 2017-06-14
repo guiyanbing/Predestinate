@@ -72,7 +72,7 @@ public class ChatPanelGiveMeGift extends ChatPanel {
             return false;
         }
         GiftMessage msg = (GiftMessage) msgData;
-        long channel_uid = getChatInstance().chatAdapter.getUserInfo(Long.valueOf(msg.getWhisperID())).getChannel_uid();
+        long channel_uid = getChatInstance().chatAdapter.getUserInfo(msg.getLWhisperID()).getChannel_uid();
         UIShow.showDiamondSendGiftDlg(App.getActivity(), msg.getGiftID(), msg.getWhisperID(), String.valueOf(channel_uid));
         return true;
     }

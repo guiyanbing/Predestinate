@@ -223,43 +223,10 @@ public class EmojiPack {
         return b;
     }
 
-    /**
-     * 通过正则表达式匹配。
-     *
-     * @param smile
-     */
-//    public static EmojiItem createEmojiItem(String key, String smile, Integer resId) {
-//        EmojiItem emojiItem = new EmojiItem();
-//
-//        emojiItem.key = "[" + key + "_" + smile + "]";
-//        emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-//        emojiItem.resId = resId;
-//        return emojiItem;
-//    }
-
-    /**
-     * 通过正则表达式匹配。
-     */
-    public static EmojiItem getDelBtnItem() {
-        EmojiItem emojiItem = new EmojiItem();
-
-        emojiItem.key = "[default_common_delete_smile]";
-        emojiItem.pattern = Pattern.compile(Pattern.quote(emojiItem.key));
-      //  emojiItem.resId = UIUtil.getResIdFromDrawable("common_delete_smile");
-        emojiItem.name = "face/common_delete_smile.png";
-        return emojiItem;
-    }
-
     public static class EmojiItem {
         public String key = null;
         public String desc = null;
         public Pattern pattern = null;
-      //  public Integer resId = 0;
         public String name = null;
-
-        public boolean isDeleteBtn() {
-            return "[default_common_delete_smile]".equals(key);
-
-        }
     }
 }
