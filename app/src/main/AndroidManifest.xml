@@ -339,6 +339,10 @@
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.mail.SysMessAct"
+            android:configChanges="screenSize|keyboard|orientation"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.discover.MyDefriendAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />

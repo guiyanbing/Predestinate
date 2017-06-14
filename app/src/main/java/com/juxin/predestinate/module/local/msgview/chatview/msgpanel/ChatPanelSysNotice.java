@@ -4,6 +4,7 @@ import android.content.Context;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.SysNoticeMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 
@@ -13,9 +14,8 @@ import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
  */
 public class ChatPanelSysNotice extends ChatPanel {
 
-
     public ChatPanelSysNotice(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
-        super(context, chatInstance, R.layout.f1_chat_item_panel_common, sender);
+        super(context, chatInstance, R.layout.f1_chat_item_panel_sysnotice, sender);
     }
 
     @Override
@@ -24,12 +24,11 @@ public class ChatPanelSysNotice extends ChatPanel {
     }
 
     @Override
-    public void setInit(BaseMessage msgData) {
-
-    }
-
-    @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
+        if (msgData == null || !(msgData instanceof SysNoticeMessage)) {
+            return false;
+        }
+
         return true;
     }
 
