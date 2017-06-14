@@ -85,35 +85,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="施展你的魅力，向男用户索要礼物"
+                        android:text="施展你的魅力，向男用户索要礼物，"
                         android:textColor="@color/color_727171"
                         android:textSize="@dimen/px42_sp" />
 
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/px15_dp"
-                    android:layout_marginTop="@dimen/px30_dp"
-                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="获得礼物"
-                        android:textColor="@color/color_727171"
-                        android:textSize="@dimen/px42_sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="收益的50%"
+                        android:text="获得礼物收益"
                         android:textColor="@color/color_EA6684"
-                        android:textSize="@dimen/px42_sp" />
-
+                        android:textSize="14sp" />
                 </LinearLayout>
+
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
