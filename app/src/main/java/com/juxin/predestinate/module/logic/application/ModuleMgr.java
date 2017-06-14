@@ -66,7 +66,7 @@ public final class ModuleMgr {
      * 按等级初始化逻辑模块
      */
     public static void initModule(final Context context) {
-        PLogger.init(BuildConfig.DEBUG);//初始化日志打印，每个进程都初始化一次
+        PLogger.init(false);//初始化日志打印，每个进程都初始化一次
 
         String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
         String packageName = ModuleMgr.getAppMgr().getPackageName();

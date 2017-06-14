@@ -364,9 +364,10 @@ public class ImageLoader {
      */
     private static int getArrayHash(Object[] trans) {
         int objHash = 0;
-        for (Object tran : trans)
-            objHash = objHash ^ tran.hashCode();
-
+        if (trans != null) {
+            for (Object tran : trans)
+                objHash = objHash ^ tran.hashCode();
+        }
         return objHash;
     }
 
