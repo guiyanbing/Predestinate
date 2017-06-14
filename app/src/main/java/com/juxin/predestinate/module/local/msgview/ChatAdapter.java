@@ -369,39 +369,36 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     private void attach() {
         PLogger.printObject(this);
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
+        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0).subscribe(new Observer<List<BaseMessage>>() {
+            @Override
+            public void onCompleted() {
+            }
 
-        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Observer<List<BaseMessage>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+            @Override
+            public void onError(Throwable e) {
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                    }
+            @Override
+            public void onNext(List<BaseMessage> baseMessages) {
+                SortList.sortListView(baseMessages);//排序
+                List<BaseMessage> listTemp = new ArrayList<>();
 
-                    @Override
-                    public void onNext(List<BaseMessage> baseMessages) {
-                        SortList.sortListView(baseMessages);//排序
-                        List<BaseMessage> listTemp = new ArrayList<>();
-
-                        if (baseMessages.size() < 20) {
-                            chatInstance.chatListView.setPullRefreshEnable(false);
+                if (baseMessages.size() < 20) {
+                    chatInstance.chatListView.setPullRefreshEnable(false);
+                }
+                if (baseMessages.size() > 0) {
+                    for (BaseMessage baseMessage : baseMessages) {
+                        if (isShowMsg(baseMessage)) {
+                            listTemp.add(baseMessage);
                         }
-                        if (baseMessages.size() > 0) {
-                            for (BaseMessage baseMessage : baseMessages) {
-                                if (isShowMsg(baseMessage)) {
-                                    listTemp.add(baseMessage);
-                                }
-                            }
-                        }
-
-                        chatInstance.chatContentAdapter.setList(listTemp);
-                        moveToBottom();
-                        if (isMachine) onDataUpdate();
                     }
-                }).unsubscribe();
+                }
+
+                chatInstance.chatContentAdapter.setList(listTemp);
+                moveToBottom();
+                if (isMachine) onDataUpdate();
+            }
+        }).unsubscribe();
     }
 
     /**
@@ -556,43 +553,41 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Observer<List<BaseMessage>>() {
-                    @Override
-                    public void onCompleted() {
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page).subscribe(new Observer<List<BaseMessage>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(List<BaseMessage> baseMessages) {
+                SortList.sortListView(baseMessages);// 排序
+                PLogger.printObject(baseMessages);
+                chatInstance.chatListView.stopRefresh();
+                if (baseMessages.size() > 0) {
+                    if (baseMessages.size() < 20) {
+                        chatInstance.chatListView.setPullRefreshEnable(false);
                     }
 
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(List<BaseMessage> baseMessages) {
-                        SortList.sortListView(baseMessages);// 排序
-                        PLogger.printObject(baseMessages);
-                        chatInstance.chatListView.stopRefresh();
-                        if (baseMessages.size() > 0) {
-                            if (baseMessages.size() < 20) {
-                                chatInstance.chatListView.setPullRefreshEnable(false);
-                            }
-
-                            List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
-                            for (BaseMessage baseMessage : baseMessages) {
-                                if (isShowMsg(baseMessage)) {
-                                    listTemp.add(baseMessage);
-                                }
-                            }
-
-                            if (chatInstance.chatContentAdapter.getList() != null) {
-                                listTemp.addAll(chatInstance.chatContentAdapter.getList());
-                            }
-
-                            chatInstance.chatContentAdapter.setList(listTemp);
-                            chatInstance.chatListView.setSelection(baseMessages.size());
+                    List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+                    for (BaseMessage baseMessage : baseMessages) {
+                        if (isShowMsg(baseMessage)) {
+                            listTemp.add(baseMessage);
                         }
                     }
-                }).unsubscribe();
+
+                    if (chatInstance.chatContentAdapter.getList() != null) {
+                        listTemp.addAll(chatInstance.chatContentAdapter.getList());
+                    }
+
+                    chatInstance.chatContentAdapter.setList(listTemp);
+                    chatInstance.chatListView.setSelection(baseMessages.size());
+                }
+            }
+        }).unsubscribe();
     }
 
     @Override
