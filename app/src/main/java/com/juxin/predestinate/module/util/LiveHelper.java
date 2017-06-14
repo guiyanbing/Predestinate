@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.baidu.location.Jni;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
@@ -40,6 +41,15 @@ public class LiveHelper {
     private static DownloadPluginFragment downloadPluginFragment = new DownloadPluginFragment();
     private static boolean isDownloading = false;
 
+    /**
+     * 打开直播间
+     * @param anchorId 主播UID
+     * @param videoUrl 视频流地址
+     * @param imgUrl 封面
+     * @param downUrl 下载地址
+     * @param pkg 直播app包名
+     * @param cls 直播app入口
+     */
     public static void openLiveRoom(String anchorId, String videoUrl, String imgUrl, String downUrl, String pkg, String cls) {
         if (!ApkUnit.getAppIsInstall(App.context, pkg)) {
             saveLiveInfo(anchorId, videoUrl, imgUrl, downUrl);
@@ -73,7 +83,7 @@ public class LiveHelper {
             jo.put("uid", "yf" + userDetail.getUid());
             jo.put("head_url", userDetail.getAvatar());
             jo.put("sex", userDetail.getGender());
-            jo.put("password", ModuleMgr.getLoginMgr().getAuth());
+            jo.put("password", JniUtil.GetEncryptString(ModuleMgr.getLoginMgr().getUserList().get(0).getPw()));
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(jo.toString().getBytes());
             fos.flush();
