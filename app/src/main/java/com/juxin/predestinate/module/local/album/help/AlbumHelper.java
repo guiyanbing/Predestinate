@@ -120,11 +120,14 @@ public class AlbumHelper {
      */
     public String getImgPath(int position, int currentShowPosition) {
         //如果是选择的全部图片
-        if (currentShowPosition == -1) {
-            return getAllImages().get(position).path;
-        } else {
+        try {
+            if (currentShowPosition == -1) {
+                return getAllImages().get(position).path;
+            }
             return getImageDirectories().get(currentShowPosition).images.getImagePath(position);
+        } catch (Exception e) {
         }
+        return "";
     }
 
     /**

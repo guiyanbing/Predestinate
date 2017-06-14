@@ -614,13 +614,6 @@ public class Invoker {
             PLogger.d("---open_live_view--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
             Activity act = appInterface.getAct();
-
-            dataObject.optLong("anchor_id");//直播用户的uid
-            dataObject.optString("video_url");//视频流地址
-            dataObject.optString("image_url");//封面地址
-            dataObject.optString("download_url");//插件下载地址
-            dataObject.optString("package_name");//安装包名
-            dataObject.optString("entrance");//入口文件，即插件需要调起的activity路径
             LiveHelper.openLiveRoom(dataObject.optString("anchor_id"),dataObject.optString("video_url"),dataObject.optString("image_url"),
                     dataObject.optString("download_url"),dataObject.optString("package_name"),dataObject.optString("entrance"));
         }

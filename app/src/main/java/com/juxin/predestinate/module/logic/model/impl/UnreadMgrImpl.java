@@ -10,12 +10,16 @@ import com.juxin.predestinate.module.local.chat.ChatSpecialMgr;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 
 /**
  * 未读角标实现类
@@ -111,9 +115,17 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
 
                 // 初始化角标数据
                 Observable<String> observable = dbCenter.getCenterFUnRead().queryUnRead(getStoreTag());
-                observable.subscribe(new Action1<String>() {
+                observable.subscribe(new Observer<String>() {
                     @Override
-                    public void call(String storeString) {
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(String storeString) {
                         getUnreadMgr().init(storeString, parentMap);
                     }
                 }).unsubscribe();

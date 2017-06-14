@@ -101,9 +101,13 @@ public class MediaNotifyUtils {
     /**
      * 播放系统默认消息提示音
      */
+
+    private static MediaPlayer mMediaPlayer = null;
     public static void playSound() {
-        MediaPlayer mMediaPlayer = MediaPlayer.create(App.context,
-                RingtoneManager.getActualDefaultRingtoneUri(App.context, RingtoneManager.TYPE_NOTIFICATION));
+        if (mMediaPlayer == null) {
+            mMediaPlayer = MediaPlayer.create(App.context,
+                    RingtoneManager.getActualDefaultRingtoneUri(App.context, RingtoneManager.TYPE_NOTIFICATION));
+        }
         mMediaPlayer.setLooping(false);
         mMediaPlayer.start();
     }

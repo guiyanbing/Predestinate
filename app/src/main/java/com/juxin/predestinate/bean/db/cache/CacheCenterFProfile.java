@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
+
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.FMessage;
@@ -12,9 +13,11 @@ import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.List;
+
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 import rx.functions.Func1;
 
 /**
@@ -74,10 +77,18 @@ public class CacheCenterFProfile {
         try {
             for (final UserInfoLightweight item : list) {
                 Observable<Boolean> observable = isExistProfile(item.getUid());
-                observable.subscribe(new Action1<Boolean>() {
+                observable.subscribe(new Observer<Boolean>() {
                     @Override
-                    public void call(Boolean b) {
-                        updateMsg(b, item);
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        updateMsg(aBoolean, item);
                     }
                 }).unsubscribe();
             }

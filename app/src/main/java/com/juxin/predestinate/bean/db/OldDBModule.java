@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.functions.Action1;
+import rx.Observer;
 import rx.schedulers.Schedulers;
 
 /**
@@ -57,6 +57,7 @@ public class OldDBModule {
 
     /**
      * 升级数据库
+     *
      * @param uid
      */
     public void updateDB(long uid) {
@@ -71,9 +72,17 @@ public class OldDBModule {
         BriteDatabase db = provideDB(App.context);
         QueryObservable query = db.createQuery(MESSAGE_LIST_TABLE, "SELECT * FROM " + MESSAGE_LIST_TABLE +
                 " WHERE msg_type <> 0 and other_id <> 9999 and login_id=" + uid);
-        query.subscribe(new Action1<SqlBrite.Query>() {
+        query.subscribe(new Observer<SqlBrite.Query>() {
             @Override
-            public void call(SqlBrite.Query query) {
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(SqlBrite.Query query) {
                 convertRecord(query);
             }
         }).unsubscribe();
@@ -81,6 +90,7 @@ public class OldDBModule {
 
     /**
      * 数据库记录转换
+     *
      * @param query
      */
     private void convertRecord(SqlBrite.Query query) {
@@ -176,7 +186,7 @@ public class OldDBModule {
         }
     }
 
-    private void setBundleToMessage(BaseMessageType messageType, BaseMessage message, Bundle bundle){
+    private void setBundleToMessage(BaseMessageType messageType, BaseMessage message, Bundle bundle) {
         switch (messageType) {
             case hi:
             case common:
