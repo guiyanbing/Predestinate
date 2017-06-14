@@ -696,6 +696,25 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 获取系统推送消息
+     * @param channelID
+     * @param whisperID
+     * @param page
+     * @return
+     */
+    public Observable<List<BaseMessage>> getSystemNotice(final String channelID, final String whisperID, int page) {
+        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
+        if(page == 0){
+            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+            if (ret != MessageConstant.ERROR) {
+                ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+            }
+        }
+        return observable;
+    }
+
+
+    /**
      * 获取历史聊天记录
      *
      * @param channelID 频道ID

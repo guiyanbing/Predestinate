@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.chat.msgtype;
 
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import org.json.JSONObject;
 
 /**
@@ -17,6 +18,9 @@ public class SysNoticeMessage extends BaseMessage {
     @Override
     public BaseMessage parseJson(String jsonStr) {
         super.parseJson(jsonStr);
+        if (ModuleMgr.getAppMgr().getScreenWidth() <= 480) {
+            this.setDisplayWidth(DisplayWidth.getDisplayWidthZero());
+        }
         JSONObject object = getJsonObject(jsonStr);
         this.setType(object.optInt("mtp")); //消息类型
         this.setMsgDesc(object.optString("mct")); //消息内容

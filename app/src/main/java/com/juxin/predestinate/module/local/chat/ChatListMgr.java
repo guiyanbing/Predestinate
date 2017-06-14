@@ -149,7 +149,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         greetList.clear();
         if (messages != null && messages.size() > 0) {
             for (BaseMessage tmp : messages) {
-                if (tmp.isRu() || tmp.getLWhisperID() == MailSpecialID.customerService.getSpecialID()) {
+                if (tmp.isRu() || MailSpecialID.getMailSpecialID(tmp.getLWhisperID())) {
                     msgList.add(tmp);
                 } else {
                     greetList.add(tmp);
