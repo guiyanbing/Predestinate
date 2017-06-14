@@ -298,8 +298,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void getWhisperListUnsubscribe() {
         PLogger.d("getWhisperList====2");
         Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
-        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Observer<List<BaseMessage>>() {
+        listObservable.observeOn(AndroidSchedulers.mainThread());
+        listObservable.subscribe(new Observer<List<BaseMessage>>() {
             @Override
             public void onCompleted() {
             }
@@ -313,7 +313,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 PLogger.d("getWhisperList=un===2" + baseMessages.size());
                 updateListMsg(baseMessages);
             }
-        });
+        }).unsubscribe();
     }
 
     @Override
