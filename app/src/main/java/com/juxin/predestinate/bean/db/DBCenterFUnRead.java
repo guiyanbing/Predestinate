@@ -155,9 +155,9 @@ public class DBCenterFUnRead {
                 Cursor cursor = null;
                 try {
                     cursor = query.run();
-                    if (cursor == null || !cursor.moveToNext()) return null;
-
-                    return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {

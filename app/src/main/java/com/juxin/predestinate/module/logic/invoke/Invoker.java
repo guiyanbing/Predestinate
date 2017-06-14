@@ -608,6 +608,21 @@ public class Invoker {
             UIShow.showPrivateChatAct(act == null ? App.context : act, MailSpecialID.customerService.getSpecialID(), "");
         }
 
+        // H5页面用户行为统计
+        public void open_live_view(String data) {
+            PLogger.d("---open_live_view--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+            Activity act = appInterface.getAct();
+
+            dataObject.optLong("anchor_id");//直播用户的uid
+            dataObject.optString("video_url");//视频流地址
+            dataObject.optString("image_url");//封面地址
+            dataObject.optString("download_url");//插件下载地址
+            dataObject.optString("package_name");//安装包名
+            dataObject.optString("entrance");//入口文件，即插件需要调起的activity路径
+            // TODO: 2017/6/14 判断是否安装三方直播插件，如果安装进行调起；如果未安装，进行文件存储并下载
+        }
+
         // ------------------------------游戏用cmd---------------------------------
 
         // 获取当前视频通话时长

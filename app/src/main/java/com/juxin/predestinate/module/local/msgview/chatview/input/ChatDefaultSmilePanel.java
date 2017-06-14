@@ -62,7 +62,7 @@ public class ChatDefaultSmilePanel extends ChatBaseSmilePanel implements Adapter
         list.addAll(listTemp);
 
         // 删除按钮
-        list.add(EmojiPack.getDelBtnItem());
+       // list.add(EmojiPack.getDelBtnItem());
 
         final ChatDefaultSmileAdapter chatSmileAdapter = new ChatDefaultSmileAdapter(getContext(), list);
         gv.setAdapter(chatSmileAdapter);

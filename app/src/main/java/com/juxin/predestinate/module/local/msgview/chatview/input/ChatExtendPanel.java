@@ -9,6 +9,7 @@ import android.widget.GridView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
@@ -120,9 +121,9 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             return;
                         }
 
-                        String channel_uid = String.valueOf(chatAdapter.getUserInfo(chatAdapter.getLWhisperId()).getChannel_uid());
+                        UserInfoLightweight info = chatAdapter.getUserInfo(chatAdapter.getLWhisperId());
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                                true, Constant.APPEAR_TYPE_NO, channel_uid);
+                                true, Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
                         break;
                     case VOICE://语音
                         Statistics.userBehavior(SendPoint.chatframe_tool_voice,
@@ -132,9 +133,10 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             return;
                         }
 
-                        long whisperId  = chatAdapter.getLWhisperId();
+                        long whisperId = chatAdapter.getLWhisperId();
+                        UserInfoLightweight infoLight = chatAdapter.getUserInfo(whisperId);
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_AUDIO_CHAT,
-                                String.valueOf(chatAdapter.getUserInfo(whisperId).getChannel_uid()));
+                                infoLight == null ? "" : String.valueOf(infoLight.getChannel_uid()));
                         break;
                 }
             }

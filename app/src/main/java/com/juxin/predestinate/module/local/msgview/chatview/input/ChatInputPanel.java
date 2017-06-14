@@ -109,30 +109,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
      */
     public void addSmile(EmojiPack.EmojiItem simleItem) {
         try {
-            if (!simleItem.isDeleteBtn()) {
-                chatTextEdit.append(ChatSmile.getSmiledText(getContext(), simleItem.key, UIUtil.dp2px(20)));
-            } else {
-                // 删除文字或者表情
-                if (!TextUtils.isEmpty(chatTextEdit.getText())) {
-
-                    int selectionStart = chatTextEdit.getSelectionStart();// 获取光标的位置
-                    if (selectionStart > 0) {
-                        String body = chatTextEdit.getText().toString();
-                        String tempStr = body.substring(0, selectionStart);
-                        int i = tempStr.lastIndexOf("[");// 获取最后一个表情的位置
-                        if (i != -1) {
-                            CharSequence cs = tempStr.substring(i, selectionStart);
-                            if (ChatSmile.containsKey(cs.toString()))
-                                chatTextEdit.getEditableText().delete(i, selectionStart);
-                            else
-                                chatTextEdit.getEditableText().delete(selectionStart - 1, selectionStart);
-                        } else {
-                            chatTextEdit.getEditableText().delete(selectionStart - 1, selectionStart);
-                        }
-                    }
-                }
-
-            }
+            chatTextEdit.append(ChatSmile.getSmiledText(getContext(), simleItem.key, UIUtil.dp2px(20)));
         } catch (Exception e) {
         }
     }
@@ -198,16 +175,16 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             case R.id.input_monthly:
                 try {
                     long otherID = getChatInstance().chatAdapter.getLWhisperId();
-                    long channel_uid = getChatInstance().chatAdapter.getUserInfo(otherID).getChannel_uid();
+                    UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(otherID);
+                    String channel_uid = info == null ? "" : String.valueOf(info.getChannel_uid());
 
                     Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact, otherID);
-
                     UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                     if (otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) &&
                             (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
-                        UIShow.showGoodsVipDlgOld(getContext(), 1, otherID, String.valueOf(channel_uid));
+                        UIShow.showGoodsVipDlgOld(getContext(), 1, otherID, channel_uid);
                     } else {
-                        UIShow.showGoodsYCoinDlgOld(getContext(), otherID, String.valueOf(channel_uid));
+                        UIShow.showGoodsYCoinDlgOld(getContext(), otherID, channel_uid);
                     }
                 } catch (Exception e) {
                 }
@@ -422,7 +399,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 long otherId = getChatInstance().chatAdapter.getLWhisperId();
 
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(otherId);
-                UIShow.showBottomGiftDlg(getContext(), otherId, Constant.OPEN_FROM_CHAT_FRAME, String.valueOf(info.getChannel_uid()));
+                UIShow.showBottomGiftDlg(getContext(), otherId, Constant.OPEN_FROM_CHAT_FRAME,
+                        info == null ? "" : String.valueOf(info.getChannel_uid()));
             }
         });
     }
@@ -437,9 +415,9 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 closeAllInput();
 
                 long whisperId = getChatInstance().chatAdapter.getLWhisperId();
-                long channel_uid = getChatInstance().chatAdapter.getUserInfo(whisperId).getChannel_uid();
+                UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperId);
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
-                        Constant.APPEAR_TYPE_NO, String.valueOf(channel_uid));
+                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
             }
         });
     }
