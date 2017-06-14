@@ -73,7 +73,7 @@ public class GiftAdapter extends BaseAdapter {
             vh.txvGifName.setText(info.getName());
             //        vh.txvIntimate.setText("亲密度+"+info.getIntimacy());
             vh.txvNeedStone.setText(info.getMoney() + mContext.getString(R.string.diamond));
-            ImageLoader.loadAvatar(mContext, info.getPic(), vh.img);
+            ImageLoader.loadCenterCrop(mContext, info.getPic(), vh.img);
             if (!info.isSelect()){
                 vh.llTop.setBackgroundResource(R.color.white);//设置为父控件的背景色（未选中）
             }else {

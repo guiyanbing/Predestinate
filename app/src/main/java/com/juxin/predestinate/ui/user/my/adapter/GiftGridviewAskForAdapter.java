@@ -71,7 +71,7 @@ public class GiftGridviewAskForAdapter extends BaseAdapter {
         if (null != vh) {
             GiftsList.GiftInfo item = mLists.get(position);
             //加载图片
-            ImageLoader.loadAvatar(mContext,item.getPic(),vh.ivPic);
+            ImageLoader.loadCenterCrop(mContext,item.getPic(),vh.ivPic);
             vh.tvName.setText(item.getName());//设置礼物名称
             vh.tvMoney.setText(item.getMoney() + "");//设置礼物所需的钻石
             if(item.isSelect()){//判断是否选中来设置item的背景
