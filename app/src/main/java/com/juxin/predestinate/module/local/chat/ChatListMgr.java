@@ -16,7 +16,6 @@ import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.OldDBModule;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -39,7 +38,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -275,45 +273,44 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
-        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
-        listObservable.subscribeOn(Schedulers.io());
-        listObservable.observeOn(AndroidSchedulers.mainThread());
-        listObservable.subscribe(new Observer<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
+        dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribe(new Observer<List<BaseMessage>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                PLogger.d("getWhisperList====2" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        PLogger.d("getWhisperList====2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                });
     }
 
     public void getWhisperListUnsubscribe() {
         PLogger.d("getWhisperList====2");
-        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
-        listObservable.observeOn(AndroidSchedulers.mainThread());
-        listObservable.subscribe(new Observer<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
+        dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribe(new Observer<List<BaseMessage>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                PLogger.d("getWhisperList=un===2" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        }).unsubscribe();
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        PLogger.d("getWhisperList=un===2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                });
     }
 
     @Override
