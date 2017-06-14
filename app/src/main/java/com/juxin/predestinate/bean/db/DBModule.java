@@ -40,7 +40,7 @@ public class DBModule {
                 @Override
                 public void log(String message) {
                     if (!TextUtils.isEmpty(message)) {
-                        PLogger.printObject("DBModule="+message);
+                        PLogger.d("DBModule="+message);
                     }
                 }
             });

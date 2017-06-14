@@ -61,7 +61,7 @@
             android:id="@+id/sys_mess_item_tv_jump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/px40_dp"
+            android:paddingRight="@dimen/px40_dp"
             android:paddingTop="@dimen/px40_dp"
             android:text="@string/sys_mess_btn_text"
             android:textColor="@color/color_45A3EC"

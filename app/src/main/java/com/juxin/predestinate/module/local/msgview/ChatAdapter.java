@@ -10,7 +10,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -34,8 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -370,8 +370,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PLogger.printObject(this);
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
-        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0)
+                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
@@ -401,7 +401,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         moveToBottom();
                         if (isMachine) onDataUpdate();
                     }
-                }).unsubscribe();
+                });
     }
 
     /**
@@ -556,8 +556,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page)
+                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
@@ -592,7 +592,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                             chatInstance.chatListView.setSelection(baseMessages.size());
                         }
                     }
-                }).unsubscribe();
+                });
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.SysNoticeMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
+import com.juxin.predestinate.module.util.TimeUtil;
 
 import java.util.List;
 
@@ -50,13 +51,14 @@ public class SysMessAdapter extends ExBaseAdapter<SysNoticeMessage> {
         mHolder.tvTitle.setText(info.getMsgDesc() + "");
         mHolder.tvContent.setText(info.getInfo());
         if (!TextUtils.isEmpty(info.getPic())) {
-            mHolder.tvJump.setTextColor(ContextCompat.getColor(mContext, R.color.color_45A3EC));
             mHolder.imgPic.setVisibility(View.VISIBLE);
             ImageLoader.loadCenterCrop(mContext, info.getPic(), mHolder.imgPic, 0, 0);
+            mHolder.tvJump.setTextColor(ContextCompat.getColor(mContext, R.color.color_zhuyao));
         } else {
             mHolder.imgPic.setVisibility(View.GONE);
-            mHolder.tvJump.setTextColor(ContextCompat.getColor(mContext, R.color.color_zhuyao));
+            mHolder.tvJump.setTextColor(ContextCompat.getColor(mContext, R.color.color_45A3EC));
         }
+        mHolder.tvTips.setText(TimeUtil.millisecondToFormatString(info.getTime()));
         mHolder.tvJump.setText(info.getBtn_text());
         mHolder.tvJump.setOnClickListener(new View.OnClickListener() {
             @Override

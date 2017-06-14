@@ -326,7 +326,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 continue;
             }
 
-            PLogger.printObject("message====" + (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID() : message.getName()));
+            PLogger.d("message====" + (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID() : message.getName()));
             if (TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())) {
                 stringList.add(message.getLWhisperID());
             }

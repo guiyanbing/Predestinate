@@ -39,6 +39,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/4/13.
@@ -271,40 +273,44 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
-        dbCenter.getCenterFLetter().queryLetterList().subscribe(new Observer<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
+        dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribe(new Observer<List<BaseMessage>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                PLogger.d("getWhisperList====2" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        PLogger.d("getWhisperList====2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                });
     }
 
     public void getWhisperListUnsubscribe() {
         PLogger.d("getWhisperList====2");
-        dbCenter.getCenterFLetter().queryLetterList().subscribe(new Observer<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
+        dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribe(new Observer<List<BaseMessage>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                PLogger.d("getWhisperList=un===2" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        PLogger.d("getWhisperList=un===2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                });
     }
 
     @Override

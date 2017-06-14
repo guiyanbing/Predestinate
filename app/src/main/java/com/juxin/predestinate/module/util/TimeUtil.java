@@ -63,6 +63,42 @@ public class TimeUtil extends TimeBaseUtil {
     }
 
     /**
+     * 将一个毫秒值，格式化为3月6日 晚上08:31格式
+     *
+     * @param time 毫秒值。
+     * @return 格式化后的字符串。
+     */
+    public static String millisecondToFormatString(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日 -HH-:mm");
+        String strTime = "";
+        String str[] ;
+        try {
+            strTime = sdf.format(new Date(time));
+            str = strTime.split("-");
+            String strTempTime = "";
+            if (str.length != 3)
+                return strTime;
+            strTempTime += str[0];
+            int hh = Integer.valueOf(str[1]);
+            if (hh >= 0 && hh < 6){
+                strTempTime += ("凌晨"+hh);
+            }else if (hh >= 6 && hh < 12){
+                strTempTime += ("上午"+hh);
+            }else if (hh >= 12 && hh < 18){
+                strTempTime += ("下午"+(hh-12));
+            }else if (hh >= 18 && hh <= 24){
+                strTempTime += ("晚上"+(hh-12));
+            }
+            strTempTime += str[2];
+            strTime = strTempTime;
+        } catch (Exception e) {
+            PLogger.printThrowable(e);
+        }
+
+        return strTime;
+    }
+
+    /**
      * 根据指定的unix时间戳获取显示时间
      *
      * @param dataFormat  格式化样式
