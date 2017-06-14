@@ -7,8 +7,6 @@ package com.juxin.predestinate.module.local.chat.utils;
 
 public class MessageConstant {
 
-    public static int Msg_Max_Version = 29;//消息最大版本号
-
     public static int KF_ID = 1;//机器人ID
 
     public static int Ru_Friend = 1;//1则为熟人消息，否则为0
@@ -44,4 +42,11 @@ public class MessageConstant {
     public static final int UNREAD_STATUS = 10;//未读
     public static final int READ_STATUS = 11;//对方已读
 
+    /**
+     * 是否超过最大版本消息
+     * @return true就是超过版本了
+     */
+    public static boolean isMaxVersionMsg(int type){
+        return (type > 29 && type < 100);
+    }
 }
