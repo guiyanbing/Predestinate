@@ -61,13 +61,13 @@ public class WebPanelPayH5 extends BasePanel {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         if (intent.resolveActivity(context.getPackageManager()) != null) {
-            ((Activity)context).startActivityForResult(intent, PayWebActivity.payResutl);
+            ((Activity) context).startActivityForResult(intent, PayWebActivity.payResutl);
         } else {
             PToast.showShort("微信未安装");
         }
     }
 
-    public  String getHostName(String urlString) {
+    public String getHostName(String urlString) {
         int index = urlString.indexOf("://");
         String header = "";
         if (index != -1) {
@@ -88,6 +88,13 @@ public class WebPanelPayH5 extends BasePanel {
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.webView, R.id.common_net_error, R.id.common_loading});
         customFrameLayout.showOfIndex(FRAME_LOADING);
+        customFrameLayout.setShowOfIndexChangeListener(new CustomFrameLayout.OnShowOfIndexChangeListener() {
+            @Override
+            public void onChange(CustomFrameLayout view, int id) {
+                if (id != FRAME_LOADING)
+                    view.stopLoading(R.id.loading_gif);
+            }
+        });
 
         ImageLoader.loadFitCenter(getContext(), R.drawable.f1_loading_h5, (ImageView) findViewById(R.id.loading_gif), 0, 0);
 

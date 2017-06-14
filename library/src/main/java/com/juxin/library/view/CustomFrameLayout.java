@@ -1,11 +1,13 @@
 package com.juxin.library.view;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.juxin.library.image.ImageLoader;
 
 /**
@@ -16,6 +18,9 @@ import com.juxin.library.image.ImageLoader;
 public class CustomFrameLayout extends FrameLayout {
 
     private int[] list;
+
+    private OnShowChangeListener showChangeListener;
+    private OnShowOfIndexChangeListener showOfIndexChangeListener;
 
     public CustomFrameLayout(Context context) {
         this(context, null);
@@ -28,6 +33,14 @@ public class CustomFrameLayout extends FrameLayout {
     public CustomFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initView();
+    }
+
+    public void setShowChangeListener(OnShowChangeListener showChangeListener) {
+        this.showChangeListener = showChangeListener;
+    }
+
+    public void setShowOfIndexChangeListener(OnShowOfIndexChangeListener showOfIndexChangeListener) {
+        this.showOfIndexChangeListener = showOfIndexChangeListener;
     }
 
     /**
@@ -51,14 +64,16 @@ public class CustomFrameLayout extends FrameLayout {
                 View view = getChildAt(i);
                 view.setVisibility(id == view.getId() ? View.VISIBLE : View.GONE);
             }
-            return;
-        }
-        for (int aList : list) {
-            View item = findViewById(aList);
-            if (item == null) continue;
+        } else {
+            for (int aList : list) {
+                View item = findViewById(aList);
+                if (item == null) continue;
 
-            item.setVisibility(aList == id ? View.VISIBLE : View.GONE);
+                item.setVisibility(aList == id ? View.VISIBLE : View.GONE);
+            }
         }
+        if (showChangeListener != null)
+            showChangeListener.onChange(this, id);
     }
 
     /**
@@ -70,13 +85,15 @@ public class CustomFrameLayout extends FrameLayout {
                 View view = getChildAt(i);
                 view.setVisibility(View.GONE);
             }
-            return;
+        } else {
+            for (int aList : list) {
+                View item = findViewById(aList);
+                if (item == null) continue;
+                item.setVisibility(View.GONE);
+            }
         }
-        for (int aList : list) {
-            View item = findViewById(aList);
-            if (item == null) continue;
-            item.setVisibility(View.GONE);
-        }
+        if (showChangeListener != null)
+            showChangeListener.onChange(this, 0);
     }
 
     /**
@@ -89,6 +106,8 @@ public class CustomFrameLayout extends FrameLayout {
             View view = getChildAt(i);
             view.setVisibility(index == i ? View.VISIBLE : View.GONE);
         }
+        if (showOfIndexChangeListener != null)
+            showOfIndexChangeListener.onChange(this, index);
     }
 
     /**
@@ -128,9 +147,33 @@ public class CustomFrameLayout extends FrameLayout {
      */
     public void showLoading(int layoutId, int imgId, int imgRes) {
         show(layoutId);
+
         View img = findViewById(imgId);
         if (img == null || !(img instanceof ImageView))
             return;
         ImageLoader.loadFitCenter(img.getContext(), imgRes, (ImageView) img, 0, 0);
+    }
+
+    /**
+     * 停止Gif
+     *
+     * @param imgId
+     */
+    public void stopLoading(int imgId) {
+        View img = findViewById(imgId);
+        if (img == null || !(img instanceof ImageView))
+            return;
+        Drawable drawable = ((ImageView) img).getDrawable();
+        if (drawable == null || !(drawable instanceof GifDrawable))
+            return;
+        ((GifDrawable) drawable).stop();
+    }
+
+    public interface OnShowChangeListener {
+        void onChange(CustomFrameLayout view, int id);
+    }
+
+    public interface OnShowOfIndexChangeListener {
+        void onChange(CustomFrameLayout view, int id);
     }
 }

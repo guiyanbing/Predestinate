@@ -60,6 +60,13 @@ public class CustomStatusListView extends LinearLayout {
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.common_ex_listview,
                 R.id.common_listviewLayout, R.id.common_nodata, R.id.common_loading, R.id.common_net_error});
+        customFrameLayout.setShowChangeListener(new CustomFrameLayout.OnShowChangeListener() {
+            @Override
+            public void onChange(CustomFrameLayout view, int id) {
+                if (id != R.id.common_loading)
+                    view.stopLoading(R.id.loading_gif);
+            }
+        });
     }
 
     /**
@@ -81,6 +88,7 @@ public class CustomStatusListView extends LinearLayout {
      */
     public void showLoading() {
         customFrameLayout.showLoading(R.id.common_loading, R.id.loading_gif, R.drawable.p1_loading);
+
     }
 
     /**

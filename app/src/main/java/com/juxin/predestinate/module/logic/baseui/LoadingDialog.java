@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.logic.baseui;
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.picker.common.popup.BottomPopup;
@@ -22,6 +24,7 @@ public class LoadingDialog extends BottomPopup {
     private static int resId = -1;
     private static String loadingTxt;
     private static View.OnClickListener onCancelListener;
+    private ImageView loading_gif;
 
     /**
      * Instantiates a new Confirm popup.
@@ -89,6 +92,13 @@ public class LoadingDialog extends BottomPopup {
      */
     public static void closeLoadingDialog() {
         if (loadingDialog != null && loadingDialog.isShowing()) {
+            if (loadingDialog.loading_gif != null) {
+                Drawable drawable = loadingDialog.loading_gif.getDrawable();
+                if (drawable != null && drawable instanceof GifDrawable) {
+                    if (((GifDrawable) drawable).isRunning())
+                        ((GifDrawable) drawable).stop();
+                }
+            }
             loadingDialog.dismiss();
             loadingDialog = null;
         }
@@ -128,7 +138,7 @@ public class LoadingDialog extends BottomPopup {
     protected View makeContentView() {
         View inflate = LayoutInflater.from(activity).inflate(R.layout.common_loading_dialog, null);
         TextView loading_txt = (TextView) inflate.findViewById(R.id.loading_txt);
-        ImageView loading_gif = (ImageView) inflate.findViewById(R.id.loading_gif);
+        loading_gif = (ImageView) inflate.findViewById(R.id.loading_gif);
         if (resId != -1)
             ImageLoader.loadFitCenter(activity, resId, loading_gif, 0, 0);
         else
