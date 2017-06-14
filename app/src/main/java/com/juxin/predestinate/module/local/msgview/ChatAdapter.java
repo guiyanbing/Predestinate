@@ -227,7 +227,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 }
             });
         }
-        return userInfo == null ? new UserInfoLightweight() : userInfo;
+        return userInfo;
     }
 
     /**
