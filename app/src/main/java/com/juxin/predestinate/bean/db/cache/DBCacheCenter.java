@@ -3,19 +3,21 @@ package com.juxin.predestinate.bean.db.cache;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.FLetter;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -111,14 +113,22 @@ public class DBCacheCenter {
      * @return
      */
     public void storageProfileData(final UserInfoLightweight lightweight) {
-        PLogger.printObject("storageProfileData==" + "111111");
+        PLogger.d("storageProfileData==" + "111111");
 
         final long uid = lightweight.getUid();
         Observable<Boolean> observable = isProfileExist(uid);
-        observable.subscribe(new Action1<Boolean>() {
+        observable.subscribe(new Observer<Boolean>() {
             @Override
-            public void call(Boolean aBoolean) {
-                PLogger.printObject("storageProfileData==" + aBoolean);
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                PLogger.d("storageProfileData==" + aBoolean);
                 storageData(lightweight, aBoolean);
             }
         }).unsubscribe();

@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 
 import static com.juxin.predestinate.R.id.say_hello_users_all_ignore;
 import static com.juxin.predestinate.module.logic.application.App.getActivity;
@@ -380,14 +380,22 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         if (stringList.size() > 0) {
             Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
             observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                    .subscribe(new Action1<List<UserInfoLightweight>>() {
+                    .subscribe(new Observer<List<UserInfoLightweight>>() {
                         @Override
-                        public void call(List<UserInfoLightweight> lightweights) {
-                            if (lightweights != null && lightweights.size() > 0) {
-                                ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onNext(List<UserInfoLightweight> userInfoLightweights) {
+                            if (userInfoLightweights != null && userInfoLightweights.size() > 0) {
+                                ModuleMgr.getChatMgr().updateUserInfoList(userInfoLightweights);
                             }
                         }
-                    });
+                    }).unsubscribe();
 
             TimerUtil.beginTime(new TimerUtil.CallBack() {
                 @Override
