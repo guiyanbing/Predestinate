@@ -16,6 +16,7 @@ import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.OldDBModule;
+import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -38,7 +39,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/4/13.
@@ -271,7 +275,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
-        dbCenter.getCenterFLetter().queryLetterList().subscribe(new Observer<List<BaseMessage>>() {
+        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
+        listObservable.subscribeOn(Schedulers.io());
+        listObservable.observeOn(AndroidSchedulers.mainThread());
+        listObservable.subscribe(new Observer<List<BaseMessage>>() {
             @Override
             public void onCompleted() {
             }
@@ -290,7 +297,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     public void getWhisperListUnsubscribe() {
         PLogger.d("getWhisperList====2");
-        dbCenter.getCenterFLetter().queryLetterList().subscribe(new Observer<List<BaseMessage>>() {
+        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
+        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+                .subscribe(new Observer<List<BaseMessage>>() {
             @Override
             public void onCompleted() {
             }

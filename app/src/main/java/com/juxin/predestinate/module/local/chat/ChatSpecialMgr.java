@@ -28,7 +28,6 @@ public class ChatSpecialMgr {
 
 	/*********私聊消息************/	
 	public void onWhisperMsgUpdate(final BaseMessage message) {
-		PLogger.printObject(message);
 		MsgMgr.getInstance().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -69,7 +68,6 @@ public class ChatSpecialMgr {
 	private Set<ChatMsgInterface.UnreadReceiveMsgListener> receiveMsgListeners = new LinkedHashSet<ChatMsgInterface.UnreadReceiveMsgListener>();
 
 	public void updateUnreadMsg(final BaseMessage message) {
-		PLogger.printObject(message);
 		MsgMgr.getInstance().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -108,7 +106,6 @@ public class ChatSpecialMgr {
 	private Set<ChatMsgInterface.SystemMsgListener> systemMsgListeners = new LinkedHashSet<ChatMsgInterface.SystemMsgListener>();
 
 	public void setSystemMsg(final BaseMessage message) {
-		PLogger.printObject(message);
 		MsgMgr.getInstance().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {

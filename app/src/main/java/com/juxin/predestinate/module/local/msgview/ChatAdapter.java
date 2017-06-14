@@ -369,7 +369,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     private void attach() {
         PLogger.printObject(this);
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
-        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0).subscribe(new Observer<List<BaseMessage>>() {
+
+        Observable<List<BaseMessage>> listObservable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
+        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+                .subscribe(new Observer<List<BaseMessage>>() {
             @Override
             public void onCompleted() {
             }
@@ -398,7 +401,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 moveToBottom();
                 if (isMachine) onDataUpdate();
             }
-        }).unsubscribe();
+        });
     }
 
     /**
@@ -553,7 +556,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page).subscribe(new Observer<List<BaseMessage>>() {
+        Observable<List<BaseMessage>> listObservable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
+        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+                .subscribe(new Observer<List<BaseMessage>>() {
             @Override
             public void onCompleted() {
             }
@@ -587,7 +592,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     chatInstance.chatListView.setSelection(baseMessages.size());
                 }
             }
-        }).unsubscribe();
+        });
     }
 
     @Override
