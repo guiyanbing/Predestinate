@@ -6,8 +6,9 @@ package com.juxin.predestinate.module.local.mail;
  */
 public enum MailSpecialID {
 
-    /**缘分小秘书**/
     customerService(9999, "缘分小秘书"),
+
+    systemMsg(9998, "系统消息"),
 
     ;
 
