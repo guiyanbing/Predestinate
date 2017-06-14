@@ -103,12 +103,14 @@ public class MediaNotifyUtils {
      */
 
     private static MediaPlayer mMediaPlayer = null;
+
     public static void playSound() {
         if (mMediaPlayer == null) {
             mMediaPlayer = MediaPlayer.create(App.context,
                     RingtoneManager.getActualDefaultRingtoneUri(App.context, RingtoneManager.TYPE_NOTIFICATION));
         }
         mMediaPlayer.setLooping(false);
-        mMediaPlayer.start();
+        if (!mMediaPlayer.isPlaying())
+            mMediaPlayer.start();
     }
 }
