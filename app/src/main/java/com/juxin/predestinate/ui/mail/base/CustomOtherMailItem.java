@@ -53,7 +53,8 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     public void showData(BaseMessage msgData) {
         this.msgData = msgData;
 
-        ImageLoader.loadRoundAvatar(getContext(), !TextUtils.isEmpty(msgData.getAvatar()) ? msgData.getAvatar() : msgData.getLocalAvatar(), item_headpic);
+        ImageLoader.loadRoundAvatar(getContext(), !TextUtils.isEmpty(msgData.getAvatar()) ? 
+                msgData.getAvatar() : msgData.getLocalAvatar(), item_headpic);
 
         String nickname = msgData.getName();
         if (!TextUtils.isEmpty(nickname)) {
