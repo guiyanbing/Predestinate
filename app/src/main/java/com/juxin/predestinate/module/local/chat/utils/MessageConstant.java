@@ -7,6 +7,8 @@ package com.juxin.predestinate.module.local.chat.utils;
 
 public class MessageConstant {
 
+    public static int Msg_Max_Version = 29;//消息最大版本号
+
     public static int KF_ID = 1;//机器人ID
 
     public static int Ru_Friend = 1;//1则为熟人消息，否则为0

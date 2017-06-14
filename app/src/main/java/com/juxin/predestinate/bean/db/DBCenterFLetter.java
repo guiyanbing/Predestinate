@@ -250,8 +250,9 @@ public class DBCenterFLetter {
                 .map(new Func1<SqlBrite.Query, BaseMessage>() {
                     @Override
                     public BaseMessage call(SqlBrite.Query query) {
-                        Cursor cursor = query.run();
+                        Cursor cursor = null;
                         try {
+                            cursor = query.run();
                             if (cursor != null && cursor.moveToFirst()) {
                                 BaseMessage message = new BaseMessage();
                                 message.setWhisperID(CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
@@ -324,20 +325,19 @@ public class DBCenterFLetter {
                 .map(new Func1<SqlBrite.Query, List<BaseMessage>>() {
                     @Override
                     public List<BaseMessage> call(SqlBrite.Query query) {
-                        return convert(query.run());
+                        return convert(query);
                     }
                 });
     }
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private List<BaseMessage> convert(Cursor cursor) {
-        if (null == cursor) {
-            return null;
-        }
+    private List<BaseMessage> convert(SqlBrite.Query query) {
+        Cursor cursor = null;
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
-            while (cursor.moveToNext()) {
+            cursor = query.run();
+            while (cursor != null && cursor.moveToNext()) {
                 Bundle bundle = new Bundle();
                 bundle.putLong(FLetter._ID, CursorUtil.getLong(cursor, FMessage._ID));
                 bundle.putString(FLetter.COLUMN_USERID, CursorUtil.getString(cursor, FLetter.COLUMN_USERID));
