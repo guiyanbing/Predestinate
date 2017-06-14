@@ -34,14 +34,16 @@ import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 public class SelectCallTypeDialog extends Dialog implements RequestComplete, View.OnClickListener {
 
     private long mOtherUserId;
+    private String channel_uid;
     private Context mContext;
     private TextView tv_video_price,tv_video_price1,tv_audio_price,tv_cancel;
     private LinearLayout ll_dlg,ll_video_chat,ll_video_chat1,ll_audio_chat;
 
-    public SelectCallTypeDialog(Context context, long otherUserId) {
+    public SelectCallTypeDialog(Context context, long otherUserId, String channel_uid) {
         super(context);
         this.mContext = context;
         this.mOtherUserId = otherUserId;
+        this.channel_uid = channel_uid;
         initView(context);
         LoadingDialog.show((FragmentActivity) context);
         ModuleMgr.getCenterMgr().reqVideoChatConfig(mOtherUserId, this);//获取对方是否开启视频或语音
@@ -136,7 +138,7 @@ public class SelectCallTypeDialog extends Dialog implements RequestComplete, Vie
                     activity = (PrivateChatAct) mContext;
                 }
                 if (activity != null) {
-                    VideoAudioChatHelper.getInstance().inviteVAChat(activity, mOtherUserId, type, false, singleType);
+                    VideoAudioChatHelper.getInstance().inviteVAChat(activity, mOtherUserId, type, false, singleType, channel_uid);
                 }
             }
         } catch (Exception e) {

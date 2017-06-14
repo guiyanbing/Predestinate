@@ -29,6 +29,48 @@ import java.util.Map;
  */
 public class Statistics {
 
+    // ------------------------------旧版本统计项-----------------------------------
+
+    /**
+     * 应用激活统计
+     */
+    public static void activeStatistic() {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
+        getParams.put("package_name", ModuleMgr.getAppMgr().getPackageName());
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.activeStatistic, getParams, null);
+    }
+
+    /**
+     * 旧版本php应用内统计
+     *
+     * @param action 行为字符串
+     */
+    public static void userOnline(String action) {
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("uid", ModuleMgr.getCenterMgr().getMyInfo().getUid());
+        getParams.put("action", action);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.userOnline, getParams, null);
+    }
+
+    /**
+     * 支付统计
+     *
+     * @param uid   交互对方uid
+     * @param tplId 交互对方channel_uid
+     */
+    public static void payStatistic(String uid, String tplId) {
+        if (TextUtils.isEmpty(uid) || TextUtils.isEmpty(tplId)) return;
+
+        PLogger.d("------>" + uid + "/" + tplId);
+        Map<String, Object> getParams = new HashMap<>();
+        getParams.put("id", uid);
+        getParams.put("tplId", tplId);
+        ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.payStatistic, getParams, null);
+    }
+
+    // ---------------------------新版本统计-----------------------------
+
     private static final String BEHAVIOR_CACHE_KEY = "BEHAVIOR_CACHE_KEY";//用户行为缓存key
     private static final String BEHAVIOR_SESSION_KEY = "BEHAVIOR_SESSION_KEY";//用户行为session time校验存储key
     private static final String BEHAVIOR_SESSION_ID_KEY = "BEHAVIOR_SESSION_ID_KEY";//用户行为sessionId存储key

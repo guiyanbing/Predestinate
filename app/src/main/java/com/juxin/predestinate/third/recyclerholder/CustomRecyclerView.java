@@ -83,7 +83,7 @@ public class CustomRecyclerView extends LinearLayout {
      * 显示loading
      */
     public void showLoading() {
-        customFrameLayout.show(R.id.common_loading);
+        customFrameLayout.showLoading(R.id.common_loading, R.id.loading_gif, R.drawable.p1_loading);
     }
 
     /**

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+
+import com.juxin.library.image.ImageLoader;
 
 /**
  * 用于状态切换的布局，只显示1个状态
@@ -114,5 +117,20 @@ public class CustomFrameLayout extends FrameLayout {
      * 预留方法
      */
     public void initView() {
+    }
+
+    /**
+     * 显示Loading面板
+     *
+     * @param layoutId
+     * @param imgId
+     * @param imgRes
+     */
+    public void showLoading(int layoutId, int imgId, int imgRes) {
+        show(layoutId);
+        View img = findViewById(imgId);
+        if (img == null || !(img instanceof ImageView))
+            return;
+        ImageLoader.loadFitCenter(img.getContext(), imgRes, (ImageView) img, 0, 0);
     }
 }

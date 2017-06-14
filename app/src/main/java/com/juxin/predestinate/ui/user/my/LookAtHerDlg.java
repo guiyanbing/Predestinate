@@ -26,6 +26,7 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickListener {
     private Context context;
     private long otherId;
+    private String channel_uid;
     private int selectVal;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
@@ -40,8 +41,9 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         this.context = context;
     }
 
-    public void setOtherId(long otherId) {
+    public void setOtherId(long otherId, String channel_uid) {
         this.otherId = otherId;
+        this.channel_uid = channel_uid;
     }
 
     @Override
@@ -91,7 +93,8 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                         saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                     }
                 }
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, false, selectVal);
+                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                        false, selectVal, channel_uid);
                 dismiss();
                 break;
             default:

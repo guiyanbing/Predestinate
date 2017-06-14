@@ -12,11 +12,10 @@
     android:paddingRight="@dimen/px60_dp"
     android:paddingTop="@dimen/px45_dp">
 
-    <pl.droidsonroids.gif.GifTextView
+    <ImageView
         android:id="@+id/loading_gif"
         android:layout_width="@dimen/px100_dp"
-        android:layout_height="@dimen/px100_dp"
-        android:background="@drawable/p1_loading" />
+        android:layout_height="@dimen/px100_dp" />
 
     <TextView
         android:id="@+id/loading_txt"

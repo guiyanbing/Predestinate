@@ -39,6 +39,7 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
 
     private int fromTag = -1; //打开来源
     private long touid = -1; //是否因为某个用户充值 （统计用 可选）
+    private String channel_uid; //是否因为某个用户充值渠道id （统计用 可选）
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
         needDiamond = getIntent().getIntExtra(GoodsConstant.DLG_GIFT_NEED, 0);
         fromTag = getIntent().getIntExtra(GoodsConstant.DLG_OPEN_FROM, -1);
         touid = getIntent().getLongExtra(GoodsConstant.DLG_OPEN_TOUID, -1);
+        channel_uid = getIntent().getStringExtra(GoodsConstant.DLG_OPEN_CHANNEL_UID);
 
         LinearLayout ll_diamond_tips = (LinearLayout) findViewById(R.id.ll_diamond_tips);
         TextView tv_decdiamod = (TextView) findViewById(R.id.tv_decdiamod); // 送礼差钻石数
@@ -98,7 +100,8 @@ public class GoodsDiamondDialog extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recharge:  // 充值
-                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
+                        touid, channel_uid);
                 //统计
                 if (fromTag == Constant.OPEN_FROM_HOT) {
                     StatisticsDiscovery.onPayGift(touid, payGoods.getCommodityList().get(goodsPanel.getPosition()).getNum(),

@@ -35,6 +35,7 @@ public class BaseMessage implements IBaseMessage {
         video(VideoMessage.class, 24),//视频消息
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
+        sysNotice(SysNoticeMessage.class, 29),//系统通知消息
         ;
 
         public Class<? extends BaseMessage> msgClass = null;

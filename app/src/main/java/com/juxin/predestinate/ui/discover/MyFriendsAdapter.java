@@ -80,7 +80,7 @@ public class MyFriendsAdapter extends ExBaseAdapter<UserInfoLightweight> {
                 holder.iv_va_open.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new SelectCallTypeDialog(getContext(), userInfo.uid);
+                        new SelectCallTypeDialog(getContext(), userInfo.uid, String.valueOf(userInfo.getChannel_uid()));
                     }
                 });
             } else {

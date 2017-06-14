@@ -9,6 +9,7 @@ import android.widget.GridView;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
@@ -119,7 +120,10 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
                         }
-                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO);
+
+                        UserInfoLightweight info = chatAdapter.getUserInfo(chatAdapter.getLWhisperId());
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                                true, Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
                         break;
                     case VOICE://语音
                         Statistics.userBehavior(SendPoint.chatframe_tool_voice,
@@ -128,7 +132,11 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_voice_chat));
                             return;
                         }
-                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+
+                        long whisperId = chatAdapter.getLWhisperId();
+                        UserInfoLightweight infoLight = chatAdapter.getUserInfo(whisperId);
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_AUDIO_CHAT,
+                                infoLight == null ? "" : String.valueOf(infoLight.getChannel_uid()));
                         break;
                 }
             }

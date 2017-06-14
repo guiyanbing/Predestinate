@@ -129,13 +129,13 @@ public class VideoAudioChatHelper {
      * @param flag       判断是否显示进场dlg
      * @param singleType 非默认情况值, 0:还没选择,1:自己露脸，2:自己不露脸
      */
-    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType) {
+    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid) {
         if (flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0 && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            UIShow.showLookAtHerDlg(context, dstUid);
+            UIShow.showLookAtHerDlg(context, dstUid, channel_uid);
             return;
         }
         this.singleType = singleType;
-        inviteVAChat(context, dstUid, type);
+        inviteVAChat(context, dstUid, type, channel_uid);
     }
 
     /**
@@ -145,7 +145,7 @@ public class VideoAudioChatHelper {
      * @param dstUid  对方UID
      * @param type    1为视频{@link #TYPE_VIDEO_CHAT TYPE_VIDEO_CHAT}，2为音频{@link #TYPE_AUDIO_CHAT TYPE_AUDIO_CHAT}
      */
-    public void inviteVAChat(final Activity context, long dstUid, int type) {
+    public void inviteVAChat(final Activity context, long dstUid, int type, String channel_uid) {
         if (!ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO) || ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(context);
             return;
@@ -180,7 +180,7 @@ public class VideoAudioChatHelper {
             }
 
         }
-        executeInviteChat(context, dstUid, type);
+        executeInviteChat(context, dstUid, type, channel_uid);
     }
 
     /**
@@ -260,19 +260,19 @@ public class VideoAudioChatHelper {
      * @param dstUid  被邀请方uid
      * @param type    音视频类型
      */
-    private void executeInviteChat(final Context context, final long dstUid, final int type) {
+    private void executeInviteChat(final Context context, final long dstUid, final int type, final String channel_uid) {
         HashMap<String, Object> postParams = new HashMap<>();
         postParams.put("tuid", dstUid);
         postParams.put("vtype", type);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.inviteVideoChat, postParams, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                handleInviteChat(context, response, dstUid, type);
+                handleInviteChat(context, response, dstUid, type, channel_uid);
             }
         });
     }
 
-    private void handleInviteChat(final Context context, HttpResponse response, long dstUid, int type) {
+    private void handleInviteChat(final Context context, HttpResponse response, long dstUid, int type, String channel_uid) {
         //特殊错误码: 3001 用户正在视频聊天中 3002 该用户无法视频聊天 3003 钻石余额不足
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
@@ -288,7 +288,7 @@ public class VideoAudioChatHelper {
 
         int code = jo.optInt("code");
         if (code == 3003)
-            UIShow.showGoodsDiamondDialogAndTag(context, Constant.OPEN_FROM_CHAT_PLUGIN, dstUid);
+            UIShow.showGoodsDiamondDialogAndTag(context, Constant.OPEN_FROM_CHAT_PLUGIN, dstUid, channel_uid);
         PToast.showShort(TextUtils.isEmpty(jo.optString("msg")) ? "数据异常" : jo.optString("msg"));
     }
 

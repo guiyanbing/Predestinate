@@ -171,7 +171,7 @@ public class GoodsYCoinDialog extends BaseActivity implements View.OnClickListen
                 break;
 
             case R.id.btn_recharge:  // 充值
-                UIShow.showPayAlipayt(this, getPayid(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, getPayid(), payTypePanel.getPayType(), 0, "");
                 break;
         }
     }

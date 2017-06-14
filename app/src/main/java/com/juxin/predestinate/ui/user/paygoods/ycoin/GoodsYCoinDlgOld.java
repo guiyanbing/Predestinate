@@ -36,6 +36,7 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
     private GoodsListPanel goodsPanel;
     private GoodsPayTypePanel payTypePanel; // 支付方式
     private long to_uid;
+    private String channel_uid;
 
     private TextView tv_tips; // 充值优惠提示信息
     private TextView tv_ycoin;
@@ -45,6 +46,7 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_goods_ycoin_dialog_old);
         to_uid = getIntent().getLongExtra("to_uid", 0);
+        channel_uid = getIntent().getStringExtra("channel_uid");
 
         initView();
     }
@@ -118,7 +120,8 @@ public class GoodsYCoinDlgOld extends BaseActivity implements View.OnClickListen
             case R.id.btn_recharge:// 充值
                 StatisticsMessage.chatNavConfirmPay(SendPoint.chatframe_nav_y_ypay_btnqrzf, to_uid, payTypePanel.getPayType(),
                         payGoods.getCommodityList().get(goodsPanel.getPosition()).getDoublePrice());
-                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType());
+                UIShow.showPayAlipayt(this, payGoods.getCommodityList().get(goodsPanel.getPosition()).getId(), payTypePanel.getPayType(),
+                        to_uid, channel_uid);
                 break;
         }
     }

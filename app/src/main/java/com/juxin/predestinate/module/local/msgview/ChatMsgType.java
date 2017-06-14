@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.msgview;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatPanelType;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCommon;
@@ -10,6 +11,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelCu
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGift;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelGiveMeGift;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelText;
+import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelUpgrade;
 import com.juxin.predestinate.module.local.msgview.chatview.msgpanel.ChatPanelVideo;
 import com.juxin.predestinate.module.local.msgview.chatview.notifyview.NotifyBasePanel;
 
@@ -37,8 +39,10 @@ public enum ChatMsgType {
 
     CMT_28(ChatPanelText.class, "自动升级提示消息"),
 
+    CMT_Max(ChatPanelUpgrade.class, "该版本不能显示的消息"),
 
-    CMT_7("已读消息"),
+
+    //  CMT_7("已读消息"),
 
     // 非有效类型
     CMT_Invalid(null, "非有效类型");
@@ -117,6 +121,9 @@ public enum ChatMsgType {
     public static Class<? extends ChatPanel> getPanelClass(int type) {
         try {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
+            if(type > MessageConstant.Msg_Max_Version){
+                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+            }
             return chatMsgType.panelClass;
         } catch (Exception e) {
             PLogger.d("--->" + type);
@@ -133,6 +140,9 @@ public enum ChatMsgType {
     public static String getPanelClassName(int type) {
         try {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
+            if(type > MessageConstant.Msg_Max_Version){
+                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+            }
             return chatMsgType.panelClass.getSimpleName();
         } catch (Exception e) {
             PLogger.d("--->" + type);
@@ -166,6 +176,9 @@ public enum ChatMsgType {
     public static Class<? extends NotifyBasePanel> getNotifyPanelClass(int type) {
         try {
             ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
+            if(type > MessageConstant.Msg_Max_Version){
+                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+            }
             return chatMsgType.notifyPanelClass;
         } catch (Exception e) {
             PLogger.d("--->" + type);
@@ -213,6 +226,9 @@ public enum ChatMsgType {
      */
     public static ChatMsgType getMsgType(int type) {
         try {
+            if(type > MessageConstant.Msg_Max_Version){
+                return ChatMsgType.valueOf("CMT_Max");
+            }
             return ChatMsgType.valueOf("CMT_" + type);
         } catch (Exception e) {
             PLogger.d("--->" + type);
