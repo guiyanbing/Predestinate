@@ -2,6 +2,7 @@ package com.juxin.predestinate.bean.db;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Handler;
 import android.text.TextUtils;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -11,6 +12,8 @@ import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -21,34 +24,51 @@ import rx.functions.Func1;
 
 public class DBCenterFUnRead {
     private BriteDatabase mDatabase;
+    private Handler handler;
 
-    public DBCenterFUnRead(BriteDatabase database) {
+    public DBCenterFUnRead(BriteDatabase database, Handler handler) {
         this.mDatabase = database;
+        this.handler = handler;
     }
 
-    public long storageData(String key, String content){
-        if (!isExist(key)) {//没有数据
-            return insertUnRead(key, content);
-        } else {
-            return updateUnRead(key, content);
-        }
+    public long storageData(final String key, final String content){
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isExist(key)) {//没有数据
+                    insertUnRead(key, content);
+                } else {
+                    updateUnRead(key, content);
+                }
+            }
+        });
+
+        //// TODO: 2017/6/15 yuchenl: ret
+        return MessageConstant.OK;
     }
 
     /**
      * 多条消息插入
      * @param stringMap
      */
-    public void insertLetter(Map<String, String> stringMap){
-        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
-        try {
-            for (Map.Entry<String, String> entry : stringMap.entrySet()) {
-                insertUnRead(entry.getKey(), entry.getValue());
-            }
+    public void insertLetter(final Map<String, String> stringMap){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+                try {
+                    for (Map.Entry<String, String> entry : stringMap.entrySet()) {
+                        insertUnRead(entry.getKey(), entry.getValue());
+                    }
 
-            transaction.markSuccessful();
-        } finally {
-            transaction.end();
-        }
+                    transaction.markSuccessful();
+                } finally {
+                    transaction.end();
+                }
+            }
+        });
+
     }
 
 
@@ -58,7 +78,7 @@ public class DBCenterFUnRead {
      * @param content
      * @return
      */
-    public long insertUnRead(String key, String content) {
+    private long insertUnRead(String key, String content) {
         try {
             final ContentValues values = new ContentValues();
             values.put(FUnRead.COLUMN_KEY, key);
@@ -79,7 +99,7 @@ public class DBCenterFUnRead {
      * @param content
      * @return
      */
-    public int updateUnRead(String key, String content){
+    private int updateUnRead(String key, String content){
         try {
             final ContentValues values = new ContentValues();
             values.put(FUnRead.COLUMN_CONTENT, ByteUtil.toBytesUTF(content));
@@ -173,7 +193,15 @@ public class DBCenterFUnRead {
      * @param key
      * @return
      */
-    public int delete(String key){
-        return mDatabase.delete(FUnRead.FUNREAD_TABLE, FUnRead.COLUMN_KEY + " = ? ", key);
+    public int delete(final String key){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.delete(FUnRead.FUNREAD_TABLE, FUnRead.COLUMN_KEY + " = ? ", key);
+            }
+        });
+
+        //// TODO: 2017/6/15 yuchenl: ret
+        return MessageConstant.OK;
     }
 }

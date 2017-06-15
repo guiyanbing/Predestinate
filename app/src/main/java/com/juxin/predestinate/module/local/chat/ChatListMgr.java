@@ -155,10 +155,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
-                PLogger.d("unreadNum=" + tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
+        PLogger.d("unreadNum=" + unreadNum);
         MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
     }
 

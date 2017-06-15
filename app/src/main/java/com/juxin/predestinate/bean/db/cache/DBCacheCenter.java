@@ -2,6 +2,7 @@ package com.juxin.predestinate.bean.db.cache;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
@@ -15,6 +16,7 @@ import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import rx.Observable;
 import rx.Observer;
@@ -28,9 +30,11 @@ import rx.schedulers.Schedulers;
 public class DBCacheCenter {
 
     private BriteDatabase mDatabase;
+    private Handler handler;
 
-    public DBCacheCenter(BriteDatabase database) {
+    public DBCacheCenter(BriteDatabase database, Handler handler) {
         this.mDatabase = database;
+        this.handler = handler;
     }
 
     /******************** FProfileCache **************************/
@@ -41,23 +45,29 @@ public class DBCacheCenter {
      * @param lightweights
      * @return
      */
-    public boolean storageProfileData(List<UserInfoLightweight> lightweights) {
+    public boolean storageProfileData(final List<UserInfoLightweight> lightweights) {
         if (lightweights == null || lightweights.size() <= 0) {
             return false;
         }
-        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
-        try {
-            for (UserInfoLightweight temp : lightweights) {
-                storageData(temp, isInfoExist(temp.getUid()));
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+                try {
+                    for (UserInfoLightweight temp : lightweights) {
+                        storageOneData(temp, isInfoExist(temp.getUid()));
+                    }
+                    transaction.markSuccessful();
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    transaction.end();
+                }
             }
-            transaction.markSuccessful();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            transaction.end();
-        }
-        return false;
+        });
+
+        return true;
     }
 
 
@@ -85,7 +95,7 @@ public class DBCacheCenter {
         return false;
     }
 
-    private void storageData(UserInfoLightweight lightweight, boolean aBoolean) {
+    private void storageOneData(UserInfoLightweight lightweight, boolean aBoolean) {
         try {
             long uid = lightweight.getUid();
             PLogger.printObject("storageProfileData==" + aBoolean);
@@ -115,23 +125,29 @@ public class DBCacheCenter {
     public void storageProfileData(final UserInfoLightweight lightweight) {
         PLogger.d("storageProfileData==" + "111111");
 
-        final long uid = lightweight.getUid();
-        Observable<Boolean> observable = isProfileExist(uid);
-        observable.subscribe(new Observer<Boolean>() {
+        handler.post(new Runnable() {
             @Override
-            public void onCompleted() {
-            }
+            public void run() {
+                final long uid = lightweight.getUid();
+                Observable<Boolean> observable = isProfileExist(uid);
+                observable.subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-            @Override
-            public void onNext(Boolean aBoolean) {
-                PLogger.d("storageProfileData==" + aBoolean);
-                storageData(lightweight, aBoolean);
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        PLogger.d("storageProfileData==" + aBoolean);
+                        storageOneData(lightweight, aBoolean);
+                    }
+                }).unsubscribe();
             }
-        }).unsubscribe();
+        });
+
     }
 
     /**
@@ -255,26 +271,33 @@ public class DBCacheCenter {
      * @param content
      * @return
      */
-    public long storageDataCache(String key, String content) {
-        try {
-            boolean ret = isExist(key);
-            final ContentValues values = new ContentValues();
-            if (!ret) {
-                values.put(FHttpCache.COLUMN_KEY, key);
+    public long storageDataCache(final String key, final String content) {
 
-                if (TextUtils.isEmpty(content))
-                    values.put(FHttpCache.COLUMN_KEY, ByteUtil.toBytesUTF(content));
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean ret = isExist(key);
+                    final ContentValues values = new ContentValues();
+                    if (!ret) {
+                        values.put(FHttpCache.COLUMN_KEY, key);
 
-                return mDatabase.insert(FHttpCache.FHTTPCACHE_TABLE, values);
-            } else {
+                        if (TextUtils.isEmpty(content))
+                            values.put(FHttpCache.COLUMN_KEY, ByteUtil.toBytesUTF(content));
 
-                values.put(FHttpCache.COLUMN_KEY, ByteUtil.toBytesUTF(content));
-                return mDatabase.update(FHttpCache.FHTTPCACHE_TABLE, values, FHttpCache.COLUMN_KEY + " = ? ", key);
+                        mDatabase.insert(FHttpCache.FHTTPCACHE_TABLE, values);
+                    } else {
+
+                        values.put(FHttpCache.COLUMN_KEY, ByteUtil.toBytesUTF(content));
+                        mDatabase.update(FHttpCache.FHTTPCACHE_TABLE, values, FHttpCache.COLUMN_KEY + " = ? ", key);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return MessageConstant.ERROR;
+        });
+
+        return MessageConstant.OK;
 
     }
 
@@ -333,8 +356,14 @@ public class DBCacheCenter {
      * @param key
      * @return
      */
-    public int delete(String key) {
-        return mDatabase.delete(FHttpCache.FHTTPCACHE_TABLE, FHttpCache.COLUMN_KEY + " = ? ", key);
+    public int delete(final String key) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.delete(FHttpCache.FHTTPCACHE_TABLE, FHttpCache.COLUMN_KEY + " = ? ", key);
+            }
+        });
+        return MessageConstant.OK;
     }
 
     /**
@@ -343,6 +372,12 @@ public class DBCacheCenter {
      * @return
      */
     public int deleteAll() {
-        return mDatabase.delete(FHttpCache.FHTTPCACHE_TABLE, "", "");
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.delete(FHttpCache.FHTTPCACHE_TABLE, "", "");
+            }
+        });
+        return MessageConstant.OK;
     }
 }

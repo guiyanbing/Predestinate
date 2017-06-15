@@ -658,7 +658,12 @@ public class ChatMgr implements ModuleBase {
     public void onReceiving(BaseMessage message) {
         message.setStatus(MessageConstant.UNREAD_STATUS);
         PLogger.printObject(message);
-        pushMsg(dbCenter.insertMsg(message) != MessageConstant.ERROR, message);
+        long ret = dbCenter.insertMsg(message);
+        if (ret != MessageConstant.OK ) {
+            PLogger.e("db save msg fail: " + message.getJsonStr() + "  id: " + message.getMsgID() );
+            return;
+        }
+        pushMsg(true, message);
     }
 
     /**
@@ -667,7 +672,7 @@ public class ChatMgr implements ModuleBase {
      * @param baseMessageList
      */
     public void onReceivingList(List<BaseMessage> baseMessageList) {
-        dbCenter.insertListMsg(baseMessageList);
+        dbCenter.getCenterFMessage().insertMsg(baseMessageList);
     }
 
     /**
