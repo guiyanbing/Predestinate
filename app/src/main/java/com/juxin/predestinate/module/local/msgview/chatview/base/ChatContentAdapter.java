@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview.chatview.base;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -344,7 +343,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 status.setVisibility(View.GONE);
                 statusProgress.setVisibility(View.GONE);
                 statusError.setVisibility(View.GONE);
-                Log.e("TTTTTTTTTTTT",statusImgError+"||");
                 if (statusImgError != null)
                     statusImgError.setVisibility(View.GONE);
                 if(MessageConstant.isMaxVersionMsg(msg.getType()) && statusImgError != null){
