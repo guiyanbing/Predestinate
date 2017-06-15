@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.pay.wepayother.third;
 import android.content.Context;
 import android.content.Intent;
 
+import com.juxin.library.log.PToast;
 import com.juxin.predestinate.module.local.pay.PayWX;
 
 import java.net.URISyntaxException;
@@ -34,6 +35,7 @@ public class JXWechatPay {
             context.startActivity(intent);
         } catch (URISyntaxException e) {
             e.printStackTrace();
+            PToast.showShort("支付失败");
         }
 
     }

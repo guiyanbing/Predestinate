@@ -17,6 +17,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
@@ -294,5 +296,12 @@ public class PayWebAct extends BaseActivity {
             payalipay_web_webview.clearHistory();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //通知刷个人资料  在
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
     }
 }

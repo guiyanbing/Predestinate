@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
@@ -58,6 +60,8 @@ public class PayWebActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
         Invoker.getInstance().setWebView(webPanel == null ? null : webPanel.getWebView());
+        //通知刷个人资料  在
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
     }
 
     @Override
