@@ -69,6 +69,7 @@ public class LiveHelper {
         intent.putExtra("sex", userDetail.getGender());
         intent.putExtra("password", ModuleMgr.getLoginMgr().getAuth());
         intent.setComponent(componetName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
