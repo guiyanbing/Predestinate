@@ -244,7 +244,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void updateToReadAll() {
         if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
-            getWhisperListUnsubscribe();
+            getWhisperListUnSubscribe();
         }
     }
 
@@ -253,7 +253,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             return;
         }
         dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperListUnsubscribe();
+        getWhisperListUnSubscribe();
     }
 
     /**
@@ -265,11 +265,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long updateToReadPrivate(long userID) {
         long ret = dbCenter.getCenterFLetter().updateStatus(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperListUnsubscribe();
+            getWhisperListUnSubscribe();
         }
         return ret;
     }
 
+    /**
+     * 获取消息列表，初始化时进行调用，不取消订阅，外部请勿使用
+     */
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
         dbCenter.getCenterFLetter().queryLetterList()
@@ -291,7 +294,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 });
     }
 
-    public void getWhisperListUnsubscribe() {
+    /**
+     * 获取消息列表，外部使用，查询完成后取消订阅
+     */
+    public void getWhisperListUnSubscribe() {
         PLogger.d("getWhisperList====2");
         dbCenter.getCenterFLetter().queryLetterList()
                 .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
@@ -323,7 +329,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-                            getWhisperListUnsubscribe();
+                            getWhisperListUnSubscribe();
                         }
                     });
                 }

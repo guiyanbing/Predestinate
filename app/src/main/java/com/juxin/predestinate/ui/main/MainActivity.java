@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -19,7 +22,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -31,7 +34,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
-import com.juxin.predestinate.module.logic.notify.FloatingMgr;
+import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.BaseUtil;
@@ -60,8 +63,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private BaseFragment current;  // 当前的fragment
     private View[] views;
-    private View layout_main_bottom;
 
+    private CustomFloatingPanel floatingPanel;
+    private ViewGroup floating_message_container;
+    private View layout_main_bottom;
     private BadgeView mail_num, user_num;
 
     @Override
@@ -112,8 +117,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         discoverMFragment = new DiscoverMFragment();
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
-        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),"http://test.game.xiaoyaoai.cn:30081/static/yfb-test/pages/square/square.html"
-                );//ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url()
+        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
+                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url()
+        );//广场直播测试链接："http://test.game.xiaoyaoai.cn:30081/static/yfb-test/pages/square/square.html"
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
@@ -133,6 +139,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         rank_layout.setOnClickListener(this);
         plaza_layout.setOnClickListener(this);
         user_layout.setOnClickListener(this);
+
+        floating_message_container = (ViewGroup) findViewById(R.id.floating_message_container);
+        floatingPanel = new CustomFloatingPanel(this);
+        floatingPanel.initView();
 
         mail_num = (BadgeView) findViewById(R.id.mail_number);
         user_num = (BadgeView) findViewById(R.id.user_number);
@@ -165,7 +175,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        FloatingMgr.getInstance().setCanNotify(fragment != mailFragment);
         if (fragment == discoverMFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.discovery_layout);
         } else if (fragment == mailFragment) {
@@ -347,6 +356,61 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onDestroy();
         Statistics.userOnline("exit");
         MsgMgr.getInstance().detach(this);
+    }
+
+    // --------------------------消息提示处理-----------------------------------------
+
+    private boolean isShowing = false;
+    private Handler handler = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            floating_message_container.removeAllViews();
+            isShowing = false;
+        }
+    };
+
+    /**
+     * 展示首页消息悬浮提示
+     *
+     * @param simpleData  简略个人资料
+     * @param baseMessage 消息体
+     * @param content     消息提示内容
+     */
+    public void showFloatingMessage(final UserInfoLightweight simpleData, final BaseMessage baseMessage, String content) {
+        synchronized (this) {
+            if (current == mailFragment) return;
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 5 * 1000);
+            floatingPanel.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
+                    content, simpleData.getAvatar(), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UIShow.showPrivateChatAct(App.getActivity(), baseMessage.getLWhisperID(), simpleData.getNickname());
+                            closeFloatingMessage();
+                        }
+                    });
+            if (!isShowing) {
+                floating_message_container.removeAllViews();
+                floating_message_container.addView(floatingPanel.getContentView());
+                floatingPanel.getContentView().setTranslationY(-100f);
+                ViewAnimator
+                        .animate(floatingPanel.getContentView())
+                        .translationY(-100, 0)
+                        .decelerate()
+                        .duration(1000)
+                        .start();
+                isShowing = true;
+            }
+        }
+    }
+
+    /**
+     * 移除首页消息悬浮提示
+     */
+    public void closeFloatingMessage() {
+        handler.removeCallbacks(runnable);
+        runnable.run();
     }
 
     // ------------------------ 离线消息处理 暂时放在这 Start--------------------------

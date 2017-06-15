@@ -99,7 +99,7 @@ public class ChatMgr implements ModuleBase {
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+            ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
         }
     }
 
@@ -720,7 +720,7 @@ public class ChatMgr implements ModuleBase {
         if (page == 0) {
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if (ret != MessageConstant.ERROR) {
-                ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+                ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
         }
         return observable;
@@ -748,7 +748,7 @@ public class ChatMgr implements ModuleBase {
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+            ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID, Long.valueOf(whisperID));
