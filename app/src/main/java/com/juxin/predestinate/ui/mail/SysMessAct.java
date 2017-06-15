@@ -120,6 +120,12 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
                                         mSysMessAdapter.setList(listTemp);
                                     }
                                     listDatas.setSelection(baseMessages.size());
+                                    listDatas.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listDatas.setSelection(baseMessages.size());//延迟定位
+                                        }
+                                    },10);
                                 }
                             }
                         });
