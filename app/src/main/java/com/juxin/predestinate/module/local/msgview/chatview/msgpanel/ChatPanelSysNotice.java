@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,8 +14,9 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SysNoticeMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.App;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
-import com.juxin.predestinate.module.util.TimeUtil;
 
 /**
  * 系统消息通知
@@ -61,7 +63,8 @@ public class ChatPanelSysNotice extends ChatPanel {
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(noticeMessage.getPic())) {
                     Invoker.getInstance().doInJS(noticeMessage.getBtn_action(), null);
-                    return;
+                }else {
+                    ModuleMgr.getCommonMgr().checkUpdate((FragmentActivity) App.getActivity(), true);
                 }
             }
         });

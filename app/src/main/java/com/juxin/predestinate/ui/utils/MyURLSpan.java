@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
@@ -17,6 +18,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 
 /**
@@ -33,12 +35,25 @@ public class MyURLSpan extends ClickableSpan {
     private final static String URL_TYPE_RECHARGE_VIP = "recharge_vip";                 //充值VIP
     private final static String URL_TYPE_CHECK_UPDATE = "check_update";                 //检查升级
 
+    private final static String URL_TYPE_CERTIFY_REAL_NAME = "certify_real_name";                 //实名认证
+    private final static String URL_TYPE_CERTIFY_PHONE = "certify_phone";                 //手机认证
+    private final static String URL_TYPE_INVITE_VIDEO = "invite_video";                 //发起视频聊天
+
+
     private final Context mContext;
     private String mUrl;
+    private long otherID;
+    private String channel_uid;
 
-    private MyURLSpan(Context mContext, String url) {
+    private MyURLSpan(Context mContext, String url, long otherID, String channel_uid) {
         this.mContext = mContext;
         mUrl = url;
+        this.otherID = otherID;
+        this.channel_uid = channel_uid;
+    }
+
+    public static void addClickToTextViewLink(Context mContext, TextView tv, String content) {
+        addClickToTextViewLink(mContext, tv, content, -1, null);
     }
 
     /**
@@ -48,7 +63,7 @@ public class MyURLSpan extends ClickableSpan {
      * @param tv       需要设置html点击效果展示的TextView
      * @param content  TextView展示的文字
      */
-    public static void addClickToTextViewLink(Context mContext, TextView tv, String content) {
+    public static void addClickToTextViewLink(Context mContext, TextView tv, String content, long otherID, String channel_uid) {
         tv.setText(Html.fromHtml(content + ""));
         tv.setMovementMethod(LinkMovementMethod.getInstance());
         CharSequence linkContent = tv.getText();
@@ -59,7 +74,7 @@ public class MyURLSpan extends ClickableSpan {
             SpannableStringBuilder style = new SpannableStringBuilder(linkContent);
             for (URLSpan url : urls) {
                 style.removeSpan(url);
-                MyURLSpan myURLSpan = new MyURLSpan(mContext, url.getURL());
+                MyURLSpan myURLSpan = new MyURLSpan(mContext, url.getURL(), otherID, channel_uid);
                 style.setSpan(myURLSpan, sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             tv.setText(style);
@@ -104,6 +119,19 @@ public class MyURLSpan extends ClickableSpan {
                 //检查升级
                 case URL_TYPE_CHECK_UPDATE:
                     ModuleMgr.getCommonMgr().checkUpdate((FragmentActivity) App.getActivity(), true);
+                    break;
+                //实名认证
+                case URL_TYPE_CERTIFY_REAL_NAME:
+                    UIShow.showIDCardAuthenticationAct((FragmentActivity) App.getActivity(), 0);
+                    break;
+                //手机认证
+                case URL_TYPE_CERTIFY_PHONE:
+                    UIShow.showPhoneVerifyAct((FragmentActivity) App.getActivity(), MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE);
+                    break;
+                //发起视频聊天
+                case URL_TYPE_INVITE_VIDEO:
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) App.getActivity(),
+                            otherID, VideoAudioChatHelper.TYPE_VIDEO_CHAT, channel_uid);
                     break;
                 default:
                     int i = checkDownExUrl(mUrl);
