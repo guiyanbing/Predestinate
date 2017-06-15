@@ -54,7 +54,8 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
 
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
-        PLogger.d("---onChatUpdate--->ret：" + ret + "，message：" + message.toString());
+        PLogger.d("---onChatUpdate--->ret：" + ret + "，sendId：" + message.getSSendID()
+                + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
 
         showNotify(message);
@@ -77,7 +78,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         }
         JSONObject jsonObject = JsonUtil.getJsonObject(message.getJsonStr());
         int type = jsonObject.optInt("mtp");
-        PLogger.d("------>Msg type: " + type);
         if (type != NOTIFY_COMMON && type != NOTIFY_GIFT
                 && type != NOTIFY_VIDEO && type != NOTIFY_UPDATE) return;
 

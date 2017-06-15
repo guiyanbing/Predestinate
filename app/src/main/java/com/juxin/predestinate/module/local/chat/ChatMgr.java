@@ -923,7 +923,7 @@ public class ChatMgr implements ModuleBase {
 
                 @Override
                 public void onNext(UserInfoLightweight lightweight) {
-                    PLogger.d("lightweight==222==" + lightweight);
+                    PLogger.d("---getUserInfoLightweight--->" + lightweight);
                     if (lightweight.getUid() <= 0) {
                         removeInfoComplete(false, false, uid, lightweight);
                         getProFile(uid);
@@ -948,7 +948,7 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("re=====" + response.getResponseString());
+                PLogger.d("---getProFile--->" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if (!response.isOk()) {
                     removeInfoComplete(true, false, userID, temp);
@@ -957,7 +957,7 @@ public class ChatMgr implements ModuleBase {
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
                 infoLightweightList.parseJsonSummary(response.getResponseJson());
 
-                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                if (infoLightweightList.getUserInfos() != null && !infoLightweightList.getUserInfos().isEmpty()) {//数据大于1条
                     temp = infoLightweightList.getUserInfos().get(0);
                     temp.setTime(getTime());
                     dbCenter.getCacheCenter().storageProfileData(temp);
@@ -970,10 +970,21 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
+    /**
+     * 从数据库中查询多个用户信息
+     *
+     * @param uids 用户uid集合
+     * @return 查询结果Observable
+     */
     public Observable<List<UserInfoLightweight>> getUserInfoList(List<Long> uids) {
         return dbCenter.getCacheCenter().queryProfile(uids);
     }
 
+    /**
+     * 批量请求简略个人资料
+     *
+     * @param userIds 用户uid集合
+     */
     public void getProFile(List<Long> userIds) {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
             @Override
@@ -994,10 +1005,12 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights) {
-        dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
-    }
-
+    /**
+     * 带回调地请求单个用户的简略个人资料
+     *
+     * @param userID       查询的用户uid
+     * @param infoComplete 查询完成回调
+     */
     public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {
         List<Long> longs = new ArrayList<>();
         longs.add(userID);
@@ -1025,30 +1038,28 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 批量更新数据库中存储的简略个人资料
+     *
+     * @param infoLightweights 需要批量更新的简略个人资料
+     */
+    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights) {
+        dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
+    }
+
+    /**
      * 更新个人资料
      *
-     * @param isRemove        是否要重回调map中移除 true是移除
-     * @param isOK            是否请求成功 true是成功
+     * @param isRemove        是否要从回调map中移除：true是移除（回调成功之后移除本次回调）
+     * @param isOK            是否请求成功：true是成功（包括数据库查询成功及请求返回数据成功）
      * @param infoLightweight 个人资料数据
      */
     private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
-        PLogger.printObject(infoLightweight);
+        PLogger.d("------>" + String.valueOf(infoLightweight));
         synchronized (infoMap) {
             if (infoMap.size() <= 0) return;
-            ChatMsgInterface.InfoComplete infoComplete = null;
-            for (Object key : infoMap.keySet()) {
-                if (key.equals(userID)) {
-                    ChatMsgInterface.InfoComplete temp = infoMap.get(key);
-                    if (temp != null) {
-                        temp.onReqComplete(isOK, infoLightweight);
-                        infoComplete = temp;
-                    }
-                }
-            }
-
-            if (isRemove && infoComplete != null) {
-                infoMap.remove(infoComplete);
-            }
+            ChatMsgInterface.InfoComplete infoComplete = infoMap.get(userID);
+            if (infoComplete != null) infoComplete.onReqComplete(isOK, infoLightweight);
+            if (isRemove && infoComplete != null) infoMap.remove(userID);
         }
     }
 
