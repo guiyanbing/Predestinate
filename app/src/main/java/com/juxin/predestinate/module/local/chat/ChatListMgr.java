@@ -16,7 +16,6 @@ import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.OldDBModule;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
@@ -39,9 +38,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -155,7 +153,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
-                PLogger.printObject("unreadNum=" + tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
@@ -274,30 +271,45 @@ public class ChatListMgr implements ModuleBase, PObserver {
     }
 
     public void getWhisperList() {
-        PLogger.printObject("getWhisperList====1");
-        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
-        listObservable.subscribeOn(Schedulers.io());
-        listObservable.observeOn(AndroidSchedulers.mainThread());
-        listObservable.subscribe(new Action1<List<BaseMessage>>() {
-            @Override
-            public void call(List<BaseMessage> baseMessages) {
-                PLogger.printObject("getWhisperList====2" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
-    }
-
-    public void getWhisperListUnsubscribe() {
-        PLogger.printObject("getWhisperList====2");
-        Observable<List<BaseMessage>> listObservable = dbCenter.getCenterFLetter().queryLetterList();
-        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Action1<List<BaseMessage>>() {
+        PLogger.d("getWhisperList====1");
+        dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
-                    public void call(List<BaseMessage> baseMessages) {
-                        PLogger.printObject("getWhisperList=un===2" + baseMessages.size());
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        PLogger.d("getWhisperList====2" + baseMessages.size());
                         updateListMsg(baseMessages);
                     }
                 });
+    }
+
+    public void getWhisperListUnsubscribe() {
+        PLogger.d("getWhisperList====2");
+        dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribe(new Observer<List<BaseMessage>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        PLogger.d("getWhisperList=un===2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                }).unsubscribe();
     }
 
     @Override

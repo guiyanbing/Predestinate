@@ -58,7 +58,7 @@ public class ChatPanelVideo extends ChatPanel {
         chat_item_video_text.setText(VideoMessage.getVideoChatContent(
                 videoMessage.getEmLastStatus(), videoMessage.getVideoVcTalkTime(), videoMessage.isSender()));
 
-        PLogger.printObject("tp=" + videoMessage.getVideoTp() + ":code=" + videoMessage.getVideoVcEscCode());
+        PLogger.d("tp=" + videoMessage.getVideoTp() + ":code=" + videoMessage.getVideoVcEscCode());
         return true;
     }
 

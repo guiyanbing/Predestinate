@@ -12,10 +12,8 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 /**
  * 我的
@@ -25,7 +23,6 @@ public class UserFragment extends BaseFragment implements PObserver {
 
     private UserFragmentHeadPanel headPanel;
     private UserFragmentFootPanel footPanel;
-    private CheckIntervalTimeUtil checkIntervalTimeUtil;
 
     @Nullable
     @Override
@@ -39,7 +36,6 @@ public class UserFragment extends BaseFragment implements PObserver {
     }
 
     private void initView() {
-        checkIntervalTimeUtil = new CheckIntervalTimeUtil();
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         headPanel = new UserFragmentHeadPanel(getActivity());
         footPanel = new UserFragmentFootPanel(getActivity());
@@ -79,11 +75,7 @@ public class UserFragment extends BaseFragment implements PObserver {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            refreshView();
-
-            if (checkIntervalTimeUtil.check(60 * 1000) || (App.uid > 0 && ModuleMgr.getCenterMgr().getMyInfo().getUid() <= 0)) {
-                ModuleMgr.getCenterMgr().reqMyInfo();
-            }
+            ModuleMgr.getCenterMgr().reqMyInfo();
         }
     }
 

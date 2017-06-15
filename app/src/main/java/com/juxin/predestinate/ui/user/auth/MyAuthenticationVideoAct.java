@@ -314,7 +314,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     }
 
     private void getStatus() {
-        ModuleMgr.getCommonMgr().requestVideochatConfigSendUI(new RequestComplete() {
+        ModuleMgr.getCommonMgr().requestVideochatConfig(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 ModuleMgr.getCommonMgr().setVideoVerify((VideoVerifyBean) response.getBaseData());

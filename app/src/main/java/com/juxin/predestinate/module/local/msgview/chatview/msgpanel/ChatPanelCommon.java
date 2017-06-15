@@ -178,7 +178,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
      * 加载展示语音消息
      */
     private void onVoiceDisplayContent(CommonMessage msg) {
-        PLogger.printObject("CommonMessage===" + msg.toString());
         chat_item_customFrameLayout.show(R.id.chat_item_panel_voice);
 
         time.setText("" + msg.getVoiceLen() + "''");

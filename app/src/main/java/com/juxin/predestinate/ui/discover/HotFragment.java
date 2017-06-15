@@ -79,6 +79,14 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
     private void initView() {
         hot_frame = (CustomFrameLayout) findViewById(R.id.hot_frame);
         hot_frame.setList(new int[]{R.id.common_loading, R.id.hot_card_nodata, R.id.hot_card_layout});
+        hot_frame.setShowChangeListener(new CustomFrameLayout.OnShowChangeListener() {
+            @Override
+            public void onChange(CustomFrameLayout view, int id) {
+                if (id != R.id.common_loading)
+                    view.stopLoading(R.id.loading_gif);
+            }
+        });
+
         cardsView = (CardsView) findViewById(R.id.hot_card_view);
         adapter = new CardsAdapter(viewData, getContext());
         cardsView.setCardsSlideListener(this);

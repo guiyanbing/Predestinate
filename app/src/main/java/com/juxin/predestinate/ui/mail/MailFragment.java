@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 
 /**
  * 消息
@@ -326,7 +326,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 continue;
             }
 
-            PLogger.printObject("message====" + (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID() : message.getName()));
+            PLogger.d("message====" + (TextUtils.isEmpty(message.getName()) ? message.getLWhisperID() : message.getName()));
             if (TextUtils.isEmpty(message.getName()) && TextUtils.isEmpty(message.getAvatar())) {
                 stringList.add(message.getLWhisperID());
             }
@@ -335,14 +335,22 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         if (stringList.size() > 0) {
             Observable<List<UserInfoLightweight>> observable = ModuleMgr.getChatMgr().getUserInfoList(stringList);
             observable.compose(RxUtil.<List<UserInfoLightweight>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                    .subscribe(new Action1<List<UserInfoLightweight>>() {
+                    .subscribe(new Observer<List<UserInfoLightweight>>() {
                         @Override
-                        public void call(List<UserInfoLightweight> lightweights) {
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onNext(List<UserInfoLightweight> lightweights) {
                             if (lightweights != null && lightweights.size() > 0) {
                                 ModuleMgr.getChatMgr().updateUserInfoList(lightweights);
                             }
                         }
-                    });
+                    }).unsubscribe();
 
             TimerUtil.beginTime(new TimerUtil.CallBack() {
                 @Override

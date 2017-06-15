@@ -56,6 +56,7 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
     }
 
     private void loadData() {
+        // TODO: 2017/6/14 注意正确的rx调用方式
         /*Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
         observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
                 .subscribe(new Action1<List<BaseMessage>>() {
@@ -91,6 +92,7 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
 
     @Override
     public void onRefresh() {
+        // TODO: 2017/6/14 注意正确的rx调用方式
         // 这里是加载更多信息的。
        /* Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
         observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))

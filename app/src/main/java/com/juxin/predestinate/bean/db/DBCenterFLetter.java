@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -16,10 +17,12 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 import rx.functions.Func1;
 
 /**
@@ -53,15 +56,24 @@ public class DBCenterFLetter {
 
     /**
      * 插入
+     *
      * @param message
      * @param dbMsgListener
      * @return
      */
     public void storageData(final BaseMessage message, final ChatMsgInterface.DBMsgListener dbMsgListener) {
         Observable<BaseMessage> observable = isExistEx(message.getWhisperID());
-        observable.subscribe(new Action1<BaseMessage>() {
+        observable.subscribe(new Observer<BaseMessage>() {
             @Override
-            public void call(BaseMessage temp) {
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(BaseMessage temp) {
                 if (temp == null) {
                     dbMsgListener.onDBMsgListener(insertLetter(message));
                 } else {
@@ -76,7 +88,7 @@ public class DBCenterFLetter {
                     }
                 }
             }
-        });
+        }).unsubscribe();
     }
 
     /**

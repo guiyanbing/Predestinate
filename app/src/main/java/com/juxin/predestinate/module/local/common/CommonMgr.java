@@ -176,20 +176,23 @@ public class CommonMgr implements ModuleBase {
      * 获取自己的音频、视频开关配置
      */
     public void requestVideochatConfig() {
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                if (response.isOk())
-                    videoVerify = (VideoVerifyBean) response.getBaseData();
-            }
-        });
+        requestVideochatConfig(null);
     }
 
     /**
      * 获取自己的音频、视频开关配置
      */
-    public void requestVideochatConfigSendUI(RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, complete);
+    public void requestVideochatConfig(final RequestComplete complete) {
+        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (complete != null) {
+                    complete.onRequestComplete(response);
+                }
+                if (response.isOk())
+                    videoVerify = (VideoVerifyBean) response.getBaseData();
+            }
+        });
     }
 
     /**

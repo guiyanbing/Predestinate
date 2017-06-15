@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.juxin.library.R;
 import com.juxin.library.image.transform.BlurImage;
@@ -251,7 +252,7 @@ public class ImageLoader {
             if (isActDestroyed(context))
                 return;
 
-            if (model instanceof Integer) {
+            if (model instanceof Integer && (Integer) model > 0) {
                 int key = getCacheKey((Integer) model, transformation);
                 Drawable drawable = cache.get(key);
                 if (drawable != null && callback != null) {
@@ -268,7 +269,7 @@ public class ImageLoader {
             builder.into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    if (model instanceof Integer) {
+                    if (model instanceof Integer && (Integer) model > 0) {
                         int key = getCacheKey((Integer) model, transformation);
                         cache.put(key, resource);
                     }

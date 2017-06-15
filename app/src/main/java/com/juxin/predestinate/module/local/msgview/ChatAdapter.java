@@ -3,13 +3,13 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -26,13 +26,16 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import rx.Observable;
-import rx.functions.Action1;
+
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -367,11 +370,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PLogger.printObject(this);
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
-        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Action1<List<BaseMessage>>() {
+        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0)
+                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
-                    public void call(List<BaseMessage> baseMessages) {
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
                         SortList.sortListView(baseMessages);//排序
                         List<BaseMessage> listTemp = new ArrayList<>();
 
@@ -388,8 +399,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
-                        if (isMachine)
-                            onDataUpdate();
+                        if (isMachine) onDataUpdate();
                     }
                 });
     }
@@ -546,11 +556,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        Observable<List<BaseMessage>> observable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
-        observable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Action1<List<BaseMessage>>() {
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page)
+                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
-                    public void call(List<BaseMessage> baseMessages) {
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
                         SortList.sortListView(baseMessages);// 排序
                         PLogger.printObject(baseMessages);
                         chatInstance.chatListView.stopRefresh();
@@ -560,7 +578,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                             }
 
                             List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
-
                             for (BaseMessage baseMessage : baseMessages) {
                                 if (isShowMsg(baseMessage)) {
                                     listTemp.add(baseMessage);
@@ -576,7 +593,6 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         }
                     }
                 });
-
     }
 
     @Override

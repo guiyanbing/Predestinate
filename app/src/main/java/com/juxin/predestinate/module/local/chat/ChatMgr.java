@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -26,7 +27,6 @@ import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -36,16 +36,20 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Observer;
 
 /**
  * 消息处理管理类
@@ -171,9 +175,17 @@ public class ChatMgr implements ModuleBase {
                 if (!messageRet.isOk() || !messageRet.isS()) return;
 
                 Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
-                observable.subscribe(new Action1<Boolean>() {
+                observable.subscribe(new Observer<Boolean>() {
                     @Override
-                    public void call(Boolean aBoolean) {
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
                         if (aBoolean) {
                             if (dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR) {
                                 return;
@@ -697,6 +709,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 获取系统推送消息
+     *
      * @param channelID
      * @param whisperID
      * @param page
@@ -704,7 +717,7 @@ public class ChatMgr implements ModuleBase {
      */
     public Observable<List<BaseMessage>> getSystemNotice(final String channelID, final String whisperID, int page) {
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
-        if(page == 0){
+        if (page == 0) {
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if (ret != MessageConstant.ERROR) {
                 ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
@@ -733,14 +746,13 @@ public class ChatMgr implements ModuleBase {
      * @param last_msgid 群最后一条消息ID
      */
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
-        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
             ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID, Long.valueOf(whisperID));
-        return observable;
+        return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
     }
 
     public void sendMailReadedMsg(String channelID, long userID) {
@@ -890,10 +902,18 @@ public class ChatMgr implements ModuleBase {
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
-            observable.subscribe(new Action1<UserInfoLightweight>() {
+            observable.subscribe(new Observer<UserInfoLightweight>() {
                 @Override
-                public void call(UserInfoLightweight lightweight) {
-                    PLogger.printObject("lightweight==222==" + lightweight);
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onNext(UserInfoLightweight lightweight) {
+                    PLogger.d("lightweight==222==" + lightweight);
                     if (lightweight.getUid() <= 0) {
                         removeInfoComplete(false, false, uid, lightweight);
                         getProFile(uid);

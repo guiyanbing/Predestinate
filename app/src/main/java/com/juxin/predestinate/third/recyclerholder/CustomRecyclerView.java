@@ -53,6 +53,13 @@ public class CustomRecyclerView extends LinearLayout {
         customFrameLayout = (CustomFrameLayout) view.findViewById(R.id.customFrameLayout);
         customFrameLayout.setList(new int[]{R.id.common_recyclerView, R.id.common_xrecyclerView, R.id.common_pagerecylerview,
                 R.id.common_nodata, R.id.common_loading, R.id.common_net_error});
+        customFrameLayout.setShowChangeListener(new CustomFrameLayout.OnShowChangeListener() {
+            @Override
+            public void onChange(CustomFrameLayout view, int id) {
+                if (id != R.id.common_loading)
+                    view.stopLoading(R.id.loading_gif);
+            }
+        });
     }
 
     /**
