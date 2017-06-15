@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -38,6 +39,7 @@ public class MyURLSpan extends ClickableSpan {
     private final static String URL_TYPE_CERTIFY_REAL_NAME = "certify_real_name";                 //实名认证
     private final static String URL_TYPE_CERTIFY_PHONE = "certify_phone";                 //手机认证
     private final static String URL_TYPE_INVITE_VIDEO = "invite_video";                 //发起视频聊天
+    private final static String URL_TYPE_SEND_GIFT = "send_gift";                 //送礼提示
 
 
     private final Context mContext;
@@ -132,6 +134,10 @@ public class MyURLSpan extends ClickableSpan {
                 case URL_TYPE_INVITE_VIDEO:
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) App.getActivity(),
                             otherID, VideoAudioChatHelper.TYPE_VIDEO_CHAT, channel_uid);
+                    break;
+                //送礼提示
+                case URL_TYPE_SEND_GIFT:
+                    UIShow.showBottomGiftDlg(App.getActivity(), otherID, Constant.OPEN_FROM_CHAT_FRAME, channel_uid);
                     break;
                 default:
                     int i = checkDownExUrl(mUrl);

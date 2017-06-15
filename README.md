@@ -33,6 +33,9 @@
 - [新类型消息测试接口](http://123.59.187.33:8681/test/PushUpdateTest?fuid=1001&tuid=1002&mct=)
 - [测试系统通知消息](http://123.59.187.33:8681/test/PushSysUpdate?fuid=9998&tuid=110872541&mct=%E5%8D%87%E7%BA%A7%E6%8F%90%E7%A4%BA&info=%E4%BD%A0%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%EF%BC%8C%E4%B8%BA%E4%BA%86%E8%83%BD%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%EF%BC%8C%E8%AF%B7%E5%8D%87%E7%BA%A7%E6%96%B0%E7%89%88%E3%80%82&btn_text=%E7%82%B9%E5%87%BB%E5%8D%87%E7%BA%A7&btn_action=check_update&pic=http://image1.yuanfenba.net/uploads/oss/avatar/201705/23/1518449570.jpg)
 - [测试推送发起视频提示](http://123.59.187.33:8681/test/TestPushVcTips?fuid=1111&tuid=1112)
+- [通用HTM HINT 测试接口 ](http://123.59.187.33:8681/test/TestPushHtmHint?fuid=1001&tuid=1002&mct=通用HTM消息测试&htm=送个礼物，对方立即接收既自动成为好友<a href="send_gift">点击赠送</a>)
+- [送礼提示](http://123.59.187.33:8681/test/TestPushNeedGift?fuid=1111&tuid=1112)
+
 
 - 待文档
 
