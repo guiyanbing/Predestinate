@@ -35,6 +35,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -720,15 +721,14 @@ public class ChatMgr implements ModuleBase {
     /**
      * 获取系统推送消息
      *
-     * @param channelID
-     * @param whisperID
      * @param page
      * @return
      */
-    public Observable<List<BaseMessage>> getSystemNotice(final String channelID, final String whisperID, int page) {
-        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
+    public Observable<List<BaseMessage>> getSystemNotice(int page) {
+        String systemMsg = String.valueOf(MailSpecialID.systemMsg.getSpecialID());
+        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(null, systemMsg, page, 20);
         if (page == 0) {
-            long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
+            long ret = dbCenter.getCenterFMessage().updateToRead(null, systemMsg);//把当前用户未读信息都更新成已读
             if (ret != MessageConstant.ERROR) {
                 ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
