@@ -536,7 +536,6 @@ public class BaseMessage implements IBaseMessage {
      */
     private void parseInfoJson(String jsonStr) {
         if (TextUtils.isEmpty(jsonStr)) return;
-        PLogger.d("jsonStr=" + jsonStr);
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
         this.setName(TextUtils.isEmpty(object.optString("remark")) ? object.optString("nickname") : object.optString("remark"));
