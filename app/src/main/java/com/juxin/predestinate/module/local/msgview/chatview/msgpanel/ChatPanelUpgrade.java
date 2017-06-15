@@ -6,7 +6,7 @@ import android.view.View;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
-import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.chat.msgtype.MaxVersionMessage;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
@@ -34,7 +34,7 @@ public class ChatPanelUpgrade extends ChatPanel {
 
     @Override
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
-        if (msgData == null || !MessageConstant.isMaxVersionMsg(msgData.getType())) return false;
+        if (msgData == null || !(msgData instanceof MaxVersionMessage)) return false;
         return true;
     }
 }
