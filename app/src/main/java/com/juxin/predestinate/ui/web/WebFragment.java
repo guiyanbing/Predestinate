@@ -57,6 +57,7 @@ public class WebFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             Invoker.getInstance().setWebView(webPanel == null ? null : webPanel.getWebView());
+            Invoker.getInstance().doInJS(Invoker.JSCMD_refresh_web, null);
         }
     }
 
