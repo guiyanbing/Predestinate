@@ -133,6 +133,7 @@ public class UserInfoLightweight extends UserBasic {
         this.setChannel_uid(jsonObject.optInt("channel_uid"));
         this.setGroup(jsonObject.optInt("group"));
         this.setOnline(jsonObject.optBoolean("isOnline"));
+        this.setPhotoNum(jsonObject.optInt("photoNum"));
 
         if (!jsonObject.isNull("videochatConfig")) {
             JSONObject configJsonObj = jsonObject.optJSONObject("videochatConfig");
