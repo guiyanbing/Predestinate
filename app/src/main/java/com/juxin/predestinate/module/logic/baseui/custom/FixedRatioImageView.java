@@ -36,7 +36,7 @@ public class FixedRatioImageView extends ImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mWidth = getMeasuredWidth();
-        if (mWidth != 0 && mHeightRatio != 0 & mWidthRatio != 0) {
+        if (mWidth != 0 && mHeightRatio != 0 && mWidthRatio != 0) {
             mHeight = mWidth * mHeightRatio / mWidthRatio;
         }
         if (this.getLayoutParams() != null && mHeight != 0) {

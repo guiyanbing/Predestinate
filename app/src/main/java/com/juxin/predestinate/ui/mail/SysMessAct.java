@@ -21,8 +21,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * 我的钻石页面
- * Created by zm on 2017/4/19
+ * 我的公告页面
+ * Created by zm on 2017/6/14
  */
 public class SysMessAct extends BaseActivity implements ExListView.IXListViewListener, ChatMsgInterface.ChatMsgListener {
 
