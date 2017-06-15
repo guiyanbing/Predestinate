@@ -29,6 +29,12 @@
         android:layout_marginTop="@dimen/px15_dp"
         android:layout_toLeftOf="@+id/chat_item_head"
         android:gravity="right">
+        <ImageView
+            android:id="@+id/chat_item_status_img_error"
+            android:layout_width="@dimen/px48_dp"
+            android:layout_height="@dimen/px48_dp"
+            android:layout_marginRight="@dimen/px18_dp"
+            android:visibility="gone"/>
 
         <FrameLayout
             android:id="@+id/chat_item_right_layout"
