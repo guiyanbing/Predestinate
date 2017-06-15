@@ -310,7 +310,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
                 HashMap<String, Object> data = (HashMap<String, Object>) value;
                 int type = (int) data.get("type");
-                if ((type == 0 || type == 2) && ModuleMgr.getChatMgr().refreshOfflineMsg()) {
+                if (type == 0) {
                     ModuleMgr.getChatMgr().getOfflineMsg();
                 }
                 break;
@@ -325,21 +325,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        ModuleMgr.getChatMgr().registerNetReceiver(this);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
-    }
-
-    @Override
-    protected void onStop() {
-        ModuleMgr.getChatMgr().unregisterNetReceiver(this);
-        super.onStop();
     }
 
     @Override

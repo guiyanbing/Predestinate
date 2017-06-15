@@ -130,6 +130,7 @@ public class MyAuthenticationAct extends BaseActivity implements View.OnClickLis
                 Statistics.userBehavior(SendPoint.menu_me_meauth_videoauth);
                 break;
             case R.id.ll_auth_id://身份认证
+                Statistics.userBehavior(SendPoint.menu_me_meauth_id);
                 UIShow.showIDCardAuthenticationAct(this, authIDCard);
                 break;
             default:
