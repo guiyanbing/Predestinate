@@ -340,6 +340,10 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 status.setVisibility(View.GONE);
                 statusProgress.setVisibility(View.GONE);
                 statusError.setVisibility(View.GONE);
+                if(MessageConstant.isMaxVersionMsg(msg.getType())){
+                    statusError.setVisibility(View.VISIBLE);
+                    statusError.setBackgroundResource(R.drawable.p1_msg_status_tip);
+                }
 
                 if (ChatMsgType.CMT_2 == msgType && msg.getfStatus() == 1) {
                     CommonMessage message = (CommonMessage) msg;

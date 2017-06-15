@@ -23,7 +23,6 @@ import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.ui.user.my.adapter.RedBagTabAdapter;
 import com.juxin.predestinate.ui.user.my.adapter.TreeRedBagTabAdapter;
 import com.switfpass.pay.utils.Util;
 
@@ -42,7 +41,7 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
     private ExListView rvList;
     private LinearLayout llSummary;
     private TextView tvData, tvPath, tvMoney, tvStatus;
-    private TextView tvNoData,tvTopTips,tv_sum_tip;
+    private TextView tvNoData, tvTopTips, tv_sum_tip;
     //数据相关
     private int mMinMoney;
     private List<RedbagList.RedbagInfo> mRedbagInfos;
@@ -91,7 +90,7 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
         tvTopTips.setText(Html.fromHtml("<font color='#cfc19a'>红包</font>"
                 + "<font color='#fb5e65'>24小时</font>"
                 + "<font color='#cfc19a'>后解冻且累积</font>"
-                + "<font color='#fb5e65'>满" + (int) Math.floor(mMinMoney/100) + "元</font>"
+                + "<font color='#fb5e65'>满" + (int) Math.floor(mMinMoney / 100) + "元</font>"
                 + "<font color='#cfc19a'>可一键放入零钱</font>"));
     }
 
@@ -138,6 +137,7 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
                 return;
             }
             PToast.showShort(response.getMsg());
+            return;
         }
         showNoData();
     }
@@ -148,15 +148,17 @@ public class TreeRedBagRecordPanel extends BasePanel implements RequestComplete,
         tv_sum_tip.setTextColor(Color.parseColor("#e3b382"));
         if (mRedbagInfos != null && !mRedbagInfos.isEmpty()) {
             mTreeRedBagTabAdapter.setList(mRedbagInfos);
-            if(oneKeyNum / 100 >= mMinMoney / 100) {
+            if (oneKeyNum / 100 >= mMinMoney / 100) {
                 butOneKey.setEnabled(true);
                 tv_sum_tip.setText("可放入零钱金额已达" + oneKeyNum / 100 + "元");
-            }else {
+            } else {
                 butOneKey.setEnabled(false);
                 tv_sum_tip.setText("可放入零钱金额不足" + (int) Math.floor(mMinMoney / 100) + "元");
             }
             showCollect();
         } else {
+            if (mRedbagInfos != null)
+                mTreeRedBagTabAdapter.setList(mRedbagInfos);
             butOneKey.setEnabled(false);
             tv_sum_tip.setVisibility(View.VISIBLE);
             tv_sum_tip.setText("可放入零钱金额不足" + (int) Math.floor(mMinMoney / 100) + "元");

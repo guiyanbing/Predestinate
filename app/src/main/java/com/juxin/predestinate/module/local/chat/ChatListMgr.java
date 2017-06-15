@@ -38,6 +38,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -217,10 +218,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
      *
      * @param messageList
      */
-    public void deleteBatchMessage(List<BaseMessage> messageList) {
-        for (BaseMessage temp : messageList) {
-            dbCenter.deleteMessage(temp.getLWhisperID());
-        }
+    public void deleteBatchMessage(final List<BaseMessage> messageList) {
+        MsgMgr.getInstance().runOnChildThread(new Runnable() {
+            @Override
+            public void run() {
+                for (BaseMessage temp : messageList) {
+                    dbCenter.deleteMessage(temp.getLWhisperID());
+                }
+            }
+        });
     }
 
     public long deleteMessage(long userID) {
@@ -243,9 +249,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * 更新已读
      */
     public void updateToReadAll() {
-        if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
-            getWhisperListUnSubscribe();
-        }
+        MsgMgr.getInstance().runOnChildThread(new Runnable() {
+            @Override
+            public void run() {
+                if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
+                    getWhisperListUnSubscribe();
+                }
+            }
+        });
     }
 
     public void updateToBatchRead(List<BaseMessage> greetList) {
