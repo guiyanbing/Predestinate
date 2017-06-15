@@ -1,5 +1,10 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -11,12 +16,15 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
+import com.juxin.predestinate.bean.start.OfflineBean;
+import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
@@ -36,6 +44,8 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import org.json.JSONObject;
 
@@ -99,7 +109,7 @@ public class ChatMgr implements ModuleBase {
     public void updateLocalReadStatus(final String channelID, final String whisperID, final long msgID) {
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+            ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
         }
     }
 
@@ -725,7 +735,7 @@ public class ChatMgr implements ModuleBase {
         if (page == 0) {
             long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
             if (ret != MessageConstant.ERROR) {
-                ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+                ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
         }
         return observable;
@@ -751,14 +761,13 @@ public class ChatMgr implements ModuleBase {
      * @param last_msgid 群最后一条消息ID
      */
     public Observable<List<BaseMessage>> getRecentlyChat(final String channelID, final String whisperID, long last_msgid) {
-        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
         long ret = dbCenter.getCenterFMessage().updateToRead(channelID, whisperID);//把当前用户未读信息都更新成已读
         if (ret != MessageConstant.ERROR) {
-            ModuleMgr.getChatListMgr().getWhisperListUnsubscribe();
+            ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
         }
         if (ret > 0 && !TextUtils.isEmpty(whisperID))
             sendMailReadedMsg(channelID, Long.valueOf(whisperID));
-        return observable;
+        return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
     }
 
     public void sendMailReadedMsg(String channelID, long userID) {
@@ -919,7 +928,7 @@ public class ChatMgr implements ModuleBase {
 
                 @Override
                 public void onNext(UserInfoLightweight lightweight) {
-                    PLogger.d("lightweight==222==" + lightweight);
+                    PLogger.d("---getUserInfoLightweight--->" + lightweight);
                     if (lightweight.getUid() <= 0) {
                         removeInfoComplete(false, false, uid, lightweight);
                         getProFile(uid);
@@ -944,7 +953,7 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                PLogger.printObject("re=====" + response.getResponseString());
+                PLogger.d("---getProFile--->" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if (!response.isOk()) {
                     removeInfoComplete(true, false, userID, temp);
@@ -953,7 +962,7 @@ public class ChatMgr implements ModuleBase {
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
                 infoLightweightList.parseJsonSummary(response.getResponseJson());
 
-                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                if (infoLightweightList.getUserInfos() != null && !infoLightweightList.getUserInfos().isEmpty()) {//数据大于1条
                     temp = infoLightweightList.getUserInfos().get(0);
                     temp.setTime(getTime());
                     dbCenter.getCacheCenter().storageProfileData(temp);
@@ -966,10 +975,21 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
+    /**
+     * 从数据库中查询多个用户信息
+     *
+     * @param uids 用户uid集合
+     * @return 查询结果Observable
+     */
     public Observable<List<UserInfoLightweight>> getUserInfoList(List<Long> uids) {
         return dbCenter.getCacheCenter().queryProfile(uids);
     }
 
+    /**
+     * 批量请求简略个人资料
+     *
+     * @param userIds 用户uid集合
+     */
     public void getProFile(List<Long> userIds) {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, new RequestComplete() {
             @Override
@@ -990,10 +1010,12 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights) {
-        dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
-    }
-
+    /**
+     * 带回调地请求单个用户的简略个人资料
+     *
+     * @param userID       查询的用户uid
+     * @param infoComplete 查询完成回调
+     */
     public void getNetSingleProfile(final long userID, final ChatMsgInterface.InfoComplete infoComplete) {
         List<Long> longs = new ArrayList<>();
         longs.add(userID);
@@ -1021,35 +1043,158 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 批量更新数据库中存储的简略个人资料
+     *
+     * @param infoLightweights 需要批量更新的简略个人资料
+     */
+    public void updateUserInfoList(List<UserInfoLightweight> infoLightweights) {
+        dbCenter.getCenterFLetter().updateUserInfoLightList(infoLightweights);
+    }
+
+    /**
      * 更新个人资料
      *
-     * @param isRemove        是否要重回调map中移除 true是移除
-     * @param isOK            是否请求成功 true是成功
+     * @param isRemove        是否要从回调map中移除：true是移除（回调成功之后移除本次回调）
+     * @param isOK            是否请求成功：true是成功（包括数据库查询成功及请求返回数据成功）
      * @param infoLightweight 个人资料数据
      */
     private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
-        PLogger.printObject(infoLightweight);
+        PLogger.d("------>" + String.valueOf(infoLightweight));
         synchronized (infoMap) {
             if (infoMap.size() <= 0) return;
-            ChatMsgInterface.InfoComplete infoComplete = null;
-            for (Object key : infoMap.keySet()) {
-                if (key.equals(userID)) {
-                    ChatMsgInterface.InfoComplete temp = infoMap.get(key);
-                    if (temp != null) {
-                        temp.onReqComplete(isOK, infoLightweight);
-                        infoComplete = temp;
-                    }
-                }
-            }
+            ChatMsgInterface.InfoComplete infoComplete = infoMap.get(userID);
+            if (infoComplete != null) infoComplete.onReqComplete(isOK, infoLightweight);
+            if (isRemove && infoComplete != null) infoMap.remove(userID);
+        }
+    }
 
-            if (isRemove && infoComplete != null) {
-                infoMap.remove(infoComplete);
+    // ------------------------------------- 离线消息处理 ------------------------------------
+    private NetReceiver netReceiver = new NetReceiver();
+    private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
+    private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
+    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
+
+    /**
+     * 注册网络变化监听广播
+     */
+    public void registerNetReceiver(Activity activity) {
+        if (netReceiver == null) netReceiver = new NetReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        activity.registerReceiver(netReceiver, filter);
+    }
+
+    public void unregisterNetReceiver(Activity activity) {
+        if (netReceiver == null) return;
+        activity.unregisterReceiver(netReceiver);
+        netReceiver = null;
+    }
+
+    /**
+     * 网络监测
+     */
+    private class NetReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
+                    && refreshOfflineMsg()) {
+                getOfflineMsg();
             }
         }
     }
 
+    /**
+     * 离线消息刷新间隔控制
+     */
+    public boolean refreshOfflineMsg() {
+        if (checkIntervalTimeUtil == null) {
+            checkIntervalTimeUtil = new CheckIntervalTimeUtil();
+        }
+        return checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL);
+    }
+
+    /**
+     * 获取离线消息并处理
+     */
+    public void getOfflineMsg() {
+        ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("offlineMsg:  " + response.getResponseString());
+                if (!response.isOk()) return;
+
+                OfflineMsg offlineMsg = (OfflineMsg) response.getBaseData();
+                if (offlineMsg == null || offlineMsg.getMsgList().size() <= 0)
+                    return;
+
+                // 逐条处理离线消息
+                for (OfflineBean bean : offlineMsg.getMsgList()) {
+                    if (bean == null) continue;
+
+                    dispatchOfflineMsg(bean);
+                }
+
+                // 服务器每次最多返50条，若超过则再次请求
+                if (offlineMsg.getMsgList().size() >= 50) {
+                    getOfflineMsg();
+                    return;
+                }
+                dispatchLastOfflineAVMap();
+            }
+        });
+    }
+
+    /**
+     * 离线消息派发
+     */
+    private void dispatchOfflineMsg(OfflineBean bean) {
+        if (bean.getD() == 0) return;
+        if (lastOfflineAVMap == null) lastOfflineAVMap = new HashMap<>();
+
+        // 音视频消息
+        if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
+            long vc_id = bean.getVc_id();
+            if (lastOfflineAVMap.get(vc_id) == null) {
+                lastOfflineAVMap.put(vc_id, bean);
+            } else {
+                lastOfflineAVMap.remove(vc_id);
+            }
+            return;
+        }
+        offlineMessage(bean.getJsonStr());
+    }
+
+    /**
+     * 处理最新的音视频离线消息
+     */
+    private void dispatchLastOfflineAVMap() {
+        if (lastOfflineAVMap == null || lastOfflineAVMap.size() == 0) return;
+        if (BaseUtil.isScreenLock(App.context)) return;
+
+        OfflineBean bean = null;
+        long mt = 0;
+
+        for (Map.Entry<Long, OfflineBean> entry : lastOfflineAVMap.entrySet()) {
+            OfflineBean msgBean = entry.getValue();
+            if (msgBean == null) return;
+
+            // 邀请加入聊天, 过滤最新一条
+            if (msgBean.getVc_tp() == 1) {
+                long t = msgBean.getMt();   // 最新时间戳
+                if (t > mt) {
+                    mt = t;
+                    bean = msgBean;
+                }
+            }
+        }
+        lastOfflineAVMap.clear();
+        if (bean != null) {
+            offlineMessage(bean.getJsonStr());
+        }
+    }
+
     //离线消息
-    public void offlineMessage(String str) {
+    private void offlineMessage(String str) {
         try {
             JSONObject tmp = new JSONObject(str);
             long from_id = tmp.optLong("fid");//发送者ID

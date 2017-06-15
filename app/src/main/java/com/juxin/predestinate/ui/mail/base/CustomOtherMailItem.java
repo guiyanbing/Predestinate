@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
@@ -53,7 +54,7 @@ public class CustomOtherMailItem extends CustomBaseMailItem {
     public void showData(BaseMessage msgData) {
         this.msgData = msgData;
 
-        ImageLoader.loadRoundAvatar(getContext(), !TextUtils.isEmpty(msgData.getAvatar()) ? 
+        ImageLoader.loadRoundAvatar(getContext(), !TextUtils.isEmpty(msgData.getAvatar()) ?
                 msgData.getAvatar() : msgData.getLocalAvatar(), item_headpic);
 
         String nickname = msgData.getName();

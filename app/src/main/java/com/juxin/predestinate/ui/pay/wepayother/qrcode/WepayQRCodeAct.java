@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.DirType;
@@ -126,6 +128,8 @@ public class WepayQRCodeAct extends BaseActivity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        //通知刷个人资料  在
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
     }
 
     @Override
@@ -220,4 +224,5 @@ public class WepayQRCodeAct extends BaseActivity implements OnClickListener {
         timer.cancel();
         super.onDestroy();
     }
+
 }

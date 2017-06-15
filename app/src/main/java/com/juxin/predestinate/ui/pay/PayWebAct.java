@@ -17,6 +17,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
@@ -87,6 +89,13 @@ public class PayWebAct extends BaseActivity {
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.payalipay_web_custom);
         payalipay_web_webview = (WebView) findViewById(R.id.payalipay_web_webview);
         customFrameLayout.setList(new int[]{R.id.payalipay_web_webview, R.id.common_loading, R.id.common_net_error});
+        customFrameLayout.setShowChangeListener(new CustomFrameLayout.OnShowChangeListener() {
+            @Override
+            public void onChange(CustomFrameLayout view, int id) {
+                if (id != R.id.common_loading)
+                    view.stopLoading(R.id.loading_gif);
+            }
+        });
         payalipay_web_webview.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         initData();
         findViewById(R.id.error_btn).setOnClickListener(new View.OnClickListener() {
@@ -287,5 +296,12 @@ public class PayWebAct extends BaseActivity {
             payalipay_web_webview.clearHistory();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //通知刷个人资料  在
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
     }
 }

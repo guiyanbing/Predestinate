@@ -10,7 +10,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -34,8 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -370,38 +370,38 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PLogger.printObject(this);
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
-        Observable<List<BaseMessage>> listObservable = ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0);
-        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+        ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0)
+                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);//排序
-                List<BaseMessage> listTemp = new ArrayList<>();
-
-                if (baseMessages.size() < 20) {
-                    chatInstance.chatListView.setPullRefreshEnable(false);
-                }
-                if (baseMessages.size() > 0) {
-                    for (BaseMessage baseMessage : baseMessages) {
-                        if (isShowMsg(baseMessage)) {
-                            listTemp.add(baseMessage);
-                        }
+                    @Override
+                    public void onCompleted() {
                     }
-                }
 
-                chatInstance.chatContentAdapter.setList(listTemp);
-                moveToBottom();
-                if (isMachine) onDataUpdate();
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        SortList.sortListView(baseMessages);//排序
+                        List<BaseMessage> listTemp = new ArrayList<>();
+
+                        if (baseMessages.size() < 20) {
+                            chatInstance.chatListView.setPullRefreshEnable(false);
+                        }
+                        if (baseMessages.size() > 0) {
+                            for (BaseMessage baseMessage : baseMessages) {
+                                if (isShowMsg(baseMessage)) {
+                                    listTemp.add(baseMessage);
+                                }
+                            }
+                        }
+
+                        chatInstance.chatContentAdapter.setList(listTemp);
+                        moveToBottom();
+                        if (isMachine) onDataUpdate();
+                    }
+                });
     }
 
     /**
@@ -556,43 +556,43 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onRefresh() {
         // 这里是加载更多信息的。
-        Observable<List<BaseMessage>> listObservable = ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page);
-        listObservable.compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
+        ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page)
+                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                SortList.sortListView(baseMessages);// 排序
-                PLogger.printObject(baseMessages);
-                chatInstance.chatListView.stopRefresh();
-                if (baseMessages.size() > 0) {
-                    if (baseMessages.size() < 20) {
-                        chatInstance.chatListView.setPullRefreshEnable(false);
+                    @Override
+                    public void onCompleted() {
                     }
 
-                    List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
-                    for (BaseMessage baseMessage : baseMessages) {
-                        if (isShowMsg(baseMessage)) {
-                            listTemp.add(baseMessage);
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        SortList.sortListView(baseMessages);// 排序
+                        PLogger.printObject(baseMessages);
+                        chatInstance.chatListView.stopRefresh();
+                        if (baseMessages.size() > 0) {
+                            if (baseMessages.size() < 20) {
+                                chatInstance.chatListView.setPullRefreshEnable(false);
+                            }
+
+                            List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+                            for (BaseMessage baseMessage : baseMessages) {
+                                if (isShowMsg(baseMessage)) {
+                                    listTemp.add(baseMessage);
+                                }
+                            }
+
+                            if (chatInstance.chatContentAdapter.getList() != null) {
+                                listTemp.addAll(chatInstance.chatContentAdapter.getList());
+                            }
+
+                            chatInstance.chatContentAdapter.setList(listTemp);
+                            chatInstance.chatListView.setSelection(baseMessages.size());
                         }
                     }
-
-                    if (chatInstance.chatContentAdapter.getList() != null) {
-                        listTemp.addAll(chatInstance.chatContentAdapter.getList());
-                    }
-
-                    chatInstance.chatContentAdapter.setList(listTemp);
-                    chatInstance.chatListView.setSelection(baseMessages.size());
-                }
-            }
-        });
+                });
     }
 
     @Override
