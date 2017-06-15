@@ -21,6 +21,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
@@ -225,6 +226,10 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                 }
             } else {
+                if(MailSpecialID.systemMsg.getSpecialID() == message.getLWhisperID()){//公告
+                    UIShow.showSysMessActivity(getActivity());
+                    return;
+                }
                 UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKfID());
                 StatisticsMessage.openChat(message.getLWhisperID(), ModuleMgr.getChatListMgr().getNoReadNum(message.getLWhisperID()));
             }
