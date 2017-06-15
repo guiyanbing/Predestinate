@@ -374,12 +374,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
-                    public void onCompleted() {
-                    }
+                    public void onCompleted() {}
 
                     @Override
-                    public void onError(Throwable e) {
-                    }
+                    public void onError(Throwable e) {}
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
