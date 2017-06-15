@@ -1,5 +1,10 @@
 package com.juxin.predestinate.module.local.chat;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -11,12 +16,15 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
+import com.juxin.predestinate.bean.start.OfflineBean;
+import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
@@ -36,6 +44,8 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
+import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import org.json.JSONObject;
 
@@ -1042,8 +1052,133 @@ public class ChatMgr implements ModuleBase {
         }
     }
 
+    // ------------------------------------- 离线消息处理 ------------------------------------
+    private NetReceiver netReceiver = new NetReceiver();
+    private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
+    private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
+    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
+
+    /**
+     * 注册网络变化监听广播
+     */
+    public void registerNetReceiver(Activity activity) {
+        if (netReceiver == null) netReceiver = new NetReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        activity.registerReceiver(netReceiver, filter);
+    }
+
+    public void unregisterNetReceiver(Activity activity) {
+        if (netReceiver == null) return;
+        activity.unregisterReceiver(netReceiver);
+        netReceiver = null;
+    }
+
+    /**
+     * 网络监测
+     */
+    private class NetReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
+                    && refreshOfflineMsg()) {
+                getOfflineMsg();
+            }
+        }
+    }
+
+    /**
+     * 离线消息刷新间隔控制
+     */
+    public boolean refreshOfflineMsg() {
+        if (checkIntervalTimeUtil == null) {
+            checkIntervalTimeUtil = new CheckIntervalTimeUtil();
+        }
+        return checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL);
+    }
+
+    /**
+     * 获取离线消息并处理
+     */
+    public void getOfflineMsg() {
+        ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                PLogger.d("offlineMsg:  " + response.getResponseString());
+                if (!response.isOk()) return;
+
+                OfflineMsg offlineMsg = (OfflineMsg) response.getBaseData();
+                if (offlineMsg == null || offlineMsg.getMsgList().size() <= 0)
+                    return;
+
+                // 逐条处理离线消息
+                for (OfflineBean bean : offlineMsg.getMsgList()) {
+                    if (bean == null) continue;
+
+                    dispatchOfflineMsg(bean);
+                }
+
+                // 服务器每次最多返50条，若超过则再次请求
+                if (offlineMsg.getMsgList().size() >= 50) {
+                    getOfflineMsg();
+                    return;
+                }
+                dispatchLastOfflineAVMap();
+            }
+        });
+    }
+
+    /**
+     * 离线消息派发
+     */
+    private void dispatchOfflineMsg(OfflineBean bean) {
+        if (bean.getD() == 0) return;
+        if (lastOfflineAVMap == null) lastOfflineAVMap = new HashMap<>();
+
+        // 音视频消息
+        if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
+            long vc_id = bean.getVc_id();
+            if (lastOfflineAVMap.get(vc_id) == null) {
+                lastOfflineAVMap.put(vc_id, bean);
+            } else {
+                lastOfflineAVMap.remove(vc_id);
+            }
+            return;
+        }
+        offlineMessage(bean.getJsonStr());
+    }
+
+    /**
+     * 处理最新的音视频离线消息
+     */
+    private void dispatchLastOfflineAVMap() {
+        if (lastOfflineAVMap == null || lastOfflineAVMap.size() == 0) return;
+        if (BaseUtil.isScreenLock(App.context)) return;
+
+        OfflineBean bean = null;
+        long mt = 0;
+
+        for (Map.Entry<Long, OfflineBean> entry : lastOfflineAVMap.entrySet()) {
+            OfflineBean msgBean = entry.getValue();
+            if (msgBean == null) return;
+
+            // 邀请加入聊天, 过滤最新一条
+            if (msgBean.getVc_tp() == 1) {
+                long t = msgBean.getMt();   // 最新时间戳
+                if (t > mt) {
+                    mt = t;
+                    bean = msgBean;
+                }
+            }
+        }
+        lastOfflineAVMap.clear();
+        if (bean != null) {
+            offlineMessage(bean.getJsonStr());
+        }
+    }
+
     //离线消息
-    public void offlineMessage(String str) {
+    private void offlineMessage(String str) {
         try {
             JSONObject tmp = new JSONObject(str);
             long from_id = tmp.optLong("fid");//发送者ID
