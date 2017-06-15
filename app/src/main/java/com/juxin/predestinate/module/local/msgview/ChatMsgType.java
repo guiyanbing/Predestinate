@@ -40,12 +40,9 @@ public enum ChatMsgType {
 
     CMT_28(ChatPanelText.class, "自动升级提示消息"),
 
-    CMT_29(ChatPanelSysNotice.class, "系统消息"),
+    CMT_29(ChatPanelSysNotice.class,  ChatPanelType.CPT_Custom, "系统消息"),
 
     CMT_Max(ChatPanelUpgrade.class, "该版本不能显示的消息"),
-
-
-    //  CMT_7("已读消息"),
 
     // 非有效类型
     CMT_Invalid(null, "非有效类型");

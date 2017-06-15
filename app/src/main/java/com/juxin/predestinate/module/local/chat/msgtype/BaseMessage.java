@@ -574,6 +574,9 @@ public class BaseMessage implements IBaseMessage {
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
+            case sysNotice:
+                message = new SysNoticeMessage(bundle, true);
+                break;
             default:
                 message = new BaseMessage(bundle, true);
                 break;
@@ -610,6 +613,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case video:
                 message = new VideoMessage(bundle);
+                break;
+            case sysNotice:
+                message = new SysNoticeMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -678,6 +684,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case autoUpdateHtml:
                 result = "[系统消息]";
+                break;
+            case sysNotice:
+                result = "[系统通知]";
                 break;
             default:
                 result = msg.getMsgDesc();

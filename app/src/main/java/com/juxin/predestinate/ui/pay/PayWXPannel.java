@@ -28,4 +28,6 @@ public class PayWXPannel extends BasePayPannel {
         super.onClick(v);
         payWeixinUtils.onPayment(getPayGood());
     }
+
+
 }
