@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ListView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
@@ -27,7 +28,7 @@ import rx.schedulers.Schedulers;
  * 我的钻石页面
  * Created by zm on 2017/4/19
  */
-public class SysMessAct extends BaseActivity implements ExListView.IXListViewListener,ChatMsgInterface.ChatMsgListener {
+public class SysMessAct extends BaseActivity implements ExListView.IXListViewListener, ChatMsgInterface.ChatMsgListener {
 
     //控件
     private CustomStatusListView cslList;
@@ -59,25 +60,25 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
     }
 
     private void initData() {
-        testData();
         loadData();
         mSysMessAdapter.setList(sysMess);
-        cslList.showExListView();
+        cslList.showLoading();
     }
 
     private void loadData() {
         // TODO: 2017/6/14 注意正确的rx调用方式
-        ModuleMgr.getChatMgr().attachChatListener("9999", this);
-        ModuleMgr.getChatMgr().getRecentlyChat("", "9999", 0)
+        ModuleMgr.getChatMgr().attachChatListener("9998", this);
+        ModuleMgr.getChatMgr().getRecentlyChat("", "9998", 0)
                 .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
-
+                        cslList.showExListView();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        cslList.showExListView();
                     }
 
                     @Override
@@ -85,7 +86,7 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                SortList.sortListView(baseMessages);//排序
+                                SortList.sortTimeListView(baseMessages);//排序
                                 List<SysNoticeMessage> listTemp = new ArrayList<>();
 
                                 if (baseMessages.size() < 20) {
@@ -100,7 +101,13 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
                                 }
 
                                 mSysMessAdapter.setList(listTemp);
-                                moveToBottom();
+                                listDatas.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cslList.showExListView();
+                                        moveToBottom();
+                                    }
+                                },800);
                             }
                         });
                     }
@@ -112,14 +119,14 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
      */
     public void moveToBottom() {
         if (mSysMessAdapter.getCount() > 0)
-            listDatas.setSelection(mSysMessAdapter.getCount() - 1);
+            listDatas.setSelection(ListView.FOCUS_DOWN);
     }
 
     @Override
     public void onRefresh() {
         // TODO: 2017/6/14 注意正确的rx调用方式
         // 这里是加载更多信息的。
-        ModuleMgr.getChatMgr().getHistoryChat("", "9999", ++page)
+        ModuleMgr.getChatMgr().getHistoryChat("", "9998", ++page)
                 .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
@@ -137,7 +144,7 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                SortList.sortListView(baseMessages);// 排序
+                                SortList.sortTimeListView(baseMessages);// 排序
                                 PLogger.printObject(baseMessages);
                                 listDatas.stopRefresh();
                                 if (baseMessages.size() > 0) {
@@ -171,29 +178,20 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
 
     }
 
-    private void testData() {
-        if (sysMess == null)
-            sysMess = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            SysNoticeMessage diamond = new SysNoticeMessage();
-            diamond.setTime(System.currentTimeMillis());
-            if (i % 2 == 1) {
-                diamond.setInfo("活动");
-                diamond.setBtn_text("点击查看");
-                diamond.setPic("OO");
-                diamond.setMsgDesc("系统活动");
-            } else {
-                diamond.setInfo(this.getString(R.string.sys_mess_content));
-                diamond.setBtn_text(this.getString(R.string.sys_mess_btn_text));
-                diamond.setMsgDesc(this.getString(R.string.updata_mess));
-            }
-            sysMess.add(diamond);
-        }
-    }
-
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
-
+        if (message == null)
+            return;
+        if (!(message instanceof SysNoticeMessage))
+            return;
+        if (mSysMessAdapter.getList() == null)
+            return;
+        if (message.getTime() == 0) {
+            message.setTime(ModuleMgr.getAppMgr().getTime());
+        }
+        mSysMessAdapter.getList().add((SysNoticeMessage) message);
+        mSysMessAdapter.notifyDataSetChanged();
+        moveToBottom();
     }
 
     @Override

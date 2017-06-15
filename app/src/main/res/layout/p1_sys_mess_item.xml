@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:auto="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/bg_color"
@@ -35,11 +36,14 @@
             android:textColor="@color/black"
             android:textSize="@dimen/px48_sp"/>
 
-        <com.juxin.predestinate.module.logic.baseui.custom.CropEndImageView
+        <com.juxin.predestinate.module.logic.baseui.custom.FixedRatioImageView
             android:id="@+id/sys_mess_item_img_pic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/px46_dp"
+            auto:mWidthRatio="521"
+            auto:mHeightRatio="245"
+            android:scaleType="centerCrop"
             android:visibility="gone"/>
 
         <TextView
