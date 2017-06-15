@@ -150,22 +150,22 @@ public class DBCenterFUnRead {
                 .append(key);
 
         return mDatabase.createQuery(FUnRead.FUNREAD_TABLE, sql.toString()).map(new Func1<SqlBrite.Query, String>() {
-            @Override
-            public String call(SqlBrite.Query query) {
-                Cursor cursor = null;
-                try {
-                    cursor = query.run();
-                    if (cursor != null && cursor.moveToFirst()) {
-                        return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
+                    @Override
+                    public String call(SqlBrite.Query query) {
+                        Cursor cursor = null;
+                        try {
+                            cursor = query.run();
+                            if (cursor != null && cursor.moveToFirst()) {
+                                return CursorUtil.getBlobToString(cursor, FUnRead.COLUMN_CONTENT);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }finally {
+                            CloseUtil.close(cursor);
+                        }
+                        return null;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    CloseUtil.close(cursor);
-                }
-                return null;
-            }
-        });
+                });
     }
 
     /**

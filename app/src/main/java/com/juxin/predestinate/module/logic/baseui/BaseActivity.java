@@ -10,9 +10,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
-import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -109,14 +109,12 @@ public class BaseActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        FloatingMgr.getInstance().onResume(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
-        FloatingMgr.getInstance().onPause(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -29,15 +28,11 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -153,7 +148,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     greetNum += tmp.getNum();
                 }
                 unreadNum += tmp.getNum();
-                PLogger.d("unreadNum=" + tmp.getNum());
             }
         }
         unreadNum += getFollowNum();//关注
@@ -218,10 +212,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
      *
      * @param messageList
      */
-    public void deleteBatchMessage(List<BaseMessage> messageList) {
-        for (BaseMessage temp : messageList) {
-            dbCenter.deleteMessage(temp.getLWhisperID());
-        }
+    public void deleteBatchMessage(final List<BaseMessage> messageList) {
+        MsgMgr.getInstance().runOnChildThread(new Runnable() {
+            @Override
+            public void run() {
+                for (BaseMessage temp : messageList) {
+                    dbCenter.deleteMessage(temp.getLWhisperID());
+                }
+            }
+        });
     }
 
     public long deleteMessage(long userID) {
@@ -244,9 +243,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * 更新已读
      */
     public void updateToReadAll() {
-        if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
-            getWhisperListUnsubscribe();
-        }
+        MsgMgr.getInstance().runOnChildThread(new Runnable() {
+            @Override
+            public void run() {
+                if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
+                    getWhisperListUnSubscribe();
+                }
+            }
+        });
     }
 
     public void updateToBatchRead(List<BaseMessage> greetList) {
@@ -254,7 +258,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             return;
         }
         dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperListUnsubscribe();
+        getWhisperListUnSubscribe();
     }
 
     /**
@@ -266,11 +270,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public long updateToReadPrivate(long userID) {
         long ret = dbCenter.getCenterFLetter().updateStatus(userID);
         if (ret != MessageConstant.ERROR) {
-            getWhisperListUnsubscribe();
+            getWhisperListUnSubscribe();
         }
         return ret;
     }
 
+    /**
+     * 获取消息列表，初始化时进行调用，不取消订阅，外部请勿使用
+     */
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
         dbCenter.getCenterFLetter().queryLetterList()
@@ -292,7 +299,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 });
     }
 
-    public void getWhisperListUnsubscribe() {
+    /**
+     * 获取消息列表，外部使用，查询完成后取消订阅
+     */
+    public void getWhisperListUnSubscribe() {
         PLogger.d("getWhisperList====2");
         dbCenter.getCenterFLetter().queryLetterList()
                 .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
@@ -310,7 +320,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                         PLogger.d("getWhisperList=un===2" + baseMessages.size());
                         updateListMsg(baseMessages);
                     }
-                });
+                }).unsubscribe();
     }
 
     @Override
@@ -324,7 +334,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                         @Override
                         public void onRequestComplete(HttpResponse response) {
-                            getWhisperListUnsubscribe();
+                            getWhisperListUnSubscribe();
                         }
                     });
                 }

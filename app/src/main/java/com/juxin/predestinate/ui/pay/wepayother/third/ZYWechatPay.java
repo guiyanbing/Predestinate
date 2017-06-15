@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.zy.i.IPayResult;
 import com.zy.pay.ZYPayTools;
 
@@ -31,6 +33,8 @@ public class ZYWechatPay {
             public void PayResult(boolean isPay) {
                 if (isPay) {
                     PToast.showShort( "支付成功");
+                    //通知刷个人资料  在
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                 } else {
                     PToast.showShort( "支付失败");
                 }

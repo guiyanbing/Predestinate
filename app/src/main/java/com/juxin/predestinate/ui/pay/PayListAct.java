@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.pay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
@@ -8,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.config.PayTypeList;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
@@ -107,5 +110,12 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
                 break;
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //通知刷个人资料  在
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
     }
 }

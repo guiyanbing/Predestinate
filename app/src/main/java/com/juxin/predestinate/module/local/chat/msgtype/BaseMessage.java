@@ -36,6 +36,9 @@ public class BaseMessage implements IBaseMessage {
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
+        maxVersion(MaxVersionMessage.class, 0),//最大版本消息
+
+
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
@@ -47,6 +50,10 @@ public class BaseMessage implements IBaseMessage {
         }
 
         public static BaseMessageType valueOf(int msgType) {
+            if(MessageConstant.isMaxVersionMsg(msgType)){
+                return BaseMessageType.maxVersion;
+            }
+
             for (BaseMessageType messageType : BaseMessageType.values()) {
                 if (messageType.getMsgType() == msgType) {
                     return messageType;
@@ -536,7 +543,6 @@ public class BaseMessage implements IBaseMessage {
      */
     private void parseInfoJson(String jsonStr) {
         if (TextUtils.isEmpty(jsonStr)) return;
-        PLogger.d("jsonStr=" + jsonStr);
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
         this.setName(TextUtils.isEmpty(object.optString("remark")) ? object.optString("nickname") : object.optString("remark"));
@@ -575,6 +581,9 @@ public class BaseMessage implements IBaseMessage {
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
+            case sysNotice:
+                message = new SysNoticeMessage(bundle, true);
+                break;
             default:
                 message = new BaseMessage(bundle, true);
                 break;
@@ -611,6 +620,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case video:
                 message = new VideoMessage(bundle);
+                break;
+            case sysNotice:
+                message = new SysNoticeMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -679,6 +691,12 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case autoUpdateHtml:
                 result = "[系统消息]";
+                break;
+            case sysNotice:
+                result = "[系统通知]";
+                break;
+            case maxVersion:
+                result = "[你的版本过低，无法接收此类消息]";
                 break;
             default:
                 result = msg.getMsgDesc();

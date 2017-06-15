@@ -3,6 +3,8 @@ package com.juxin.predestinate.ui.pay.wepayother.third;
 import android.content.Context;
 
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.third.wa5.sdk.IThirdCallback;
@@ -63,6 +65,8 @@ public class ZFWechatPay {
             @Override
             public void onSuccess() {
                 PToast.showShort("支付成功！");
+                //通知刷个人资料  在
+                MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
             }
 
             @Override

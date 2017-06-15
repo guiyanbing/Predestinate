@@ -8,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.notify.FloatingMgr;
+import com.juxin.predestinate.ui.main.MainActivity;
 
 /**
  * 私聊信息提示panel
@@ -38,7 +37,8 @@ public class CustomFloatingPanel extends FloatingBasePanel {
         findViewById(R.id.btn_ignore).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FloatingMgr.getInstance().removePanel(CustomFloatingPanel.this);
+                if (context instanceof MainActivity)
+                    ((MainActivity) context).closeFloatingMessage();
             }
         });
     }
@@ -55,15 +55,10 @@ public class CustomFloatingPanel extends FloatingBasePanel {
      * @param avatar  用户头像
      */
     public void init(final String name, final String content, final String avatar, final OnClickListener listener) {
-        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ImageLoader.loadAvatar(getContext(), avatar, user_img);
-                user_name.setText(name);
-                user_content.setText(Html.fromHtml(content));
-                floating_tip.setOnClickListener(listener);
-                btn_reply.setOnClickListener(listener);
-            }
-        });
+        ImageLoader.loadAvatar(getContext(), avatar, user_img);
+        user_name.setText(name);
+        user_content.setText(Html.fromHtml(content));
+        floating_tip.setOnClickListener(listener);
+        btn_reply.setOnClickListener(listener);
     }
 }

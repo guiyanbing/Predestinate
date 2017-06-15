@@ -122,6 +122,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             cih.content = (ViewGroup) cih.parent.findViewById(R.id.chat_item_content);
             cih.status = (TextView) cih.parent.findViewById(R.id.chat_item_status);
             cih.statusImg = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img);
+            cih.statusImgError = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img_error);
             cih.statusProgress = (ProgressBar) cih.parent.findViewById(R.id.chat_item_status_progress);
             cih.statusError = (ImageView) cih.parent.findViewById(R.id.chat_item_status_error);
 
@@ -132,6 +133,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             cih.content = (ViewGroup) cih.parent.findViewById(R.id.chat_item_content);
             cih.status = (TextView) cih.parent.findViewById(R.id.chat_item_status);
             cih.statusImg = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img);
+            cih.statusImgError = (ImageView) cih.parent.findViewById(R.id.chat_item_status_img_error);
             cih.statusProgress = (ProgressBar) cih.parent.findViewById(R.id.chat_item_status_progress);
             cih.statusError = (ImageView) cih.parent.findViewById(R.id.chat_item_status_error);
 
@@ -296,6 +298,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         public TextView status;
         public ImageView statusImg, statusError;
         private ProgressBar statusProgress;
+        private ImageView statusImgError;
 
         @Override
         public void init(boolean sender) {
@@ -340,6 +343,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 status.setVisibility(View.GONE);
                 statusProgress.setVisibility(View.GONE);
                 statusError.setVisibility(View.GONE);
+                if (statusImgError != null)
+                    statusImgError.setVisibility(View.GONE);
+                if(MessageConstant.isMaxVersionMsg(msg.getType()) && statusImgError != null){
+                    statusImgError.setVisibility(View.VISIBLE);
+                    statusImgError.setBackgroundResource(R.drawable.p1_msg_status_tip);
+                }
 
                 if (ChatMsgType.CMT_2 == msgType && msg.getfStatus() == 1) {
                     CommonMessage message = (CommonMessage) msg;

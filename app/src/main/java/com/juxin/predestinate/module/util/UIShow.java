@@ -47,6 +47,7 @@ import com.juxin.predestinate.ui.discover.MyFriendsAct;
 import com.juxin.predestinate.ui.discover.SayHelloUserAct;
 import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
 import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
+import com.juxin.predestinate.ui.mail.SysMessAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.mail.popup.RandomRedBoxActivity;
 import com.juxin.predestinate.ui.main.MainActivity;
@@ -631,6 +632,13 @@ public class UIShow {
     }
 
     /**
+     * 跳转到公告页面
+     */
+    public static void showSysMessActivity(Context context) {
+        context.startActivity(new Intent(context, SysMessAct.class));
+    }
+
+    /**
      * 打开私信聊天内容页
      *
      * @param mContext  上下文
@@ -780,7 +788,7 @@ public class UIShow {
                                 LoadingDialog.closeLoadingDialog(800, new TimerUtil.CallBack() {
                                     @Override
                                     public void call() {
-                                        PayWX payWX = new PayWX(response.getResponseString(),true);
+                                        PayWX payWX = new PayWX(response.getResponseString(), true);
                                         if (!payWX.isOK()) {
                                             PToast.showShort("支付出错，请重试！");
                                             return;

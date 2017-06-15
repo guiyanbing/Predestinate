@@ -103,13 +103,7 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete, ExL
             if (response.isOk()) {
                 ((RedBoxRecordAct) context).refreshView(redbagList.getTotal());
                 mRedbagInfos = redbagList.getRedbagLists();
-                handleData();
-                return;
             }
-            if (mRedbagInfos != null && !mRedbagInfos.isEmpty()) {
-                return;
-            }
-            showNoData();
         } else if (response.getUrlParam() == UrlParam.reqAddredonekey) {
             if (response.isOk()) {
                 RedOneKeyList redOneKeyList = (RedOneKeyList) response.getBaseData();
@@ -120,12 +114,10 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete, ExL
                 } else {
                     PToast.showShort(mContext.getString(R.string.succeed) + redOneKeyList.getSucnum() + mContext.getString(R.string.hour_into_the_bag));
                 }
-                handleData();
-                return;
             }
             PToast.showShort(response.getMsg());
-            return;
         }
+        handleData();
     }
 
     //处理数据
@@ -135,6 +127,8 @@ public class RedBagRecordPanel extends BasePanel implements RequestComplete, ExL
             butOneKey.setEnabled(true);
             showCollect();
         } else {
+            if (mRedbagInfos != null)
+                mRedBagTabAdapter.setList(mRedbagInfos);
             butOneKey.setEnabled(false);
             showNoData();
         }

@@ -40,12 +40,9 @@ public enum ChatMsgType {
 
     CMT_28(ChatPanelText.class, "自动升级提示消息"),
 
-    CMT_29(ChatPanelSysNotice.class, "系统消息"),
+    CMT_29(ChatPanelSysNotice.class,  ChatPanelType.CPT_Custom, "系统消息"),
 
     CMT_Max(ChatPanelUpgrade.class, "该版本不能显示的消息"),
-
-
-    //  CMT_7("已读消息"),
 
     // 非有效类型
     CMT_Invalid(null, "非有效类型");
@@ -123,11 +120,11 @@ public enum ChatMsgType {
      */
     public static Class<? extends ChatPanel> getPanelClass(int type) {
         try {
-            ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             if(MessageConstant.isMaxVersionMsg(type)){
-                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+                return ChatMsgType.valueOf("CMT_Max").panelClass;
             }
-            return chatMsgType.panelClass;
+
+            return ChatMsgType.valueOf("CMT_" + type).panelClass;
         } catch (Exception e) {
             PLogger.d("--->" + type);
         }
@@ -142,11 +139,10 @@ public enum ChatMsgType {
      */
     public static String getPanelClassName(int type) {
         try {
-            ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             if(MessageConstant.isMaxVersionMsg(type)){
-                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+                return ChatMsgType.valueOf("CMT_Max").panelClass.getSimpleName();
             }
-            return chatMsgType.panelClass.getSimpleName();
+            return ChatMsgType.valueOf("CMT_" + type).panelClass.getSimpleName();
         } catch (Exception e) {
             PLogger.d("--->" + type);
         }
@@ -178,11 +174,11 @@ public enum ChatMsgType {
      */
     public static Class<? extends NotifyBasePanel> getNotifyPanelClass(int type) {
         try {
-            ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             if(MessageConstant.isMaxVersionMsg(type)){
-                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+                return ChatMsgType.valueOf("CMT_Max").notifyPanelClass;
             }
-            return chatMsgType.notifyPanelClass;
+
+            return ChatMsgType.valueOf("CMT_" + type).notifyPanelClass;
         } catch (Exception e) {
             PLogger.d("--->" + type);
         }

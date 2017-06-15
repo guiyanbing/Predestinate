@@ -70,4 +70,11 @@
         <!-- scale定义的取值范围是0-1，所以scale的步长也得在这个范围之内-->
         <attr name="scaleOffsetStep" format="float" />
     </declare-styleable>
+
+    <declare-styleable name="FixedRatioView">
+        <!-- 控件宽度比例-->
+        <attr name="mWidthRatio" format="integer" />
+        <!-- 控件高度比例-->
+        <attr name="mHeightRatio" format="integer" />
+    </declare-styleable>
 </resources>

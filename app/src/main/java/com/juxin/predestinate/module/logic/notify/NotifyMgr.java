@@ -1,8 +1,5 @@
 package com.juxin.predestinate.module.logic.notify;
 
-import android.text.TextUtils;
-import android.view.View;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -15,7 +12,6 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
-import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
@@ -58,10 +54,11 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
 
     @Override
     public void onChatUpdate(boolean ret, BaseMessage message) {
-        PLogger.d("---onChatUpdate--->ret：" + ret + "，message：" + message.toString());
+        PLogger.d("---onChatUpdate--->ret：" + ret + "，sendId：" + message.getSSendID()
+                + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
 
-//        showNotify(message);
+        showNotify(message);
     }
 
     //进行悬浮窗通知的消息类型
@@ -81,7 +78,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         }
         JSONObject jsonObject = JsonUtil.getJsonObject(message.getJsonStr());
         int type = jsonObject.optInt("mtp");
-        PLogger.d("------>Msg type: " + type);
         if (type != NOTIFY_COMMON && type != NOTIFY_GIFT
                 && type != NOTIFY_VIDEO && type != NOTIFY_UPDATE) return;
 
@@ -151,11 +147,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * @param content     消息提示内容
      */
     private void viewPrivacy(final UserInfoLightweight simpleData, final BaseMessage baseMessage, final String content) {
-        boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
-        if (!instanceOfChat && baseMessage.getType() != NOTIFY_VIDEO) {
-            playSound();
-            vibrator();
-        }
+        noticeRemind(baseMessage.getType());
 
         //锁屏状态，锁屏弹窗
         if (BaseUtil.isScreenLock(App.context)) {
@@ -166,22 +158,9 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
 
         //解锁状态
         if (ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
-//            if (App.getActivity() instanceof BaseActivity &&
-//                    !((BaseActivity) App.getActivity()).isCanNotify()) return;
-            boolean instanceOfMain = App.getActivity() instanceof MainActivity;
-            if (!instanceOfMain) return;// 缘分吧1.0逻辑，只有主页面弹出浮动提示框
-
-            final CustomFloatingPanel floatingPanelChat = new CustomFloatingPanel(App.context);
-            floatingPanelChat.initView();
-            floatingPanelChat.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
-                    content, simpleData.getAvatar(), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            UIShow.showPrivateChatAct(App.getActivity(), baseMessage.getLWhisperID(), simpleData.getNickname());
-                            FloatingMgr.getInstance().removePanel(floatingPanelChat);
-                        }
-                    });
-            FloatingMgr.getInstance().addPanel(floatingPanelChat);
+            if (App.getActivity() instanceof MainActivity) {
+                ((MainActivity) App.getActivity()).showFloatingMessage(simpleData, baseMessage, content);
+            }
         } else {//在后台，桌面悬浮窗
             if (ModuleMgr.getAppMgr().isForeground()
                     || !LockScreenMgr.getInstance().isTip()
@@ -191,6 +170,23 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                 return;
             }
             UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
+        }
+    }
+
+    private long notifyTime = -1;//控制消息提示时间，3s之后执行一次提示
+
+    /**
+     * 进行新消息提示
+     *
+     * @param messageType 消息类型
+     */
+    private void noticeRemind(int messageType) {
+        boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
+        if (!instanceOfChat && messageType != NOTIFY_VIDEO
+                && (System.currentTimeMillis() - notifyTime > 3 * 1000)) {
+            notifyTime = System.currentTimeMillis();
+            playSound();
+            vibrator();
         }
     }
 

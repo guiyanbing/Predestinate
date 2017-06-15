@@ -43,11 +43,6 @@ public class Constant {
     public static final String SETTING_SLEEP_MESSAGE = "setting_sleep_message"; //是否睡眠免打扰，存储key及默认值
     public static final boolean SETTING_SLEEP_MESSAGE_DEFAULT = true;
 
-    public static final String SETTING_VIDEO_CHAT = "setting_video_chat";
-    public static final boolean SETTING_VIDEO_CHAT_DEFAULT = true;
-    public static final String SETTING_AUDIO_CHAT = "setting_audio_chat";
-    public static final boolean SETTING_AUDIO_CHAT_DEFAULT = true;
-
     // 图片
     public static final int INT_AVATAR = 101;       // 头像
     public static final int INT_ALBUM = 102;        // 相册

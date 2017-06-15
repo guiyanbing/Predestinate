@@ -116,10 +116,12 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_certification.setVisibility(GONE);
 
         String result = BaseMessage.getContent(msgData);
-        if (msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()) {
-            item_last_msg.setTextContent(result);
-        } else {
-            item_last_msg.setText(Html.fromHtml(result));
+        if(!TextUtils.isEmpty(result)){
+            if (msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()) {
+                item_last_msg.setTextContent(result);
+            } else {
+                item_last_msg.setText(Html.fromHtml(result));
+            }
         }
 
         long time = msgData.getTime();

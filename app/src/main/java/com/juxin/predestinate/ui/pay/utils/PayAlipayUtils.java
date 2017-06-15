@@ -96,6 +96,8 @@ public class PayAlipayUtils {
                 default:
                     break;
             }
+            //通知刷个人资料  在
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
         }
     };
 }

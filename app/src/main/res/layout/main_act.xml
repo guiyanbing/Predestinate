@@ -24,4 +24,11 @@
         <include layout="@layout/main_act_footer" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/floating_message_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/title_footer_height"
+        android:orientation="vertical" />
+
 </RelativeLayout>
