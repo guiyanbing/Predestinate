@@ -119,6 +119,35 @@ public class StatisticsUser {
     }
 
     /**
+     * 我的认证->身份认证->提交按钮(上传资料信息)
+     *
+     * @param name //姓名
+     * @param id_number 身份证号
+     * @param pay_type 支付方式(zhifubao/bank)
+     * @param bank_kaihuhang 开户行
+     * @param bank_zhihang 开户支行
+     * @param bank_cardid 银行卡号
+     * @param zhifubao_account 支付宝账号
+     * @param pic_idnumber_positive 身份证正面图片URL
+     * @param pic_idnumber_contrary 身份证正反面图片URL
+     * @param pic_idnumberinhand 手持身份证照片
+     */
+    public static void meauthIdSubmit(String name, String id_number, int pay_type, String bank_kaihuhang, String bank_zhihang, String bank_cardid, String zhifubao_account, String pic_idnumber_positive, String pic_idnumber_contrary, String pic_idnumberinhand) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("id_number", id_number);
+        params.put("pay_type", pay_type);
+        params.put("bank_kaihuhang", bank_kaihuhang);
+        params.put("bank_zhihang", bank_zhihang);
+        params.put("bank_cardid", bank_cardid);
+        params.put("zhifubao_account", zhifubao_account);
+        params.put("pic_idnumber_positive", pic_idnumber_positive);
+        params.put("pic_idnumber_contrary", pic_idnumber_contrary);
+        params.put("pic_idnumberinhand", pic_idnumberinhand);
+        Statistics.userBehavior(SendPoint.menu_me_meauth_id_submit, params);
+    }
+
+    /**
      * 登录页->登录按钮(无需检测登录成功状态,点击按钮一次上报一次日志)
      *
      * @param username 用户账号,取文本框输入内容
