@@ -18,6 +18,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.settting.ContactBean;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -198,6 +199,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                         PToast.showShort(getString(R.string.please_upload_the_idcard_handle));
                         return;
                     }
+                    StatisticsUser.meauthIdSubmit(cardName,cardIdCard,paytype,cardLocal,cardLocalBranch,cardNum,cardNum,strImgFront,strImgTail,strImgHand);
                     ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum, cardLocal, cardLocalBranch, strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
                 }
             });

@@ -47,6 +47,6 @@ public class MessageConstant {
      * @return true就是超过版本了
      */
     public static boolean isMaxVersionMsg(int type){
-        return (type > 29 && type < 100);
+        return (type > 29 && type <= 100);
     }
 }

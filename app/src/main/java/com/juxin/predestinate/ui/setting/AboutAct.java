@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
@@ -61,6 +63,7 @@ public class AboutAct extends BaseActivity implements OnClickListener {
                 UIShow.showQQService(AboutAct.this, qq);
                 break;
             case R.id.ll_customerservice_btn:
+                Statistics.userBehavior(SendPoint.menu_me_setting_about_kefuservice);
                 UIShow.showPrivateChatAct(AboutAct.this, MailSpecialID.customerService.getSpecialID(),"");
                 break;
             default:
