@@ -1064,39 +1064,9 @@ public class ChatMgr implements ModuleBase {
     }
 
     // ------------------------------------- 离线消息处理 ------------------------------------
-    private NetReceiver netReceiver = new NetReceiver();
     private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
     private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
-    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
-
-    /**
-     * 注册网络变化监听广播
-     */
-    public void registerNetReceiver(Activity activity) {
-        if (netReceiver == null) netReceiver = new NetReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        activity.registerReceiver(netReceiver, filter);
-    }
-
-    public void unregisterNetReceiver(Activity activity) {
-        if (netReceiver == null) return;
-        activity.unregisterReceiver(netReceiver);
-        netReceiver = null;
-    }
-
-    /**
-     * 网络监测
-     */
-    private class NetReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
-                    && refreshOfflineMsg()) {
-                getOfflineMsg();
-            }
-        }
-    }
+    private static final long OFFLINE_MSG_INTERVAL = 10 * 1000;  // 获取离线消息间隔
 
     /**
      * 离线消息刷新间隔控制
@@ -1130,7 +1100,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50) {
+                if (offlineMsg.getMsgList().size() >= 50  && refreshOfflineMsg()) {
                     getOfflineMsg();
                     return;
                 }
