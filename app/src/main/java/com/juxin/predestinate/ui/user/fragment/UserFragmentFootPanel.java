@@ -80,7 +80,7 @@ public class UserFragmentFootPanel extends BasePanel implements BaseRecyclerView
         switch (position) {
             case CenterItemID.i_Center_item_1: // 我的主页
                 UIShow.showCheckOwnInfoAct(getContext());
-//                Statistics.userBehavior(SendPoint.menu_me_profile);
+                Statistics.userBehavior(SendPoint.menu_me_myhome);
                 break;
 
             case CenterItemID.i_Center_item_2: // 谁关注我

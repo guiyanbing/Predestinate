@@ -120,11 +120,11 @@ public enum ChatMsgType {
      */
     public static Class<? extends ChatPanel> getPanelClass(int type) {
         try {
-            ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             if(MessageConstant.isMaxVersionMsg(type)){
-                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+                return ChatMsgType.valueOf("CMT_Max").panelClass;
             }
-            return chatMsgType.panelClass;
+
+            return ChatMsgType.valueOf("CMT_" + type).panelClass;
         } catch (Exception e) {
             PLogger.d("--->" + type);
         }
@@ -139,11 +139,10 @@ public enum ChatMsgType {
      */
     public static String getPanelClassName(int type) {
         try {
-            ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             if(MessageConstant.isMaxVersionMsg(type)){
-                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+                return ChatMsgType.valueOf("CMT_Max").panelClass.getSimpleName();
             }
-            return chatMsgType.panelClass.getSimpleName();
+            return ChatMsgType.valueOf("CMT_" + type).panelClass.getSimpleName();
         } catch (Exception e) {
             PLogger.d("--->" + type);
         }
@@ -175,11 +174,11 @@ public enum ChatMsgType {
      */
     public static Class<? extends NotifyBasePanel> getNotifyPanelClass(int type) {
         try {
-            ChatMsgType chatMsgType = ChatMsgType.valueOf("CMT_" + type);
             if(MessageConstant.isMaxVersionMsg(type)){
-                chatMsgType = ChatMsgType.valueOf("CMT_Max");
+                return ChatMsgType.valueOf("CMT_Max").notifyPanelClass;
             }
-            return chatMsgType.notifyPanelClass;
+
+            return ChatMsgType.valueOf("CMT_" + type).notifyPanelClass;
         } catch (Exception e) {
             PLogger.d("--->" + type);
         }

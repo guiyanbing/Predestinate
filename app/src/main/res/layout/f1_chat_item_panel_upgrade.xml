@@ -11,7 +11,7 @@
         android:paddingRight="@dimen/px35_dp"
         android:paddingTop="@dimen/px35_dp"
         android:paddingBottom="@dimen/px25_dp"
-        android:background="@color/bg_color"
+        android:background="@color/color_F5F5F5"
         android:orientation="vertical">
 
         <TextView
@@ -23,6 +23,7 @@
             style="@style/chat_item_text_content"
             android:layout_marginTop="@dimen/px20_dp"
             android:text="你的版本过低，无法接收此类消息"
+            android:textColor="@color/color_ciyao"
             android:textSize="@dimen/px36_sp"/>
     </LinearLayout>
     <View
