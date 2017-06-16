@@ -37,6 +37,9 @@
 - [测试软件升级消息](http://123.59.187.33:8681/test/PushUpdate?fuid=110872797&tuid=110872898&mct=%E5%AF%B9%E6%96%B9%E5%8F%91%E4%BA%86%E4%B8%80%E6%9D%A1%E6%B6%88%E6%81%AF%EF%BC%8C%E6%82%A8%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%EF%BC%8C%E6%97%A0%E6%B3%95%E6%9F%A5%E7%9C%8B%E3%80%82&htm=%E5%AF%B9%E6%96%B9%E5%8F%91%E4%BA%86%E4%B8%80%E6%9D%A1%E6%B6%88%E6%81%AF%EF%BC%8C%E6%82%A8%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%EF%BC%8C%E6%97%A0%E6%B3%95%E6%9F%A5%E7%9C%8B%E3%80%82%3Ca%20href=%22check_update%22%3E%E7%82%B9%E5%87%BB%E5%8D%87%E7%BA%A7%3C/a%3E)
 - [测试系统通知消息](http://123.59.187.33:8681/test/PushSysUpdate?fuid=9998&tuid=110872541&mct=%E5%8D%87%E7%BA%A7%E6%8F%90%E7%A4%BA&info=%E4%BD%A0%E5%BD%93%E5%89%8D%E7%89%88%E6%9C%AC%E8%BF%87%E4%BD%8E%EF%BC%8C%E4%B8%BA%E4%BA%86%E8%83%BD%E6%AD%A3%E5%B8%B8%E4%BD%BF%E7%94%A8%EF%BC%8C%E8%AF%B7%E5%8D%87%E7%BA%A7%E6%96%B0%E7%89%88%E3%80%82&btn_text=%E7%82%B9%E5%87%BB%E5%8D%87%E7%BA%A7&btn_action=check_update&pic=http://image1.yuanfenba.net/uploads/oss/avatar/201705/23/1518449570.jpg)
 - [通用HTM HINT 测试接口 ](http://123.59.187.33:8681/test/TestPushHtmHint?fuid=1001&tuid=1002&mct=通用HTM消息测试&htm=送个礼物，对方立即接收既自动成为好友<a href="send_gift">点击赠送</a>)
+- [送礼提示](http://123.59.187.33:8681/test/TestPushNeedGift?fuid=1111&tuid=1112)
+- [跳转到小秘书聊天框](http://123.59.187.33:8681/test/TestPushJUMPKF?fuid=1111&tuid=1112)
+
 
 ### 2. 其他
 

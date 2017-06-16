@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.request.DownloadListener;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -27,7 +28,6 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
  * Created by siow on 2017/5/8.
  */
 public class MyURLSpan extends ClickableSpan {
-
     private final static String URL_TYPE_UPLOAD_HEAD_PIC = "1";                         //上传头像
     private final static String URL_TYPE_COMPLETE_INFO = "2";                           //完善资料
     private final static String URL_TYPE_BIND_PHONE = "3";                              //绑定手机
@@ -37,10 +37,11 @@ public class MyURLSpan extends ClickableSpan {
     private final static String URL_TYPE_RECHARGE_VIP = "recharge_vip";                 //充值VIP
     private final static String URL_TYPE_CHECK_UPDATE = "check_update";                 //检查升级
 
-    private final static String URL_TYPE_CERTIFY_REAL_NAME = "certify_real_name";       //实名认证
-    private final static String URL_TYPE_CERTIFY_PHONE = "certify_phone";               //手机认证
+    private final static String URL_TYPE_CERTIFY_REAL_NAME = "certify_real_name";                 //实名认证
+    private final static String URL_TYPE_CERTIFY_PHONE = "certify_phone";                 //手机认证
     private final static String URL_TYPE_INVITE_VIDEO = "invite_video";                 //发起视频聊天
-    private final static String URL_TYPE_SEND_GIFT = "send_gift";                       //送礼提示
+    private final static String URL_TYPE_SEND_GIFT = "send_gift";                 //送礼提示
+    private final static String URL_TYPE_JUMP_KF = "jump_kf";                 //跳转到小秘书聊天框
 
     private Context mContext;
     private String mUrl;
@@ -86,7 +87,9 @@ public class MyURLSpan extends ClickableSpan {
     @Override
     public void onClick(View widget) {
         try {
-            if (TextUtils.isEmpty(mUrl)) return;
+            if (TextUtils.isEmpty(mUrl))
+                return;
+
             switch (mUrl) {
                 //上传头像
                 case URL_TYPE_UPLOAD_HEAD_PIC:
@@ -137,6 +140,10 @@ public class MyURLSpan extends ClickableSpan {
                 case URL_TYPE_SEND_GIFT:
                     UIShow.showBottomGiftDlg(App.getActivity(), otherID, Constant.OPEN_FROM_CHAT_FRAME, channel_uid);
                     break;
+                //跳转到小秘书聊天框
+                case URL_TYPE_JUMP_KF:
+                    UIShow.showPrivateChatAct(App.getActivity(), MailSpecialID.customerService.getSpecialID(), null);
+                    break;
                 default:
                     int i = checkDownExUrl(mUrl);
                     //是否自定义下载协议
@@ -157,7 +164,6 @@ public class MyURLSpan extends ClickableSpan {
 
     /**
      * 检测URL是否自定义下载协议URL
-     *
      * @param url
      * @return -1 不是自定义下载协议URL  >= 0 自定义协议头在DownExUrlProtocol数组中的下标索引值
      */

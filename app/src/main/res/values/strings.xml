@@ -523,8 +523,7 @@
     <string name="head_draw_record">提现记录</string>
     <string name="diamond_explain_one">1、钻石可用于赠送虚拟礼物</string>
     <string name="diamond_explain_two">2、等价钻石礼物直接纳入我的个人钱包</string>
-    <string name="diamond_explain_three">3、礼物总价，按50%的分成比例</string>
-    <string name="diamond_explain_four">4、活动最终解释权归本APP所有</string>
+    <string name="diamond_explain_four">3、活动最终解释权归本APP所有</string>
     <string name="usable_diamond">可用钻石：</string>
     <string name="withdrawal_instructions_one">收入详情需24小时后解冻才能放入零钱提现</string>
     <string name="withdrawal_instructions_two">其他红包需24小时后解冻才能放入零钱提现</string>
