@@ -1070,7 +1070,7 @@ public class ChatMgr implements ModuleBase {
     /**
      * 离线消息刷新间隔控制
      */
-    public boolean refreshOfflineMsg() {
+    private boolean refreshOfflineMsg() {
         if (checkIntervalTimeUtil == null) {
             checkIntervalTimeUtil = new CheckIntervalTimeUtil();
         }
