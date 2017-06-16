@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -28,11 +29,15 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -47,6 +52,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
+
+    private List<BaseMessage> tmpList = new ArrayList<>(); //批量删除用的临时变量
 
     @Inject
     DBCenter dbCenter;
@@ -213,12 +220,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param messageList
      */
     public void deleteBatchMessage(final List<BaseMessage> messageList) {
+        if (tmpList.size() != 0) {
+            tmpList.clear();
+        }
+        tmpList.addAll(messageList);
         MsgMgr.getInstance().runOnChildThread(new Runnable() {
             @Override
             public void run() {
-                for (BaseMessage temp : messageList) {
+                for (BaseMessage temp : tmpList) {
                     dbCenter.deleteMessage(temp.getLWhisperID());
                 }
+                tmpList.clear();
             }
         });
     }
