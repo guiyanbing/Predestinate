@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 
 import org.json.JSONObject;
 
@@ -79,6 +80,8 @@ public class AttentionUserDetail extends BaseData {
         this.setPhotoNum(info.getPhotoNum());
         this.setRemark(info.getRemark());
         this.setKf_id(info.getKf_id());
+        if (AttentionUtil.isContainsUid(info.getUid()))
+            this.setType(1);
     }
 
     public int getKf_id() {

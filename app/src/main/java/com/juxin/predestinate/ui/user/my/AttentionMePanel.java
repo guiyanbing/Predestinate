@@ -73,7 +73,6 @@ public class AttentionMePanel extends BasePanel implements RequestComplete, ExLi
                 lists.parseJson(response.getResponseString());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
-//                mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos, AttentionUtil.ATTENTIONME));//先从缓存中获取数据
                 if (infos != null && !infos.isEmpty()) {//缓存中处理完毕后，还有消息记录，则该记录没有获取过，去服务器请求用户详细信息
                     List<Long> userIds = new ArrayList<>();
                     int size = infos.size();
@@ -83,7 +82,6 @@ public class AttentionMePanel extends BasePanel implements RequestComplete, ExLi
                     ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, this);//批量获取用户信息
                     return;
                 }
-//                mAttentionMeAdapter.setList(mUserDetails);
                 if (mUserDetails.size() <= 0) {
                     crvView.showNoData(mContext.getString(R.string.tip_data_empty), mContext.getString(R.string.tip_click_refresh), new View.OnClickListener() {
                         @Override
@@ -117,9 +115,7 @@ public class AttentionMePanel extends BasePanel implements RequestComplete, ExLi
             AttentionUserDetail userDetail = new AttentionUserDetail();
             userDetail.parseJs(userList.get(i));
             mUserDetails.add(userDetail);//添加到数据列表
-//            AttentionUtil.addUser(userDetail);//添加到缓存列表
             if (i == size - 1) {
-//                AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }
