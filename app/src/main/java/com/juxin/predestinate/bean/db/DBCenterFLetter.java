@@ -422,7 +422,7 @@ public class DBCenterFLetter {
 
     private int delete(long whisperID) {
         long ret = mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
-        return ret != MessageConstant.ERROR ? MessageConstant.OK : MessageConstant.ERROR;
+        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     public void deleteList(final List<Long> list, final DBCallback callback) {
