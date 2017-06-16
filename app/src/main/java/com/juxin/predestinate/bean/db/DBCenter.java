@@ -138,7 +138,7 @@ public class DBCenter {
      * @param userID
      * @return
      */
-    public void deleteMessage(final long userID) {
+    public void deleteMessage(long userID) {
         centerFLetter.delete(userID, null);
         centerFmessage.delete(userID, null);
     }

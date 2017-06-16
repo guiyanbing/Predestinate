@@ -126,7 +126,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
 
         if (group) {// 群聊
             message.setChannelID(groupId);
-            ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), null, true, message);
+            ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), null, message);
         } else {//私聊或群私聊
             if (!TextUtils.isEmpty(groupId)) {//群里面的私聊
                 message.setChannelID(groupId);
@@ -162,7 +162,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                     ModuleMgr.getChatMgr().onReceiving(message);
                 }
             } else {
-                ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
+                ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
             }
         }
     }
