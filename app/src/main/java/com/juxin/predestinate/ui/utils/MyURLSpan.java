@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.request.DownloadListener;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
