@@ -100,23 +100,23 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
         }
     };
 
-
     private void initView() {
         this.btn_photo_display_title_left = (ImageView) findViewById(R.id.btn_photo_display_title_left);
         tv_set_bg = (TextView) findViewById(R.id.tv_set_bg);
         this.btn_photo_display_del = (TextView) findViewById(R.id.btn_photo_display_del);
         this.vp_photo_display = (ViewPager) findViewById(R.id.vp_photo_display);
         this.btn_photo_display_title = (TextView) findViewById(R.id.btn_photo_display_title);
+
+        int imgSize;
         if (isPhoto()) {
-            if (photoList.size() > 1) {
-                btn_photo_display_title.setVisibility(View.VISIBLE);
-                btn_photo_display_title.setText("照片  " + (currentPosition + 1) + "/" + photoList.size());
-            } else {
-                btn_photo_display_title.setVisibility(View.GONE);
-            }
+            imgSize = photoList.size();
         } else {
+            imgSize = imageList.size();
+        }
+
+        if (imgSize > 1) {
             btn_photo_display_title.setVisibility(View.VISIBLE);
-            btn_photo_display_title.setText("照片  " + (currentPosition + 1) + "/" + imageList.size());
+            btn_photo_display_title.setText("照片  " + (currentPosition + 1) + "/" + imgSize);
         }
 
         this.vp_photo_display.setAdapter(displayAdapter);

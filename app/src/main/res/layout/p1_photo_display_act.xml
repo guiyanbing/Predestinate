@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/btn_photo_display_title_left"
-            android:layout_width="40dip"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/px120_dp"
+            android:layout_height="@dimen/px60_dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@drawable/p1_back_white_btn"/>
@@ -42,10 +42,10 @@
             android:padding="4dp"
             android:shadowDx="0"
             android:shadowDy="-1"
-            android:singleLine="true"
             android:text="照片  0/0"
             android:textColor="@android:color/white"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/btn_photo_display_del"
