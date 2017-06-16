@@ -342,8 +342,8 @@ public class ImageLoader {
     private static <T> BitmapRequestBuilder<T, Bitmap> getBitmapBuilder(Context context, T model) {
         return getRequest(context, model)
                 .asBitmap()
-                .crossFade()
-//                .dontAnimate()
+//                .crossFade()//加载gif会显示不正常
+                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
