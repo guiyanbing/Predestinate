@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Handler;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -12,6 +13,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.UnreadMgr;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
@@ -29,16 +31,18 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -53,7 +57,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
 
-    private List<BaseMessage> tmpList = new ArrayList<>(); //批量删除用的临时变量
+    private CheckIntervalTimeUtil intervalTimeUtil;
 
     @Inject
     DBCenter dbCenter;
@@ -61,6 +65,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
+        intervalTimeUtil = new CheckIntervalTimeUtil();
     }
 
     @Override
@@ -140,7 +145,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public synchronized void updateListMsg(List<BaseMessage> messages) {
+    private long tmpTm = 0;
+
+    public synchronized void updateListMsg(List<BaseMessage> messages, long tm) {
         PLogger.printObject(messages);
         unreadNum = 0;
         msgList.clear();
@@ -158,8 +165,19 @@ public class ChatListMgr implements ModuleBase, PObserver {
             }
         }
         unreadNum += getFollowNum();//关注
-        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        PLogger.d("unreadNum=" + unreadNum);
+
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 1000);
     }
+
+    private Handler handler = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        }
+    };
 
     /**
      * 截取语音
@@ -220,23 +238,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param messageList
      */
     public void deleteBatchMessage(final List<BaseMessage> messageList) {
-        if (tmpList.size() != 0) {
-            tmpList.clear();
+        List<Long> idList = new ArrayList<Long>();
+
+        for (BaseMessage temp : messageList) {
+            idList.add(temp.getLWhisperID() );
         }
-        tmpList.addAll(messageList);
-        MsgMgr.getInstance().runOnChildThread(new Runnable() {
-            @Override
-            public void run() {
-                for (BaseMessage temp : tmpList) {
-                    dbCenter.deleteMessage(temp.getLWhisperID());
-                }
-                tmpList.clear();
-            }
-        });
+
+        dbCenter.deleteMessageList(idList);
     }
 
-    public long deleteMessage(long userID) {
-        return dbCenter.deleteMessage(userID);
+    public void deleteMessage(long userID) {
+        dbCenter.deleteMessage(userID);
     }
 
     /**
@@ -245,10 +257,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param userID
      * @return
      */
-    public long deleteFmessage(long userID) {
-        long ret = dbCenter.getCenterFLetter().updateContent(String.valueOf(userID));
-        if (ret == MessageConstant.ERROR) return ret;
-        return dbCenter.getCenterFMessage().delete(userID);
+    public long deleteFmessage(final long userID) {
+        dbCenter.getCenterFLetter().updateContent(String.valueOf(userID), new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if (result != MessageConstant.OK) {
+                    return;
+                }
+
+                dbCenter.getCenterFMessage().delete(userID, null);
+            }
+        });
+
+        //// TODO: 2017/6/15 yuchenl: status
+        return MessageConstant.OK;
     }
 
     /**
@@ -258,9 +280,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         MsgMgr.getInstance().runOnChildThread(new Runnable() {
             @Override
             public void run() {
-                if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
-                    getWhisperListUnSubscribe();
-                }
+                dbCenter.updateToReadAll(new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        getWhisperListUnSubscribe();
+                    }
+                });
             }
         });
     }
@@ -269,8 +294,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (greetList == null || greetList.size() <= 0) {
             return;
         }
-        dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperListUnSubscribe();
+        dbCenter.getCenterFMessage().updateToRead(greetList, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                getWhisperListUnSubscribe();
+            }
+        });
     }
 
     /**
@@ -279,12 +308,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param userID
      * @return
      */
-    public long updateToReadPrivate(long userID) {
-        long ret = dbCenter.getCenterFLetter().updateStatus(userID);
-        if (ret != MessageConstant.ERROR) {
-            getWhisperListUnSubscribe();
-        }
-        return ret;
+    public void updateToReadPrivate(long userID) {
+        dbCenter.getCenterFLetter().updateStatus(userID, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if (result != MessageConstant.OK) {
+                    return;
+                }
+
+                getWhisperListUnSubscribe();
+            }
+        });
     }
 
     /**
@@ -293,7 +327,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
         dbCenter.getCenterFLetter().queryLetterList()
-                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
@@ -305,34 +339,38 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
-                        PLogger.d("getWhisperList====2" + baseMessages.size());
-                        updateListMsg(baseMessages);
+                        PLogger.d("getWhisperList====" + baseMessages.size());
+                        updateListMsg(baseMessages, ModuleMgr.getAppMgr().getTime());
                     }
                 });
     }
+
 
     /**
      * 获取消息列表，外部使用，查询完成后取消订阅
      */
     public void getWhisperListUnSubscribe() {
         PLogger.d("getWhisperList====2");
-        dbCenter.getCenterFLetter().queryLetterList()
-                .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
-                .subscribe(new Observer<List<BaseMessage>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+        final Observable<List<BaseMessage>> observable = dbCenter.getCenterFLetter().queryLetterList();
+        observable.subscribeOn(Schedulers.io());
+        observable.subscribeOn(AndroidSchedulers.mainThread());
+        observable.subscribe(new Subscriber<List<BaseMessage>>() {
+            @Override
+            public void onCompleted() {
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onNext(List<BaseMessage> baseMessages) {
-                        PLogger.d("getWhisperList=un===2" + baseMessages.size());
-                        updateListMsg(baseMessages);
-                    }
-                }).unsubscribe();
+            }
+
+            @Override
+            public void onNext(List<BaseMessage> baseMessages) {
+                this.unsubscribe();
+                PLogger.d("getWhisperList=un===2" + baseMessages.size());
+                updateListMsg(baseMessages, ModuleMgr.getAppMgr().getTime());
+            }
+        });
     }
 
     @Override

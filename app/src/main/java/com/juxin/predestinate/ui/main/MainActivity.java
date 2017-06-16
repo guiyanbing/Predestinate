@@ -31,7 +31,6 @@ import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.logic.socket.TCPConstant;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -41,8 +40,6 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
-
-import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
@@ -209,6 +206,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Statistics.userOnline("mail");
                 Statistics.userBehavior(SendPoint.menu_xiaoxi);
                 switchContent(mailFragment);
+                if (isFloatShowing) closeFloatingMessage();
                 break;
             case R.id.rank_layout:
                 Statistics.userOnline("rank");
@@ -307,15 +305,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }, 200);
                 break;
 
-            case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
-                HashMap<String, Object> data = (HashMap<String, Object>) value;
-                int type = (int) data.get("type");
-                if (type == TCPConstant.SOCKET_STATUS_Login_Success) {
-                    PLogger.d("---offlineMessage--->SOCKET_STATUS_Login_Success");
-                    ModuleMgr.getChatMgr().getOfflineMsg();
-                }
-                break;
-
             case MsgType.MT_Unread_change:
                 ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
                 break;
@@ -340,13 +329,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     // --------------------------消息提示处理-----------------------------------------
 
-    private boolean isShowing = false;
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    private boolean isFloatShowing = false;
+    private Handler floatHandler = new Handler();
+    private Runnable floatRunnable = new Runnable() {
         @Override
         public void run() {
             floating_message_container.removeAllViews();
-            isShowing = false;
+            isFloatShowing = false;
         }
     };
 
@@ -360,8 +349,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void showFloatingMessage(final UserInfoLightweight simpleData, final BaseMessage baseMessage, String content) {
         synchronized (this) {
             if (current == mailFragment) return;
-            handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 5 * 1000);
+            floatHandler.removeCallbacks(floatRunnable);
+            floatHandler.postDelayed(floatRunnable, 5 * 1000);
             floatingPanel.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
                     content, simpleData.getAvatar(), new View.OnClickListener() {
                         @Override
@@ -370,7 +359,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             closeFloatingMessage();
                         }
                     });
-            if (!isShowing) {
+            if (!isFloatShowing) {
                 floating_message_container.removeAllViews();
                 floating_message_container.addView(floatingPanel.getContentView());
                 floatingPanel.getContentView().setTranslationY(-100f);
@@ -380,7 +369,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         .decelerate()
                         .duration(1000)
                         .start();
-                isShowing = true;
+                isFloatShowing = true;
             }
         }
     }
@@ -389,7 +378,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * 移除首页消息悬浮提示
      */
     public void closeFloatingMessage() {
-        handler.removeCallbacks(runnable);
-        runnable.run();
+        floatHandler.removeCallbacks(floatRunnable);
+        floatRunnable.run();
     }
 }

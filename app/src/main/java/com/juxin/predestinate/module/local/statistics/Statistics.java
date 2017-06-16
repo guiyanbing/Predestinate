@@ -13,7 +13,6 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -313,13 +312,13 @@ public class Statistics {
      */
     private static void sendStatistics(HashMap<String, Object> postParams) {
         if (postParams == null) postParams = new HashMap<>();
-        LinkedList<HashMap<String, Object>> cachedList = JSON.parseObject(PCache.getInstance().getCache(BEHAVIOR_CACHE_KEY),
+        LinkedList<HashMap<String, Object>> cachedList = JSON.parseObject(PSP.getInstance().getString(BEHAVIOR_CACHE_KEY, "[]"),
                 new TypeReference<LinkedList<HashMap<String, Object>>>() {
                 });
         if (cachedList == null) cachedList = new LinkedList<>();
         if (cachedList.size() < 10) {
             cachedList.add(postParams);
-            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
+            PSP.getInstance().put(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
             return;
         }
         if (NetworkUtils.isConnected(App.context)) {
@@ -341,15 +340,15 @@ public class Statistics {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     if (response.isOk()) {
-                        PCache.getInstance().deleteCache(BEHAVIOR_CACHE_KEY);
+                        PSP.getInstance().remove(BEHAVIOR_CACHE_KEY);
                     } else {
-                        PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(tempList));
+                        PSP.getInstance().put(BEHAVIOR_CACHE_KEY, JSON.toJSONString(tempList));
                     }
                 }
             });
         } else {
             cachedList.add(postParams);
-            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
+            PSP.getInstance().put(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
         }
     }
 }

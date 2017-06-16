@@ -18,11 +18,9 @@ public class ChatMsgInterface {
 
         /**
          * 更新数据
-         *
-         * @param ret
          * @param message
          */
-        void onChatUpdate(boolean ret, BaseMessage message);
+        void onChatUpdate(BaseMessage message);
     }
 
     /**

@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -14,12 +16,14 @@ import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
+import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import rx.Observable;
 import rx.Observer;
@@ -32,63 +36,34 @@ import rx.functions.Func1;
 
 public class DBCenterFLetter {
     private BriteDatabase mDatabase;
+    private Handler handler;
 
-    public DBCenterFLetter(BriteDatabase database) {
+    public DBCenterFLetter(BriteDatabase database, Handler handler) {
         this.mDatabase = database;
+        this.handler = handler;
     }
 
-    public long storageData(final BaseMessage message) {
-        BaseMessage temp = isExist(message.getWhisperID());
-        if (temp == null) {//没有数据
-            return insertLetter(message);
-        } else {
-            if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-                return updateLetter(message);
-            } else {
-                if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-                    return updateLetter(message);
+    public void storageData(final BaseMessage message, final DBCallback callback) {
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long ret = MessageConstant.OK;
+                BaseMessage temp = isExist(message.getWhisperID());
+                if (temp == null) {//没有数据
+                    ret = insertOneLetter(message);
                 }
-            }
-            return MessageConstant.OK;
-        }
-    }
-
-    /**
-     * 插入
-     *
-     * @param message
-     * @param dbMsgListener
-     * @return
-     */
-    public void storageData(final BaseMessage message, final ChatMsgInterface.DBMsgListener dbMsgListener) {
-        Observable<BaseMessage> observable = isExistEx(message.getWhisperID());
-        observable.subscribe(new Observer<BaseMessage>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onNext(BaseMessage temp) {
-                if (temp == null) {
-                    dbMsgListener.onDBMsgListener(insertLetter(message));
-                } else {
-                    if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                            && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-                        dbMsgListener.onDBMsgListener(updateLetter(message));
-                    } else {
-                        if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-                            dbMsgListener.onDBMsgListener(updateLetter(message));
-                        }
-                        dbMsgListener.onDBMsgListener(MessageConstant.OK);
-                    }
+                else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                        && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
+                    ret = updateOneLetter(message);
                 }
+                else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
+                    ret = updateOneLetter(message);
+                }
+
+                DBCenter.makeDBCallback(callback, ret);
             }
-        }).unsubscribe();
+        });
     }
 
     /**
@@ -96,16 +71,28 @@ public class DBCenterFLetter {
      *
      * @param list
      */
-    public void insertLetter(List<BaseMessage> list) {
-        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
-        try {
-            for (BaseMessage item : list) {
-                insertLetter(item);
+    public void insertLetter(final List<BaseMessage> list, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long ret= MessageConstant.OK;
+                BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+                try {
+                    for (BaseMessage item : list) {
+                        ret =insertOneLetter(item);
+                        if (ret != MessageConstant.OK) {
+                            break;
+                        }
+                    }
+                    transaction.markSuccessful();
+                } finally {
+                    transaction.end();
+                }
+
+                DBCenter.makeDBCallback(callback, ret);
             }
-            transaction.markSuccessful();
-        } finally {
-            transaction.end();
-        }
+        });
+
     }
 
     /**
@@ -114,7 +101,7 @@ public class DBCenterFLetter {
      * @param baseMessage
      * @return
      */
-    public long insertLetter(BaseMessage baseMessage) {
+    private long insertOneLetter(final BaseMessage baseMessage) {
         if (baseMessage == null) {
             return MessageConstant.ERROR;
         }
@@ -141,17 +128,20 @@ public class DBCenterFLetter {
             values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
-            return mDatabase.insert(FLetter.FLETTER_TABLE, values);
+            mDatabase.insert(FLetter.FLETTER_TABLE, values);
         } catch (Exception e) {
             e.printStackTrace();
+            return MessageConstant.ERROR;
         }
-        return MessageConstant.ERROR;
+
+        return MessageConstant.OK;
     }
 
-    public int updateLetter(BaseMessage baseMessage) {
+    private int updateOneLetter(BaseMessage baseMessage) {
         if (baseMessage == null) {
             return MessageConstant.ERROR;
         }
+
         try {
             final ContentValues values = new ContentValues();
             if (baseMessage.getInfoJson() != null)
@@ -175,42 +165,61 @@ public class DBCenterFLetter {
 
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
-            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
+            mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
         } catch (Exception e) {
             e.printStackTrace();
+            return MessageConstant.ERROR;
         }
-        return MessageConstant.ERROR;
+
+        return MessageConstant.OK;
     }
 
-    public boolean updateUserInfoLightList(List<UserInfoLightweight> lightweights) {
+    public void updateLetter(final BaseMessage baseMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long ret = updateOneLetter(baseMessage);
+                DBCenter.makeDBCallback(callback, ret);
+            }
+        });
+    }
+
+    public void helloLetter(final BaseMessage baseMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long ret = updateOneLetter(baseMessage);
+                DBCenter.makeDBCallback(callback, ret);
+            }
+        });
+    }
+
+    public boolean updateUserInfoLightList(final List<UserInfoLightweight> lightweights) {
         if (lightweights == null || lightweights.size() <= 0) {
             return false;
         }
-        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
-        try {
-            for (UserInfoLightweight temp : lightweights) {
-                updateUserInfoLight(temp);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                BriteDatabase.Transaction transaction = mDatabase.newTransaction();
+                try {
+                    for (UserInfoLightweight temp : lightweights) {
+                        updateOneUserInfoLight(temp);
+                    }
+                    transaction.markSuccessful();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    transaction.end();
+                }
             }
-            transaction.markSuccessful();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            transaction.end();
-        }
-        return false;
+        });
+
+        return true;
     }
 
-    /**
-     * 更新个人资料
-     *
-     * @param lightweight
-     * @return
-     */
-    public long updateUserInfoLight(UserInfoLightweight lightweight) {
-        if (lightweight == null) {
-            return MessageConstant.ERROR;
-        }
+    private long updateOneUserInfoLight(UserInfoLightweight lightweight) {
         try {
             if (isExist(String.valueOf(lightweight.getUid())) == null)
                 return MessageConstant.ERROR;//没有数据
@@ -219,14 +228,34 @@ public class DBCenterFLetter {
             if (lightweight.getInfoJson() != null)
                 values.put(FLetter.COLUMN_INFOJSON, ByteUtil.toBytesUTF(lightweight.getInfoJson()));
 
-            return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", String.valueOf(lightweight.getUid()));
+            mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", String.valueOf(lightweight.getUid()));
         } catch (Exception e) {
             e.printStackTrace();
+            return MessageConstant.ERROR;
         }
-        return MessageConstant.ERROR;
+        return MessageConstant.OK;
+    }
+    /**
+     * 更新个人资料
+     *
+     * @param lightweight
+     * @return
+     */
+    public void updateUserInfoLight(final UserInfoLightweight lightweight, final DBCallback callback) {
+        if (lightweight == null) {
+            DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+            return;
+        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long ret = updateOneUserInfoLight(lightweight);
+                DBCenter.makeDBCallback(callback, ret);
+            }
+        });
     }
 
-    public BaseMessage isExist(String userid) {
+    private BaseMessage isExist(String userid) {
         Cursor cursor = null;
         try {
             StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
@@ -254,6 +283,7 @@ public class DBCenterFLetter {
     }
 
 
+    //// TODO: 2017/6/15 yuchenl: need refact
     public Observable<BaseMessage> isExistEx(String userid) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
                 .append(" WHERE ").append(FLetter.COLUMN_USERID + " = ").append(userid);
@@ -380,8 +410,32 @@ public class DBCenterFLetter {
      * @param whisperID 私聊ID
      * @return
      */
-    public int delete(long whisperID) {
-        return mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
+    public void delete(final long whisperID, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long result = delete(whisperID);
+                DBCenter.makeDBCallback(callback, result);
+            }
+        });
+    }
+
+    private int delete(long whisperID) {
+        long ret = mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
+        return ret != MessageConstant.ERROR ? MessageConstant.OK : MessageConstant.ERROR;
+    }
+
+    public void deleteList(final List<Long> list, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i=0; i<list.size(); ++i) {
+                    delete(list.get(i));
+                }
+
+                DBCenter.makeDBCallback(callback, MessageConstant.OK);
+            }
+        });
     }
 
     /**
@@ -390,29 +444,76 @@ public class DBCenterFLetter {
      * @param userid
      * @return
      */
-    public long updateContent(String userid) {
-        ContentValues values = new ContentValues();
-        values.put(FLetter.COLUMN_CONTENT, new byte[0]);
-        values.put(FLetter.COLUMN_TYPE, 0);
-        values.put(FLetter.COLUMN_TIME, 0);
-        values.put(FLetter.COLUMN_STATUS, 0);
-        values.put(FLetter.COLUMN_CMSGID, 0);
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", userid);
+    public void updateContent(final String userid, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(FLetter.COLUMN_CONTENT, new byte[0]);
+                values.put(FLetter.COLUMN_TYPE, 0);
+                values.put(FLetter.COLUMN_TIME, 0);
+                values.put(FLetter.COLUMN_STATUS, 0);
+                values.put(FLetter.COLUMN_CMSGID, 0);
+                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", userid);
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
+            }
+        });
     }
 
-    public long updateStatus(long userID) {
-        ContentValues values = new ContentValues();
-        values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? AND "
-                + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
+    public void updateStatus(final long userID, final DBCallback callback) {
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? AND "
+                        + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
+            }
+        });
     }
 
-    public long updateStatusFail() {
-        ContentValues values = new ContentValues();
-        values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
+    public void updateStatusFail(final DBCallback callback) {
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
+                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
+            }
+        });
     }
 
+
+    public void updateMsgStatus(final BaseMessage message, final DBCallback callback) {
+        final String userID = message.getWhisperID();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                BaseMessage temp = isExist(message.getWhisperID());
+                if (temp == null) {
+                    DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                    return; //没有数据
+                }
+
+                long ret = MessageConstant.OK;
+                if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                        && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType() ) {
+                    ret = updateStatus(userID, message.getStatus());
+                } else if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID() ) ){
+                    ret = updateStatus(userID, message.getStatus());
+                }
+
+                DBCenter.makeDBCallback(callback, ret);
+            }
+        });
+    }
     /**
      * 发送成功或失败更新状态
      *
@@ -420,10 +521,12 @@ public class DBCenterFLetter {
      * @param status
      * @return
      */
-    public long updateStatus(String userID, int status) {
+    private long updateStatus(String userID, int status) {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
-        return mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ?", userID);
+        long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ?", userID);
+        long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+        return result;
     }
 
     public Observable<List<BaseMessage>> deleteCommon(long delTime) {

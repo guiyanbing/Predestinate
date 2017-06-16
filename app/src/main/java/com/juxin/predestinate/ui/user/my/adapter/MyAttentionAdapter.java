@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.logic.config.AreaConfig;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 
 import java.util.List;
 
@@ -104,6 +105,7 @@ public class MyAttentionAdapter extends ExBaseAdapter<AttentionUserDetail> {
                         messageRet.parseJson(contents);
 
                         if (messageRet.getS() == 0) {
+                            AttentionUtil.deleteUserId(info);
                             int mPosition = getPosition(info);
                             getList().get(mPosition).setType(0);
                             getList().remove(mPosition);
