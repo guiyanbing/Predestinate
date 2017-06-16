@@ -57,6 +57,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Observer;
+import rx.schedulers.Schedulers;
 
 /**
  * 消息处理管理类
@@ -424,7 +425,6 @@ public class ChatMgr implements ModuleBase {
         });
 
 
-
     }
 
     //语音消息
@@ -510,11 +510,11 @@ public class ChatMgr implements ModuleBase {
                         info.parseJson(response.getResponseString());
                         if (response.isOk()) {
                             updateOk(giftMessage, null);
-						GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
-                    if (giftInfo == null) return;
-                    int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
-                    if (stone >= 0)
-                        ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
+                            GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
+                            if (giftInfo == null) return;
+                            int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
+                            if (stone >= 0)
+                                ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
                         } else {
                             updateFail(giftMessage, null);
                         }
@@ -788,7 +788,6 @@ public class ChatMgr implements ModuleBase {
         });
 
 
-
     }
 
     /**
@@ -861,7 +860,7 @@ public class ChatMgr implements ModuleBase {
             public void OnDBExecuted(long result) {
                 if (result == MessageConstant.OK) {
                     ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
-                    if (!TextUtils.isEmpty(whisperID) ) {
+                    if (!TextUtils.isEmpty(whisperID)) {
                         sendMailReadedMsg(channelID, Long.valueOf(whisperID));
                     }
                 }
@@ -1017,6 +1016,7 @@ public class ChatMgr implements ModuleBase {
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
+            observable.subscribeOn(Schedulers.io()).observeOn(Schedulers.io());
             observable.subscribe(new Observer<UserInfoLightweight>() {
                 @Override
                 public void onCompleted() {
@@ -1218,7 +1218,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50  && refreshOfflineMsg()) {
+                if (offlineMsg.getMsgList().size() >= 50 && refreshOfflineMsg()) {
                     getOfflineMsg();
                     return;
                 }
@@ -1245,7 +1245,7 @@ public class ChatMgr implements ModuleBase {
         }
 
         //已读消息
-        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()){
+        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()) {
             ModuleMgr.getChatListMgr().updateToReadPrivate(bean.getFid());
             ModuleMgr.getChatMgr().updateOtherSideRead(null, bean.getFid() + "", bean.getTid() + "");
             return;
