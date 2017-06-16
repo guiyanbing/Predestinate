@@ -12,6 +12,7 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.UnreadMgr;
 import com.juxin.predestinate.bean.db.AppComponent;
 import com.juxin.predestinate.bean.db.AppModule;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
@@ -33,6 +34,7 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 
@@ -220,18 +222,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param messageList
      */
     public void deleteBatchMessage(final List<BaseMessage> messageList) {
-        MsgMgr.getInstance().runOnChildThread(new Runnable() {
-            @Override
-            public void run() {
-                for (BaseMessage temp : messageList) {
-                    dbCenter.deleteMessage(temp.getLWhisperID());
-                }
-            }
-        });
+        List<Long> idList = new ArrayList<Long>();
+
+        for (BaseMessage temp : messageList) {
+            idList.add(temp.getLWhisperID() );
+        }
+
+        dbCenter.deleteMessageList(idList);
     }
 
-    public long deleteMessage(long userID) {
-        return dbCenter.deleteMessage(userID);
+    public void deleteMessage(long userID) {
+        dbCenter.deleteMessage(userID);
     }
 
     /**
@@ -240,10 +241,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param userID
      * @return
      */
-    public long deleteFmessage(long userID) {
-        long ret = dbCenter.getCenterFLetter().updateContent(String.valueOf(userID));
-        if (ret == MessageConstant.ERROR) return ret;
-        return dbCenter.getCenterFMessage().delete(userID);
+    public long deleteFmessage(final long userID) {
+        dbCenter.getCenterFLetter().updateContent(String.valueOf(userID), new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if (result != MessageConstant.OK) {
+                    return;
+                }
+
+                dbCenter.getCenterFMessage().delete(userID, null);
+            }
+        });
+
+        //// TODO: 2017/6/15 yuchenl: status
+        return MessageConstant.OK;
     }
 
     /**
@@ -253,9 +264,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         MsgMgr.getInstance().runOnChildThread(new Runnable() {
             @Override
             public void run() {
-                if (dbCenter.updateToReadAll() != MessageConstant.ERROR) {
-                    getWhisperListUnSubscribe();
-                }
+                dbCenter.updateToReadAll(new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        getWhisperListUnSubscribe();
+                    }
+                });
             }
         });
     }
@@ -264,8 +278,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (greetList == null || greetList.size() <= 0) {
             return;
         }
-        dbCenter.getCenterFMessage().updateToRead(greetList);
-        getWhisperListUnSubscribe();
+        dbCenter.getCenterFMessage().updateToRead(greetList, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                getWhisperListUnSubscribe();
+            }
+        });
     }
 
     /**
@@ -274,12 +292,17 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param userID
      * @return
      */
-    public long updateToReadPrivate(long userID) {
-        long ret = dbCenter.getCenterFLetter().updateStatus(userID);
-        if (ret != MessageConstant.ERROR) {
-            getWhisperListUnSubscribe();
-        }
-        return ret;
+    public void updateToReadPrivate(long userID) {
+        dbCenter.getCenterFLetter().updateStatus(userID, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if (result != MessageConstant.OK) {
+                    return;
+                }
+
+                getWhisperListUnSubscribe();
+            }
+        });
     }
 
     /**

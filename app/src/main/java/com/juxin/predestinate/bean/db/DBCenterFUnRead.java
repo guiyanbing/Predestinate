@@ -31,16 +31,19 @@ public class DBCenterFUnRead {
         this.handler = handler;
     }
 
-    public long storageData(final String key, final String content){
+    public long storageData(final String key, final String content, final DBCallback callback){
 
         handler.post(new Runnable() {
             @Override
             public void run() {
+                long ret = MessageConstant.OK;
                 if (!isExist(key)) {//没有数据
-                    insertUnRead(key, content);
+                    ret = insertUnRead(key, content);
                 } else {
-                    updateUnRead(key, content);
+                    ret = updateUnRead(key, content);
                 }
+
+                DBCenter.makeDBCallback(callback, ret);
             }
         });
 
@@ -104,11 +107,12 @@ public class DBCenterFUnRead {
             final ContentValues values = new ContentValues();
             values.put(FUnRead.COLUMN_CONTENT, ByteUtil.toBytesUTF(content));
 
-            return mDatabase.update(FUnRead.FUNREAD_TABLE, values, FUnRead.COLUMN_KEY +  " = ? ", key);
+            mDatabase.update(FUnRead.FUNREAD_TABLE, values, FUnRead.COLUMN_KEY +  " = ? ", key);
         } catch (Exception e) {
             e.printStackTrace();
+            return MessageConstant.ERROR;
         }
-        return MessageConstant.ERROR;
+        return MessageConstant.OK;
     }
 
     /**
@@ -193,15 +197,14 @@ public class DBCenterFUnRead {
      * @param key
      * @return
      */
-    public int delete(final String key){
+    public void delete(final String key, final DBCallback callback){
         handler.post(new Runnable() {
             @Override
             public void run() {
-                mDatabase.delete(FUnRead.FUNREAD_TABLE, FUnRead.COLUMN_KEY + " = ? ", key);
+                long ret = mDatabase.delete(FUnRead.FUNREAD_TABLE, FUnRead.COLUMN_KEY + " = ? ", key);
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        //// TODO: 2017/6/15 yuchenl: ret
-        return MessageConstant.OK;
     }
 }

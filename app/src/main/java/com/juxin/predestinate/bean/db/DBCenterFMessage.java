@@ -38,32 +38,28 @@ public class DBCenterFMessage {
     }
 
 
-    public long storageDataVideo(final VideoMessage message) {
+    public void storageDataVideo(final VideoMessage message, final DBCallback callback) {
 
         handler.post(new Runnable() {
             @Override
             public void run() {
+                long ret = MessageConstant.OK;
                 if (!isExist(message.getSpecialMsgID())) {//没有数据
-                    insertOneMsg(message);
-                    return;
+                    ret = insertOneMsg(message);
                 }
-                if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
-                    insertOneMsg(message);
-                    return;
+                else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
+                    ret = insertOneMsg(message);
                 }
-
-                if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
-                    insertOneMsg(message);
-                    return;
+                else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
+                    ret = insertOneMsg(message);
                 }
                 //TODO
                 // return updateMsgVideo(message);
 
+                DBCenter.makeDBCallback(callback, ret);
+
             }
         });
-
-        //// TODO: 2017/6/15 yuchenl: ret
-        return MessageConstant.OK;
     }
 
     private boolean isExist(long vcID) {
@@ -89,7 +85,7 @@ public class DBCenterFMessage {
      *
      * @param list
      */
-    public void insertMsg(final List<BaseMessage> list) {
+    public void insertMsgList(final List<BaseMessage> list, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -102,6 +98,8 @@ public class DBCenterFMessage {
                 } finally {
                     transaction.end();
                 }
+
+                DBCenter.makeDBCallback(callback, MessageConstant.OK);
             }
         });
     }
@@ -111,7 +109,7 @@ public class DBCenterFMessage {
             return MessageConstant.ERROR;
         }
 
-        long ret = MessageConstant.OK;
+        long ret = -1;
         try {
             final ContentValues values = new ContentValues();
             if (baseMessage.getChannelID() != null)
@@ -139,9 +137,10 @@ public class DBCenterFMessage {
             ret = mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
         } catch (Exception e) {
             e.printStackTrace();
-            ret = MessageConstant.ERROR;
+            ret = -1;
         }
-        return ret;
+
+        return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     /**
@@ -150,16 +149,14 @@ public class DBCenterFMessage {
      * @param baseMessage
      * @return
      */
-    public long insertMsg(final BaseMessage baseMessage) {
+    public void insertMsg(final BaseMessage baseMessage, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                insertOneMsg(baseMessage);
+                long ret = insertOneMsg(baseMessage);
+                DBCenter.makeDBCallback(callback, ret);
             }
         });
-
-        //// TODO: 2017/6/15 yuchenl: ret
-        return MessageConstant.OK;
     }
 
     /**
@@ -168,15 +165,18 @@ public class DBCenterFMessage {
      * @param baseMessage
      * @return
      */
-    public int updateMsg(final BaseMessage baseMessage) {
+    public void updateMsg(final BaseMessage baseMessage, final DBCallback callback) {
 
         if (baseMessage == null) {
-            return MessageConstant.ERROR;
+            DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+            return;
         }
 
         handler.post(new Runnable() {
             @Override
             public void run() {
+
+                long ret = -1;
                 try {
                     String channelID = baseMessage.getChannelID();
                     String whisperID = baseMessage.getWhisperID();
@@ -211,45 +211,48 @@ public class DBCenterFMessage {
                     if (baseMessage.getJsonStr() != null)
                         values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
-                    mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
+                    ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ret = -1;
                 }
+
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        return MessageConstant.ERROR;
     }
 
-    public long updateMsgFStatus(final long msgID) {
+    public void updateMsgFStatus(final long msgID, final DBCallback callback) {
 
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_FSTATUS, String.valueOf(MessageConstant.NumDefault));
-                mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        return MessageConstant.OK;
     }
 
-    public long updateToReadAll() {
+    public void updateToReadAll(final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-                mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        return MessageConstant.OK;
     }
 
-    public void updateToRead(final List<BaseMessage> list) {
+    public void updateToRead(final List<BaseMessage> list , final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -262,22 +265,24 @@ public class DBCenterFMessage {
                 } finally {
                     transaction.end();
                 }
+
+                DBCenter.makeDBCallback(callback, MessageConstant.OK);
             }
         });
 
     }
 
-    public long updateStatusFail() {
+    public void updateStatusFail(final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
-                mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        return MessageConstant.OK;
     }
 
     private long updateOneToRead(long userID) {
@@ -293,11 +298,12 @@ public class DBCenterFMessage {
      * @param userID
      * @return
      */
-    public long updateToRead(final String channelID, final String userID) {
+    public void updateToRead(final String channelID, final String userID, final DBCallback callback) {
 
         handler.post(new Runnable() {
             @Override
             public void run() {
+                long ret = -1;
                 try {
                     String sql;
                     String[] str;
@@ -314,14 +320,16 @@ public class DBCenterFMessage {
 
                     ContentValues values = new ContentValues();
                     values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-                    mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
+                    ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql, str);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    ret = -1;
                 }
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        return MessageConstant.OK;
     }
 
     /**
@@ -332,71 +340,69 @@ public class DBCenterFMessage {
      * @param sendID
      * @return
      */
-    public long updateOtherSideRead(final String channelID, final String userID, @NonNull final String sendID, final long msgID) {
+    public void updateOtherSideRead(final String channelID, final String userID, @NonNull final String sendID, final long msgID, final DBCallback callback) {
 
         handler.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    StringBuilder sql = new StringBuilder();
-                    List<String> stringList = new ArrayList<>();
 
-                    if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
-                        sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
-                                .append(FMessage.COLUMN_WHISPERID + " = ? AND ")
-                                .append(FMessage.COLUMN_SENDID + " = ? AND ")
-                                .append(FMessage.COLUMN_STATUS + " = ?");
-                        stringList.add(channelID);
-                        stringList.add(userID);
-                        stringList.add(sendID);
-                        stringList.add(String.valueOf(MessageConstant.OK_STATUS));
-                    } else if (!TextUtils.isEmpty(channelID)) {
-                        sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
-                                .append(FMessage.COLUMN_SENDID + " = ? AND ")
-                                .append(FMessage.COLUMN_STATUS + " = ?");
-                        stringList.add(channelID);
-                        stringList.add(sendID);
-                        stringList.add(String.valueOf(MessageConstant.OK_STATUS));
-                    } else {
-                        sql.append(FMessage.COLUMN_WHISPERID + " = ? AND ")
-                                .append(FMessage.COLUMN_SENDID + " = ? AND ")
-                                .append(FMessage.COLUMN_STATUS + " = ?");
-                        stringList.add(userID);
-                        stringList.add(sendID);
-                        stringList.add(String.valueOf(MessageConstant.OK_STATUS));
-                    }
+                StringBuilder sql = new StringBuilder();
+                List<String> stringList = new ArrayList<>();
 
-                    if (msgID != MessageConstant.NumNo) {
-                        sql.append(" AND " + FMessage.COLUMN_MSGID + " < ?");
-                        stringList.add(String.valueOf(msgID));
-                    }
-
-                    String[] strs = new String[stringList.size()];
-                    stringList.toArray(strs);
-
-                    ContentValues values = new ContentValues();
-                    values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-                    mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (!TextUtils.isEmpty(channelID) && !TextUtils.isEmpty(userID)) {
+                    sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
+                            .append(FMessage.COLUMN_WHISPERID + " = ? AND ")
+                            .append(FMessage.COLUMN_SENDID + " = ? AND ")
+                            .append(FMessage.COLUMN_STATUS + " = ?");
+                    stringList.add(channelID);
+                    stringList.add(userID);
+                    stringList.add(sendID);
+                    stringList.add(String.valueOf(MessageConstant.OK_STATUS));
+                } else if (!TextUtils.isEmpty(channelID)) {
+                    sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
+                            .append(FMessage.COLUMN_SENDID + " = ? AND ")
+                            .append(FMessage.COLUMN_STATUS + " = ?");
+                    stringList.add(channelID);
+                    stringList.add(sendID);
+                    stringList.add(String.valueOf(MessageConstant.OK_STATUS));
+                } else {
+                    sql.append(FMessage.COLUMN_WHISPERID + " = ? AND ")
+                            .append(FMessage.COLUMN_SENDID + " = ? AND ")
+                            .append(FMessage.COLUMN_STATUS + " = ?");
+                    stringList.add(userID);
+                    stringList.add(sendID);
+                    stringList.add(String.valueOf(MessageConstant.OK_STATUS));
                 }
+
+                if (msgID != MessageConstant.NumNo) {
+                    sql.append(" AND " + FMessage.COLUMN_MSGID + " < ?");
+                    stringList.add(String.valueOf(msgID));
+                }
+
+                String[] strs = new String[stringList.size()];
+                stringList.toArray(strs);
+
+                ContentValues values = new ContentValues();
+                values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
+
             }
         });
-
-        return MessageConstant.OK;
     }
 
-    public long updateToReadVoice(final long msgID) {
+    public void updateToReadVoice(final long msgID, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_FSTATUS, 0);
-                mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-
-        return MessageConstant.OK;
     }
 
     public Observable<BaseMessage> queryVideoMsg(int vcID) {
@@ -526,28 +532,31 @@ public class DBCenterFMessage {
      * @param whisperID 私聊ID
      * @return
      */
-    public int delete(final long whisperID) {
+    public void delete(final long whisperID, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
+                long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
+                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-        return MessageConstant.OK;
     }
 
-    private int deleteMsgID(long vcID) {
-        return mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(vcID));
+    private long deleteMsgID(long vcID) {
+        long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(vcID));
+        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
-    public int delete(final long whisperID, final long time) {
+    public void delete(final long whisperID, final long time, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? AND " +
+                long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? AND " +
                         FMessage.COLUMN_TIME + " = ? ", String.valueOf(whisperID), String.valueOf(time));
+                long result = ret >=0 ? MessageConstant.OK: MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, result);
             }
         });
-        return MessageConstant.OK;
     }
 }

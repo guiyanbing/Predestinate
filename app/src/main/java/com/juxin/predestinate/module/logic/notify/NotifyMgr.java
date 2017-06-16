@@ -58,7 +58,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                 + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
 
-        showNotify(message);
+//        showNotify(message);
     }
 
     //进行悬浮窗通知的消息类型

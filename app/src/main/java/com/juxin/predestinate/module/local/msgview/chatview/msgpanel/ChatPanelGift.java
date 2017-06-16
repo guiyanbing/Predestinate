@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
@@ -8,8 +9,10 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
@@ -99,23 +102,38 @@ public class ChatPanelGift extends ChatPanel {
         ModuleMgr.getCommonMgr().receiveGift(msg.getGiftLogID(), giftInfo.getName(), msg.getGiftID(), new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    long ret = ModuleMgr.getChatMgr().updateMsgFStatus(msg.getMsgID());
-                    if (ret == MessageConstant.OK) {
-                        tv_gift_status.setText(getContext().getString(R.string.gift_has_received));
-                    }
-                    // 往数据库插一条14提示消息，标识已接受礼物
-                    TextMessage textMessage = new TextMessage();
-                    textMessage.setWhisperID(msgData.getWhisperID());
-                    textMessage.setSendID(App.uid);
-                    textMessage.setMsgDesc(getContext().getString(R.string.chat_gift_has_received));
-                    textMessage.setcMsgID(BaseMessage.getCMsgID());
-                    textMessage.setType(BaseMessage.BaseMessageType.hint.getMsgType());
-                    textMessage.setJsonStr(textMessage.getJson(textMessage));
-                    ModuleMgr.getChatMgr().onLocalReceiving(textMessage);
-                } else {
+                if (!response.isOk()) {
                     msgData.setfStatus(1);
+                    return;
                 }
+
+                ModuleMgr.getChatMgr().updateMsgFStatus(msg.getMsgID(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        if (result != MessageConstant.OK) {
+                            return;
+                        }
+
+                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_gift_status.setText(getContext().getString(R.string.gift_has_received));
+                            }
+                        });
+
+                        // 往数据库插一条14提示消息，标识已接受礼物
+                        TextMessage textMessage = new TextMessage();
+                        textMessage.setWhisperID(msgData.getWhisperID());
+                        textMessage.setSendID(App.uid);
+                        textMessage.setMsgDesc(getContext().getString(R.string.chat_gift_has_received));
+                        textMessage.setcMsgID(BaseMessage.getCMsgID());
+                        textMessage.setType(BaseMessage.BaseMessageType.hint.getMsgType());
+                        textMessage.setJsonStr(textMessage.getJson(textMessage));
+                        ModuleMgr.getChatMgr().onLocalReceiving(textMessage);
+
+                    }
+                });
+
             }
         });
         return true;

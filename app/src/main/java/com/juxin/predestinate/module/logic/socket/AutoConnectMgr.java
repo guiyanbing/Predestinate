@@ -339,7 +339,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * 将即时通讯中收到消息通过ICSCallback抛出。
      */
     private void onMessage(NetData data, long msgId) {
-        PLogger.d("onMessage:---->msgId:" + msgId + ",sender:" + data.getUid() + ",content:" + data.getContent());
+        PLogger.i("onMessage:---->msgId:" + msgId + ",sender:" + data.getUid() + ",content:" + data.getContent());
         try {
             if (iCSCallback != null) {
                 iCSCallback.onMessage(data);
