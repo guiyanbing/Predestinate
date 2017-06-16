@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 transaction.show(fragment).commitAllowingStateLoss(); // 隐藏当前的fragment，显示下一个
             }
+            fragmentManager.executePendingTransactions();
             current = fragment;
         }
     }
