@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,7 +43,6 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     public final static int DISPLAY_TYPE_INFO_EDIT = 3;
     public final static int DISPLAY_TYPE_BIG_IMG = 4; //看大图
 
-    private ImageView btn_photo_display_title_left;
     private TextView btn_photo_display_del;
     private ViewPager vp_photo_display;
     private TextView btn_photo_display_title, tv_set_bg;
@@ -101,7 +99,6 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     };
 
     private void initView() {
-        this.btn_photo_display_title_left = (ImageView) findViewById(R.id.btn_photo_display_title_left);
         tv_set_bg = (TextView) findViewById(R.id.tv_set_bg);
         this.btn_photo_display_del = (TextView) findViewById(R.id.btn_photo_display_del);
         this.vp_photo_display = (ViewPager) findViewById(R.id.vp_photo_display);
@@ -130,16 +127,16 @@ public class PhotoDisplayAct extends BaseActivity implements OnClickListener, On
     }
 
     private void initEvent() {
-        this.btn_photo_display_title_left.setOnClickListener(this);
         this.btn_photo_display_del.setOnClickListener(this);
         tv_set_bg.setOnClickListener(this);
         this.vp_photo_display.setOnPageChangeListener(this);
+        findViewById(R.id.btn_title_back).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_photo_display_title_left:
+            case R.id.btn_title_back:
                 finishCurrentActivity();
                 break;
             case R.id.btn_photo_display_del:
