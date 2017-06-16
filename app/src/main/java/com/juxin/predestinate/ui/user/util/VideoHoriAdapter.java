@@ -49,10 +49,11 @@ public class VideoHoriAdapter extends ExBaseAdapter<UserVideo> {
         }
 
         UserVideo userVideo = getItem(position);
+        String url = ImageLoader.checkOssImageUrl(userVideo.getPic());
         if (userVideo.isCanView()) {
-            ImageLoader.loadCenterCrop(App.context, userVideo.getPic(), mHolder.img_media);
+            ImageLoader.loadCenterCrop(App.context, url, mHolder.img_media);
         } else {
-            ImageLoader.loadBlur(App.context, userVideo.getPic(), mHolder.img_media);
+            ImageLoader.loadBlur(App.context, url, mHolder.img_media);
         }
         mHolder.img_shade.setVisibility(View.VISIBLE);
         return convertView;

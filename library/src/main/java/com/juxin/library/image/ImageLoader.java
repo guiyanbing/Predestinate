@@ -426,6 +426,10 @@ public class ImageLoader {
         return checkOssImageUrl(model, 128, "jpg");
     }
 
+    public static <T> T checkOssImageUrl(T model) {
+        return checkOssImageUrl(model, 128);
+    }
+
     public static <T> T checkOssImageUrl(T model, int wh) {
         return checkOssImageUrl(model, wh, "jpg");
     }
