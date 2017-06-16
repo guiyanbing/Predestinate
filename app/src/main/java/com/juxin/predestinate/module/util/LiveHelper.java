@@ -66,7 +66,7 @@ public class LiveHelper {
         intent.putExtra("image_url", imgUrl);
         intent.putExtra("uid", "yf" + userDetail.getUid());
         intent.putExtra("head_url", userDetail.getAvatar());
-        intent.putExtra("sex", userDetail.getGender());
+        intent.putExtra("sex", userDetail.getGender() == 2 ? "0":"1");//隔壁APP 字符串："0"是女性，"1"是男性
         intent.putExtra("password", ModuleMgr.getLoginMgr().getAuth());
         intent.setComponent(componetName);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -91,7 +91,7 @@ public class LiveHelper {
             jo.put("image_url", imgUrl);
             jo.put("uid", "yf" + userDetail.getUid());
             jo.put("head_url", userDetail.getAvatar());
-            jo.put("sex", userDetail.getGender());
+            jo.put("sex", userDetail.getGender() == 2 ? "0":"1");//隔壁APP 字符串："0"是女性，"1"是男性
             jo.put("password", JniUtil.GetEncryptString(ModuleMgr.getLoginMgr().getUserList().get(0).getPw()));
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(jo.toString().getBytes());
