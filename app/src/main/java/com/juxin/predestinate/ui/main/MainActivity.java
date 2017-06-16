@@ -207,6 +207,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Statistics.userOnline("mail");
                 Statistics.userBehavior(SendPoint.menu_xiaoxi);
                 switchContent(mailFragment);
+                if (isFloatShowing) closeFloatingMessage();
                 break;
             case R.id.rank_layout:
                 Statistics.userOnline("rank");
@@ -329,13 +330,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     // --------------------------消息提示处理-----------------------------------------
 
-    private boolean isShowing = false;
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    private boolean isFloatShowing = false;
+    private Handler floatHandler = new Handler();
+    private Runnable floatRunnable = new Runnable() {
         @Override
         public void run() {
             floating_message_container.removeAllViews();
-            isShowing = false;
+            isFloatShowing = false;
         }
     };
 
@@ -349,8 +350,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void showFloatingMessage(final UserInfoLightweight simpleData, final BaseMessage baseMessage, String content) {
         synchronized (this) {
             if (current == mailFragment) return;
-            handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 5 * 1000);
+            floatHandler.removeCallbacks(floatRunnable);
+            floatHandler.postDelayed(floatRunnable, 5 * 1000);
             floatingPanel.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
                     content, simpleData.getAvatar(), new View.OnClickListener() {
                         @Override
@@ -359,7 +360,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             closeFloatingMessage();
                         }
                     });
-            if (!isShowing) {
+            if (!isFloatShowing) {
                 floating_message_container.removeAllViews();
                 floating_message_container.addView(floatingPanel.getContentView());
                 floatingPanel.getContentView().setTranslationY(-100f);
@@ -369,7 +370,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         .decelerate()
                         .duration(1000)
                         .start();
-                isShowing = true;
+                isFloatShowing = true;
             }
         }
     }
@@ -378,7 +379,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * 移除首页消息悬浮提示
      */
     public void closeFloatingMessage() {
-        handler.removeCallbacks(runnable);
-        runnable.run();
+        floatHandler.removeCallbacks(floatRunnable);
+        floatRunnable.run();
     }
 }

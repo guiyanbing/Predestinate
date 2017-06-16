@@ -46,6 +46,8 @@ dependencies {
 
     //fast-json解析
     compile 'com.alibaba:fastjson:1.2.31'
+    //跨进程sp存储
+    compile 'net.grandcentrix.tray:tray:0.12.0'
 
     //okhttp:[https://github.com/square/okhttp]
     compile "com.squareup.okhttp3:okhttp:$rootProject.versions.libOkhttp"
