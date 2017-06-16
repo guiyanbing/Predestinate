@@ -15,6 +15,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
@@ -445,7 +446,7 @@ public class ChatMgr implements ModuleBase {
      * @param giftCount 礼物个数
      * @param gType     来源
      */
-    public void sendGiftMsg(String channelID, String whisperID, @Nullable int giftID, @Nullable int giftCount, @Nullable int gType) {
+    public void sendGiftMsg(String channelID, String whisperID, @Nullable final int giftID, @Nullable final int giftCount, @Nullable int gType) {
         final GiftMessage giftMessage = new GiftMessage(channelID, whisperID, giftID, giftCount);
         giftMessage.setStatus(MessageConstant.SENDING_STATUS);
         giftMessage.setJsonStr(giftMessage.getJson(giftMessage));
@@ -461,6 +462,11 @@ public class ChatMgr implements ModuleBase {
                 info.parseJson(response.getResponseString());
                 if (response.isOk()) {
                     updateOk(giftMessage, null);
+                    GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
+                    if (giftInfo == null) return;
+                    int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
+                    if (stone >= 0)
+                        ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
                 } else {
                     updateFail(giftMessage, null);
                 }
