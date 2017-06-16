@@ -365,7 +365,7 @@ public class CardsView extends LinearLayout {
     }
 
     private void releaseTopView(float xvel, float yvel) {
-        mScrolling = true;
+//        mScrolling = true;
         View topView = getTopView();
         if (topView != null && canMoveCard() && mEnableSwipe) {
             onTopViewReleased(topView, xvel, yvel);
@@ -433,6 +433,7 @@ public class CardsView extends LinearLayout {
         final int dy = finalTop - startTop;
         if (dx != 0 || dy != 0) {
             mScroller.startScroll(topView.getLeft(), topView.getTop(), dx, dy, duration);
+            mScrolling = true;
             ViewCompat.postInvalidateOnAnimation(this);
         } else {
             mScrolling = false;
