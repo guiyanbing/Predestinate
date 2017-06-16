@@ -60,11 +60,14 @@ public enum SendPoint {
     menu_me_vippay,                         // 立即开通VIP
     menu_me_meauth,                         // 我的认证
     menu_me_meauth_videoauth,               // 视频认证
+    menu_me_meauth_id,                      // 身份认证
+    menu_me_meauth_id_submit,               // 提交按钮(上传资料信息)
     menu_me_meauth_videoauth_capturepicture,// 拍摄照片按钮
     menu_me_meauth_videoauth_capturevideo,  // 拍摄视频按钮
     menu_me_meauth_telauth,                 // 手机认证
     menu_me_meauth_telauth_btnverifycode,   // 获取验证码
     menu_me_meauth_telauth_btnverify,       // 立即验证按钮
+    menu_me_top_ljbd,                       // 个人中心->立即绑定(普通点击,顶部黄色提示条链接)
     menu_me_avatar,                         // 上传头像
     menu_me_sgzw,                           // 谁关注我
     menu_me_money,                          // 我的钱包
@@ -81,6 +84,7 @@ public enum SendPoint {
     menu_me_gem_explain,                    // 钻石说明
     menu_me_gem_btnpay,                     // 点击钻石支付按钮
     menu_me_gift,                           // 我的礼物
+    menu_me_myhome,                         // 我的主页
     menu_me_profile,                        // 个人资料
     menu_me_album,                          // 我的相册
     menu_me_setting,                        // 设置中心
@@ -95,6 +99,7 @@ public enum SendPoint {
     menu_me_setting_checkupdates,           // 检查更新
     menu_me_setting_huodong,                // 活动相关
     menu_me_setting_about,                  // 关于
+    menu_me_setting_about_kefuservice,      // 关于-客服服务
     menu_me_setting_clearcache,             // 清除缓存
     menu_me_setting_signout,                // 退出按钮
 

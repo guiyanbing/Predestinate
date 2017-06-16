@@ -41,12 +41,17 @@ public class ChatPanelCustomHint extends ChatPanel {
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
         if (msgData == null || !(msgData instanceof TextMessage)) return false;
 
-        String hintContent = TextUtils.isEmpty(msgData.getMsgDesc()) ?
-                ((TextMessage) msgData).getHtm() : msgData.getMsgDesc();
+        TextMessage msg = (TextMessage) msgData;
+        String channel_uid = "";
+        if (infoLightweight != null) {
+            channel_uid = String.valueOf(infoLightweight.getChannel_uid());
+        }
+
+        String hintContent = TextUtils.isEmpty(msg.getHtm()) ? msg.getMsgDesc() : msg.getHtm();
         if (TextUtils.isEmpty(hintContent)) {
             getContentView().setVisibility(View.GONE);
         }
-        MyURLSpan.addClickToTextViewLink(App.getActivity(), text, hintContent);
+        MyURLSpan.addClickToTextViewLink(App.getActivity(), text, hintContent, msg.getLWhisperID(), channel_uid);
         text.setMovementMethod(LinkMovementMethod.getInstance());
         return true;
     }

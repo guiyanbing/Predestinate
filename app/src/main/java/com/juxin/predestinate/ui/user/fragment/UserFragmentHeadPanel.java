@@ -139,6 +139,7 @@ public class UserFragmentHeadPanel extends BasePanel implements View.OnClickList
                 ChineseFilter.copyString(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getShareCode());
                 break;
             case R.id.tips_verify_mobile:
+                Statistics.userBehavior(SendPoint.menu_me_top_ljbd);
                 UIShow.showPhoneVerifyAct((FragmentActivity) getContext(),
                         MyAuthenticationAct.AUTHENTICSTION_REQUESTCODE); //跳手机认证页面
                 break;

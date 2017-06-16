@@ -41,8 +41,6 @@ import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
 
-import java.util.HashMap;
-
 public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
     private FragmentManager fragmentManager;
@@ -109,8 +107,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
         plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
-                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url()
-        );//广场直播测试链接："http://test.game.xiaoyaoai.cn:30081/static/yfb-test/pages/square/square.html"
+                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url());
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
@@ -307,14 +304,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }, 200);
                 break;
 
-            case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
-                HashMap<String, Object> data = (HashMap<String, Object>) value;
-                int type = (int) data.get("type");
-                if ((type == 0 || type == 2) && ModuleMgr.getChatMgr().refreshOfflineMsg()) {
-                    ModuleMgr.getChatMgr().getOfflineMsg();
-                }
-                break;
-
             case MsgType.MT_Unread_change:
                 ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
                 break;
@@ -325,21 +314,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        ModuleMgr.getChatMgr().registerNetReceiver(this);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
-    }
-
-    @Override
-    protected void onStop() {
-        ModuleMgr.getChatMgr().unregisterNetReceiver(this);
-        super.onStop();
     }
 
     @Override

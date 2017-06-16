@@ -1,13 +1,7 @@
 package com.juxin.predestinate.module.local.chat;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -16,13 +10,13 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.BitmapUtil;
 import com.juxin.library.utils.FileUtil;
-import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.file.UpLoadResult;
+import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
@@ -36,6 +30,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.unread.UnreadReceiveMsgType;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -542,6 +537,11 @@ public class ChatMgr implements ModuleBase {
                         info.parseJson(response.getResponseString());
                         if (response.isOk()) {
                             updateOk(giftMessage, null);
+						GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
+                    if (giftInfo == null) return;
+                    int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
+                    if (stone >= 0)
+                        ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
                         } else {
                             updateFail(giftMessage, null);
                         }
@@ -842,16 +842,14 @@ public class ChatMgr implements ModuleBase {
     /**
      * 获取系统推送消息
      *
-     * @param channelID
-     * @param whisperID
      * @param page
      * @return
      */
-    public Observable<List<BaseMessage>> getSystemNotice(final String channelID, final String whisperID, int page) {
-        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, page, 20);
+    public Observable<List<BaseMessage>> getSystemNotice(int page) {
+        String systemMsg = String.valueOf(MailSpecialID.systemMsg.getSpecialID());
+        Observable<List<BaseMessage>> observable = dbCenter.getCenterFMessage().queryMsgList(null, systemMsg, page, 20);
         if (page == 0) {
-            //把当前用户未读信息都更新成已读
-            dbCenter.getCenterFMessage().updateToRead(channelID, whisperID, new DBCallback() {
+            dbCenter.getCenterFMessage().updateToRead(null, systemMsg, new DBCallback() {
                 @Override
                 public void OnDBExecuted(long result) {
                     if (result != MessageConstant.OK) {
@@ -1214,44 +1212,14 @@ public class ChatMgr implements ModuleBase {
     }
 
     // ------------------------------------- 离线消息处理 ------------------------------------
-    private NetReceiver netReceiver = new NetReceiver();
     private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
     private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
-    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
-
-    /**
-     * 注册网络变化监听广播
-     */
-    public void registerNetReceiver(Activity activity) {
-        if (netReceiver == null) netReceiver = new NetReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        activity.registerReceiver(netReceiver, filter);
-    }
-
-    public void unregisterNetReceiver(Activity activity) {
-        if (netReceiver == null) return;
-        activity.unregisterReceiver(netReceiver);
-        netReceiver = null;
-    }
-
-    /**
-     * 网络监测
-     */
-    private class NetReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
-                    && refreshOfflineMsg()) {
-                getOfflineMsg();
-            }
-        }
-    }
+    private static final long OFFLINE_MSG_INTERVAL = 10 * 1000;  // 获取离线消息间隔
 
     /**
      * 离线消息刷新间隔控制
      */
-    public boolean refreshOfflineMsg() {
+    private boolean refreshOfflineMsg() {
         if (checkIntervalTimeUtil == null) {
             checkIntervalTimeUtil = new CheckIntervalTimeUtil();
         }
@@ -1280,7 +1248,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50) {
+                if (offlineMsg.getMsgList().size() >= 50  && refreshOfflineMsg()) {
                     getOfflineMsg();
                     return;
                 }

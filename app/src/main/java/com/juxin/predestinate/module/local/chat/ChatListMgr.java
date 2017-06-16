@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -30,17 +29,12 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
-import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -141,6 +135,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
+    private long updateTime = 0;
+
     public synchronized void updateListMsg(List<BaseMessage> messages) {
         PLogger.printObject(messages);
         unreadNum = 0;
@@ -160,7 +156,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
         unreadNum += getFollowNum();//关注
         PLogger.d("unreadNum=" + unreadNum);
-        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+
+
+        long newUpdateTime = System.currentTimeMillis();
+
+        if (Math.abs(newUpdateTime - updateTime) >= 1000) {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+            updateTime = newUpdateTime;
+        }
+
     }
 
     /**

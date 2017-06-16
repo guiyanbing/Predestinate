@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.widget.ImageView;
 
@@ -26,6 +28,7 @@ import com.juxin.library.R;
 import com.juxin.library.image.transform.BlurImage;
 import com.juxin.library.image.transform.CircleTransform;
 import com.juxin.library.image.transform.RoundedCorners;
+import com.juxin.library.utils.FileUtil;
 
 /**
  * 基于Glide图片请求，处理类
@@ -54,7 +57,7 @@ public class ImageLoader {
      * 加载头像
      */
     public static <T> void loadAvatar(Context context, T model, ImageView view) {
-        loadPic(context, model, view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop);
+        loadPic(context, checkOssAvatar(model), view, R.drawable.default_head, R.drawable.default_head, bitmapCenterCrop);
     }
 
     public static <T> void loadCircleAvatar(Context context, T model, ImageView view) {
@@ -62,7 +65,7 @@ public class ImageLoader {
     }
 
     public static <T> void loadCircleAvatar(Context context, T model, ImageView view, int borderWidth) {
-        loadCircle(context, model, view, R.drawable.default_head, R.drawable.default_head, borderWidth, Color.WHITE);
+        loadCircle(context, checkOssAvatar(model), view, R.drawable.default_head, R.drawable.default_head, borderWidth, Color.WHITE);
     }
 
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view) {
@@ -70,7 +73,7 @@ public class ImageLoader {
     }
 
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view, int roundPx) {
-        loadRound(context, model, view, roundPx, R.drawable.default_head, R.drawable.default_head);
+        loadRound(context, checkOssAvatar(model), view, roundPx, R.drawable.default_head, R.drawable.default_head);
     }
 
     /**
@@ -164,6 +167,23 @@ public class ImageLoader {
         loadPicWithCallback(context, model, callback, (Transformation<Bitmap>[]) null);
     }
 
+    /**
+     * 清除Glide内存缓存
+     *
+     * @return
+     */
+    public boolean clearCacheMemory(Context context) {
+        try {
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                Glide.get(context).clearMemory();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // ==================================== 内部私有调用 =============================================
 
     /**
@@ -182,6 +202,7 @@ public class ImageLoader {
                                          final Transformation<Bitmap>... transformation) {
         if (!isInvalidTag(view, model, transformation))
             return;
+
         setImgTag(view, model, transformation);
 
         loadPicWithCallback(context, defResImg, new GlideCallback() {
@@ -205,7 +226,9 @@ public class ImageLoader {
         try {
             if (!isInvalidTag(view, model, transformation))
                 return;
+
             setImgTag(view, model, transformation);
+
             loadPic(context, model, view, defResImg > 0 ? ContextCompat.getDrawable(context, defResImg) : null,
                     errResImg > 0 ? ContextCompat.getDrawable(context, errResImg) : null, transformation);
         } catch (Exception e) {
@@ -220,9 +243,10 @@ public class ImageLoader {
             //先加载默认图
             if (isInvalidTag(view, model, transformation))
                 return;
+
             view.setImageDrawable(defResImg);
 
-            if (model == null)
+            if (model == null || "".equals(model))
                 return;
 
             //再去网络请求
@@ -231,12 +255,18 @@ public class ImageLoader {
                 public void onResourceReady(GlideDrawable resource) {
                     if (isInvalidTag(view, model, transformation))
                         return;
+
                     getDrawableBuilder(context, model)
-                            .bitmapTransform(transformation)
-//                            .placeholder(defResImg)
-                            .error(errResImg)
                             .diskCacheStrategy(resource.isAnimated() ? DiskCacheStrategy.SOURCE : DiskCacheStrategy.ALL)
-                            .into(view);
+                            .bitmapTransform(transformation)
+                            .placeholder(defResImg)
+                            .error(errResImg)
+                            .into(new GlideDrawableImageViewTarget(view) {
+                                @Override
+                                protected void setResource(GlideDrawable resource) {
+                                    super.setResource(resource);
+                                }
+                            });
                 }
             });
         } catch (Exception e) {
@@ -247,7 +277,8 @@ public class ImageLoader {
     /**
      * 带回调的加载
      */
-    private static <T> void loadPicWithCallback(final Context context, final T model, final GlideCallback callback, final Transformation<Bitmap>... transformation) {
+    private static <T> void loadPicWithCallback(final Context context, final T model, final GlideCallback callback,
+                                                final Transformation<Bitmap>... transformation) {
         try {
             if (isActDestroyed(context))
                 return;
@@ -303,14 +334,16 @@ public class ImageLoader {
 
     private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
         return getRequest(context, model)
-                .dontAnimate()
+                .crossFade()
+//                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 
     private static <T> BitmapRequestBuilder<T, Bitmap> getBitmapBuilder(Context context, T model) {
         return getRequest(context, model)
                 .asBitmap()
-                .dontAnimate()
+                .crossFade()
+//                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
@@ -372,8 +405,59 @@ public class ImageLoader {
         return objHash;
     }
 
+    /**
+     * 根据resId和Transformation生成CacheKey
+     *
+     * @param resId
+     * @param trans
+     * @return
+     */
     private static int getCacheKey(int resId, Object[] trans) {
         return getArrayHash(trans) ^ resId;
+    }
+
+    /**
+     * 检测并拼接头像的带裁切参数的图片url
+     *
+     * @param model
+     * @return
+     */
+    public static <T> T checkOssAvatar(T model) {
+        return checkOssImageUrl(model, 128, "jpg");
+    }
+
+    public static <T> T checkOssImageUrl(T model) {
+        return checkOssImageUrl(model, 128);
+    }
+
+    public static <T> T checkOssImageUrl(T model, int wh) {
+        return checkOssImageUrl(model, wh, "jpg");
+    }
+
+    /**
+     * 获取拼接裁切参数的图片url[适用于阿里云存储的图片]
+     *
+     * @param model  图片原url
+     * @param wh     裁切宽高
+     * @param suffix 扩展名
+     * @return 拼接之后的请求url
+     */
+    public static <T> T checkOssImageUrl(T model, int wh, String suffix) {
+        if (!(model instanceof String))
+            return model;
+        String url = (String) model;
+        if (TextUtils.isEmpty(url) || !FileUtil.isURL(url))
+            return model;
+        if (TextUtils.isEmpty(suffix)) {
+            suffix = "jpg";
+            try {
+                suffix = url.substring(url.lastIndexOf("."));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        url = url.contains("/oss/") && !url.contains("@1e_") ? (url + "@1e_" + wh + "w_" + wh + "h_1c_0i_1o_75Q_1x." + suffix) : url;
+        return (T) url;
     }
 
     /**
