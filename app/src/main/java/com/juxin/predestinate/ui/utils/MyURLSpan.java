@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.request.DownloadListener;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -40,6 +41,7 @@ public class MyURLSpan extends ClickableSpan {
     private final static String URL_TYPE_CERTIFY_PHONE = "certify_phone";                 //手机认证
     private final static String URL_TYPE_INVITE_VIDEO = "invite_video";                 //发起视频聊天
     private final static String URL_TYPE_SEND_GIFT = "send_gift";                 //送礼提示
+    private final static String URL_TYPE_JUMP_KF = "jump_kf";                 //跳转到小秘书聊天框
 
 
     private final Context mContext;
@@ -138,6 +140,10 @@ public class MyURLSpan extends ClickableSpan {
                 //送礼提示
                 case URL_TYPE_SEND_GIFT:
                     UIShow.showBottomGiftDlg(App.getActivity(), otherID, Constant.OPEN_FROM_CHAT_FRAME, channel_uid);
+                    break;
+                //跳转到小秘书聊天框
+                case URL_TYPE_JUMP_KF:
+                    UIShow.showPrivateChatAct(App.getActivity(), MailSpecialID.customerService.getSpecialID(), null);
                     break;
                 default:
                     int i = checkDownExUrl(mUrl);

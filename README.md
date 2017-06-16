@@ -35,6 +35,8 @@
 - [测试推送发起视频提示](http://123.59.187.33:8681/test/TestPushVcTips?fuid=1111&tuid=1112)
 - [通用HTM HINT 测试接口 ](http://123.59.187.33:8681/test/TestPushHtmHint?fuid=1001&tuid=1002&mct=通用HTM消息测试&htm=送个礼物，对方立即接收既自动成为好友<a href="send_gift">点击赠送</a>)
 - [送礼提示](http://123.59.187.33:8681/test/TestPushNeedGift?fuid=1111&tuid=1112)
+- [跳转到小秘书聊天框](http://123.59.187.33:8681/test/TestPushJUMPKF?fuid=1111&tuid=1112)
+
 
 
 - 待文档
