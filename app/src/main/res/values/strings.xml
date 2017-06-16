@@ -749,7 +749,7 @@
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>
     <string name="update_has_install">检测到新版已安装，请点击跳转</string>
-    <string name="update_already_new">您当前的版本为最新的</string>
+    <string name="update_already_new">已是最新版本，无需升级</string>
     <string name="update_download_error">安装包下载失败，请重试</string>
     <string name="update_find_new">发现新版本 </string>
     <!-- =================软件升级 end================= -->
