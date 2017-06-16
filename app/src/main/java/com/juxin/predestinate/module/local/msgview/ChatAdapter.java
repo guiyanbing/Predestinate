@@ -13,6 +13,7 @@ import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
+import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -376,6 +377,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
+                        SortList.sortListView(baseMessages);//排序
                         List<BaseMessage> listTemp = new ArrayList<>();
 
                         if (baseMessages.size() < 20) {
@@ -561,6 +563,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
+                        SortList.sortListView(baseMessages);//排序
                         PLogger.printObject(baseMessages);
                         chatInstance.chatListView.stopRefresh();
                         if (baseMessages.size() > 0) {
@@ -568,7 +571,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                                 chatInstance.chatListView.setPullRefreshEnable(false);
                             }
 
-                            List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+                            List<BaseMessage> listTemp = new ArrayList<>();
                             for (BaseMessage baseMessage : baseMessages) {
                                 if (isShowMsg(baseMessage)) {
                                     listTemp.add(baseMessage);

@@ -31,7 +31,6 @@ import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.logic.socket.TCPConstant;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -41,8 +40,6 @@ import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
-
-import java.util.HashMap;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
@@ -305,15 +302,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         onMsgNum(ModuleMgr.getChatListMgr().getUnreadNumber());
                     }
                 }, 200);
-                break;
-
-            case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
-                HashMap<String, Object> data = (HashMap<String, Object>) value;
-                int type = (int) data.get("type");
-                if (type == TCPConstant.SOCKET_STATUS_Login_Success) {
-                    PLogger.d("---offlineMessage--->SOCKET_STATUS_Login_Success");
-                    ModuleMgr.getChatMgr().getOfflineMsg();
-                }
                 break;
 
             case MsgType.MT_Unread_change:

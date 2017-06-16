@@ -22,6 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.juxin.library.R;
 import com.juxin.library.image.transform.BlurImage;
@@ -64,7 +65,7 @@ public class ImageLoader {
     }
 
     public static <T> void loadCircleAvatar(Context context, T model, ImageView view, int borderWidth) {
-        loadCircle(context, model, view, R.drawable.default_head, R.drawable.default_head, borderWidth, Color.WHITE);
+        loadCircle(context, checkOssAvatar(model), view, R.drawable.default_head, R.drawable.default_head, borderWidth, Color.WHITE);
     }
 
     public static <T> void loadRoundAvatar(Context context, T model, ImageView view) {
@@ -258,9 +259,14 @@ public class ImageLoader {
                     getDrawableBuilder(context, model)
                             .diskCacheStrategy(resource.isAnimated() ? DiskCacheStrategy.SOURCE : DiskCacheStrategy.ALL)
                             .bitmapTransform(transformation)
-//                            .placeholder(defResImg)
+                            .placeholder(defResImg)
                             .error(errResImg)
-                            .into(view);
+                            .into(new GlideDrawableImageViewTarget(view) {
+                                @Override
+                                protected void setResource(GlideDrawable resource) {
+                                    super.setResource(resource);
+                                }
+                            });
                 }
             });
         } catch (Exception e) {
@@ -328,14 +334,16 @@ public class ImageLoader {
 
     private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
         return getRequest(context, model)
-                .dontAnimate()
+                .crossFade()
+//                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 
     private static <T> BitmapRequestBuilder<T, Bitmap> getBitmapBuilder(Context context, T model) {
         return getRequest(context, model)
                 .asBitmap()
-                .dontAnimate()
+                .crossFade()
+//                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
     }
 
@@ -412,11 +420,18 @@ public class ImageLoader {
      * 检测并拼接头像的带裁切参数的图片url
      *
      * @param model
-     * @param <T>
      * @return
      */
     public static <T> T checkOssAvatar(T model) {
         return checkOssImageUrl(model, 128, "jpg");
+    }
+
+    public static <T> T checkOssImageUrl(T model) {
+        return checkOssImageUrl(model, 128);
+    }
+
+    public static <T> T checkOssImageUrl(T model, int wh) {
+        return checkOssImageUrl(model, wh, "jpg");
     }
 
     /**
@@ -431,13 +446,17 @@ public class ImageLoader {
         if (!(model instanceof String))
             return model;
         String url = (String) model;
-        if (!FileUtil.isURL(url))
-            return (T) url;
-        if (TextUtils.isEmpty(url))
-            return (T) url;
-        if (TextUtils.isEmpty(suffix))
+        if (TextUtils.isEmpty(url) || !FileUtil.isURL(url))
+            return model;
+        if (TextUtils.isEmpty(suffix)) {
             suffix = "jpg";
-        url = url.contains("/oss/") && !url.contains("@1e_") ? (url + "@1e_" + wh + "w_" + wh + "h_1c_0i_1o_80Q_1x." + suffix) : url;
+            try {
+                suffix = url.substring(url.lastIndexOf("."));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        url = url.contains("/oss/") && !url.contains("@1e_") ? (url + "@1e_" + wh + "w_" + wh + "h_1c_0i_1o_75Q_1x." + suffix) : url;
         return (T) url;
     }
 

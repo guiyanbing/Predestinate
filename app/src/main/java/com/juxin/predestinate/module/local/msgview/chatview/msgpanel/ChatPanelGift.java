@@ -66,7 +66,7 @@ public class ChatPanelGift extends ChatPanel {
         tv_gift_status.setText(msg.isGiftAutoReceived() ? getContext().getString(R.string.gift_has_auto_received)
                 : (msgData.getfStatus() == 0 ? getContext().getString(R.string.gift_has_received)
                 : getContext().getString(R.string.gift_click_to_receive)));
-        ImageLoader.loadAvatar(context, giftInfo.getPic(), iv_gift_img);
+        ImageLoader.loadFitCenter(context, giftInfo.getPic(), iv_gift_img);
         tv_gift_hello.setText(isSender()
                 ? (ModuleMgr.getCenterMgr().getMyInfo().isMan()
                 ? getContext().getString(R.string.chat_gift_hello_woman)

@@ -68,7 +68,7 @@ public class UserBasic extends BaseData implements Parcelable {
         this.setEdu(infoConfig.getEdu().getShowWithSubmit(detailObject.optInt("edu")));
         this.setJob(infoConfig.getJob().getShowWithSubmit(detailObject.optInt("job")));
         this.setIncome(infoConfig.getIncome().getShowWithSubmit(detailObject.optInt("income")));
-        this.setMarry(infoConfig.getMarry().getShowWithSubmit(marry == 0 ? 2 : marry));
+        this.setMarry(infoConfig.getMarry().getShowWithSubmit(marry < 2 ? 2 : marry));
 
         int pid = detailObject.optInt("province");
         int cit = detailObject.optInt("city");

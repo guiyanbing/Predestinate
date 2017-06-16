@@ -71,7 +71,8 @@ public class AlbumAdapter extends BaseAdapter {
 
         String path = userPhoto.getPic();
         if (path != null && !"".equals(path)) {
-            ImageLoader.loadCenterCrop(context, path, mHolder.img_info_grid_item_pic);
+            String url = ImageLoader.checkOssImageUrl(path);
+            ImageLoader.loadCenterCrop(context, url, mHolder.img_info_grid_item_pic);
         } else {
             mHolder.img_info_grid_item_pic.setImageResource(R.drawable.f1_upload_photo_btn);
         }
