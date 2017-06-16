@@ -53,9 +53,6 @@ public class DBCenterFMessage {
                 else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
                     ret = insertOneMsg(message);
                 }
-                //TODO
-                // return updateMsgVideo(message);
-
                 DBCenter.makeDBCallback(callback, ret);
 
             }

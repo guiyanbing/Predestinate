@@ -2,6 +2,8 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Handler;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -31,7 +33,6 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -135,8 +136,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    private long updateTime = 0;
-
     public synchronized void updateListMsg(List<BaseMessage> messages) {
         PLogger.printObject(messages);
         unreadNum = 0;
@@ -158,14 +157,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.d("unreadNum=" + unreadNum);
 
 
-        long newUpdateTime = System.currentTimeMillis();
-
-        if (Math.abs(newUpdateTime - updateTime) >= 1000) {
-            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-            updateTime = newUpdateTime;
-        }
-
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 1000);
     }
+
+
+    private Handler handler = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        }
+    };
 
     /**
      * 截取语音
