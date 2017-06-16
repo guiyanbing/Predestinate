@@ -27,6 +27,7 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 
 import java.util.List;
 
@@ -120,9 +121,11 @@ public class AttentionMeAdapter extends ExBaseAdapter<AttentionUserDetail> imple
                             if (getList().get(mPosition).getType() == 1) {
                                 vh.tvconcern.setText(getContext().getString(R.string.attention_ta));
                                 getList().get(mPosition).setType(0);
+                                AttentionUtil.deleteUserId(info);
                             } else {
                                 vh.tvconcern.setText(getContext().getString(R.string.privatechat_title_unsubscribe));
                                 getList().get(mPosition).setType(1);
+                                AttentionUtil.saveUserIds(info);
                             }
                             notifyDataSetChanged();
                         } else {

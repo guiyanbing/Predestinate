@@ -1,5 +1,7 @@
 package com.juxin.predestinate.module.util.my;
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -8,6 +10,8 @@ import com.juxin.predestinate.bean.my.AttentionUserDetail;
 import com.juxin.predestinate.bean.my.AttentionUserDetailList;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +24,11 @@ import java.util.Map;
 public class AttentionUtil {
 
     private static final String USERSKEY = "USERSKEY";
-    public static final int MYATTENTION = 1;
-    public static final int ATTENTIONME = 2;
+    private static final String USERSIDKEY = "USERSIDKEY";
     private static Map<Long, AttentionUserDetail> userInfos = new HashMap<>();
     private static List<AttentionUserDetail> userDetails = new ArrayList<>();
     private static List<AttentionUserDetail> userMyDetails = new ArrayList<>();
+    private static String strUserIds = "";
 
     //初始化
     public static void initUserDetails() {
@@ -32,6 +36,18 @@ public class AttentionUtil {
             @Override
             public void run() {
                 if (userInfos.size() <= 0) {
+                    strUserIds = PSP.getInstance().getString(USERSIDKEY + App.uid, "");
+                    if (TextUtils.isEmpty(strUserIds))
+                        ModuleMgr.getCommonMgr().getFollowing(new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(HttpResponse response) {
+                                AttentionList lists = new AttentionList();
+                                lists.parseJson(response.getResponseString());
+                                List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
+                                saveUserIdsById(infos);
+                            }
+                        });
+
                     String jsonStr = PSP.getInstance().getString(USERSKEY + App.uid, "");
                     AttentionUserDetailList list = new AttentionUserDetailList();
                     list.parseJson(jsonStr);
@@ -44,14 +60,6 @@ public class AttentionUtil {
         }).start();
     }
 
-    public static void addUser(AttentionUserDetail userDetail) {
-        userInfos.put(userDetail.getUid(), userDetail);
-    }
-
-    public static AttentionUserDetail getUserDetail(Long uid) {
-        return userInfos.get(uid);
-    }
-
     public static void saveUserDetails() {
         List<AttentionUserDetail> userDetails = new ArrayList<>();
         for (Long uid : userInfos.keySet()) {
@@ -59,6 +67,34 @@ public class AttentionUtil {
         }
         String jsonStr = JSON.toJSONString(userDetails);
         PSP.getInstance().put(USERSKEY + ModuleMgr.getCenterMgr().getMyInfo().getUid(), jsonStr);
+    }
+
+    public synchronized static void saveUserIdsById(List<AttentionList.AttentionInfo> userIds) {
+        if (userIds == null)
+            return;
+        strUserIds = "";
+        for (int i = 0; i < userIds.size(); i++) {
+            strUserIds = strUserIds + userIds.get(i).getUid() + "LL";
+        }
+        PSP.getInstance().put(USERSIDKEY + App.uid, strUserIds);
+    }
+
+    public synchronized static void saveUserIds(AttentionUserDetail userId) {
+        if (userId == null)
+            return;
+        strUserIds = strUserIds + userId.getUid() + "LL";
+        PSP.getInstance().put(USERSIDKEY + App.uid, strUserIds);
+    }
+
+    public synchronized static void deleteUserId(AttentionUserDetail userId) {
+        if (userId == null)
+            return;
+        strUserIds = strUserIds.replace(userId.getUid() + "LL","");
+        PSP.getInstance().put(USERSIDKEY + App.uid, strUserIds);
+    }
+
+    public static boolean isContainsUid(Long uid) {
+        return strUserIds.contains(uid+"LL");
     }
 
     /**
@@ -83,37 +119,6 @@ public class AttentionUtil {
         if (userInfos.containsKey(userDetail.getUid())) {
             userInfos.put(userDetail.getUid(), userDetail);
             saveUserDetails();
-        }
-    }
-
-    /**
-     * 返回内存中存储的用户信息
-     *
-     * @return
-     */
-    public static List<AttentionUserDetail> HandleAttentionList(List<AttentionList.AttentionInfo> infos, int attention) {
-        if (attention == ATTENTIONME) {
-            userDetails.clear();
-        } else {
-            userMyDetails.clear();
-        }
-        for (int i = 0; i < infos.size(); i++) {
-            AttentionUserDetail detail = getUserDetail(infos.get(i).getUid());
-            if (detail != null) {
-                if (attention == ATTENTIONME) {
-                    userDetails.add(detail);
-                } else {
-                    userMyDetails.add(detail);
-                }
-                infos.remove(i);
-                i--;
-                continue;
-            }
-        }
-        if (attention == ATTENTIONME) {
-            return userDetails;
-        } else {
-            return userMyDetails;
         }
     }
 }
