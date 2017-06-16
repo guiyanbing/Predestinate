@@ -139,7 +139,7 @@ public class SysMessAct extends BaseActivity implements ExListView.IXListViewLis
     }
 
     @Override
-    public void onChatUpdate(boolean ret, BaseMessage message) {
+    public void onChatUpdate(BaseMessage message) {
         if (message == null || !(message instanceof SysNoticeMessage)) return;
 
         SysNoticeMessage noticeMessage = (SysNoticeMessage) message;

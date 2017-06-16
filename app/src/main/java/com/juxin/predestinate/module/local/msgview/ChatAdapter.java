@@ -417,9 +417,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     @Override
-    public void onChatUpdate(boolean ret, BaseMessage message) {
-        PLogger.printObject(message.getJsonStr());
-        if (ret) {
+    public void onChatUpdate(BaseMessage message) {
+        if (message != null) {
+            PLogger.printObject(message.getJsonStr());
             if (message.getTime() == 0) {
                 message.setTime(ModuleMgr.getAppMgr().getTime());
             }
