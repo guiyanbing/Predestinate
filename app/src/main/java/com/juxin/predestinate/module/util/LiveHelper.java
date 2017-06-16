@@ -42,7 +42,6 @@ public class LiveHelper {
     /**
      * 打开直播间
      *
-     * @param type     1男用户  2 女用户点击立即下载 3 女用户点击开始直播
      * @param anchorId 主播UID
      * @param videoUrl 视频流地址
      * @param imgUrl   封面
@@ -50,12 +49,12 @@ public class LiveHelper {
      * @param pkg      直播app包名
      * @param cls      直播app入口
      */
-    public static void openLiveRoom(int type, String anchorId, String videoUrl, String imgUrl, String downUrl, String pkg, String cls) {
+    public static void openLiveRoom(String anchorId, String videoUrl, String imgUrl, String downUrl, String pkg, String cls) {
         if (!APKUtil.isAppInstalled(App.context, pkg)) {
             saveLiveInfo(anchorId, videoUrl, imgUrl, downUrl);
             return;
         }
-        // TODO: 2017/6/16 根据文档处理不同type类型时的用户行为
+        // TODO: 2017/6/16 根据当前用户性别判断打开女性直播页面还是打开去直播页面
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         ComponentName componetName = new ComponentName(pkg, cls);
         Intent intent = new Intent(Intent.ACTION_MAIN);
