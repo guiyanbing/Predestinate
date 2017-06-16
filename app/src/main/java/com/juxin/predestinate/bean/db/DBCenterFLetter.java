@@ -414,15 +414,15 @@ public class DBCenterFLetter {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                long result = deleteOne(whisperID);
+                long result = delete(whisperID);
                 DBCenter.makeDBCallback(callback, result);
             }
         });
     }
 
-    private int deleteOne(long whisperID) {
+    private int delete(long whisperID) {
         long ret = mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
-        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+        return ret != MessageConstant.ERROR ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     public void deleteList(final List<Long> list, final DBCallback callback) {
@@ -430,7 +430,7 @@ public class DBCenterFLetter {
             @Override
             public void run() {
                 for (int i=0; i<list.size(); ++i) {
-                    deleteOne(list.get(i));
+                    delete(list.get(i));
                 }
 
                 DBCenter.makeDBCallback(callback, MessageConstant.OK);

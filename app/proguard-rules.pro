@@ -142,18 +142,6 @@
 -keep public class pl.droidsonroids.gif.GifIOException{<init>(int);}
 -keep class pl.droidsonroids.gif.GifInfoHandle{<init>(long,int,int,int);}
 
-# ==============GreenDao start================
--keepclassmembers class * extends org.greenrobot.**greendao.**AbstractDao {
-public static java.lang.String TABLENAME;
-}
--keep class **$Properties
-
-# If you do not use SQLCipher:
--dontwarn org.greenrobot.greendao.database.**
-# If you do not use Rx:
--dontwarn rx.**
-# ==============GreenDao end================
-
 # ==============支付================
 #银联
 -dontwarn com.unionpay.**

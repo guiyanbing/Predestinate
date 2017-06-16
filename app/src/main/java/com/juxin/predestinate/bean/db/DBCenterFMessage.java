@@ -37,9 +37,7 @@ public class DBCenterFMessage {
         this.handler = handler;
     }
 
-
     public void storageDataVideo(final VideoMessage message, final DBCallback callback) {
-
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -534,7 +532,7 @@ public class DBCenterFMessage {
             @Override
             public void run() {
                 long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret != MessageConstant.ERROR ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -551,7 +549,7 @@ public class DBCenterFMessage {
             public void run() {
                 long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? AND " +
                         FMessage.COLUMN_TIME + " = ? ", String.valueOf(whisperID), String.valueOf(time));
-                long result = ret >=0 ? MessageConstant.OK: MessageConstant.ERROR;
+                long result = ret != MessageConstant.ERROR ? MessageConstant.OK: MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });

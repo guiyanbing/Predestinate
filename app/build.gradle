@@ -1,7 +1,6 @@
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'AndResGuard'
 
 android {
@@ -29,6 +28,10 @@ android {
         signingConfig signingConfigs.release;
         ndk { abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86" }//让64位的操作系统可以兼容32位的库文件
         multiDexEnabled true// 65535限制
+
+        // tray contentProvider鉴权
+        // add this to set a unique tray authority based on your applicationId
+        resValue "string", "tray__authority", "${applicationId}.tray"
     }
 
     dexOptions {
@@ -211,13 +214,6 @@ tasks.whenTaskAdded { task ->
     }
 }
 
-greendao {
-    // GreenDao数据库配置
-    schemaVersion 1
-    daoPackage 'com.juxin.predestinate.bean.db'
-    targetGenDir 'src/main/java'
-}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -227,13 +223,9 @@ dependencies {
     compile project(':library')
     //友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
-    //GreenDao数据库
-    compile 'org.greenrobot:greendao:3.2.0'
-    compile 'org.greenrobot:greendao-generator:3.2.0'
     //dagger2依赖注入
     compile 'com.google.dagger:dagger:2.10'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
     //sqlbrite数据库
     compile 'com.squareup.sqlbrite:sqlbrite:1.1.1'
-    compile files('libs/zy_pay.jar')
 }

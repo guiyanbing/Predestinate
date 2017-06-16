@@ -24,7 +24,7 @@
     - Sharedpreferences：`PSP`；
     - 请求缓存：`PCache`；
     - 消息派发：`MsgMgr`
-2. 软件中数据库使用[GreenDao](https://github.com/greenrobot/greenDAO)，进行数据库操作时各自学习使用。`./bean/db/`目录下的文件为GreenDao自动生成，请勿上传。
+2. 软件中数据库使用[sqlbrite](https://github.com/square/sqlbrite)，进行数据库操作时各自学习使用。
 
 ## 测试接口
 ### 1. 系统cmd消息测试接口

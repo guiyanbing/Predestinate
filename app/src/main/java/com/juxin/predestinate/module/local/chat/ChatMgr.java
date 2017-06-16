@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -111,7 +112,7 @@ public class ChatMgr implements ModuleBase {
                 }
                 ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
-        });//把当前用户未读信息都更新成已读
+        });
 
     }
 
@@ -205,13 +206,6 @@ public class ChatMgr implements ModuleBase {
 
                     @Override
                     public void onNext(Boolean aBoolean) {
-//                        if (aBoolean) {
-//                            if (dbCenter.getCenterFLetter().updateLetter(textMessage) == MessageConstant.ERROR) {
-//                                return;
-//                            }
-//                        }
-//                        dbCenter.getCenterFMessage().insertMsg(textMessage);
-
                         if (aBoolean) {
                             dbCenter.getCenterFLetter().updateLetter(textMessage, null);
                         }
@@ -239,7 +233,7 @@ public class ChatMgr implements ModuleBase {
         BaseMessage.BaseMessageType messageType = BaseMessage.BaseMessageType.valueOf(message.getType());
         if (messageType != null) {
             message.setStatus(MessageConstant.SENDING_STATUS);
-            onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
+            onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
 
             switch (messageType) {
                 case common: {
@@ -268,19 +262,13 @@ public class ChatMgr implements ModuleBase {
                                         dbCenter.updateFmessage(commonMessage, new DBCallback() {
                                             @Override
                                             public void OnDBExecuted(long result) {
-                                                if (result != MessageConstant.OK) {
+                                                if (result == MessageConstant.ERROR) {
+                                                    onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
                                                     return;
                                                 }
-                                                //// TODO: 2017/6/15 yuchenl: ori code is this butfalse
-                                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
                                                 sendMessage(commonMessage, null);
                                             }
                                         });
-//                                        if (upRet == MessageConstant.ERROR) {
-//                                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), false, commonMessage);
-//                                            return;
-//                                        }
-//                                        sendMessage(commonMessage, null);
                                     }
                                 }
                             });
@@ -307,7 +295,7 @@ public class ChatMgr implements ModuleBase {
                                                     return;
                                                 }
 
-                                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
+                                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
                                                 sendMessage(commonMessage, null);
                                             }
                                         });
@@ -362,19 +350,12 @@ public class ChatMgr implements ModuleBase {
         dbCenter.insertMsg(commonMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result == MessageConstant.ERROR) {
-                    return;
-                }
+                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
+                if (result == MessageConstant.ERROR) return;
 
-                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
                 sendMessage(commonMessage, null);
             }
         });
-
-//        boolean b = ret != MessageConstant.ERROR;
-//        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), b, commonMessage);
-//
-//        if (b) sendMessage(commonMessage, null);
     }
 
     /**
@@ -410,11 +391,8 @@ public class ChatMgr implements ModuleBase {
         dbCenter.insertMsg(commonMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result != MessageConstant.OK) {
-                    return;
-                }
-
-                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
+                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
+                if (result != MessageConstant.OK) return;
 
                 if (FileUtil.isURL(img_url)) {
                     sendMessage(commonMessage, null);
@@ -436,7 +414,7 @@ public class ChatMgr implements ModuleBase {
                                 if (result != MessageConstant.OK) {
                                     return;
                                 }
-                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
+                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
                                 sendMessage(commonMessage, null);
                             }
                         });
@@ -460,11 +438,9 @@ public class ChatMgr implements ModuleBase {
         dbCenter.insertMsg(commonMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result != MessageConstant.OK) {
-                    return;
-                }
+                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
 
-                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
+                if (result != MessageConstant.OK) return;
 
                 sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
                     @Override
@@ -480,7 +456,7 @@ public class ChatMgr implements ModuleBase {
                                         return;
                                     }
 
-                                    onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), true, commonMessage);
+                                    onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
                                     sendMessage(commonMessage, null);
                                 }
                             });
@@ -524,11 +500,8 @@ public class ChatMgr implements ModuleBase {
         dbCenter.insertMsg(giftMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result != MessageConstant.OK) {
-                    return;
-                }
-
-                onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), true, giftMessage);
+                onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), giftMessage);
+                if (result != MessageConstant.OK) return;
 
                 ModuleMgr.getCommonMgr().sendGift(whisperID, String.valueOf(giftID), giftCount, gType, new RequestComplete() {
                     @Override
@@ -689,7 +662,7 @@ public class ChatMgr implements ModuleBase {
         dbCenter.updateMsg(message, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), result != MessageConstant.ERROR, message);
+                onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
             }
         });
 
@@ -722,7 +695,7 @@ public class ChatMgr implements ModuleBase {
         dbCenter.updateMsg(message, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), result != MessageConstant.ERROR, message);
+                onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
             }
         });
 
@@ -762,7 +735,7 @@ public class ChatMgr implements ModuleBase {
                 if (result != MessageConstant.OK) {
                     return;
                 }
-                pushMsg(true, message);
+                pushMsg(message);
             }
         });
     }
@@ -808,7 +781,7 @@ public class ChatMgr implements ModuleBase {
                         if (result != MessageConstant.OK) {
                             return;
                         }
-                        pushMsg(true, videoMessage);
+                        pushMsg(videoMessage);
                     }
                 });
             }
@@ -834,7 +807,7 @@ public class ChatMgr implements ModuleBase {
                     return;
                 }
 
-                pushMsg(true, message);
+                pushMsg(message);
             }
         });
     }
@@ -886,13 +859,11 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result != MessageConstant.OK) {
-                    return;
-                }
-
-                ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
-                if (!TextUtils.isEmpty(whisperID) ) {
-                    sendMailReadedMsg(channelID, Long.valueOf(whisperID));
+                if (result == MessageConstant.OK) {
+                    ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
+                    if (!TextUtils.isEmpty(whisperID) ) {
+                        sendMailReadedMsg(channelID, Long.valueOf(whisperID));
+                    }
                 }
             }
         });
@@ -900,7 +871,7 @@ public class ChatMgr implements ModuleBase {
         return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
     }
 
-    public void sendMailReadedMsg(String channelID, long userID) {
+    public void sendMailReadedMsg(String channelID, final long userID) {
         sendMailReadedMsg(channelID, userID, new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -917,9 +888,9 @@ public class ChatMgr implements ModuleBase {
         });
     }
 
-    private void pushMsg(boolean ret, BaseMessage message) {
+    private void pushMsg(BaseMessage message) {
         if (message == null) return;
-        onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), ret, message);
+        onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
     }
 
     /******************************************/
@@ -1000,10 +971,9 @@ public class ChatMgr implements ModuleBase {
      *
      * @param msgID0  群ID
      * @param msgID1  私聊ID
-     * @param ret
      * @param message
      */
-    public void onChatMsgUpdate(String msgID0, String msgID1, final boolean ret, final BaseMessage message) {
+    public void onChatMsgUpdate(String msgID0, String msgID1, final BaseMessage message) {
         PLogger.printObject(message);
         final Set<ChatMsgInterface.ChatMsgListener> listeners = chatMapMsgListener.get(msgID0);
         final Set<ChatMsgInterface.ChatMsgListener> listeners2 = chatMapMsgListener.get(msgID1);
@@ -1012,18 +982,18 @@ public class ChatMgr implements ModuleBase {
             public void run() {
                 if (listeners != null) {
                     for (ChatMsgInterface.ChatMsgListener imListener : listeners) {
-                        imListener.onChatUpdate(ret, message);
+                        imListener.onChatUpdate(message);
                     }
                 }
 
                 if (listeners2 != null) {
                     for (ChatMsgInterface.ChatMsgListener imListener : listeners2) {
-                        imListener.onChatUpdate(ret, message);
+                        imListener.onChatUpdate(message);
                     }
                 }
 
                 for (ChatMsgInterface.ChatMsgListener imListener : chatMsgListener) {
-                    imListener.onChatUpdate(ret, message);
+                    imListener.onChatUpdate(message);
                 }
 
                 //纯私聊消息
@@ -1263,7 +1233,6 @@ public class ChatMgr implements ModuleBase {
     private void dispatchOfflineMsg(OfflineBean bean) {
         if (bean.getD() == 0) return;
         if (lastOfflineAVMap == null) lastOfflineAVMap = new HashMap<>();
-
         // 音视频消息
         if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
             long vc_id = bean.getVc_id();
@@ -1274,6 +1243,14 @@ public class ChatMgr implements ModuleBase {
             }
             return;
         }
+
+        //已读消息
+        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()){
+            ModuleMgr.getChatListMgr().updateToReadPrivate(bean.getFid());
+            ModuleMgr.getChatMgr().updateOtherSideRead(null, bean.getFid() + "", bean.getTid() + "");
+            return;
+        }
+
         offlineMessage(bean.getJsonStr());
     }
 
