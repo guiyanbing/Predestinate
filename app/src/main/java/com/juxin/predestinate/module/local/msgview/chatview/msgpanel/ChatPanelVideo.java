@@ -9,8 +9,10 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
+import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
@@ -67,7 +69,7 @@ public class ChatPanelVideo extends ChatPanel {
         if (msgData == null || !(msgData instanceof VideoMessage) || isSender()) return false;
 
         // 如果是别人发起的音视频，点击之后更新小红点已读状态
-        ModuleMgr.getChatMgr().updateMsgFStatus(msgData.getMsgID());
+        ModuleMgr.getChatMgr().updateMsgFStatus(msgData.getMsgID(), null);
 
         String channel_uid = "";
         if (infoLightweight != null) {

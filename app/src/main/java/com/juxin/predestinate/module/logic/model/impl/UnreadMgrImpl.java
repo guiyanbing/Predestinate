@@ -133,7 +133,7 @@ public class UnreadMgrImpl implements ModuleBase, ChatMsgInterface.UnreadReceive
                 getUnreadMgr().setUnreadListener(new UnreadMgr.UnreadListener() {
                     @Override
                     public void onUnreadChange(String key, boolean isAdd, String storeString) {
-                        dbCenter.insertUnRead(getStoreTag(), storeString);
+                        dbCenter.insertUnRead(getStoreTag(), storeString, null);
                     }
                 });
             default:

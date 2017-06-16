@@ -321,7 +321,7 @@ public class KeepAliveSocket {
                 while (!done() ) {
                     packet = queue.take();
                     if (packet == null) {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                         continue;
                     }
                     PLogger.d("Socket send packet :" + packet.toString());
@@ -437,12 +437,15 @@ public class KeepAliveSocket {
                     } else {
                         PLogger.d("Socket read packet dispatch packet null");
                     }
+                    Thread.sleep(15);
                 }
             } catch (IOException e) {
                 if (!isShutDown) {
                     endWithException = true;
                     PLogger.d("Socket read packet error:" + e.getMessage());
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             //注意消息顺序

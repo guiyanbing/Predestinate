@@ -99,8 +99,8 @@ public class OldDBModule {
             cursor = query.run();
             if (cursor == null)
                 return;
-            int c1 = cursor.getCount();
-            int c2 = 0;
+//            int c1 = cursor.getCount();
+//            int c2 = 0;
             while (cursor.moveToNext()) {
                 try {
                     int type = cursor.getInt(INDEX_COLUMN_MSG_TYPE);
@@ -171,13 +171,12 @@ public class OldDBModule {
                         jsonStr = json.toString();
                     }
                     message.setJsonStr(jsonStr);
-                    if (dbCenter.insertMsg(message) != MessageConstant.ERROR)
-                        c2++;
+                    dbCenter.insertMsg(message, null);
                 } catch (Exception ee) {
                     ee.printStackTrace();
                 }
             }
-            Log.d("aaa", "c1:" + c1 + ", c2:" + c2);
+//            Log.d("aaa", "c1:" + c1 + ", c2:" + c2);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
