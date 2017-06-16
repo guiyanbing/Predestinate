@@ -614,7 +614,7 @@ public class Invoker {
         public void open_live_view(String data) {
             PLogger.d("---open_live_view--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            LiveHelper.openLiveRoom(dataObject.optInt("type"), dataObject.optString("anchor_id"),
+            LiveHelper.openLiveRoom(dataObject.optString("anchor_id"),
                     dataObject.optString("video_url"), dataObject.optString("image_url"),
                     dataObject.optString("download_url"), dataObject.optString("package_name"),
                     dataObject.optString("entrance"));
