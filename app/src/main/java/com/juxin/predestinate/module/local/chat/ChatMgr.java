@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -870,7 +871,7 @@ public class ChatMgr implements ModuleBase {
         return dbCenter.getCenterFMessage().queryMsgList(channelID, whisperID, 0, 20);
     }
 
-    public void sendMailReadedMsg(String channelID, long userID) {
+    public void sendMailReadedMsg(String channelID, final long userID) {
         sendMailReadedMsg(channelID, userID, new IMProxy.SendCallBack() {
             @Override
             public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
@@ -1232,7 +1233,6 @@ public class ChatMgr implements ModuleBase {
     private void dispatchOfflineMsg(OfflineBean bean) {
         if (bean.getD() == 0) return;
         if (lastOfflineAVMap == null) lastOfflineAVMap = new HashMap<>();
-
         // 音视频消息
         if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
             long vc_id = bean.getVc_id();
@@ -1243,6 +1243,14 @@ public class ChatMgr implements ModuleBase {
             }
             return;
         }
+
+        //已读消息
+        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()){
+            ModuleMgr.getChatListMgr().updateToReadPrivate(bean.getFid());
+            ModuleMgr.getChatMgr().updateOtherSideRead(null, bean.getFid() + "", bean.getTid() + "");
+            return;
+        }
+
         offlineMessage(bean.getJsonStr());
     }
 
