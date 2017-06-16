@@ -1,15 +1,13 @@
 package com.juxin.predestinate.module.util;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 
-import com.baidu.location.Jni;
 import com.juxin.library.request.DownloadListener;
+import com.juxin.library.utils.APKUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -30,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static com.juxin.predestinate.module.logic.application.App.context;
-import static java.lang.Long.getLong;
 
 /**
  * 直播相关功能
@@ -38,33 +35,37 @@ import static java.lang.Long.getLong;
  * @author gwz
  */
 public class LiveHelper {
+
     private static DownloadPluginFragment downloadPluginFragment = new DownloadPluginFragment();
     private static boolean isDownloading = false;
 
     /**
      * 打开直播间
+     *
+     * @param type     1男用户  2 女用户点击立即下载 3 女用户点击开始直播
      * @param anchorId 主播UID
      * @param videoUrl 视频流地址
-     * @param imgUrl 封面
-     * @param downUrl 下载地址
-     * @param pkg 直播app包名
-     * @param cls 直播app入口
+     * @param imgUrl   封面
+     * @param downUrl  下载地址
+     * @param pkg      直播app包名
+     * @param cls      直播app入口
      */
-    public static void openLiveRoom(String anchorId, String videoUrl, String imgUrl, String downUrl, String pkg, String cls) {
-        if (!ApkUnit.getAppIsInstall(App.context, pkg)) {
+    public static void openLiveRoom(int type, String anchorId, String videoUrl, String imgUrl, String downUrl, String pkg, String cls) {
+        if (!APKUtil.isAppInstalled(App.context, pkg)) {
             saveLiveInfo(anchorId, videoUrl, imgUrl, downUrl);
             return;
         }
+        // TODO: 2017/6/16 根据文档处理不同type类型时的用户行为
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         ComponentName componetName = new ComponentName(pkg, cls);
         Intent intent = new Intent(Intent.ACTION_MAIN);
         Bundle bundle = new Bundle();
         bundle.putString("type", "5");
         intent.putExtras(bundle);
-        intent.putExtra("anchor_id",anchorId);
-        intent.putExtra("video_url",videoUrl);
-        intent.putExtra("image_url",imgUrl);
-        intent.putExtra("uid","yf" + userDetail.getUid());
+        intent.putExtra("anchor_id", anchorId);
+        intent.putExtra("video_url", videoUrl);
+        intent.putExtra("image_url", imgUrl);
+        intent.putExtra("uid", "yf" + userDetail.getUid());
         intent.putExtra("head_url", userDetail.getAvatar());
         intent.putExtra("sex", userDetail.getGender());
         intent.putExtra("password", ModuleMgr.getLoginMgr().getAuth());
@@ -73,6 +74,14 @@ public class LiveHelper {
         context.startActivity(intent);
     }
 
+    /**
+     * 保存插件调用信息并进行插件下载
+     *
+     * @param anchorId 主播UID
+     * @param videoUrl 视频流地址
+     * @param imgUrl   封面图片
+     * @param downUrl  插件下载地址
+     */
     private static void saveLiveInfo(String anchorId, String videoUrl, String imgUrl, String downUrl) {
         File file = new File(DirType.getCacheDir() + "live.json");
         JSONObject jo = new JSONObject();
@@ -93,12 +102,16 @@ public class LiveHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 下载插件
+     *
+     * @param downUrl
+     */
     private static void downLoadPlugin(String downUrl) {
         if (!downloadPluginFragment.isAdded())
             downloadPluginFragment.show(((FragmentActivity) App.activity).getSupportFragmentManager(), "download");
@@ -123,7 +136,7 @@ public class LiveHelper {
             public void onSuccess(String url, String filePath) {
                 isDownloading = false;
                 downloadPluginFragment.dismiss();
-                ApkUnit.ExecApkFile(context, filePath);
+                APKUtil.installAPK(context, filePath);
             }
 
             @Override

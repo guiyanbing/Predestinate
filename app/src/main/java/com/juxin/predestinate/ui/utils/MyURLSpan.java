@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.juxin.library.request.DownloadListener;
-import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -43,15 +42,14 @@ public class MyURLSpan extends ClickableSpan {
     private final static String URL_TYPE_SEND_GIFT = "send_gift";                 //送礼提示
     private final static String URL_TYPE_JUMP_KF = "jump_kf";                 //跳转到小秘书聊天框
 
-
-    private final Context mContext;
+    private Context mContext;
     private String mUrl;
     private long otherID;
     private String channel_uid;
 
     private MyURLSpan(Context mContext, String url, long otherID, String channel_uid) {
         this.mContext = mContext;
-        mUrl = url;
+        this.mUrl = url;
         this.otherID = otherID;
         this.channel_uid = channel_uid;
     }

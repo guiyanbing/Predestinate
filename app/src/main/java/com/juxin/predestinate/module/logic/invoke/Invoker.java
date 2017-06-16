@@ -62,6 +62,7 @@ import io.reactivex.schedulers.Schedulers;
 public class Invoker {
 
     // js cmd key
+    public static final String JSCMD_refresh_web = "refresh_web";//主动调用刷新web页面
     public static final String JSCMD_ranking_btn_click = "ranking_btn_click";// 风云榜按钮点击事件（本周上周切换）
     public static final String JSCMD_header_right_btn_click = "header_right_btn_click";// 导航条右侧按钮点击事件
     public static final String JSCMD_turntable_result = "turntable_result";// 转盘转动结果(同步他人客户端开始抽奖)
@@ -613,9 +614,10 @@ public class Invoker {
         public void open_live_view(String data) {
             PLogger.d("---open_live_view--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
-            Activity act = appInterface.getAct();
-            LiveHelper.openLiveRoom(dataObject.optString("anchor_id"),dataObject.optString("video_url"),dataObject.optString("image_url"),
-                    dataObject.optString("download_url"),dataObject.optString("package_name"),dataObject.optString("entrance"));
+            LiveHelper.openLiveRoom(dataObject.optInt("type"), dataObject.optString("anchor_id"),
+                    dataObject.optString("video_url"), dataObject.optString("image_url"),
+                    dataObject.optString("download_url"), dataObject.optString("package_name"),
+                    dataObject.optString("entrance"));
         }
 
         // ------------------------------游戏用cmd---------------------------------

@@ -9,8 +9,8 @@ public class Constant {
     // -------------------------版本信息常量---------------------------
 
     // [以下3个参数对应文档](http://test.game.xiaoyouapp.cn:20080/juxin/api_doc/src/master/version/versions.md)
-    public static final int MS_TYPE = 20;           //消息版本号
-    public static final int SUB_VERSION = 20;       //客户端版本号
+    public static final int MS_TYPE = 21;           //消息版本号
+    public static final int SUB_VERSION = 21;       //客户端版本号
     public static final int PLATFORM_TYPE = 2;      //平台号：2为android，3为iphone
     public static final int REG_FLAG = 0;           //0缘分吧，1爱爱，2同城快约，3附近秘约，标记
 

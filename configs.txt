@@ -14,8 +14,8 @@ keyPassword = fate123
 PrjProguard = proguard-rules.pro
 
 #版本号
-VersionCode = 10230300
-VersionName = 3.3.0
+VersionCode = 10230400
+VersionName = 3.4.0
 
 #APK输出目录相对路径，生成加固包的时候需要指定确切的路径
 ApkPath = ../../K_GEN_APK/Predestinate/

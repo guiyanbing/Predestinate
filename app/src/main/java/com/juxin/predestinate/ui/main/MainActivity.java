@@ -31,6 +31,7 @@ import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.logic.socket.TCPConstant;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -109,8 +110,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
         plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
-                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url()
-        );//广场直播测试链接："http://test.game.xiaoyaoai.cn:30081/static/yfb-test/pages/square/square.html"
+                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url());
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
@@ -310,7 +310,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
                 HashMap<String, Object> data = (HashMap<String, Object>) value;
                 int type = (int) data.get("type");
-                if (type == 0) {
+                if (type == TCPConstant.SOCKET_STATUS_Login_Success) {
+                    PLogger.d("---offlineMessage--->SOCKET_STATUS_Login_Success");
                     ModuleMgr.getChatMgr().getOfflineMsg();
                 }
                 break;
