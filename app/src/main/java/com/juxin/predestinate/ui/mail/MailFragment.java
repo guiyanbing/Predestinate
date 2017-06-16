@@ -51,7 +51,6 @@ import rx.Observer;
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
         SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
 
-    private CheckIntervalTimeUtil timeUtil;
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
     private View mail_bottom;
@@ -112,7 +111,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
-        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
         mail_bottom = findViewById(R.id.mail_bottom);
@@ -318,9 +316,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (!timeUtil.check(4 * 1000)) {
-            return;
-        }
         final List<Long> stringList = new ArrayList<>();
 
         int firs = view.getFirstVisiblePosition();
