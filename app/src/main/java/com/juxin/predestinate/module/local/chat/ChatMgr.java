@@ -1042,7 +1042,7 @@ public class ChatMgr implements ModuleBase {
                         getProFile(uid);
                     }
                 }
-            }).unsubscribe();
+            });
         }
     }
 

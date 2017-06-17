@@ -571,6 +571,7 @@ public class UIShow {
         intent.putExtra("type", type);
         intent.putExtra("simple_data", simpleData);
         intent.putExtra("content", content);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         App.context.startActivity(intent);
     }
 
