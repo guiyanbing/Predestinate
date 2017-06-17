@@ -45,8 +45,7 @@ import com.juxin.predestinate.ui.discover.DefriendAct;
 import com.juxin.predestinate.ui.discover.MyDefriendAct;
 import com.juxin.predestinate.ui.discover.MyFriendsAct;
 import com.juxin.predestinate.ui.discover.SayHelloUserAct;
-import com.juxin.predestinate.ui.discover.UserNoHeadUploadAct;
-import com.juxin.predestinate.ui.discover.UserRegHeadUploadAct;
+import com.juxin.predestinate.ui.discover.UserAvatarUploadAct;
 import com.juxin.predestinate.ui.mail.SysMessAct;
 import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 import com.juxin.predestinate.ui.mail.popup.RandomRedBoxActivity;
@@ -1176,62 +1175,29 @@ public class UIShow {
         context.startActivity(intent);
     }
 
-    public static final int FROM_HEADUPLOAD = 1012;// 上传头像返回
-    public static final int FROM_MYCONCERNACT = 1013;// 上传头像返回
-
     /**
-     * 打开头像上传页面
+     * 打开上传头像界面
      *
      * @param context
-     * @param tipText 显示的提示文字
+     * @param isResetAvatar 是不是重新上传头像
      */
-    public static void showUserRegHeadUploadAct(Context context, String tipText) {
-        Intent intent = new Intent(context, UserRegHeadUploadAct.class);
-        intent.putExtra("type", 2);
-        if (tipText != null)
-            intent.putExtra("tipText", tipText);
-        ((Activity) context).startActivityForResult(intent, FROM_HEADUPLOAD);
-    }
-
-    /**
-     * 打开头像上传页面
-     *
-     * @param context
-     */
-    public static void showUserRegHeadUploadAct(Context context) {
-        showUserRegHeadUploadAct(context, null);
-    }
-
-    /**
-     * 打开上传头像界面 完成后跳转到主页
-     *
-     * @param context
-     */
-    public static void showRegHeadUploadActToMain(Context context) {
-        Intent intent = new Intent(context, UserRegHeadUploadAct.class);
-        intent.putExtra("type", 0);
+    public static void showUploadAvatarAct(Context context, boolean isResetAvatar) {
+        Intent intent = new Intent(context, UserAvatarUploadAct.class);
+        intent.putExtra("type", -1);
+        intent.putExtra("isResetAvatar", isResetAvatar);
         context.startActivity(intent);
     }
 
     /**
-     * 打开头像更新界面
+     * 打开上传头像界面
      *
      * @param context
+     * @param isResetAvatar 是不是重新上传头像
      */
-    public static void showUserNoHeadUploadAct(Context context) {
-        Intent intent = new Intent(context, UserNoHeadUploadAct.class);
-        context.startActivity(intent);
-    }
-
-
-    /**
-     * 打开头像更新界面 完成后跳转到主页
-     *
-     * @param context
-     */
-    public static void showNoHeadUploadActToMain(Context context) {
-        Intent intent = new Intent(context, UserNoHeadUploadAct.class);
+    public static void showUploadAvatarActToMain(Context context, boolean isResetAvatar) {
+        Intent intent = new Intent(context, UserAvatarUploadAct.class);
         intent.putExtra("type", 0);
+        intent.putExtra("isResetAvatar", isResetAvatar);
         context.startActivity(intent);
     }
 

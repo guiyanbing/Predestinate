@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -33,40 +32,60 @@
                 android:background="@drawable/nohead_yuan" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/txt_usernohead_ts"
+        <com.juxin.library.view.CustomFrameLayout
+            android:id="@+id/img_upload_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-20dip"
-            android:paddingLeft="20dip"
-            android:text="你的头像因以下原因被拒绝："
-            android:textColor="@color/text_gray"
-            android:textSize="18sp" />
+            android:layout_marginTop="-20dip">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:gravity="left"
-            android:orientation="vertical"
-            android:paddingLeft="20dip">
+            <LinearLayout
+                android:id="@+id/img_upload_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/txt_usernohead_ts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dip"
+                    android:text="你的头像因以下原因被拒绝："
+                    android:textColor="@color/text_gray"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dip"
+                    android:gravity="left"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dip">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dip"
+                        android:background="@drawable/nohead_tan" />
+
+                    <TextView
+                        android:id="@+id/txt_usernohead_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="22dip"
+                        android:paddingRight="20dip"
+                        android:text="未审核通过"
+                        android:textColor="@color/noheard_info"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:id="@+id/img_upload_logo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
-                android:background="@drawable/nohead_tan" />
-
-            <TextView
-                android:id="@+id/txt_usernohead_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="22dip"
-                android:paddingRight="20dip"
-                android:text="未审核通过"
-                android:textColor="@color/noheard_info"
-                android:textSize="18sp" />
-        </RelativeLayout>
+                android:src="@drawable/ic_upload_head_logo_male" />
+        </com.juxin.library.view.CustomFrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,5 +133,6 @@
             android:textColor="@color/noheard_info2"
             android:textSize="15sp" />
     </LinearLayout>
+
 
 </LinearLayout>
