@@ -34,6 +34,8 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
@@ -55,6 +57,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
+    private CheckIntervalTimeUtil timeUtil;
 
     @Nullable
     @Override
@@ -107,6 +110,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
+        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
         mail_bottom = findViewById(R.id.mail_bottom);
@@ -386,8 +390,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void showAllData() {
-        refreshHandler.removeCallbacks(refreshRunnable);
-        refreshHandler.postDelayed(refreshRunnable, 1000);
+        if(timeUtil.check(1000)){
+            mailFragmentAdapter.updateAllData();
+            detectInfo(listMail);
+        }else {
+            refreshHandler.removeCallbacks(refreshRunnable);
+            refreshHandler.postDelayed(refreshRunnable, 1000);
+        }
     }
 
     private Handler refreshHandler = new Handler();

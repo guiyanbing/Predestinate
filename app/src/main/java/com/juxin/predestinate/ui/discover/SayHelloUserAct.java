@@ -32,6 +32,7 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
@@ -57,6 +58,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     private Button del_btn, ignore_btn;
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> delList = new ArrayList<>();
+    private CheckIntervalTimeUtil timeUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         setTitle(getString(R.string.say_hello_user_act_title));
         setBackView();
         onTitleRight();
-
+        timeUtil = new CheckIntervalTimeUtil();
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.say_hello_users_frame_layput);
         customFrameLayout.setList(new int[]{R.id.say_hello_users_data, R.id.common_nodata});
         exListView = (SwipeListView) findViewById(R.id.say_hello_users_list);
@@ -332,8 +334,13 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
 
     private void showAllData() {
-        refreshHandler.removeCallbacks(refreshRunnable);
-        refreshHandler.postDelayed(refreshRunnable, 1000);
+        if(timeUtil.check(1000)){
+            initData();
+            detectInfo(exListView);
+        }else {
+            refreshHandler.removeCallbacks(refreshRunnable);
+            refreshHandler.postDelayed(refreshRunnable, 1000);
+        }
     }
 
     private Handler refreshHandler = new Handler();
