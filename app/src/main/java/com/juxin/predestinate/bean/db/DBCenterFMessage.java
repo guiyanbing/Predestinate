@@ -18,8 +18,6 @@ import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -534,6 +532,24 @@ public class DBCenterFMessage {
                 long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
                 long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
+            }
+        });
+    }
+
+    private int delete(long whisperID) {
+        long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
+        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+    }
+
+    public void deleteList(final List<Long> list, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for(long temp : list){
+                    delete(temp);
+                }
+
+                DBCenter.makeDBCallback(callback, MessageConstant.OK);
             }
         });
     }

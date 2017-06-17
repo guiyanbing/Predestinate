@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.chat;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -31,18 +30,14 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -57,15 +52,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
 
-    private CheckIntervalTimeUtil intervalTimeUtil;
-
     @Inject
     DBCenter dbCenter;
 
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
-        intervalTimeUtil = new CheckIntervalTimeUtil();
     }
 
     @Override
@@ -144,8 +136,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
             return tempList;
         }
     }
-
-    private long tmpTm = 0;
 
     public synchronized void updateListMsg(List<BaseMessage> messages, long tm) {
         PLogger.printObject(messages);
@@ -344,7 +334,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     }
                 });
     }
-
 
     /**
      * 获取消息列表，外部使用，查询完成后取消订阅
