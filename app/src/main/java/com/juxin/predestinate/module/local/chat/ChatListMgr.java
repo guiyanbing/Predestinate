@@ -30,6 +30,8 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
+    private CheckIntervalTimeUtil timeUtil;
 
     @Inject
     DBCenter dbCenter;
@@ -58,6 +61,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
+        timeUtil = new CheckIntervalTimeUtil();
     }
 
     @Override
@@ -157,8 +161,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         unreadNum += getFollowNum();//关注
         PLogger.d("unreadNum=" + unreadNum);
 
-        handler.removeCallbacks(runnable);
-        handler.postDelayed(runnable, 1000);
+        if(timeUtil.check(1000)){
+            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        }else {
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 1000);
+        }
     }
 
     private Handler handler = new Handler();

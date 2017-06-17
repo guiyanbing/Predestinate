@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
@@ -27,13 +26,11 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import rx.Observer;
 
 /**

@@ -16,7 +16,7 @@ public class SortList {
 	// 排序
 	@SuppressLint("UseValueOf")
 	public  static void sortListView(List<BaseMessage> baseMessages) {
-		if (baseMessages != null && baseMessages.size() < 2) {
+		if (baseMessages == null || baseMessages.size() < 2) {
 			return;
 		}
 
@@ -31,7 +31,7 @@ public class SortList {
 	// 时间排序
 	@SuppressLint("UseValueOf")
 	public static void sortTimeListView(List<BaseMessage> baseMessages) {
-		if (baseMessages != null && baseMessages.size() < 2) {
+		if (baseMessages == null || baseMessages.size() < 2) {
 			return;
 		}
 
@@ -48,7 +48,7 @@ public class SortList {
 	 * @param baseMessages
      */
 	public static void sortWeightTimeListView(List<BaseMessage> baseMessages) {
-		if (baseMessages != null && baseMessages.size() < 2) {
+		if (baseMessages == null || baseMessages.size() < 2) {
 			return;
 		}
 
