@@ -103,6 +103,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         this.token = token;
 
         if (heartBeating) return;//如果是保持心跳连接状态，就不再次登录
+        TimerUtil.resetIncreaseTime();//主动重连接时重置间隔时间
         PLogger.d("login: ------>发送连接服务器的消息");
         connect();
     }

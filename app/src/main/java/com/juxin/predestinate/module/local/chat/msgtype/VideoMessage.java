@@ -215,7 +215,7 @@ public class VideoMessage extends BaseMessage {
                 result = "[通话结束]";
                 break;
             default:
-                result = "";
+                result = "<font color='#ffac0c'>[未接通]</font>";
         }
         return result + " " + sendTime;
     }
@@ -240,7 +240,7 @@ public class VideoMessage extends BaseMessage {
             case connect:
                 return "聊天时长 " + TimeUtil.formatTimeLong(talk_time);
             default:
-                return "已取消";
+                return "网络忙，请重试";
         }
     }
 

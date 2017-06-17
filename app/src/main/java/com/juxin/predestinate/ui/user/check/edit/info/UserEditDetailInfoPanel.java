@@ -20,6 +20,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
+import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.check.edit.EditKey;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -91,7 +92,7 @@ public class UserEditDetailInfoPanel extends BasePanel implements RequestComplet
                     break;
 
                 case R.id.birth_view:
-                    final String[] dateValues = TextUtils.isEmpty(userdetail.getBirthday()) ? new String[]{"", "", ""} : userdetail.getBirthday().split("-");
+                    final String[] dateValues = TextUtils.isEmpty(userdetail.getBirthday()) ? new String[]{String.valueOf(TimeUtil.getInspectYear() - 18), "01", "01"} : userdetail.getBirthday().split("-");
                     PickerDialogUtil.showDatePickerDialog((FragmentActivity) getContext(), new DatePicker.OnYearMonthDayPickListener() {
                         @Override
                         public void onDatePicked(String year, String month, String day) {

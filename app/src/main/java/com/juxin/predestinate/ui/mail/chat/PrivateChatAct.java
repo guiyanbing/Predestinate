@@ -230,7 +230,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
-                    setNickName(infoLightweight.getShowName());
                     if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setImageResource(R.drawable.f1_topc02);
                     }
@@ -244,7 +243,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID) {
                         privateChat.getChatAdapter().onDataUpdate();
                     }
-                    name = infoLightweight.getShowName();
                 }
             }
         });
@@ -281,6 +279,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 isFollow = userDetail.isFollow();
                 kf_id = userDetail.getKf_id();
                 channel_uid = String.valueOf(userDetail.getChannel_uid());
+                name = userDetail.getNickname();
+                setNickName(userDetail.getShowName());
                 if (isFollow) {
                     chat_title_attention_name.setText("已关注");
                     chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
@@ -391,6 +391,21 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 更新备注名
+        if (requestCode == CenterConstant.USER_SET_REQUEST_CODE) {
+            switch (resultCode) {
+                case CenterConstant.USER_SET_RESULT_CODE:
+                    String remark = data.getStringExtra("remark");
+                    setNickName(TextUtils.isEmpty(remark) ? name : remark);
+                    break;
+            }
+        }
+    }
+
+    @Override
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_Chat_Can:
@@ -414,7 +429,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     executeYCoinTask();
                 } else {//不请求网络
                     checkIsCanSendMsg();
-                    chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
+                    if (chat_title_yb_name != null) {
+                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
+                    }
                 }
                 break;
             default:

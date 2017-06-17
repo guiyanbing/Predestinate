@@ -9,7 +9,6 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
-import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -31,7 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -367,16 +368,23 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0)
-                .compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Observer<List<BaseMessage>>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<BaseMessage>>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+
+                    }
 
                     @Override
-                    public void onError(Throwable e) {}
+                    public void onError(Throwable e) {
+
+                    }
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
+                        this.unsubscribe();
+                        PLogger.printObject(baseMessages);
                         SortList.sortListView(baseMessages);//排序
                         List<BaseMessage> listTemp = new ArrayList<>();
 
@@ -551,18 +559,22 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onRefresh() {
         // 这里是加载更多信息的。
         ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page)
-                .compose(RxUtil.<List<BaseMessage>>applySchedulers(RxUtil.IO_ON_UI_TRANSFORMER))
-                .subscribe(new Observer<List<BaseMessage>>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
+
                     }
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
+                        this.unsubscribe();
                         SortList.sortListView(baseMessages);//排序
                         PLogger.printObject(baseMessages);
                         chatInstance.chatListView.stopRefresh();

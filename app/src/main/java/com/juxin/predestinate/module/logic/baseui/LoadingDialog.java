@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.juxin.library.image.ImageLoader;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.picker.common.popup.BottomPopup;
 import com.juxin.predestinate.module.util.TimerUtil;
@@ -84,23 +85,34 @@ public class LoadingDialog extends BottomPopup {
             loadingDialog = new LoadingDialog(activity);
         }
         loadingDialog.setWidth(-1);
-        loadingDialog.show();
+
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.show();
+            }
+        });
     }
 
     /**
      * 关闭loading
      */
     public static void closeLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            if (loadingDialog.loading_gif != null) {
-                Drawable drawable = loadingDialog.loading_gif.getDrawable();
-                if (drawable != null && drawable instanceof GifDrawable)
-                    ((GifDrawable) drawable).stop();
-                loadingDialog.loading_gif.setImageDrawable(null);
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingDialog != null && loadingDialog.isShowing()) {
+                    if (loadingDialog.loading_gif != null) {
+                        Drawable drawable = loadingDialog.loading_gif.getDrawable();
+                        if (drawable != null && drawable instanceof GifDrawable)
+                            ((GifDrawable) drawable).stop();
+                        loadingDialog.loading_gif.setImageDrawable(null);
+                    }
+                    loadingDialog.dismiss();
+                    loadingDialog = null;
+                }
             }
-            loadingDialog.dismiss();
-            loadingDialog = null;
-        }
+        });
     }
 
     /**
@@ -109,12 +121,12 @@ public class LoadingDialog extends BottomPopup {
      * @param tm 延迟关闭时间
      */
     public static void closeLoadingDialog(int tm) {
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
+        closeLoadingDialog(tm, new TimerUtil.CallBack() {
             @Override
             public void call() {
                 closeLoadingDialog();
             }
-        }, tm);
+        });
     }
 
     /**
@@ -124,9 +136,9 @@ public class LoadingDialog extends BottomPopup {
      * @param callBack 延迟结束后进行的操作回调
      */
     public static void closeLoadingDialog(int tm, final TimerUtil.CallBack callBack) {
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
+        MsgMgr.getInstance().delay(new Runnable() {
             @Override
-            public void call() {
+            public void run() {
                 closeLoadingDialog();
                 callBack.call();
             }
@@ -138,14 +150,12 @@ public class LoadingDialog extends BottomPopup {
         View inflate = LayoutInflater.from(activity).inflate(R.layout.common_loading_dialog, null);
         TextView loading_txt = (TextView) inflate.findViewById(R.id.loading_txt);
         loading_gif = (ImageView) inflate.findViewById(R.id.loading_gif);
-        if (resId != -1)
-            ImageLoader.loadFitCenter(activity, resId, loading_gif, 0, 0);
-        else
-            ImageLoader.loadFitCenter(activity, R.drawable.p1_loading, loading_gif, 0, 0);
-        View cancel = inflate.findViewById(R.id.cancel);
+        ImageLoader.loadFitCenter(activity, resId != -1 ? resId : R.drawable.p1_loading, loading_gif, 0, 0);
 
         loading_txt.setText(loadingTxt);
         loading_txt.setVisibility(TextUtils.isEmpty(loadingTxt) ? View.GONE : View.VISIBLE);
+
+        View cancel = inflate.findViewById(R.id.cancel);
         cancel.setVisibility(onCancelListener == null ? View.GONE : View.VISIBLE);
         if (onCancelListener != null) cancel.setOnClickListener(onCancelListener);
 

@@ -66,10 +66,6 @@
                     android:visibility="invisible" />
             </FrameLayout>
 
-            <!--<View-->
-            <!--style="@style/divider_line_vertical"-->
-            <!--android:layout_marginLeft="@dimen/px35_dp" />-->
-
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
