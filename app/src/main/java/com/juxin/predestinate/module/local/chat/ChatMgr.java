@@ -1061,26 +1061,15 @@ public class ChatMgr implements ModuleBase {
                 }
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
                 infoLightweightList.parseJsonSummary(response.getResponseJson());
-
+                //通知上层请求到数据了，然后更新数据库
                 if (infoLightweightList.getUserInfos() != null && !infoLightweightList.getUserInfos().isEmpty()) {//数据大于1条
                     final UserInfoLightweight info = infoLightweightList.getUserInfos().get(0);
                     info.setTime(getTime());
                     info.setUid(userID);
-                    dbCenter.getCacheCenter().storageProfileData(info, new DBCallback() {
-                        @Override
-                        public void OnDBExecuted(long result) {
-                            if (result != MessageConstant.OK) {
-                                return;
-                            }
+                    removeInfoComplete(true, true, userID, info);
 
-                            dbCenter.getCenterFLetter().updateUserInfoLight(info, new DBCallback() {
-                                @Override
-                                public void OnDBExecuted(long result) {
-                                    removeInfoComplete(true, true, userID, info);
-                                }
-                            });
-                        }
-                    });
+                    dbCenter.getCacheCenter().storageProfileData(info, null);
+                    dbCenter.getCenterFLetter().updateUserInfoLight(info, null);
 
                 }
             }
