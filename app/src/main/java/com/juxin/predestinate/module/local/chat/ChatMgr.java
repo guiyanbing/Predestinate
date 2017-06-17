@@ -342,7 +342,6 @@ public class ChatMgr implements ModuleBase {
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
         commonMessage.setRu(MessageConstant.Ru_Friend);
 
-
         dbCenter.insertMsg(commonMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {

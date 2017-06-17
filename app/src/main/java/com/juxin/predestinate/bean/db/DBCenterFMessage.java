@@ -159,7 +159,6 @@ public class DBCenterFMessage {
      * @return
      */
     public void updateMsg(final BaseMessage baseMessage, final DBCallback callback) {
-
         if (baseMessage == null) {
             DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
             return;
@@ -168,7 +167,6 @@ public class DBCenterFMessage {
         handler.post(new Runnable() {
             @Override
             public void run() {
-
                 long ret = -1;
                 try {
                     String channelID = baseMessage.getChannelID();
@@ -529,9 +527,7 @@ public class DBCenterFMessage {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
-                DBCenter.makeDBCallback(callback, result);
+                DBCenter.makeDBCallback(callback, delete(whisperID));
             }
         });
     }

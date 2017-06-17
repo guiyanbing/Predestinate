@@ -74,7 +74,6 @@ public class DBCenter {
 
     /******************** FLetter **************************/
     public void insertMsg(final BaseMessage baseMessage, final DBCallback callback) {
-
         if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
             baseMessage.setStatus(MessageConstant.READ_STATUS);
         }
@@ -120,6 +119,8 @@ public class DBCenter {
                     centerFmessage.updateMsg(message, callback);
                 }
             });
+        }else {
+            DBCenter.makeDBCallback(callback, MessageConstant.OK);
         }
     }
 

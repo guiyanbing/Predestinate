@@ -431,7 +431,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
                 moveToBottom();
-                //if (isMachine) onDataUpdate();
+                if (isMachine) onDataUpdate();
 
                 if (!message.isSender())//发送已读消息
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
