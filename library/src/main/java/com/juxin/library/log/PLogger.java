@@ -17,6 +17,7 @@ public class PLogger {
                 .logLevel(isDebug ? LogLevel.ALL : LogLevel.NONE)       // 指定日志级别，低于该级别的日志将不会被打印，默认为 LogLevel.ALL
                 .tag("Predestinate")                                    // 指定 TAG，默认为 "X-LOG"
                 .t()                                                    // 允许打印线程信息，默认禁止
+                .threadFormatter(new PThreadFormatter())                // 指定线程信息格式化器，默认为 DefaultThreadFormatter
                 .st(3)                                                  // 允许打印深度为2的调用栈信息，默认禁止
                 .build();
         Printer androidPrinter = new AndroidPrinter();                  // 通过 android.util.Log 打印日志的打印器

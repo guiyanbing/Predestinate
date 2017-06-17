@@ -57,10 +57,6 @@
             android:name=".module.logic.baseui.WebActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.test.TestActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.start.NavUserAct"
             android:screenOrientation="portrait" />
         <activity

@@ -15,6 +15,7 @@ import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
@@ -272,12 +273,17 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
             @Override
             public void onSubmit() {
-                long ret = ModuleMgr.getChatListMgr().deleteFmessage(userDetail.getUid());
-                if (ret != MessageConstant.ERROR) {
-                    PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
-                    return;
-                }
-                PToast.showShort(getString(R.string.user_other_set_chat_del_fail));
+                 ModuleMgr.getChatListMgr().deleteFmessage(userDetail.getUid(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        if (result != MessageConstant.ERROR) {
+                            PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
+                            return;
+                        }
+                        PToast.showShort(getString(R.string.user_other_set_chat_del_fail));
+                    }
+                });
+
             }
         }, getString(R.string.user_other_set_chat_del), R.color.text_zhuyao_black, "");
     }

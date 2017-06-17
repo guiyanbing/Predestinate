@@ -167,7 +167,7 @@ public class CommonMgr implements ModuleBase {
     public void reqOfflineMsg(RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("uid", App.uid);
-        getParams.put("count", 50);
+        getParams.put("count", 500);
 
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
     }

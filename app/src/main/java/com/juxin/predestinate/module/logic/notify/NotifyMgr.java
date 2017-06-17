@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
  * 消息通知管理manager
  */
 public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
+
     private Executor notifyExecutor = Executors.newSingleThreadExecutor();
 
     @Override
@@ -57,7 +58,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
 
     @Override
     public void onChatUpdate(final BaseMessage message) {
-        if(message == null) return;
+        if (message == null) return;
         PLogger.d("---onChatUpdate--->sendId：" + message.getSSendID()
                 + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
@@ -155,12 +156,11 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * @param content     消息提示内容
      */
     private void viewPrivacy(final UserInfoLightweight simpleData, final BaseMessage baseMessage, final String content) {
-        noticeRemind(baseMessage.getType());
-
         //锁屏状态，锁屏弹窗
         if (BaseUtil.isScreenLock(App.context)) {
             LockScreenMgr.getInstance().setChatData(simpleData, baseMessage, content);
             popupActivity();
+            noticeRemind(baseMessage.getType());
             return;
         }
 
@@ -178,6 +178,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                 return;
             }
             UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
+            noticeRemind(baseMessage.getType());
         }
     }
 
@@ -188,7 +189,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      *
      * @param messageType 消息类型
      */
-    private void noticeRemind(int messageType) {
+    public void noticeRemind(int messageType) {
         boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
         if (!instanceOfChat && messageType != NOTIFY_VIDEO
                 && (System.currentTimeMillis() - notifyTime > 3 * 1000)) {

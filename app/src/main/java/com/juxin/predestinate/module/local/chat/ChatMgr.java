@@ -276,7 +276,6 @@ public class ChatMgr implements ModuleBase {
                             if (TextUtils.isEmpty(img)) {
                                 img = localImg;
                             }
-
                             sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img, new RequestComplete() {
                                 @Override
                                 public void onRequestComplete(final HttpResponse response) {
@@ -389,32 +388,39 @@ public class ChatMgr implements ModuleBase {
                 onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
                 if (result != MessageConstant.OK) return;
 
-                if (FileUtil.isURL(img_url)) {
-                    sendMessage(commonMessage, null);
-                    return;
-                }
-                sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        if (!response.isOk()) {
+                    public void run() {
+                        if (FileUtil.isURL(img_url)) {
+                            sendMessage(commonMessage, null);
                             return;
                         }
 
-                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                        commonMessage.setImg(upLoadResult.getFile_http_path());
-                        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-                        dbCenter.updateFmessage(commonMessage, new DBCallback() {
+                        sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
                             @Override
-                            public void OnDBExecuted(long result) {
-                                if (result != MessageConstant.OK) {
+                            public void onRequestComplete(HttpResponse response) {
+                                if (!response.isOk()) {
                                     return;
                                 }
-                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
-                                sendMessage(commonMessage, null);
+
+                                UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                                commonMessage.setImg(upLoadResult.getFile_http_path());
+                                commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                                dbCenter.updateFmessage(commonMessage, new DBCallback() {
+                                    @Override
+                                    public void OnDBExecuted(long result) {
+                                        if (result != MessageConstant.OK) {
+                                            return;
+                                        }
+                                        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
+                                        sendMessage(commonMessage, null);
+                                    }
+                                });
                             }
                         });
                     }
                 });
+
             }
         });
 
@@ -436,31 +442,34 @@ public class ChatMgr implements ModuleBase {
 
                 if (result != MessageConstant.OK) return;
 
-                sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
-                    public void onRequestComplete(final HttpResponse response) {
-                        if (response.isOk()) {
-                            UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                            commonMessage.setVoiceUrl(upLoadResult.getFile_http_path());
-                            commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-                            dbCenter.updateFmessage(commonMessage, new DBCallback() {
-                                @Override
-                                public void OnDBExecuted(long result) {
-                                    if (result != MessageConstant.OK) {
-                                        return;
-                                    }
+                    public void run() {
+                        sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(final HttpResponse response) {
+                                if (response.isOk()) {
+                                    UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                                    commonMessage.setVoiceUrl(upLoadResult.getFile_http_path());
+                                    commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                                    dbCenter.updateFmessage(commonMessage, new DBCallback() {
+                                        @Override
+                                        public void OnDBExecuted(long result) {
+                                            if (result != MessageConstant.OK) {
+                                                return;
+                                            }
 
-                                    onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
-                                    sendMessage(commonMessage, null);
+                                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
+                                            sendMessage(commonMessage, null);
+                                        }
+                                    });
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 });
             }
         });
-
-
     }
 
     private void sendHttpFile(String uploadType, final BaseMessage message, String url, final RequestComplete complete) {
@@ -1147,6 +1156,15 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 更新消息列表个人资料
+     * @param lightweight
+     * @param callback
+     */
+    public void updateUserInfoLight(UserInfoLightweight lightweight, DBCallback callback){
+        dbCenter.getCenterFLetter().updateUserInfoLight(lightweight, callback);
+    }
+
+    /**
      * 批量更新数据库中存储的简略个人资料
      *
      * @param infoLightweights 需要批量更新的简略个人资料
@@ -1208,8 +1226,8 @@ public class ChatMgr implements ModuleBase {
                     dispatchOfflineMsg(bean);
                 }
 
-                // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50) {
+                // 服务器每次最多取500条，若超过则再次请求
+                if (offlineMsg.getMsgList().size() >= 500) {
                     getOfflineMsg();
                     return;
                 }
