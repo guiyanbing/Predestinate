@@ -22,11 +22,14 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * 消息通知管理manager
  */
 public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
+    private Executor notifyExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     public void init() {
@@ -53,13 +56,17 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     //------------------新消息通知start--------------------
 
     @Override
-    public void onChatUpdate(BaseMessage message) {
+    public void onChatUpdate(final BaseMessage message) {
         if(message == null) return;
         PLogger.d("---onChatUpdate--->sendId：" + message.getSSendID()
                 + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
-
-        showNotify(message);
+        notifyExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                showNotify(message);
+            }
+        });
     }
 
     //进行悬浮窗通知的消息类型
