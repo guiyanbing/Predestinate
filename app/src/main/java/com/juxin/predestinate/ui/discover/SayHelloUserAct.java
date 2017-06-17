@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.discover;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -118,9 +119,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     private void initData() {
-        List<BaseMessage> data = ModuleMgr.getChatListMgr().getGeetList();
-        adapter.setList(data);
-        if (data.size() > 0) {
+        adapter.setList(ModuleMgr.getChatListMgr().getGeetList());
+        PLogger.d("initData=" + adapter.getList().size());
+        if (adapter.getList() != null && adapter.getList().size() > 0) {
             showHasData();
         } else {
             showNoData();
@@ -348,22 +349,30 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
     private void showAllData() {
         if(timeUtil.check(1000)){
-            initData();
             detectInfo(exListView);
         }else {
-            refreshHandler.removeCallbacks(refreshRunnable);
-            refreshHandler.postDelayed(refreshRunnable, 1000);
+            handlerStop.removeMessages(1);
+            Message message = new Message();
+            message.what = 1;
+            handlerStop.sendMessageDelayed(message, 1100);
         }
     }
 
-    private Handler refreshHandler = new Handler();
-    private Runnable refreshRunnable = new Runnable() {
+
+    private final Handler handlerStop = new Handler(){
+
         @Override
-        public void run() {
-            initData();
-            detectInfo(exListView);
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    detectInfo(exListView);
+                    break;
+                default:
+                    break;
+            }
         }
     };
+
 
     /**
      * 检测个人资料

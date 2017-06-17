@@ -3,6 +3,7 @@ package com.juxin.predestinate.ui.mail;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -126,6 +127,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listview_footer.setOnClickListener(null);
         mailFragmentAdapter = new MailFragmentAdapter(getContext(), null);
         listMail.setAdapter(mailFragmentAdapter);
+        mailFragmentAdapter.updateAllData();
         showAllData();
 
         listMail.setPullLoadEnable(false);
@@ -274,7 +276,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
                 if (isHidden()) return;
-
+                mailFragmentAdapter.updateAllData();
                 showAllData();
                 break;
             default:
@@ -404,20 +406,27 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private void showAllData() {
         if(timeUtil.check(1000)){
-            mailFragmentAdapter.updateAllData();
             detectInfo(listMail);
         }else {
-            refreshHandler.removeCallbacks(refreshRunnable);
-            refreshHandler.postDelayed(refreshRunnable, 1000);
+            handlerStop.removeMessages(1);
+            Message message = new Message();
+            message.what = 1;
+            handlerStop.sendMessageDelayed(message, 1100);
         }
     }
 
-    private Handler refreshHandler = new Handler();
-    private Runnable refreshRunnable = new Runnable() {
+    private final Handler handlerStop = new Handler(){
+
         @Override
-        public void run() {
-            mailFragmentAdapter.updateAllData();
-            detectInfo(listMail);
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    detectInfo(listMail);
+                    break;
+
+                default:
+                    break;
+            }
         }
     };
 
@@ -425,6 +434,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!isHidden()) {
+            mailFragmentAdapter.updateAllData();
             showAllData();
         }
     }

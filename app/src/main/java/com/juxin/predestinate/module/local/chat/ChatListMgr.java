@@ -3,6 +3,8 @@ package com.juxin.predestinate.module.local.chat;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
+import android.os.Message;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -160,19 +162,29 @@ public class ChatListMgr implements ModuleBase, PObserver {
         unreadNum += getFollowNum();//关注
         PLogger.d("unreadNum=" + unreadNum);
 
-        if(timeUtil.check(1000)){
+        if(timeUtil.check(1000)){//0
             MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-        }else {
-            handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 1000);
+        }else {//200  400 600
+            handlerStop.removeMessages(1);
+            Message message = new Message();
+            message.what = 1;
+            handlerStop.sendMessageDelayed(message, 1100);
         }
     }
 
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    private final Handler handlerStop = new Handler(){
+
         @Override
-        public void run() {
-            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    PLogger.d("MsgType.handler");
+                    MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+                    break;
+
+                default:
+                    break;
+            }
         }
     };
 

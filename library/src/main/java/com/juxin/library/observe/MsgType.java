@@ -123,7 +123,7 @@ public class MsgType {
     public static final String MT_Chat_Can = "MT_Chat_Can";
 
     /**
-     * 新的陌生人消息
+     * 陌生的人消息
      */
     public static final String MT_Stranger_New = "MT_Stranger_New";
 
