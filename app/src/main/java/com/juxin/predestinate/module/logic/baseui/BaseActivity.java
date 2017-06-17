@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bugtags.library.Bugtags;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
 import com.umeng.analytics.MobclickAgent;
@@ -109,17 +111,25 @@ public class BaseActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        Bugtags.onResume(this);//注：Bugtags回调 1
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+        Bugtags.onPause(this);//注：Bugtags回调 2
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        Bugtags.onDispatchTouchEvent(this, event);//注：Bugtags回调 3
+        return super.dispatchTouchEvent(event);
     }
 
     /**

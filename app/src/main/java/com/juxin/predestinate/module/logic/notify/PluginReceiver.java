@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -22,6 +23,7 @@ public class PluginReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if ("com.juxin.action.plugin".equals(intent.getAction())) {
             String json = intent.getStringExtra("extra_json");
+            PLogger.d("PluginReceiver=tid=" + json);
             if (json != null) {
                 try {
                     JSONObject jo = new JSONObject(json);

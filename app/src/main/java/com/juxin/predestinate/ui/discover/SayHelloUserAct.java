@@ -2,6 +2,7 @@ package com.juxin.predestinate.ui.discover;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -33,13 +33,10 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.Observer;
-
 import static com.juxin.predestinate.R.id.say_hello_users_all_ignore;
 import static com.juxin.predestinate.module.logic.application.App.getActivity;
 
@@ -53,8 +50,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
     private CustomFrameLayout customFrameLayout;
     private SwipeListView exListView;
-
-    private List<BaseMessage> data = new ArrayList<>();
 
     private SayHelloUserAdapter adapter;
 
@@ -80,7 +75,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         setTitle(getString(R.string.say_hello_user_act_title));
         setBackView();
         onTitleRight();
-
         timeUtil = new CheckIntervalTimeUtil();
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.say_hello_users_frame_layput);
         customFrameLayout.setList(new int[]{R.id.say_hello_users_data, R.id.common_nodata});
@@ -92,7 +86,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         exListView.setXListViewListener(this);
         exListView.addHeaderView(mViewTop);
         exListView.addFooterView(listview_footer);
-        adapter = new SayHelloUserAdapter(this, data);
+        adapter = new SayHelloUserAdapter(this, null);
         exListView.setAdapter(adapter);
         exListView.setOnItemClickListener(this);
 
@@ -122,10 +116,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     private void initData() {
-        if (data.size() != 0) {
-            data.clear();
-        }
-        data.addAll(ModuleMgr.getChatListMgr().getGeetList());
+        List<BaseMessage> data = ModuleMgr.getChatListMgr().getGeetList();
+        adapter.setList(data);
         if (data.size() > 0) {
             showHasData();
         } else {
@@ -235,15 +227,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * 显示有数据状态
      */
     public void showHasData() {
-        adapter.notifyDataSetChanged();
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(exListView);
-            }
-        }, 800);
+        showAllData();
     }
 
     /**
@@ -273,7 +259,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                     @Override
                     public void onSubmit() {
                         onHidTitleLeft();
-                        ModuleMgr.getChatListMgr().updateToBatchRead(data);
+                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
                         exListView.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
                     }
@@ -330,12 +316,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        detectInfo(view);
-                    }
-                }, 200);
+                showAllData();
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
@@ -352,15 +333,33 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
 
+    private void showAllData() {
+        if(timeUtil.check(1000)){
+            initData();
+            detectInfo(exListView);
+        }else {
+            refreshHandler.removeCallbacks(refreshRunnable);
+            refreshHandler.postDelayed(refreshRunnable, 1000);
+        }
+    }
+
+    private Handler refreshHandler = new Handler();
+    private Runnable refreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            initData();
+            detectInfo(exListView);
+        }
+    };
+
     /**
      * 检测个人资料
      *
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (adapter == null || !timeUtil.check(4 * 1000)) {
-            return;
-        }
+        if (adapter == null) return;
+
         final List<Long> stringList = new ArrayList<>();
 
         int firs = view.getFirstVisiblePosition();

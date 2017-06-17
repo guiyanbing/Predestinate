@@ -12,7 +12,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -39,7 +38,6 @@ import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.Observer;
 
@@ -59,6 +57,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
+    private CheckIntervalTimeUtil timeUtil;
 
     @Nullable
     @Override
@@ -111,6 +110,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
+        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
         mail_bottom = findViewById(R.id.mail_bottom);
@@ -390,8 +390,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void showAllData() {
-        refreshHandler.removeCallbacks(refreshRunnable);
-        refreshHandler.postDelayed(refreshRunnable, 1000);
+        if(timeUtil.check(1000)){
+            mailFragmentAdapter.updateAllData();
+            detectInfo(listMail);
+        }else {
+            refreshHandler.removeCallbacks(refreshRunnable);
+            refreshHandler.postDelayed(refreshRunnable, 1000);
+        }
     }
 
     private Handler refreshHandler = new Handler();
@@ -414,7 +419,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     public void onResume() {
         super.onResume();
-
         PLogger.d("MailFragment-onResume");
 
         PLogger.d("MailFragment -- onResume == setmTouchPosition");
