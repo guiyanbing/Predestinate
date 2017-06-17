@@ -1156,6 +1156,15 @@ public class ChatMgr implements ModuleBase {
     }
 
     /**
+     * 更新消息列表个人资料
+     * @param lightweight
+     * @param callback
+     */
+    public void updateUserInfoLight(UserInfoLightweight lightweight, DBCallback callback){
+        dbCenter.getCenterFLetter().updateUserInfoLight(lightweight, callback);
+    }
+
+    /**
      * 批量更新数据库中存储的简略个人资料
      *
      * @param infoLightweights 需要批量更新的简略个人资料
