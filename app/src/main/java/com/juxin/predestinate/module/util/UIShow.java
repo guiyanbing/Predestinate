@@ -179,6 +179,19 @@ public class UIShow {
     }
 
     /**
+     * 应用外消息提示点击跳转到信箱fragment
+     *
+     * @param context 上下文
+     */
+    public static void showMainWithBackMessage(Context context) {
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        mainIntent.setClass(context, MainActivity.class);
+        mainIntent.putExtra(FinalKey.HOME_TAB_TYPE, FinalKey.MAIN_TAB_2);//消息列表
+        context.startActivity(mainIntent);
+    }
+
+    /**
      * 跳转到网页
      *
      * @param type 1-侧滑页面，2-全屏页面，全屏时显示loading条
@@ -1262,7 +1275,7 @@ public class UIShow {
      * @param type
      * @param fromTag     打开来源
      * @param touid       是否因为某个用户充值 （统计用 可选）
-     * @param channel_uid  是否因为某个用户充值渠道id （统计用 可选）
+     * @param channel_uid 是否因为某个用户充值渠道id （统计用 可选）
      */
     private static void showGoodsDiamondDialog(Context context, int needDiamond, int type, int fromTag, long touid, String channel_uid) {
         Intent intent = new Intent(context, GoodsDiamondDialog.class);

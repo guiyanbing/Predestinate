@@ -42,10 +42,6 @@ android {
         signingConfig signingConfigs.release;
         ndk { abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86" }//让64位的操作系统可以兼容32位的库文件
         multiDexEnabled true// 65535限制
-
-        // tray contentProvider鉴权
-        // add this to set a unique tray authority based on your applicationId
-        resValue "string", "tray__authority", "${applicationId}.tray"
     }
 
     dexOptions {
