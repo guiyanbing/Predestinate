@@ -204,6 +204,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                ChatMediaPlayer.getInstance().stopPlayVoice();
                 chatVoiceRecord.setText("松开 发送");
                 chatVoiceRecord.setPressed(true);
 

@@ -10,19 +10,9 @@
         style="@style/chat_item_head"
         android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/chat_item_name"
-        style="@style/chat_item_name"
-        android:layout_marginLeft="@dimen/px25_dp"
-        android:layout_marginRight="@dimen/px222_dp"
-        android:layout_toRightOf="@+id/chat_item_head"
-        android:visibility="gone"
-        android:text="xiaoyou" />
-
     <LinearLayout
         android:id="@+id/chat_item_left_layout"
         style="@style/chat_item_content_layout"
-        android:layout_below="@+id/chat_item_name"
         android:layout_marginRight="0dp"
         android:layout_toRightOf="@+id/chat_item_head">
 

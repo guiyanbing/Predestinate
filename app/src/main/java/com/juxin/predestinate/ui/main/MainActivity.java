@@ -243,7 +243,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, -1), intent);
+        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, FinalKey.MAIN_TAB_1), intent);
     }
 
     /**
@@ -350,6 +350,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void showFloatingMessage(final UserInfoLightweight simpleData, final BaseMessage baseMessage, String content) {
         synchronized (this) {
             if (current == mailFragment) return;
+
+            ModuleMgr.getNotifyMgr().noticeRemind(baseMessage.getType());
             floatHandler.removeCallbacks(floatRunnable);
             floatHandler.postDelayed(floatRunnable, 5 * 1000);
             floatingPanel.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),

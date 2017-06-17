@@ -9,9 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.view.CircularCoverView;
 import com.juxin.library.view.CustomFrameLayout;
@@ -35,9 +33,6 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.utils.MyURLSpan;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 文本、图片、短语音、小视频消息展示panel
@@ -104,40 +99,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         } else {
             coverView.setRadians(6, 15, 15, 15);
         }
-    }
-
-    @Override
-    public void setInit(BaseMessage msgData) {
-        if (msgData == null || !(msgData instanceof CommonMessage)) return;
-        CommonMessage msg = (CommonMessage) msgData;
-
-        String videoUrl = msg.getVideoUrl();
-        String localVideoUrl = msg.getLocalVideoUrl();
-        String voiceUrl = msg.getVoiceUrl();
-        String localVoiceUrl = msg.getLocalVoiceUrl();
-        String img = msg.getImg();
-        String localImg = msg.getLocalImg();
-        if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {//视频
-        } else if (!TextUtils.isEmpty(voiceUrl) || !TextUtils.isEmpty(localVoiceUrl)) {//语音
-        } else if (!TextUtils.isEmpty(img) || !TextUtils.isEmpty(localImg)) {//图片
-        } else {
-        }
-
-//        if (msgData.getfStatus() == 1 && msgData.isAutoplay()) {//自动播放
-//            PLogger.d(msg.getImg());
-//
-//          //  ChatMediaPlayer.getInstance().togglePlayVoice(ModuleMgr.getChatListMgr().spliceStringAmr(msg.getImg()), this);
-//
-//            palySound = true;
-//            msgData.setfStatus(0);
-//            this.msgData = msgData;
-//
-//            if (chatItemHolder != null) {
-//                chatItemHolder.statusImg.setVisibility(View.GONE);
-//            }
-//
-//         //   ModuleMgr.getChatMgr().updateLocalReadVoiceStatus(msgData.getChannelID(), msgData.getWhisperID(), msgData.getMsgid());
-//        }
     }
 
     @Override
@@ -347,35 +308,9 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
     @Override
     public void onStop(String filePath) {
         stopAnimation();
-
         if (palySound && !TextUtils.isEmpty(filePath)) {
             palySound = false;
             MediaNotifyUtils.playSound(getContext(), R.raw.play_voice_after);
-        }
-
-        if (msgData != null) {
-            try {
-                List<BaseMessage> baseMessages = getChatInstance().chatContentAdapter.getList();
-                List<BaseMessage> tmpList = new ArrayList<BaseMessage>();//临时
-                for (BaseMessage tmp : baseMessages) {
-                    if (!tmp.isSender()) {
-                        tmpList.add(tmp);
-                    }
-                }
-
-                int index = tmpList.indexOf(msgData) + 1;
-                if (tmpList.size() > index) {
-                    BaseMessage tmp = tmpList.get(index);
-                    if (tmp.getfStatus() == 1) {
-                        BaseMessage temp = baseMessages.get(baseMessages.indexOf(tmp));
-                        temp.setAutoplay(true);
-                        getChatInstance().chatContentAdapter.notifyDataSetChanged();
-                        msgData = null;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 

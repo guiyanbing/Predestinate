@@ -2,7 +2,11 @@ package com.juxin.predestinate.bean.db;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -27,7 +31,7 @@ public class DBCenter {
 
 //    private final Executor dbExecutor = Executors.newSingleThreadExecutor();
     private HandlerThread workerThread = new HandlerThread("LightTaskThread");
-    private Handler handler = null;
+    private DBHandler handler = null;
 
     public static void makeDBCallback (DBCallback callback, long result) {
         if (callback != null) {
@@ -39,8 +43,7 @@ public class DBCenter {
         this.mDatabase = database;
 
         workerThread.start();
-        handler = new Handler(workerThread.getLooper() );
-
+        handler = new DBHandler(workerThread.getLooper() );
 
         centerFLetter = new DBCenterFLetter(database, handler);
         centerFmessage = new DBCenterFMessage(database, handler);
@@ -139,8 +142,16 @@ public class DBCenter {
         centerFmessage.delete(userID, null);
     }
 
-    public void deleteMessageList(List<Long> list) {
-        centerFLetter.deleteList(list, null);
+    public void deleteMessageList(final List<Long> list, final DBCallback callback) {
+        centerFLetter.deleteList(list, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if(callback != null){
+                    callback.OnDBExecuted(result);
+                }
+            }
+        });
+
         centerFmessage.deleteList(list, null);
     }
 
@@ -231,5 +242,21 @@ public class DBCenter {
 
     public void updateToReadAll(DBCallback callback) {
         centerFmessage.updateToReadAll(callback);
+    }
+
+    private class DBHandler extends Handler {
+        public DBHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void dispatchMessage(Message msg) {
+            // catch any Exception
+            try {
+                super.dispatchMessage(msg);
+            } catch (Exception e) {
+                PLogger.e("db dispatchMessage " + e.getMessage());
+            }
+        }
     }
 }
