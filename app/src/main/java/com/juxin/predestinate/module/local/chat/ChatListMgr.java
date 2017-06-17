@@ -31,7 +31,6 @@ import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -235,14 +234,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
      *
      * @param messageList
      */
-    public void deleteBatchMessage(final List<BaseMessage> messageList) {
+    public void deleteBatchMessage(final List<BaseMessage> messageList, DBCallback callback) {
         List<Long> idList = new ArrayList<Long>();
 
         for (BaseMessage temp : messageList) {
             idList.add(temp.getLWhisperID() );
         }
 
-        dbCenter.deleteMessageList(idList);
+        dbCenter.deleteMessageList(idList,callback);
     }
 
     public void deleteMessage(long userID) {
@@ -255,20 +254,27 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param userID
      * @return
      */
-    public long deleteFmessage(final long userID) {
+    public void deleteFmessage(final long userID, final DBCallback dbCallback) {
         dbCenter.getCenterFLetter().updateContent(String.valueOf(userID), new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
                 if (result != MessageConstant.OK) {
+                    if(dbCallback != null){
+                        dbCallback.OnDBExecuted(result);
+                    }
                     return;
                 }
 
-                dbCenter.getCenterFMessage().delete(userID, null);
+                dbCenter.getCenterFMessage().delete(userID, new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        if(dbCallback != null){
+                            dbCallback.OnDBExecuted(result);
+                        }
+                    }
+                });
             }
         });
-
-        //// TODO: 2017/6/15 yuchenl: status
-        return MessageConstant.OK;
     }
 
     /**
