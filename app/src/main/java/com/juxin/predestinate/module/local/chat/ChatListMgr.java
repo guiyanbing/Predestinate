@@ -331,7 +331,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
         dbCenter.getCenterFLetter().queryLetterList()
-                .subscribeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
@@ -356,7 +357,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.d("getWhisperList====2");
         final Observable<List<BaseMessage>> observable = dbCenter.getCenterFLetter().queryLetterList();
         observable.subscribeOn(Schedulers.io());
-        observable.subscribeOn(AndroidSchedulers.mainThread());
+        observable.observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(new Subscriber<List<BaseMessage>>() {
             @Override
             public void onCompleted() {

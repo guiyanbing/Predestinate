@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.logic.notify.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -15,11 +14,9 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
 import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
-import com.juxin.predestinate.ui.main.MainActivity;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 应用非锁屏状态下消息弹框
@@ -138,12 +135,8 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
             case R.id.btn_reply:
                 finish();
                 if (simpleData == null || simpleData.getUid() == 0) return;
-                Intent mainIntent = new Intent(Intent.ACTION_MAIN);
-                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                mainIntent.setClass(this, MainActivity.class);
-                mainIntent.putExtra(FinalKey.HOME_TAB_TYPE, FinalKey.MAIN_TAB_2);//消息列表
-                startActivity(mainIntent);
 
+                UIShow.showMainWithBackMessage(this);
                 Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + ",\"nickname\":" + simpleData.getNickname() + "}");
                 break;
         }

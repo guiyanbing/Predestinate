@@ -121,7 +121,7 @@ public class IMProxy {
      * 代理和服务器建立连接
      */
     public void connect() {
-        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) {
+        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED && iCoreService != null) {
             login();
             return;
         }
@@ -205,6 +205,7 @@ public class IMProxy {
         public void onServiceDisconnected(final ComponentName name) {
             status = ConnectStatus.DISCONNECTED;
             iCoreService = null;
+            connect();
         }
 
         @Override
