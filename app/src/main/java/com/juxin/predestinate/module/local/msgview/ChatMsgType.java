@@ -26,6 +26,8 @@ public enum ChatMsgType {
 
     CMT_3(ChatPanelCommon.class, "打招呼消息"),
 
+    CMT_7(null, "已读消息"),
+
     CMT_10(ChatPanelGift.class, "礼物消息"),
 
     CMT_14(ChatPanelCustomHint.class, ChatPanelType.CPT_Custom, "小提示消息"),

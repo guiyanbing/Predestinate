@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.MsgMgr;
@@ -25,11 +26,13 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.CommonGridBtnP
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -220,7 +223,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
                 @Override
                 public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                    if (ret) addUserInfo(infoLightweight);
+                    if (ret)
+                        addUserInfo(infoLightweight);
                 }
             });
         }
@@ -401,7 +405,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
-                        if (isMachine) onDataUpdate();
+                        if (isMachine)
+                            onDataUpdate();
                     }
                 });
     }
@@ -440,6 +445,23 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                 if (!message.isSender())//发送已读消息
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
+            }else {
+                ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
+                switch (msgType){
+                    case CMT_7:{
+                        List<BaseMessage> messData = chatInstance.chatContentAdapter.getList();
+                        if (messData != null) {
+                            for (int i = messData.size() - 1 ; i >= 0; i--){
+                                BaseMessage mess = messData.get(i);
+                                if (mess == null) continue;
+                                if (mess.getStatus() == MessageConstant.READ_STATUS) break;
+                                if (mess.getStatus() == MessageConstant.OK_STATUS)
+                                    mess.setStatus(MessageConstant.READ_STATUS);
+                            }
+                            chatInstance.chatContentAdapter.setList(messData);
+                        }
+                    }
+                }
             }
 
             /**
