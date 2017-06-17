@@ -45,7 +45,6 @@ public class DBCenter {
         workerThread.start();
         handler = new DBHandler(workerThread.getLooper() );
 
-
         centerFLetter = new DBCenterFLetter(database, handler);
         centerFmessage = new DBCenterFMessage(database, handler);
         centerFUnRead = new DBCenterFUnRead(database, handler);

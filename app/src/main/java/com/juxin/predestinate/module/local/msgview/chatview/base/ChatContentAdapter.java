@@ -66,29 +66,23 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             return;
         }
 
-        boolean isSender = false;
-
-        if (ChatAdapter.isSender(message.getSendID())) {
-            isSender = true;
-        }
-
         BaseMessage delVideoMsg = null;
         BaseMessage data;
         for (int i = 0; i < datas.size(); i++) {
             data = datas.get(i);
 
-            if (isSender) {
+            if (message.isSender()) {
                 try {
-                    if(BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
-                            && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage){
+                    if (BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
+                            && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage) {
                         VideoMessage videoMessage = (VideoMessage) message;
                         VideoMessage tmpVideMsg = (VideoMessage) data;
-                        if(videoMessage.getVideoID() == tmpVideMsg.getVideoID()){
+                        if (videoMessage.getVideoID() == tmpVideMsg.getVideoID()) {
                             delVideoMsg = data;
                             break;
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -113,7 +107,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             }
         }
 
-        if(delVideoMsg != null){
+        if (delVideoMsg != null) {
             datas.remove(delVideoMsg);
         }
 
@@ -136,7 +130,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             cih = (ChatItemHolder) vh.receiver;
             cih.parent = convertView.findViewById(R.id.chat_item_left);
-            cih.name = (TextView) cih.parent.findViewById(R.id.chat_item_name);
             cih.head = (ImageView) cih.parent.findViewById(R.id.chat_item_head);
             cih.content = (ViewGroup) cih.parent.findViewById(R.id.chat_item_content);
             cih.status = (TextView) cih.parent.findViewById(R.id.chat_item_status);
@@ -147,7 +140,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             cih = (ChatItemHolder) vh.sender;
             cih.parent = convertView.findViewById(R.id.chat_item_right);
-            cih.name = (TextView) cih.parent.findViewById(R.id.chat_item_name);
             cih.head = (ImageView) cih.parent.findViewById(R.id.chat_item_head);
             cih.content = (ViewGroup) cih.parent.findViewById(R.id.chat_item_content);
             cih.status = (TextView) cih.parent.findViewById(R.id.chat_item_status);
@@ -165,11 +157,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         BaseMessage msgData = getItem(position);
         vh.reset(ChatAdapter.isSender(msgData.getSendID()), msgData, getItem(position - 1));
         return convertView;
-    }
-
-    @Override
-    public void setList(List<BaseMessage> datas) {
-        super.setList(datas);
     }
 
     /**
@@ -311,7 +298,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
     }
 
     public class ChatItemHolder extends ChatViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        public TextView name;
         public ImageView head;
         public ViewGroup content;
         public TextView status;
@@ -339,10 +325,10 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             UserInfoLightweight infoLightweight = getChatInstance().chatAdapter.getUserInfo(msg.getSendID());
 
-            if(msgData.getLWhisperID() == MailSpecialID.customerService.getSpecialID() && !msgData.isSender()){
+            if (msgData.getLWhisperID() == MailSpecialID.customerService.getSpecialID() && !msgData.isSender()) {
                 ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null &&
                         !TextUtils.isEmpty(infoLightweight.getAvatar())) ? infoLightweight.getAvatar() : R.drawable.f1_secretary_avatar, head);
-            }else {
+            } else {
                 ImageLoader.loadCircleAvatar(getContext(), (infoLightweight != null) ? infoLightweight.getAvatar() : "", head);
             }
 
@@ -364,7 +350,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 statusError.setVisibility(View.GONE);
                 if (statusImgError != null)
                     statusImgError.setVisibility(View.GONE);
-                if(MessageConstant.isMaxVersionMsg(msg.getType()) && statusImgError != null){
+                if (MessageConstant.isMaxVersionMsg(msg.getType()) && statusImgError != null) {
                     statusImgError.setVisibility(View.VISIBLE);
                     statusImgError.setBackgroundResource(R.drawable.p1_msg_status_tip);
                 }
@@ -383,7 +369,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             statusImg.setVisibility(View.GONE);
             statusError.setVisibility(View.GONE);
-            if (msg.getStatus() != MessageConstant.SENDING_STATUS){
+            if (msg.getStatus() != MessageConstant.SENDING_STATUS) {
                 statusProgress.setVisibility(View.VISIBLE);
                 status.setVisibility(View.INVISIBLE);
             }
@@ -414,17 +400,17 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     status.setText("失败");
                     statusProgress.setVisibility(View.GONE);
                     status.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     statusProgress.setVisibility(View.VISIBLE);
                     status.setVisibility(View.GONE);
                     statusError.setVisibility(View.GONE);
                 }
-            }else if(msg.getStatus() == 4){
+            } else if (msg.getStatus() == 4) {
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
-            }else if (msg.getStatus() == MessageConstant.OK_STATUS || msg.getStatus() == MessageConstant.FAIL_STATUS
-                    || msg.getStatus() ==MessageConstant.READ_STATUS) {//发送失败
+            } else if (msg.getStatus() == MessageConstant.OK_STATUS || msg.getStatus() == MessageConstant.FAIL_STATUS
+                    || msg.getStatus() == MessageConstant.READ_STATUS) {//发送失败
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
                 statusError.setVisibility(View.GONE);

@@ -414,7 +414,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     executeYCoinTask();
                 } else {//不请求网络
                     checkIsCanSendMsg();
-                    chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
+                    if(chat_title_yb_name != null){
+                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
+                    }
                 }
                 break;
             default:
