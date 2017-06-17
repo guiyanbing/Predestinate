@@ -8,12 +8,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.CommonMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
@@ -23,7 +23,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,11 +72,26 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             isSender = true;
         }
 
+        BaseMessage delVideoMsg = null;
         BaseMessage data;
         for (int i = 0; i < datas.size(); i++) {
             data = datas.get(i);
 
             if (isSender) {
+                try {
+                    if(BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
+                            && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage){
+                        VideoMessage videoMessage = (VideoMessage) message;
+                        VideoMessage tmpVideMsg = (VideoMessage) data;
+                        if(videoMessage.getVideoID() == tmpVideMsg.getVideoID()){
+                            delVideoMsg = data;
+                            break;
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 if ((message.getcMsgID() > 0 && data.getcMsgID() == message.getcMsgID())) {
                     // 本地发送的消息更新
                     datas.set(i, message);
@@ -98,6 +112,11 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 }
             }
         }
+
+        if(delVideoMsg != null){
+            datas.remove(delVideoMsg);
+        }
+
         datas.add(message);
         notifyDataSetChanged();
     }

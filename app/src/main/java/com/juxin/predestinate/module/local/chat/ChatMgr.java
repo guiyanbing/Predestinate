@@ -772,9 +772,6 @@ public class ChatMgr implements ModuleBase {
                 dbCenter.getCenterFLetter().storageData(videoMessage, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        if (result != MessageConstant.OK) {
-                            return;
-                        }
                         pushMsg(videoMessage);
                     }
                 });

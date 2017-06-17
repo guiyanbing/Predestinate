@@ -36,7 +36,6 @@ public class DBCenterFLetter {
     }
 
     public void storageData(final BaseMessage message, final DBCallback callback) {
-
         handler.post(new Runnable() {
             @Override
             public void run() {
