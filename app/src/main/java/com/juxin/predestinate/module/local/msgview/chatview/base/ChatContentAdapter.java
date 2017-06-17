@@ -338,7 +338,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         }
 
         private void updateStatus(ChatMsgType msgType, boolean sender) {
-            status.setClickable(false);
             if (!sender) {
                 status.setVisibility(View.GONE);
                 statusProgress.setVisibility(View.GONE);
@@ -376,7 +375,6 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 case 2: // 发送失败
                     status.setText("失败");
-                    status.setClickable(true);
                     break;
 
                 case 11: // 已读
@@ -400,12 +398,13 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     status.setVisibility(View.GONE);
                     statusError.setVisibility(View.GONE);
                 }
-            }else if(msg.getStatus() == 4){
+            }else if (msg.getStatus() == MessageConstant.FAIL_STATUS &&
+                    msg.getStatus() == MessageConstant.BLACKLIST_STATUS) {//发送失败
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
-            }else if (msg.getStatus() == MessageConstant.OK_STATUS || msg.getStatus() == MessageConstant.FAIL_STATUS
-                    || msg.getStatus() ==MessageConstant.READ_STATUS) {//发送失败
+            }else if (msg.getStatus() == MessageConstant.OK_STATUS
+                    || msg.getStatus() == MessageConstant.READ_STATUS) {//状态
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
                 statusError.setVisibility(View.GONE);
@@ -432,7 +431,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 case R.id.chat_item_status:
                     if (chatpanel != null) {
-                        chatpanel.onClickErrorResend(msg);
+                        chatpanel.onClickStatus(msg);
                     }
                     break;
 
@@ -442,7 +441,9 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     }
                     break;
                 case R.id.chat_item_status_error:
-
+                    if (chatpanel != null) {
+                        chatpanel.onClickErrorResend(msg);
+                    }
                     break;
                 default:
                     break;
