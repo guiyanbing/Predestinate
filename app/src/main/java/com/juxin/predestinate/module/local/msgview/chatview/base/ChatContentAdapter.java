@@ -394,10 +394,9 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
             if (msg.getStatus() == 3) {//发送中,
                 long time = msg.getCurrentTime() - msg.getTime();
                 if (time >= 90000) {
-                    status.setClickable(true);
-                    status.setText("失败");
                     statusProgress.setVisibility(View.GONE);
-                    status.setVisibility(View.VISIBLE);
+                    status.setVisibility(View.GONE);
+                    statusError.setVisibility(View.VISIBLE);
                 } else {
                     statusProgress.setVisibility(View.VISIBLE);
                     status.setVisibility(View.GONE);
