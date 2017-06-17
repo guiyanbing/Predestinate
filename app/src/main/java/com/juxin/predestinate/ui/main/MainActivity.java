@@ -69,6 +69,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         initListenerAndRequest();
         initData();
+
+        //跳转标签
+        Intent intent = getIntent();
+        if(intent != null){
+            changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, FinalKey.MAIN_TAB_1), intent);
+        }
     }
 
     private void initData() {
@@ -243,7 +249,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, -1), intent);
+        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, FinalKey.MAIN_TAB_1), intent);
     }
 
     /**

@@ -139,8 +139,16 @@ public class DBCenter {
         centerFmessage.delete(userID, null);
     }
 
-    public void deleteMessageList(List<Long> list) {
-        centerFLetter.deleteList(list, null);
+    public void deleteMessageList(final List<Long> list, final DBCallback callback) {
+        centerFLetter.deleteList(list, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if(callback != null){
+                    callback.OnDBExecuted(result);
+                }
+            }
+        });
+
         centerFmessage.deleteList(list, null);
     }
 

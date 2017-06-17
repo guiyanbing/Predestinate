@@ -19,12 +19,14 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
@@ -285,7 +287,18 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (view.getId()) {
             case R.id.mail_delete:
                 mail_delete.setEnabled(false);
-                ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList);
+                LoadingDialog.show(getActivity(), "删除中...");
+                ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList, new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LoadingDialog.closeLoadingDialog();
+                            }
+                        });
+                    }
+                });
                 setTitleLeftContainerRemoveAll();
                 listMail.smoothCloseChooseView();
                 mailDelInfoList.clear();

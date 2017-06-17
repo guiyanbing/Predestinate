@@ -19,10 +19,12 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.baseui.xlistview.XListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
@@ -244,7 +246,18 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         switch (view.getId()) {
             case R.id.say_hello_users_delete:
                 del_btn.setEnabled(false);
-                ModuleMgr.getChatListMgr().deleteBatchMessage(delList);
+                LoadingDialog.show(this, "删除中...");
+                ModuleMgr.getChatListMgr().deleteBatchMessage(delList, new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LoadingDialog.closeLoadingDialog();
+                            }
+                        });
+                    }
+                });
                 delList.clear();
                 onHidTitleLeft();
                 exListView.smoothCloseChooseView();
