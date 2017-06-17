@@ -1218,7 +1218,7 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50 && refreshOfflineMsg()) {
+                if (offlineMsg.getMsgList().size() >= 50) {
                     getOfflineMsg();
                     return;
                 }
