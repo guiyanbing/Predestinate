@@ -168,7 +168,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         if (ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
             if (App.getActivity() instanceof MainActivity) {
                 ((MainActivity) App.getActivity()).showFloatingMessage(simpleData, baseMessage, content);
-                noticeRemind(baseMessage.getType());
             }
         } else {//在后台，桌面悬浮窗
             if (ModuleMgr.getAppMgr().isForeground()
@@ -190,7 +189,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      *
      * @param messageType 消息类型
      */
-    private void noticeRemind(int messageType) {
+    public void noticeRemind(int messageType) {
         boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
         if (!instanceOfChat && messageType != NOTIFY_VIDEO
                 && (System.currentTimeMillis() - notifyTime > 3 * 1000)) {
