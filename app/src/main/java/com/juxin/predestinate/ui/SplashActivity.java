@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -70,12 +69,12 @@ public class SplashActivity extends BaseActivity {
      */
     private void skipLogic() {
         if (ModuleMgr.getLoginMgr().checkAuthIsExist()) {
-            if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey())&&!checkUserIsUploadAvatar()) {
+            if (ModuleMgr.getCommonMgr().checkDateAndSave(getUploadHeadKey()) && !checkUserIsUploadAvatar()) {
                 int avatar_status = ModuleMgr.getCenterMgr().getMyInfo().getAvatar_status();
                 if (avatar_status == CenterConstant.USER_AVATAR_NO_PASS)
-                    UIShow.showNoHeadUploadActToMain(SplashActivity.this);//更新
+                    UIShow.showUploadAvatarActToMain(SplashActivity.this, true);//更新
                 if (avatar_status == CenterConstant.USER_AVATAR_NO_UPLOAD)
-                    UIShow.showRegHeadUploadActToMain(SplashActivity.this);
+                    UIShow.showUploadAvatarActToMain(SplashActivity.this, false);
                 finish();
             } else {
                 UIShow.showMainClearTask(SplashActivity.this);

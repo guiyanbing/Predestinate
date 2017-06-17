@@ -12,6 +12,7 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
@@ -168,6 +169,9 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         if (ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
             if (App.getActivity() instanceof MainActivity) {
                 ((MainActivity) App.getActivity()).showFloatingMessage(simpleData, baseMessage, content);
+            } else if (App.getActivity() instanceof UserMailNotifyAct) {
+                UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
+                noticeRemind(baseMessage.getType());
             }
         } else {//在后台，桌面悬浮窗
             if (ModuleMgr.getAppMgr().isForeground()
