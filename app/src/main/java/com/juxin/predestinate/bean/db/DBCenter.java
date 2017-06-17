@@ -3,17 +3,12 @@ package com.juxin.predestinate.bean.db;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
-
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
-
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import rx.Observable;
 import rx.Observer;
 
@@ -79,7 +74,6 @@ public class DBCenter {
 
     /******************** FLetter **************************/
     public void insertMsg(final BaseMessage baseMessage, final DBCallback callback) {
-
         if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
             baseMessage.setStatus(MessageConstant.READ_STATUS);
         }
@@ -125,6 +119,8 @@ public class DBCenter {
                     centerFmessage.updateMsg(message, callback);
                 }
             });
+        }else {
+            DBCenter.makeDBCallback(callback, MessageConstant.OK);
         }
     }
 
@@ -145,6 +141,7 @@ public class DBCenter {
 
     public void deleteMessageList(List<Long> list) {
         centerFLetter.deleteList(list, null);
+        centerFmessage.deleteList(list, null);
     }
 
     /**

@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.local.chat;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -38,11 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -56,8 +53,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
-
-    private CheckIntervalTimeUtil intervalTimeUtil;
+    private CheckIntervalTimeUtil timeUtil;
 
     @Inject
     DBCenter dbCenter;
@@ -65,7 +61,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
-        intervalTimeUtil = new CheckIntervalTimeUtil();
+        timeUtil = new CheckIntervalTimeUtil();
     }
 
     @Override
@@ -145,8 +141,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    private long tmpTm = 0;
-
     public synchronized void updateListMsg(List<BaseMessage> messages, long tm) {
         PLogger.printObject(messages);
         unreadNum = 0;
@@ -167,8 +161,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         unreadNum += getFollowNum();//关注
         PLogger.d("unreadNum=" + unreadNum);
 
-        handler.removeCallbacks(runnable);
-        handler.postDelayed(runnable, 1000);
+        if(timeUtil.check(1000)){
+            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        }else {
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 1000);
+        }
     }
 
     private Handler handler = new Handler();
@@ -344,7 +342,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     }
                 });
     }
-
 
     /**
      * 获取消息列表，外部使用，查询完成后取消订阅
