@@ -162,12 +162,12 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
-     * 获取离线消息
+     * 获取离线消息: 客户端每次最多只处理1000条离线消息
      */
     public void reqOfflineMsg(RequestComplete complete) {
         Map<String, Object> getParams = new HashMap<>();
         getParams.put("uid", App.uid);
-        getParams.put("count", 500);
+        getParams.put("count", 1000);
 
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
     }

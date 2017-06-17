@@ -1216,10 +1216,10 @@ public class ChatMgr implements ModuleBase {
                 }
 
                 // 服务器每次最多取500条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 500) {
-                    getOfflineMsg();
-                    return;
-                }
+                //if (offlineMsg.getMsgList().size() >= 500) {
+                //    getOfflineMsg();
+                //    return;
+                //}
                 dispatchLastOfflineAVMap();
             }
         });
