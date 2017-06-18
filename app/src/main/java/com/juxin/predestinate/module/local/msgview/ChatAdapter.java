@@ -429,6 +429,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PSP.getInstance().put("whisperId", "-1");
     }
 
+    public void clearHistory(){
+        chatInstance.chatContentAdapter.setList(new ArrayList<BaseMessage>());
+    }
+
     @Override
     public void onChatUpdate(BaseMessage message) {
         if (message != null) {

@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -282,6 +284,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                     @Override
                     public void OnDBExecuted(long result) {
                         if (result != MessageConstant.ERROR) {
+                            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Clear_History, null);
                             PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
                             return;
                         }
