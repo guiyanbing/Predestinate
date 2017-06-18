@@ -118,6 +118,11 @@ public class MsgType {
     public static final String MT_User_List_Msg_Change = "MT_User_List_Msg_Change";
 
     /**
+     * 清除聊天记录
+     */
+    public static final String MT_Chat_Clear_History = "MT_Chat_Clear_History";
+
+    /**
      * 能否聊天
      */
     public static final String MT_Chat_Can = "MT_Chat_Can";
