@@ -409,7 +409,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_Chat_Clear_History:
-                if(privateChat != null){
+                long tmpID = (long) value;
+                if(privateChat != null && whisperID == tmpID){
                     privateChat.getChatAdapter().clearHistory();
                 }
                 break;

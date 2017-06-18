@@ -91,7 +91,7 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
     public void notifyDataSetChanged() {
         if (getList() != null && getList().size() != 0) {
             handlerStop.removeMessages(1);
-            handlerStop.sendEmptyMessageDelayed(1, 1000);
+            handlerStop.sendEmptyMessageDelayed(1, 500);
         }
         super.notifyDataSetChanged();
     }

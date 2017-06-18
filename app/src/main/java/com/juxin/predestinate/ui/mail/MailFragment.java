@@ -60,7 +60,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
-    private CheckIntervalTimeUtil timeUtil;
     private boolean isShow =true;
 
     @Nullable
@@ -114,7 +113,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
-        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
         mail_bottom = findViewById(R.id.mail_bottom);
@@ -406,14 +404,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void showAllData() {
-        if(timeUtil.check(1000)){
-            detectInfo(listMail);
-        }else {
-            handlerStop.removeMessages(1);
-            Message message = new Message();
-            message.what = 1;
-            handlerStop.sendMessageDelayed(message, 1100);
-        }
+        handlerStop.removeMessages(1);
+        handlerStop.sendEmptyMessageDelayed(1, 500);
     }
 
     private final Handler handlerStop = new Handler(){
@@ -424,7 +416,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 case 1:
                     detectInfo(listMail);
                     break;
-
                 default:
                     break;
             }

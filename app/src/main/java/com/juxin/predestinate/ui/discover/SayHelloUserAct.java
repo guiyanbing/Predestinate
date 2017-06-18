@@ -344,10 +344,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
 
-
     private void showAllData() {
         handlerStop.removeMessages(1);
-        handlerStop.sendEmptyMessageDelayed(1, 1000);
+        handlerStop.sendEmptyMessageDelayed(1, 500);
     }
 
     private final Handler handlerStop = new Handler(){
@@ -363,7 +362,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             }
         }
     };
-
 
     /**
      * 检测个人资料

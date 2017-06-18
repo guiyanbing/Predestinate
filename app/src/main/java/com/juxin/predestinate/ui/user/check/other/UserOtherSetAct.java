@@ -284,7 +284,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                     @Override
                     public void OnDBExecuted(long result) {
                         if (result != MessageConstant.ERROR) {
-                            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Clear_History, null);
+                            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Clear_History, userDetail == null ? 0 : userDetail.getUid());
                             PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
                             return;
                         }
