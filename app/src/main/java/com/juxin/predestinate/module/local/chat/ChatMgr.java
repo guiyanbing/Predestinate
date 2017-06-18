@@ -57,6 +57,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Observer;
+import rx.schedulers.Schedulers;
 
 /**
  * 消息处理管理类
@@ -280,7 +281,6 @@ public class ChatMgr implements ModuleBase {
                             if (TextUtils.isEmpty(img)) {
                                 img = localImg;
                             }
-
                             sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img, new RequestComplete() {
                                 @Override
                                 public void onRequestComplete(final HttpResponse response) {
@@ -346,7 +346,6 @@ public class ChatMgr implements ModuleBase {
         commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
         commonMessage.setRu(MessageConstant.Ru_Friend);
 
-
         dbCenter.insertMsg(commonMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
@@ -394,35 +393,41 @@ public class ChatMgr implements ModuleBase {
                 onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
                 if (result != MessageConstant.OK) return;
 
-                if (FileUtil.isURL(img_url)) {
-                    sendMessage(commonMessage, null);
-                    return;
-                }
-                sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
-                    public void onRequestComplete(HttpResponse response) {
-                        if (!response.isOk()) {
+                    public void run() {
+                        if (FileUtil.isURL(img_url)) {
+                            sendMessage(commonMessage, null);
                             return;
                         }
 
-                        UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                        commonMessage.setImg(upLoadResult.getFile_http_path());
-                        commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-                        dbCenter.updateFmessage(commonMessage, new DBCallback() {
+                        sendHttpFile(Constant.UPLOAD_TYPE_PHOTO, commonMessage, img_url, new RequestComplete() {
                             @Override
-                            public void OnDBExecuted(long result) {
-                                if (result != MessageConstant.OK) {
+                            public void onRequestComplete(HttpResponse response) {
+                                if (!response.isOk()) {
                                     return;
                                 }
-                                onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
-                                sendMessage(commonMessage, null);
+
+                                UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                                commonMessage.setImg(upLoadResult.getFile_http_path());
+                                commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                                dbCenter.updateFmessage(commonMessage, new DBCallback() {
+                                    @Override
+                                    public void OnDBExecuted(long result) {
+                                        if (result != MessageConstant.OK) {
+                                            return;
+                                        }
+                                        onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
+                                        sendMessage(commonMessage, null);
+                                    }
+                                });
                             }
                         });
                     }
                 });
+
             }
         });
-
 
 
     }
@@ -442,31 +447,34 @@ public class ChatMgr implements ModuleBase {
 
                 if (result != MessageConstant.OK) return;
 
-                sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
-                    public void onRequestComplete(final HttpResponse response) {
-                        if (response.isOk()) {
-                            UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
-                            commonMessage.setVoiceUrl(upLoadResult.getFile_http_path());
-                            commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
-                            dbCenter.updateFmessage(commonMessage, new DBCallback() {
-                                @Override
-                                public void OnDBExecuted(long result) {
-                                    if (result != MessageConstant.OK) {
-                                        return;
-                                    }
+                    public void run() {
+                        sendHttpFile(Constant.UPLOAD_TYPE_VOICE, commonMessage, url, new RequestComplete() {
+                            @Override
+                            public void onRequestComplete(final HttpResponse response) {
+                                if (response.isOk()) {
+                                    UpLoadResult upLoadResult = (UpLoadResult) response.getBaseData();
+                                    commonMessage.setVoiceUrl(upLoadResult.getFile_http_path());
+                                    commonMessage.setJsonStr(commonMessage.getJson(commonMessage));
+                                    dbCenter.updateFmessage(commonMessage, new DBCallback() {
+                                        @Override
+                                        public void OnDBExecuted(long result) {
+                                            if (result != MessageConstant.OK) {
+                                                return;
+                                            }
 
-                                    onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
-                                    sendMessage(commonMessage, null);
+                                            onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
+                                            sendMessage(commonMessage, null);
+                                        }
+                                    });
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 });
             }
         });
-
-
     }
 
     private void sendHttpFile(String uploadType, final BaseMessage message, String url, final RequestComplete complete) {
@@ -510,11 +518,11 @@ public class ChatMgr implements ModuleBase {
                         info.parseJson(response.getResponseString());
                         if (response.isOk()) {
                             updateOk(giftMessage, null);
-						GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
-                    if (giftInfo == null) return;
-                    int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
-                    if (stone >= 0)
-                        ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
+                            GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
+                            if (giftInfo == null) return;
+                            int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
+                            if (stone >= 0)
+                                ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
                         } else {
                             updateFail(giftMessage, null);
                         }
@@ -778,15 +786,11 @@ public class ChatMgr implements ModuleBase {
                 dbCenter.getCenterFLetter().storageData(videoMessage, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        if (result != MessageConstant.OK) {
-                            return;
-                        }
                         pushMsg(videoMessage);
                     }
                 });
             }
         });
-
 
 
     }
@@ -861,7 +865,7 @@ public class ChatMgr implements ModuleBase {
             public void OnDBExecuted(long result) {
                 if (result == MessageConstant.OK) {
                     ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
-                    if (!TextUtils.isEmpty(whisperID) ) {
+                    if (!TextUtils.isEmpty(whisperID)) {
                         sendMailReadedMsg(channelID, Long.valueOf(whisperID));
                     }
                 }
@@ -1017,6 +1021,7 @@ public class ChatMgr implements ModuleBase {
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
+            observable.subscribeOn(Schedulers.io()).observeOn(Schedulers.io());
             observable.subscribe(new Observer<UserInfoLightweight>() {
                 @Override
                 public void onCompleted() {
@@ -1028,63 +1033,24 @@ public class ChatMgr implements ModuleBase {
 
                 @Override
                 public void onNext(UserInfoLightweight lightweight) {
-                    PLogger.d("---getUserInfoLightweight--->" + lightweight);
-                    if (lightweight.getUid() <= 0) {
-                        removeInfoComplete(false, false, uid, lightweight);
-                        getProFile(uid);
+                    long infoTime = lightweight.getTime();
+                    //如果有数据且是一小时内请求的就不用请求了
+                    if (lightweight.getUid() > 0 &&
+                            (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime())) {
+                        removeInfoComplete(true, true, uid, lightweight);
                         return;
                     }
-                    long infoTime = lightweight.getTime();
-                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
-                        removeInfoComplete(true, true, uid, lightweight);
-                    } else {
-                        removeInfoComplete(false, true, uid, lightweight);
-                        getProFile(uid);
-                    }
+                    removeInfoComplete(false, false, uid, lightweight);
+                    getNetSingleProfile(uid, new ChatMsgInterface.InfoComplete() {
+                        @Override
+                        public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
+                            // 再次请求一遍之后不管成功失败都移除
+                            removeInfoComplete(true, ret, uid, infoLightweight);
+                        }
+                    });
                 }
             }).unsubscribe();
         }
-    }
-
-    // 获取个人资料
-    private void getProFile(final long userID) {
-        List<Long> longs = new ArrayList<>();
-        longs.add(userID);
-        ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                PLogger.d("---getProFile--->" + response.getResponseString());
-                UserInfoLightweight temp = new UserInfoLightweight();
-                if (!response.isOk()) {
-                    removeInfoComplete(true, false, userID, temp);
-                    return;
-                }
-                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
-                infoLightweightList.parseJsonSummary(response.getResponseJson());
-
-                if (infoLightweightList.getUserInfos() != null && !infoLightweightList.getUserInfos().isEmpty()) {//数据大于1条
-                    final UserInfoLightweight info = infoLightweightList.getUserInfos().get(0);
-                    info.setTime(getTime());
-                    info.setUid(userID);
-                    dbCenter.getCacheCenter().storageProfileData(info, new DBCallback() {
-                        @Override
-                        public void OnDBExecuted(long result) {
-                            if (result != MessageConstant.OK) {
-                                return;
-                            }
-
-                            dbCenter.getCenterFLetter().updateUserInfoLight(info, new DBCallback() {
-                                @Override
-                                public void OnDBExecuted(long result) {
-                                    removeInfoComplete(true, true, userID, info);
-                                }
-                            });
-                        }
-                    });
-
-                }
-            }
-        });
     }
 
     /**
@@ -1134,25 +1100,40 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---getNetSingleProfile--->" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if (!response.isOk()) {
-                    infoComplete.onReqComplete(true, temp);
+                    infoComplete.onReqComplete(false, temp);
                     return;
                 }
+
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
                 infoLightweightList.parseJsonSummary(response.getResponseJson());
 
-                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
-                    temp = infoLightweightList.getUserInfos().get(0);
-                    temp.setTime(getTime());
-                    temp.setUid(userID);
-                    infoComplete.onReqComplete(true, temp);
-
-                    dbCenter.getCacheCenter().storageProfileData(temp, null);
-                    dbCenter.getCenterFLetter().updateUserInfoLight(temp, null);
+                if (infoLightweightList.getUserInfos() == null || infoLightweightList.getUserInfos().isEmpty()) {
+                    infoComplete.onReqComplete(false, temp);
+                    return;
                 }
+
+                temp = infoLightweightList.getUserInfos().get(0);
+                temp.setTime(getTime());
+                temp.setUid(userID);
+                infoComplete.onReqComplete(true, temp);
+
+                dbCenter.getCacheCenter().storageProfileData(temp, null);
+                dbCenter.getCenterFLetter().updateUserInfoLight(temp, null);
             }
         });
+    }
+
+    /**
+     * 更新消息列表个人资料
+     *
+     * @param lightweight
+     * @param callback
+     */
+    public void updateUserInfoLight(UserInfoLightweight lightweight, DBCallback callback) {
+        dbCenter.getCenterFLetter().updateUserInfoLight(lightweight, callback);
     }
 
     /**
@@ -1172,7 +1153,7 @@ public class ChatMgr implements ModuleBase {
      * @param infoLightweight 个人资料数据
      */
     private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
-        PLogger.d("------>" + String.valueOf(infoLightweight));
+        PLogger.d("---removeInfoComplete--->" + infoLightweight);
         synchronized (infoMap) {
             if (infoMap.size() <= 0) return;
             ChatMsgInterface.InfoComplete infoComplete = infoMap.get(userID);
@@ -1217,11 +1198,11 @@ public class ChatMgr implements ModuleBase {
                     dispatchOfflineMsg(bean);
                 }
 
-                // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50  && refreshOfflineMsg()) {
-                    getOfflineMsg();
-                    return;
-                }
+                // 服务器每次最多取500条，若超过则再次请求
+                //if (offlineMsg.getMsgList().size() >= 500) {
+                //    getOfflineMsg();
+                //    return;
+                //}
                 dispatchLastOfflineAVMap();
             }
         });
@@ -1245,7 +1226,7 @@ public class ChatMgr implements ModuleBase {
         }
 
         //已读消息
-        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()){
+        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()) {
             ModuleMgr.getChatListMgr().updateToReadPrivate(bean.getFid());
             ModuleMgr.getChatMgr().updateOtherSideRead(null, bean.getFid() + "", bean.getTid() + "");
             return;

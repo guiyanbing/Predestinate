@@ -2,6 +2,8 @@ package com.juxin.predestinate.ui.discover;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,7 +12,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -19,10 +20,12 @@ import com.juxin.library.observe.PObserver;
 import com.juxin.library.view.CustomFrameLayout;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.baseui.xlistview.XListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
@@ -33,13 +36,10 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 import rx.Observer;
-
 import static com.juxin.predestinate.R.id.say_hello_users_all_ignore;
 import static com.juxin.predestinate.module.logic.application.App.getActivity;
 
@@ -54,8 +54,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     private CustomFrameLayout customFrameLayout;
     private SwipeListView exListView;
 
-    private List<BaseMessage> data = new ArrayList<>();
-
     private SayHelloUserAdapter adapter;
 
     private TextView mail_title_right_text;
@@ -63,7 +61,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     private Button del_btn, ignore_btn;
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> delList = new ArrayList<>();
-    private CheckIntervalTimeUtil timeUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,8 +77,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         setTitle(getString(R.string.say_hello_user_act_title));
         setBackView();
         onTitleRight();
-
-        timeUtil = new CheckIntervalTimeUtil();
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.say_hello_users_frame_layput);
         customFrameLayout.setList(new int[]{R.id.say_hello_users_data, R.id.common_nodata});
         exListView = (SwipeListView) findViewById(R.id.say_hello_users_list);
@@ -92,7 +87,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         exListView.setXListViewListener(this);
         exListView.addHeaderView(mViewTop);
         exListView.addFooterView(listview_footer);
-        adapter = new SayHelloUserAdapter(this, data);
+        adapter = new SayHelloUserAdapter(this, null);
         exListView.setAdapter(adapter);
         exListView.setOnItemClickListener(this);
 
@@ -122,11 +117,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     private void initData() {
-        if (data.size() != 0) {
-            data.clear();
-        }
-        data.addAll(ModuleMgr.getChatListMgr().getGeetList());
-        if (data.size() > 0) {
+        adapter.setList(ModuleMgr.getChatListMgr().getGeetList());
+        PLogger.d("initData=" + adapter.getList().size());
+        if (adapter.getList() != null && adapter.getList().size() > 0) {
             showHasData();
         } else {
             showNoData();
@@ -235,15 +228,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * 显示有数据状态
      */
     public void showHasData() {
-        adapter.notifyDataSetChanged();
         exListView.stopRefresh();
         customFrameLayout.show(R.id.say_hello_users_data);
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(exListView);
-            }
-        }, 800);
+        showAllData();
     }
 
     /**
@@ -258,7 +245,18 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         switch (view.getId()) {
             case R.id.say_hello_users_delete:
                 del_btn.setEnabled(false);
-                ModuleMgr.getChatListMgr().deleteBatchMessage(delList);
+                LoadingDialog.show(this, "删除中...");
+                ModuleMgr.getChatListMgr().deleteBatchMessage(delList, new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LoadingDialog.closeLoadingDialog();
+                            }
+                        });
+                    }
+                });
                 delList.clear();
                 onHidTitleLeft();
                 exListView.smoothCloseChooseView();
@@ -273,7 +271,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                     @Override
                     public void onSubmit() {
                         onHidTitleLeft();
-                        ModuleMgr.getChatListMgr().updateToBatchRead(data);
+                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
                         exListView.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
                     }
@@ -330,12 +328,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        detectInfo(view);
-                    }
-                }, 200);
+                showAllData();
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
@@ -351,6 +344,24 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
 
+    private void showAllData() {
+        handlerStop.removeMessages(1);
+        handlerStop.sendEmptyMessageDelayed(1, 500);
+    }
+
+    private final Handler handlerStop = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    detectInfo(exListView);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     /**
      * 检测个人资料
@@ -358,9 +369,8 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (adapter == null || !timeUtil.check(4 * 1000)) {
-            return;
-        }
+        if (adapter == null) return;
+
         final List<Long> stringList = new ArrayList<>();
 
         int firs = view.getFirstVisiblePosition();

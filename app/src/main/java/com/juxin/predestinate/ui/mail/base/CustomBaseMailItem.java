@@ -122,6 +122,8 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
             } else {
                 item_last_msg.setText(Html.fromHtml(result));
             }
+        }else {
+            item_last_msg.setText("");
         }
 
         long time = msgData.getTime();

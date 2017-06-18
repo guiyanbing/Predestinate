@@ -47,6 +47,7 @@ public class PSP {
      */
     public void init(Context context, String pspName) {
         sharedPreferences = new PTrayPreferences(context, pspName);
+        PLogger.d("---PSP init--->" + pspName);
     }
 
     // ===================初始化=====================

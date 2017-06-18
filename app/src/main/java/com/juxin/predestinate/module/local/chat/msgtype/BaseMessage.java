@@ -36,7 +36,7 @@ public class BaseMessage implements IBaseMessage {
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
-        maxVersion(MaxVersionMessage.class, 0),//最大版本消息
+        maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
 
         ;
@@ -47,6 +47,14 @@ public class BaseMessage implements IBaseMessage {
         BaseMessageType(Class<? extends BaseMessage> msgClass, int msgType) {
             this.msgClass = msgClass;
             this.msgType = msgType;
+        }
+
+        public static BaseMessageType getMsgType(int msgType) {
+            if(MessageConstant.isMaxVersionMsg(msgType)){
+                return BaseMessageType.maxVersion;
+            }
+
+            return BaseMessageType.valueOf(String.valueOf(msgType));
         }
 
         public static BaseMessageType valueOf(int msgType) {

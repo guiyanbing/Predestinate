@@ -93,7 +93,7 @@ public class MyURLSpan extends ClickableSpan {
             switch (mUrl) {
                 //上传头像
                 case URL_TYPE_UPLOAD_HEAD_PIC:
-                    UIShow.showUserRegHeadUploadAct(mContext);
+                    UIShow.showUploadAvatarAct(mContext, false);
                     break;
                 //完善资料
                 case URL_TYPE_COMPLETE_INFO:
@@ -134,7 +134,7 @@ public class MyURLSpan extends ClickableSpan {
                 //发起视频聊天
                 case URL_TYPE_INVITE_VIDEO:
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) App.getActivity(),
-                            otherID, VideoAudioChatHelper.TYPE_VIDEO_CHAT, channel_uid);
+                            otherID, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO, channel_uid);
                     break;
                 //送礼提示
                 case URL_TYPE_SEND_GIFT:
@@ -164,6 +164,7 @@ public class MyURLSpan extends ClickableSpan {
 
     /**
      * 检测URL是否自定义下载协议URL
+     *
      * @param url
      * @return -1 不是自定义下载协议URL  >= 0 自定义协议头在DownExUrlProtocol数组中的下标索引值
      */

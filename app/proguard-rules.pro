@@ -142,6 +142,16 @@
 -keep public class pl.droidsonroids.gif.GifIOException{<init>(int);}
 -keep class pl.droidsonroids.gif.GifInfoHandle{<init>(long,int,int,int);}
 
+# ProGuard configurations for Bugtags
+-keepattributes LineNumberTable,SourceFile
+-keep class com.bugtags.library.** {*;}
+-dontwarn com.bugtags.library.**
+-keep class io.bugtags.** {*;}
+-dontwarn io.bugtags.**
+-dontwarn org.apache.http.**
+-dontwarn android.net.http.AndroidHttpClient
+# End Bugtags
+
 # ==============支付================
 #银联
 -dontwarn com.unionpay.**
@@ -192,7 +202,6 @@
 
 -keep class com.activity.**{*;}
 -keep class bfb.weixin.pay.**{*;}
-
 
 -dontwarn com.gather.flood.system.*
 -dontwarn com.switfpass.pay.activity.*

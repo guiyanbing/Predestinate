@@ -3,7 +3,9 @@ package com.juxin.predestinate.module.local.chat;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
+import android.os.Message;
 
+import com.bumptech.glide.util.Util;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -32,17 +34,16 @@ import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
+import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -57,7 +58,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
 
-    private CheckIntervalTimeUtil intervalTimeUtil;
+    private boolean isMsgChange = false;
+    private Thread notifyThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    stepHandler.sendEmptyMessage(1);
+                    Thread.sleep(1500);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
 
     @Inject
     DBCenter dbCenter;
@@ -65,7 +79,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
-        intervalTimeUtil = new CheckIntervalTimeUtil();
+        notifyThread.start();
     }
 
     @Override
@@ -145,10 +159,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    private long tmpTm = 0;
-
-    public synchronized void updateListMsg(List<BaseMessage> messages, long tm) {
-        PLogger.printObject(messages);
+    private long tm = 0;
+    private boolean isPassTime (long dt) {
+        long newTm = System.currentTimeMillis();
+        if (Math.abs(newTm - tm) >= dt) {
+            tm = newTm;
+            return true;
+        }
+        return false;
+    }
+    public void updateListMsg(List<BaseMessage> messages, long tm) {
+//        PLogger.printObject(messages);
+        PLogger.i(String.format("msg tm: %d", System.currentTimeMillis() ) );
         unreadNum = 0;
         msgList.clear();
         greetNum = 0;
@@ -167,15 +189,24 @@ public class ChatListMgr implements ModuleBase, PObserver {
         unreadNum += getFollowNum();//关注
         PLogger.d("unreadNum=" + unreadNum);
 
-        handler.removeCallbacks(runnable);
-        handler.postDelayed(runnable, 1000);
+        isMsgChange = true;
     }
 
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    private final Handler stepHandler = new Handler(){
+
         @Override
-        public void run() {
-            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (isMsgChange) {
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+                        isMsgChange = false;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
         }
     };
 
@@ -237,14 +268,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
      *
      * @param messageList
      */
-    public void deleteBatchMessage(final List<BaseMessage> messageList) {
+    public void deleteBatchMessage(final List<BaseMessage> messageList, DBCallback callback) {
         List<Long> idList = new ArrayList<Long>();
 
         for (BaseMessage temp : messageList) {
             idList.add(temp.getLWhisperID() );
         }
 
-        dbCenter.deleteMessageList(idList);
+        dbCenter.deleteMessageList(idList,callback);
     }
 
     public void deleteMessage(long userID) {
@@ -257,20 +288,27 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param userID
      * @return
      */
-    public long deleteFmessage(final long userID) {
+    public void deleteFmessage(final long userID, final DBCallback dbCallback) {
         dbCenter.getCenterFLetter().updateContent(String.valueOf(userID), new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
                 if (result != MessageConstant.OK) {
+                    if(dbCallback != null){
+                        dbCallback.OnDBExecuted(result);
+                    }
                     return;
                 }
 
-                dbCenter.getCenterFMessage().delete(userID, null);
+                dbCenter.getCenterFMessage().delete(userID, new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        if(dbCallback != null){
+                            dbCallback.OnDBExecuted(result);
+                        }
+                    }
+                });
             }
         });
-
-        //// TODO: 2017/6/15 yuchenl: status
-        return MessageConstant.OK;
     }
 
     /**
@@ -326,9 +364,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
-        dbCenter.getCenterFLetter().queryLetterList()
-                .subscribeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<BaseMessage>>() {
+
+        Observable<List<BaseMessage> > observable = dbCenter.getCenterFLetter().queryLetterList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation() );
+        observable.skip(1,TimeUnit.SECONDS);
+        observable.subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -341,10 +382,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     public void onNext(List<BaseMessage> baseMessages) {
                         PLogger.d("getWhisperList====" + baseMessages.size());
                         updateListMsg(baseMessages, ModuleMgr.getAppMgr().getTime());
+                        updateListMsg(baseMessages, 0);
                     }
                 });
     }
-
 
     /**
      * 获取消息列表，外部使用，查询完成后取消订阅
@@ -353,7 +394,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.d("getWhisperList====2");
         final Observable<List<BaseMessage>> observable = dbCenter.getCenterFLetter().queryLetterList();
         observable.subscribeOn(Schedulers.io());
-        observable.subscribeOn(AndroidSchedulers.mainThread());
+        observable.observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(new Subscriber<List<BaseMessage>>() {
             @Override
             public void onCompleted() {

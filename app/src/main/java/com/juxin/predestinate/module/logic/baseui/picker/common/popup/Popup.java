@@ -122,6 +122,7 @@ public class Popup extends DialogFragment {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 transaction.add(Popup.this, activity.toString());
                 transaction.commitAllowingStateLoss();
+                activity.getSupportFragmentManager().executePendingTransactions();
             } catch (Exception e) {
                 e.printStackTrace();
             }

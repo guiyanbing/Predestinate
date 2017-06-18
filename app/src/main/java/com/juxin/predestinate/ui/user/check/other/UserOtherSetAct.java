@@ -10,11 +10,16 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.others.UserBlack;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
@@ -33,6 +38,9 @@ import com.juxin.predestinate.ui.user.check.edit.EditKey;
 import com.juxin.predestinate.ui.user.check.edit.custom.EditPopupWindow;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 他人： 资料设置
@@ -272,12 +280,18 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
 
             @Override
             public void onSubmit() {
-                long ret = ModuleMgr.getChatListMgr().deleteFmessage(userDetail.getUid());
-                if (ret != MessageConstant.ERROR) {
-                    PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
-                    return;
-                }
-                PToast.showShort(getString(R.string.user_other_set_chat_del_fail));
+                ModuleMgr.getChatListMgr().deleteFmessage(userDetail.getUid(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        if (result != MessageConstant.ERROR) {
+                            MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Clear_History, userDetail == null ? 0 : userDetail.getUid());
+                            PToast.showShort(getString(R.string.user_other_set_chat_del_suc));
+                            return;
+                        }
+                        PToast.showShort(getString(R.string.user_other_set_chat_del_fail));
+                    }
+                });
+
             }
         }, getString(R.string.user_other_set_chat_del), R.color.text_zhuyao_black, "");
     }
@@ -288,6 +302,26 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
         setResult(CenterConstant.USER_SET_RESULT_CODE, data);
     }
 
+    /**
+     * 刷新聊天列表
+     */
+    private void refreshChatList() {
+        UserInfoLightweight temp = new UserInfoLightweight();
+        Map<String, Object> params = new HashMap<>();
+        params.put("avatar", userDetail.getAvatar());
+        params.put("remark", tempRemark);
+        params.put("nickname", userDetail.getNickname());
+        params.put("group", userDetail.getGroup());
+        params.put("top", userDetail.getTopN());
+
+        temp.setTime(ModuleMgr.getAppMgr().getTime());
+        temp.setUid(userDetail.getUid());
+        temp.setInfoJson(JSON.toJSONString(params));
+
+        ModuleMgr.getChatMgr().updateUserInfoLight(temp, null);
+    }
+
+
     @Override
     public void onRequestComplete(HttpResponse response) {
         // 设置备注
@@ -297,6 +331,7 @@ public class UserOtherSetAct extends BaseActivity implements RequestComplete {
                 return;
             }
             setResult();
+            refreshChatList();
             userDetail.setRemark(tempRemark);
             user_remark.setText(TextUtils.isEmpty(tempRemark) ? "" : tempRemark);
         }

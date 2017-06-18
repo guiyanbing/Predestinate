@@ -57,10 +57,6 @@
             android:name=".module.logic.baseui.WebActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.test.TestActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.start.NavUserAct"
             android:screenOrientation="portrait" />
         <activity
@@ -347,11 +343,7 @@
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.discover.UserNoHeadUploadAct"
-            android:configChanges="screenSize|keyboard|orientation"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.discover.UserRegHeadUploadAct"
+            android:name=".ui.discover.UserAvatarUploadAct"
             android:configChanges="screenSize|keyboard|orientation"
             android:screenOrientation="portrait" />
         <activity

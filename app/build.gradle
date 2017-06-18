@@ -1,9 +1,23 @@
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.bugtags.library.plugin'
 apply plugin: 'AndResGuard'
 
+//Bugtags 插件配置
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考帮助中心->符号表->Android 符号表->配置自动上传符号表
+    appKey "882cc0b7fdb25bed47b9fa577ea684f0"       //这里是你的 appKey
+    appSecret "01016699d806e927eabfa4c26777237b"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置(企业版)
+    trackingNetworkEnabled true
+}
+
 android {
+    useLibrary 'org.apache.http.legacy'
+
     signingConfigs {
         debug {
             storeFile file(cStoreFile)
@@ -28,10 +42,6 @@ android {
         signingConfig signingConfigs.release;
         ndk { abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86" }//让64位的操作系统可以兼容32位的库文件
         multiDexEnabled true// 65535限制
-
-        // tray contentProvider鉴权
-        // add this to set a unique tray authority based on your applicationId
-        resValue "string", "tray__authority", "${applicationId}.tray"
     }
 
     dexOptions {
@@ -221,6 +231,10 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile project(':library')
+
+    //bugtags统计
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+
     //友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
     //dagger2依赖注入

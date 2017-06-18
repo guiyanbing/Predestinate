@@ -39,7 +39,6 @@ import static android.view.View.GONE;
  * 发现
  * Created by zhang on 2017/4/20.
  */
-
 public class DiscoverFragment extends BaseFragment implements RequestComplete, View.OnClickListener, PObserver, ExListView.IXListViewListener {
 
     private static final int Look_All = 0; //查看全部
@@ -47,20 +46,15 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
 
     private static final int Group_sayHai_Msg = 100; //群打招呼
 
-    private ExListView exListView;
     private CustomStatusListView customStatusListView;
-
-    private int page = 0;
-
-    private List<UserInfoLightweight> infos = new ArrayList<>();
-    private DiscoverAdapter adapter;
-
+    private ExListView exListView;
     private Button groupSayhiBtn;
 
+    private DiscoverAdapter adapter;
+    private List<UserInfoLightweight> infos = new ArrayList<>();
+
+    private int page = 0;
     private boolean isNearPage = false;
-
-
-
 
     @Nullable
     @Override
@@ -99,7 +93,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         exListView.setHeaderHintType(2);
         customStatusListView.showLoading();
     }
-
 
     @Override
     public void onRefresh() {
@@ -226,16 +219,7 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 }
                 adapter.notifyDataSetChanged();
                 customStatusListView.showExListView();
-            } else {
-                customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customStatusListView.showLoading();
-                        onRefresh();
-                    }
-                });
             }
-
         }
     }
 
@@ -300,15 +284,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
                 } else {
                     setGroupSayhiBtn(true);
                 }
-            } else {
-                customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customStatusListView.showLoading();
-                        getNearData();
-                    }
-                });
-                setGroupSayhiBtn(false);
             }
         }
     }
@@ -348,11 +323,10 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             }
         }
         StatisticsDiscovery.onNearGroupSayHello(onclickData);
-
     }
 
     /**
-     *
+     * 一键打招呼
      */
     private void doSayHi() {
         Iterator<UserInfoLightweight> userInfos = infos.iterator();
@@ -458,7 +432,6 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
         }
     }
 
-
     /**
      * 刷新首页
      */
@@ -468,6 +441,4 @@ public class DiscoverFragment extends BaseFragment implements RequestComplete, V
             exListView.setSelection(0);
         }
     }
-
-
 }

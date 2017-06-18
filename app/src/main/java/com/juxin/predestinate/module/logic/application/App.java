@@ -7,6 +7,9 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
 
+import com.bugtags.library.Bugtags;
+import com.bugtags.library.BugtagsOptions;
+
 /**
  * Application
  * Created by ZRP on 2016/9/8.
@@ -39,8 +42,27 @@ public class App extends MultiDexApplication {
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
-       // initAppComponent();
+        // initAppComponent();
         ModuleMgr.initModule(context);
+        initBugTags();
+    }
+
+    /**
+     * 初始化Bugtags
+     */
+    private void initBugTags() {
+        BugtagsOptions options = new BugtagsOptions.Builder()
+                .trackingLocation(true)//是否获取位置
+                .trackingCrashLog(true)//是否收集crash
+                .trackingConsoleLog(true)//是否收集console log
+                .trackingUserSteps(true)//是否收集用户操作步骤
+                .crashWithScreenshot(true)//crash附带图
+                .versionName(ModuleMgr.getAppMgr().getVerName())//自定义版本名称
+                .versionCode(ModuleMgr.getAppMgr().getVerCode())//自定义版本号
+                .channel(ModuleMgr.getAppMgr().getUMChannel())//渠道标识
+                .trackingNetworkURLFilter("(.*)")//自定义网络请求跟踪的 url 规则
+                .build();
+        Bugtags.start("882cc0b7fdb25bed47b9fa577ea684f0", this, Bugtags.BTGInvocationEventNone, options);
     }
 
     /**

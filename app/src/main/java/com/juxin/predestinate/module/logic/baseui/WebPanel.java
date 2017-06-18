@@ -22,6 +22,7 @@ import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.third.wa5.sdk.common.utils.NetUtil;
 
 /**
  * 通用的网络请求处理panel
@@ -35,6 +36,7 @@ public class WebPanel extends BasePanel {
 
     private String url;
     private boolean isLoadingInnerControl = true;    //是否由内部控制loading的展示逻辑
+    private boolean isLoadError = false;             //是否加载出错
 
     private CustomFrameLayout customFrameLayout;
     private WebView webView;
@@ -66,7 +68,7 @@ public class WebPanel extends BasePanel {
         findViewById(R.id.error_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                webView.loadUrl(url);
+                loadUrl();
             }
         });
 
@@ -86,7 +88,8 @@ public class WebPanel extends BasePanel {
             @Override
             public void onReceivedTitle(WebView webView, String s) {
                 super.onReceivedTitle(webView, s);
-                if (webListener != null) webListener.onTitle(s);
+                if (webListener != null)
+                    webListener.onTitle(s);
             }
         });
         webView.setWebViewClient(new WebViewClient() {
@@ -101,7 +104,7 @@ public class WebPanel extends BasePanel {
                         getContext().startActivity(intent);
                     }
                 } else {
-                    webView.loadUrl(url);
+                    loadUrl();
                 }
                 return true;
             }
@@ -109,21 +112,27 @@ public class WebPanel extends BasePanel {
             @Override
             public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(webView, errorCode, description, failingUrl);
+                isLoadError = true;
                 customFrameLayout.showOfIndex(FRAME_ERROR);
-                if (webListener != null) webListener.onLoadFinish(WebLoadStatus.ERROR);
+                if (webListener != null)
+                    webListener.onLoadFinish(WebLoadStatus.ERROR);
             }
 
             @Override
             public void onPageFinished(WebView webView, String url) {
                 PLogger.d("-----onPageFinished---->" + url);
-                if (isLoadingInnerControl) hideLoading();
-                if (webListener != null) webListener.onLoadFinish(WebLoadStatus.FINISH);
+                if (isLoadingInnerControl && !isLoadError) {
+                    hideLoading();
+                }
+                if (webListener != null)
+                    webListener.onLoadFinish(WebLoadStatus.FINISH);
             }
 
             @Override
             public void onPageStarted(WebView webView, String url, Bitmap bitmap) {
                 super.onPageStarted(webView, url, bitmap);
-//                customFrameLayout.showOfIndex(FRAME_LOADING);
+                isLoadError = false;
+                //                customFrameLayout.showOfIndex(FRAME_LOADING);
             }
 
             @Override
@@ -134,7 +143,17 @@ public class WebPanel extends BasePanel {
         });
         webView.addJavascriptInterface(new WebAppInterface(getContext(), webView), "Android");
         webView.requestFocus();
-        webView.loadUrl(url);
+        loadUrl();
+    }
+
+    private void loadUrl(){
+        // 判断有无网络
+        if (!NetUtil.getInstance().isNetConnect(getContext())) {
+            customFrameLayout.showOfIndex(FRAME_ERROR);
+        } else {
+            customFrameLayout.showOfIndex(FRAME_WEB);
+            webView.loadUrl(url);
+        }
     }
 
     /**

@@ -12,6 +12,7 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
+import com.juxin.predestinate.module.logic.notify.view.UserMailNotifyAct;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
@@ -53,8 +54,8 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
     //------------------新消息通知start--------------------
 
     @Override
-    public void onChatUpdate(BaseMessage message) {
-        if(message == null) return;
+    public void onChatUpdate(final BaseMessage message) {
+        if (message == null) return;
         PLogger.d("---onChatUpdate--->sendId：" + message.getSSendID()
                 + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
@@ -148,12 +149,11 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * @param content     消息提示内容
      */
     private void viewPrivacy(final UserInfoLightweight simpleData, final BaseMessage baseMessage, final String content) {
-        noticeRemind(baseMessage.getType());
-
         //锁屏状态，锁屏弹窗
         if (BaseUtil.isScreenLock(App.context)) {
             LockScreenMgr.getInstance().setChatData(simpleData, baseMessage, content);
             popupActivity();
+            noticeRemind(baseMessage.getType());
             return;
         }
 
@@ -161,6 +161,9 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         if (ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
             if (App.getActivity() instanceof MainActivity) {
                 ((MainActivity) App.getActivity()).showFloatingMessage(simpleData, baseMessage, content);
+            } else if (App.getActivity() instanceof UserMailNotifyAct) {
+                UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
+                noticeRemind(baseMessage.getType());
             }
         } else {//在后台，桌面悬浮窗
             if (ModuleMgr.getAppMgr().isForeground()
@@ -171,6 +174,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
                 return;
             }
             UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
+            noticeRemind(baseMessage.getType());
         }
     }
 
@@ -181,7 +185,7 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      *
      * @param messageType 消息类型
      */
-    private void noticeRemind(int messageType) {
+    public void noticeRemind(int messageType) {
         boolean instanceOfChat = App.getActivity() instanceof PrivateChatAct;
         if (!instanceOfChat && messageType != NOTIFY_VIDEO
                 && (System.currentTimeMillis() - notifyTime > 3 * 1000)) {

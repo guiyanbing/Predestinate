@@ -16,6 +16,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
 import com.juxin.predestinate.module.logic.notify.LockScreenMgr;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 锁屏弹窗：聊天，一次只显示与一位用户的聊天信息
@@ -91,8 +92,10 @@ public class LockChatPanel extends BasePanel implements OnClickListener {
             case R.id.wake_lock_nickname:
                 LockScreenMgr.getInstance().closeLockNotify();
                 // 音视频消息不用打开私聊页面，先进行处理
-                if (BaseMessage.BaseMessageType.video.getMsgType() != baseMessage.getType())
+                if (BaseMessage.BaseMessageType.video.getMsgType() != baseMessage.getType()) {
+                    UIShow.showMainWithBackMessage(getContext());
                     Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + userInfo.getUid() + "}");
+                }
                 break;
             default:
                 break;

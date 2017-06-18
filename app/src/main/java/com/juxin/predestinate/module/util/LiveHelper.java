@@ -54,7 +54,7 @@ public class LiveHelper {
             saveLiveInfo(anchorId, videoUrl, imgUrl, downUrl);
             return;
         }
-        // TODO: 2017/6/16 根据当前用户性别判断打开女性直播页面还是打开去直播页面
+        // 根据当前用户性别判断打开女性直播页面还是打开去直播页面
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         ComponentName componetName = new ComponentName(pkg, cls);
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -66,7 +66,7 @@ public class LiveHelper {
         intent.putExtra("image_url", imgUrl);
         intent.putExtra("uid", "yf" + userDetail.getUid());
         intent.putExtra("head_url", userDetail.getAvatar());
-        intent.putExtra("sex", userDetail.getGender() == 2 ? "0":"1");//隔壁APP 字符串："0"是女性，"1"是男性
+        intent.putExtra("sex", userDetail.getGender() == 2 ? "0" : "1");//隔壁APP 字符串："0"是女性，"1"是男性
         intent.putExtra("password", ModuleMgr.getLoginMgr().getAuth());
         intent.setComponent(componetName);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -91,7 +91,7 @@ public class LiveHelper {
             jo.put("image_url", imgUrl);
             jo.put("uid", "yf" + userDetail.getUid());
             jo.put("head_url", userDetail.getAvatar());
-            jo.put("sex", userDetail.getGender() == 2 ? "0":"1");//隔壁APP 字符串："0"是女性，"1"是男性
+            jo.put("sex", userDetail.getGender() == 2 ? "0" : "1");//隔壁APP 字符串："0"是女性，"1"是男性
             jo.put("password", JniUtil.GetEncryptString(ModuleMgr.getLoginMgr().getUserList().get(0).getPw()));
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(jo.toString().getBytes());
@@ -112,8 +112,10 @@ public class LiveHelper {
      * @param downUrl
      */
     private static void downLoadPlugin(String downUrl) {
-        if (!downloadPluginFragment.isAdded())
+        if (!downloadPluginFragment.isAdded()) {
+            downloadPluginFragment.setLiveStyle(true);
             downloadPluginFragment.show(((FragmentActivity) App.activity).getSupportFragmentManager(), "download");
+        }
         if (isDownloading) return;
 
         isDownloading = true;

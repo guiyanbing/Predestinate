@@ -135,11 +135,13 @@ public class RecMessageMgr implements IMProxy.IMListener {
             message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-            if (BaseMessage.TalkRed_MsgType == message.getType() || BaseMessage.System_MsgType == message.getType()) {//红包消息不保存，也不通知上层
+            if (BaseMessage.TalkRed_MsgType == message.getType()) {//红包消息不保存，也不通知上层
                 return;
             }
 
-            if (BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()) {
+            if (BaseMessage.Follow_MsgType == message.getType() ||
+                    BaseMessage.RedEnvelopesBalance_MsgType == message.getType() ||
+                    BaseMessage.System_MsgType == message.getType()) {
                 isSave = false;
             }
 
