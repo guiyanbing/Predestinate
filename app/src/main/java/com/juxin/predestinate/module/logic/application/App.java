@@ -62,7 +62,7 @@ public class App extends MultiDexApplication {
                 .channel(ModuleMgr.getAppMgr().getUMChannel())//渠道标识
                 .trackingNetworkURLFilter("(.*)")//自定义网络请求跟踪的 url 规则
                 .build();
-        Bugtags.start("882cc0b7fdb25bed47b9fa577ea684f0", this, Bugtags.BTGInvocationEventShake, options);
+        Bugtags.start("882cc0b7fdb25bed47b9fa577ea684f0", this, Bugtags.BTGInvocationEventNone, options);
     }
 
     /**
