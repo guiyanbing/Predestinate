@@ -49,6 +49,14 @@ public class BaseMessage implements IBaseMessage {
             this.msgType = msgType;
         }
 
+        public static BaseMessageType getMsgType(int msgType) {
+            if(MessageConstant.isMaxVersionMsg(msgType)){
+                return BaseMessageType.maxVersion;
+            }
+
+            return BaseMessageType.valueOf(String.valueOf(msgType));
+        }
+
         public static BaseMessageType valueOf(int msgType) {
             if(MessageConstant.isMaxVersionMsg(msgType)){
                 return BaseMessageType.maxVersion;

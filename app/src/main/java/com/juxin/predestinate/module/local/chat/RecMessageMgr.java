@@ -139,8 +139,9 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 return;
             }
 
-            if (BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()
-                    || BaseMessage.System_MsgType == message.getType()) {
+            if (BaseMessage.Follow_MsgType == message.getType() ||
+                    BaseMessage.RedEnvelopesBalance_MsgType == message.getType() ||
+                    BaseMessage.System_MsgType == message.getType()) {
                 isSave = false;
             }
 
