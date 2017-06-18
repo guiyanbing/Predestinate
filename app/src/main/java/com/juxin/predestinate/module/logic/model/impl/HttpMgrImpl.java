@@ -248,7 +248,6 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
-        lock.lock();
 
         final UrlParam urlParam = requestParam.getUrlParam();
         final Map<String, String> headerMap = requestParam.getHead_param();
@@ -381,7 +380,6 @@ public class HttpMgrImpl implements HttpMgr {
             }
         };
         httpResultCall.enqueue(rb);
-        lock.unlock();
 
         return new HTCallBack(httpResultCall);
     }
