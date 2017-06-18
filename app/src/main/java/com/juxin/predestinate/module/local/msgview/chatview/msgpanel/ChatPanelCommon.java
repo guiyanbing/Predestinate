@@ -152,6 +152,13 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
         String img = msg.getImg();
         String localImg = msg.getLocalImg();
 
+        //不是语音
+        if (TextUtils.isEmpty(voiceUrl) && TextUtils.isEmpty(localVoiceUrl)) {
+            palySound = false;
+            ChatMediaPlayer.getInstance().setOnVoicePlayListener(null);
+            stopAnimation();
+        }
+
         //视频
         if (!TextUtils.isEmpty(videoUrl) || !TextUtils.isEmpty(localVideoUrl)) {
             onVideoDisplayContent(msg);
@@ -182,6 +189,15 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
         time.setText("" + msg.getVoiceLen() + "''");
         time.setWidth(UIUtil.dp2px((float) (20.f + Math.sqrt(msg.getVoiceLen() - 1) * 20)));
+
+        if (ChatMediaPlayer.getInstance().isPlayingVoice(isSender() ? msg.getLocalVoiceUrl() : msg.getVoiceUrl())) {
+            palySound = true;
+            ChatMediaPlayer.getInstance().setOnVoicePlayListener(this);
+            showAnimation();
+        } else {
+            palySound = false;
+            stopAnimation();
+        }
     }
 
     /**

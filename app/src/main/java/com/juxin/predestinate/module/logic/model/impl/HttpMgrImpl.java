@@ -133,6 +133,7 @@ public class HttpMgrImpl implements HttpMgr {
             if (downloadListener != null) downloadListener.onSuccess(url, filePath);
             return new HTCallBack();
         }
+        PSP.getInstance().put(url.hashCode() + "", filePath);
         return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
     }
 
