@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -42,14 +43,18 @@ import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Observer;
 import rx.schedulers.Schedulers;
@@ -1028,52 +1033,24 @@ public class ChatMgr implements ModuleBase {
 
                 @Override
                 public void onNext(UserInfoLightweight lightweight) {
-                    PLogger.d("---getUserInfoLightweight--->" + lightweight);
-                    if (lightweight.getUid() <= 0) {
-                        removeInfoComplete(false, false, uid, lightweight);
-                        getProFile(uid);
+                    long infoTime = lightweight.getTime();
+                    //如果有数据且是一小时内请求的就不用请求了
+                    if (lightweight.getUid() > 0 &&
+                            (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime())) {
+                        removeInfoComplete(true, true, uid, lightweight);
                         return;
                     }
-                    long infoTime = lightweight.getTime();
-                    if (infoTime > 0 && (infoTime + Constant.TWO_HOUR_TIME) > getTime()) {//如果有数据且是一小时内请求的就不用请求了
-                        removeInfoComplete(true, true, uid, lightweight);
-                    } else {
-                        removeInfoComplete(false, true, uid, lightweight);
-                        getProFile(uid);
-                    }
+                    removeInfoComplete(false, false, uid, lightweight);
+                    getNetSingleProfile(uid, new ChatMsgInterface.InfoComplete() {
+                        @Override
+                        public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
+                            // 再次请求一遍之后不管成功失败都移除
+                            removeInfoComplete(true, ret, uid, infoLightweight);
+                        }
+                    });
                 }
-            });
+            }).unsubscribe();
         }
-    }
-
-    // 获取个人资料
-    private void getProFile(final long userID) {
-        List<Long> longs = new ArrayList<>();
-        longs.add(userID);
-        ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                PLogger.d("---getProFile--->" + response.getResponseString());
-                UserInfoLightweight temp = new UserInfoLightweight();
-                if (!response.isOk()) {
-                    removeInfoComplete(true, false, userID, temp);
-                    return;
-                }
-                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
-                infoLightweightList.parseJsonSummary(response.getResponseJson());
-                //通知上层请求到数据了，然后更新数据库
-                if (infoLightweightList.getUserInfos() != null && !infoLightweightList.getUserInfos().isEmpty()) {//数据大于1条
-                    final UserInfoLightweight info = infoLightweightList.getUserInfos().get(0);
-                    info.setTime(getTime());
-                    info.setUid(userID);
-                    removeInfoComplete(true, true, userID, info);
-
-                    dbCenter.getCacheCenter().storageProfileData(info, null);
-                    dbCenter.getCenterFLetter().updateUserInfoLight(info, null);
-
-                }
-            }
-        });
     }
 
     /**
@@ -1123,33 +1100,39 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqUserInfoSummary(longs, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                PLogger.d("---getNetSingleProfile--->" + response.getResponseString());
                 UserInfoLightweight temp = new UserInfoLightweight();
                 if (!response.isOk()) {
-                    infoComplete.onReqComplete(true, temp);
+                    infoComplete.onReqComplete(false, temp);
                     return;
                 }
+
                 UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
                 infoLightweightList.parseJsonSummary(response.getResponseJson());
 
-                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
-                    temp = infoLightweightList.getUserInfos().get(0);
-                    temp.setTime(getTime());
-                    temp.setUid(userID);
-                    infoComplete.onReqComplete(true, temp);
-
-                    dbCenter.getCacheCenter().storageProfileData(temp, null);
-                    dbCenter.getCenterFLetter().updateUserInfoLight(temp, null);
+                if (infoLightweightList.getUserInfos() == null || infoLightweightList.getUserInfos().isEmpty()) {
+                    infoComplete.onReqComplete(false, temp);
+                    return;
                 }
+
+                temp = infoLightweightList.getUserInfos().get(0);
+                temp.setTime(getTime());
+                temp.setUid(userID);
+                infoComplete.onReqComplete(true, temp);
+
+                dbCenter.getCacheCenter().storageProfileData(temp, null);
+                dbCenter.getCenterFLetter().updateUserInfoLight(temp, null);
             }
         });
     }
 
     /**
      * 更新消息列表个人资料
+     *
      * @param lightweight
      * @param callback
      */
-    public void updateUserInfoLight(UserInfoLightweight lightweight, DBCallback callback){
+    public void updateUserInfoLight(UserInfoLightweight lightweight, DBCallback callback) {
         dbCenter.getCenterFLetter().updateUserInfoLight(lightweight, callback);
     }
 
@@ -1170,7 +1153,7 @@ public class ChatMgr implements ModuleBase {
      * @param infoLightweight 个人资料数据
      */
     private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
-        PLogger.d("------>" + String.valueOf(infoLightweight));
+        PLogger.d("---removeInfoComplete--->" + infoLightweight);
         synchronized (infoMap) {
             if (infoMap.size() <= 0) return;
             ChatMsgInterface.InfoComplete infoComplete = infoMap.get(userID);
