@@ -64,11 +64,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
         public void run() {
             try {
                 while (true) {
-                    if (isMsgChange) {
-                        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-                        isMsgChange = false;
-                    }
-                    Thread.sleep(1000);
+                    stepHandler.sendEmptyMessage(1);
+                    Thread.sleep(1500);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -193,27 +190,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         PLogger.d("unreadNum=" + unreadNum);
 
         isMsgChange = true;
-//
-//        if(isPassTime(1000)){
-//            PLogger.i(String.format("sync msg tm: %d", System.currentTimeMillis() ) );
-//            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-//        }
-////        else {//200  400 600
-////            handlerStop.removeMessages(1);
-////            Message message = new Message();
-////            message.what = 1;
-////            handlerStop.sendMessageDelayed(message, 1100);
-////        }
     }
 
-    private final Handler handlerStop = new Handler(){
+    private final Handler stepHandler = new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    PLogger.d("MsgType.handler");
-                    MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+                    if (isMsgChange) {
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+                        isMsgChange = false;
+                    }
                     break;
 
                 default:
