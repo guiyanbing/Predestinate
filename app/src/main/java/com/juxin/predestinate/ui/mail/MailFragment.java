@@ -61,6 +61,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
     private CheckIntervalTimeUtil timeUtil;
+    private boolean isShow =true;
 
     @Nullable
     @Override
@@ -275,7 +276,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                if (isHidden()) return;
+                if (isHidden() || !isShow) return;
                 mailFragmentAdapter.updateAllData();
                 showAllData();
                 break;
@@ -442,8 +443,10 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     public void onResume() {
         super.onResume();
+        isShow = true;
         PLogger.d("MailFragment-onResume");
-
+        mailFragmentAdapter.updateAllData();
+        showAllData();
         PLogger.d("MailFragment -- onResume == setmTouchPosition");
         if (mailFragmentAdapter != null && mailFragmentAdapter.getList() != null && mailFragmentAdapter.getList().size() != 0) {
             if (listMail != null)
@@ -462,6 +465,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     public void onPause() {
         super.onPause();
+        isShow = false;
         PLogger.d("MailFragment-onPause");
     }
 }
