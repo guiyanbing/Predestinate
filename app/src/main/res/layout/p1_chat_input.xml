@@ -39,8 +39,8 @@
         android:gravity="center_vertical"
         android:minHeight="@dimen/title_footer_height"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:paddingLeft="@dimen/px35_dp">
+        android:paddingLeft="@dimen/px35_dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/input_layout"
@@ -82,7 +82,7 @@
                     android:layout_marginTop="@dimen/px18_dp"
                     android:background="@drawable/btn_chat_record_selector"
                     android:gravity="center"
-                    android:text="按住 说话"
+                    android:text="按住说话"
                     android:textColor="@color/color_666666"
                     android:textSize="@dimen/px39_sp"
                     android:visibility="invisible" />
