@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.widget.ListView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -334,14 +335,32 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     /**
+     * ListView是否已到底部，非精准判断
+     *
+     * @param listView
+     * @return
+     */
+    public static boolean isListViewReachBottomEdge(final ListView listView) {
+        boolean result = false;
+
+        //忽略新到来的一条消息，和最后一条消息的高度
+        if (listView.getLastVisiblePosition() >= (listView.getCount() - 3))
+            result = true;
+
+        return result;
+    }
+
+    /**
      * 移动到聊天列表的最后一个。
      */
     public void moveToBottom() {
         if (getChatInstance().chatListView == null) {
             return;
         }
-        getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
-        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+        if (isListViewReachBottomEdge(getChatInstance().chatListView)) {
+            getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
+            chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+        }
     }
 
     /**
