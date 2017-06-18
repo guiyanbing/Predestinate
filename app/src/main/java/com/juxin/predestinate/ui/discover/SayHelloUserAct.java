@@ -61,7 +61,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     private Button del_btn, ignore_btn;
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> delList = new ArrayList<>();
-    private CheckIntervalTimeUtil timeUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +77,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         setTitle(getString(R.string.say_hello_user_act_title));
         setBackView();
         onTitleRight();
-        timeUtil = new CheckIntervalTimeUtil();
         customFrameLayout = (CustomFrameLayout) findViewById(R.id.say_hello_users_frame_layput);
         customFrameLayout.setList(new int[]{R.id.say_hello_users_data, R.id.common_nodata});
         exListView = (SwipeListView) findViewById(R.id.say_hello_users_list);
@@ -348,16 +346,9 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
 
 
     private void showAllData() {
-        if(timeUtil.check(1000)){
-            detectInfo(exListView);
-        }else {
-            handlerStop.removeMessages(1);
-            Message message = new Message();
-            message.what = 1;
-            handlerStop.sendMessageDelayed(message, 1100);
-        }
+        handlerStop.removeMessages(1);
+        handlerStop.sendEmptyMessageDelayed(1, 1000);
     }
-
 
     private final Handler handlerStop = new Handler(){
 
