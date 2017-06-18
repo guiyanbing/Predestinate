@@ -261,12 +261,7 @@ public class ImageLoader {
                             .bitmapTransform(transformation)
                             .placeholder(defResImg)
                             .error(errResImg)
-                            .into(new GlideDrawableImageViewTarget(view) {
-                                @Override
-                                protected void setResource(GlideDrawable resource) {
-                                    super.setResource(resource);
-                                }
-                            });
+                            .into(view);
                 }
             });
         } catch (Exception e) {
