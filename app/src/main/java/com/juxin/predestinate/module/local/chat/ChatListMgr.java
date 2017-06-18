@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Handler;
 import android.os.Message;
 
+import com.bumptech.glide.util.Util;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -37,6 +38,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 import rx.Observable;
 import rx.Observer;
@@ -54,7 +57,24 @@ public class ChatListMgr implements ModuleBase, PObserver {
     private int greetNum = 0;
     private List<BaseMessage> msgList = new ArrayList<>(); //私聊列表
     private List<BaseMessage> greetList = new ArrayList<>(); //陌生人
-    private CheckIntervalTimeUtil timeUtil;
+
+    private boolean isMsgChange = false;
+    private Thread notifyThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    if (isMsgChange) {
+                        MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+                        isMsgChange = false;
+                    }
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
 
     @Inject
     DBCenter dbCenter;
@@ -62,7 +82,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
     @Override
     public void init() {
         MsgMgr.getInstance().attach(this);
-        timeUtil = new CheckIntervalTimeUtil();
+        notifyThread.start();
     }
 
     @Override
@@ -142,8 +162,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public synchronized void updateListMsg(List<BaseMessage> messages, long tm) {
-        PLogger.printObject(messages);
+    private long tm = 0;
+    private boolean isPassTime (long dt) {
+        long newTm = System.currentTimeMillis();
+        if (Math.abs(newTm - tm) >= dt) {
+            tm = newTm;
+            return true;
+        }
+        return false;
+    }
+    public void updateListMsg(List<BaseMessage> messages, long tm) {
+//        PLogger.printObject(messages);
+        PLogger.i(String.format("msg tm: %d", System.currentTimeMillis() ) );
         unreadNum = 0;
         msgList.clear();
         greetNum = 0;
@@ -162,14 +192,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         unreadNum += getFollowNum();//关注
         PLogger.d("unreadNum=" + unreadNum);
 
-        if(timeUtil.check(1000)){//0
-            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
-        }else {//200  400 600
-            handlerStop.removeMessages(1);
-            Message message = new Message();
-            message.what = 1;
-            handlerStop.sendMessageDelayed(message, 1100);
-        }
+        isMsgChange = true;
+//
+//        if(isPassTime(1000)){
+//            PLogger.i(String.format("sync msg tm: %d", System.currentTimeMillis() ) );
+//            MsgMgr.getInstance().sendMsg(MsgType.MT_User_List_Msg_Change, null);
+//        }
+////        else {//200  400 600
+////            handlerStop.removeMessages(1);
+////            Message message = new Message();
+////            message.what = 1;
+////            handlerStop.sendMessageDelayed(message, 1100);
+////        }
     }
 
     private final Handler handlerStop = new Handler(){
@@ -342,10 +376,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
-        dbCenter.getCenterFLetter().queryLetterList()
+
+        Observable<List<BaseMessage> > observable = dbCenter.getCenterFLetter().queryLetterList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<BaseMessage>>() {
+                .observeOn(Schedulers.computation() );
+        observable.skip(1,TimeUnit.SECONDS);
+        observable.subscribe(new Observer<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -358,6 +394,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     public void onNext(List<BaseMessage> baseMessages) {
                         PLogger.d("getWhisperList====" + baseMessages.size());
                         updateListMsg(baseMessages, ModuleMgr.getAppMgr().getTime());
+                        updateListMsg(baseMessages, 0);
                     }
                 });
     }
