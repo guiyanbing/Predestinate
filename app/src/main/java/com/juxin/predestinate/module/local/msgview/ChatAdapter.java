@@ -341,13 +341,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
      * @return
      */
     public static boolean isListViewReachBottomEdge(final ListView listView) {
-        boolean result = false;
-
         //忽略新到来的一条消息，和最后一条消息的高度
-        if (listView.getLastVisiblePosition() >= (listView.getCount() - 3))
-            result = true;
-
-        return result;
+        return listView.getLastVisiblePosition() >= (listView.getCount() - 3);
     }
 
     /**
@@ -357,10 +352,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (getChatInstance().chatListView == null) {
             return;
         }
-        if (isListViewReachBottomEdge(getChatInstance().chatListView)) {
-            getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
-            chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
-        }
+        getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
+        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
     }
 
     /**
@@ -448,7 +441,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PSP.getInstance().put("whisperId", "-1");
     }
 
-    public void clearHistory(){
+    public void clearHistory() {
         chatInstance.chatContentAdapter.setList(new ArrayList<BaseMessage>());
     }
 
@@ -463,18 +456,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             boolean show = isShowMsg(message);
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
-                moveToBottom();
+                if (isListViewReachBottomEdge(getChatInstance().chatListView))
+                    moveToBottom();
                 if (isMachine) onDataUpdate();
 
                 if (!message.isSender())//发送已读消息
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
-            }else {
+            } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
-                switch (msgType){
-                    case CMT_7:{
+                switch (msgType) {
+                    case CMT_7: {
                         List<BaseMessage> messData = chatInstance.chatContentAdapter.getList();
                         if (messData != null) {
-                            for (int i = messData.size() - 1 ; i >= 0; i--){
+                            for (int i = messData.size() - 1; i >= 0; i--) {
                                 BaseMessage mess = messData.get(i);
                                 if (mess == null) continue;
                                 if (mess.getStatus() == MessageConstant.READ_STATUS) break;
