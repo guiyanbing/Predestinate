@@ -37,28 +37,18 @@ public class DBCenterFLetter {
         this.handler = handler;
     }
 
-    public void storageData(final BaseMessage message, final DBCallback callback) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                DBCenter.makeDBCallback(callback,  storageData(message));
-            }
-        });
-    }
-
     public long storageData(BaseMessage message) {
         long ret = MessageConstant.OK;
         BaseMessage temp = isExist(message.getWhisperID());
         if (temp == null) {//没有数据
             ret = insertOneLetter(message);
-            PLogger.d("storageData=insertOneLetter");
+
         } else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
                 && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
             ret = updateOneLetter(message);
-            PLogger.d("storageData=updateOneLetter");
+
         } else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
             ret = updateOneLetter(message);
-            PLogger.d("storageData=111");
         }
         return ret;
     }

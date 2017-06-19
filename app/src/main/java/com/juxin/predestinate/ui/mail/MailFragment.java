@@ -327,11 +327,16 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         ModuleMgr.getChatListMgr().updateToReadAll(new DBCallback() {
                             @Override
                             public void OnDBExecuted(long result) {
-                                LoadingDialog.closeLoadingDialog(1000);
+                                LoadingDialog.closeLoadingDialog(1000, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PToast.showShort("忽略成功!");
+                                    }
+                                });
                             }
                         });
                         listMail.smoothCloseChooseView();
-                        PToast.showShort("忽略成功!");
+
                     }
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");
                 break;

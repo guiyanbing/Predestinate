@@ -124,7 +124,6 @@ public class DBCenterFMessage {
             ret = mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
         } catch (Exception e) {
             e.printStackTrace();
-            ret = -1;
         }
 
         return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;

@@ -118,6 +118,21 @@ public class DBCenter {
         });
     }
 
+    public void insertMsgLocalVideo(final VideoMessage videoMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long result = centerFLetter.storageData(videoMessage);
+                if (result != MessageConstant.OK) {
+                    DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                    return;
+                }
+
+                DBCenter.makeDBCallback(callback, centerFmessage.insertOneMsg(videoMessage));
+            }
+        });
+    }
+
     /**
      * 更新
      *

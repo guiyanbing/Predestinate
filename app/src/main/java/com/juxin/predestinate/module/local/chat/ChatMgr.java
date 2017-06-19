@@ -111,7 +111,6 @@ public class ChatMgr implements ModuleBase {
                 ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
         });
-
     }
 
     /**
@@ -156,14 +155,10 @@ public class ChatMgr implements ModuleBase {
         videoMessage.setDataSource(MessageConstant.FOUR);
         videoMessage.setJsonStr(videoMessage.getJson(videoMessage));
 
-        dbCenter.getCenterFLetter().storageData(videoMessage, new DBCallback() {
+        dbCenter.insertMsgLocalVideo(videoMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result == MessageConstant.ERROR) {
-                    return;
-                }
 
-                dbCenter.getCenterFMessage().insertMsg(videoMessage, null);
             }
         });
     }

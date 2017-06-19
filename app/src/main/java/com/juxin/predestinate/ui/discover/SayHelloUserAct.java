@@ -290,11 +290,15 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                         ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList(), new DBCallback() {
                             @Override
                             public void OnDBExecuted(long result) {
-                                LoadingDialog.closeLoadingDialog(1000);
+                                LoadingDialog.closeLoadingDialog(1000, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PToast.showShort("忽略成功!");
+                                    }
+                                });
                             }
                         });
                         exListView.smoothCloseChooseView();
-                        PToast.showShort("忽略成功!");
                     }
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");
                 break;
