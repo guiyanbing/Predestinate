@@ -5,6 +5,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.App;
+
 
 /**
  * 插件下载弹窗
@@ -22,9 +26,11 @@ public class DownloadPluginFragment extends DialogFragment implements View.OnCli
 
     private ProgressBar progressBar;
     private boolean isLiveStyle = false;
+    private FragmentActivity activity;
 
     public DownloadPluginFragment() {
         super();
+        activity = (FragmentActivity) App.getActivity();
     }
 
     @Nullable
@@ -70,5 +76,21 @@ public class DownloadPluginFragment extends DialogFragment implements View.OnCli
     @Override
     public void onClick(View v) {
         dismiss();
+    }
+
+    public void show(){
+        synchronized (this) {
+            if (activity == null || activity.isFinishing() || isAdded()) {
+                return;
+            }
+            try {
+                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.add(DownloadPluginFragment.this, activity.toString());
+                transaction.commitAllowingStateLoss();
+                activity.getSupportFragmentManager().executePendingTransactions();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
