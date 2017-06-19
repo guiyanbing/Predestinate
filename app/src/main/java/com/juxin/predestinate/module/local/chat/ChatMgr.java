@@ -769,13 +769,6 @@ public class ChatMgr implements ModuleBase {
             }
         }
 
-        //通知刷新个人资料
-        long vcId = PSP.getInstance().getLong("VIDEOID" + App.uid, 0);
-        if (videoMessage.getVideoTp() == 4 && videoMessage.getVideoID() != vcId) {
-            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
-            PSP.getInstance().put("VIDEOID" + App.uid, videoMessage.getVideoID()+"");
-        }
-
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
         dbCenter.insertMsgVideo(videoMessage, new DBCallback() {
@@ -788,6 +781,13 @@ public class ChatMgr implements ModuleBase {
                 pushMsg(videoMessage);
             }
         });
+
+        //通知刷新个人资料
+        long vcId = PSP.getInstance().getLong("VIDEOID" + App.uid, 0);
+        if (videoMessage.getVideoTp() == 4 && videoMessage.getVideoID() != vcId) {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+            PSP.getInstance().put("VIDEOID" + App.uid, videoMessage.getVideoID()+"");
+        }
     }
 
     /**
