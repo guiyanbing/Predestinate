@@ -90,6 +90,14 @@ public class App extends MultiDexApplication {
         return context.getResources();
     }
 
+    /**
+     * 判断最后的Activity是否属于前台显示
+     * @return
+     */
+    public static boolean isForeground(){
+        return lifecycleCallbacks.isForeground();
+    }
+
     // -----------------------------------------------------
 
 //    private static CacheComponent cacheComponent;

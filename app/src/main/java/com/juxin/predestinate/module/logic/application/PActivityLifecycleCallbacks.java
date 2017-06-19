@@ -14,6 +14,7 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     // 本地模拟的activity栈链表，记录activity跳转行为
     private LinkedList<Activity> activities = new LinkedList<>();
+    private volatile boolean isForeground = false;//最后的Activity是否属于前台显示
 
     /**
      * @return 获取本地模拟的activity栈链表
@@ -33,6 +34,7 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityResumed(Activity activity) {
+        isForeground = true;
         App.activity = activity;
 
         // 本地模拟一个只存储10条记录的activity栈
@@ -46,6 +48,9 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityStopped(Activity activity) {
+        if(App.activity == activity) {
+            isForeground = false;
+        }
     }
 
     @Override
@@ -54,5 +59,13 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityDestroyed(Activity activity) {
+    }
+
+    /**
+     * 判断最后的Activity是否属于前台显示
+     * @return
+     */
+    public boolean isForeground(){
+        return isForeground;
     }
 }
