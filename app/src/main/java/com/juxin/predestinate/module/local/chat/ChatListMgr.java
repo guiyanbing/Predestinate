@@ -169,8 +169,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         return false;
     }
     public void updateListMsg(List<BaseMessage> messages, long tm) {
-//        PLogger.printObject(messages);
-        PLogger.i(String.format("msg tm: %d", System.currentTimeMillis() ) );
         unreadNum = 0;
         msgList.clear();
         greetNum = 0;
@@ -278,8 +276,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
         dbCenter.deleteMessageList(idList,callback);
     }
 
-    public void deleteMessage(long userID) {
-        dbCenter.deleteMessage(userID);
+    public void deleteMessage(long userID, final DBCallback callback) {
+        dbCenter.deleteMessage(userID, callback);
     }
 
     /**
