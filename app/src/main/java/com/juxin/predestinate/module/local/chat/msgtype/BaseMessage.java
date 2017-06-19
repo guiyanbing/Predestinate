@@ -116,7 +116,7 @@ public class BaseMessage implements IBaseMessage {
     private String content;//具体内容
     private String jsonStr;//json串
     private int status;//1.发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过   私聊列表中是最后一条消息的状态
-    private int fStatus = -1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
+    private int fStatus = 1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
     private int type;//消息类型
     private int dataSource = 1;//数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟消息
     private String customtype;//自定义类型

@@ -114,7 +114,7 @@ public class LiveHelper {
     private static void downLoadPlugin(String downUrl) {
         if (!downloadPluginFragment.isAdded()) {
             downloadPluginFragment.setLiveStyle(true);
-            downloadPluginFragment.show();
+            downloadPluginFragment.show((FragmentActivity) App.getActivity());
         }
         if (isDownloading) return;
 

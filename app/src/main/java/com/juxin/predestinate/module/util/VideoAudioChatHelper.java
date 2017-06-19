@@ -220,7 +220,7 @@ public class VideoAudioChatHelper {
      */
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
-            downloadPluginFragment.show();
+            downloadPluginFragment.show((FragmentActivity) context);
         if (isDownloading) return;
 
         isDownloading = true;
