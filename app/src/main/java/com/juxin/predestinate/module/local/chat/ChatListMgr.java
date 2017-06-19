@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Message;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -31,11 +32,15 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -176,7 +181,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         isMsgChange = true;
     }
 
-    private final Handler stepHandler = new Handler(){
+    private final Handler stepHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -256,10 +261,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         List<Long> idList = new ArrayList<Long>();
 
         for (BaseMessage temp : messageList) {
-            idList.add(temp.getLWhisperID() );
+            idList.add(temp.getLWhisperID());
         }
 
-        dbCenter.deleteMessageList(idList,callback);
+        dbCenter.deleteMessageList(idList, callback);
     }
 
     public void deleteMessage(long userID, final DBCallback callback) {
@@ -277,7 +282,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             @Override
             public void OnDBExecuted(long result) {
                 if (result != MessageConstant.OK) {
-                    if(dbCallback != null){
+                    if (dbCallback != null) {
                         dbCallback.OnDBExecuted(result);
                     }
                     return;
@@ -286,7 +291,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 dbCenter.getCenterFMessage().delete(userID, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        if(dbCallback != null){
+                        if (dbCallback != null) {
                             dbCallback.OnDBExecuted(result);
                         }
                     }
@@ -302,7 +307,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         dbCenter.updateToReadAll(new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if(dbCallback != null){
+                if (dbCallback != null) {
                     dbCallback.OnDBExecuted(result);
                 }
                 getWhisperListUnSubscribe();
@@ -317,7 +322,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         dbCenter.getCenterFMessage().updateToRead(greetList, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if(dbCallback != null){
+                if (dbCallback != null) {
                     dbCallback.OnDBExecuted(result);
                 }
                 getWhisperListUnSubscribe();
@@ -350,23 +355,23 @@ public class ChatListMgr implements ModuleBase, PObserver {
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
 
-        Observable<List<BaseMessage> > observable = dbCenter.getCenterFLetter().queryLetterList()
+        Observable<List<BaseMessage>> observable = dbCenter.getCenterFLetter().queryLetterList()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(new Observer<List<BaseMessage>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+            @Override
+            public void onCompleted() {
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                    }
+            @Override
+            public void onError(Throwable e) {
+            }
 
-                    @Override
-                    public void onNext(List<BaseMessage> baseMessages) {
-                        PLogger.d("getWhisperList====" + baseMessages.size());
-                        updateListMsg(baseMessages);
-                    }
-                });
+            @Override
+            public void onNext(List<BaseMessage> baseMessages) {
+                PLogger.d("getWhisperList====" + baseMessages.size());
+                updateListMsg(baseMessages);
+            }
+        });
     }
 
     /**

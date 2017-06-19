@@ -200,8 +200,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     case MyFriend_Msg:
                         break;
                     case Greet_Msg:
-                        LoadingDialog.show(getActivity(), "删除中...");
-                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList(), new DBCallback() {
+                        List<BaseMessage> tmpList = ModuleMgr.getChatListMgr().getGeetList();
+                        if (tmpList.size() <= 0) {
+                            PToast.showCenterShort("没有打招呼的人！");
+                            return;
+                        }
+                        LoadingDialog.show(getActivity(), getString(R.string.ignore));
+                        ModuleMgr.getChatListMgr().updateToBatchRead(tmpList, new DBCallback() {
                             @Override
                             public void OnDBExecuted(long result) {
                                 LoadingDialog.closeLoadingDialog(1000);
@@ -210,7 +215,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                 }
             } else {
-                LoadingDialog.show(getActivity(), "删除中...");
+                LoadingDialog.show(getActivity(), getString(R.string.deleted));
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
@@ -301,7 +306,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (view.getId()) {
             case R.id.mail_delete:
                 mail_delete.setEnabled(false);
-                LoadingDialog.show(getActivity(), "删除中...");
+                LoadingDialog.show(getActivity(), getString(R.string.deleted));
                 ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
@@ -323,7 +328,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     @Override
                     public void onSubmit() {
                         setTitleLeftContainerRemoveAll();
-                        LoadingDialog.show(getActivity(), "忽略中...");
+                        LoadingDialog.show(getActivity(), getString(R.string.ignore));
                         ModuleMgr.getChatListMgr().updateToReadAll(new DBCallback() {
                             @Override
                             public void OnDBExecuted(long result) {
