@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -23,6 +24,7 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -355,7 +357,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 if (ChatMsgType.CMT_2 == msgType && msg.getfStatus() == 1) {
                     CommonMessage message = (CommonMessage) msg;
-                    if (!TextUtils.isEmpty(message.getVoiceUrl())) {
+                    if (!TextUtils.isEmpty(message.getVoiceUrl()) && message.getVoiceLen() > 0) {
                         statusImg.setVisibility(View.VISIBLE);
                         return;
                     }
