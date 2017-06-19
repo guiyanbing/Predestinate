@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.App;
-import com.juxin.predestinate.module.logic.baseui.picker.common.popup.Popup;
 
 
 /**
