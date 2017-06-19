@@ -5,7 +5,6 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -30,7 +29,6 @@ public class DBCenter {
     private DBCenterFUnRead centerFUnRead;
     private DBCacheCenter cacheCenter;
 
-    //    private final Executor dbExecutor = Executors.newSingleThreadExecutor();
     private HandlerThread workerThread = new HandlerThread("LightTaskThread");
     private DBHandler handler = null;
 
@@ -50,7 +48,6 @@ public class DBCenter {
         centerFmessage = new DBCenterFMessage(database, handler);
         centerFUnRead = new DBCenterFUnRead(database, handler);
         cacheCenter = new DBCacheCenter(database, handler);
-
     }
 
     /******************** DBCacheCenter **************************/
@@ -61,8 +58,6 @@ public class DBCenter {
 
 
     /******************** FUnRead **************************/
-
-
     public DBCenterFUnRead getCenterFUnRead() {
         return centerFUnRead;
     }
@@ -231,7 +226,6 @@ public class DBCenter {
 
             }
         }).unsubscribe();
-
     }
 
     /**
