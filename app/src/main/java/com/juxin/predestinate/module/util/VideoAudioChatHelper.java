@@ -286,7 +286,7 @@ public class VideoAudioChatHelper {
                 public void run() {
                     ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
                 }
-            },1000);
+            },500);
 
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             startRtcInitActivity(context, bundle);
