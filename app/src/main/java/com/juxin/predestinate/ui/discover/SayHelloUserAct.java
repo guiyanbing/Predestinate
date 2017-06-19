@@ -35,7 +35,6 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import java.util.ArrayList;
 import java.util.List;
 import rx.Observable;
@@ -117,7 +116,10 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
     }
 
     private void initData() {
-        adapter.setList(ModuleMgr.getChatListMgr().getGeetList());
+        adapter.setListNonotify(ModuleMgr.getChatListMgr().getGeetList());
+        handlerNotify.removeMessages(1);
+        handlerNotify.sendEmptyMessageDelayed(1, 500);
+
         PLogger.d("initData=" + adapter.getList().size());
         if (adapter.getList() != null && adapter.getList().size() > 0) {
             showHasData();
@@ -125,6 +127,23 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             showNoData();
         }
     }
+
+    private final Handler handlerNotify = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    adapter.notifyDataSetChanged();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+
+
 
     private void onTitleRight() {
         setTitleRightImgGone();
@@ -318,7 +337,13 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         if (item != null) {
             MailMsgID mailMsgID = MailMsgID.getMailMsgID(item.getLWhisperID());
             if (mailMsgID == null) {
-                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+                LoadingDialog.show(this, "删除中...");
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        LoadingDialog.closeLoadingDialog();
+                    }
+                });
             }
         }
     }

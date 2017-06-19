@@ -203,7 +203,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                 }
             } else {
-                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+                LoadingDialog.show(getActivity(), "删除中...");
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        LoadingDialog.closeLoadingDialog();
+                    }
+                });
             }
         }
     }

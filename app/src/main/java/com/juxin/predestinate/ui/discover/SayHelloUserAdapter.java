@@ -89,24 +89,7 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public void notifyDataSetChanged() {
-        if (getList() != null && getList().size() != 0) {
-            handlerStop.removeMessages(1);
-            handlerStop.sendEmptyMessageDelayed(1, 500);
-        }
+        SortList.sortWeightTimeListView(getList());
         super.notifyDataSetChanged();
     }
-
-    private final Handler handlerStop = new Handler(){
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    SortList.sortWeightTimeListView(getList());
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 }
