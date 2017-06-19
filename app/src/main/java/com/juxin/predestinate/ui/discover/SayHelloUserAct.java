@@ -286,7 +286,13 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                     @Override
                     public void onSubmit() {
                         onHidTitleLeft();
-                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
+                        LoadingDialog.show(SayHelloUserAct.this, "忽略中...");
+                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList(), new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000);
+                            }
+                        });
                         exListView.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
                     }

@@ -200,7 +200,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     case MyFriend_Msg:
                         break;
                     case Greet_Msg:
-                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
+                        LoadingDialog.show(getActivity(), "删除中...");
+                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList(), new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000);
+                            }
+                        });
                         break;
                 }
             } else {
@@ -317,7 +323,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     @Override
                     public void onSubmit() {
                         setTitleLeftContainerRemoveAll();
-                        ModuleMgr.getChatListMgr().updateToReadAll();
+                        LoadingDialog.show(getActivity(), "忽略中...");
+                        ModuleMgr.getChatListMgr().updateToReadAll(new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000);
+                            }
+                        });
                         listMail.smoothCloseChooseView();
                         PToast.showShort("忽略成功!");
                     }
