@@ -448,6 +448,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     @Override
     public void onChatUpdate(BaseMessage message) {
         if (message != null) {
+            boolean isUpdate = true;
             PLogger.printObject(message.getJsonStr());
             if (message.getTime() == 0) {
                 message.setTime(ModuleMgr.getAppMgr().getTime());
@@ -466,6 +467,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {
                     case CMT_7: {
+                        isUpdate = false;
                         List<BaseMessage> messData = chatInstance.chatContentAdapter.getList();
                         if (messData != null) {
                             for (int i = messData.size() - 1; i >= 0; i--) {
@@ -485,7 +487,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
              * 本地模拟消息
              * 接收的网络消息
              */
-            if (message.getDataSource() == MessageConstant.FOUR || (message.getDataSource() == MessageConstant.TWO && show)) {
+            if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
+                    || (message.getDataSource() == MessageConstant.TWO && show)) {
                 ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
             }
         }
