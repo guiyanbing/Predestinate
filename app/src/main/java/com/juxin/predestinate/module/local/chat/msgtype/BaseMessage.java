@@ -29,7 +29,7 @@ public class BaseMessage implements IBaseMessage {
         hi(CommonMessage.class, 3),//打招呼
         sys(SystemMessage.class, 7),//系统
         gift(GiftMessage.class, 10),//礼物消息
-        hint(TextMessage.class, 14),//小提示消息
+        hint(TextMessage.class, 14),//小提示消息   不显示
         html(TextMessage.class, 19),//html消息
         wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息

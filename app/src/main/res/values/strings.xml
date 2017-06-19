@@ -11,6 +11,9 @@
     <string name="edit">编辑</string>
     <string name="save">保存</string>
     <string name="request_error">请求出错!</string>
+    <string name="deleted">删除中...</string>
+    <string name="ignore">忽略中...</string>
+
 
     <!-- 主页Fragment -->
     <string name="main_btn_discovery">发现</string>
