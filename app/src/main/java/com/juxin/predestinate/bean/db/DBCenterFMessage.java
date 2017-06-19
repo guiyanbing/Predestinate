@@ -35,24 +35,18 @@ public class DBCenterFMessage {
         this.handler = handler;
     }
 
-    public void storageDataVideo(final VideoMessage message, final DBCallback callback) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long ret = MessageConstant.OK;
-                if (!isExist(message.getSpecialMsgID())) {//没有数据
-                    ret = insertOneMsg(message);
-                }
-                else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
-                    ret = insertOneMsg(message);
-                }
-                else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
-                    ret = insertOneMsg(message);
-                }
-                DBCenter.makeDBCallback(callback, ret);
-
-            }
-        });
+    public long storageDataVideo(final VideoMessage message) {
+        long ret = MessageConstant.OK;
+        if (!isExist(message.getSpecialMsgID())) {//没有数据
+            ret = insertOneMsg(message);
+        }
+        else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
+            ret = insertOneMsg(message);
+        }
+        else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
+            ret = insertOneMsg(message);
+        }
+        return ret;
     }
 
     private boolean isExist(long vcID) {
@@ -97,7 +91,7 @@ public class DBCenterFMessage {
         });
     }
 
-    private long insertOneMsg(BaseMessage baseMessage) {
+    public long insertOneMsg(BaseMessage baseMessage) {
         if (baseMessage == null) {
             return MessageConstant.ERROR;
         }

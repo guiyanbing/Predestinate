@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -77,24 +78,44 @@ public class DBCenter {
 
     /******************** FLetter **************************/
     public void insertMsg(final BaseMessage baseMessage, final DBCallback callback) {
-        if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
-            baseMessage.setStatus(MessageConstant.READ_STATUS);
-        }
-
-        centerFmessage.insertMsg(baseMessage, new DBCallback() {
+        handler.post(new Runnable() {
             @Override
-            public void OnDBExecuted(long result) {
+            public void run() {
+                if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
+                    baseMessage.setStatus(MessageConstant.READ_STATUS);
+                }
+
+                long result = centerFmessage.insertOneMsg(baseMessage);
                 if (result != MessageConstant.OK) {
                     DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
                     return;
                 }
 
                 if (BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()) {
-                    centerFLetter.storageData(baseMessage, callback);
+                    result = centerFLetter.storageData(baseMessage);
+                    DBCenter.makeDBCallback(callback, (result >=0 ? MessageConstant.OK : MessageConstant.ERROR));
+                }else {
+                    DBCenter.makeDBCallback(callback, MessageConstant.OK);
                 }
             }
         });
+    }
 
+    public void insertMsgVideo(final VideoMessage videoMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long result = centerFmessage.storageDataVideo(videoMessage);
+                if (result != MessageConstant.OK) {
+                    DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                    return;
+                }
+
+                result = centerFLetter.storageData(videoMessage);
+                long ret = result >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, ret);
+            }
+        });
     }
 
     /**
@@ -137,8 +158,15 @@ public class DBCenter {
      * @param userID
      * @return
      */
-    public void deleteMessage(long userID) {
-        centerFLetter.delete(userID, null);
+    public void deleteMessage(long userID, final DBCallback callback) {
+        centerFLetter.delete(userID, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if(callback != null){
+                    callback.OnDBExecuted(result);
+                }
+            }
+        });
         centerFmessage.delete(userID, null);
     }
 

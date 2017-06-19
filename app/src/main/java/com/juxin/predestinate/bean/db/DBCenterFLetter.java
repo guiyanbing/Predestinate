@@ -7,6 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -39,22 +41,26 @@ public class DBCenterFLetter {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                long ret = MessageConstant.OK;
-                BaseMessage temp = isExist(message.getWhisperID());
-                if (temp == null) {//没有数据
-                    ret = insertOneLetter(message);
-                }
-                else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                        && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-                    ret = updateOneLetter(message);
-                }
-                else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-                    ret = updateOneLetter(message);
-                }
-
-                DBCenter.makeDBCallback(callback, ret);
+                DBCenter.makeDBCallback(callback,  storageData(message));
             }
         });
+    }
+
+    public long storageData(BaseMessage message) {
+        long ret = MessageConstant.OK;
+        BaseMessage temp = isExist(message.getWhisperID());
+        if (temp == null) {//没有数据
+            ret = insertOneLetter(message);
+            PLogger.d("storageData=insertOneLetter");
+        } else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
+            ret = updateOneLetter(message);
+            PLogger.d("storageData=updateOneLetter");
+        } else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
+            ret = updateOneLetter(message);
+            PLogger.d("storageData=111");
+        }
+        return ret;
     }
 
     /**
