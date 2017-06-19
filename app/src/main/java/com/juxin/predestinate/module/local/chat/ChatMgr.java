@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.Msg;
@@ -772,6 +773,13 @@ public class ChatMgr implements ModuleBase {
             } else {
                 videoMessage.setStatus(MessageConstant.READ_STATUS);
             }
+        }
+
+        //通知刷新个人资料
+        long vcId = PSP.getInstance().getLong("VIDEOID" + App.uid, 0);
+        if (videoMessage.getVideoTp() == 4 && videoMessage.getVideoID() != vcId) {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+            PSP.getInstance().put("VIDEOID" + App.uid, videoMessage.getVideoID()+"");
         }
 
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
