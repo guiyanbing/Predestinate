@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.module.logic.application.App;
 
 
 /**
@@ -26,11 +25,9 @@ public class DownloadPluginFragment extends DialogFragment implements View.OnCli
 
     private ProgressBar progressBar;
     private boolean isLiveStyle = false;
-    private FragmentActivity activity;
 
     public DownloadPluginFragment() {
         super();
-        activity = (FragmentActivity) App.getActivity();
     }
 
     @Nullable
@@ -78,7 +75,7 @@ public class DownloadPluginFragment extends DialogFragment implements View.OnCli
         dismiss();
     }
 
-    public void show(){
+    public void show(FragmentActivity activity){
         synchronized (this) {
             if (activity == null || activity.isFinishing() || isAdded()) {
                 return;
