@@ -457,8 +457,9 @@ public class DBCenterFLetter {
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? AND "
-                        + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
+                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
+                        FLetter.COLUMN_USERID + " = ? AND " + FLetter.COLUMN_STATUS + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
+                        String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS), String.valueOf(BaseMessage.video_MsgType));
                 long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
