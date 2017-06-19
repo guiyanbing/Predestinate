@@ -35,24 +35,16 @@ public class DBCenterFMessage {
         this.handler = handler;
     }
 
-    public void storageDataVideo(final VideoMessage message, final DBCallback callback) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long ret = MessageConstant.OK;
-                if (!isExist(message.getSpecialMsgID())) {//没有数据
-                    ret = insertOneMsg(message);
-                }
-                else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
-                    ret = insertOneMsg(message);
-                }
-                else if(deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR){
-                    ret = insertOneMsg(message);
-                }
-                DBCenter.makeDBCallback(callback, ret);
-
-            }
-        });
+    public long storageDataVideo(final VideoMessage message) {
+        long ret = MessageConstant.OK;
+        if (!isExist(message.getSpecialMsgID())) {//没有数据
+            ret = insertOneMsg(message);
+        } else if (deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR) {
+            ret = insertOneMsg(message);
+        } else if (deleteMsgID(message.getSpecialMsgID()) != MessageConstant.ERROR) {
+            ret = insertOneMsg(message);
+        }
+        return ret;
     }
 
     private boolean isExist(long vcID) {
@@ -97,7 +89,7 @@ public class DBCenterFMessage {
         });
     }
 
-    private long insertOneMsg(BaseMessage baseMessage) {
+    public long insertOneMsg(BaseMessage baseMessage) {
         if (baseMessage == null) {
             return MessageConstant.ERROR;
         }
@@ -130,7 +122,6 @@ public class DBCenterFMessage {
             ret = mDatabase.insert(FMessage.FMESSAGE_TABLE, values);
         } catch (Exception e) {
             e.printStackTrace();
-            ret = -1;
         }
 
         return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
@@ -196,9 +187,6 @@ public class DBCenterFMessage {
                     if (baseMessage.getTime() != -1)
                         values.put(FMessage.COLUMN_TIME, baseMessage.getTime());
 
-                    if (baseMessage.getfStatus() != -1)
-                        values.put(FMessage.COLUMN_FSTATUS, baseMessage.getfStatus());
-
                     if (baseMessage.getJsonStr() != null)
                         values.put(FMessage.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
@@ -209,7 +197,7 @@ public class DBCenterFMessage {
                     ret = -1;
                 }
 
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
 
                 DBCenter.makeDBCallback(callback, result);
             }
@@ -224,7 +212,7 @@ public class DBCenterFMessage {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_FSTATUS, String.valueOf(MessageConstant.NumDefault));
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -237,13 +225,13 @@ public class DBCenterFMessage {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
     }
 
-    public void updateToRead(final List<BaseMessage> list , final DBCallback callback) {
+    public void updateToRead(final List<BaseMessage> list, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -270,7 +258,7 @@ public class DBCenterFMessage {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -316,7 +304,7 @@ public class DBCenterFMessage {
                     e.printStackTrace();
                     ret = -1;
                 }
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
 
                 DBCenter.makeDBCallback(callback, result);
             }
@@ -376,7 +364,7 @@ public class DBCenterFMessage {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
 
             }
@@ -390,7 +378,7 @@ public class DBCenterFMessage {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_FSTATUS, 0);
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -430,7 +418,7 @@ public class DBCenterFMessage {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }finally {
+                        } finally {
                             CloseUtil.close(cursor);
                         }
                         return null;
@@ -534,14 +522,14 @@ public class DBCenterFMessage {
 
     private int delete(long whisperID) {
         long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? ", String.valueOf(whisperID));
-        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+        return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     public void deleteList(final List<Long> list, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                for(long temp : list){
+                for (long temp : list) {
                     delete(temp);
                 }
 
@@ -552,7 +540,7 @@ public class DBCenterFMessage {
 
     private long deleteMsgID(long vcID) {
         long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_SPECIALMSGID + " = ? ", String.valueOf(vcID));
-        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+        return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     public void delete(final long whisperID, final long time, final DBCallback callback) {
@@ -561,7 +549,7 @@ public class DBCenterFMessage {
             public void run() {
                 long ret = mDatabase.delete(FMessage.FMESSAGE_TABLE, FMessage.COLUMN_WHISPERID + " = ? AND " +
                         FMessage.COLUMN_TIME + " = ? ", String.valueOf(whisperID), String.valueOf(time));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });

@@ -305,7 +305,7 @@ public class TimeUtil extends TimeBaseUtil {
      */
     public static String formatBeforeTimeWeek(long time) {
         String ret = "";
-        long currentTime = ModuleMgr.getAppMgr().getTime();
+        long currentTime = onPad(ModuleMgr.getAppMgr().getTime());
         currentTime = onPad(currentTime);
         time = onPad(time);
 

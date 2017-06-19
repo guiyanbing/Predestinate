@@ -2,8 +2,8 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.Msg;
@@ -43,20 +43,17 @@ import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
 import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -108,13 +105,12 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result != MessageConstant.OK) {
-                    return;
+                PLogger.d("result==" + result);
+                if (result == MessageConstant.OK) {
+                    ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
                 }
-                ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
         });
-
     }
 
     /**
@@ -159,14 +155,13 @@ public class ChatMgr implements ModuleBase {
         videoMessage.setDataSource(MessageConstant.FOUR);
         videoMessage.setJsonStr(videoMessage.getJson(videoMessage));
 
-        dbCenter.getCenterFLetter().storageData(videoMessage, new DBCallback() {
+        dbCenter.insertMsgLocalVideo(videoMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result == MessageConstant.ERROR) {
+                if(result == MessageConstant.ERROR){
                     return;
                 }
-
-                dbCenter.getCenterFMessage().insertMsg(videoMessage, null);
+                pushMsg(videoMessage);
             }
         });
     }
@@ -776,23 +771,23 @@ public class ChatMgr implements ModuleBase {
 
         if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
 
-        dbCenter.getCenterFMessage().storageDataVideo(videoMessage, new DBCallback() {
+        dbCenter.insertMsgVideo(videoMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
                 if (result != MessageConstant.OK) {
                     return;
                 }
 
-                dbCenter.getCenterFLetter().storageData(videoMessage, new DBCallback() {
-                    @Override
-                    public void OnDBExecuted(long result) {
-                        pushMsg(videoMessage);
-                    }
-                });
+                pushMsg(videoMessage);
             }
         });
 
-
+        //通知刷新个人资料
+        long vcId = PSP.getInstance().getLong("VIDEOID" + App.uid, 0);
+        if (videoMessage.getVideoTp() == 4 && videoMessage.getVideoID() != vcId) {
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+            PSP.getInstance().put("VIDEOID" + App.uid, videoMessage.getVideoID()+"");
+        }
     }
 
     /**
@@ -1021,7 +1016,7 @@ public class ChatMgr implements ModuleBase {
         synchronized (infoMap) {
             infoMap.put(uid, infoComplete);
             Observable<UserInfoLightweight> observable = dbCenter.getCacheCenter().queryProfile(uid);
-            observable.subscribeOn(Schedulers.io()).observeOn(Schedulers.io());
+            observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
             observable.subscribe(new Observer<UserInfoLightweight>() {
                 @Override
                 public void onCompleted() {
@@ -1033,6 +1028,7 @@ public class ChatMgr implements ModuleBase {
 
                 @Override
                 public void onNext(UserInfoLightweight lightweight) {
+                    PLogger.d("getUserInfoLightweight=" + lightweight.toString());
                     long infoTime = lightweight.getTime();
                     //如果有数据且是一小时内请求的就不用请求了
                     if (lightweight.getUid() > 0 &&

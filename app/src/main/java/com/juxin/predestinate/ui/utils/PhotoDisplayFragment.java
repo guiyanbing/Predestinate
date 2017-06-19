@@ -1,14 +1,12 @@
 package com.juxin.predestinate.ui.utils;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.TouchImageView;
@@ -50,19 +48,12 @@ public class PhotoDisplayFragment extends BaseFragment {
      * 加载图片
      */
     public void loadPic(String pic) {
-        if (!TextUtils.isEmpty(pic)) {
-            if (FileUtil.isURL(pic)) {
-                ImageLoader.loadFitCenter(getContext(), pic, image);
-                TimerUtil.beginTime(new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        progress.setVisibility(View.GONE);
-                    }
-                }, 100);
-            } else {
-                ImageLoader.loadFitCenter(getContext(), R.drawable.default_pic, image);
+        ImageLoader.loadFitCenter(getContext(), pic, image);
+        TimerUtil.beginTime(new TimerUtil.CallBack() {
+            @Override
+            public void call() {
                 progress.setVisibility(View.GONE);
             }
-        }
+        }, 100);
     }
 }
