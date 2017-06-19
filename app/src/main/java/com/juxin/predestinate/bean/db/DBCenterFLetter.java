@@ -46,7 +46,6 @@ public class DBCenterFLetter {
         } else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
                 && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
             ret = updateOneLetter(message);
-
         } else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
             ret = updateOneLetter(message);
         }

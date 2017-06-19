@@ -158,7 +158,10 @@ public class ChatMgr implements ModuleBase {
         dbCenter.insertMsgLocalVideo(videoMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-
+                if(result == MessageConstant.ERROR){
+                    return;
+                }
+                pushMsg(videoMessage);
             }
         });
     }

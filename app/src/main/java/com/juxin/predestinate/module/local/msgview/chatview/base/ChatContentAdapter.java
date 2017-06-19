@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.juxin.library.image.ImageLoader;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
@@ -24,7 +23,6 @@ import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,40 +70,39 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         BaseMessage data;
         for (int i = 0; i < datas.size(); i++) {
             data = datas.get(i);
+            try {
+                if (BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
+                        && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage) {
+                    VideoMessage videoMessage = (VideoMessage) message;
+                    VideoMessage tmpVideMsg = (VideoMessage) data;
+                    if (videoMessage.getVideoID() == tmpVideMsg.getVideoID()) {
+                        delVideoMsg = data;
+                        break;
+                    }
+                } else {
+                    if (message.isSender()) {
+                        if ((message.getcMsgID() > 0 && data.getcMsgID() == message.getcMsgID())) {
+                            // 本地发送的消息更新
+                            datas.set(i, message);
+                            notifyDataSetChanged();
+                            return;
+                        }
 
-            if (message.isSender()) {
-                try {
-                    if (BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
-                            && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage) {
-                        VideoMessage videoMessage = (VideoMessage) message;
-                        VideoMessage tmpVideMsg = (VideoMessage) data;
-                        if (videoMessage.getVideoID() == tmpVideMsg.getVideoID()) {
-                            delVideoMsg = data;
-                            break;
+                        if ((message.getMsgID() > 0 && data.getMsgID() == message.getMsgID())) {
+                            datas.set(i, message);
+                            notifyDataSetChanged();
+                            return;
+                        }
+                    } else {
+                        if (data.getMsgID() == message.getMsgID() && data.getcMsgID() == message.getcMsgID()) {
+                            datas.set(i, message);
+                            notifyDataSetChanged();
+                            return;
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-
-                if ((message.getcMsgID() > 0 && data.getcMsgID() == message.getcMsgID())) {
-                    // 本地发送的消息更新
-                    datas.set(i, message);
-                    notifyDataSetChanged();
-                    return;
-                }
-
-                if ((message.getMsgID() > 0 && data.getMsgID() == message.getMsgID())) {
-                    datas.set(i, message);
-                    notifyDataSetChanged();
-                    return;
-                }
-            } else {
-                if (data.getMsgID() == message.getMsgID() && data.getcMsgID() == message.getcMsgID()) {
-                    datas.set(i, message);
-                    notifyDataSetChanged();
-                    return;
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -404,12 +401,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     status.setVisibility(View.GONE);
                     statusError.setVisibility(View.GONE);
                 }
-            }else if (msg.getStatus() == MessageConstant.FAIL_STATUS ||
+            } else if (msg.getStatus() == MessageConstant.FAIL_STATUS ||
                     msg.getStatus() == MessageConstant.BLACKLIST_STATUS) {//发送失败
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
-            }else if (msg.getStatus() == MessageConstant.OK_STATUS
+            } else if (msg.getStatus() == MessageConstant.OK_STATUS
                     || msg.getStatus() == MessageConstant.READ_STATUS) {//状态
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
