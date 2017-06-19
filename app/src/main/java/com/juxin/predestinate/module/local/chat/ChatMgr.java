@@ -105,10 +105,10 @@ public class ChatMgr implements ModuleBase {
         dbCenter.getCenterFMessage().updateToRead(channelID, whisperID, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if (result != MessageConstant.OK) {
-                    return;
+                PLogger.d("result==" + result);
+                if (result == MessageConstant.OK) {
+                    ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
                 }
-                ModuleMgr.getChatListMgr().getWhisperListUnSubscribe();
             }
         });
     }

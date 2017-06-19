@@ -159,7 +159,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         }
     }
 
-    public void updateListMsg(List<BaseMessage> messages) {
+    public synchronized void updateListMsg(List<BaseMessage> messages) {
         unreadNum = 0;
         msgList.clear();
         greetNum = 0;
@@ -354,7 +354,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void getWhisperList() {
         PLogger.d("getWhisperList====1");
-
         Observable<List<BaseMessage>> observable = dbCenter.getCenterFLetter().queryLetterList()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         observable.subscribe(new Observer<List<BaseMessage>>() {
@@ -379,10 +378,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     public void getWhisperListUnSubscribe() {
         PLogger.d("getWhisperList====2");
-        final Observable<List<BaseMessage>> observable = dbCenter.getCenterFLetter().queryLetterList();
-        observable.subscribeOn(Schedulers.io());
-        observable.observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(new Subscriber<List<BaseMessage>>() {
+        dbCenter.getCenterFLetter().queryLetterList().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<BaseMessage>>() {
             @Override
             public void onCompleted() {
             }
