@@ -220,7 +220,7 @@ public class VideoAudioChatHelper {
      */
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
-            downloadPluginFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "download");
+            downloadPluginFragment.show();
         if (isDownloading) return;
 
         isDownloading = true;
@@ -242,14 +242,14 @@ public class VideoAudioChatHelper {
             @Override
             public void onSuccess(String url, String filePath) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
                 ApkUnit.ExecApkFile(context, filePath);
             }
 
             @Override
             public void onFail(String url, Throwable throwable) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
             }
         });
     }
