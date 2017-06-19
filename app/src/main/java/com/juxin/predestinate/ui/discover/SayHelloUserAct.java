@@ -12,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -35,10 +36,13 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.Observer;
+
 import static com.juxin.predestinate.R.id.say_hello_users_all_ignore;
 import static com.juxin.predestinate.module.logic.application.App.getActivity;
 
@@ -128,7 +132,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         }
     }
 
-    private final Handler handlerNotify = new Handler(){
+    private final Handler handlerNotify = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -141,9 +145,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             }
         }
     };
-
-
-
 
     private void onTitleRight() {
         setTitleRightImgGone();
@@ -268,12 +269,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                 ModuleMgr.getChatListMgr().deleteBatchMessage(delList, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                LoadingDialog.closeLoadingDialog();
-                            }
-                        });
+                        LoadingDialog.closeLoadingDialog(1000);
                     }
                 });
                 delList.clear();
@@ -341,7 +337,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        LoadingDialog.closeLoadingDialog();
+                        LoadingDialog.closeLoadingDialog(1000);
                     }
                 });
             }
@@ -374,7 +370,7 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         handlerStop.sendEmptyMessageDelayed(1, 500);
     }
 
-    private final Handler handlerStop = new Handler(){
+    private final Handler handlerStop = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {

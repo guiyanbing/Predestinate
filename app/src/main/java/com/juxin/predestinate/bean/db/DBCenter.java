@@ -12,7 +12,9 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
+
 import java.util.List;
+
 import rx.Observable;
 import rx.Observer;
 
@@ -29,11 +31,11 @@ public class DBCenter {
     private DBCenterFUnRead centerFUnRead;
     private DBCacheCenter cacheCenter;
 
-//    private final Executor dbExecutor = Executors.newSingleThreadExecutor();
+    //    private final Executor dbExecutor = Executors.newSingleThreadExecutor();
     private HandlerThread workerThread = new HandlerThread("LightTaskThread");
     private DBHandler handler = null;
 
-    public static void makeDBCallback (DBCallback callback, long result) {
+    public static void makeDBCallback(DBCallback callback, long result) {
         if (callback != null) {
             callback.OnDBExecuted(result);
         }
@@ -43,7 +45,7 @@ public class DBCenter {
         this.mDatabase = database;
 
         workerThread.start();
-        handler = new DBHandler(workerThread.getLooper() );
+        handler = new DBHandler(workerThread.getLooper());
 
         centerFLetter = new DBCenterFLetter(database, handler);
         centerFmessage = new DBCenterFMessage(database, handler);
@@ -66,9 +68,9 @@ public class DBCenter {
         return centerFUnRead;
     }
 
-    public void insertUnRead(final String key, final String content ,DBCallback callback) {
+    public void insertUnRead(final String key, final String content, DBCallback callback) {
         if (TextUtils.isEmpty(key)) {
-            makeDBCallback(callback,MessageConstant.ERROR);
+            makeDBCallback(callback, MessageConstant.ERROR);
             return;
         }
 
@@ -107,22 +109,21 @@ public class DBCenter {
         final String userID = message.getWhisperID();
         if (TextUtils.isEmpty(userID)) {
             DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
-            return ;
+            return;
         }
 
         if (BaseMessage.BaseMessageType.hint.getMsgType() != message.getType()) {
             centerFLetter.updateMsgStatus(message, new DBCallback() {
                 @Override
                 public void OnDBExecuted(long result) {
-                    if (result!= MessageConstant.OK) {
+                    if (result != MessageConstant.OK) {
                         DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
                         return;
                     }
-
                     centerFmessage.updateMsg(message, callback);
                 }
             });
-        }else {
+        } else {
             DBCenter.makeDBCallback(callback, MessageConstant.OK);
         }
     }
@@ -134,11 +135,18 @@ public class DBCenter {
     /**
      * 删除消息列表及内容表的消息
      *
-     * @param userID
-     * @return
+     * @param userID   删除聊天信息的用户id
+     * @param callback 数据库处理回调
      */
-    public void deleteMessage(long userID) {
-        centerFLetter.delete(userID, null);
+    public void deleteMessage(long userID, final DBCallback callback) {
+        centerFLetter.delete(userID, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if (callback != null) {
+                    callback.OnDBExecuted(result);
+                }
+            }
+        });
         centerFmessage.delete(userID, null);
     }
 
@@ -146,7 +154,7 @@ public class DBCenter {
         centerFLetter.deleteList(list, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if(callback != null){
+                if (callback != null) {
                     callback.OnDBExecuted(result);
                 }
             }

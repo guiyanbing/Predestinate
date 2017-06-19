@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -37,10 +38,10 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.Observer;
 
@@ -60,7 +61,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
-    private boolean isShow =true;
+    private boolean isShow = true;
 
     @Nullable
     @Override
@@ -207,7 +208,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        LoadingDialog.closeLoadingDialog();
+                        LoadingDialog.closeLoadingDialog(1000);
                     }
                 });
             }
@@ -298,12 +299,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                 ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                LoadingDialog.closeLoadingDialog();
-                            }
-                        });
+                        LoadingDialog.closeLoadingDialog(1000);
                     }
                 });
                 setTitleLeftContainerRemoveAll();
@@ -414,7 +410,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         handlerStop.sendEmptyMessageDelayed(1, 500);
     }
 
-    private final Handler handlerStop = new Handler(){
+    private final Handler handlerStop = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
