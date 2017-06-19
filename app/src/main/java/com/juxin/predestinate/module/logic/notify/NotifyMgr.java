@@ -23,11 +23,15 @@ import com.juxin.predestinate.ui.main.MainActivity;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * 消息通知管理manager
  */
 public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
+
+    private Executor notifyExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     public void init() {
@@ -59,8 +63,12 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         PLogger.d("---onChatUpdate--->sendId：" + message.getSSendID()
                 + "，message：" + message.getJsonStr());
         if (message.getSendID() == App.uid) return;
-
-        showNotify(message);
+        notifyExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                showNotify(message);
+            }
+        });
     }
 
     //进行悬浮窗通知的消息类型
@@ -158,15 +166,12 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
         }
 
         //解锁状态
-        if (ModuleMgr.getAppMgr().isForeground()) {//在前台，应用内悬浮窗
+        if (App.isForeground()) {//在前台，应用内悬浮窗
             if (App.getActivity() instanceof MainActivity) {
                 ((MainActivity) App.getActivity()).showFloatingMessage(simpleData, baseMessage, content);
-            } else if (App.getActivity() instanceof UserMailNotifyAct) {
-                UIShow.showUserMailNotifyAct(baseMessage.getType(), simpleData, content);
-                noticeRemind(baseMessage.getType());
             }
         } else {//在后台，桌面悬浮窗
-            if (ModuleMgr.getAppMgr().isForeground()
+            if (App.isForeground()
                     || !LockScreenMgr.getInstance().isTip()
                     || BaseUtil.isRunningForegroundMe(App.context)) {
                 //应用在前台/(应用在退出状态且应用设置为退出不提示)：不进行应用外弹框

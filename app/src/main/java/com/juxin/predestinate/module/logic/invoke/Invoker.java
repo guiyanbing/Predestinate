@@ -101,7 +101,7 @@ public class Invoker {
      */
     public void doInApp(WebAppInterface appInterface, final String cmd, final String data) {
         PLogger.d("---doInApp--->cmd：" + cmd + "，data：" + data +
-                "，AppMgr.isForground()：" + ModuleMgr.getAppMgr().isForeground());
+                "，AppMgr.isForground()：" + App.isForeground());
 
         this.appInterface = (appInterface == null ? new WebAppInterface(App.context, null) : appInterface);
         webView = appInterface == null ? null : appInterface.getWebView();
