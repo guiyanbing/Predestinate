@@ -83,7 +83,7 @@
             android:layout_marginLeft="@dimen/px20_dp"
             android:textSize="@dimen/px38_sp"
             android:textColor="@color/txt_customerservice_phone"
-            android:text="0731-89746010" />
+            android:text="@string/txt_customerservice_phone_default" />
 
         <TextView
             android:id="@+id/tv_customerservice_worktime"

@@ -61,6 +61,7 @@ import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.setting.AboutAct;
+import com.juxin.predestinate.ui.setting.BottomBannedDialog;
 import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
@@ -1011,6 +1012,21 @@ public class UIShow {
                 }
             });
         }
+    }
+
+    private static BottomBannedDialog bannedDialog = null;
+
+    /**
+     * 账号封禁弹框
+     *
+     * @param context
+     * @param isLogin 是否处于登录状态
+     */
+    public static void showBottomBannedDlg(final Context context,final boolean isLogin) {
+        bannedDialog = null;
+        bannedDialog = new BottomBannedDialog();
+        bannedDialog.setCtx(context,isLogin);
+        bannedDialog.showDialog((FragmentActivity) context);
     }
 
     /**

@@ -251,7 +251,7 @@
                             android:layout_marginLeft="@dimen/px20_dp"
                             android:textSize="@dimen/px32_sp"
                             android:textColor="@color/color_999999"
-                            android:text="0731-89746010"/>
+                            android:text="@string/txt_customerservice_phone_default"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
