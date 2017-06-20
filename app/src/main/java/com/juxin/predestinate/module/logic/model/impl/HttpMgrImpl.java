@@ -125,11 +125,16 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
+        if (TextUtils.isEmpty(url)) {
+            if (downloadListener != null)
+                downloadListener.onFail(url, new NullPointerException("The download url is empty."));
+            return new HTCallBack();
+        }
         if (FileUtil.isExist(filePath)) {
             if (downloadListener != null) downloadListener.onSuccess(url, filePath);
             return new HTCallBack();
         }
-        PSP.getInstance().put(url.hashCode() + "", filePath);
+        PSP.getInstance().put(String.valueOf(url.hashCode()), filePath);
         return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
     }
 

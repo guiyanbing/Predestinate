@@ -128,7 +128,7 @@ public class LockScreenMgr {
      * @param wakeLock 锁屏弹窗是否点亮屏幕
      */
     public boolean popupActivity(boolean wakeLock) {
-        if (ModuleMgr.getAppMgr().isForeground() || getLockView(null) == null || !isTip() || !isLockScreen()) {
+        if (App.isForeground() || getLockView(null) == null || !isTip() || !isLockScreen()) {
             // 前台/显示面板为空/(应用为退出状态且消息提示状态为退出不提示)/不是锁屏状态：不进行锁屏弹窗
             PLogger.d("=== 锁屏弹窗popupActivity returned ===");
             return false;
