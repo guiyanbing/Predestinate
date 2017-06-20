@@ -2,6 +2,9 @@
     <string name="app_name">缘份吧</string>
     <string name="app_storage_name">xiaou</string>
 
+    <!-- 网络状态 -->
+    <string name="net_status_pre">在线-</string>
+
     <!-- 全局提示语 -->
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
@@ -518,6 +521,8 @@
     <string name="pay_errcode_unknown">支付出错</string>
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
+    <string name="chat_y_tips_buy">立即购买 ></string>
+    <string name="chat_y_tips"><Data><![CDATA[<font color=\'#666666\'> 发消息需要Y币,</font><font color=\'#fcbc4c\'>余额:</font><font color=\'#666666\'>%1$d</font>]]> </Data></string>
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>

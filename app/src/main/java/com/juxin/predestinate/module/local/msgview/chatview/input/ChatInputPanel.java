@@ -102,6 +102,9 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         onClickChatGift();
         onClickLookAtHer();
+        onClickYTipsBuy();
+        onClickYTipsClose();
+
     }
 
     /**
@@ -412,6 +415,31 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperId);
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
                         Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
+            }
+        });
+    }
+
+    /**
+     * 立即购买Y币
+     */
+    private void onClickYTipsBuy() {
+        getChatInstance().chatViewLayout.onClickYTipsBuy(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeAllInput();
+                UIShow.showBuyCoinActivity(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_y);
+            }
+        });
+    }
+
+    private void onClickYTipsClose() {
+        getChatInstance().chatViewLayout.onClickYTipsClose(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeAllInput();
+                UIShow.showBuyCoinActivity(getContext());
+                Statistics.userBehavior(SendPoint.menu_me_y);
             }
         });
     }

@@ -54,6 +54,53 @@
                     android:layout_marginBottom="@dimen/px35_dp"
                     android:layout_marginRight="@dimen/px15_dp"
                     android:src="@drawable/f1_fc_gift_w" />
+
+                <LinearLayout
+                    android:id="@+id/ll_y_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/input_giftview"
+                    android:layout_toLeftOf="@+id/input_giftview"
+                    android:layout_marginBottom="@dimen/px18_dp"
+                    android:background="@drawable/f1_gray_fillet"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/px15_dp"
+                    android:paddingLeft="@dimen/px30_dp"
+                    android:paddingRight="@dimen/px30_dp"
+                    android:paddingTop="@dimen/px15_dp">
+
+                    <TextView
+                        android:id="@+id/tv_y_tips_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_y_tips_buy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chat_y_tips_buy"
+                        android:textSize="13sp"
+                        android:textColor="@color/blue"/>
+
+                    <TextView
+                        android:id="@+id/tv_y_tips_split"
+                        android:layout_width="@dimen/px3_dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/px18_dp"
+                        android:layout_marginRight="@dimen/px18_dp"
+                        android:background="@color/color_d3d3d3"
+                        android:paddingBottom="@dimen/px12_dp"
+                        android:paddingTop="@dimen/px12_dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_y_tips_close"
+                        android:layout_width="@dimen/px45_dp"
+                        android:layout_height="@dimen/px45_dp"
+                        android:src="@drawable/f1_y_tips_close" />
+                </LinearLayout>
             </RelativeLayout>
 
             <FrameLayout
