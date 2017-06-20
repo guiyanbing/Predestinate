@@ -289,13 +289,13 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 channel_uid = String.valueOf(userDetail.getChannel_uid());
                 name = userDetail.getNickname();
                 setNickName(userDetail.getShowName());
-                if (isFollow) {
-                    chat_title_attention_name.setText("已关注");
-                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
-                } else {
-                    chat_title_attention_name.setText("关注她");
-                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
-                }
+//                if (isFollow) {
+//                    chat_title_attention_name.setText("已关注");
+//                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
+//                } else {
+//                    chat_title_attention_name.setText("关注她");
+//                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
+//                }
             }
         });
     }
@@ -443,9 +443,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     executeYCoinTask();
                 } else {//不请求网络
                     checkIsCanSendMsg();
-                    if (chat_title_yb_name != null) {
-                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
-                    }
+//                    if (chat_title_yb_name != null) {
+//                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
+//                    }
                 }
                 break;
             default:
