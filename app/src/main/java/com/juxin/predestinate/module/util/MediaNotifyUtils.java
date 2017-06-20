@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
 
@@ -106,8 +107,9 @@ public class MediaNotifyUtils {
 
     public static void playSound() {
         if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(App.context,
-                    RingtoneManager.getActualDefaultRingtoneUri(App.context, RingtoneManager.TYPE_NOTIFICATION));
+            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(App.context, RingtoneManager.TYPE_NOTIFICATION);
+            if(uri == null) return;
+            mMediaPlayer = MediaPlayer.create(App.context, uri);
         }
         mMediaPlayer.setLooping(false);
         if (!mMediaPlayer.isPlaying())
