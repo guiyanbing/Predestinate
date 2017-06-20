@@ -1,5 +1,5 @@
 ﻿#APK 签名key文件目录
-storeFile = ../fate_it_new.keystore
+storeFile = /Users/xy/key/fate_it_new.keystore
 
 #APK 签名key密码（第一重密码）
 storePassword = fate123
@@ -18,7 +18,7 @@ VersionCode = 10230400
 VersionName = 3.4.0
 
 #APK输出目录相对路径，生成加固包的时候需要指定确切的路径
-ApkPath = ../../K_GEN_APK/Predestinate/
+ApkPath = /Users/xy/ApkOutPut/Predestinate/
 
 #App名称
 AppName = Fate_It
