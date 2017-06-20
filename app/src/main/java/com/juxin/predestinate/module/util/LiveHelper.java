@@ -114,7 +114,7 @@ public class LiveHelper {
     private static void downLoadPlugin(String downUrl) {
         if (!downloadPluginFragment.isAdded()) {
             downloadPluginFragment.setLiveStyle(true);
-            downloadPluginFragment.show(((FragmentActivity) App.activity).getSupportFragmentManager(), "download");
+            downloadPluginFragment.show((FragmentActivity) App.getActivity());
         }
         if (isDownloading) return;
 
@@ -136,14 +136,14 @@ public class LiveHelper {
             @Override
             public void onSuccess(String url, String filePath) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
                 APKUtil.installAPK(context, filePath);
             }
 
             @Override
             public void onFail(String url, Throwable throwable) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
             }
         });
     }

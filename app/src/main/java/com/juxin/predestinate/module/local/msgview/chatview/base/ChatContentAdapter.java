@@ -72,40 +72,39 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
         BaseMessage data;
         for (int i = 0; i < datas.size(); i++) {
             data = datas.get(i);
+            try {
+                if (BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
+                        && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage) {
+                    VideoMessage videoMessage = (VideoMessage) message;
+                    VideoMessage tmpVideMsg = (VideoMessage) data;
+                    if (videoMessage.getVideoID() == tmpVideMsg.getVideoID()) {
+                        delVideoMsg = data;
+                        break;
+                    }
+                } else {
+                    if (message.isSender()) {
+                        if ((message.getcMsgID() > 0 && data.getcMsgID() == message.getcMsgID())) {
+                            // 本地发送的消息更新
+                            datas.set(i, message);
+                            notifyDataSetChanged();
+                            return;
+                        }
 
-            if (message.isSender()) {
-                try {
-                    if (BaseMessage.video_MsgType == message.getType() && message instanceof VideoMessage
-                            && BaseMessage.video_MsgType == data.getType() && data instanceof VideoMessage) {
-                        VideoMessage videoMessage = (VideoMessage) message;
-                        VideoMessage tmpVideMsg = (VideoMessage) data;
-                        if (videoMessage.getVideoID() == tmpVideMsg.getVideoID()) {
-                            delVideoMsg = data;
-                            break;
+                        if ((message.getMsgID() > 0 && data.getMsgID() == message.getMsgID())) {
+                            datas.set(i, message);
+                            notifyDataSetChanged();
+                            return;
+                        }
+                    } else {
+                        if (data.getMsgID() == message.getMsgID() && data.getcMsgID() == message.getcMsgID()) {
+                            datas.set(i, message);
+                            notifyDataSetChanged();
+                            return;
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-
-                if ((message.getcMsgID() > 0 && data.getcMsgID() == message.getcMsgID())) {
-                    // 本地发送的消息更新
-                    datas.set(i, message);
-                    notifyDataSetChanged();
-                    return;
-                }
-
-                if ((message.getMsgID() > 0 && data.getMsgID() == message.getMsgID())) {
-                    datas.set(i, message);
-                    notifyDataSetChanged();
-                    return;
-                }
-            } else {
-                if (data.getMsgID() == message.getMsgID() && data.getcMsgID() == message.getcMsgID()) {
-                    datas.set(i, message);
-                    notifyDataSetChanged();
-                    return;
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -358,7 +357,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
                 if (ChatMsgType.CMT_2 == msgType && msg.getfStatus() == 1) {
                     CommonMessage message = (CommonMessage) msg;
-                    if (!TextUtils.isEmpty(message.getVoiceUrl())) {
+                    if (!TextUtils.isEmpty(message.getVoiceUrl()) && message.getVoiceLen() > 0) {
                         statusImg.setVisibility(View.VISIBLE);
                         return;
                     }
@@ -404,12 +403,12 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     status.setVisibility(View.GONE);
                     statusError.setVisibility(View.GONE);
                 }
-            }else if (msg.getStatus() == MessageConstant.FAIL_STATUS ||
+            } else if (msg.getStatus() == MessageConstant.FAIL_STATUS ||
                     msg.getStatus() == MessageConstant.BLACKLIST_STATUS) {//发送失败
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
-            }else if (msg.getStatus() == MessageConstant.OK_STATUS
+            } else if (msg.getStatus() == MessageConstant.OK_STATUS
                     || msg.getStatus() == MessageConstant.READ_STATUS) {//状态
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);

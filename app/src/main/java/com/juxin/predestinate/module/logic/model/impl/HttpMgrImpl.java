@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,8 +37,6 @@ import retrofit2.Response;
  * Created by ZRP on 2016/12/29.
  */
 public class HttpMgrImpl implements HttpMgr {
-
-    private Lock lock = new ReentrantLock();
 
     @Override
     public void init() {
@@ -129,11 +125,16 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
+        if (TextUtils.isEmpty(url)) {
+            if (downloadListener != null)
+                downloadListener.onFail(url, new NullPointerException("The download url is empty."));
+            return new HTCallBack();
+        }
         if (FileUtil.isExist(filePath)) {
             if (downloadListener != null) downloadListener.onSuccess(url, filePath);
             return new HTCallBack();
         }
-        PSP.getInstance().put(url.hashCode() + "", filePath);
+        PSP.getInstance().put(String.valueOf(url.hashCode()), filePath);
         return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
     }
 
@@ -249,7 +250,6 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
-
         final UrlParam urlParam = requestParam.getUrlParam();
         final Map<String, String> headerMap = requestParam.getHead_param();
         final Map<String, Object> get_param = requestParam.getGet_param();

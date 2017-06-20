@@ -19,9 +19,8 @@ import com.juxin.predestinate.module.logic.config.InfoConfig;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.module.util.TimerUtil;
-import com.juxin.predestinate.ui.user.check.edit.custom.ContactEditDialog;
 import com.juxin.predestinate.ui.user.check.edit.EditKey;
+import com.juxin.predestinate.ui.user.check.edit.custom.ContactEditDialog;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.util.HashMap;
@@ -207,15 +206,6 @@ public class UserEditBaseInfoPanel extends BasePanel implements RequestComplete 
 
     @Override
     public void onRequestComplete(final HttpResponse response) {
-        LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                if (response.isOk()) {
-                    PToast.showShort(context.getString(R.string.user_info_edit_suc));
-                } else {
-                    PToast.showShort(context.getString(R.string.user_info_edit_fail));
-                }
-            }
-        });
+        LoadingDialog.closeLoadingDialog(200);
     }
 }

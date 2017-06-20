@@ -220,7 +220,7 @@ public class VideoAudioChatHelper {
      */
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
-            downloadPluginFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "download");
+            downloadPluginFragment.show((FragmentActivity) context);
         if (isDownloading) return;
 
         isDownloading = true;
@@ -242,14 +242,14 @@ public class VideoAudioChatHelper {
             @Override
             public void onSuccess(String url, String filePath) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
                 ApkUnit.ExecApkFile(context, filePath);
             }
 
             @Override
             public void onFail(String url, Throwable throwable) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
             }
         });
     }
@@ -286,7 +286,7 @@ public class VideoAudioChatHelper {
                 public void run() {
                     ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
                 }
-            },1000);
+            },500);
 
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             startRtcInitActivity(context, bundle);

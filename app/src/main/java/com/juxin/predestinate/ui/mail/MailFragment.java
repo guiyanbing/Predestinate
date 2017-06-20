@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -37,10 +38,10 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.Observer;
 
@@ -60,7 +61,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
-    private boolean isShow =true;
+    private boolean isShow = true;
 
     @Nullable
     @Override
@@ -199,11 +200,28 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     case MyFriend_Msg:
                         break;
                     case Greet_Msg:
-                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
+                        List<BaseMessage> tmpList = ModuleMgr.getChatListMgr().getGeetList();
+                        if (tmpList.size() <= 0) {
+                            PToast.showCenterShort("没有打招呼的人！");
+                            return;
+                        }
+                        LoadingDialog.show(getActivity(), getString(R.string.ignore));
+                        ModuleMgr.getChatListMgr().updateToBatchRead(tmpList, new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000);
+                            }
+                        });
                         break;
                 }
             } else {
-                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+                LoadingDialog.show(getActivity(), getString(R.string.deleted));
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        LoadingDialog.closeLoadingDialog(1000);
+                    }
+                });
             }
         }
     }
@@ -288,16 +306,11 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (view.getId()) {
             case R.id.mail_delete:
                 mail_delete.setEnabled(false);
-                LoadingDialog.show(getActivity(), "删除中...");
+                LoadingDialog.show(getActivity(), getString(R.string.deleted));
                 ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList, new DBCallback() {
                     @Override
                     public void OnDBExecuted(long result) {
-                        MsgMgr.getInstance().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                LoadingDialog.closeLoadingDialog();
-                            }
-                        });
+                        LoadingDialog.closeLoadingDialog(1000);
                     }
                 });
                 setTitleLeftContainerRemoveAll();
@@ -315,9 +328,20 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     @Override
                     public void onSubmit() {
                         setTitleLeftContainerRemoveAll();
-                        ModuleMgr.getChatListMgr().updateToReadAll();
+                        LoadingDialog.show(getActivity(), getString(R.string.ignore));
+                        ModuleMgr.getChatListMgr().updateToReadAll(new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PToast.showShort("忽略成功!");
+                                    }
+                                });
+                            }
+                        });
                         listMail.smoothCloseChooseView();
-                        PToast.showShort("忽略成功!");
+
                     }
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");
                 break;
@@ -408,7 +432,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         handlerStop.sendEmptyMessageDelayed(1, 500);
     }
 
-    private final Handler handlerStop = new Handler(){
+    private final Handler handlerStop = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {

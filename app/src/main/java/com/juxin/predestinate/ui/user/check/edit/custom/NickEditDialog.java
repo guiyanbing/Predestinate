@@ -68,16 +68,7 @@ public class NickEditDialog extends SimpleTipDialog {
         ModuleMgr.getCenterMgr().updateMyInfo(postParams, new RequestComplete() {
             @Override
             public void onRequestComplete(final HttpResponse response) {
-                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        if (response.isOk()) {
-                            PToast.showShort(context.getString(R.string.user_info_edit_suc));
-                        } else {
-                            PToast.showShort(context.getString(R.string.user_info_edit_fail));
-                        }
-                    }
-                });
+                LoadingDialog.closeLoadingDialog(200);
             }
         });
         super.onSubmit();

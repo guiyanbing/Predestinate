@@ -318,8 +318,10 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
-                userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-                footPanel.refreshView(userDetail);
+                if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+                    userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+                    footPanel.refreshView(userDetail);
+                }
                 break;
 
             default:

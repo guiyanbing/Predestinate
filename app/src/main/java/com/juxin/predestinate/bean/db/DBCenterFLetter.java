@@ -7,6 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
@@ -16,8 +18,10 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -35,26 +39,19 @@ public class DBCenterFLetter {
         this.handler = handler;
     }
 
-    public void storageData(final BaseMessage message, final DBCallback callback) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long ret = MessageConstant.OK;
-                BaseMessage temp = isExist(message.getWhisperID());
-                if (temp == null) {//没有数据
-                    ret = insertOneLetter(message);
-                }
-                else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                        && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-                    ret = updateOneLetter(message);
-                }
-                else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-                    ret = updateOneLetter(message);
-                }
+    public long storageData(BaseMessage message) {
+        long ret = MessageConstant.OK;
+        BaseMessage temp = isExist(message.getWhisperID());
+        if (temp == null) {//没有数据
+            ret = insertLetter(message);
 
-                DBCenter.makeDBCallback(callback, ret);
-            }
-        });
+        } else if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
+                && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
+            ret = updateOneLetter(message);
+        } else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
+            ret = updateOneLetter(message);
+        }
+        return ret;
     }
 
     /**
@@ -62,15 +59,15 @@ public class DBCenterFLetter {
      *
      * @param list
      */
-    public void insertLetter(final List<BaseMessage> list, final DBCallback callback) {
+    public void insertLetterBatch(final List<BaseMessage> list, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                long ret= MessageConstant.OK;
+                long ret = MessageConstant.OK;
                 BriteDatabase.Transaction transaction = mDatabase.newTransaction();
                 try {
                     for (BaseMessage item : list) {
-                        ret =insertOneLetter(item);
+                        ret = insertLetter(item);
                         if (ret != MessageConstant.OK) {
                             break;
                         }
@@ -92,7 +89,7 @@ public class DBCenterFLetter {
      * @param baseMessage
      * @return
      */
-    private long insertOneLetter(final BaseMessage baseMessage) {
+    private long insertLetter(final BaseMessage baseMessage) {
         if (baseMessage == null) {
             return MessageConstant.ERROR;
         }
@@ -119,13 +116,12 @@ public class DBCenterFLetter {
             values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
-            mDatabase.insert(FLetter.FLETTER_TABLE, values);
+            long ret = mDatabase.insert(FLetter.FLETTER_TABLE, values);
+            return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
         } catch (Exception e) {
             e.printStackTrace();
             return MessageConstant.ERROR;
         }
-
-        return MessageConstant.OK;
     }
 
     private int updateOneLetter(BaseMessage baseMessage) {
@@ -156,26 +152,15 @@ public class DBCenterFLetter {
 
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
-            mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
+            long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
+            return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
         } catch (Exception e) {
             e.printStackTrace();
             return MessageConstant.ERROR;
         }
-
-        return MessageConstant.OK;
     }
 
     public void updateLetter(final BaseMessage baseMessage, final DBCallback callback) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long ret = updateOneLetter(baseMessage);
-                DBCenter.makeDBCallback(callback, ret);
-            }
-        });
-    }
-
-    public void helloLetter(final BaseMessage baseMessage, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -226,6 +211,7 @@ public class DBCenterFLetter {
         }
         return MessageConstant.OK;
     }
+
     /**
      * 更新个人资料
      *
@@ -413,14 +399,14 @@ public class DBCenterFLetter {
 
     private int delete(long whisperID) {
         long ret = mDatabase.delete(FLetter.FLETTER_TABLE, FLetter.COLUMN_USERID + " = ? ", String.valueOf(whisperID));
-        return ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+        return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     public void deleteList(final List<Long> list, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                for(long temp : list){
+                for (long temp : list) {
                     delete(temp);
                 }
 
@@ -446,7 +432,7 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_STATUS, 0);
                 values.put(FLetter.COLUMN_CMSGID, 0);
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", userid);
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -459,9 +445,10 @@ public class DBCenterFLetter {
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
-                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? AND "
-                        + FLetter.COLUMN_STATUS + " = ?", String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
+                        FLetter.COLUMN_USERID + " = ? AND " + FLetter.COLUMN_STATUS + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
+                        String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS), String.valueOf(BaseMessage.video_MsgType));
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -475,7 +462,7 @@ public class DBCenterFLetter {
                 ContentValues values = new ContentValues();
                 values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.FAIL_STATUS));
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.SENDING_STATUS));
-                long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -495,9 +482,9 @@ public class DBCenterFLetter {
 
                 long ret = MessageConstant.OK;
                 if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                        && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType() ) {
+                        && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
                     ret = updateStatus(userID, message.getStatus());
-                } else if(!message.isSender() || (message.getcMsgID() >= temp.getcMsgID() ) ){
+                } else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
                     ret = updateStatus(userID, message.getStatus());
                 }
 
@@ -505,6 +492,7 @@ public class DBCenterFLetter {
             }
         });
     }
+
     /**
      * 发送成功或失败更新状态
      *
@@ -516,7 +504,7 @@ public class DBCenterFLetter {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
         long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ?", userID);
-        long result = ret >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+        long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
         return result;
     }
 

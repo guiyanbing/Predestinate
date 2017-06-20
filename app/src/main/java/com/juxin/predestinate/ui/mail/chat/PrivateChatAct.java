@@ -230,6 +230,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
                 if (infoLightweight != null && whisperID == infoLightweight.getUid()) {
+                    setNickName(infoLightweight.getShowName());
                     if (infoLightweight.getGender() == 1) {//是男的显示豪,显示头布局
                         cus_top_title_img.setImageResource(R.drawable.f1_topc02);
                     }
