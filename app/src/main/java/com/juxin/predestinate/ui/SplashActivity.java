@@ -9,7 +9,6 @@ import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
-import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
@@ -52,9 +51,9 @@ public class SplashActivity extends BaseActivity {
                         initData();
 
                         int delay = (int) Math.abs(3000 - (System.currentTimeMillis() - t));
-                        TimerUtil.beginTime(new TimerUtil.CallBack() {
+                        MsgMgr.getInstance().delay(new Runnable() {
                             @Override
-                            public void call() {
+                            public void run() {
                                 skipLogic();
                             }
                         }, delay);

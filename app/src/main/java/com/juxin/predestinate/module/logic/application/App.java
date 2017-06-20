@@ -41,6 +41,10 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
+        lifecycleCallbacks = new PActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(lifecycleCallbacks);
+
         initAppDelay();
     }
 
@@ -59,9 +63,6 @@ public class App extends MultiDexApplication {
     }
 
     private void initApp() {
-        lifecycleCallbacks = new PActivityLifecycleCallbacks();
-        registerActivityLifecycleCallbacks(lifecycleCallbacks);
-
         ModuleMgr.initModule(context);
         initBugTags();
     }
