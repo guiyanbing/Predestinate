@@ -64,7 +64,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
 
     @Override
     public void onBindData(final int index, View cardview) {
-        if (datas == null || datas.size() == 0) {
+        if (datas == null || datas.size() == 0 || index < 0) {
             return;
         }
         final int position = index % datas.size();
