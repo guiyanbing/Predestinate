@@ -37,6 +37,8 @@ public class Hosts {
     public static final String H5_BILL = H5_HOST + "setting/tollCollection.html";      // 话费领取
     public static final String H5_ROTARY = H5_HOST + "turntable/turntable.html";       // 大转盘设置
     // ---------------------H5 assets路径 end--------------------
+    private static final String WEB_APP_ROOT = "http://test.game.xiaoyaoai.cn:30081/static/webApp/";
+    public static final String H5_EARN_RED_BAG = WEB_APP_ROOT + "YfbWebApp/pages/earnRedBag/earn-red-bag.html";    //我要赚红包
 
     // -----------------------备份地址 start---------------------------
     // 广场本地备份地址

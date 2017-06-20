@@ -375,7 +375,28 @@ public class Invoker {
                 case 503://跳转到设置-活动相关页面
                     UIShow.showActionActivity(context);
                     break;
+                case 507://设置大转盘
+                    UIShow.showRotaryActivity(context);
+                    break;
+                case 508://群发视频
+                    break;
+                case 509://群发语音
+                    break;
                 default:
+                    break;
+            }
+        }
+
+        public void ask_for_gift(String data){
+            PLogger.d("---ask_for_gift--->" + data);
+            JSONObject dataObject = JsonUtil.getJsonObject(data);
+
+            //索要礼物
+            Activity act = appInterface.getAct();
+            Activity context = (act == null ? (Activity) App.getActivity() : act);
+            switch (dataObject.optString("type")){
+                case "normal":
+                    UIShow.showNormalAskGiftDlg(context);
                     break;
             }
         }

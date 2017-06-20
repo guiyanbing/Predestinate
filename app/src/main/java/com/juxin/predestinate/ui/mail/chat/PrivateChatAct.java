@@ -61,7 +61,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private int kf_id;
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img, cus_top_img_phone;
-    private TextView base_title_title, cus_top_title_txt;
+    private TextView base_title_title,net_top_title,cus_top_title_txt;
     private View cus_top_title_view;
     private LMarqueeView lmvMeassages;
     private LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
@@ -183,6 +183,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         setTitleRightContainer(baseTitleViewRight);
         llTitleRight = (RelativeLayout) baseTitleView.findViewById(R.id.cus_top_title_ll);
         base_title_title = (TextView) baseTitleView.findViewById(R.id.cus_top_title);
+        net_top_title = (TextView) baseTitleView.findViewById(R.id.net_top_title);
         cus_top_title_txt = (TextView) baseTitleView.findViewById(R.id.cus_top_title_txt);
         cus_top_title_view = baseTitleView.findViewById(R.id.cus_top_title_view);
         cus_top_title_img = (ImageView) baseTitleView.findViewById(R.id.cus_top_title_img);
@@ -190,6 +191,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         cus_top_img_phone.setOnClickListener(this);
 
         setNickName(name);
+        setOtherNetStatus();
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//缘分小秘书
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
                 @Override
@@ -214,6 +216,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         if (base_title_title != null) {
             base_title_title.setText(str.length() > 10 ? (str.substring(0, 10)) : (str));
         }
+    }
+
+    private void setOtherNetStatus() {
+        //TODO 对方状态
+        net_top_title.setText(String.valueOf(getResources().getString(R.string.net_status_pre)));
     }
 
     private void initView() {
@@ -259,7 +266,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         privateChat.setInputLookAtHerVisibility(View.VISIBLE);
                 }
             });
-            initHeadView();
+//            initHeadView();
             initFollow();
             isShowTopPhone();
         }
@@ -282,13 +289,13 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 channel_uid = String.valueOf(userDetail.getChannel_uid());
                 name = userDetail.getNickname();
                 setNickName(userDetail.getShowName());
-                if (isFollow) {
-                    chat_title_attention_name.setText("已关注");
-                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
-                } else {
-                    chat_title_attention_name.setText("关注她");
-                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
-                }
+//                if (isFollow) {
+//                    chat_title_attention_name.setText("已关注");
+//                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
+//                } else {
+//                    chat_title_attention_name.setText("关注她");
+//                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
+//                }
             }
         });
     }
@@ -436,9 +443,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     executeYCoinTask();
                 } else {//不请求网络
                     checkIsCanSendMsg();
-                    if (chat_title_yb_name != null) {
-                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
-                    }
+//                    if (chat_title_yb_name != null) {
+//                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
+//                    }
                 }
                 break;
             default:

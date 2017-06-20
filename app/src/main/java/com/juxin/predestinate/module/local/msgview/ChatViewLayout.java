@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
@@ -23,6 +25,7 @@ import com.juxin.predestinate.module.local.msgview.chatview.input.ChatExtendPane
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatInputPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatRecordPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.input.ChatSmilePanel;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.intercept.InterceptTouchLinearLayout;
 import com.juxin.predestinate.module.logic.baseui.intercept.OnInterceptTouchEventLayout;
@@ -36,7 +39,9 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ChatAdapter.ChatInstance chatInstance = null;
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
-    private ImageView input_giftview, input_look_at_her;
+    private ImageView input_giftview,input_look_at_her,iv_y_tips_close;
+    private LinearLayout ll_y_tips;
+    private TextView tv_y_tips_buy,tv_y_tips_count,tv_y_tips_split;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -75,6 +80,20 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         chatFloatTip = (ViewGroup) contentView.findViewById(R.id.chat_float_tip);
         input_look_at_her = (ImageView) contentView.findViewById(R.id.input_look_at_her);
         input_giftview = (ImageView) contentView.findViewById(R.id.input_giftview);
+        ll_y_tips = (LinearLayout) contentView.findViewById(R.id.ll_y_tips);
+        tv_y_tips_count = (TextView) contentView.findViewById(R.id.tv_y_tips_count);
+        tv_y_tips_buy = (TextView) contentView.findViewById(R.id.tv_y_tips_buy);
+        tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
+        iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
+
+        int yCoin = ModuleMgr.getCenterMgr().getMyInfo().getYcoin();
+        if(yCoin < 100) {
+            tv_y_tips_split.setVisibility(View.GONE);
+            iv_y_tips_close.setVisibility(View.GONE);
+            tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
+        }else {
+            tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
+        }
 
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -139,6 +158,14 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
 
     public void onClickLookAtHer(View.OnClickListener listener) {
         input_look_at_her.setOnClickListener(listener);
+    }
+
+    public void onClickYTipsBuy(View.OnClickListener listener) {
+        tv_y_tips_buy.setOnClickListener(listener);
+    }
+
+    public void onClickYTipsClose(View.OnClickListener listener) {
+        iv_y_tips_close.setOnClickListener(listener);
     }
 
     /**

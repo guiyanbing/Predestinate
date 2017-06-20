@@ -25,6 +25,7 @@ import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
 import com.juxin.predestinate.module.local.pay.PayWX;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -90,6 +91,7 @@ import com.juxin.predestinate.ui.user.check.secret.dialog.SecretDiamondDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretGiftDlg;
 import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerAct;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
+import com.juxin.predestinate.ui.user.my.AskForGiftDialog;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
@@ -926,6 +928,42 @@ public class UIShow {
      */
     public static void showDemandRedPacketAct(Context context) {
         context.startActivity(new Intent(context, DemandRedPacketAct.class));
+    }
+
+    /**
+     * 打开我要赚红包H5
+     * @param context
+     */
+    public static void showEarnRedBagAct(Context context){
+        showWebActivity(context,WebUtil.jointUrl(Hosts.H5_EARN_RED_BAG));
+    }
+
+    /**
+     * 打开普通索要礼物弹窗
+     * @param context
+     */
+    public static void showNormalAskGiftDlg(final Context context){
+        Statistics.userBehavior(SendPoint.menu_me_redpackage_sylw);
+
+        final AskForGiftDialog dialog = new AskForGiftDialog(context);
+        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0) {
+            dialog.show();
+        } else {
+            LoadingDialog.show((FragmentActivity) context);
+            ModuleMgr.getCommonMgr().requestGiftList(new GiftHelper.OnRequestGiftListCallback() {
+                @Override
+                public void onRequestGiftListCallback(boolean isOk) {
+                    LoadingDialog.closeLoadingDialog();
+                    if (isOk) {
+                        if (ModuleMgr.getCommonMgr().getGiftLists().getArrCommonGifts().size() > 0 && dialog != null) {
+                            dialog.show();
+                        }
+                    } else {
+                        PToast.showShort("数据加载失败，请检查您的网络");
+                    }
+                }
+            });
+        }
     }
 
     /**

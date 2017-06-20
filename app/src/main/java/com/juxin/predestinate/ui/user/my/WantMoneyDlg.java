@@ -63,7 +63,7 @@ public class WantMoneyDlg extends Dialog {
             @Override
             public void onClick(View v) {
                 Statistics.userBehavior(SendPoint.login_guide_moneyhelp);
-                UIShow.showDemandRedPacketAct(context);
+                UIShow.showEarnRedBagAct(context);
                 dismiss();
             }
         });
