@@ -21,7 +21,7 @@ import java.util.TimerTask;
  * Created by ZRP on 2016/12/27.
  */
 public class SplashActivity extends BaseActivity {
-
+    private final static long delayTime = 2000;
     private Timer timer;
     private long t;
 
@@ -50,7 +50,7 @@ public class SplashActivity extends BaseActivity {
                     public void run() {
                         initData();
 
-                        int delay = (int) Math.abs(3000 - (System.currentTimeMillis() - t));
+                        int delay = (int) (delayTime - (System.currentTimeMillis() - t));
                         MsgMgr.getInstance().delay(new Runnable() {
                             @Override
                             public void run() {
