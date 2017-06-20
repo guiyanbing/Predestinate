@@ -93,6 +93,7 @@ import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerAct;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
 import com.juxin.predestinate.ui.user.my.AskForGiftDialog;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
+import com.juxin.predestinate.ui.user.my.CloseBalanceDlg;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
 import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
@@ -1075,6 +1076,16 @@ public class UIShow {
         LookAtHerDlg dialog = new LookAtHerDlg();
         dialog.setContext(context);
         dialog.setOtherId(otherId, channel_uid);
+        dialog.showDialog((FragmentActivity) context);
+    }
+
+    /**
+     * 关闭余额提示
+     */
+    public static void showYTipsCloseDlg(final Context context, long otherId) {
+        CloseBalanceDlg dialog = new CloseBalanceDlg();
+        dialog.setContext(context);
+        dialog.setOtherId(otherId);
         dialog.showDialog((FragmentActivity) context);
     }
 
