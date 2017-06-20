@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Process;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
 
@@ -45,7 +46,13 @@ public class App extends MultiDexApplication {
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
-        initAppDelay();
+        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
+        String packageName = ModuleMgr.getAppMgr().getPackageName();
+        if (processName != null && processName.equals(packageName)) {//主进程
+            initAppDelay();
+        }else{
+            initApp();
+        }
     }
 
     private void initAppDelay() {
