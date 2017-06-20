@@ -9,6 +9,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
@@ -267,6 +268,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("xt", 0);//android传0，或者不传。暂时不区分系统
         loginMap.put("ms", Constant.MS_TYPE);
         loginMap.put("imei", ModuleMgr.getAppMgr().getDeviceID());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
+        loginMap.put("ontop", App.isForeground() ? 1 : 2);//是否前端在线 (1为前端在线 2为非前端在线)
 
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, JSON.toJSONString(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
