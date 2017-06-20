@@ -1,13 +1,10 @@
 package com.juxin.predestinate.ui;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.ImageView;
 
-import com.juxin.predestinate.R;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -16,52 +13,60 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * 闪屏页面
  * Created by ZRP on 2016/12/27.
  */
 public class SplashActivity extends BaseActivity {
 
+    private Timer timer;
+    private long t;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        t = System.currentTimeMillis();
         isCanBack(false);
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        initData();
-        jumpAnimation();
+
+        initDelay();
+    }
+
+    private void initDelay(){
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!App.isAppInited())
+                    return;
+
+                timer.cancel();
+
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initData();
+
+                        int delay = (int) Math.abs(3000 - (System.currentTimeMillis() - t));
+                        MsgMgr.getInstance().delay(new Runnable() {
+                            @Override
+                            public void run() {
+                                skipLogic();
+                            }
+                        }, delay);
+                    }
+                });
+            }
+        }, 1000, 200);
     }
 
     private void initData() {
         LocationMgr.getInstance().start();//启动定位
         ModuleMgr.getCommonMgr().updateUsers();//软件升级U-P读取
         ModuleMgr.getCommonMgr().requestStaticConfig();//请求一些在线配置信息
-    }
-
-    private void jumpAnimation() {
-        ImageView iv_splash = (ImageView) findViewById(R.id.iv_splash);
-
-        ObjectAnimator animator = ObjectAnimator.ofFloat(iv_splash, "alpha", 0.5f, 1.0f);
-        animator.setDuration(3000);
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                skipLogic();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-            }
-        });
-        animator.start();
     }
 
     /**
