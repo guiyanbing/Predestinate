@@ -93,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/px20_dp"
-                    android:text="0731-89746010"
+                    android:text="@string/txt_customerservice_phone_default"
                     android:textColor="@color/txt_customerservice_phone"
                     android:textSize="@dimen/px38_sp" />
 

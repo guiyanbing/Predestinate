@@ -410,8 +410,8 @@ public class IMProxy {
         }
 
         @Override
-        public void accountInvalid(int reason) throws RemoteException {
-            IMProxy.this.accountInvalid(reason);
+        public void accountInvalid(int reason, String content) throws RemoteException {
+            IMProxy.this.accountInvalid(reason, content);
         }
 
         @Override
@@ -468,11 +468,19 @@ public class IMProxy {
      *
      * @param reason 重登陆原因：1[异地登陆踢下线]，2[密码验证失败，用户不存在等]
      */
-    private void accountInvalid(int reason) {
-        if (reason == 1) {// 踢下线弹窗
-            showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
-        } else if (reason == 2) {// 帐号无效
-            showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
+    private void accountInvalid(int reason, String content) {
+        switch (reason){
+            case 1:// 踢下线弹窗
+                showInvalidDialog((FragmentActivity) App.getActivity(), "您的账号在另一台设备登录！");
+                break;
+            case 2:// 帐号无效
+                showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
+                break;
+            case 3:// 账号被封消息
+
+                break;
+            default:
+                break;
         }
     }
 

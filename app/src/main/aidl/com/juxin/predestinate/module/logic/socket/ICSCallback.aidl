@@ -20,7 +20,7 @@ interface ICSCallback {
     void onStatusChange(int type, String msg);
 
     //帐号无效
-    void accountInvalid(int reason);
+    void accountInvalid(int reason, String content);
 
     //心跳状态回送，判断socket连接状态
     void heartbeatStatus(boolean isBeating);
