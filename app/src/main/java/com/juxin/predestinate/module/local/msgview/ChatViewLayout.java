@@ -89,19 +89,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
 
-        int yCoin = ModuleMgr.getCenterMgr().getMyInfo().getYcoin();
-        boolean isCloseYTips = PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), false);
-        if(yCoin < 100) {
-            tv_y_tips_split.setVisibility(View.GONE);
-            iv_y_tips_close.setVisibility(View.GONE);
-        }
-        if(isCloseYTips) {
-            ll_y_tips.setVisibility(View.GONE);
-        }else {
-            ll_y_tips.setVisibility(View.VISIBLE);
-            showYCountTips(yCoin);
-        }
-
+        yTipsLogic();
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
         if (viewGroup instanceof OnInterceptTouchEventLayout) {
@@ -141,7 +129,31 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         chatInstance.chatContentAdapter = chatContentAdapter;
     }
 
-    public void showYCountTips(int yCoin) {
+    /**
+     * Y币提示逻辑
+     */
+    public void yTipsLogic() {
+        int yCoin = ModuleMgr.getCenterMgr().getMyInfo().getYcoin();
+        boolean isCloseYTips = PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), false);
+        if(yCoin < 100) {
+            tv_y_tips_split.setVisibility(View.GONE);
+            iv_y_tips_close.setVisibility(View.GONE);
+            ll_y_tips.setVisibility(View.VISIBLE);
+            changeYTipsCount(yCoin);
+        }else {
+            if(isCloseYTips) {
+                ll_y_tips.setVisibility(View.GONE);
+            }else {
+                ll_y_tips.setVisibility(View.VISIBLE);
+                changeYTipsCount(yCoin);
+            }
+        }
+    }
+
+    /**
+     * 改变Y值
+     */
+    public void changeYTipsCount(int yCoin) {
         if(tv_y_tips_count == null) return;
         tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
     }

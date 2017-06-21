@@ -22,10 +22,14 @@ import com.juxin.predestinate.module.logic.config.Constant;
  */
 public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickListener {
 
-    private long otherId;
     private Context context;
     private CheckBox cb_def_sel;
     private TextView tv_cancel,tv_sure;
+    private IsCloseYTips isCloseYTips;
+
+    public interface IsCloseYTips {
+        void isCloseYTips();
+    }
 
     public CloseBalanceDlg() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -38,8 +42,8 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
         this.context = context;
     }
 
-    public void setOtherId(long otherId) {
-        this.otherId = otherId;
+    public void setIsCloseYTips(IsCloseYTips callBack) {
+        this.isCloseYTips = callBack;
     }
 
     @Override
@@ -69,6 +73,7 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
                 break;
             case R.id.tv_sure:
                 PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), cb_def_sel.isChecked());
+                isCloseYTips.isCloseYTips();
                 dismiss();
                 break;
             default:
