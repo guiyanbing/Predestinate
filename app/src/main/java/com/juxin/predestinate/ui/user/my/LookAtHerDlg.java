@@ -19,6 +19,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 
 /**
  * 创建日期：2017/6/7
@@ -75,17 +76,23 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
-        if(!isMan) {//女号--邀请他
+        if(!isMan && (context != null && context instanceof PrivateChatAct)) {//女号--邀请他
             VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
             tv_title.setText(getString(R.string.invitation_he_type));
-            if(bean.getBooleanVideochat()) {
-                tv_first.setText(getString(R.string.invitation_he_video));
-            }else if(bean.getBooleanAudiochat()) {
-                tv_second.setText(getString(R.string.invitation_he_audio));
-            }
+            rl_own_agree.setVisibility(View.GONE);
+            rl_own_disagree.setVisibility(View.GONE);
             cb_own_agree.setVisibility(View.GONE);
             cb_own_disagree.setVisibility(View.GONE);
             ll_def_select.setVisibility(View.GONE);
+
+            if(bean.getBooleanVideochat()) {
+                tv_first.setText(getString(R.string.invitation_he_video));
+                rl_own_agree.setVisibility(View.VISIBLE);
+            }
+            if(bean.getBooleanAudiochat()) {
+                tv_second.setText(getString(R.string.invitation_he_audio));
+                rl_own_agree.setVisibility(View.VISIBLE);
+            }
             tv_select_ok.setText(getString(R.string.cancel));
         }
         cb_own_agree.setChecked(true);
