@@ -22,6 +22,7 @@ public class TCPConstant {
     public static final int MSG_ID_SERVER_PUSH_END_INDEX = 200; //服务器推送消息，结束id（暂定）
     public static final long Heartbeat_Time = 60 * 1000;    //心跳时间间隔，60s
     public static final long SEND_RESPOND_TIME_OUT = 60 * 1000; //发送消息等待响应的超时时间
+    public static final int MSG_ID_HEART_BEAT3 = 65531;     // 表示用户的前端状态 1为前端在线 2为非前端在线 用户切换前端状态时需要发一次心跳消息
 
     /**
      * 即时通许中，CoreService连接服务器时，返回的几种状态。

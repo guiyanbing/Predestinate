@@ -136,14 +136,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public int getNoReadNum(long userID) {
-        synchronized (msgList) {
-            for (BaseMessage temp : msgList) {
-                if (userID == temp.getLWhisperID()) {
-                    return temp.getNum();
-                }
+        List<BaseMessage> tempList = new ArrayList<>();
+        tempList.addAll(msgList);
+        for (BaseMessage temp : tempList) {
+            if (userID == temp.getLWhisperID()) {
+                return temp.getNum();
             }
-            return 0;
         }
+        return 0;
     }
 
     /**
@@ -489,6 +489,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.System_MsgType://系统消息
                 setSystemMsg(message);
                 break;
+            case BaseMessage.inviteVideoDelivery_MsgType://语音(视频)邀请送达男用户
+                setInviteVideoDelivery(message);
+                break;
             default:
                 break;
         }
@@ -535,4 +538,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
             }
         }
     }
+
+    /**
+     * 语音(视频)邀请送达男用户
+     * @param message
+     */
+    private void setInviteVideoDelivery(BaseMessage message) {
+
+    }
+
+
 }

@@ -3,27 +3,24 @@ package com.juxin.predestinate.module.logic.socket;
 import android.os.DeadObjectException;
 import android.os.RemoteException;
 import android.text.TextUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.EncryptUtil;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.util.TimerUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
@@ -268,8 +265,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("ms", Constant.MS_TYPE);
         loginMap.put("imei", ModuleMgr.getAppMgr().getDeviceID());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
         loginMap.put("pkg_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名，主要针对IOS（2017-06-20）
-     //   loginMap.put("net_tp", curTime);//用户上网方式（2017-06-20）Wifi 1 4G 2 3G / 2G 3其它4
-     //   loginMap.put("phone_info", curTime);//手机设备信息（2017-06-20）
+        loginMap.put("ontop", App.isForeground() ? 1 : 2);//是否前端在线 (1为前端在线 2为非前端在线)
 
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, JSON.toJSONString(loginMap));
         PLogger.d("getLoginData: ---socket登录消息--->" + data.toString());
@@ -488,8 +484,8 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 }
 
                 if (data.getMsgType() == TCPConstant.MSG_ID_Account_Closed) {//账号被封消息
-                    String unban_tm = contentObject.optString("unban_tm");
-                    accountInvalid(3, unban_tm);
+                   // String unban_tm = contentObject.optString("unban_tm");
+                    accountInvalid(3, content);
                     return;
                 }
 

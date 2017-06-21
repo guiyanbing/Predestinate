@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.juxin.library.log.PToast;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
@@ -21,7 +20,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
-import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.check.edit.EditKey;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -146,16 +144,7 @@ public class UserEditDetailInfoPanel extends BasePanel implements RequestComplet
     public void onRequestComplete(final HttpResponse response) {
         //修改个人资料返回结果
         if (response.getUrlParam() == UrlParam.updateMyInfo) {
-            LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-                @Override
-                public void call() {
-                    if (response.isOk()) {
-                        PToast.showShort(context.getString(R.string.user_info_edit_suc));
-                    } else {
-                        PToast.showShort(context.getString(R.string.user_info_edit_fail));
-                    }
-                }
-            });
+            LoadingDialog.closeLoadingDialog(200);
         }
     }
 }

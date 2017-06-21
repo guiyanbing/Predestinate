@@ -18,6 +18,7 @@ import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.local.msgview.ChatAdapter;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatViewPanel;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
@@ -28,6 +29,7 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.user.my.CloseBalanceDlg;
 
 /**
  * 输入面板
@@ -403,14 +405,20 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     }
 
     /**
-     * 看看她
+     * 男号--看看她 / 女号--邀请他
      */
     private void onClickLookAtHer() {
         getChatInstance().chatViewLayout.onClickLookAtHer(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 closeAllInput();
-
+                if(!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//女号--邀请他
+                    VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
+                    if((!bean.getBooleanVideochat() && !bean.getBooleanAudiochat())) {
+                        PToast.showShort("请在设置中开启视频、语音通话");
+                        return;
+                    }
+                }
                 long whisperId = getChatInstance().chatAdapter.getLWhisperId();
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperId);
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
@@ -438,8 +446,12 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                long whisperId = getChatInstance().chatAdapter.getLWhisperId();
-                UIShow.showYTipsCloseDlg(getContext(), whisperId);
+                UIShow.showYTipsCloseDlg(getContext(), new CloseBalanceDlg.IsCloseYTips() {
+                    @Override
+                    public void isCloseYTips() {
+                        getChatInstance().chatViewLayout.yTipsLogic(true, true);
+                    }
+                });
             }
         });
     }

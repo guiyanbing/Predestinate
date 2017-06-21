@@ -76,7 +76,8 @@ public class DBCenter {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
+                if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType() ||
+                        BaseMessage.BaseMessageType.html.getMsgType() == baseMessage.getType()) {
                     baseMessage.setStatus(MessageConstant.READ_STATUS);
                 }
 
@@ -86,7 +87,8 @@ public class DBCenter {
                     return;
                 }
 
-                if (BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()) {
+                if (BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType() &&
+                        BaseMessage.BaseMessageType.html.getMsgType() != baseMessage.getType()) {
                     result = centerFLetter.storageData(baseMessage);
                     DBCenter.makeDBCallback(callback, (result >=0 ? MessageConstant.OK : MessageConstant.ERROR));
                 }else {
@@ -141,7 +143,8 @@ public class DBCenter {
             return ;
         }
 
-        if (BaseMessage.BaseMessageType.hint.getMsgType() != message.getType()) {
+        if (BaseMessage.BaseMessageType.hint.getMsgType() != message.getType() &&
+                BaseMessage.BaseMessageType.html.getMsgType() != message.getType()) {
             centerFLetter.updateMsgStatus(message, new DBCallback() {
                 @Override
                 public void OnDBExecuted(long result) {

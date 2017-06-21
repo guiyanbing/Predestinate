@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.NoSaveMsgType;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.App;
@@ -133,13 +134,12 @@ public class RecMessageMgr implements IMProxy.IMListener {
             message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-            if (BaseMessage.TalkRed_MsgType == message.getType()) {//红包消息不保存，也不通知上层
+            if (BaseMessage.TalkRed_MsgType == message.getType() ||
+                    BaseMessage.inviteVideoDelivery_MsgType == message.getType()) {//红包消息不保存，也不通知上层,女性对男性的语音(视频)邀请送达男用户
                 return;
             }
 
-            if (BaseMessage.Follow_MsgType == message.getType() ||
-                    BaseMessage.RedEnvelopesBalance_MsgType == message.getType() ||
-                    BaseMessage.System_MsgType == message.getType()) {
+            if(NoSaveMsgType.getNoSaveMsgType(message.getType()) != null){
                 isSave = false;
             }
 

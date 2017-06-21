@@ -39,6 +39,7 @@ public class MessageConstant {
     public static final int FAIL_STATUS = 2;//发送失败
     public static final int SENDING_STATUS = 3;//发送中
     public static final int BLACKLIST_STATUS = 4;//黑名单中
+    public static final int DELIVERY_STATUS = 5;//送达
     public static final int UNREAD_STATUS = 10;//未读
     public static final int READ_STATUS = 11;//对方已读
 

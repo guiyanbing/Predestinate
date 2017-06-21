@@ -1085,10 +1085,10 @@ public class UIShow {
     /**
      * 关闭余额提示
      */
-    public static void showYTipsCloseDlg(final Context context, long otherId) {
+    public static void showYTipsCloseDlg(final Context context, CloseBalanceDlg.IsCloseYTips callBack) {
         CloseBalanceDlg dialog = new CloseBalanceDlg();
         dialog.setContext(context);
-        dialog.setOtherId(otherId);
+        dialog.setIsCloseYTips(callBack);
         dialog.showDialog((FragmentActivity) context);
     }
 

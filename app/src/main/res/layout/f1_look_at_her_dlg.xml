@@ -5,11 +5,12 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_title"
         style="@style/common_list_item"
         android:gravity="center"
         android:paddingBottom="@dimen/px35_dp"
         android:paddingTop="@dimen/px35_dp"
-        android:text="请选择自己的出场方式"
+        android:text="@string/look_at_she_type"
         android:textColor="@color/text_ciyao_gray"
         android:textSize="@dimen/px42_sp" />
 
@@ -18,11 +19,12 @@
         style="@style/center_set_item">
 
         <TextView
+            android:id="@+id/tv_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="自己露脸"
+            android:text="@string/look_at_she_own"
             android:textColor="@color/text_zhuyao_black"
             android:textSize="@dimen/px45_sp" />
 
@@ -46,11 +48,12 @@
         style="@style/center_set_item">
 
         <TextView
+            android:id="@+id/tv_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="自己不露脸"
+            android:text="@string/look_at_she_no_own"
             android:textColor="@color/text_zhuyao_black"
             android:textSize="@dimen/px45_sp" />
 
@@ -70,6 +73,7 @@
         android:background="@color/bg_color" />
 
     <LinearLayout
+        android:id="@+id/ll_def_select"
         style="@style/common_list_item"
         android:gravity="right|center"
         android:orientation="horizontal"
@@ -86,7 +90,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="以后默认此选项"
+            android:text="@string/look_at_she_def"
             android:textColor="@color/text_ciyao_gray"
             android:textSize="@dimen/px36_sp" />
     </LinearLayout>

@@ -1194,11 +1194,11 @@ public class ChatMgr implements ModuleBase {
                     dispatchOfflineMsg(bean);
                 }
 
-                // 服务器每次最多取500条，若超过则再次请求
-                //if (offlineMsg.getMsgList().size() >= 500) {
-                //    getOfflineMsg();
-                //    return;
-                //}
+                // 服务器每次最多取1000条，若超过则再次请求
+                if (offlineMsg.getMsgList().size() >= 1000) {
+                    getOfflineMsg();
+                    return;
+                }
                 dispatchLastOfflineAVMap();
             }
         });

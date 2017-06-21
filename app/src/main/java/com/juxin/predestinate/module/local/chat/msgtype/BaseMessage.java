@@ -36,6 +36,7 @@ public class BaseMessage implements IBaseMessage {
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
+        inviteVideo(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
         maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
 
@@ -47,14 +48,6 @@ public class BaseMessage implements IBaseMessage {
         BaseMessageType(Class<? extends BaseMessage> msgClass, int msgType) {
             this.msgClass = msgClass;
             this.msgType = msgType;
-        }
-
-        public static BaseMessageType getMsgType(int msgType) {
-            if(MessageConstant.isMaxVersionMsg(msgType)){
-                return BaseMessageType.maxVersion;
-            }
-
-            return BaseMessageType.valueOf(String.valueOf(msgType));
         }
 
         public static BaseMessageType valueOf(int msgType) {
@@ -76,13 +69,15 @@ public class BaseMessage implements IBaseMessage {
     }
 
     /**
-     * 消息类型，进行未读消息比对
+     * 消息类型，特殊地方方便用
      */
     public static final int Follow_MsgType = 5;//关注
     public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
     public static final int video_MsgType = 24;//视频消息
+    public static final int inviteVideoDelivery_MsgType = 1002;//女性对男性的语音(视频)邀请送达男用户 此消息为群发视频/语音，送达人数对女用户的通知
+
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
@@ -593,6 +588,9 @@ public class BaseMessage implements IBaseMessage {
             case sysNotice:
                 message = new SysNoticeMessage(bundle, true);
                 break;
+            case inviteVideo:
+                message = new InviteVideoMessage(bundle, true);
+                break;
             default:
                 message = new BaseMessage(bundle, true);
                 break;
@@ -632,6 +630,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case sysNotice:
                 message = new SysNoticeMessage(bundle);
+                break;
+            case inviteVideo:
+                message = new InviteVideoMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -703,6 +704,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case sysNotice:
                 result = "[系统通知]";
+                break;
+            case inviteVideo:
+                result = "[邀请视频]";
                 break;
             case maxVersion:
                 result = "[你的版本过低，无法接收此类消息]";

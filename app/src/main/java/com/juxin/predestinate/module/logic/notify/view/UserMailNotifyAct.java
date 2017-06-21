@@ -137,7 +137,7 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
                 if (simpleData == null || simpleData.getUid() == 0) return;
 
                 UIShow.showMainWithBackMessage(this);
-                Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + ",\"nickname\":" + simpleData.getNickname() + "}");
+                Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + "}");
                 break;
         }
     }
