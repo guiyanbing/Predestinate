@@ -763,6 +763,14 @@
     <string name="sys_mess_content">你当前版本过低，为了能正常使用，请立即升级到最新版本。</string>
     <string name="sys_mess_btn_text">点击升级</string>
 
+    <string name="invite_video">发来一个视频邀请</string>
+    <string name="invite_voice">发来一个语音邀请</string>
+    <string name="video_cost">通话费用：%d钻石/分钟</string>lost efficacy
+    <string name="time">%dS</string>
+    <string name="lost_efficacy">已失效</string>
+    <string name="connect">立即接通</string>
+    <string name="call_back">立即回拨</string>
+
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>
     <string name="update_has_install">检测到新版已安装，请点击跳转</string>
