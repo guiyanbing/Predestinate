@@ -22,9 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.juxin.library.R;
 import com.juxin.library.image.transform.BlurImage;
@@ -42,7 +40,8 @@ public class ImageLoader {
     private static RoundedCorners roundedCorners;
     private static RoundedCorners roundedCornerTop;
     private static BlurImage blurImage;
-//    private static SparseArray<Drawable> cache = new SparseArray<>();//替换图缓存
+    private static SparseArray<Drawable> cache = new SparseArray<>();//替换图缓存
+    private static boolean usedCache = true;
 
     public static void init(Context context) {
         Context mContext = context.getApplicationContext();
@@ -124,8 +123,12 @@ public class ImageLoader {
         loadStylePic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCornerTop);
     }
 
+    public static <T> void loadRoundFitCenter(Context context, T model, ImageView view) {
+        loadRoundFitCenter(context, model, view, 8, R.drawable.default_pic, R.drawable.default_pic);
+    }
+
     public static <T> void loadRoundFitCenter(Context context, T model, ImageView view,
-                                     int roundPx, int defResImg, int errResImg) {
+                                              int roundPx, int defResImg, int errResImg) {
         loadRound(context, model, view, roundPx, defResImg, errResImg, bitmapFitCenter, roundedCorners);
     }
 
@@ -168,8 +171,16 @@ public class ImageLoader {
     /**
      * 以静态图片展示Gif
      */
-    public static <T> void loadGifAsBmp(Context context, T model, ImageView view) {
-        loadGifAsBmp(context, model, view, R.drawable.default_pic, R.drawable.default_pic);
+    public static <T> void loadAsBmpFitCenter(Context context, T model, ImageView view) {
+        loadAsBmp(context, model, view, bitmapFitCenter);
+    }
+
+    public static <T> void loadAsBmpCenterCrop(Context context, T model, ImageView view) {
+        loadAsBmp(context, model, view, bitmapCenterCrop);
+    }
+
+    public static <T> void loadAsBmp(Context context, T model, ImageView view, Transformation<Bitmap>... transformation) {
+        loadAsBmp(context, model, view, R.drawable.default_pic, R.drawable.default_pic, transformation);
     }
 
     /**
@@ -290,14 +301,14 @@ public class ImageLoader {
             if (isActDestroyed(context))
                 return;
 
-//            if (model instanceof Integer && (Integer) model > 0) {
-//                int key = getCacheKey((Integer) model, transformation);
-//                Drawable drawable = cache.get(key);
-//                if (drawable != null && callback != null) {
-//                    callback.onResourceReady((GlideDrawable) drawable);
-//                    return;
-//                }
-//            }
+            if (usedCache && model instanceof Integer && (Integer) model > 0) {
+                int key = getCacheKey((Integer) model, transformation);
+                Drawable drawable = cache.get(key);
+                if (drawable != null && callback != null) {
+                    callback.onResourceReady((GlideDrawable) drawable);
+                    return;
+                }
+            }
 
             DrawableRequestBuilder<T> builder = getDrawableBuilder(context, model);
 
@@ -307,13 +318,17 @@ public class ImageLoader {
             builder.into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-//                    if (model instanceof Integer && (Integer) model > 0) {
-//                        int key = getCacheKey((Integer) model, transformation);
-//                        Drawable drawable = cache.get(key);
-//                        if (drawable == null) {
-//                            cache.put(key, resource);
-//                        }
-//                    }
+                    if (usedCache && model instanceof Integer && (Integer) model > 0) {
+                        int key = getCacheKey((Integer) model, transformation);
+                        Drawable drawable = cache.get(key);
+                        if (drawable == null) {
+                            if (resource instanceof GlideBitmapDrawable) {
+                                Bitmap bmp = ((GlideBitmapDrawable) resource).getBitmap();
+                                if (bmp != null && !bmp.isRecycled())
+                                    cache.put(key, new GlideBitmapDrawable(null, bmp.copy(bmp.getConfig(), true)));
+                            }
+                        }
+                    }
 
                     if (isActDestroyed(context))
                         return;
@@ -327,13 +342,14 @@ public class ImageLoader {
         }
     }
 
-    private static <T> void loadGifAsBmp(Context context, T model, ImageView view, int defResImg, int errResImg) {
+    private static <T> void loadAsBmp(Context context, T model, ImageView view, int defResImg, int errResImg,
+                                         Transformation<Bitmap>... transformation) {
         try {
             if (isActDestroyed(context))
                 return;
 
             getBitmapBuilder(context, model)
-                    .transform(bitmapFitCenter)
+                    .transform(transformation)
                     .placeholder(defResImg)
                     .error(errResImg)
                     .into(view);
@@ -344,8 +360,8 @@ public class ImageLoader {
 
     private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
         return getRequest(context, model)
-//                .crossFade()
-                .dontAnimate()
+                .crossFade()
+//                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 

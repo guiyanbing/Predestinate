@@ -18,7 +18,6 @@
         android:id="@+id/chat_item_img"
         android:layout_width="@dimen/px400_dp"
         android:layout_height="@dimen/px400_dp"
-        android:scaleType="centerCrop"
         android:src="@drawable/default_pic" />
 
     <include layout="@layout/f1_chat_item_panel_voice" />
