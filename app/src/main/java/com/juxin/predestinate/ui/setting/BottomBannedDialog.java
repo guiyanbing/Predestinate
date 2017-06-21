@@ -23,6 +23,7 @@ import com.juxin.predestinate.ui.start.UserLoginExtAct;
 public class BottomBannedDialog extends BaseDialogFragment {
     private Context mContext;
     private boolean isLogin;
+    private String bannedTime;
 
     public BottomBannedDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -31,9 +32,10 @@ public class BottomBannedDialog extends BaseDialogFragment {
         setCancelable(true);
     }
 
-    public void setCtx(Context context, boolean isLogin) {
+    public void setCtx(Context context, boolean isLogin, String bannedTime) {
         this.mContext = context;
         this.isLogin = isLogin;
+        this.bannedTime = bannedTime;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class BottomBannedDialog extends BaseDialogFragment {
     }
 
     private void initView() {
-        ((TextView) findViewById(R.id.tv_bottom_banned_time)).setText("封停时间:永久");
+        ((TextView) findViewById(R.id.tv_bottom_banned_time)).setText(bannedTime);
         findViewById(R.id.iv_bottom_banned_exit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

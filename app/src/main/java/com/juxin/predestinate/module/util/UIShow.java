@@ -933,17 +933,19 @@ public class UIShow {
 
     /**
      * 打开我要赚红包H5
+     *
      * @param context
      */
-    public static void showEarnRedBagAct(Context context){
-        showWebActivity(context,WebUtil.jointUrl(Hosts.H5_EARN_RED_BAG));
+    public static void showEarnRedBagAct(Context context) {
+        showWebActivity(context, WebUtil.jointUrl(Hosts.H5_EARN_RED_BAG));
     }
 
     /**
      * 打开普通索要礼物弹窗
+     *
      * @param context
      */
-    public static void showNormalAskGiftDlg(final Context context){
+    public static void showNormalAskGiftDlg(final Context context) {
         Statistics.userBehavior(SendPoint.menu_me_redpackage_sylw);
 
         final AskForGiftDialog dialog = new AskForGiftDialog(context);
@@ -1059,12 +1061,13 @@ public class UIShow {
      * 账号封禁弹框
      *
      * @param context
-     * @param isLogin 是否处于登录状态
+     * @param isLogin    是否处于登录状态
+     * @param bannedTime 封禁时间
      */
-    public static void showBottomBannedDlg(final Context context,final boolean isLogin) {
+    public static void showBottomBannedDlg(final Context context, final boolean isLogin, String bannedTime) {
         bannedDialog = null;
         bannedDialog = new BottomBannedDialog();
-        bannedDialog.setCtx(context,isLogin);
+        bannedDialog.setCtx(context, isLogin, bannedTime);
         bannedDialog.showDialog((FragmentActivity) context);
     }
 
