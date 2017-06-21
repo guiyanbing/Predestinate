@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.juxin.predestinate.module.logic.socket.IMProxy;
+
 import java.util.LinkedList;
 
 /**
@@ -34,6 +36,8 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityResumed(Activity activity) {
+        if (!isForeground)
+            IMProxy.getInstance().heartBeat3(true);
         isForeground = true;
         App.activity = activity;
 
@@ -50,6 +54,7 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
     public void onActivityStopped(Activity activity) {
         if (App.activity == activity) {
             isForeground = false;
+            IMProxy.getInstance().heartBeat3(false);
         }
     }
 
