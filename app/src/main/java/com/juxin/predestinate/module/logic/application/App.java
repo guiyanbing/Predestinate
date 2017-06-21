@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Process;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
 
@@ -33,18 +35,52 @@ public class App extends MultiDexApplication {
     public static boolean isLogin = false;
 
     private static PActivityLifecycleCallbacks lifecycleCallbacks;
+    private static int initFlag;
 
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
-        // initAppComponent();
+        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
+        String packageName = ModuleMgr.getAppMgr().getPackageName();
+        if (processName != null && processName.equals(packageName)) {//主进程
+            initAppDelay();
+        }else{
+            initApp();
+        }
+    }
+
+    private void initAppDelay() {
+        if (initFlag > 0)
+            return;
+
+        initFlag++;
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                initApp();
+                initFlag++;
+            }
+        });
+    }
+
+    private void initApp() {
         ModuleMgr.initModule(context);
         initBugTags();
+    }
+
+    /**
+     * App是否已初始化完成
+     *
+     * @return
+     */
+    public static boolean isAppInited() {
+        return initFlag > 1;
     }
 
     /**

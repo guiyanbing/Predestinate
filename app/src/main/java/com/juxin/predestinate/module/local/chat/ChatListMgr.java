@@ -136,14 +136,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public int getNoReadNum(long userID) {
-        synchronized (msgList) {
-            for (BaseMessage temp : msgList) {
-                if (userID == temp.getLWhisperID()) {
-                    return temp.getNum();
-                }
+        List<BaseMessage> tempList = new ArrayList<>();
+        tempList.addAll(msgList);
+        for (BaseMessage temp : tempList) {
+            if (userID == temp.getLWhisperID()) {
+                return temp.getNum();
             }
-            return 0;
         }
+        return 0;
     }
 
     /**

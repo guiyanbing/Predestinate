@@ -20,7 +20,6 @@ import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ChineseFilter;
-import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.ui.user.check.edit.EditKey;
 
 import java.util.HashMap;
@@ -103,16 +102,7 @@ public class ContactEditDialog extends SimpleTipDialog implements RadioGroup.OnC
         ModuleMgr.getCenterMgr().updateMyInfo(postParams, new RequestComplete() {
             @Override
             public void onRequestComplete(final HttpResponse response) {
-                LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-                    @Override
-                    public void call() {
-                        if (response.isOk()) {
-                            PToast.showShort(context.getString(R.string.user_info_edit_suc));
-                        } else {
-                            PToast.showShort(context.getString(R.string.user_info_edit_fail));
-                        }
-                    }
-                });
+                LoadingDialog.closeLoadingDialog(200);
             }
         });
     }
