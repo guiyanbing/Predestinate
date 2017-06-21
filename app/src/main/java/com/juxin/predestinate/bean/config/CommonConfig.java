@@ -3,7 +3,9 @@ package com.juxin.predestinate.bean.config;
 import android.text.TextUtils;
 
 import com.juxin.predestinate.bean.net.BaseData;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Hosts;
+import com.juxin.predestinate.module.util.WebAppDownloader;
 
 import org.json.JSONObject;
 
@@ -38,6 +40,8 @@ public class CommonConfig extends BaseData {
 
     private PayTypeList payTypeList;    //支付方式控制
     private int secretary_dialog;       //小秘书对话框是否开放，1为开放，0为不开放
+    private String webAppUrl;
+    private long webAppVer;
 
     /**
      * @return 是否展示活动弹窗
@@ -81,6 +85,9 @@ public class CommonConfig extends BaseData {
 
         payTypeList = new PayTypeList();
         payTypeList.parseJson(jsonObject.optString("paytype"));
+        webAppUrl = jsonObject.optString("webapp_url");
+        webAppVer = jsonObject.optLong("webapp_version");
+        WebAppDownloader.getInstance().download(webAppUrl,webAppVer);
     }
 
     public String getService_qq() {
