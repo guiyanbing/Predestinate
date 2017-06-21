@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
@@ -30,6 +31,7 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.intercept.InterceptTouchLinearLayout;
 import com.juxin.predestinate.module.logic.baseui.intercept.OnInterceptTouchEventLayout;
 import com.juxin.predestinate.module.logic.baseui.xlistview.ExListView;
+import com.juxin.predestinate.module.logic.config.Constant;
 
 /**
  * Created by Kind on 2017/3/30.
@@ -41,7 +43,8 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ViewGroup chatFloatTip = null;
     private ImageView input_giftview,input_look_at_her,iv_y_tips_close;
     private LinearLayout ll_y_tips;
-    private TextView tv_y_tips_buy,tv_y_tips_count,tv_y_tips_split;
+    public TextView tv_y_tips_count;
+    private TextView tv_y_tips_buy,tv_y_tips_split;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -87,12 +90,16 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
 
         int yCoin = ModuleMgr.getCenterMgr().getMyInfo().getYcoin();
+        boolean isCloseYTips = PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), false);
         if(yCoin < 100) {
             tv_y_tips_split.setVisibility(View.GONE);
             iv_y_tips_close.setVisibility(View.GONE);
-            tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
+        }
+        if(isCloseYTips) {
+            ll_y_tips.setVisibility(View.GONE);
         }else {
-            tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
+            ll_y_tips.setVisibility(View.VISIBLE);
+            showYCountTips(yCoin);
         }
 
         // 最外层
@@ -132,6 +139,11 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         list.setXListViewListener(chatInstance.chatAdapter);
 
         chatInstance.chatContentAdapter = chatContentAdapter;
+    }
+
+    public void showYCountTips(int yCoin) {
+        if(tv_y_tips_count == null) return;
+        tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
     }
 
     /**

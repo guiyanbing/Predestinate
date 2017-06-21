@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
+import com.juxin.predestinate.module.logic.config.Constant;
+
 /**
  * 创建日期：2017/6/20
  * 描述:关闭余额弹框
@@ -20,11 +23,9 @@ import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickListener {
 
     private long otherId;
-
     private Context context;
     private CheckBox cb_def_sel;
     private TextView tv_cancel,tv_sure;
-//    private LinearLayout ll_no_show_tips;
 
     public CloseBalanceDlg() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -51,7 +52,6 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
     }
 
     private void initView(View view) {
-//        ll_no_show_tips = (LinearLayout) view.findViewById(R.id.ll_no_show_tips);
         cb_def_sel = (CheckBox) view.findViewById(R.id.cb_def_sel);
         tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
         tv_sure = (TextView) view.findViewById(R.id.tv_sure);
@@ -68,8 +68,7 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
                 dismiss();
                 break;
             case R.id.tv_sure:
-//                cb_def_sel.isChecked()
-//                PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(type), val);
+                PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), cb_def_sel.isChecked());
                 dismiss();
                 break;
             default:
