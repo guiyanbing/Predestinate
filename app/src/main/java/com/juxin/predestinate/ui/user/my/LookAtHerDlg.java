@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
@@ -28,6 +30,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private long otherId;
     private String channel_uid;
     private int selectVal;
+    private boolean isMan = true;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -51,6 +54,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.f1_look_at_her_dlg);
         View view = getContentView();
+        isMan = ModuleMgr.getCenterMgr().getMyInfo().isMan();
         initView(view);
         return view;
     }
@@ -58,6 +62,10 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private void initView(View view) {
         RelativeLayout rl_own_agree = (RelativeLayout) view.findViewById(R.id.rl_own_agree);
         RelativeLayout rl_own_disagree = (RelativeLayout) view.findViewById(R.id.rl_own_disagree);
+        LinearLayout ll_def_select = (LinearLayout) view.findViewById(R.id.ll_def_select);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
+        TextView tv_first = (TextView) view.findViewById(R.id.tv_first);
+        TextView tv_second = (TextView) view.findViewById(R.id.tv_second);
         cb_own_agree = (CheckBox) view.findViewById(R.id.cb_own_agree);
         cb_own_disagree = (CheckBox) view.findViewById(R.id.cb_own_disagree);
         cb_def_sel = (CheckBox) view.findViewById(R.id.cb_def_sel);
@@ -67,6 +75,19 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
+        if(!isMan) {//女号--邀请他
+            VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
+            tv_title.setText(getString(R.string.invitation_he_type));
+            if(bean.getBooleanVideochat()) {
+                tv_first.setText(getString(R.string.invitation_he_video));
+            }else if(bean.getBooleanAudiochat()) {
+                tv_second.setText(getString(R.string.invitation_he_audio));
+            }
+            cb_own_agree.setVisibility(View.GONE);
+            cb_own_disagree.setVisibility(View.GONE);
+            ll_def_select.setVisibility(View.GONE);
+            tv_select_ok.setText(getString(R.string.cancel));
+        }
         cb_own_agree.setChecked(true);
     }
 
@@ -74,27 +95,38 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_own_agree:
-                cb_own_agree.setChecked(true);
-                cb_own_disagree.setChecked(false);
+                if(isMan) {
+                    cb_own_agree.setChecked(true);
+                    cb_own_disagree.setChecked(false);
+                }else {// 女性--邀请他(邀请视频)
+                    //TODO
+                }
+
                 break;
             case R.id.rl_own_disagree:
-                cb_own_agree.setChecked(false);
-                cb_own_disagree.setChecked(true);
+                if(isMan) {
+                    cb_own_agree.setChecked(false);
+                    cb_own_disagree.setChecked(true);
+                }else {// 女性--邀请他(邀请语音)
+                    //TODO
+                }
                 break;
             case R.id.tv_select_ok:
-                if (cb_own_agree.isChecked()) {
-                    selectVal = Constant.APPEAR_TYPE_OWN;
-                    if (cb_def_sel.isChecked()) {
-                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
+                if(isMan) {// 男性--看看她
+                    if (cb_own_agree.isChecked()) {
+                        selectVal = Constant.APPEAR_TYPE_OWN;
+                        if (cb_def_sel.isChecked()) {
+                            saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
+                        }
+                    } else if (cb_own_disagree.isChecked()) {
+                        selectVal = Constant.APPEAR_TYPE_NO_OWN;
+                        if (cb_def_sel.isChecked()) {
+                            saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
+                        }
                     }
-                } else if (cb_own_disagree.isChecked()) {
-                    selectVal = Constant.APPEAR_TYPE_NO_OWN;
-                    if (cb_def_sel.isChecked()) {
-                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
-                    }
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                            false, selectVal, channel_uid);
                 }
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                        false, selectVal, channel_uid);
                 dismiss();
                 break;
             default:

@@ -255,7 +255,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             }
         });
 
-        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID) {
+        if (MailSpecialID.customerService.getSpecialID() != whisperID) {
+            privateChat.yTipsLogic(true, false);
             ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
@@ -447,7 +448,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
 //                    }
                     if(privateChat != null) {
-                        privateChat.changeYTipsCount(ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
+                        privateChat.yTipsLogic(true, false);
                     }
                 }
                 break;

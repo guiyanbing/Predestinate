@@ -524,6 +524,15 @@
     <string name="chat_y_tips_buy">立即购买 ></string>
     <string name="chat_y_tips"><Data><![CDATA[<font color=\'#666666\'> 发消息需要Y币，</font><font color=\'#fcbc4c\'>余额：</font><font color=\'#666666\'>%1$d</font>]]> </Data></string>
 
+    <!--看看她/邀请他 弹框-->
+    <string name="invitation_he_type">请选择邀请方式</string>
+    <string name="invitation_he_video">邀请视频</string>
+    <string name="invitation_he_audio">邀请语音</string>
+    <string name="look_at_she_type">请选择自己的出场方式</string>
+    <string name="look_at_she_own">自己露脸</string>
+    <string name="look_at_she_no_own">自己不露脸</string>
+    <string name="look_at_she_def">以后默认此选项</string>
+
     <!--红包记录-->
     <string name="head_title">可提现金额</string>
     <string name="head_unit">元</string>
