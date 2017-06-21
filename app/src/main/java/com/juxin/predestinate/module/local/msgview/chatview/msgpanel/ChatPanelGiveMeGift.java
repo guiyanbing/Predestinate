@@ -56,7 +56,7 @@ public class ChatPanelGiveMeGift extends ChatPanel {
             return false;
         }
 
-        ImageLoader.loadAvatar(context, giftInfo.getPic(), iv_gift_img);
+        ImageLoader.loadFitCenter(context, giftInfo.getPic(), iv_gift_img);
         tv_gift_hello.setText(ModuleMgr.getCenterMgr().getMyInfo().isMan() ?
                 getContext().getString(R.string.chat_gift_hello_man)
                 : getContext().getString(R.string.chat_gift_hello_woman));

@@ -75,7 +75,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
         changeAllStatus(videoVerifyBean.getStatus());
 
         if (!"".equals(videoVerifyBean.getImgurl()) && videoVerifyBean.getStatus() != 0)
-            ImageLoader.loadCenterCrop(this, videoVerifyBean.getImgurl(), ivPic);
+            ImageLoader.loadAsBmpCenterCrop(this, videoVerifyBean.getImgurl(), ivPic);
         if (new File(Video.getPicPath()).exists() && videoVerifyBean.getStatus() != 0) {
             loadLocalVideoImg();
         }
@@ -90,9 +90,10 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
     private void loadLocalVideoImg() {
         try {
             String vp = Video.getPicPath();
-            FileInputStream fis = new FileInputStream(vp);
-            Bitmap bitmap = BitmapFactory.decodeStream(fis);
-            ivVideo.setImageBitmap(bitmap);
+            ImageLoader.loadAsBmpCenterCrop(this, vp, ivVideo);
+//            FileInputStream fis = new FileInputStream(vp);
+//            Bitmap bitmap = BitmapFactory.decodeStream(fis);
+//            ivVideo.setImageBitmap(bitmap);
         } catch (Exception e) {
             PToast.showShort(getResources().getString(R.string.toast_local_video_isnull));
         }
@@ -238,7 +239,7 @@ public class MyAuthenticationVideoAct extends BaseActivity implements View.OnCli
                     }
                     String spic = jsonObject.optJSONObject("res").optString("file_http_path");
                     sPicNoHttp = jsonObject.optJSONObject("res").optString("file_s_path");
-                    ImageLoader.loadCenterCrop(context, spic, ivPic);
+                    ImageLoader.loadAsBmpCenterCrop(context, spic, ivPic);
                     videoVerifyBean.setImgurl(spic);
                     tvMakePic.setVisibility(View.VISIBLE);
                     isMakePhotoOK = true;
