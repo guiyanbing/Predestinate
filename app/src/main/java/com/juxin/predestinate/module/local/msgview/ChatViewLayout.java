@@ -92,6 +92,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
             input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
         }else {
+            //TODO 文档--女性用户需要判断网络状态
             input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
         }
 
