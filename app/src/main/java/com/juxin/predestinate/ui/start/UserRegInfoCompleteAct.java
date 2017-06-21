@@ -185,8 +185,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                         public void onRequestComplete(HttpResponse response) {
                             if (response.isOk()) {
                                 UIShow.showMainClearTask(UserRegInfoCompleteAct.this);
-                            } else {
-                                PToast.showShort(getResources().getString(R.string.loading_reg_update_error));
                             }
                             LoadingDialog.closeLoadingDialog(300);
                         }

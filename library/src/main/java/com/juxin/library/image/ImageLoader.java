@@ -20,7 +20,9 @@ import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -40,7 +42,7 @@ public class ImageLoader {
     private static RoundedCorners roundedCorners;
     private static RoundedCorners roundedCornerTop;
     private static BlurImage blurImage;
-    private static SparseArray<Drawable> cache = new SparseArray<>();//替换图缓存
+//    private static SparseArray<Drawable> cache = new SparseArray<>();//替换图缓存
 
     public static void init(Context context) {
         Context mContext = context.getApplicationContext();
@@ -122,13 +124,23 @@ public class ImageLoader {
         loadStylePic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCornerTop);
     }
 
+    public static <T> void loadRoundFitCenter(Context context, T model, ImageView view,
+                                     int roundPx, int defResImg, int errResImg) {
+        loadRound(context, model, view, roundPx, defResImg, errResImg, bitmapFitCenter, roundedCorners);
+    }
+
     /**
      * @param roundPx 圆角弧度
      */
     public static <T> void loadRound(Context context, T model, ImageView view,
                                      int roundPx, int defResImg, int errResImg) {
+        loadRound(context, model, view, roundPx, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
+    }
+
+    public static <T> void loadRound(Context context, T model, ImageView view,
+                                     int roundPx, int defResImg, int errResImg, final Transformation<Bitmap>... transformation) {
         roundedCorners.setRadius(roundPx);
-        loadStylePic(context, model, view, defResImg, errResImg, bitmapCenterCrop, roundedCorners);
+        loadStylePic(context, model, view, defResImg, errResImg, transformation);
     }
 
     /**
@@ -278,14 +290,14 @@ public class ImageLoader {
             if (isActDestroyed(context))
                 return;
 
-            if (model instanceof Integer && (Integer) model > 0) {
-                int key = getCacheKey((Integer) model, transformation);
-                Drawable drawable = cache.get(key);
-                if (drawable != null && callback != null) {
-                    callback.onResourceReady((GlideDrawable) drawable);
-                    return;
-                }
-            }
+//            if (model instanceof Integer && (Integer) model > 0) {
+//                int key = getCacheKey((Integer) model, transformation);
+//                Drawable drawable = cache.get(key);
+//                if (drawable != null && callback != null) {
+//                    callback.onResourceReady((GlideDrawable) drawable);
+//                    return;
+//                }
+//            }
 
             DrawableRequestBuilder<T> builder = getDrawableBuilder(context, model);
 
@@ -295,10 +307,13 @@ public class ImageLoader {
             builder.into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    if (model instanceof Integer && (Integer) model > 0) {
-                        int key = getCacheKey((Integer) model, transformation);
-                        cache.put(key, resource);
-                    }
+//                    if (model instanceof Integer && (Integer) model > 0) {
+//                        int key = getCacheKey((Integer) model, transformation);
+//                        Drawable drawable = cache.get(key);
+//                        if (drawable == null) {
+//                            cache.put(key, resource);
+//                        }
+//                    }
 
                     if (isActDestroyed(context))
                         return;
@@ -329,8 +344,8 @@ public class ImageLoader {
 
     private static <T> DrawableRequestBuilder<T> getDrawableBuilder(Context context, T model) {
         return getRequest(context, model)
-                .crossFade()
-//                .dontAnimate()
+//                .crossFade()
+                .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE);
     }
 

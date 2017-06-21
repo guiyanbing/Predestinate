@@ -119,7 +119,7 @@ public class UnreadMgr {
      * @param key     注册角标的key
      */
     public void registerBadge(BadgeView badge, boolean isPoint, String key) {
-        if (TextUtils.isEmpty(key)) return;
+        if (badge == null || TextUtils.isEmpty(key)) return;
 
         Unread unread = unreadMap.get(key);
         PLogger.d("registerView：key：" + key + "，isPoint：" + isPoint + "，unread：" + unread);
