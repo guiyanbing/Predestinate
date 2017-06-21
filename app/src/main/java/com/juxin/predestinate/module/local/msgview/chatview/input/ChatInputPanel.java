@@ -204,6 +204,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 ChatMediaPlayer.getInstance().stopPlayVoice();
+                getChatInstance().chatAdapter.moveToBottom();
+
                 chatVoiceRecord.setText("松开结束");
                 chatVoiceRecord.setPressed(true);
 
@@ -282,6 +284,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         showSendBtn(false);
         closeAllInput();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -295,6 +299,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatVoiceRecord.setVisibility(View.INVISIBLE);
 
         showSendBtn();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -307,6 +313,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(false);
         getChatInstance().chatSmilePanel.showToggle();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -337,6 +345,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(true);
         getChatInstance().chatSmilePanel.show(false);
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     public void closeAllInput() {
