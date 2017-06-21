@@ -16,8 +16,12 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.utils.FileUtil;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.album.ImgSelectUtil;
+import com.juxin.predestinate.module.local.statistics.SendPoint;
+import com.juxin.predestinate.module.local.statistics.Statistics;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -55,9 +59,9 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     private String heightValue;
     private String marryValue;
 
-
     private HashMap<String, Object> postParams;
 
+    private String avatarLink = "";
     private boolean ifUpHead = true;             // 是否已设置头像
 
     @Override
@@ -155,6 +159,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_reg_info_upload_photo:
+                Statistics.userBehavior(SendPoint.regist_uploadface_choosepicture);
                 ImgSelectUtil.getInstance().pickPhoto(UserRegInfoCompleteAct.this, this);
                 break;
             case R.id.layout_reg_info_job:
@@ -178,6 +183,11 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                 showChooseDlg(InfoConfig.getInstance().getMarry(), "marry", tv_marry, getResources().getString(R.string.daltitle_marry));
                 break;
             case R.id.user_reg_info_complete_submit:
+                StatisticsUser.registerSuccess(avatarLink,
+                        tv_job.getText().toString(),
+                        tv_edu.getText().toString(),
+                        TypeConvertUtil.toInt(tv_height.getText().toString().replace("cm", "")),
+                        tv_marry.getText().toString());
                 if (validInput()) {
                     LoadingDialog.show(this, getResources().getString(R.string.loading_reg_update));
                     ModuleMgr.getCenterMgr().updateMyInfo(postParams, new RequestComplete() {
@@ -218,7 +228,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
         return true;
     }
 
-
     @Override
     public void onComplete(final String... path) {
         if (path == null || path.length == 0 || TextUtils.isEmpty(path[0])) {
@@ -234,6 +243,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                         if (response.isOk()) {
                             JSONObject jsonObject = response.getResponseJson();
                             String file_path = jsonObject.optString("file_path");
+                            avatarLink = file_path;
                             ImageLoader.loadCircleAvatar(UserRegInfoCompleteAct.this, file_path, img_reg_info_upload_photo);
                             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
                             ifUpHead = true;
@@ -247,7 +257,6 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
             PToast.showShort(getResources().getString(R.string.toast_picpath_error));
         }
     }
-
 
     @Override
     public void onMessage(String key, Object value) {

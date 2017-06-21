@@ -172,11 +172,16 @@ public enum SendPoint {
     welcome_regist, //注册按钮
 
     // --------------登录页---------------
-    login_btnlogin, //登录按钮
-    login_freereg,  //免费注册按钮
+    login_btnlogin,                     //登录按钮
+    login_freereg,                      //免费注册按钮
+    login_findpassword,                 //用户登录->忘记密码(普通点击)
+    login_findpassword_confirm,         //用户登录->忘记密码->确定(上传表单信息)
+    login_findpassword_getverifycode,   //用户登录->忘记密码->获取验证码(上传表单信息)
 
     // --------------注册页---------------
-    regist_btnreg,  // 注册按钮
+    regist_btnreg,                      //注册按钮
+    regist_success,                     //完善个人资料->完成(上传资料信息)
+    regist_uploadface_choosepicture,    //上传头像->相册选取(普通点击)
 
     // --------------登录后引导---------------
     login_guide_onekeysayhello, // 一键打招呼(男用户)
