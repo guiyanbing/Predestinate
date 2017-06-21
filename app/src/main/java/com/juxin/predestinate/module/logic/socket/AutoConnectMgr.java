@@ -269,8 +269,6 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         loginMap.put("ms", Constant.MS_TYPE);
         loginMap.put("imei", ModuleMgr.getAppMgr().getDeviceID());//客户端机器码 安卓imei,IOS为用户码（注册时提交未IMEI里的字段）
         loginMap.put("pkg_name", ModuleMgr.getAppMgr().getPackageName());//客户端包名，主要针对IOS（2017-06-20）
-     //   loginMap.put("net_tp", curTime);//用户上网方式（2017-06-20）Wifi 1 4G 2 3G / 2G 3其它4
-     //   loginMap.put("phone_info", curTime);//手机设备信息（2017-06-20）
         loginMap.put("ontop", App.isForeground() ? 1 : 2);//是否前端在线 (1为前端在线 2为非前端在线)
 
         NetData data = new NetData(uid, TCPConstant.MSG_ID_Login, JSON.toJSONString(loginMap));

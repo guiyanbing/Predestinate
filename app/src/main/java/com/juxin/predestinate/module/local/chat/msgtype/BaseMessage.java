@@ -36,6 +36,7 @@ public class BaseMessage implements IBaseMessage {
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
+        inviteVideo(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
         maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
 
@@ -586,6 +587,9 @@ public class BaseMessage implements IBaseMessage {
             case sysNotice:
                 message = new SysNoticeMessage(bundle, true);
                 break;
+            case inviteVideo:
+                message = new InviteVideoMessage(bundle, true);
+                break;
             default:
                 message = new BaseMessage(bundle, true);
                 break;
@@ -625,6 +629,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case sysNotice:
                 message = new SysNoticeMessage(bundle);
+                break;
+            case inviteVideo:
+                message = new InviteVideoMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -696,6 +703,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case sysNotice:
                 result = "[系统通知]";
+                break;
+            case inviteVideo:
+                result = "[邀请视频]";
                 break;
             case maxVersion:
                 result = "[你的版本过低，无法接收此类消息]";
