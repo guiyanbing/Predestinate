@@ -3,7 +3,6 @@ package com.juxin.predestinate.module.logic.socket;
 import android.os.DeadObjectException;
 import android.os.RemoteException;
 import android.text.TextUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -14,17 +13,14 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.ServerTime;
 import com.juxin.predestinate.module.util.TimerUtil;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
