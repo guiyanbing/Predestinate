@@ -24,6 +24,7 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.my.GiftMessageList;
+import com.juxin.predestinate.bean.my.UserNetInfo;
 import com.juxin.predestinate.module.local.chat.MessageRet;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
@@ -136,6 +137,20 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
     }
 
+    /**
+     * 获取对方网络信息
+     */
+    private void getUserNetInfo() {
+        ModuleMgr.getCommonMgr().getUserNetInfo(whisperID, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+//                    UserNetInfo bean = (UserNetInfo) response.getBaseData();
+//                    net_top_title.setText(getString(R.string.net_status_pre) + bean.getNetType());
+                }
+            }
+        });
+    }
 
     private void initLastGiftList() {
         if (MailSpecialID.customerService.getSpecialID() != whisperID)
@@ -191,7 +206,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         cus_top_img_phone.setOnClickListener(this);
 
         setNickName(name);
-        setOtherNetStatus();
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {//缘分小秘书
             setTitleRightImg(R.drawable.f1_user_ico, new View.OnClickListener() {
                 @Override
@@ -218,11 +232,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private void setOtherNetStatus() {
-        //TODO 对方状态
-        net_top_title.setText(String.valueOf(getResources().getString(R.string.net_status_pre)));
-    }
-
     private void initView() {
         onTitleInit();
 
@@ -231,6 +240,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
         marqueeView = new GiftMessageInfoView(this);
 
+        getUserNetInfo();
         initLastGiftList();
         executeYCoinTask();
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {

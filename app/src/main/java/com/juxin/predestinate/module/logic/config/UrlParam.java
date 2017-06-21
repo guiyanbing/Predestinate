@@ -193,6 +193,8 @@ public enum UrlParam {
 
     AddCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
 
+    GetUserNetInfo(Hosts.FATE_IT_GO, "xs/userinfo/GetUserNetInfo", null, true),  //获取用户设备网络信息
+
     // 最后一个，占位
     LastUrlParam("");
 
