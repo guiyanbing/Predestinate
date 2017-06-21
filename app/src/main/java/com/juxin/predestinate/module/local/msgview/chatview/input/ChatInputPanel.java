@@ -422,7 +422,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 long whisperId = getChatInstance().chatAdapter.getLWhisperId();
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperId);
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
-                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
+                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), true);
             }
         });
     }

@@ -32,6 +32,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private String channel_uid;
     private int selectVal;
     private boolean isMan = true;
+    private boolean isInvate = false;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -48,6 +49,10 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     public void setOtherId(long otherId, String channel_uid) {
         this.otherId = otherId;
         this.channel_uid = channel_uid;
+    }
+
+    public void setIsInvate(boolean isInvate) {
+        this.isInvate = isInvate;
     }
 
     @Override
@@ -76,7 +81,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
-        if(!isMan && (context != null && context instanceof PrivateChatAct)) {//女号--邀请他
+        if(!isMan && isInvate) {//女号--邀请他
             VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
             tv_title.setText(getString(R.string.invitation_he_type));
             rl_own_agree.setVisibility(View.GONE);
@@ -132,7 +137,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                         }
                     }
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                            false, selectVal, channel_uid);
+                            false, selectVal, channel_uid, false);
                 }
                 dismiss();
                 break;

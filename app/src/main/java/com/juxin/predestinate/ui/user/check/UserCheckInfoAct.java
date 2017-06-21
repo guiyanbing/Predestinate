@@ -158,7 +158,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                 case R.id.ll_userinfo_bottom_video: // 底部发视频
                     Statistics.userBehavior(SendPoint.userinfo_btnvideo, userDetail.getUid());
                     VideoAudioChatHelper.getInstance().inviteVAChat(UserCheckInfoAct.this, userDetail.getUid(), VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
-                            Constant.APPEAR_TYPE_NO, String.valueOf(userDetail.getChannel_uid()));
+                            Constant.APPEAR_TYPE_NO, String.valueOf(userDetail.getChannel_uid()), false);
                     break;
 
                 case R.id.ll_userinfo_bottom_voice: // 底部发语音

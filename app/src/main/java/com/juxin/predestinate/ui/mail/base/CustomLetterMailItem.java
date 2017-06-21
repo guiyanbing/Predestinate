@@ -57,7 +57,7 @@ public class CustomLetterMailItem extends CustomBaseMailItem {
 
                 if (videoMessage.isVideoMediaTp()) {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(),
-                            VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO, "");
+                            VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO, "", false);
                 } else {
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), msgData.getLWhisperID(),
                             VideoAudioChatHelper.TYPE_AUDIO_CHAT, "");
