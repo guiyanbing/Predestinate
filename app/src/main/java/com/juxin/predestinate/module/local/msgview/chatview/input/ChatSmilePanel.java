@@ -44,6 +44,9 @@ public class ChatSmilePanel extends ChatViewPanel implements AdapterView.OnItemC
         smilePackageLayouts = (FrameLayout) findViewById(R.id.chat_smile_package_layouts);
         tv_custom_face_del = (TextView) findViewById(R.id.tv_custom_face_del);
 
+        chatSmileCustomPanel = new ChatCustomSmilePanel(getContext(), getChatInstance(), tv_custom_face_del);
+        chatSmileCustomPanel.setData(ModuleMgr.getPhizMgr().getPackages().get(1).getItems());
+
         chatSmileAdapter = new ChatSmileAdapter(getContext(), ModuleMgr.getPhizMgr().getPackages());
         chat_smile_tab.setAdapter(chatSmileAdapter);
         chat_smile_tab.setOnItemClickListener(this);
