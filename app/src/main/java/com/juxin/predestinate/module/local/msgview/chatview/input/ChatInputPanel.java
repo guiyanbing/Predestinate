@@ -438,8 +438,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                UIShow.showBuyCoinActivity(getContext());
-                Statistics.userBehavior(SendPoint.menu_me_y);
+                long whisperId = getChatInstance().chatAdapter.getLWhisperId();
+                UIShow.showYTipsCloseDlg(getContext(), whisperId);
             }
         });
     }
