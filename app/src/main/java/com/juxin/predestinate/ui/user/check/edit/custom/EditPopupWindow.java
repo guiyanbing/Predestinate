@@ -120,7 +120,7 @@ public class EditPopupWindow extends PopupWindow implements OnDismissListener {
                 if (actionId == EditorInfo.IME_ACTION_SEND
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-                    onDismiss();
+                    dismiss();
                 }
                 return false;
             }

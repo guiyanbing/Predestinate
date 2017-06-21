@@ -289,5 +289,7 @@
     <color name="lmarquee_boy_gift">#ff6699</color>
 
     <color name="pay_tel_color">#45A9EF</color>
+
+    <color name="txt_bottom_banned_phone">#9DDBF8</color>
 </resources>
 

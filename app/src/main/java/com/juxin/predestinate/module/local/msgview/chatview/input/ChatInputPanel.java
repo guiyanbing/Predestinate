@@ -28,6 +28,7 @@ import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.user.my.CloseBalanceDlg;
 
 /**
  * 输入面板
@@ -438,8 +439,12 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
-                UIShow.showBuyCoinActivity(getContext());
-                Statistics.userBehavior(SendPoint.menu_me_y);
+                UIShow.showYTipsCloseDlg(getContext(), new CloseBalanceDlg.IsCloseYTips() {
+                    @Override
+                    public void isCloseYTips() {
+                        getChatInstance().chatViewLayout.yTipsLogic();
+                    }
+                });
             }
         });
     }

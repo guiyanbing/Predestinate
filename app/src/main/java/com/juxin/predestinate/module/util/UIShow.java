@@ -62,6 +62,7 @@ import com.juxin.predestinate.ui.pay.wepayother.qrcode.OpenWxDialog;
 import com.juxin.predestinate.ui.pay.wepayother.qrcode.WepayQRCodeAct;
 import com.juxin.predestinate.ui.push.WebPushDialog;
 import com.juxin.predestinate.ui.setting.AboutAct;
+import com.juxin.predestinate.ui.setting.BottomBannedDialog;
 import com.juxin.predestinate.ui.setting.SearchTestActivity;
 import com.juxin.predestinate.ui.setting.SettingAct;
 import com.juxin.predestinate.ui.setting.SuggestAct;
@@ -92,6 +93,7 @@ import com.juxin.predestinate.ui.user.check.secret.dialog.SecretVideoPlayerAct;
 import com.juxin.predestinate.ui.user.check.self.album.UserPhotoAct;
 import com.juxin.predestinate.ui.user.my.AskForGiftDialog;
 import com.juxin.predestinate.ui.user.my.BottomGiftDialog;
+import com.juxin.predestinate.ui.user.my.CloseBalanceDlg;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
 import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
@@ -1051,6 +1053,21 @@ public class UIShow {
         }
     }
 
+    private static BottomBannedDialog bannedDialog = null;
+
+    /**
+     * 账号封禁弹框
+     *
+     * @param context
+     * @param isLogin 是否处于登录状态
+     */
+    public static void showBottomBannedDlg(final Context context,final boolean isLogin) {
+        bannedDialog = null;
+        bannedDialog = new BottomBannedDialog();
+        bannedDialog.setCtx(context,isLogin);
+        bannedDialog.showDialog((FragmentActivity) context);
+    }
+
     /**
      * 看看她
      * 出场方式选项
@@ -1059,6 +1076,16 @@ public class UIShow {
         LookAtHerDlg dialog = new LookAtHerDlg();
         dialog.setContext(context);
         dialog.setOtherId(otherId, channel_uid);
+        dialog.showDialog((FragmentActivity) context);
+    }
+
+    /**
+     * 关闭余额提示
+     */
+    public static void showYTipsCloseDlg(final Context context, CloseBalanceDlg.IsCloseYTips callBack) {
+        CloseBalanceDlg dialog = new CloseBalanceDlg();
+        dialog.setContext(context);
+        dialog.setIsCloseYTips(callBack);
         dialog.showDialog((FragmentActivity) context);
     }
 

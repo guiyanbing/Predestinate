@@ -279,9 +279,8 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if (complete != null) complete.onRequestComplete(response);
                 if (response.isOk()) {
                     reqMyInfo();
-                    return;
                 }
-                PToast.showShort("修改失败");
+                PToast.showShort(response.getMsg());
             }
         });
     }

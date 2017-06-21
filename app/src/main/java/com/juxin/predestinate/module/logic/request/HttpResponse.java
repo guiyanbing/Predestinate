@@ -115,7 +115,7 @@ public class HttpResponse extends BaseData {
         JSONObject json = getJsonObject(responseString);
 
         status = json.optString("status", json.optString("result", json.optString("respCode")));
-        msg = json.optString("msg");
+        msg = json.optString("msg", json.optString("content"));
 
         //------请求返回的数据体处理------
 

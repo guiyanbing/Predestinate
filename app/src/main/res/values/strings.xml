@@ -81,7 +81,6 @@
     <string name="txt_noheard_ts">温馨提示：请上传清晰美观的个人近照，上传宠物、照片不清晰、裸露的照片不予通过</string>
     <string name="txt_head_ts">温馨提示：请上传真实、清晰美观的个人近照，上传宠物照、照片不清晰、裸露的照片不予通过</string>
 
-
     <!-- 个人中心 -->
     <string name="copy">复制</string>
     <string name="center_my_invite_code">我的邀请码：%s</string>
@@ -184,6 +183,7 @@
     <string name="txt_customerservice_phone">客服电话:</string>
     <string name="txt_customerservice_bind_desc">绑定过程中遇到问题，可联系在线客服获得帮助</string>
     <string name="txt_customerservice_complete_desc">联系在线客服，反馈意见，获得帮助</string>
+    <string name="txt_customerservice_phone_default">0731-89746010</string>
 
     <!--设置-->
     <string name="txt_set_account">当前账号：input_field@163.com</string>
@@ -522,7 +522,7 @@
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
     <string name="chat_y_tips_buy">立即购买 ></string>
-    <string name="chat_y_tips"><Data><![CDATA[<font color=\'#666666\'> 发消息需要Y币,</font><font color=\'#fcbc4c\'>余额:</font><font color=\'#666666\'>%1$d</font>]]> </Data></string>
+    <string name="chat_y_tips"><Data><![CDATA[<font color=\'#666666\'> 发消息需要Y币，</font><font color=\'#fcbc4c\'>余额：</font><font color=\'#666666\'>%1$d</font>]]> </Data></string>
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>
@@ -771,4 +771,10 @@
     <!-- =================支付 start================= -->
     <string name="pay_alipay_not_install">支付出错，请检查支付宝是否安装！</string>
     <!-- =================支付 end================= -->
+       <!-- =================封禁弹框================= -->
+    <string name="dal_bottom_banned_title">抱歉暂时无法登录</string>
+    <string name="dal_bottom_banned_desc">由于您被多人举报，被限制登录</string>
+    <string name="dal_bottom_banned_cus_tip">如有疑问，请联系客服:</string>
+    <!-- =================封禁弹框 end================= -->
+
 </resources>
