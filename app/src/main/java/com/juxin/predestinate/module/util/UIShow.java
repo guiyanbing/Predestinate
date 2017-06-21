@@ -1069,13 +1069,13 @@ public class UIShow {
     }
 
     /**
-     * 看看她
-     * 出场方式选项
+     * 看看她出场 / 邀请她方式选项
      */
-    public static void showLookAtHerDlg(final Context context, long otherId, String channel_uid) {
+    public static void showLookAtHerDlg(final Context context, long otherId, String channel_uid, boolean isInvate) {
         LookAtHerDlg dialog = new LookAtHerDlg();
         dialog.setContext(context);
         dialog.setOtherId(otherId, channel_uid);
+        dialog.setIsInvate(isInvate);
         dialog.showDialog((FragmentActivity) context);
     }
 

@@ -134,7 +134,7 @@ public class MyURLSpan extends ClickableSpan {
                 //发起视频聊天
                 case URL_TYPE_INVITE_VIDEO:
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) App.getActivity(),
-                            otherID, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO, channel_uid);
+                            otherID, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true, Constant.APPEAR_TYPE_NO, channel_uid, false);
                     break;
                 //送礼提示
                 case URL_TYPE_SEND_GIFT:

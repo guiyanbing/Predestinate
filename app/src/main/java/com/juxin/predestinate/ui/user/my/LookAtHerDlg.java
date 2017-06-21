@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 
 /**
  * 创建日期：2017/6/7
@@ -30,6 +32,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private String channel_uid;
     private int selectVal;
     private boolean isMan = true;
+    private boolean isInvate = false;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -46,6 +49,10 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     public void setOtherId(long otherId, String channel_uid) {
         this.otherId = otherId;
         this.channel_uid = channel_uid;
+    }
+
+    public void setIsInvate(boolean isInvate) {
+        this.isInvate = isInvate;
     }
 
     @Override
@@ -74,11 +81,24 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
-        if(!isMan) {
+        if(!isMan && isInvate) {//女号--邀请他
+            VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
             tv_title.setText(getString(R.string.invitation_he_type));
-            tv_first.setText(getString(R.string.invitation_he_video));
-            tv_second.setText(getString(R.string.invitation_he_audio));
+            rl_own_agree.setVisibility(View.GONE);
+            rl_own_disagree.setVisibility(View.GONE);
+            cb_own_agree.setVisibility(View.GONE);
+            cb_own_disagree.setVisibility(View.GONE);
             ll_def_select.setVisibility(View.GONE);
+
+            if(bean.getBooleanVideochat()) {
+                tv_first.setText(getString(R.string.invitation_he_video));
+                rl_own_agree.setVisibility(View.VISIBLE);
+            }
+            if(bean.getBooleanAudiochat()) {
+                tv_second.setText(getString(R.string.invitation_he_audio));
+                rl_own_agree.setVisibility(View.VISIBLE);
+            }
+            tv_select_ok.setText(getString(R.string.cancel));
         }
         cb_own_agree.setChecked(true);
     }
@@ -87,12 +107,21 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_own_agree:
-                cb_own_agree.setChecked(true);
-                cb_own_disagree.setChecked(false);
+                if(isMan) {
+                    cb_own_agree.setChecked(true);
+                    cb_own_disagree.setChecked(false);
+                }else {// 女性--邀请他(邀请视频)
+                    //TODO
+                }
+
                 break;
             case R.id.rl_own_disagree:
-                cb_own_agree.setChecked(false);
-                cb_own_disagree.setChecked(true);
+                if(isMan) {
+                    cb_own_agree.setChecked(false);
+                    cb_own_disagree.setChecked(true);
+                }else {// 女性--邀请他(邀请语音)
+                    //TODO
+                }
                 break;
             case R.id.tv_select_ok:
                 if(isMan) {// 男性--看看她
@@ -108,9 +137,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                         }
                     }
                     VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                            false, selectVal, channel_uid);
-                }else {// 女性--邀请他
-                    //TODO 女性邀请方式
+                            false, selectVal, channel_uid, false);
                 }
                 dismiss();
                 break;

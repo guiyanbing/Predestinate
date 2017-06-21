@@ -129,10 +129,11 @@ public class VideoAudioChatHelper {
      * @param type
      * @param flag       判断是否显示进场dlg
      * @param singleType 非默认情况值, 0:还没选择,1:自己露脸，2:自己不露脸
+     * @param isInvate 是否来自邀请他按钮，只有女号有。布局和出场方式 singleType 不同
      */
-    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid) {
+    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid, boolean isInvate) {
         if (flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0) {
-            UIShow.showLookAtHerDlg(context, dstUid, channel_uid);
+            UIShow.showLookAtHerDlg(context, dstUid, channel_uid, isInvate);
             return;
         }
         this.singleType = singleType;

@@ -529,6 +529,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         UIShow.showChatRedBoxDialog((Activity) App.getActivity(), red_log_id, content);
     }
 
+    /**
+     * 系统消息
+     * @param message
+     */
     private void setSystemMsg(BaseMessage message) {
         if (message != null && !(message instanceof SystemMessage)) return;
         SystemMessage mess = (SystemMessage) message;
@@ -556,6 +560,5 @@ public class ChatListMgr implements ModuleBase, PObserver {
             util.addTimerTask(mInviteVideoMessage.getInvite_id(),timeCount);
         }
     }
-
 
 }

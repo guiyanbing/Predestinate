@@ -137,8 +137,7 @@ public class DBCenterFMessage {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                long ret = insertOneMsg(baseMessage);
-                DBCenter.makeDBCallback(callback, ret);
+                DBCenter.makeDBCallback(callback, insertOneMsg(baseMessage));
             }
         });
     }
@@ -205,7 +204,6 @@ public class DBCenterFMessage {
     }
 
     public void updateMsgFStatus(final long msgID, final DBCallback callback) {
-
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -248,7 +246,6 @@ public class DBCenterFMessage {
                 DBCenter.makeDBCallback(callback, MessageConstant.OK);
             }
         });
-
     }
 
     public void updateStatusFail(final DBCallback callback) {
@@ -319,7 +316,8 @@ public class DBCenterFMessage {
      * @param sendID
      * @return
      */
-    public void updateOtherSideRead(final String channelID, final String userID, @NonNull final String sendID, final long msgID, final DBCallback callback) {
+    public void updateOtherSideRead(final String channelID, final String userID,
+                                    @NonNull final String sendID, final long msgID, final DBCallback callback) {
 
         handler.post(new Runnable() {
             @Override
@@ -478,7 +476,6 @@ public class DBCenterFMessage {
         ArrayList<BaseMessage> result = new ArrayList<>();
         try {
             cursor = query.run();
-
             while (cursor != null && cursor.moveToNext()) {
                 Bundle bundle = new Bundle();
                 bundle.putLong(FMessage._ID, CursorUtil.getLong(cursor, FMessage._ID));
