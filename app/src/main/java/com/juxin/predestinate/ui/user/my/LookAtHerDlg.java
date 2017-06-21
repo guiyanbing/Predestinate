@@ -75,9 +75,9 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         tv_select_ok.setOnClickListener(this);
 
         if(!isMan) {
-            tv_title.setText("请选择邀请方式");
-            tv_first.setText("邀请视频");
-            tv_second.setText("邀请语音");
+            tv_title.setText(getString(R.string.invitation_he_type));
+            tv_first.setText(getString(R.string.invitation_he_video));
+            tv_second.setText(getString(R.string.invitation_he_audio));
             ll_def_select.setVisibility(View.GONE);
         }
         cb_own_agree.setChecked(true);
