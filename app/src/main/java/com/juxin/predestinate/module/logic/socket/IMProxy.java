@@ -477,7 +477,6 @@ public class IMProxy {
                 showInvalidDialog((FragmentActivity) App.getActivity(), "账号无效，请重新登录。");
                 break;
             case 3:// 账号被封消息
-
                 break;
             default:
                 break;

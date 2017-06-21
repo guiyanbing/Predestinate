@@ -488,8 +488,8 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
                 }
 
                 if (data.getMsgType() == TCPConstant.MSG_ID_Account_Closed) {//账号被封消息
-                    String unban_tm = contentObject.optString("unban_tm");
-                    accountInvalid(3, unban_tm);
+                   // String unban_tm = contentObject.optString("unban_tm");
+                    accountInvalid(3, content);
                     return;
                 }
 

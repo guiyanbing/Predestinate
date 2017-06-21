@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.NoSaveMsgType;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.App;
@@ -137,9 +138,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 return;
             }
 
-            if (BaseMessage.Follow_MsgType == message.getType() ||
-                    BaseMessage.RedEnvelopesBalance_MsgType == message.getType() ||
-                    BaseMessage.System_MsgType == message.getType()) {
+            if(NoSaveMsgType.getNoSaveMsgType(message.getType()) != null){
                 isSave = false;
             }
 

@@ -49,14 +49,6 @@ public class BaseMessage implements IBaseMessage {
             this.msgType = msgType;
         }
 
-        public static BaseMessageType getMsgType(int msgType) {
-            if(MessageConstant.isMaxVersionMsg(msgType)){
-                return BaseMessageType.maxVersion;
-            }
-
-            return BaseMessageType.valueOf(String.valueOf(msgType));
-        }
-
         public static BaseMessageType valueOf(int msgType) {
             if(MessageConstant.isMaxVersionMsg(msgType)){
                 return BaseMessageType.maxVersion;
@@ -76,13 +68,14 @@ public class BaseMessage implements IBaseMessage {
     }
 
     /**
-     * 消息类型，进行未读消息比对
+     * 消息类型，特殊地方方便用
      */
     public static final int Follow_MsgType = 5;//关注
     public static final int System_MsgType = 7;//系统消息
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
     public static final int video_MsgType = 24;//视频消息
+
 
     @Override
     public BaseMessage parseJson(String jsonStr) {
