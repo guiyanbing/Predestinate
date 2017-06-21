@@ -89,6 +89,12 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
 
+        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+            input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
+        }else {
+            input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
+        }
+
         yTipsLogic();
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -153,7 +159,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     /**
      * 改变Y值
      */
-    public void changeYTipsCount(int yCoin) {
+    private void changeYTipsCount(int yCoin) {
         if(tv_y_tips_count == null) return;
         tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
     }

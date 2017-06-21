@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private long otherId;
     private String channel_uid;
     private int selectVal;
+    private boolean isMan = true;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
 
     public LookAtHerDlg() {
@@ -51,6 +53,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         super.onCreateView(inflater, container, savedInstanceState);
         setContentView(R.layout.f1_look_at_her_dlg);
         View view = getContentView();
+        isMan = ModuleMgr.getCenterMgr().getMyInfo().isMan();
         initView(view);
         return view;
     }
@@ -58,6 +61,10 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private void initView(View view) {
         RelativeLayout rl_own_agree = (RelativeLayout) view.findViewById(R.id.rl_own_agree);
         RelativeLayout rl_own_disagree = (RelativeLayout) view.findViewById(R.id.rl_own_disagree);
+        LinearLayout ll_def_select = (LinearLayout) view.findViewById(R.id.ll_def_select);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
+        TextView tv_first = (TextView) view.findViewById(R.id.tv_first);
+        TextView tv_second = (TextView) view.findViewById(R.id.tv_second);
         cb_own_agree = (CheckBox) view.findViewById(R.id.cb_own_agree);
         cb_own_disagree = (CheckBox) view.findViewById(R.id.cb_own_disagree);
         cb_def_sel = (CheckBox) view.findViewById(R.id.cb_def_sel);
@@ -67,6 +74,12 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
+        if(!isMan) {
+            tv_title.setText("请选择邀请方式");
+            tv_first.setText("邀请视频");
+            tv_second.setText("邀请语音");
+            ll_def_select.setVisibility(View.GONE);
+        }
         cb_own_agree.setChecked(true);
     }
 
@@ -82,19 +95,23 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                 cb_own_disagree.setChecked(true);
                 break;
             case R.id.tv_select_ok:
-                if (cb_own_agree.isChecked()) {
-                    selectVal = Constant.APPEAR_TYPE_OWN;
-                    if (cb_def_sel.isChecked()) {
-                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
+                if(isMan) {// 男性--看看她
+                    if (cb_own_agree.isChecked()) {
+                        selectVal = Constant.APPEAR_TYPE_OWN;
+                        if (cb_def_sel.isChecked()) {
+                            saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_OWN);
+                        }
+                    } else if (cb_own_disagree.isChecked()) {
+                        selectVal = Constant.APPEAR_TYPE_NO_OWN;
+                        if (cb_def_sel.isChecked()) {
+                            saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
+                        }
                     }
-                } else if (cb_own_disagree.isChecked()) {
-                    selectVal = Constant.APPEAR_TYPE_NO_OWN;
-                    if (cb_def_sel.isChecked()) {
-                        saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
-                    }
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                            false, selectVal, channel_uid);
+                }else {// 女性--邀请他
+                    //TODO 女性邀请方式
                 }
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                        false, selectVal, channel_uid);
                 dismiss();
                 break;
             default:

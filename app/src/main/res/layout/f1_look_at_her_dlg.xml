@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_title"
         style="@style/common_list_item"
         android:gravity="center"
         android:paddingBottom="@dimen/px35_dp"
@@ -18,6 +19,7 @@
         style="@style/center_set_item">
 
         <TextView
+            android:id="@+id/tv_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -46,6 +48,7 @@
         style="@style/center_set_item">
 
         <TextView
+            android:id="@+id/tv_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -70,6 +73,7 @@
         android:background="@color/bg_color" />
 
     <LinearLayout
+        android:id="@+id/ll_def_select"
         style="@style/common_list_item"
         android:gravity="right|center"
         android:orientation="horizontal"
