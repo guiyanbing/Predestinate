@@ -36,8 +36,8 @@
 
                 <ImageView
                     android:id="@+id/input_look_at_her"
-                    android:layout_width="@dimen/px150_dp"
-                    android:layout_height="@dimen/px150_dp"
+                    android:layout_width="@dimen/px135_dp"
+                    android:layout_height="@dimen/px135_dp"
                     android:layout_above="@+id/input_giftview"
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px35_dp"
@@ -47,8 +47,8 @@
 
                 <ImageView
                     android:id="@+id/input_giftview"
-                    android:layout_width="@dimen/px150_dp"
-                    android:layout_height="@dimen/px150_dp"
+                    android:layout_width="@dimen/px135_dp"
+                    android:layout_height="@dimen/px135_dp"
                     android:layout_alignBottom="@+id/chat_content_list"
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px35_dp"
@@ -68,7 +68,8 @@
                     android:paddingBottom="@dimen/px15_dp"
                     android:paddingLeft="@dimen/px30_dp"
                     android:paddingRight="@dimen/px30_dp"
-                    android:paddingTop="@dimen/px15_dp">
+                    android:paddingTop="@dimen/px15_dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_y_tips_count"
