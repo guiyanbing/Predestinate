@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -89,11 +92,21 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
 
-        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//男--看看她
             input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
-        }else {
-            //TODO 文档--女性用户需要判断网络状态
-            input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
+        }else {//男--邀请他
+            String whisperId = chatInstance.chatAdapter.getWhisperId();
+            if(TextUtils.isEmpty(whisperId)) {
+                input_look_at_her.setVisibility(View.GONE);
+            }else {
+                UserInfoLightweight userInfoLightweight = chatInstance.chatAdapter.getUserInfo(TypeConvertUtil.toLong(whisperId));
+                if(userInfoLightweight.isOnline()) {
+                    input_look_at_her.setVisibility(View.VISIBLE);
+                    input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
+                }else {
+                    input_look_at_her.setVisibility(View.GONE);
+                }
+            }
         }
 
         yTipsLogic(false, false);

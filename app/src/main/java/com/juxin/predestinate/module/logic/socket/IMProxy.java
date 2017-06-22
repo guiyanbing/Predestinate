@@ -495,7 +495,7 @@ public class IMProxy {
                     if (TextUtils.isEmpty(content)) {
                         JSONObject contentObject = new JSONObject(content);
                         String unban_tm = contentObject.optString("unban_tm");
-
+                        UIShow.showBottomBannedDlg(App.getContext(), true, unban_tm);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

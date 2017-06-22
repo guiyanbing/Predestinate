@@ -34,10 +34,7 @@ public class ChatSmileAdapter extends ExBaseAdapter<SmilePackage> {
 
         SmilePackage smileItem = getItem(position);
 
-      //  ImageLoader.loadAvatar(getContext(), smileItem.getIcon(), vh.smile_package_ico);
-
         vh.smile_package_name.setText(smileItem.getName());
-
         vh.smile_package_name.setSelected(position == selectPos);
         vh.smile_package_name.setTextColor(getResources().getColor(position == selectPos ? R.color.color_E36D87 : R.color.color_zhuyao));
         return convertView;

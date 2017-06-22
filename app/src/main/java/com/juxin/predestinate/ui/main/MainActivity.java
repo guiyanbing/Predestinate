@@ -17,9 +17,11 @@ import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.BadgeView;
+import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.common.CommonMgr;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
@@ -27,7 +29,9 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.model.impl.AppMgrImpl;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
+import com.juxin.predestinate.module.logic.model.mgr.AppMgr;
 import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -70,6 +74,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         initListenerAndRequest();
         initData();
+        updateNetInfo();
     }
 
     private void initData() {
@@ -92,6 +97,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         showSayHelloDialog();//判断男性展示一键打招呼弹窗
         UIShow.showWantMoneyDlg(this);//判断女性展示索要礼物弹窗
+    }
+
+    /**
+     * 设置用户设备网络信息
+     */
+    private void updateNetInfo() {
+        ModuleMgr.getCommonMgr().updateNetInfo(NetworkUtils.getNetWorkType(App.getContext()), ModuleMgr.getAppMgr().getPhoneMode(), new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                //是否设置成功
+            }
+        });
     }
 
     /**
@@ -309,6 +326,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             case MsgType.MT_Unread_change:
                 ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
+                break;
+
+            case MsgType.MT_Net_Change:
+                updateNetInfo();
                 break;
 
             default:

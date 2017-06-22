@@ -164,4 +164,9 @@ public class MsgType {
      */
     public static final String MT_Time_Change = "MT_MyTime_Change";
 
+    /**
+     * 网络变更
+     */
+    public static final String MT_Net_Change = "MT_Net_Change";
+
 }

@@ -1086,7 +1086,7 @@ public class UIShow {
     /**
      * 邀请过期弹框
      */
-    public static void showInvitaExpiredDlg(final Context context, long otherId, String channel_uid, String type, int price) {
+    public static void showInvitaExpiredDlg(final Context context, long otherId, String channel_uid, int type, int price) {
         InvitationExpiredDlg dialog = new InvitationExpiredDlg();
         dialog.setData(context,otherId,channel_uid,type,price);
         dialog.showDialog((FragmentActivity) context);
