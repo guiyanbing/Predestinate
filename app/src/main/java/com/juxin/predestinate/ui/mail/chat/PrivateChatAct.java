@@ -145,8 +145,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
-//                    UserNetInfo bean = (UserNetInfo) response.getBaseData();
-//                    net_top_title.setText(getString(R.string.net_status_pre) + bean.getNetType());
+                    UserNetInfo userNetInfo = new UserNetInfo();
+                    userNetInfo.parseJson(response.getResponseString());
+                    net_top_title.setText(getString(R.string.net_status_pre) + userNetInfo.getNetType());
                 }
             }
         });
