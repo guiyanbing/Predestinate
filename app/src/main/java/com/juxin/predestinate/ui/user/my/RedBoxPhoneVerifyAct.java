@@ -11,13 +11,14 @@ import android.widget.EditText;
 import com.juxin.library.log.PToast;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.my.PhoneVerifyInfo;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.bean.my.PhoneVerifyInfo;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.CountdownUtil;
 
 import java.util.regex.Matcher;
@@ -27,7 +28,7 @@ import java.util.regex.Pattern;
  * 手机验证
  * Created by zm on 2017/4/27
  */
-public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickListener,RequestComplete,CountdownUtil.TimeListener{
+public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickListener, RequestComplete, CountdownUtil.TimeListener {
 
     private EditText edtPhoneNum;
     private EditText edtPhoneCode;
@@ -36,6 +37,9 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
     private String phoneNum;
     private CountdownUtil mCountdownUtil;
 
+
+    private int authIDCard = 105;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +47,7 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.phone_verify));
 
@@ -57,7 +61,7 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.phone_verify_bt_take_phone_code://获取验证码
                 reqPhoneCode();
                 break;
@@ -68,6 +72,7 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
                 break;
         }
     }
+
     //判断是否是手机号
     public static boolean isPhoneNum(String phoneNum) {
         Pattern pattern = Pattern.compile("^((13[0-9])|(14[5,7,9])|(15[^4,\\D])|(17[0,1,3,5-8])|(18[0-9]))\\d{8}$");
@@ -79,17 +84,17 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
      * 获取手机验证码p
      */
     private void reqPhoneCode() {
-        if(!NetworkUtils.isConnected(RedBoxPhoneVerifyAct.this)) {//无网络
+        if (!NetworkUtils.isConnected(RedBoxPhoneVerifyAct.this)) {//无网络
             return;
         }
         phoneNum = edtPhoneNum.getText().toString().trim();
         if (phoneOrCodeIsEmpty(phoneNum)) return;
-        LoadingDialog.show(this,getString(R.string.tip_loading_submit));
+        LoadingDialog.show(this, getString(R.string.tip_loading_submit));
         ModuleMgr.getCommonMgr().sendSMS(phoneNum, this);
         btnPhoneverifyNext.setEnabled(false);
     }
 
-    private boolean phoneOrCodeIsEmpty(String phoneNum){
+    private boolean phoneOrCodeIsEmpty(String phoneNum) {
         if (TextUtils.isEmpty(phoneNum)) {
             PToast.showShort(getString(R.string.toast_phone_isnull));
             return true;
@@ -114,8 +119,8 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
             PToast.showShort(getString(R.string.toast_code_isnull));
             return;
         }
-        LoadingDialog.show(this,getString(R.string.tip_loading_submit));
-        ModuleMgr.getCommonMgr().bindCellPhone(code,phoneNum,this);
+        LoadingDialog.show(this, getString(R.string.tip_loading_submit));
+        ModuleMgr.getCommonMgr().bindCellPhone(code, phoneNum, this);
     }
 
     @Override
@@ -126,20 +131,20 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
         PhoneVerifyInfo info = new PhoneVerifyInfo();
         info.parseJson(response.getResponseString());
 
-        if (response.getUrlParam() == UrlParam.sendSMS){
+        if (response.getUrlParam() == UrlParam.sendSMS) {
             switch (info.getResCode()) {
                 case PhoneVerifyInfo.VERIFICATIONCODE_ERROR:
-                    PToast.showLong(response.getMsg()+"");
+                    PToast.showLong(response.getMsg() + "");
                     break;
                 case PhoneVerifyInfo.VERIFICATIONCODE_SUCCEED:
                     btnPhoneverifyNext.setEnabled(true);
                     //计时
-                    if (mCountdownUtil == null){
+                    if (mCountdownUtil == null) {
                         mCountdownUtil = new CountdownUtil();
                         mCountdownUtil.setOnTimeListener(RedBoxPhoneVerifyAct.this).start();
                         break;
                     }
-                    if (mCountdownUtil != null && !mCountdownUtil.isAlive()){
+                    if (mCountdownUtil != null && !mCountdownUtil.isAlive()) {
                         mCountdownUtil = new CountdownUtil();
                         mCountdownUtil.setOnTimeListener(RedBoxPhoneVerifyAct.this).start();
                         break;
@@ -155,7 +160,7 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
             }
             return;
         }
-        if (response.isOk()){
+        if (response.isOk()) {
             btTakePhoneCode.setEnabled(true);
             switch (info.getResCode()) {
                 case PhoneVerifyInfo.VERIFICATIONCODE_ERROR:
@@ -165,8 +170,19 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
                     PToast.showLong(getString(R.string.toast_code_succeed));
                     ModuleMgr.getCenterMgr().getMyInfo().setVerifyCellphone(true);
                     ModuleMgr.getCenterMgr().getMyInfo().setMobile(phoneNum);
-                    startActivity(new Intent(this, WithDrawApplyAct.class));
-                    this.finish();
+                    int status = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getStatus();
+                    if (status <= 0) {//是否进行了身份认证
+                        UIShow.showIDCardAuthenticationAct(this, authIDCard);
+                        finish();
+                        break;
+                    }
+                    if (status != 2) {//身份认证还未通过
+                        PToast.showShort(R.string.the_identity_certification_audit);
+                        finish();
+                        break;
+                    }
+                    UIShow.showWithDrawApplyAct(0, 0, false, this);
+                    finish();
                     break;
                 case PhoneVerifyInfo.PHONE_INKED:
                     PToast.showLong(getString(R.string.please_send_verification_code));
@@ -182,7 +198,7 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onTimeListener(final int time) {
-        if (btTakePhoneCode != null){
+        if (btTakePhoneCode != null) {
             RedBoxPhoneVerifyAct.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -202,9 +218,15 @@ public class RedBoxPhoneVerifyAct extends BaseActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mCountdownUtil != null && mCountdownUtil.isAlive()){//退出时停止计时
+        if (mCountdownUtil != null && mCountdownUtil.isAlive()) {//退出时停止计时
             mCountdownUtil.setOnTimeListener(null);
             mCountdownUtil.setStop(true);
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
