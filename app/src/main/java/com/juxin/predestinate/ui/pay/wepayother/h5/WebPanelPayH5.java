@@ -55,8 +55,6 @@ public class WebPanelPayH5 extends BasePanel {
 
 
     private void toWeixin(String url) {
-        if(null != h5PayStart)
-            h5PayStart.OnPayStart();
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         if (intent.resolveActivity(context.getPackageManager()) != null) {
@@ -64,6 +62,8 @@ public class WebPanelPayH5 extends BasePanel {
         } else {
             PToast.showShort("微信未安装");
         }
+        if(null != h5PayStart)
+            h5PayStart.OnPayStart();
     }
 
     public String getHostName(String urlString) {
