@@ -87,15 +87,17 @@
                 android:layout_marginTop="@dimen/px60_dp"
                 android:text="@string/bt_login"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/txt_user_reset_pw"
                 android:layout_width="wrap_content"
                 android:layout_height="40dip"
-                android:layout_marginTop="10dip"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dip"
                 android:text="@string/txt_forget_password"
                 android:textColor="@color/text_ciyao_gray"
                 android:textSize="@dimen/px36_sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -130,10 +132,10 @@
             <ListView
                 android:id="@+id/list_user_login_account"
                 android:layout_width="match_parent"
-                android:divider="@color/color_DDDDDD"
-                android:dividerHeight="1px"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:divider="@color/color_DDDDDD"
+                android:dividerHeight="1px"
                 android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>

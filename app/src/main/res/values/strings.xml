@@ -532,6 +532,8 @@
     <string name="look_at_she_own">自己露脸</string>
     <string name="look_at_she_no_own">自己不露脸</string>
     <string name="look_at_she_def">以后默认此选项</string>
+    <string name="face_is_already_exist">该表情已存在</string>
+    <string name="back_call_bt">立即回拨（%d钻石/分钟）</string>
 
     <!--红包记录-->
     <string name="head_title">可提现金额</string>

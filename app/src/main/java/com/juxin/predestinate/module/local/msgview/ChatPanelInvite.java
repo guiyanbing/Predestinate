@@ -15,6 +15,7 @@ import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.util.CountDownTimerUtil;
+import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.my.TimeMgr;
 
 import static com.juxin.predestinate.R.id.ll_invite_connect;
@@ -126,7 +127,8 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     //接通逻辑
                     break;
                 }
-                //回拨逻辑
+
+//                UIShow.showInvitaExpiredDlg(context, id, mInviteVideoMessage.getPrice());
                 break;
         }
     }

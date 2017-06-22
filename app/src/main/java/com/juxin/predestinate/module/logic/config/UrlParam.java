@@ -62,9 +62,9 @@ public enum UrlParam {
     // 获取用户验证信息(密)
     getVerifyStatus("User/getVerifyStatus", true),
     //女性单邀音视频
-    girlSingleInviteVa(Hosts.FATE_IT_GO,"/xs/message/VCCustomInvite", null, true),
+    girlSingleInviteVa(Hosts.FATE_IT_GO,"xs/message/VCCustomInvite", null, true),
     //女性群邀视频
-    girlGroupInviteVa(Hosts.FATE_IT_GO, "/xs/message/VCGroupInvite", null, true),
+    girlGroupInviteVa(Hosts.FATE_IT_GO, "xs/message/VCGroupInvite", null, true),
 
     //============================== 用户资料相关接口 =============================
     reqSetInfo("i/uinfo/SecSetInfo", true),                   // 用户设置更新
@@ -192,6 +192,8 @@ public enum UrlParam {
     delCustomFace(Hosts.FATE_IT_GO, "xs/message/DelCustomFace", null, true),   //删除自定义表情
 
     AddCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
+
+    GetUserNetInfo(Hosts.FATE_IT_GO, "xs/userinfo/GetUserNetInfo", null, true),  //获取用户设备网络信息
 
     // 最后一个，占位
     LastUrlParam("");

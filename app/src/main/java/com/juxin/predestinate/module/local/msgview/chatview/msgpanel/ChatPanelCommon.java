@@ -188,7 +188,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
 
         String url = msg.getLocalImg();
         if (TextUtils.isEmpty(url)) url = msg.getImg();
-        ImageLoader.loadRound(getContext(), url, chat_item_img);
+        ImageLoader.loadRoundFitCenter(getContext(), url, chat_item_img);
     }
 
     /**

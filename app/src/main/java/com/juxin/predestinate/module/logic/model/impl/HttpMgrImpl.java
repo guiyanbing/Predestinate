@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
@@ -124,14 +125,24 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
-    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
+    public HTCallBack download(final String url, final String filePath, final DownloadListener downloadListener) {
         if (TextUtils.isEmpty(url)) {
             if (downloadListener != null)
-                downloadListener.onFail(url, new NullPointerException("The download url is empty."));
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        downloadListener.onFail(url, new NullPointerException("The download url is empty."));
+                    }
+                });
             return new HTCallBack();
         }
         if (FileUtil.isExist(filePath)) {
-            if (downloadListener != null) downloadListener.onSuccess(url, filePath);
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (downloadListener != null) downloadListener.onSuccess(url, filePath);
+                }
+            });
             return new HTCallBack();
         }
         PSP.getInstance().put(String.valueOf(url.hashCode()), filePath);

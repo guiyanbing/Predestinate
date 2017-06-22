@@ -1087,4 +1087,10 @@ public class CommonMgr implements ModuleBase {
         postParams.put("reload", reload ? 1 : 0);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserHotList, postParams, complete);
     }
+
+    public void getUserNetInfo(long tuid, RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("tuid", tuid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.GetUserNetInfo, parms, complete);
+    }
 }

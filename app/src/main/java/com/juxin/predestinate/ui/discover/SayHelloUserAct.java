@@ -123,13 +123,6 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
         adapter.setListNonotify(ModuleMgr.getChatListMgr().getGeetList());
         handlerNotify.removeMessages(1);
         handlerNotify.sendEmptyMessageDelayed(1, 500);
-
-        PLogger.d("initData=" + adapter.getList().size());
-        if (adapter.getList() != null && adapter.getList().size() > 0) {
-            showHasData();
-        } else {
-            showNoData();
-        }
     }
 
     private final Handler handlerNotify = new Handler() {
@@ -139,6 +132,12 @@ public class SayHelloUserAct extends BaseActivity implements AdapterView.OnItemC
             switch (msg.what) {
                 case 1:
                     adapter.notifyDataSetChanged();
+                    PLogger.d("initData=" + adapter.getList().size());
+                    if (adapter.getList() != null && adapter.getList().size() > 0) {
+                        showHasData();
+                    } else {
+                        showNoData();
+                    }
                     break;
                 default:
                     break;
