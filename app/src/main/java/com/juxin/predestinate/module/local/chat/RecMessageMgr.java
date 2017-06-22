@@ -134,8 +134,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
             message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-            if (BaseMessage.TalkRed_MsgType == message.getType() ||
-                    BaseMessage.inviteVideoDelivery_MsgType == message.getType()) {//红包消息不保存，也不通知上层,女性对男性的语音(视频)邀请送达男用户
+            if (BaseMessage.TalkRed_MsgType == message.getType()) {//红包消息不保存，也不通知上层
                 return;
             }
 
