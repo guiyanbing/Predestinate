@@ -56,14 +56,18 @@ public enum UrlParam {
     setVideochatConfig(Hosts.FATE_IT_GO, "xs/message/SetVideochatConfig", null, true),
     //上传视频认证配置
     addVideoVerify(Hosts.FATE_IT_GO, "xs/message/AddVideoVerify", null, true),
-    //邀请视频、音频聊天
-    inviteVideoChat(Hosts.FATE_IT_GO, "xs/message/InviteVideoChat", null, true),
+
     // 用户身份认证提交
     userVerify("User/Verify", true),
     // 获取用户验证信息(密)
     getVerifyStatus("User/getVerifyStatus", true),
+
+
+    // 男女发起
+    inviteVideoChat(Hosts.FATE_IT_GO, "xs/message/InviteVideoChat", null, true),
+
     //女性单邀音视频
-    girlSingleInviteVa(Hosts.FATE_IT_GO,"xs/message/VCCustomInvite", null, true),
+    girlSingleInviteVa(Hosts.FATE_IT_GO,"xs/message/InviteVideoChatW", null, true),
     //女性群邀视频
     girlGroupInviteVa(Hosts.FATE_IT_GO, "xs/message/VCGroupInvite", null, true),
 

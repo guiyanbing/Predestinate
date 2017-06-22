@@ -523,6 +523,7 @@
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
     <string name="chat_y_tips_buy">立即购买 ></string>
+    <string name="chat_pay_diamond_tips">钻石不足，购买钻石与她通话</string>
     <string name="chat_y_tips"><Data><![CDATA[<font color=\'#666666\'> 发消息需要Y币，</font><font color=\'#fcbc4c\'>余额：</font><font color=\'#666666\'>%1$d</font>]]> </Data></string>
 
     <!--看看她/邀请他 弹框-->
@@ -767,6 +768,9 @@
     <string name="sys_mess_btn_text">点击升级</string>
 
     <string name="invite_video">发来一个视频邀请</string>
+    <string name="invite_video_tips">邀你视频通话</string>
+    <string name="invite_voice_tips">邀你语音通话</string>
+    <string name="invite_video_price">%d钻/分钟(由男方支付)</string>
     <string name="invite_voice">发来一个语音邀请</string>
     <string name="video_cost">通话费用：%d钻石/分钟</string>lost efficacy
     <string name="time">%dS</string>
