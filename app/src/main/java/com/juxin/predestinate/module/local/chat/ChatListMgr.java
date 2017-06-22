@@ -537,14 +537,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param message
      */
     private void setSystemMsg(BaseMessage message) {
-        if (message != null && !(message instanceof SystemMessage)) return;
-        SystemMessage mess = (SystemMessage) message;
-        if (mess != null) {
-            switch (mess.getXtType()) {
-                case 3:
-                    ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(), mess);
-                    break;
-            }
+        if (message == null) return;
+        SystemMessage mess = new SystemMessage();
+        mess.parseJson(message.getJsonStr());
+        switch (mess.getXtType()) {
+            case 3:
+                ModuleMgr.getChatMgr().updateOtherRead(null, mess.getFid() + "", mess.getTid(), mess);
+                break;
         }
     }
 
@@ -553,8 +552,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param message
      */
     private void setMsgRecvedType(BaseMessage message) {
-        if (message != null && !(message instanceof SystemMessage)) return;
-        SystemMessage mess = (SystemMessage) message;
+        if (message == null) return;
+        SystemMessage mess = new SystemMessage();
+        mess.parseJson(message.getJsonStr());
         ModuleMgr.getChatMgr().updateDeliveryStatus(mess.getTid(), mess.getMsgID(), null);
     }
 

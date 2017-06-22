@@ -13,6 +13,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.inter.ChatMsgInterface;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatInterface;
@@ -500,7 +501,9 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     case CMT_1001:
                         List<BaseMessage> msgData = chatInstance.chatContentAdapter.getList();
                         if (msgData == null || message == null) break;
-                        handRecvedMsg(message.getMsgID());
+                        SystemMessage msg = new SystemMessage();
+                        msg.parseJson(message.getJsonStr());
+                        handRecvedMsg(msg.getMsgID());
                         chatInstance.chatContentAdapter.setList(msgData);
                     break;
                 }
