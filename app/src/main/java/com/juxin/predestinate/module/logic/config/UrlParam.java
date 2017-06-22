@@ -27,6 +27,7 @@ public enum UrlParam {
 
     reqRegister("pubtest/quickReg", null, false),//注册接口
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
+    reqNewLogin(Hosts.FATE_IT_GO, "x/userinfo/UserLogin", LoginResult.class, false),//2.2版登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
     reqForgotsms("Public/forgotsms", false),//找回密码发送验证码
     getserviceqq("user/getserviceqq", ContactBean.class, true),//获取客服信息
