@@ -107,7 +107,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_own_agree:
-                if(isMan) {
+                if(!isInvate) {// 男、女 来自非邀请他按钮
                     cb_own_agree.setChecked(true);
                     cb_own_disagree.setChecked(false);
                 }else {// 女性--邀请他(邀请视频)
@@ -116,7 +116,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
 
                 break;
             case R.id.rl_own_disagree:
-                if(isMan) {
+                if(!isInvate) {// 男、女 来自非邀请他按钮
                     cb_own_agree.setChecked(false);
                     cb_own_disagree.setChecked(true);
                 }else {// 女性--邀请他(邀请语音)
@@ -124,7 +124,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                 }
                 break;
             case R.id.tv_select_ok:
-                if(isMan) {// 男性--看看她
+                if(!isInvate) {// 男、女 来自非邀请他按钮
                     if (cb_own_agree.isChecked()) {
                         selectVal = Constant.APPEAR_TYPE_OWN;
                         if (cb_def_sel.isChecked()) {
