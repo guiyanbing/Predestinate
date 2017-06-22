@@ -63,6 +63,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
 
     private String avatarLink = "";
     private boolean ifUpHead = true;             // 是否已设置头像
+    private boolean validSubmit;//完善成功标记
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +195,7 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
                         @Override
                         public void onRequestComplete(HttpResponse response) {
                             if (response.isOk()) {
+                                validSubmit=true;
                                 UIShow.showMainClearTask(UserRegInfoCompleteAct.this);
                             }
                             LoadingDialog.closeLoadingDialog(300);
@@ -270,6 +272,9 @@ public class UserRegInfoCompleteAct extends BaseActivity implements OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (!validSubmit){
+            ModuleMgr.getLoginMgr().clearCookie();
+        }
         MsgMgr.getInstance().detach(this);
     }
 }
