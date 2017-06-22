@@ -444,7 +444,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     /**
      * 男--看看她 / 女--邀请他
      */
-    public void lookAtHer() {
+    public void lookAtHer(boolean isOnline) {
         ImageView imageView =  getChatInstance().chatViewLayout.getInputLookAtHer();
         if(imageView == null) return;
 
@@ -452,15 +452,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             imageView.setImageResource(R.drawable.f1_look_at_her);
         } else {//女--邀请他
             imageView.setImageResource(R.drawable.f1_invitation_he);
-            long whisperId = getChatInstance().chatAdapter.getLWhisperId();
-            if (whisperId > 0) {
-                UserInfoLightweight userInfoLightweight = getChatInstance().chatAdapter.getUserInfo(whisperId);
-                if(userInfoLightweight == null) return;
-                if (userInfoLightweight.isOnline()) {
-                    imageView.setVisibility(View.VISIBLE);
-                } else {
-                    imageView.setVisibility(View.GONE);
-                }
+            if (isOnline) {
+                imageView.setVisibility(View.VISIBLE);
             } else {
                 imageView.setVisibility(View.GONE);
             }

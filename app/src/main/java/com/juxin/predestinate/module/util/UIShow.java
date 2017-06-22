@@ -110,6 +110,7 @@ import com.juxin.predestinate.ui.user.my.WithDrawApplyAct;
 import com.juxin.predestinate.ui.user.my.WithDrawExplainAct;
 import com.juxin.predestinate.ui.user.my.WithDrawSuccessAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
+import com.juxin.predestinate.ui.user.paygoods.diamond.BottomChatDiamondDlg;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondAct;
 import com.juxin.predestinate.ui.user.paygoods.diamond.GoodsDiamondDialog;
 import com.juxin.predestinate.ui.user.paygoods.vip.GoodsVipDialog;
@@ -1088,7 +1089,7 @@ public class UIShow {
      */
     public static void showInvitaExpiredDlg(final Context context, long otherId, String channel_uid, int type, int price) {
         InvitationExpiredDlg dialog = new InvitationExpiredDlg();
-        dialog.setData(context,otherId,channel_uid,type,price);
+        dialog.setData(context, otherId, channel_uid, type, price);
         dialog.showDialog((FragmentActivity) context);
     }
 
@@ -1330,6 +1331,22 @@ public class UIShow {
         intent.putExtra(GoodsConstant.DLG_OPEN_TOUID, touid);
         intent.putExtra(GoodsConstant.DLG_OPEN_CHANNEL_UID, channel_uid);
         context.startActivity(intent);
+    }
+
+    private static BottomChatDiamondDlg chatDialog;
+
+    /**
+     * 聊天钻石充值弹框
+     *
+     * @param girlUrl  女用户头像
+     * @param chatType 视频，语音邀请
+     * @param price    通信价格
+     */
+    public static void showBottomChatDiamondDlg(Context context, String girlUrl, int chatType, int price) {
+        if (chatDialog == null) chatDialog = new BottomChatDiamondDlg();
+
+        chatDialog.setInfo(girlUrl, chatType, price);
+        chatDialog.showDialog((FragmentActivity) context);
     }
 
     /**

@@ -63,6 +63,24 @@
       }
     ]
   },
+  "chat_diamond": {
+    "list": [
+      {
+        "cid": 57,
+        "cname": "",
+        "cnum": 600,
+        "desc": "600钻石",
+        "price": 60
+      },
+      {
+        "cid": 58,
+        "cname": "",
+        "cnum": 1000,
+        "desc": "1000钻石",
+        "price": 100
+      }
+    ]
+  },
   "vip_old": {
     "list": [
       {
