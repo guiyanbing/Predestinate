@@ -1046,7 +1046,7 @@ public class CommonMgr implements ModuleBase {
     public void addCustomFace(String url, RequestComplete complete) {
         HashMap<String, Object> postParms = new HashMap<>();
         postParms.put("url", url);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.AddCustomFace, postParms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addCustomFace, postParms, complete);
     }
 
     /**
@@ -1088,9 +1088,27 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqUserHotList, postParams, complete);
     }
 
+    /**
+     * 获取对方设备网络信息
+     * @param tuid 对方uid
+     * @param complete 回调
+     */
     public void getUserNetInfo(long tuid, RequestComplete complete) {
         HashMap<String, Object> parms = new HashMap<>();
         parms.put("tuid", tuid);
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.GetUserNetInfo, parms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.getUserNetInfo, parms, complete);
+    }
+
+    /**
+     * 设置用户设备网络信息
+     * @param net_tp 网络类型 //用户上网方式（2017-06-20）Wifi 1 4G 2 3G/2G 3 其它 4
+     * @param phone_info //用户设备描述
+     * @param complete 回调
+     */
+    public void updateNetInfo(int net_tp, String phone_info, RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("net_tp", net_tp);
+        parms.put("phone_info", phone_info);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateNetInfo, parms, complete);
     }
 }

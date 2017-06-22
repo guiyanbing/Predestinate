@@ -22,6 +22,12 @@ import java.util.Enumeration;
  */
 public final class NetworkUtils {
 
+    //用户上网方式（2017-06-20）Wifi 1 4G 2 3G/2G 3 其它 4
+    public static final int NETWORK_WIFI = 1;
+    public static final int NETWORK_4G = 2;
+    public static final int NETWORK_2_OR_3G = 3;
+    public static final int NETWORK_OTHER = 4;
+
     /**
      * 网络状态枚举
      */
@@ -81,6 +87,26 @@ public final class NetworkUtils {
             return NetworkType.MOBILE;
         } else {
             return NetworkType.OTHER;
+        }
+    }
+
+    /**
+     * 获取网络类型
+     * @return WIFI/4G/3G/2G
+     */
+    public static int getNetWorkType(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null || !info.isConnectedOrConnecting()) {
+            return NETWORK_OTHER;
+        }
+        int type = info.getType();
+        if (type == ConnectivityManager.TYPE_WIFI) {
+            return NETWORK_WIFI;
+        } else if (type == ConnectivityManager.TYPE_MOBILE) {
+            return getNetWorkClass(context);
+        }else {
+            return NETWORK_OTHER;
         }
     }
 
@@ -154,5 +180,32 @@ public final class NetworkUtils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private static int getNetWorkClass(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        switch (tm.getNetworkType()) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                //return NETWORK_2G;//以上是2G
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                //return NETWORK_3G;//以上是3G
+                return NETWORK_2_OR_3G;
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return NETWORK_4G;
+            default:
+                return NETWORK_OTHER;
+        }
     }
 }
