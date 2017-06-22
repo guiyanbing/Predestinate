@@ -202,15 +202,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
-//            addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
-//            MsgMgr.getInstance().delay(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
-//                }
-//            },500);
-
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             bundle.putInt("vc_girl_type", 1);
             startGroupInviteAct(context, bundle);
