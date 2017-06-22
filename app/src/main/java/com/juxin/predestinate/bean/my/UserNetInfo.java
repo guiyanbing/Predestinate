@@ -39,6 +39,7 @@ public class UserNetInfo extends BaseData {
                     tempType = "其它";
                     break;
                 default:
+                    tempType = "其它";
                     break;
             }
             this.setNetType(tempType);

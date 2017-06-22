@@ -140,10 +140,6 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getChatMgr().updateOtherSideRead(null, message.getFid() + "", message.getTid() + "");
     }
 
-    public void updateToReadVoice(long msgID) {
-        dbCenter.getCenterFMessage().updateToReadVoice(msgID, null);
-    }
-
     /**
      * 本地模拟语音视频消息
      *
@@ -525,7 +521,6 @@ public class ChatMgr implements ModuleBase {
                 });
             }
         });
-
     }
 
     /**
@@ -535,6 +530,16 @@ public class ChatMgr implements ModuleBase {
      */
     public void updateMsgFStatus(long msgID, DBCallback callback) {
         dbCenter.getCenterFMessage().updateMsgFStatus(msgID, callback);
+    }
+
+    /**
+     * 更新送达状态
+     * @param msgID
+     * @param callback
+     */
+    public void updateDeliveryStatus(long userID, long msgID, DBCallback callback) {
+        dbCenter.getCenterFMessage().updateDeliveryStatus(msgID, null);
+        dbCenter.getCenterFLetter().updateDeliveryStatus(userID, callback);
     }
 
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack) {

@@ -272,7 +272,7 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
             if (chatItemHolder != null) {
                 chatItemHolder.statusImg.setVisibility(View.GONE);
             }
-            ModuleMgr.getChatMgr().updateToReadVoice(msg.getMsgID());
+            ModuleMgr.getChatMgr().updateMsgFStatus(msg.getMsgID(), null);
         }
     }
 

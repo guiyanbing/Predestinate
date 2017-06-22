@@ -3,7 +3,8 @@
     <string name="app_storage_name">xiaou</string>
 
     <!-- 网络状态 -->
-    <string name="net_status_pre">在线-</string>
+    <string name="net_online_pre">在线-</string>
+    <string name="net_offline">离线</string>
 
     <!-- 全局提示语 -->
     <string name="ok">确定</string>

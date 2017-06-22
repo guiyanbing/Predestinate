@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
 import com.juxin.predestinate.bean.db.utils.CloseUtil;
 import com.juxin.predestinate.bean.db.utils.CursorUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -16,8 +17,10 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.util.ByteUtil;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -197,7 +200,6 @@ public class DBCenterFMessage {
                 }
 
                 long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
-
                 DBCenter.makeDBCallback(callback, result);
             }
         });
@@ -225,6 +227,22 @@ public class DBCenterFMessage {
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_STATUS + " = ?", String.valueOf(MessageConstant.UNREAD_STATUS));
                 long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
+            }
+        });
+    }
+
+    public void updateDeliveryStatus(long msgID, DBCallback callback) {
+        updateStatus(msgID, MessageConstant.DELIVERY_STATUS, callback);
+    }
+
+    public void updateStatus(final long msgID, final int status, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(FMessage.COLUMN_STATUS, status);
+                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
+                DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
         });
     }
@@ -362,20 +380,6 @@ public class DBCenterFMessage {
                 ContentValues values = new ContentValues();
                 values.put(FMessage.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
                 long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, sql.toString(), strs);
-                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
-                DBCenter.makeDBCallback(callback, result);
-
-            }
-        });
-    }
-
-    public void updateToReadVoice(final long msgID, final DBCallback callback) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                ContentValues values = new ContentValues();
-                values.put(FMessage.COLUMN_FSTATUS, 0);
-                long ret = mDatabase.update(FMessage.FMESSAGE_TABLE, values, FMessage.COLUMN_MSGID + " = ?", String.valueOf(msgID));
                 long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
             }

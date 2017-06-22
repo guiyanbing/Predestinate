@@ -339,7 +339,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @return
      */
     public void updateToReadPrivate(long userID) {
-        dbCenter.getCenterFLetter().updateStatus(userID, new DBCallback() {
+        dbCenter.getCenterFLetter().updateReadStatus(userID, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
                 if (result != MessageConstant.OK) {
