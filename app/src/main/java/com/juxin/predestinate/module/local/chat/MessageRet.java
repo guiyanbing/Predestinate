@@ -13,24 +13,33 @@ public class MessageRet extends BaseData {
     public static final int MSG_CODE_PULL_BLACK = -2;//已拉黑
     public static final int MSG_CODE_OK = 0;//成功
 
-    //  {"d":5510,"s":0,"status":"ok","tm":1495610499}
+    //{"d":3302,"msg_id":1166518,"s":0,"status":"ok","tm":1498109958}
 
-    private long msgId;
+    private long d;//本地消息ID
+    private long msgId;//服务器消息ID
     private long tm;
     private boolean isOk;
     private int s;
 
     @Override
     public void parseJson(String jsonStr) {
-
         JSONObject jsonObject = getJsonObject(jsonStr);
-        this.setMsgId(jsonObject.optLong("d"));
+        this.setD(jsonObject.optLong("d"));
+        this.setMsgId(jsonObject.optLong("msg_id"));
         String status = jsonObject.optString("status");
         this.setOk("ok".equals(status));
         this.setTm(jsonObject.optLong("tm"));
         if (!jsonObject.isNull("s")) {//状态
             this.setS(jsonObject.optInt("s"));
         }
+    }
+
+    public long getD() {
+        return d;
+    }
+
+    public void setD(long d) {
+        this.d = d;
     }
 
     public long getMsgId() {

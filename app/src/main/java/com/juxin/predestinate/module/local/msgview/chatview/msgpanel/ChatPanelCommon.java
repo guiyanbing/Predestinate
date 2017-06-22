@@ -50,8 +50,6 @@ public class ChatPanelCommon extends ChatPanel implements ChatMediaPlayer.OnPlay
     private TextView time = null;
     private AnimationDrawable voiceAnimation = null;
     private boolean palySound = false;
-    private BaseMessage msgData = null;
-
 
     private TextureVideoView preview_surface;
     private ImageView thumb_img;

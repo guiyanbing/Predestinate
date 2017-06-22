@@ -42,10 +42,7 @@ public class ChatDefaultSmileAdapter extends ExBaseAdapter<EmojiPack.EmojiItem> 
         vh.smile.setTag(smileItem.key);
 
         try {
-            Bitmap mBitmap = BitmapFactory.decodeStream(getContext().getAssets().open(smileItem.name));
-           // PLogger.printObject("smileItem.resId=" + smileItem.resId);
-            vh.smile.setImageBitmap(mBitmap);
-           // vh.smile.setImageResource(smileItem.resId);
+            vh.smile.setImageBitmap(BitmapFactory.decodeStream(getContext().getAssets().open(smileItem.name)));
         } catch (IOException e) {
             e.printStackTrace();
         }

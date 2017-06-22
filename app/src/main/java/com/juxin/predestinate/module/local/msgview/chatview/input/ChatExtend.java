@@ -49,21 +49,4 @@ public class ChatExtend {
 
         return listTemp.subList(start, start + offset);
     }
-
-    public class ChatExtendData {
-        /**
-         *
-         */
-        public String name;
-
-        /**
-         * 显示的Icon资源Id。
-         */
-        public int resId;
-
-        /**
-         * 背景的资源Id。
-         */
-        public int resBgId;
-    }
 }
