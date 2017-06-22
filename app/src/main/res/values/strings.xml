@@ -766,5 +766,6 @@
     <string name="dlg_need_vip">您非VIP会员，不可以直接发起视频和语音通话</string>
     <!-- =================支付 start================= -->
     <string name="pay_alipay_not_install">支付出错，请检查支付宝是否安装！</string>
+    <string name="paying">支付中</string>
     <!-- =================支付 end================= -->
 </resources>
