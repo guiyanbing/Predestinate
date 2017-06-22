@@ -14,6 +14,8 @@ public enum NoSaveMsgType {
     RedEnvelopesBalance_MsgType(17),
     //消息送达
     recved_MsgType(1001),
+    //女用户单独视频邀请
+    aloneInviteVideo_MsgType(1003),
     ;
 
     public long msgType;

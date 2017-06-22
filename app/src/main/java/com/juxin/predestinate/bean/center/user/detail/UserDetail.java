@@ -19,6 +19,9 @@ public class UserDetail extends UserInfo {
     private int voice = 1;          //1为开启语音，0为关闭
     private int videopopularity;    // 私密视频人气值
 
+    private int unlock_ycoin;//1为开启语音，0为关闭
+    private int unlock_vip;
+
     @Override
     public void parseJson(String s) {
         String jsonData = getJsonObject(s).optString("res");
@@ -50,6 +53,14 @@ public class UserDetail extends UserInfo {
         if (!jsonObject.isNull("videopopularity")){
             this.videopopularity = jsonObject.optInt("videopopularity");
         }
+
+        if (!jsonObject.isNull("unlock_ycoin")){
+            this.setUnlock_ycoin(jsonObject.optInt("unlock_ycoin"));
+        }
+
+        if (!jsonObject.isNull("unlock_vip")){
+            this.setUnlock_vip(jsonObject.optInt("unlock_vip"));
+        }
     }
 
     public List<UserVideo> getUserVideos() {
@@ -74,6 +85,23 @@ public class UserDetail extends UserInfo {
 
     public int getVideopopularity() {
         return videopopularity;
+    }
+
+
+    public int getUnlock_ycoin() {
+        return unlock_ycoin;
+    }
+
+    public void setUnlock_ycoin(int unlock_ycoin) {
+        this.unlock_ycoin = unlock_ycoin;
+    }
+
+    public int getUnlock_vip() {
+        return unlock_vip;
+    }
+
+    public void setUnlock_vip(int unlock_vip) {
+        this.unlock_vip = unlock_vip;
     }
 
     public UserDetail() {

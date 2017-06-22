@@ -37,7 +37,7 @@ public class BaseMessage implements IBaseMessage {
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
         inviteVideoMass(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
-        aloneInviteVideo(AloneInviteVideoMessage.class, 31),//女用户单独视频邀请
+      //  aloneInviteVideo(AloneInviteVideoMessage.class, 31),//女用户单独视频邀请
         maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
 
@@ -593,9 +593,6 @@ public class BaseMessage implements IBaseMessage {
             case inviteVideoMass:
                 message = new InviteVideoMessage(bundle, true);
                 break;
-            case aloneInviteVideo:
-                message = new AloneInviteVideoMessage(bundle, true);
-                break;
             default:
                 message = new BaseMessage(bundle, true);
                 break;
@@ -638,9 +635,6 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case inviteVideoMass:
                 message = new InviteVideoMessage(bundle);
-                break;
-            case aloneInviteVideo:
-                message = new AloneInviteVideoMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -714,9 +708,6 @@ public class BaseMessage implements IBaseMessage {
                 result = "[系统通知]";
                 break;
             case inviteVideoMass:
-                result = "[邀请视频]";
-                break;
-            case aloneInviteVideo:
                 result = "[邀请视频]";
                 break;
             case maxVersion:
