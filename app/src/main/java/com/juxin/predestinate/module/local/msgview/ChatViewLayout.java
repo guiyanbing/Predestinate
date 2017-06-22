@@ -44,10 +44,10 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ChatAdapter.ChatInstance chatInstance = null;
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
-    private ImageView input_giftview,input_look_at_her,iv_y_tips_close;
+    private ImageView input_giftview, input_look_at_her, iv_y_tips_close;
     private LinearLayout ll_y_tips;
     public TextView tv_y_tips_count;
-    private TextView tv_y_tips_buy,tv_y_tips_split;
+    private TextView tv_y_tips_buy, tv_y_tips_split;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -133,48 +133,27 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     }
 
     /**
-     * 男--看看她 / 女--邀请他
-     */
-    public void lookAtHer() {
-        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//男--看看她
-            input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
-        }else {//女--邀请他
-            input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
-            String whisperId = chatInstance.chatAdapter.getWhisperId();
-            if(TextUtils.isEmpty(whisperId)) {
-                input_look_at_her.setVisibility(View.GONE);
-            }else {
-                UserInfoLightweight userInfoLightweight = chatInstance.chatAdapter.getUserInfo(TypeConvertUtil.toLong(whisperId));
-                if(userInfoLightweight.isOnline()) {
-                    input_look_at_her.setVisibility(View.VISIBLE);
-                }else {
-                    input_look_at_her.setVisibility(View.GONE);
-                }
-            }
-        }
-    }
-
-    /**
      * Y币提示逻辑
-     * @param isShow 是否显示
+     *
+     * @param isShow  是否显示
      * @param isClose 是否点了关闭提示
      */
-    public void yTipsLogic(boolean isShow,boolean isClose) {
-        if(!isShow || isClose) {
+    public void yTipsLogic(boolean isShow, boolean isClose) {
+        if (!isShow || isClose) {
             ll_y_tips.setVisibility(View.GONE);
             return;
         }
         int yCoin = ModuleMgr.getCenterMgr().getMyInfo().getYcoin();
         boolean isCloseYTips = PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), false);
-        if(yCoin < 100) {
+        if (yCoin < 100) {
             tv_y_tips_split.setVisibility(View.GONE);
             iv_y_tips_close.setVisibility(View.GONE);
             ll_y_tips.setVisibility(View.VISIBLE);
             changeYTipsCount(yCoin);
-        }else {
-            if(isCloseYTips) {
+        } else {
+            if (isCloseYTips) {
                 ll_y_tips.setVisibility(View.GONE);
-            }else {
+            } else {
                 ll_y_tips.setVisibility(View.VISIBLE);
                 changeYTipsCount(yCoin);
             }
@@ -185,7 +164,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      * 改变Y值
      */
     private void changeYTipsCount(int yCoin) {
-        if(tv_y_tips_count == null) return;
+        if (tv_y_tips_count == null) return;
         tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
     }
 
@@ -196,6 +175,11 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      */
     public ChatAdapter getChatAdapter() {
         return chatInstance.chatAdapter;
+    }
+
+
+    public ImageView getInputLookAtHer() {
+        return input_look_at_her;
     }
 
     /**

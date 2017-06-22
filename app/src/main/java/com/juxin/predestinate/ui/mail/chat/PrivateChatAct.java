@@ -267,13 +267,14 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID) {
                         privateChat.getChatAdapter().onDataUpdate();
                     }
+                    privateChat.getChatAdapter().lookAtHer();
                 }
             }
         });
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.yTipsLogic(true, false);
-//            privateChat.lookAtHer();
+            privateChat.getChatAdapter().lookAtHer();
             ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {

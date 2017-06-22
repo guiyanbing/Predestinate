@@ -699,6 +699,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onLoadMore() {
     }
 
+    public void lookAtHer() {
+        chatInstance.chatInputPanel.lookAtHer();
+    }
+
     /**
      * 是否可以聊天
      */

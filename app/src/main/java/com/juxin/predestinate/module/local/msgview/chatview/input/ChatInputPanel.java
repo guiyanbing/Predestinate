@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
@@ -437,6 +438,33 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                         Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), isInviteHe);
             }
         });
+    }
+
+
+    /**
+     * 男--看看她 / 女--邀请他
+     */
+    public void lookAtHer() {
+        ImageView imageView =  getChatInstance().chatViewLayout.getInputLookAtHer();
+        if(imageView == null) return;
+
+        if (ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//男--看看她
+            imageView.setImageResource(R.drawable.f1_look_at_her);
+        } else {//女--邀请他
+            imageView.setImageResource(R.drawable.f1_invitation_he);
+            long whisperId = getChatInstance().chatAdapter.getLWhisperId();
+            if (whisperId > 0) {
+                UserInfoLightweight userInfoLightweight = getChatInstance().chatAdapter.getUserInfo(whisperId);
+                if(userInfoLightweight == null) return;
+                if (userInfoLightweight.isOnline()) {
+                    imageView.setVisibility(View.VISIBLE);
+                } else {
+                    imageView.setVisibility(View.GONE);
+                }
+            } else {
+                imageView.setVisibility(View.GONE);
+            }
+        }
     }
 
     /**
