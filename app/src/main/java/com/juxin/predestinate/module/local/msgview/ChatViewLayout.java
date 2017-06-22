@@ -92,23 +92,6 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
 
-        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//男--看看她
-            input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
-        }else {//男--邀请他
-            String whisperId = chatInstance.chatAdapter.getWhisperId();
-            if(TextUtils.isEmpty(whisperId)) {
-                input_look_at_her.setVisibility(View.GONE);
-            }else {
-                UserInfoLightweight userInfoLightweight = chatInstance.chatAdapter.getUserInfo(TypeConvertUtil.toLong(whisperId));
-                if(userInfoLightweight.isOnline()) {
-                    input_look_at_her.setVisibility(View.VISIBLE);
-                    input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
-                }else {
-                    input_look_at_her.setVisibility(View.GONE);
-                }
-            }
-        }
-
         yTipsLogic(false, false);
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -147,6 +130,28 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         list.setXListViewListener(chatInstance.chatAdapter);
 
         chatInstance.chatContentAdapter = chatContentAdapter;
+    }
+
+    /**
+     * 男--看看她 / 女--邀请他
+     */
+    public void lookAtHer() {
+        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//男--看看她
+            input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
+        }else {//女--邀请他
+            input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
+            String whisperId = chatInstance.chatAdapter.getWhisperId();
+            if(TextUtils.isEmpty(whisperId)) {
+                input_look_at_her.setVisibility(View.GONE);
+            }else {
+                UserInfoLightweight userInfoLightweight = chatInstance.chatAdapter.getUserInfo(TypeConvertUtil.toLong(whisperId));
+                if(userInfoLightweight.isOnline()) {
+                    input_look_at_her.setVisibility(View.VISIBLE);
+                }else {
+                    input_look_at_her.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     /**

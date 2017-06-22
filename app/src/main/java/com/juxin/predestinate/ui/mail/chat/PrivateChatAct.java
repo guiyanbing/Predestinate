@@ -273,14 +273,20 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.yTipsLogic(true, false);
+//            privateChat.lookAtHer();
             ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     if (!response.isOk())
                         return;
                     VideoConfig config = (VideoConfig) response.getBaseData();
-                    if (config.isVideoChat())
-                        privateChat.setInputLookAtHerVisibility(View.VISIBLE);
+                    if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+                        if (config.isVideoChat()) {
+                            privateChat.setInputLookAtHerVisibility(View.VISIBLE);
+                        }else {
+                            privateChat.setInputLookAtHerVisibility(View.GONE);
+                        }
+                    }
                 }
             });
 //            initHeadView();
