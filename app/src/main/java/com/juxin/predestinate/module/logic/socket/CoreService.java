@@ -10,6 +10,8 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.util.ExTimerUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
@@ -99,6 +101,8 @@ public class CoreService extends Service {
             if (NetworkUtils.isConnected(context)) {
                 TimerUtil.resetIncreaseTime();
                 AutoConnectMgr.getInstance().reConnect();
+                MsgMgr.getInstance().sendMsg(MsgType.MT_Net_Change, "");
+
             }
         }
     }
