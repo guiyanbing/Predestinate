@@ -1214,14 +1214,8 @@ public class ChatMgr implements ModuleBase {
             return;
         }
 
-        //送达消息
-//        if (bean.getMtp() == BaseMessage.BaseMessageType.msgRecved.getMsgType()) {
-//            ModuleMgr.getChatMgr().updateDeliveryStatus(bean.getFid(),bean.getD(),null);
-//            return;
-//        }
-
         //已读消息
-        if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()) {
+        if (bean.getMtp() == BaseMessage.System_MsgType) {
             ModuleMgr.getChatListMgr().updateToReadPrivate(bean.getFid());
             ModuleMgr.getChatMgr().updateOtherSideRead(null, bean.getFid() + "", bean.getTid() + "");
             return;
