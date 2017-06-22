@@ -143,6 +143,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private void getUserNetInfo() {
         if(otherInfo != null && !otherInfo.isOnline()) {
             net_top_title.setText(getString(R.string.net_offline));
+            privateChat.getChatAdapter().lookAtHer(false);
             return;
         }
         ModuleMgr.getCommonMgr().getUserNetInfo(whisperID, new RequestComplete() {
@@ -152,6 +153,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     UserNetInfo userNetInfo = new UserNetInfo();
                     userNetInfo.parseJson(response.getResponseString());
                     net_top_title.setText(getString(R.string.net_online_pre) + userNetInfo.getNetType());
+                    privateChat.getChatAdapter().lookAtHer(true);
+                }else {
+                    privateChat.getChatAdapter().lookAtHer(false);
                 }
             }
         });
@@ -267,14 +271,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     if (kf_id != 0 || MailSpecialID.customerService.getSpecialID() == whisperID) {
                         privateChat.getChatAdapter().onDataUpdate();
                     }
-                    privateChat.getChatAdapter().lookAtHer();
                 }
             }
         });
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.yTipsLogic(true, false);
-            privateChat.getChatAdapter().lookAtHer();
             ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {

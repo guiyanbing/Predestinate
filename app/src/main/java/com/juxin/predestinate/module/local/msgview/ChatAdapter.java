@@ -699,8 +699,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onLoadMore() {
     }
 
-    public void lookAtHer() {
-        chatInstance.chatInputPanel.lookAtHer();
+    public void lookAtHer(boolean isOnline) {
+        chatInstance.chatInputPanel.lookAtHer(isOnline);
     }
 
     /**
