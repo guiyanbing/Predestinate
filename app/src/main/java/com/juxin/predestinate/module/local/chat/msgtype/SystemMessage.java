@@ -29,6 +29,8 @@ public class SystemMessage extends BaseMessage {
         this.setXtType(object.optInt("xt"));
         this.setFid(object.optLong("fid"));
         this.setTid(object.optLong("tid"));
+
+        this.setMsgID(object.optLong("msg_id"));
         return this;
     }
 

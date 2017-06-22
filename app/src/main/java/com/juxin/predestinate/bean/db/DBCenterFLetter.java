@@ -435,27 +435,36 @@ public class DBCenterFLetter {
         });
     }
 
+    //修改为已读
     public void updateReadStatus(long userID, DBCallback callback) {
-        updateStatus(userID, MessageConstant.READ_STATUS, callback);
+        updateStatus(userID, MessageConstant.READ_STATUS, MessageConstant.DELIVERY_STATUS, callback);
     }
 
-    public void updateStatus(final long userID, final int status, final DBCallback callback) {
+    //修改为送达
+    public void updateDeliveryStatus(long userID, DBCallback callback) {
+        updateStatus(userID, MessageConstant.DELIVERY_STATUS, MessageConstant.OK_STATUS, callback);
+    }
+
+    /**
+     *
+     * @param userID
+     * @param modifyStatus 要修改为的状态
+     * @param judgmentStatus 判断的状态
+     * @param callback
+     */
+    public void updateStatus(final long userID, final int modifyStatus, final int judgmentStatus, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
-                values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
+                values.put(FLetter.COLUMN_STATUS, String.valueOf(modifyStatus));
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
                         FLetter.COLUMN_USERID + " = ? AND " + FLetter.COLUMN_STATUS + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
-                        String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS), String.valueOf(BaseMessage.video_MsgType));
+                        String.valueOf(userID), String.valueOf(judgmentStatus), String.valueOf(BaseMessage.video_MsgType));
 
                 DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
         });
-    }
-
-    public void updateDeliveryStatus(long userID, DBCallback callback) {
-        updateStatus(userID, MessageConstant.DELIVERY_STATUS, callback);
     }
 
     public void updateStatusFail(final DBCallback callback) {

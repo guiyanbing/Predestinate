@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatBasePanel;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.local.msgview.chatview.base.ChatContentAdapter;
@@ -41,10 +44,10 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ChatAdapter.ChatInstance chatInstance = null;
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
-    private ImageView input_giftview,input_look_at_her,iv_y_tips_close;
+    private ImageView input_giftview, input_look_at_her, iv_y_tips_close;
     private LinearLayout ll_y_tips;
     public TextView tv_y_tips_count;
-    private TextView tv_y_tips_buy,tv_y_tips_split;
+    private TextView tv_y_tips_buy, tv_y_tips_split;
 
     public ChatViewLayout(Context context) {
         super(context);
@@ -89,13 +92,6 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
 
-        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-            input_look_at_her.setImageResource(R.drawable.f1_look_at_her);
-        }else {
-            //TODO 文档--女性用户需要判断网络状态
-            input_look_at_her.setImageResource(R.drawable.f1_invitation_he);
-        }
-
         yTipsLogic(false, false);
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -138,25 +134,26 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
 
     /**
      * Y币提示逻辑
-     * @param isShow 是否显示
+     *
+     * @param isShow  是否显示
      * @param isClose 是否点了关闭提示
      */
-    public void yTipsLogic(boolean isShow,boolean isClose) {
-        if(!isShow || isClose) {
+    public void yTipsLogic(boolean isShow, boolean isClose) {
+        if (!isShow || isClose) {
             ll_y_tips.setVisibility(View.GONE);
             return;
         }
         int yCoin = ModuleMgr.getCenterMgr().getMyInfo().getYcoin();
         boolean isCloseYTips = PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), false);
-        if(yCoin < 100) {
+        if (yCoin < 100) {
             tv_y_tips_split.setVisibility(View.GONE);
             iv_y_tips_close.setVisibility(View.GONE);
             ll_y_tips.setVisibility(View.VISIBLE);
             changeYTipsCount(yCoin);
-        }else {
-            if(isCloseYTips) {
+        } else {
+            if (isCloseYTips) {
                 ll_y_tips.setVisibility(View.GONE);
-            }else {
+            } else {
                 ll_y_tips.setVisibility(View.VISIBLE);
                 changeYTipsCount(yCoin);
             }
@@ -167,7 +164,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      * 改变Y值
      */
     private void changeYTipsCount(int yCoin) {
-        if(tv_y_tips_count == null) return;
+        if (tv_y_tips_count == null) return;
         tv_y_tips_count.setText(Html.fromHtml(getResources().getString(R.string.chat_y_tips, yCoin)));
     }
 
@@ -178,6 +175,11 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      */
     public ChatAdapter getChatAdapter() {
         return chatInstance.chatAdapter;
+    }
+
+
+    public ImageView getInputLookAtHer() {
+        return input_look_at_her;
     }
 
     /**

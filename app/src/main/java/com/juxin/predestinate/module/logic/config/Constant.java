@@ -44,20 +44,6 @@ public class Constant {
     public static final String SETTING_SLEEP_MESSAGE = "setting_sleep_message"; //是否睡眠免打扰，存储key及默认值
     public static final boolean SETTING_SLEEP_MESSAGE_DEFAULT = true;
 
-    // 图片
-    public static final int INT_AVATAR = 101;       // 头像
-    public static final int INT_ALBUM = 102;        // 相册
-    public static final int INT_CHAT_PIC = 103;     // 聊天图片
-    public static final int INT_PRAISE_PIC = 104;   // 集赞图片: 暂时替代动态图片和身份验证
-
-    // 语音
-    public static final int INT_CHAT_VOICE = 201;   // 聊天语音
-    public static final int INT_PRAISE_VOICE = 202; // 集赞语音
-    public static final int INT_GAME_VOICE = 203;   // 游戏语音
-
-    // 视频
-    public static final int INT_CHAT_VIDEO = 301;   // 聊天小视频
-
     public static final long CHAT_RESEND_TIME = 5 * 60 * 1000;              //5分钟内重发消息
     public static final long CHAT_SHOW_TIP_TIME_Interval = 20 * 60 * 1000;  //Chat相关
     public static final int CHAT_TEXT_LIMIT = 3478;//Chat相关
@@ -88,10 +74,6 @@ public class Constant {
     public static final int PAY_VOICEACT = 0x20;// 银联语音支付
     public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
     public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
-
-    public static String U_IS_VIDEO_AUTH;
-    public static String U_IS_VIDEO_IMG_URL;
-    public static String U_IS_VIDEO_VIDEO_URL;
 
     //============= 打招呼类型 start =============
     /**

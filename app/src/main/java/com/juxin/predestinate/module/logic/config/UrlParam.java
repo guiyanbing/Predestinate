@@ -16,6 +16,7 @@ import com.juxin.predestinate.bean.start.LoginResult;
 import com.juxin.predestinate.bean.start.OfflineMsg;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.check.bean.VideoSetting;
+import com.juxin.predestinate.ui.user.my.adapter.Accept;
 import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 
 import java.util.Map;
@@ -156,6 +157,8 @@ public enum UrlParam {
     uploadIdCard("User/uploadIdCard", true),
     // 获取最近礼物列表
     lastGiftList("gift/lastgiftlist", GiftMessageList.class, false),
+    // 接受通信邀请
+    reqAcceptChat(Hosts.FATE_IT_GO,"xs/message/AcceptVideoChat", Accept.class,false),
 
     //================= 发现 ===========
     //举报

@@ -46,6 +46,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     private Map<Long, UserInfoLightweight> userInfos = new HashMap<>();
 
+    private List<BaseMessage> unHandledMess = new ArrayList();//未读消息列表
+
     /**
      * 频道Id（群聊的），私聊时聊天对象的uid；群聊时是群聊Id。
      */
@@ -422,6 +424,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
+                        checkUnHandledMess(listTemp);
                         if (isMachine)
                             onDataUpdate();
                     }
@@ -448,6 +451,19 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     public void clearHistory() {
         chatInstance.chatContentAdapter.setList(new ArrayList<BaseMessage>());
+        unHandledMess.clear();
+    }
+
+    public void checkUnHandledMess(List<BaseMessage> listTemp) {
+        for (int i = 0 ;i < listTemp.size(); i++){
+            BaseMessage message = listTemp.get(i);
+            if (message == null) continue;
+            if (message.getStatus() == MessageConstant.FAIL_STATUS ||
+                    message.getStatus() == MessageConstant.OK_STATUS ||
+                    message.getStatus() == MessageConstant.DELIVERY_STATUS){
+                unHandledMess.add(message);
+            }
+        }
     }
 
     @Override
@@ -466,25 +482,27 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                     moveToBottom();
                 if (isMachine) onDataUpdate();
 
-                if (!message.isSender())//发送已读消息
+                if (!message.isSender()){//发送已读消息
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
+                }else {
+                    addUnHandledMsg(message);
+                }
             } else {
                 ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
                 switch (msgType) {
-                    case CMT_7: {
+                    case CMT_7:
                         isUpdate = false;
                         List<BaseMessage> messData = chatInstance.chatContentAdapter.getList();
-                        if (messData != null) {
-                            for (int i = messData.size() - 1; i >= 0; i--) {
-                                BaseMessage mess = messData.get(i);
-                                if (mess == null) continue;
-                                if (mess.getStatus() == MessageConstant.READ_STATUS) break;
-                                if (mess.getStatus() == MessageConstant.OK_STATUS)
-                                    mess.setStatus(MessageConstant.READ_STATUS);
-                            }
-                            chatInstance.chatContentAdapter.setList(messData);
-                        }
-                    }
+                        if (messData == null || message == null) break;
+                        handReadMsg();
+                        chatInstance.chatContentAdapter.setList(messData);
+                    break;
+                    case CMT_1001:
+                        List<BaseMessage> msgData = chatInstance.chatContentAdapter.getList();
+                        if (msgData == null || message == null) break;
+                        handRecvedMsg(message.getMsgID());
+                        chatInstance.chatContentAdapter.setList(msgData);
+                    break;
                 }
             }
 
@@ -495,6 +513,34 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
                     || (message.getDataSource() == MessageConstant.TWO && show)) {
                 ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
+            }
+        }
+    }
+
+    private void addUnHandledMsg(BaseMessage message){
+        if (message == null) return;
+        unHandledMess.remove(message);
+        unHandledMess.add(message);
+    }
+
+    private void handRecvedMsg(Long msgId){
+        for (int i = 0 ;i < unHandledMess.size(); i++){
+            BaseMessage message = unHandledMess.get(i);
+            if (message == null) continue;
+            if (message.getMsgID() == msgId){
+                message.setStatus(MessageConstant.DELIVERY_STATUS);
+                break;
+            }
+        }
+    }
+    private void handReadMsg(){
+        for (int i = 0 ;i < unHandledMess.size(); i++){
+            BaseMessage message = unHandledMess.get(i);
+            if (message == null) continue;
+            if (message.getStatus() == MessageConstant.DELIVERY_STATUS){
+                message.setStatus(MessageConstant.READ_STATUS);
+                unHandledMess.remove(i);
+                i--;
             }
         }
     }
@@ -643,6 +689,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                             chatInstance.chatContentAdapter.setList(listTemp);
                             chatInstance.chatListView.setSelection(baseMessages.size());
+                            checkUnHandledMess(listTemp);
                         }
                     }
                 });
@@ -650,6 +697,10 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
     @Override
     public void onLoadMore() {
+    }
+
+    public void lookAtHer(boolean isOnline) {
+        chatInstance.chatInputPanel.lookAtHer(isOnline);
     }
 
     /**

@@ -36,7 +36,8 @@ public class BaseMessage implements IBaseMessage {
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
-        inviteVideo(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
+        inviteVideoMass(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
+        aloneInviteVideo(AloneInviteVideoMessage.class, 31),//女用户单独视频邀请
         maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
 
@@ -76,6 +77,7 @@ public class BaseMessage implements IBaseMessage {
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
     public static final int video_MsgType = 24;//视频消息
+    public static final int Msg_RecvedType = 1001;//送达消息
     public static final int inviteVideoDelivery_MsgType = 30;//女性对男性的语音(视频)邀请送达男用户 此消息为群发视频/语音，送达人数对女用户的通知
 
 
@@ -588,8 +590,11 @@ public class BaseMessage implements IBaseMessage {
             case sysNotice:
                 message = new SysNoticeMessage(bundle, true);
                 break;
-            case inviteVideo:
+            case inviteVideoMass:
                 message = new InviteVideoMessage(bundle, true);
+                break;
+            case aloneInviteVideo:
+                message = new AloneInviteVideoMessage(bundle, true);
                 break;
             default:
                 message = new BaseMessage(bundle, true);
@@ -631,8 +636,11 @@ public class BaseMessage implements IBaseMessage {
             case sysNotice:
                 message = new SysNoticeMessage(bundle);
                 break;
-            case inviteVideo:
+            case inviteVideoMass:
                 message = new InviteVideoMessage(bundle);
+                break;
+            case aloneInviteVideo:
+                message = new AloneInviteVideoMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -705,7 +713,10 @@ public class BaseMessage implements IBaseMessage {
             case sysNotice:
                 result = "[系统通知]";
                 break;
-            case inviteVideo:
+            case inviteVideoMass:
+                result = "[邀请视频]";
+                break;
+            case aloneInviteVideo:
                 result = "[邀请视频]";
                 break;
             case maxVersion:

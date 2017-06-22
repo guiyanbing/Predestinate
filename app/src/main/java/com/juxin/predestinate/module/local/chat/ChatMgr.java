@@ -42,7 +42,6 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1165,18 +1164,7 @@ public class ChatMgr implements ModuleBase {
 
     // ------------------------------------- 离线消息处理 ------------------------------------
     private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
-    private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
     private static final long OFFLINE_MSG_INTERVAL = 10 * 1000;  // 获取离线消息间隔
-
-    /**
-     * 离线消息刷新间隔控制
-     */
-    private boolean refreshOfflineMsg() {
-        if (checkIntervalTimeUtil == null) {
-            checkIntervalTimeUtil = new CheckIntervalTimeUtil();
-        }
-        return checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL);
-    }
 
     /**
      * 获取离线消息并处理
@@ -1225,6 +1213,12 @@ public class ChatMgr implements ModuleBase {
             }
             return;
         }
+
+        //送达消息
+//        if (bean.getMtp() == BaseMessage.BaseMessageType.msgRecved.getMsgType()) {
+//            ModuleMgr.getChatMgr().updateDeliveryStatus(bean.getFid(),bean.getD(),null);
+//            return;
+//        }
 
         //已读消息
         if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()) {

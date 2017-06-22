@@ -777,6 +777,7 @@
     <string name="lost_efficacy">已失效</string>
     <string name="connect">立即接通</string>
     <string name="call_back">立即回拨</string>
+    <string name="chat_join_fail_tips">加入聊天失败，请检查网络后重试</string>
 
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>
@@ -799,6 +800,8 @@
     <string name="dal_bottom_banned_title">抱歉暂时无法登录</string>
     <string name="dal_bottom_banned_desc">由于您被多人举报，被限制登录</string>
     <string name="dal_bottom_banned_cus_tip">如有疑问，请联系客服:</string>
+    <string name="dal_bottom_bannd_time_001">封停时间:永久</string>
+    <string name="dal_bottom_bannd_time_002">解禁时间:还剩</string>
     <!-- =================封禁弹框 end================= -->
 
 </resources>

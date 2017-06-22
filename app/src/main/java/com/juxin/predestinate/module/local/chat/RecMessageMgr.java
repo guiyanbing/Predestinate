@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.content.Intent;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -12,6 +13,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,11 +84,11 @@ public class RecMessageMgr implements IMProxy.IMListener {
 
             if (mtp == 10) {
                 JSONObject giftJo = object.getJSONObject("gift");
-                if(giftJo.getInt("recved") == 1){
+                if (giftJo.getInt("recved") == 1) {
                     jo = new JSONObject();
                     jo.put("mt", 4);
                     jo.put("gift_id", giftJo.getInt("gift_id"));
-                    jo.put("num",giftJo.getInt("count"));
+                    jo.put("num", giftJo.getInt("count"));
                 }
             }
 
@@ -104,7 +106,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
             }
             if (jo != null) {
                 jo.put("fid", fid);
-                jo.put("msgId",object.getLong("d"));
+                jo.put("msgId", object.getLong("d"));
                 Intent intent = new Intent("com.juxin.action.plugin");
                 intent.putExtra("extra_json", jo.toString());
                 App.context.sendBroadcast(intent);
@@ -134,12 +136,11 @@ public class RecMessageMgr implements IMProxy.IMListener {
             message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-            if (BaseMessage.TalkRed_MsgType == message.getType() ||
-                    BaseMessage.inviteVideoDelivery_MsgType == message.getType()) {//红包消息不保存，也不通知上层,女性对男性的语音(视频)邀请送达男用户
+            if (BaseMessage.TalkRed_MsgType == message.getType()) {//红包消息不保存，也不通知上层
                 return;
             }
 
-            if(NoSaveMsgType.getNoSaveMsgType(message.getType()) != null){
+            if (NoSaveMsgType.getNoSaveMsgType(message.getType()) != null) {
                 isSave = false;
             }
 

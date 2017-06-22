@@ -1,11 +1,13 @@
 package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
@@ -14,9 +16,13 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.CountDownTimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.my.TimeMgr;
+import com.juxin.predestinate.ui.user.my.adapter.Accept;
 
 import static com.juxin.predestinate.R.id.ll_invite_connect;
 import static com.juxin.predestinate.R.id.ll_invite_reject;
@@ -25,7 +31,7 @@ import static com.juxin.predestinate.R.id.ll_invite_reject;
  * 邀请音视频消息，只能出现在发送左侧
  * Created by Kind on 2017/6/20.
  */
-public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClickListener {
+public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClickListener,RequestComplete {
 
     private ImageView imgPic;
     private TextView tvTitle, tvContent, tvTime, tvConnect;
@@ -33,6 +39,10 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     private InviteVideoMessage mInviteVideoMessage;
     private CountDownTimerUtil util;
     private long id = -1;
+    private long whisperID ;
+    private String channelUid;
+    private long inviteId;
+    private int type;
 
     private boolean isTimeOut = true;
 
@@ -58,12 +68,19 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     public boolean reset(BaseMessage msgData, UserInfoLightweight infoLightweight) {
         if (msgData == null || !(msgData instanceof InviteVideoMessage))
             return false;
-
+        whisperID = msgData.getLWhisperID();
+        channelUid = msgData.getChannelID();
         mInviteVideoMessage = (InviteVideoMessage) msgData;
+        inviteId = mInviteVideoMessage.getInvite_id();
+
+        Log.e("TTTTTTTTTTTTTNNN",whisperID+"|||"+channelUid+"|||"+mInviteVideoMessage.getTimeout_tm());
+
         this.id = mInviteVideoMessage.getInvite_id();
         tvContent.setText(getContext().getString(R.string.video_cost, mInviteVideoMessage.getPrice()));
         if (mInviteVideoMessage.getMedia_tp() == 1) {
             tvTitle.setText(R.string.invite_video);
+        }else if (mInviteVideoMessage.getMedia_tp() == 2){
+            tvTitle.setText(R.string.invite_voice);
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             TimeMgr.getInstance().attach(this);
@@ -125,11 +142,23 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
             case ll_invite_connect:
                 if (util.isTimingTask(id) && !util.isHandled(id)){
                     //接通逻辑
+                    ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId,this);
                     break;
                 }
-
-//                UIShow.showInvitaExpiredDlg(context, id, mInviteVideoMessage.getPrice());
+                //点击回拨
+                UIShow.showInvitaExpiredDlg(context, whisperID,channelUid,mInviteVideoMessage.getType(),(int)mInviteVideoMessage.getPrice());
                 break;
         }
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        //RtcSubUtil.getInstance().stopVibrator();
+        if (response.isOk()) {
+            Accept accept = (Accept) response.getBaseData();
+
+            return;
+        }
+        PToast.showShort(response.getMsg() == null ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
     }
 }
