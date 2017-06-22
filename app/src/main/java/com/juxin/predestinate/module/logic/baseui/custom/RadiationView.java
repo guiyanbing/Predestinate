@@ -94,6 +94,7 @@ public class RadiationView extends View {
     private void init() {
         mPaint = new Paint();
         mPaint.setStrokeWidth(1);
+        mPaint.setAntiAlias(true);
         // 必须先设置color，再设置alpha
         mPaint.setColor(mColor);
         mPaint.setAlpha(mAlpha);

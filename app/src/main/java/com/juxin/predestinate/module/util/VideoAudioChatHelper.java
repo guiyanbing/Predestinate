@@ -234,7 +234,7 @@ public class VideoAudioChatHelper {
             Bundle bundle = newBundle(inviteId, 0, 1, type, 0);
             bundle.putInt("vc_girl_type", 2);
             bundle.putInt("vc_girl_price", 30);
-            startGroupInviteAct(context, bundle);
+            startGroupInviteAct(activity, bundle);
             return;
         }
         PToast.showShort(TextUtils.isEmpty(jo.optString("msg")) ? "数据异常" : jo.optString("msg"));
