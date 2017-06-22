@@ -33,7 +33,12 @@ public class PayWebActivity extends BaseActivity {
         String url = getIntent().getStringExtra("url");
         setTitle(getString(R.string.goods_pay_weixin1));
         LinearLayout web_container = (LinearLayout) findViewById(R.id.web_container);
-        webPanel = new WebPanelPayH5(this, url, true);
+        webPanel = new WebPanelPayH5(this, url, true, new H5PayStart() {
+            @Override
+            public void OnPayStart() {
+                finish();
+            }
+        });
         webPanel.setWebListener(new WebPanelPayH5.WebListener() {
             @Override
             public void onTitle(String title) {
