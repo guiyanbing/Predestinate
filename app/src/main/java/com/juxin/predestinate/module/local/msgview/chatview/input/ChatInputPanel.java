@@ -209,6 +209,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 ChatMediaPlayer.getInstance().stopPlayVoice();
+                getChatInstance().chatAdapter.moveToBottom();
+
                 chatVoiceRecord.setText("松开结束");
                 chatVoiceRecord.setPressed(true);
 
@@ -287,6 +289,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         showSendBtn(false);
         closeAllInput();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -300,6 +304,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatVoiceRecord.setVisibility(View.INVISIBLE);
 
         showSendBtn();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -312,6 +318,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(false);
         getChatInstance().chatSmilePanel.showToggle();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -342,6 +350,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(true);
         getChatInstance().chatSmilePanel.show(false);
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     public void closeAllInput() {
@@ -412,7 +422,9 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
+                boolean isInviteHe = false;
                 if(!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//女号--邀请他
+                    isInviteHe = true;
                     VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
                     if((!bean.getBooleanVideochat() && !bean.getBooleanAudiochat())) {
                         PToast.showShort("请在设置中开启视频、语音通话");
@@ -422,7 +434,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 long whisperId = getChatInstance().chatAdapter.getLWhisperId();
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperId);
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
-                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
+                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), isInviteHe);
             }
         });
     }

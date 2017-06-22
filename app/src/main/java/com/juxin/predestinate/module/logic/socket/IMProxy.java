@@ -147,6 +147,17 @@ public class IMProxy {
         }
     }
 
+    public void heartBeat3(boolean isForground){
+        try {
+            byte[] data = new byte[]{isForground ? (byte) 1 : (byte) 2};
+            long uid = ModuleMgr.getLoginMgr().getUid();
+            NetData netData = new NetData(uid, TCPConstant.MSG_ID_HEART_BEAT3, data);
+            send(netData);
+        }catch (Exception e){
+
+        }
+    }
+
     /**
      * socket发消息
      *

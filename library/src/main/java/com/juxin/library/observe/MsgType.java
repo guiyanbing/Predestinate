@@ -158,5 +158,10 @@ public class MsgType {
      */
     public static final String MT_Friend_Num_Notice = "MT_Friend_Num_Notice";
 
+    /**
+     * 个人信息变更消息类型
+     * 消息变更注册这个
+     */
+    public static final String MT_Time_Change = "MT_MyTime_Change";
 
 }

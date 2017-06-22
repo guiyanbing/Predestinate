@@ -129,10 +129,11 @@ public class VideoAudioChatHelper {
      * @param type
      * @param flag       判断是否显示进场dlg
      * @param singleType 非默认情况值, 0:还没选择,1:自己露脸，2:自己不露脸
+     * @param isInvate 是否来自邀请他按钮，只有女号有。布局和出场方式 singleType 不同
      */
-    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid) {
+    public void inviteVAChat(final Activity context, long dstUid, int type, boolean flag, int singleType, String channel_uid, boolean isInvate) {
         if (flag && PSP.getInstance().getInt(ModuleMgr.getCommonMgr().getPrivateKey(Constant.APPEAR_FOREVER_TYPE), 0) == 0) {
-            UIShow.showLookAtHerDlg(context, dstUid, channel_uid);
+            UIShow.showLookAtHerDlg(context, dstUid, channel_uid, isInvate);
             return;
         }
         this.singleType = singleType;
@@ -182,6 +183,29 @@ public class VideoAudioChatHelper {
 
         }
         executeInviteChat(context, dstUid, type, channel_uid);
+    }
+
+    public void girlSingleInvite(Activity activity,long dstUid,int type){
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", dstUid);
+        postParams.put("vtype", type);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.girlSingleInviteVa, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+            }
+        });
+    }
+
+    public void girlGroupInvite(Activity activity,int type){
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("vtype", type);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.girlGroupInviteVa, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+            }
+        });
     }
 
     /**
@@ -330,7 +354,9 @@ public class VideoAudioChatHelper {
         return bundle;
     }
 
-    //调起视频插件
+    /**
+     * 调起视频插件： 普通
+     */
     private void startRtcInitActivity(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
             Intent intent = new Intent();
@@ -342,4 +368,19 @@ public class VideoAudioChatHelper {
             downloadVideoPlugin(context);
         }
     }
+
+    /**
+     * 调起视频插件： 单聊, 群发
+     */
+    private void startRtcGroupInitActivity(Context context, Bundle bundle) {
+        if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
+            Intent intent = new Intent();
+            intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        } else {
+            downloadVideoPlugin(context);
+        }
+    }
+
 }

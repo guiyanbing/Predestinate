@@ -44,6 +44,8 @@ public enum ChatMsgType {
 
     CMT_29(ChatPanelSysNotice.class,  ChatPanelType.CPT_Custom, "系统消息"),
 
+    CMT_30(ChatPanelInvite.class, "邀请消息"),
+
     CMT_Max(ChatPanelUpgrade.class, "该版本不能显示的消息"),
 
     // 非有效类型

@@ -45,7 +45,6 @@
                     android:id="@+id/iv_pic"
                     android:layout_width="120dp"
                     android:layout_height="160dp"
-                    android:scaleType="centerCrop"
                     android:background="@drawable/f1_auth_bg" />
 
                 <LinearLayout
@@ -136,8 +135,7 @@
                     android:id="@+id/iv_video"
                     android:layout_width="120dp"
                     android:layout_height="160dp"
-                    android:background="@drawable/f1_auth_bg"
-                    android:scaleType="centerCrop" />
+                    android:background="@drawable/f1_auth_bg"/>
 
                 <LinearLayout
                     android:id="@+id/ll_auth_status_video"

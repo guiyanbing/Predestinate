@@ -80,7 +80,6 @@ public class DBCenterFLetter {
                 DBCenter.makeDBCallback(callback, ret);
             }
         });
-
     }
 
     /**
@@ -259,7 +258,6 @@ public class DBCenterFLetter {
         return null;
     }
 
-
     //// TODO: 2017/6/15 yuchenl: need refact
     public Observable<BaseMessage> isExistEx(String userid) {
         StringBuilder sql = new StringBuilder("SELECT * FROM ").append(FLetter.FLETTER_TABLE)
@@ -348,7 +346,6 @@ public class DBCenterFLetter {
                     }
                 });
     }
-
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private List<BaseMessage> convert(SqlBrite.Query query) {
@@ -475,9 +472,9 @@ public class DBCenterFLetter {
             @Override
             public void run() {
                 BaseMessage temp = isExist(message.getWhisperID());
-                if (temp == null) {
+                if (temp == null) {//没有数据
                     DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
-                    return; //没有数据
+                    return;
                 }
 
                 long ret = MessageConstant.OK;
@@ -504,8 +501,7 @@ public class DBCenterFLetter {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
         long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ?", userID);
-        long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
-        return result;
+        return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
     }
 
     public Observable<List<BaseMessage>> deleteCommon(long delTime) {

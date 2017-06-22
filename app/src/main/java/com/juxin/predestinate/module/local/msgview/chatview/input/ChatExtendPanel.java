@@ -123,7 +123,7 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
 
                         UserInfoLightweight info = chatAdapter.getUserInfo(chatAdapter.getLWhisperId());
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                                true, Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()));
+                                true, Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), false);
                         break;
                     case VOICE://语音
                         Statistics.userBehavior(SendPoint.chatframe_tool_voice,

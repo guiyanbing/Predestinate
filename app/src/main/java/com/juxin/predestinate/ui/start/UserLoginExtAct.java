@@ -143,6 +143,7 @@ public class UserLoginExtAct extends BaseActivity implements OnItemClickListener
                 finish();
                 break;
             case R.id.txt_user_reset_pw://重置密码
+                Statistics.userBehavior(SendPoint.login_findpassword);
                 UIShow.showFindPwdAct(this);
                 break;
         }

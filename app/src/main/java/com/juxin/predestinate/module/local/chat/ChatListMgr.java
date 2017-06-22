@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.db.DBModule;
 import com.juxin.predestinate.bean.db.DaggerAppComponent;
 import com.juxin.predestinate.bean.db.OldDBModule;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.SystemMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
@@ -29,6 +30,7 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
+import com.juxin.predestinate.module.util.CountDownTimerUtil;
 import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -478,7 +480,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      *
      * @param message
      */
-    public void setSpecialMsg(BaseMessage message) {
+    public void setSpecialMsg(final BaseMessage message) {
         switch (message.getType()) {
             case BaseMessage.TalkRed_MsgType://红包消息
                 setTalkMsg(message);
@@ -527,6 +529,10 @@ public class ChatListMgr implements ModuleBase, PObserver {
         UIShow.showChatRedBoxDialog((Activity) App.getActivity(), red_log_id, content);
     }
 
+    /**
+     * 系统消息
+     * @param message
+     */
     private void setSystemMsg(BaseMessage message) {
         if (message != null && !(message instanceof SystemMessage)) return;
         SystemMessage mess = (SystemMessage) message;
@@ -544,8 +550,15 @@ public class ChatListMgr implements ModuleBase, PObserver {
      * @param message
      */
     private void setInviteVideoDelivery(BaseMessage message) {
+        if (message == null || !(message instanceof InviteVideoMessage))
+            return;
 
+        InviteVideoMessage mInviteVideoMessage = (InviteVideoMessage) message;
+        CountDownTimerUtil util = CountDownTimerUtil.getInstance();
+        long timeCount = mInviteVideoMessage.getTimeout_tm() - ModuleMgr.getAppMgr().getTime();//计时时间
+        if (timeCount > 0 && !util.isTimingTask(mInviteVideoMessage.getInvite_id()) && !util.isTimingTask(mInviteVideoMessage.getInvite_id())) {
+            util.addTimerTask(mInviteVideoMessage.getInvite_id(),timeCount);
+        }
     }
-
 
 }
