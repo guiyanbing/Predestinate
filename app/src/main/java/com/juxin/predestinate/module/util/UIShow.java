@@ -1063,9 +1063,9 @@ public class UIShow {
      *
      * @param context
      * @param isLogin    是否处于登录状态
-     * @param bannedTime 封禁时间
+     * @param bannedTime 封禁时间戳
      */
-    public static void showBottomBannedDlg(final Context context, final boolean isLogin, String bannedTime) {
+    public static void showBottomBannedDlg(final Context context, final boolean isLogin, long bannedTime) {
         bannedDialog = null;
         bannedDialog = new BottomBannedDialog();
         bannedDialog.setCtx(context, isLogin, bannedTime);

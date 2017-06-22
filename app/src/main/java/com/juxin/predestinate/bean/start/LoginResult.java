@@ -1,7 +1,6 @@
 package com.juxin.predestinate.bean.start;
 
 
-import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -30,7 +29,6 @@ public class LoginResult extends BaseData {
 
     private String msg;//登录失败原因
 
-    private String bannedTime;//封禁时间
     private String token;
 
 
@@ -65,7 +63,6 @@ public class LoginResult extends BaseData {
             this.failCode = jsonfail.optInt("failCode");
             this.msg = jsonfail.optString("msg");
             this.expire = jsonfail.optLong("expire");
-            setBannedTime(expire);
         }
     }
 
@@ -82,17 +79,6 @@ public class LoginResult extends BaseData {
         myInfo.setYcoin(getYcoin());
     }
 
-    public String getBannedTime() {
-        return bannedTime;
-    }
-
-    public void setBannedTime(long expire) {
-        if (expire == -1) {
-            this.bannedTime = "封停时间:永久";
-        } else {
-            this.bannedTime = "解禁时间:还剩" + TimeBaseUtil.formatSecondsToDate3((int) (expire-System.currentTimeMillis()/1000));
-        }
-    }
 
     public String getToken() {
         return token;

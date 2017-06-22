@@ -250,7 +250,7 @@ public class LoginMgr implements ModuleBase {
                             return;
                         }
                         if (result.getLoginstatus() != 0 && result.getFailCode() == 2) {
-                            UIShow.showBottomBannedDlg(context, false, result.getBannedTime());
+                            UIShow.showBottomBannedDlg(context, false, result.getExpire());
                             clearCookie();
                             return;
                         }

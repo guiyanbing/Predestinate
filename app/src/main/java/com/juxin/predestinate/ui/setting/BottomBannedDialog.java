@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -23,7 +24,7 @@ import com.juxin.predestinate.ui.start.UserLoginExtAct;
 public class BottomBannedDialog extends BaseDialogFragment {
     private Context mContext;
     private boolean isLogin;
-    private String bannedTime;
+    private long bannedTime;
 
     public BottomBannedDialog() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -32,7 +33,7 @@ public class BottomBannedDialog extends BaseDialogFragment {
         setCancelable(true);
     }
 
-    public void setCtx(Context context, boolean isLogin, String bannedTime) {
+    public void setCtx(Context context, boolean isLogin, long bannedTime) {
         this.mContext = context;
         this.isLogin = isLogin;
         this.bannedTime = bannedTime;
@@ -47,7 +48,7 @@ public class BottomBannedDialog extends BaseDialogFragment {
     }
 
     private void initView() {
-        ((TextView) findViewById(R.id.tv_bottom_banned_time)).setText(bannedTime);
+        ((TextView) findViewById(R.id.tv_bottom_banned_time)).setText(getBannedTimeString(bannedTime));
         findViewById(R.id.iv_bottom_banned_exit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,9 +59,13 @@ public class BottomBannedDialog extends BaseDialogFragment {
             }
         });
         ContactBean contactBean = ModuleMgr.getCommonMgr().getContactBean();
-        if (contactBean == null) {
-            return;
-        }
+        if (contactBean == null) return;
         ((TextView) findViewById(R.id.bottom_banned_csphone)).setText(contactBean.getTel());
+    }
+
+    private String getBannedTimeString(long banndeTime) {
+        if (banndeTime == -1)
+            return getResources().getString(R.string.dal_bottom_bannd_time_001);
+        return getResources().getString(R.string.dal_bottom_bannd_time_002) + TimeBaseUtil.formatSecondsToDate3((int) (banndeTime - System.currentTimeMillis() / 1000));
     }
 }
