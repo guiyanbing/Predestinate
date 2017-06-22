@@ -81,6 +81,8 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
+        cb_own_agree.setChecked(true);
+
         if(!isMan && isInvate) {//女号--邀请他
             VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
             tv_title.setText(getString(R.string.invitation_he_type));
@@ -100,31 +102,30 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
             }
             tv_select_ok.setText(getString(R.string.cancel));
         }
-        cb_own_agree.setChecked(true);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_own_agree:
-                if(isMan) {
+                if(!isInvate) {// 男、女 来自非邀请他按钮
                     cb_own_agree.setChecked(true);
                     cb_own_disagree.setChecked(false);
                 }else {// 女性--邀请他(邀请视频)
-                    //TODO
+                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity)context,otherId,VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 }
 
                 break;
             case R.id.rl_own_disagree:
-                if(isMan) {
+                if(!isInvate) {// 男、女 来自非邀请他按钮
                     cb_own_agree.setChecked(false);
                     cb_own_disagree.setChecked(true);
                 }else {// 女性--邀请他(邀请语音)
-                    //TODO
+                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity)context,otherId,VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
                 break;
             case R.id.tv_select_ok:
-                if(isMan) {// 男性--看看她
+                if(!isInvate) {// 男、女 来自非邀请他按钮
                     if (cb_own_agree.isChecked()) {
                         selectVal = Constant.APPEAR_TYPE_OWN;
                         if (cb_def_sel.isChecked()) {

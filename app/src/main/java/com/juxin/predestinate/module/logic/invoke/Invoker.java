@@ -33,6 +33,7 @@ import com.juxin.predestinate.module.util.JsonUtil;
 import com.juxin.predestinate.module.util.LiveHelper;
 import com.juxin.predestinate.module.util.MediaNotifyUtils;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.main.MainActivity;
 
 import org.json.JSONArray;
@@ -379,8 +380,10 @@ public class Invoker {
                     UIShow.showRotaryActivity(context);
                     break;
                 case 508://群发视频
+                    VideoAudioChatHelper.getInstance().girlGroupInvite(context,VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                     break;
                 case 509://群发语音
+                    VideoAudioChatHelper.getInstance().girlGroupInvite(context,VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                     break;
                 default:
                     break;

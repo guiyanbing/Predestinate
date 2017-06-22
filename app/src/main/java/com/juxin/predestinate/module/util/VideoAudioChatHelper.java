@@ -185,6 +185,29 @@ public class VideoAudioChatHelper {
         executeInviteChat(context, dstUid, type, channel_uid);
     }
 
+    public void girlSingleInvite(Activity activity,long dstUid,int type){
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", dstUid);
+        postParams.put("vtype", type);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.girlSingleInviteVa, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+            }
+        });
+    }
+
+    public void girlGroupInvite(Activity activity,int type){
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("vtype", type);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.girlGroupInviteVa, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+
+            }
+        });
+    }
+
     /**
      * 检测是否需要下载视频插件
      */
