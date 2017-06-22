@@ -435,10 +435,23 @@ public class DBCenterFLetter {
         });
     }
 
+    //修改为已读
     public void updateReadStatus(long userID, DBCallback callback) {
         updateStatus(userID, MessageConstant.READ_STATUS, MessageConstant.DELIVERY_STATUS, callback);
     }
 
+    //修改为送达
+    public void updateDeliveryStatus(long userID, DBCallback callback) {
+        updateStatus(userID, MessageConstant.DELIVERY_STATUS, MessageConstant.OK_STATUS, callback);
+    }
+
+    /**
+     *
+     * @param userID
+     * @param modifyStatus 要修改为的状态
+     * @param judgmentStatus 判断的状态
+     * @param callback
+     */
     public void updateStatus(final long userID, final int modifyStatus, final int judgmentStatus, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
@@ -452,10 +465,6 @@ public class DBCenterFLetter {
                 DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
         });
-    }
-
-    public void updateDeliveryStatus(long userID, DBCallback callback) {
-        updateStatus(userID, MessageConstant.DELIVERY_STATUS, MessageConstant.OK_STATUS, callback);
     }
 
     public void updateStatusFail(final DBCallback callback) {
