@@ -111,7 +111,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                     cb_own_agree.setChecked(true);
                     cb_own_disagree.setChecked(false);
                 }else {// 女性--邀请他(邀请视频)
-                    //TODO
+                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity)context,otherId,VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                 }
 
                 break;
@@ -120,7 +120,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                     cb_own_agree.setChecked(false);
                     cb_own_disagree.setChecked(true);
                 }else {// 女性--邀请他(邀请语音)
-                    //TODO
+                    VideoAudioChatHelper.getInstance().girlSingleInvite((Activity)context,otherId,VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                 }
                 break;
             case R.id.tv_select_ok:
