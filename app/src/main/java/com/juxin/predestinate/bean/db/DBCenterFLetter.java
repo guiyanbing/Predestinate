@@ -435,20 +435,27 @@ public class DBCenterFLetter {
         });
     }
 
-    public void updateStatus(final long userID, final DBCallback callback) {
+    public void updateReadStatus(long userID, DBCallback callback) {
+        updateStatus(userID, MessageConstant.READ_STATUS, callback);
+    }
 
+    public void updateStatus(final long userID, final int status, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
-                values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.READ_STATUS));
+                values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
                         FLetter.COLUMN_USERID + " = ? AND " + FLetter.COLUMN_STATUS + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
                         String.valueOf(userID), String.valueOf(MessageConstant.OK_STATUS), String.valueOf(BaseMessage.video_MsgType));
-                long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
-                DBCenter.makeDBCallback(callback, result);
+
+                DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
         });
+    }
+
+    public void updateDeliveryStatus(long userID, DBCallback callback) {
+        updateStatus(userID, MessageConstant.DELIVERY_STATUS, callback);
     }
 
     public void updateStatusFail(final DBCallback callback) {
