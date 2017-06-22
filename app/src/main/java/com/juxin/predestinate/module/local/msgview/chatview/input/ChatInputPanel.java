@@ -422,7 +422,9 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 closeAllInput();
+                boolean isInviteHe = false;
                 if(!ModuleMgr.getCenterMgr().getMyInfo().isMan()) {//女号--邀请他
+                    isInviteHe = true;
                     VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
                     if((!bean.getBooleanVideochat() && !bean.getBooleanAudiochat())) {
                         PToast.showShort("请在设置中开启视频、语音通话");
@@ -432,7 +434,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 long whisperId = getChatInstance().chatAdapter.getLWhisperId();
                 UserInfoLightweight info = getChatInstance().chatAdapter.getUserInfo(whisperId);
                 VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), whisperId, VideoAudioChatHelper.TYPE_VIDEO_CHAT, true,
-                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), true);
+                        Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), isInviteHe);
             }
         });
     }
