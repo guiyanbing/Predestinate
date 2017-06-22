@@ -29,6 +29,9 @@ var MyGift = MyGift || (function ($) {
           //   }
           // },
           up: {
+            auto: true,
+            contentinit: '上拉刷新',
+            contentdown: '上拉刷新',
             callback: function () {
               var self = this;
               setTimeout(function () {
@@ -88,10 +91,10 @@ var MyGift = MyGift || (function ($) {
         var cells=null;
         if (tabindex === 0) {
            table = document.body.querySelector('#scroll1 .mui-scroll .mui-table-view');
-           cells = table.querySelectorAll('.mui-table-view-cell');
+           cells = table.querySelectorAll('.padding-box');
         }else {
            table = document.body.querySelector('#scroll2 .mui-scroll .mui-table-view');
-           cells = table.querySelectorAll('.mui-table-view-cell');
+           cells = table.querySelectorAll('.padding-box');
         }
 
         for (var j = 0;j <cells.length;j++) {
@@ -103,8 +106,8 @@ var MyGift = MyGift || (function ($) {
           var img = data.img;
           var num = data.num;
           var li = document.createElement('li');
-          li.className = 'mui-table-view-cell mui-media';
-          li.innerHTML = '<a href="">\
+          li.className = 'padding-box mui-media';
+          li.innerHTML = '<a href="#">\
             <img class="mui-media-object mui-pull-left" src="'+img+'" alt="">\
             <div class="mui-media-body" style="line-height: 46px">'+ name +'<p class="mui-ellipsis mui-pull-right">X'+  num+'</p>\</div></a>';
           table.appendChild(li);

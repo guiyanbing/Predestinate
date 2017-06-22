@@ -391,10 +391,14 @@ public class VideoAudioChatHelper {
      */
     private void startRtcInitActivity(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
-            Intent intent = new Intent();
-            intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
-            intent.putExtras(bundle);
-            context.startActivity(intent);
+            try {
+                Intent intent = new Intent();
+                intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             downloadVideoPlugin(context);
         }
@@ -405,10 +409,14 @@ public class VideoAudioChatHelper {
      */
     private void startGroupInviteAct(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
-            Intent intent = new Intent();
-            intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
-            intent.putExtras(bundle);
-            context.startActivity(intent);
+            try {
+                Intent intent = new Intent();
+                intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             downloadVideoPlugin(context);
         }
