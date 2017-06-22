@@ -773,6 +773,7 @@
     <string name="lost_efficacy">已失效</string>
     <string name="connect">立即接通</string>
     <string name="call_back">立即回拨</string>
+    <string name="chat_join_fail_tips">加入聊天失败，请检查网络后重试</string>
 
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>

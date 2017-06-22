@@ -376,11 +376,15 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             switch (msg.getStatus()) {
                 case 1: // 发送成功
-                    status.setText("送达");
+                    status.setText("发送中");
                     break;
 
                 case 2: // 发送失败
                     status.setText("失败");
+                    break;
+
+                case 5: // 送达
+                    status.setText("送达");
                     break;
 
                 case 11: // 已读
@@ -392,7 +396,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                     break;
             }
 
-            if (msg.getStatus() == 3) {//发送中,
+            if (msg.getStatus() == MessageConstant.SENDING_STATUS) {//发送中,
                 long time = msg.getCurrentTime() - msg.getTime();
                 if (time >= 90000) {
                     statusProgress.setVisibility(View.GONE);
@@ -409,7 +413,8 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
                 status.setVisibility(View.GONE);
                 statusError.setVisibility(View.VISIBLE);
             } else if (msg.getStatus() == MessageConstant.OK_STATUS
-                    || msg.getStatus() == MessageConstant.READ_STATUS) {//状态
+                    || msg.getStatus() == MessageConstant.READ_STATUS ||
+                    msg.getStatus() == MessageConstant.DELIVERY_STATUS) {//状态
                 statusProgress.setVisibility(View.GONE);
                 status.setVisibility(View.VISIBLE);
                 statusError.setVisibility(View.GONE);

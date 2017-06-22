@@ -491,6 +491,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.System_MsgType://系统消息
                 setSystemMsg(message);
                 break;
+            case BaseMessage.Msg_RecvedType://送达消息
+                setMsgRecvedType(message);
+                break;
             case BaseMessage.inviteVideoDelivery_MsgType://语音(视频)邀请送达男用户
                 setInviteVideoDelivery(message);
                 break;
@@ -543,6 +546,16 @@ public class ChatListMgr implements ModuleBase, PObserver {
                     break;
             }
         }
+    }
+
+    /**
+     * 送达消息Msg_RecvedType
+     * @param message
+     */
+    private void setMsgRecvedType(BaseMessage message) {
+        if (message != null && !(message instanceof SystemMessage)) return;
+        SystemMessage mess = (SystemMessage) message;
+        ModuleMgr.getChatMgr().updateDeliveryStatus(mess.getTid(), mess.getMsgID(), null);
     }
 
     /**

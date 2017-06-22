@@ -1226,6 +1226,12 @@ public class ChatMgr implements ModuleBase {
             return;
         }
 
+        //送达消息
+        if (bean.getMtp() == BaseMessage.BaseMessageType.msgRecved.getMsgType()) {
+            ModuleMgr.getChatMgr().updateDeliveryStatus(bean.getFid(),bean.getD(),null);
+            return;
+        }
+
         //已读消息
         if (bean.getMtp() == BaseMessage.BaseMessageType.sys.getMsgType()) {
             ModuleMgr.getChatListMgr().updateToReadPrivate(bean.getFid());
