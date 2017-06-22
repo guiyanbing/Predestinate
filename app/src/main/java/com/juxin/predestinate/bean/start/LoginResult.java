@@ -44,27 +44,29 @@ public class LoginResult extends BaseData {
     @Override
     public void parseJson(String jsonStr) {
         JSONObject jsonFirst = getJsonObject(jsonStr);
-        JSONObject jsonNext = jsonFirst.optJSONObject("userdata");
+        JSONObject jsonRes = jsonFirst.optJSONObject("res");
+        if (jsonRes==null)
+            return;
+        this.loginstatus= jsonRes.optInt("loginstatus");
+        JSONObject jsonNext = jsonRes.optJSONObject("userdata");
         if (jsonNext != null) {
             this.setUid(jsonNext.optLong("uid"));
-            this.setNickname(jsonNext.optString("nickname"));
-            this.setAvatar(jsonNext.optString("avatar"));
-            this.setAvatar_status(jsonNext.optInt("avatar_status"));
+//            this.setNickname(jsonNext.optString("nickname"));
+//            this.setAvatar(jsonNext.optString("avatar"));
+//            this.setAvatar_status(jsonNext.optInt("avatar_status"));
             this.setGender(jsonNext.optInt("gender"));
             this.setGroup(jsonNext.optInt("group"));
             this.setYcoin(jsonNext.optInt("ycoin"));
             this.setMiss_info(jsonNext.optInt("missinfo"));
             this.token= jsonNext.optString("token");
         }
-        JSONObject jsonfail = jsonFirst.optJSONObject("faildata");
+        JSONObject jsonfail = jsonRes.optJSONObject("faildata");
         if (jsonfail != null) {
-            this.failCode = jsonfail.optInt("filCode");
+            this.failCode = jsonfail.optInt("failCode");
             this.msg = jsonfail.optString("msg");
             this.expire = jsonfail.optLong("expire");
             setBannedTime(expire);
-
         }
-        setUserInfo();
     }
 
 
@@ -74,8 +76,6 @@ public class LoginResult extends BaseData {
     public void setUserInfo() {
         UserDetail myInfo = ModuleMgr.getCenterMgr().getMyInfo();
         myInfo.setUid(getUid());
-        myInfo.setNickname(getNickname());
-        myInfo.setAvatar(getAvatar());
         myInfo.setAvatar_status(getAvatar_status());
         myInfo.setGender(getGender());
         myInfo.setGroup(getGroup());
@@ -90,7 +90,7 @@ public class LoginResult extends BaseData {
         if (expire == -1) {
             this.bannedTime = "封停时间:永久";
         } else {
-            this.bannedTime = "解禁时间:还剩" + TimeBaseUtil.formatSecondsToDate((int) (expire/1000));
+            this.bannedTime = "解禁时间:还剩" + TimeBaseUtil.formatSecondsToDate3((int) (expire-System.currentTimeMillis()/1000));
         }
     }
 

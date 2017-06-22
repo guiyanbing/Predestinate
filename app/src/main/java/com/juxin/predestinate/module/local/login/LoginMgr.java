@@ -243,17 +243,19 @@ public class LoginMgr implements ModuleBase {
                         }
                         // 临时资料设置
                         LoginResult result = (LoginResult) response.getBaseData();
+                        ModuleMgr.getLoginMgr().setCookie("auth=" + result.getToken());
                         if (result.getLoginstatus() != 0 && result.getFailCode() != 2) {
                             PToast.showShort(result.getMsg());
+                            clearCookie();
                             return;
                         }
                         if (result.getLoginstatus() != 0 && result.getFailCode() == 2) {
                             UIShow.showBottomBannedDlg(context, false, result.getBannedTime());
+                            clearCookie();
                             return;
                         }
                         result.setUserInfo();
                         putAllLoginInfo(result.getUid(), pwd, true);// Cookie 在http响应头中返回
-                        ModuleMgr.getLoginMgr().setCookie("auth=" + result.getToken());
                         if (!result.isValidDetailInfo()) {
                             PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
                             UIShow.showUserInfoCompleteAct(context, result.getGender());

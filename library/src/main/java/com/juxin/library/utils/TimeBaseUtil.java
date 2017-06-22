@@ -311,7 +311,32 @@ public class TimeBaseUtil {
         return str.toString();
     }
 
-
+    /**
+     * 格式化秒钟为天时分
+     *
+     * @param seconds
+     */
+    public static String formatSecondsToDate3(int seconds) {
+        int oneDayToSeconds = 86400;
+        int oneHourToSeconds = 3600;
+        int oneMinuteToSeconds = 60;
+        int day = seconds / oneDayToSeconds;
+        seconds = seconds - day * oneDayToSeconds;
+        int hour = seconds / oneHourToSeconds;
+        seconds = seconds - hour * oneHourToSeconds;
+        int minute = seconds / oneMinuteToSeconds;
+        StringBuffer str = new StringBuffer();
+        if (day != 0) {
+            str.append(day + "天");
+        }
+        if (hour != 0) {
+            str.append(hour + "小时");
+        }
+        if (minute != 0) {
+            str.append(minute + "分钟");
+        }
+        return str.toString();
+    }
     /**
      * 格式化秒钟为天时分秒
      *
