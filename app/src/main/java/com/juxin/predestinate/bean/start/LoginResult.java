@@ -53,7 +53,7 @@ public class LoginResult extends BaseData {
             this.setGender(jsonNext.optInt("gender"));
             this.setGroup(jsonNext.optInt("group"));
             this.setYcoin(jsonNext.optInt("ycoin"));
-            this.setMiss_info(jsonNext.optInt("miss_info"));
+            this.setMiss_info(jsonNext.optInt("missinfo"));
             this.token= jsonNext.optString("token");
         }
         JSONObject jsonfail = jsonFirst.optJSONObject("faildata");
