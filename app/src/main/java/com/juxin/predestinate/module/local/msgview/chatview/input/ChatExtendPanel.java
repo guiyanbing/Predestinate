@@ -120,10 +120,15 @@ public class ChatExtendPanel extends ChatViewPanel implements RequestComplete {
                             PToast.showShort(getContext().getString(R.string.user_other_not_video_chat));
                             return;
                         }
-
+                        boolean isShow;
                         UserInfoLightweight info = chatAdapter.getUserInfo(chatAdapter.getLWhisperId());
+                        if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+                            isShow = true;
+                        }else {
+                            isShow = false;
+                        }
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) getContext(), chatAdapter.getLWhisperId(), VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                                true, Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), false);
+                                isShow, Constant.APPEAR_TYPE_NO, info == null ? "" : String.valueOf(info.getChannel_uid()), false);
                         break;
                     case VOICE://语音
                         Statistics.userBehavior(SendPoint.chatframe_tool_voice,
