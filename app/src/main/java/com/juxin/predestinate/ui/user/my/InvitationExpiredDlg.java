@@ -28,7 +28,7 @@ public class InvitationExpiredDlg extends BaseDialogFragment implements View.OnC
 
     private long otherId;
     private String channel_uid;
-    private String type;//类型视频、语音
+    private int type;//类型: 1 视频、2 语音
     private int price;
 
     private Context context;
@@ -41,7 +41,7 @@ public class InvitationExpiredDlg extends BaseDialogFragment implements View.OnC
         setCancelable(false);
     }
 
-    public void setData(Context context, long otherId, String channel_uid, String type, int price) {
+    public void setData(Context context, long otherId, String channel_uid, int type, int price) {
         this.context = context;
         this.otherId = otherId;
         this.channel_uid = channel_uid;
@@ -68,12 +68,13 @@ public class InvitationExpiredDlg extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_call:
-                //TODO 回拨
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                        true, Constant.APPEAR_TYPE_NO, channel_uid, false);
-
-                VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_AUDIO_CHAT,
-                        channel_uid);
+                if(type == 1) {
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                            true, Constant.APPEAR_TYPE_NO, channel_uid, false);
+                }else if(type == 2) {
+                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_AUDIO_CHAT,
+                            channel_uid);
+                }
                 dismiss();
                 break;
             default:
