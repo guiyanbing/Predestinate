@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -14,6 +15,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.FinalKey;
+import com.juxin.predestinate.module.logic.config.Hosts;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.WebUtil;
 
@@ -23,6 +25,7 @@ import com.juxin.predestinate.module.util.WebUtil;
 public class SearchTestActivity extends BaseActivity {
 
     private EditText url_edit, uid_edit, db_edit;
+    private TextView switch_server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class SearchTestActivity extends BaseActivity {
         url_edit = (EditText) findViewById(R.id.url_edit);
         uid_edit = (EditText) findViewById(R.id.uid_edit);
         db_edit = (EditText) findViewById(R.id.db_edit);
+        switch_server = (TextView) findViewById(R.id.switch_server);
+        switch_server.setText(Hosts.SERVER_TYPE == 0 ? "正式服" : "测试服");
 
         url_edit.setText(PSP.getInstance().getString(FinalKey.TESTING_WEB_STORE, ""));
     }

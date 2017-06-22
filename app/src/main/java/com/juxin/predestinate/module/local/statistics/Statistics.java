@@ -13,7 +13,6 @@ import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
@@ -277,10 +276,10 @@ public class Statistics {
         singleMap.put("tracker_code", EncryptUtil.md5(ModuleMgr.getAppMgr().getDeviceID()));//追踪码MD5,访客(包含游客)唯一标识且终生唯一
         singleMap.put("session_id", EncryptUtil.md5(getSessionId()));//会话标识MD5,30分钟无操作失效
 
-        LinkedList<Activity> activities = App.getLifecycleCallbacks().getActivities();
+        LinkedList<String> activities = App.getLifecycleCallbacks().getActivities();
         singleMap.put("page", App.getActivity().getClass().getSimpleName());//当前页面，栈顶activity
         singleMap.put("referer", activities.size() > 1 ?
-                activities.get(activities.size() - 2).getClass().getSimpleName() : "");//来源页面(可选)，栈中第二个activity
+                activities.get(activities.size() - 2) : "");//来源页面(可选)，栈中第二个activity
         singleMap.put("event_type", sendPoint);//事件类型
         singleMap.put("event_data", TextUtils.isEmpty(fixParams) ? "{}" : fixParams);//事件数据(可选,有数据需提供数据说明文档)
 
@@ -313,13 +312,13 @@ public class Statistics {
      */
     private static void sendStatistics(HashMap<String, Object> postParams) {
         if (postParams == null) postParams = new HashMap<>();
-        LinkedList<HashMap<String, Object>> cachedList = JSON.parseObject(PCache.getInstance().getCache(BEHAVIOR_CACHE_KEY),
+        LinkedList<HashMap<String, Object>> cachedList = JSON.parseObject(PSP.getInstance().getString(BEHAVIOR_CACHE_KEY, "[]"),
                 new TypeReference<LinkedList<HashMap<String, Object>>>() {
                 });
         if (cachedList == null) cachedList = new LinkedList<>();
         if (cachedList.size() < 10) {
             cachedList.add(postParams);
-            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
+            PSP.getInstance().put(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
             return;
         }
         if (NetworkUtils.isConnected(App.context)) {
@@ -341,15 +340,15 @@ public class Statistics {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
                     if (response.isOk()) {
-                        PCache.getInstance().deleteCache(BEHAVIOR_CACHE_KEY);
+                        PSP.getInstance().remove(BEHAVIOR_CACHE_KEY);
                     } else {
-                        PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(tempList));
+                        PSP.getInstance().put(BEHAVIOR_CACHE_KEY, JSON.toJSONString(tempList));
                     }
                 }
             });
         } else {
             cachedList.add(postParams);
-            PCache.getInstance().cacheString(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
+            PSP.getInstance().put(BEHAVIOR_CACHE_KEY, JSON.toJSONString(cachedList));
         }
     }
 }

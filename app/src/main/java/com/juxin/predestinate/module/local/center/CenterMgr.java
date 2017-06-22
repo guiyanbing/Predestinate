@@ -22,8 +22,6 @@ import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.settting.Setting;
 import com.juxin.predestinate.module.local.login.LoginMgr;
-import com.juxin.predestinate.module.local.statistics.SendPoint;
-import com.juxin.predestinate.module.local.statistics.Statistics;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -34,6 +32,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.request.RequestParam;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
+import com.juxin.predestinate.module.logic.socket.TCPConstant;
 import com.juxin.predestinate.ui.setting.UserModifyPwdAct;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
@@ -79,8 +78,18 @@ public class CenterMgr implements ModuleBase, PObserver {
                     clearUserInfo();
                 }
                 break;
+
             case MsgType.MT_App_CoreService://socket已连接，登录
                 IMProxy.getInstance().login();
+                break;
+
+            case MsgType.MT_App_IMStatus://socket登录成功后取离线消息
+                HashMap<String, Object> data = (HashMap<String, Object>) value;
+                int type = (int) data.get("type");
+                if (type == TCPConstant.SOCKET_STATUS_Login_Success) {
+                    PLogger.d("---offlineMessage--->SOCKET_STATUS_Login_Success");
+                    ModuleMgr.getChatMgr().getOfflineMsg();
+                }
                 break;
 
             case MsgType.MT_Update_MyInfo:
@@ -270,9 +279,8 @@ public class CenterMgr implements ModuleBase, PObserver {
                 if (complete != null) complete.onRequestComplete(response);
                 if (response.isOk()) {
                     reqMyInfo();
-                    return;
                 }
-                PToast.showShort("修改失败");
+                PToast.showShort(response.getMsg());
             }
         });
     }

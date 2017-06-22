@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bugtags.library.Bugtags;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.baseui.custom.RightSlidLinearLayout;
-import com.juxin.predestinate.module.logic.notify.FloatingMgr;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -109,19 +111,25 @@ public class BaseActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        FloatingMgr.getInstance().onResume(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
+        Bugtags.onResume(this);//注：Bugtags回调 1
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
-        FloatingMgr.getInstance().onPause(getWindowManager());//设置应用内悬浮窗的windowManager，必须添加
+        Bugtags.onPause(this);//注：Bugtags回调 2
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        Bugtags.onDispatchTouchEvent(this, event);//注：Bugtags回调 3
+        return super.dispatchTouchEvent(event);
     }
 
     /**

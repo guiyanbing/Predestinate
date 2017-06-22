@@ -15,9 +15,6 @@ import java.net.SocketAddress;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.SocketFactory;
 
@@ -29,7 +26,7 @@ public class KeepAliveSocket {
 
     private final int SOCKET_PACKET_QUEUE_SIZE = 500;
     private Socket socket;
-//    private Condition socketConnectCondition;
+    //    private Condition socketConnectCondition;
     private volatile SocketState state = SocketState.INVALID;
     private SocketAddress address;
     private Executor singleDispatchExecutor = Executors.newSingleThreadExecutor();
@@ -46,7 +43,7 @@ public class KeepAliveSocket {
 
     private SocketConnectionListener listener;
 
-    private void setState (SocketState newState) {
+    private void setState(SocketState newState) {
         if (state == newState) {
             return;
         }
@@ -112,7 +109,7 @@ public class KeepAliveSocket {
         setState(SocketState.CONNECTING);
 
         try {
-            if(address == null) {
+            if (address == null) {
                 address = new InetSocketAddress(host, port);
             }
 //            socketStateLock.lock();
@@ -200,19 +197,20 @@ public class KeepAliveSocket {
             setState(SocketState.DISCONNECT_ERROR);
         }
     }
-    private void onReadClose () {
+
+    private void onReadClose() {
         PLogger.d("Socket reader close");
         packerReader = null;
         check2Close();
     }
 
-    private void onWriterClose () {
+    private void onWriterClose() {
         PLogger.d("Socket writer close");
         packetWriter = null;
         check2Close();
     }
 
-    private void onIOError () {
+    private void onIOError() {
         disconnect(false);
     }
 
@@ -226,6 +224,7 @@ public class KeepAliveSocket {
         public SocketIoHandler(KeepAliveSocket client) {
             this.client = client;
         }
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -293,7 +292,7 @@ public class KeepAliveSocket {
         public void init(KeepAliveSocket client) {
             endWithException = false;
 
-            writerThread = new SubTread(client,this);
+            writerThread = new SubTread(client, this);
             writerThread.start();
             PLogger.d("Socket send packet thread init and start");
         }
@@ -318,10 +317,10 @@ public class KeepAliveSocket {
             NetData packet = null;
             //loop
             try {
-                while (!done() ) {
+                while (!done()) {
                     packet = queue.take();
                     if (packet == null) {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                         continue;
                     }
                     PLogger.d("Socket send packet :" + packet.toString());
@@ -332,8 +331,7 @@ public class KeepAliveSocket {
                     output.flush();
                     packet = null;
                 }
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 PLogger.d("Socket send packet ,take packet from queue interrupt");
             } catch (IOException e) {
                 final NetData errorPacket = packet;
@@ -366,7 +364,7 @@ public class KeepAliveSocket {
                         }
                     });
                 }
-            }while (true);
+            } while (true);
 
             //注意消息顺序
             if (endWithException) {
@@ -428,7 +426,7 @@ public class KeepAliveSocket {
 
         private void readPacket() {
             try {
-                while (!done() ) {
+                while (!done()) {
                     PLogger.d("Socket read packet thread start read");
                     NetData data = NetData.parseNetData(input);
                     if (data != null) {
@@ -437,12 +435,15 @@ public class KeepAliveSocket {
                     } else {
                         PLogger.d("Socket read packet dispatch packet null");
                     }
+                    Thread.sleep(15);
                 }
             } catch (IOException e) {
                 if (!isShutDown) {
                     endWithException = true;
                     PLogger.d("Socket read packet error:" + e.getMessage());
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             //注意消息顺序

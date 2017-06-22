@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
@@ -219,7 +220,7 @@ public class VideoAudioChatHelper {
      */
     public void downloadVideoPlugin(final Context context) {
         if (!downloadPluginFragment.isAdded())
-            downloadPluginFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "download");
+            downloadPluginFragment.show((FragmentActivity) context);
         if (isDownloading) return;
 
         isDownloading = true;
@@ -241,14 +242,14 @@ public class VideoAudioChatHelper {
             @Override
             public void onSuccess(String url, String filePath) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
                 ApkUnit.ExecApkFile(context, filePath);
             }
 
             @Override
             public void onFail(String url, Throwable throwable) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
             }
         });
     }
@@ -272,15 +273,21 @@ public class VideoAudioChatHelper {
         });
     }
 
-    private void handleInviteChat(final Context context, HttpResponse response, long dstUid, int type, String channel_uid) {
+    private void handleInviteChat(final Context context, HttpResponse response, final long dstUid, final int type, String channel_uid) {
         //特殊错误码: 3001 用户正在视频聊天中 3002 该用户无法视频聊天 3003 钻石余额不足
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
-            long vcID = resJo.optLong("vc_id");
+            final long vcID = resJo.optLong("vc_id");
             addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
-            ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
+            MsgMgr.getInstance().delay(new Runnable() {
+                @Override
+                public void run() {
+                    ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
+                }
+            },500);
+
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             startRtcInitActivity(context, bundle);
             return;

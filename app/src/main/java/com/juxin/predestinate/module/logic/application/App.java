@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Process;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
+
+import com.bugtags.library.Bugtags;
+import com.bugtags.library.BugtagsOptions;
 
 /**
  * Application
@@ -30,17 +35,70 @@ public class App extends MultiDexApplication {
     public static boolean isLogin = false;
 
     private static PActivityLifecycleCallbacks lifecycleCallbacks;
+    private static int initFlag;
 
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
 
-       // initAppComponent();
+        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
+        String packageName = ModuleMgr.getAppMgr().getPackageName();
+        if (processName != null && processName.equals(packageName)) {//主进程
+            initAppDelay();
+        }else{
+            initApp();
+        }
+    }
+
+    private void initAppDelay() {
+        if (initFlag > 0)
+            return;
+
+        initFlag++;
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                initApp();
+                initFlag++;
+            }
+        });
+    }
+
+    private void initApp() {
         ModuleMgr.initModule(context);
+        initBugTags();
+    }
+
+    /**
+     * App是否已初始化完成
+     *
+     * @return
+     */
+    public static boolean isAppInited() {
+        return initFlag > 1;
+    }
+
+    /**
+     * 初始化Bugtags
+     */
+    private void initBugTags() {
+        BugtagsOptions options = new BugtagsOptions.Builder()
+                .trackingLocation(true)//是否获取位置
+                .trackingCrashLog(true)//是否收集crash
+                .trackingConsoleLog(true)//是否收集console log
+                .trackingUserSteps(true)//是否收集用户操作步骤
+                .crashWithScreenshot(true)//crash附带图
+                .versionName(ModuleMgr.getAppMgr().getVerName())//自定义版本名称
+                .versionCode(ModuleMgr.getAppMgr().getVerCode())//自定义版本号
+                .channel(ModuleMgr.getAppMgr().getUMChannel())//渠道标识
+                .trackingNetworkURLFilter("(.*)")//自定义网络请求跟踪的 url 规则
+                .build();
+        Bugtags.start("882cc0b7fdb25bed47b9fa577ea684f0", this, Bugtags.BTGInvocationEventNone, options);
     }
 
     /**
@@ -66,6 +124,14 @@ public class App extends MultiDexApplication {
      */
     public static Resources getResource() {
         return context.getResources();
+    }
+
+    /**
+     * 判断最后的Activity是否属于前台显示
+     * @return
+     */
+    public static boolean isForeground(){
+        return lifecycleCallbacks.isForeground();
     }
 
     // -----------------------------------------------------

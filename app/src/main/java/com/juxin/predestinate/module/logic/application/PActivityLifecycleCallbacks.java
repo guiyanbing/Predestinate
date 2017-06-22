@@ -13,12 +13,13 @@ import java.util.LinkedList;
 public class PActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
     // 本地模拟的activity栈链表，记录activity跳转行为
-    private LinkedList<Activity> activities = new LinkedList<>();
+    private LinkedList<String> activities = new LinkedList<>();
+    private volatile boolean isForeground = false;//最后的Activity是否属于前台显示
 
     /**
      * @return 获取本地模拟的activity栈链表
      */
-    public LinkedList<Activity> getActivities() {
+    public LinkedList<String> getActivities() {
         return activities;
     }
 
@@ -33,10 +34,11 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityResumed(Activity activity) {
+        isForeground = true;
         App.activity = activity;
 
         // 本地模拟一个只存储10条记录的activity栈
-        activities.add(activity);
+        activities.add(activity.getClass().getSimpleName());
         if (activities.size() > 10) activities.remove(0);
     }
 
@@ -46,6 +48,9 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityStopped(Activity activity) {
+        if (App.activity == activity) {
+            isForeground = false;
+        }
     }
 
     @Override
@@ -54,5 +59,12 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityDestroyed(Activity activity) {
+    }
+
+    /**
+     * @return 最后的Activity是否属于前台显示
+     */
+    public boolean isForeground() {
+        return isForeground;
     }
 }

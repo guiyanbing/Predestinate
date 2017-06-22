@@ -56,6 +56,8 @@ public class NetData implements Parcelable {
     // 同时为零，表示不用
     private int num1 = 0;
     private int num2 = 0;
+
+    private byte[] noEncryptContent = null; //非加密用内容体
     /**
      * 消息id
      * 对应消息体中的"d"字段
@@ -88,6 +90,19 @@ public class NetData implements Parcelable {
                 e.printStackTrace();
                 this.length = 0;
             }
+        }
+    }
+
+    public NetData(long uid, int msgType, byte[] noEncryptContent) {
+        super();
+        this.uid = uid;
+        this.msgType = msgType;
+        this.noEncryptContent = noEncryptContent;
+
+        if (noEncryptContent == null || noEncryptContent.length ==0) {
+            this.length = 0;
+        } else {
+            this.length = noEncryptContent.length;
         }
     }
 
@@ -328,11 +343,13 @@ public class NetData implements Parcelable {
             baos.write(bUid);
             baos.write(bType);
 
-            if (num1 == 0 && num2 == 0) {
+            if (noEncryptContent != null && noEncryptContent.length > 0 ) {
+                baos.write(noEncryptContent);
+            }else if (num1 == 0 && num2 == 0) {
                 if (!TextUtils.isEmpty(content)) {
                     baos.write(content.getBytes("UTF-8"));
                 }
-            } else {
+            }  else {
                 baos.write(ByteUtil.toBytes(num1));
                 baos.write(ByteUtil.toBytes(num2));
             }

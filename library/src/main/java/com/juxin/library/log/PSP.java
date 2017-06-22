@@ -1,9 +1,10 @@
 package com.juxin.library.log;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import java.util.Map;
+import net.grandcentrix.tray.core.TrayItem;
+
+import java.util.Collection;
 
 /**
  * sharedPreferences管理类，须在application中进行init操作
@@ -27,7 +28,7 @@ public class PSP {
         return instance;
     }
 
-    private SharedPreferences sharedPreferences;
+    private PTrayPreferences sharedPreferences;
 
     /**
      * 初始化sharedpreferences存储
@@ -35,7 +36,7 @@ public class PSP {
      * @param context 上下文
      */
     public void init(Context context) {
-        init("xiaou", context);
+        init(context, "xiaou");
     }
 
     /**
@@ -44,8 +45,9 @@ public class PSP {
      * @param pspName sharedpreferences存储文件名
      * @param context 上下文
      */
-    public void init(String pspName, Context context) {
-        sharedPreferences = context.getSharedPreferences(pspName, Context.MODE_PRIVATE);
+    public void init(Context context, String pspName) {
+        sharedPreferences = new PTrayPreferences(context, pspName);
+        PLogger.d("---PSP init--->" + pspName);
     }
 
     // ===================初始化=====================
@@ -58,22 +60,20 @@ public class PSP {
             PLogger.d("sharedPreferences is null.");
             return;
         }
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         if (object instanceof String) {
-            editor.putString(key, (String) object);
+            sharedPreferences.put(key, (String) object);
         } else if (object instanceof Integer) {
-            editor.putInt(key, (Integer) object);
+            sharedPreferences.put(key, (Integer) object);
         } else if (object instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) object);
+            sharedPreferences.put(key, (Boolean) object);
         } else if (object instanceof Float) {
-            editor.putFloat(key, (Float) object);
+            sharedPreferences.put(key, (Float) object);
         } else if (object instanceof Long) {
-            editor.putLong(key, (Long) object);
+            sharedPreferences.put(key, (Long) object);
         } else {
-            editor.putString(key, String.valueOf(object));
+            sharedPreferences.put(key, String.valueOf(object));
         }
         PLogger.d("------>key: " + key + " , value: " + String.valueOf(object));
-        editor.apply();
     }
 
     public synchronized String getString(String key, String defaultValue) {
@@ -134,9 +134,7 @@ public class PSP {
             PLogger.d("sharedPreferences is null.");
             return;
         }
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(key);
-        editor.apply();
+        if (sharedPreferences.contains(key)) sharedPreferences.remove(key);
     }
 
     /**
@@ -147,9 +145,7 @@ public class PSP {
             PLogger.d("sharedPreferences is null.");
             return;
         }
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        sharedPreferences.clear();
     }
 
     /**
@@ -162,7 +158,7 @@ public class PSP {
     /**
      * 返回所有的键值对
      */
-    public synchronized Map<String, ?> getAll() {
+    public synchronized Collection<TrayItem> getAll() {
         return sharedPreferences == null ? null : sharedPreferences.getAll();
     }
 }

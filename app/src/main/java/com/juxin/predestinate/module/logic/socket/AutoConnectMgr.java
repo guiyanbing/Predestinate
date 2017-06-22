@@ -103,6 +103,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         this.token = token;
 
         if (heartBeating) return;//如果是保持心跳连接状态，就不再次登录
+        TimerUtil.resetIncreaseTime();//主动重连接时重置间隔时间
         PLogger.d("login: ------>发送连接服务器的消息");
         connect();
     }
@@ -339,7 +340,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * 将即时通讯中收到消息通过ICSCallback抛出。
      */
     private void onMessage(NetData data, long msgId) {
-        PLogger.d("onMessage:---->msgId:" + msgId + ",sender:" + data.getUid() + ",content:" + data.getContent());
+//        PLogger.i("onMessage:---->msgId:" + msgId + ",sender:" + data.getUid() + ",content:" + data.getContent());
         try {
             if (iCSCallback != null) {
                 iCSCallback.onMessage(data);

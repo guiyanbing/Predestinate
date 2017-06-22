@@ -17,6 +17,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.JsonUtil;
+import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.ui.user.my.adapter.MyAttentionAdapter;
 
 import java.util.ArrayList;
@@ -71,11 +72,8 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
                 lists.parseJson(response.getResponseString());
 
                 List<AttentionList.AttentionInfo> infos = lists.getArr_lists();
-//                mUserDetails.addAll(AttentionUtil.HandleAttentionList(infos, AttentionUtil.MYATTENTION));
-                for (int i = 0; i < mUserDetails.size(); i++) {
-                    mUserDetails.get(i).setType(1);
-                }
                 if (infos != null && !infos.isEmpty()) {
+                    AttentionUtil.saveUserIdsById(infos);
                     List<Long> userIds = new ArrayList<>();
                     int size = infos.size();
                     for (int i = 0; i < size; i++) {
@@ -84,7 +82,6 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
                     ModuleMgr.getCommonMgr().reqUserInfoSummary(userIds, this);//批量获取用户信息
                     return;
                 }
-//                mAttentionMeAdapter.setList(mUserDetails);
                 if (mUserDetails.size() <= 0) {
                     crvView.showNoData(mContext.getString(R.string.tip_data_empty), mContext.getString(R.string.tip_click_refresh), new View.OnClickListener() {
                         @Override
@@ -117,9 +114,7 @@ public class MyAttentionPanel extends BasePanel implements RequestComplete, ExLi
             userDetail.parseJs(userList.get(i));
             userDetail.setType(1);
             mUserDetails.add(userDetail);//添加到数据列表
-//            AttentionUtil.addUser(userDetail);//添加到缓存列表
             if (i == size - 1) {
-//                AttentionUtil.saveUserDetails();//将用户信息存入缓存
                 mAttentionMeAdapter.setList(mUserDetails);
             }
         }

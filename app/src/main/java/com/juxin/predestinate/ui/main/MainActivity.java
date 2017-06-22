@@ -1,27 +1,24 @@
 package com.juxin.predestinate.ui.main;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.library.unread.BadgeView;
-import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
-import com.juxin.predestinate.bean.config.VideoVerifyBean;
-import com.juxin.predestinate.bean.start.OfflineBean;
-import com.juxin.predestinate.bean.start.OfflineMsg;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.statistics.SendPoint;
 import com.juxin.predestinate.module.local.statistics.Statistics;
@@ -31,10 +28,10 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
 import com.juxin.predestinate.module.logic.config.FinalKey;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
-import com.juxin.predestinate.module.logic.notify.FloatingMgr;
+import com.juxin.predestinate.module.logic.notify.view.CustomFloatingPanel;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
-import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
@@ -42,12 +39,8 @@ import com.juxin.predestinate.ui.discover.DiscoverMFragment;
 import com.juxin.predestinate.ui.mail.MailFragment;
 import com.juxin.predestinate.ui.user.auth.MyAuthenticationAct;
 import com.juxin.predestinate.ui.user.fragment.UserFragment;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 import com.juxin.predestinate.ui.web.RankFragment;
 import com.juxin.predestinate.ui.web.WebFragment;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, PObserver {
 
@@ -60,8 +53,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private BaseFragment current;  // 当前的fragment
     private View[] views;
-    private View layout_main_bottom;
 
+    private CustomFloatingPanel floatingPanel;
+    private ViewGroup floating_message_container;
+    private View layout_main_bottom;
     private BadgeView mail_num, user_num;
 
     @Override
@@ -112,8 +107,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         discoverMFragment = new DiscoverMFragment();
         mailFragment = new MailFragment();
         rankFragment = new RankFragment();
-        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),"http://test.game.xiaoyaoai.cn:30081/static/yfb-test/pages/square/square.html"
-                );//ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url()
+        plazaFragment = new WebFragment(getResources().getString(R.string.main_btn_plaza),
+                ModuleMgr.getCommonMgr().getCommonConfig().getSquare_url());
         userFragment = new UserFragment();
 
         switchContent(discoverMFragment);
@@ -133,6 +128,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         rank_layout.setOnClickListener(this);
         plaza_layout.setOnClickListener(this);
         user_layout.setOnClickListener(this);
+
+        floating_message_container = (ViewGroup) findViewById(R.id.floating_message_container);
+        floatingPanel = new CustomFloatingPanel(this);
+        floatingPanel.initView();
 
         mail_num = (BadgeView) findViewById(R.id.mail_number);
         user_num = (BadgeView) findViewById(R.id.user_number);
@@ -155,6 +154,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 transaction.show(fragment).commitAllowingStateLoss(); // 隐藏当前的fragment，显示下一个
             }
+            fragmentManager.executePendingTransactions();
             current = fragment;
         }
     }
@@ -165,7 +165,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      * @param fragment 切换的fragment
      */
     private void tabSwitchStatus(BaseFragment fragment) {
-        FloatingMgr.getInstance().setCanNotify(fragment != mailFragment);
         if (fragment == discoverMFragment) {
             tabSwitchHandler.sendEmptyMessage(R.id.discovery_layout);
         } else if (fragment == mailFragment) {
@@ -209,6 +208,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Statistics.userOnline("mail");
                 Statistics.userBehavior(SendPoint.menu_xiaoxi);
                 switchContent(mailFragment);
+                if (isFloatShowing) closeFloatingMessage();
                 break;
             case R.id.rank_layout:
                 Statistics.userOnline("rank");
@@ -244,7 +244,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, -1), intent);
+        changeTab(intent.getIntExtra(FinalKey.HOME_TAB_TYPE, FinalKey.MAIN_TAB_1), intent);
     }
 
     /**
@@ -307,14 +307,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }, 200);
                 break;
 
-            case MsgType.MT_App_IMStatus:  // socket登录成功后取离线消息
-                HashMap<String, Object> data = (HashMap<String, Object>) value;
-                int type = (int) data.get("type");
-                if ((type == 0 || type == 2) && checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL)) {
-                    getOfflineMsg();
-                }
-                break;
-
             case MsgType.MT_Unread_change:
                 ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
                 break;
@@ -325,21 +317,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        registerNetReceiver();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         ModuleMgr.getUnreadMgr().registerBadge(user_num, true, UnreadMgrImpl.CENTER);
-    }
-
-    @Override
-    protected void onStop() {
-        unregisterReceiver(netReceiver);
-        super.onStop();
+        IMProxy.getInstance().connect();
     }
 
     @Override
@@ -349,110 +330,60 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         MsgMgr.getInstance().detach(this);
     }
 
-    // ------------------------ 离线消息处理 暂时放在这 Start--------------------------
-    private NetReceiver netReceiver = new NetReceiver();
-    private static Map<Long, OfflineBean> lastOfflineAVMap = new HashMap<>(); // 维护离线音视频消息
-    private static CheckIntervalTimeUtil checkIntervalTimeUtil = new CheckIntervalTimeUtil();
-    private static final long OFFLINE_MSG_INTERVAL = 30 * 1000;  // 获取离线消息间隔
+    // --------------------------消息提示处理-----------------------------------------
 
-    /**
-     * 注册网络变化监听广播
-     */
-    private void registerNetReceiver() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(netReceiver, filter);
-    }
-
-    /**
-     * 网络监测
-     */
-    public class NetReceiver extends BroadcastReceiver {
+    private boolean isFloatShowing = false;
+    private Handler floatHandler = new Handler();
+    private Runnable floatRunnable = new Runnable() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (NetworkUtils.isConnected(context) && ModuleMgr.getLoginMgr().checkAuthIsExist()
-                    && checkIntervalTimeUtil.check(OFFLINE_MSG_INTERVAL)) {
-                getOfflineMsg();
+        public void run() {
+            floating_message_container.removeAllViews();
+            isFloatShowing = false;
+        }
+    };
+
+    /**
+     * 展示首页消息悬浮提示
+     *
+     * @param simpleData  简略个人资料
+     * @param baseMessage 消息体
+     * @param content     消息提示内容
+     */
+    public void showFloatingMessage(final UserInfoLightweight simpleData, final BaseMessage baseMessage, String content) {
+        synchronized (this) {
+            if (current == mailFragment) return;
+
+            ModuleMgr.getNotifyMgr().noticeRemind(baseMessage.getType());
+            floatHandler.removeCallbacks(floatRunnable);
+            floatHandler.postDelayed(floatRunnable, 5 * 1000);
+            floatingPanel.init(TextUtils.isEmpty(simpleData.getNickname()) ? String.valueOf(simpleData.getUid()) : simpleData.getNickname(),
+                    content, simpleData.getAvatar(), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UIShow.showPrivateChatAct(App.getActivity(), baseMessage.getLWhisperID(), simpleData.getNickname());
+                            closeFloatingMessage();
+                        }
+                    });
+            if (!isFloatShowing) {
+                floating_message_container.removeAllViews();
+                floating_message_container.addView(floatingPanel.getContentView());
+                floatingPanel.getContentView().setTranslationY(-100f);
+                ViewAnimator
+                        .animate(floatingPanel.getContentView())
+                        .translationY(-100, 0)
+                        .decelerate()
+                        .duration(1000)
+                        .start();
+                isFloatShowing = true;
             }
         }
     }
 
     /**
-     * 获取离线消息并处理
+     * 移除首页消息悬浮提示
      */
-    private static void getOfflineMsg() {
-        ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                PLogger.d("offlineMsg:  " + response.getResponseString());
-                if (!response.isOk()) return;
-
-                OfflineMsg offlineMsg = (OfflineMsg) response.getBaseData();
-                if (offlineMsg == null || offlineMsg.getMsgList().size() <= 0)
-                    return;
-
-                // 逐条处理离线消息
-                for (OfflineBean bean : offlineMsg.getMsgList()) {
-                    if (bean == null) continue;
-
-                    dispatchOfflineMsg(bean);
-                }
-
-                // 服务器每次最多返50条，若超过则再次请求
-                if (offlineMsg.getMsgList().size() >= 50) {
-                    getOfflineMsg();
-                    return;
-                }
-                dispatchLastOfflineAVMap();
-            }
-        });
-    }
-
-    /**
-     * 把离线消息按推送消息来派发
-     */
-    private static void dispatchOfflineMsg(OfflineBean bean) {
-        if (bean.getD() == 0) return;
-
-        // 音视频消息
-        if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
-            long vc_id = bean.getVc_id();
-            if (lastOfflineAVMap.get(vc_id) == null) {
-                lastOfflineAVMap.put(vc_id, bean);
-            } else {
-                lastOfflineAVMap.remove(vc_id);
-            }
-            return;
-        }
-        ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
-    }
-
-    /**
-     * 处理最新的音视频离线消息
-     */
-    public static void dispatchLastOfflineAVMap() {
-        if (lastOfflineAVMap.size() == 0) return;
-        if (BaseUtil.isScreenLock(App.context)) return;
-
-        OfflineBean bean = null;
-        long mt = 0;
-
-        for (Map.Entry<Long, OfflineBean> entry : lastOfflineAVMap.entrySet()) {
-            OfflineBean msgBean = entry.getValue();
-            if (msgBean == null) return;
-
-            // 邀请加入聊天, 过滤最新一条
-            if (msgBean.getVc_tp() == 1) {
-                long t = msgBean.getMt();   // 最新时间戳
-                if (t > mt) {
-                    mt = t;
-                    bean = msgBean;
-                }
-            }
-        }
-        lastOfflineAVMap.clear();
-        if (bean != null) {
-            ModuleMgr.getChatMgr().offlineMessage(bean.getJsonStr());
-        }
+    public void closeFloatingMessage() {
+        floatHandler.removeCallbacks(floatRunnable);
+        floatRunnable.run();
     }
 }

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.juxin.library.log.PToast;
 import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.library.view.BasePanel;
 import com.juxin.predestinate.R;
@@ -20,7 +19,7 @@ import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
-import com.juxin.predestinate.module.util.TimerUtil;
+import com.juxin.predestinate.module.util.TimeUtil;
 import com.juxin.predestinate.ui.user.check.edit.EditKey;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
@@ -91,7 +90,7 @@ public class UserEditDetailInfoPanel extends BasePanel implements RequestComplet
                     break;
 
                 case R.id.birth_view:
-                    final String[] dateValues = TextUtils.isEmpty(userdetail.getBirthday()) ? new String[]{"", "", ""} : userdetail.getBirthday().split("-");
+                    final String[] dateValues = TextUtils.isEmpty(userdetail.getBirthday()) ? new String[]{String.valueOf(TimeUtil.getInspectYear() - 18), "01", "01"} : userdetail.getBirthday().split("-");
                     PickerDialogUtil.showDatePickerDialog((FragmentActivity) getContext(), new DatePicker.OnYearMonthDayPickListener() {
                         @Override
                         public void onDatePicked(String year, String month, String day) {
@@ -145,16 +144,7 @@ public class UserEditDetailInfoPanel extends BasePanel implements RequestComplet
     public void onRequestComplete(final HttpResponse response) {
         //修改个人资料返回结果
         if (response.getUrlParam() == UrlParam.updateMyInfo) {
-            LoadingDialog.closeLoadingDialog(200, new TimerUtil.CallBack() {
-                @Override
-                public void call() {
-                    if (response.isOk()) {
-                        PToast.showShort(context.getString(R.string.user_info_edit_suc));
-                    } else {
-                        PToast.showShort(context.getString(R.string.user_info_edit_fail));
-                    }
-                }
-            });
+            LoadingDialog.closeLoadingDialog(200);
         }
     }
 }

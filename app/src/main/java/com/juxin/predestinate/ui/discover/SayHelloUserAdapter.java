@@ -1,15 +1,16 @@
 package com.juxin.predestinate.ui.discover;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ListView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
 import com.juxin.predestinate.module.logic.baseui.ExBaseAdapter;
 import com.juxin.predestinate.ui.mail.base.CustomLetterMailItem;
-
 import java.util.List;
 
 /**
@@ -41,8 +42,25 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
             vh.letterMailItem.measure(width, height);
             setItemHeight(vh.letterMailItem.getMeasuredHeight());
         }
-
         return convertView;
+    }
+
+    /**
+     * 局部更新数据，调用一次getView()方法；Google推荐的做法
+     *
+     * @param listView 要更新的listview
+     */
+    public void notifyDataSetChanged(ListView listView) {
+        /**第一个可见的位置**/
+        int firs = listView.getFirstVisiblePosition();
+        /**最后一个可见的位置**/
+        int last = listView.getLastVisiblePosition();
+
+        for (int i = firs; i < last; i++) {
+            /**获取指定位置view对象**/
+            View view = listView.getChildAt(i);
+            getView(i, view, listView);
+        }
     }
 
     class MyViewHolder {
@@ -71,9 +89,7 @@ public class SayHelloUserAdapter extends ExBaseAdapter<BaseMessage> {
 
     @Override
     public void notifyDataSetChanged() {
-        if (getList() != null && getList().size() != 0) {
-            SortList.sortWeightTimeListView(getList());
-        }
+        SortList.sortWeightTimeListView(getList());
         super.notifyDataSetChanged();
     }
 }

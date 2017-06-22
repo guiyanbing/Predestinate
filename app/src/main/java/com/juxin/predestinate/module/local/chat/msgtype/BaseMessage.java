@@ -29,13 +29,16 @@ public class BaseMessage implements IBaseMessage {
         hi(CommonMessage.class, 3),//打招呼
         sys(SystemMessage.class, 7),//系统
         gift(GiftMessage.class, 10),//礼物消息
-        hint(TextMessage.class, 14),//小提示消息
+        hint(TextMessage.class, 14),//小提示消息   不显示
         html(TextMessage.class, 19),//html消息
         wantGift(GiftMessage.class, 20),//索要礼物消息
         video(VideoMessage.class, 24),//视频消息
         htmlText(TextMessage.class, 25),//HTML文本消息
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
+        maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
+
+
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
@@ -46,7 +49,19 @@ public class BaseMessage implements IBaseMessage {
             this.msgType = msgType;
         }
 
+        public static BaseMessageType getMsgType(int msgType) {
+            if(MessageConstant.isMaxVersionMsg(msgType)){
+                return BaseMessageType.maxVersion;
+            }
+
+            return BaseMessageType.valueOf(String.valueOf(msgType));
+        }
+
         public static BaseMessageType valueOf(int msgType) {
+            if(MessageConstant.isMaxVersionMsg(msgType)){
+                return BaseMessageType.maxVersion;
+            }
+
             for (BaseMessageType messageType : BaseMessageType.values()) {
                 if (messageType.getMsgType() == msgType) {
                     return messageType;
@@ -101,7 +116,7 @@ public class BaseMessage implements IBaseMessage {
     private String content;//具体内容
     private String jsonStr;//json串
     private int status;//1.发送成功2.发送失败3.发送中 10.未读11.已读//12未审核通过   私聊列表中是最后一条消息的状态
-    private int fStatus = -1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
+    private int fStatus = 1; // 给所有具有操作状态的消息用。1 表示可以操作；0 表示已经处理过
     private int type;//消息类型
     private int dataSource = 1;//数据来源 1.本地  2.网络  3.离线(默认是本地) 4.模拟消息
     private String customtype;//自定义类型
@@ -536,6 +551,7 @@ public class BaseMessage implements IBaseMessage {
      */
     private void parseInfoJson(String jsonStr) {
         if (TextUtils.isEmpty(jsonStr)) return;
+//        PLogger.d("jsonStr=" + jsonStr);
         JSONObject object = getJsonObject(jsonStr);
         this.setAvatar(object.optString("avatar"));
         this.setName(TextUtils.isEmpty(object.optString("remark")) ? object.optString("nickname") : object.optString("remark"));
@@ -574,6 +590,9 @@ public class BaseMessage implements IBaseMessage {
             case video:
                 message = new VideoMessage(bundle, true);
                 break;
+            case sysNotice:
+                message = new SysNoticeMessage(bundle, true);
+                break;
             default:
                 message = new BaseMessage(bundle, true);
                 break;
@@ -610,6 +629,9 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case video:
                 message = new VideoMessage(bundle);
+                break;
+            case sysNotice:
+                message = new SysNoticeMessage(bundle);
                 break;
             default:
                 message = new BaseMessage(bundle);
@@ -678,6 +700,12 @@ public class BaseMessage implements IBaseMessage {
                 break;
             case autoUpdateHtml:
                 result = "[系统消息]";
+                break;
+            case sysNotice:
+                result = "[系统通知]";
+                break;
+            case maxVersion:
+                result = "[你的版本过低，无法接收此类消息]";
                 break;
             default:
                 result = msg.getMsgDesc();

@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class IMProxy {
 
     private ConcurrentHashMap<Long, SendCallBack> mSendCallBackMap = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Long ,NetData> mSendMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Long, NetData> mSendMap = new ConcurrentHashMap<>();
     private CallBackHandler mHandler = new CallBackHandler(Looper.getMainLooper());
 
     private static class SingletonHolder {
@@ -121,24 +121,26 @@ public class IMProxy {
      * 代理和服务器建立连接
      */
     public void connect() {
-        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED) {
+        if (status != ConnectStatus.NO_CONNECT && status != ConnectStatus.DISCONNECTED && iCoreService != null) {
             login();
-        } else {
-            Context context = App.context;
-            sIntent = new Intent();
-            sIntent.setClass(context, CoreService.class);
-            try {
-                context.startService(sIntent);//启动CoreService服务
-                if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
-                    if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
-                        status = ConnectStatus.BINDING;
-                    } else {
-                        status = ConnectStatus.REBINDING;
-                    }
+            return;
+        }
+
+        // 服务绑定
+        Context context = App.context;
+        sIntent = new Intent();
+        sIntent.setClass(context, CoreService.class);
+        try {
+            context.startService(sIntent);//启动CoreService服务
+            if (context.bindService(sIntent, connection, Context.BIND_AUTO_CREATE)) {//服务是否绑定成功
+                if (status == ConnectStatus.NO_CONNECT) {//如果本地记录的连接状态是未连接，就更新为已绑定，否则更新为重连
+                    status = ConnectStatus.BINDING;
+                } else {
+                    status = ConnectStatus.REBINDING;
                 }
-            } catch (SecurityException e) {
-                e.printStackTrace();
             }
+        } catch (SecurityException e) {
+            e.printStackTrace();
         }
     }
 
@@ -162,7 +164,7 @@ public class IMProxy {
      * @param callBack 发送消息回调
      */
     public void send(NetData netData, SendCallBack callBack) {
-        if(callBack == null){
+        if (callBack == null) {
             send(netData);
             return;
         }
@@ -173,9 +175,7 @@ public class IMProxy {
         }
         send(netData);
 
-        /**
-         * 发送消息后发送响应超时消息
-         */
+        // 发送消息后发送响应超时消息
         mSendMap.put(msgId, netData);
         Message message = Message.obtain();
         message.what = CallBackHandler.MESSAGE_TYPE_RESPONDS_TIME_OUT;
@@ -205,6 +205,7 @@ public class IMProxy {
         public void onServiceDisconnected(final ComponentName name) {
             status = ConnectStatus.DISCONNECTED;
             iCoreService = null;
+            connect();
         }
 
         @Override
@@ -519,31 +520,33 @@ public class IMProxy {
 
     /**
      * 移除发送消息响应超时消息
+     *
      * @param msgId
      */
-    private void removeTimoutCallBack(long msgId){
+    private void removeTimoutCallBack(long msgId) {
         NetData sendData = mSendMap.remove(msgId);
-        if(sendData != null) {
+        if (sendData != null) {
             mHandler.removeMessages(CallBackHandler.MESSAGE_TYPE_RESPONDS_TIME_OUT, sendData);
         }
     }
 
-    class CallBackHandler extends Handler{
+    class CallBackHandler extends Handler {
         static final int MESSAGE_TYPE_RESPONDS_TIME_OUT = 1;
-        public CallBackHandler(Looper looper){
+
+        public CallBackHandler(Looper looper) {
             super(looper);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            if(msg.obj == null || !(msg.obj instanceof NetData)) return;
+            if (msg.obj == null || !(msg.obj instanceof NetData)) return;
 
             NetData data = (NetData) msg.obj;
             long msgId = data.getMessageId();
             SendCallBack callBack = mSendCallBackMap.remove(msgId);
-            if(callBack == null) return;
+            if (callBack == null) return;
 
-            switch (msg.what){
+            switch (msg.what) {
                 case MESSAGE_TYPE_RESPONDS_TIME_OUT:
                     callBack.onSendFailed(data);
                     break;

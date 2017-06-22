@@ -16,6 +16,7 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.invoke.Invoker;
 import com.juxin.predestinate.module.util.BaseUtil;
+import com.juxin.predestinate.module.util.UIShow;
 
 /**
  * 应用非锁屏状态下消息弹框
@@ -134,7 +135,9 @@ public class UserMailNotifyAct extends BaseActivity implements View.OnClickListe
             case R.id.btn_reply:
                 finish();
                 if (simpleData == null || simpleData.getUid() == 0) return;
-                Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + ",\"nickname\":" + simpleData.getNickname() + "}");
+
+                UIShow.showMainWithBackMessage(this);
+                Invoker.getInstance().doInApp(null, "cmd_open_chat", "{\"uid\":" + simpleData.getUid() + "}");
                 break;
         }
     }

@@ -1,10 +1,23 @@
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'com.bugtags.library.plugin'
 apply plugin: 'AndResGuard'
 
+//Bugtags 插件配置
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考帮助中心->符号表->Android 符号表->配置自动上传符号表
+    appKey "882cc0b7fdb25bed47b9fa577ea684f0"       //这里是你的 appKey
+    appSecret "01016699d806e927eabfa4c26777237b"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置(企业版)
+    trackingNetworkEnabled true
+}
+
 android {
+    useLibrary 'org.apache.http.legacy'
+
     signingConfigs {
         debug {
             storeFile file(cStoreFile)
@@ -211,13 +224,6 @@ tasks.whenTaskAdded { task ->
     }
 }
 
-greendao {
-    // GreenDao数据库配置
-    schemaVersion 1
-    daoPackage 'com.juxin.predestinate.bean.db'
-    targetGenDir 'src/main/java'
-}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -225,15 +231,15 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile project(':library')
+
+    //bugtags统计
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+
     //友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
-    //GreenDao数据库
-    compile 'org.greenrobot:greendao:3.2.0'
-    compile 'org.greenrobot:greendao-generator:3.2.0'
     //dagger2依赖注入
     compile 'com.google.dagger:dagger:2.10'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
     //sqlbrite数据库
     compile 'com.squareup.sqlbrite:sqlbrite:1.1.1'
-    compile files('libs/zy_pay.jar')
 }

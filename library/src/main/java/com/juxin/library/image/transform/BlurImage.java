@@ -18,7 +18,7 @@ import com.juxin.library.image.transform.blur.FastBlur;
 public class BlurImage implements Transformation<Bitmap> {
 
     private static int MAX_RADIUS = 25;
-    private static int DEFAULT_DOWN_SAMPLING = 2;
+    private static int DEFAULT_DOWN_SAMPLING = 4;
 
 //    private Context mContext;
     private BitmapPool mBitmapPool;

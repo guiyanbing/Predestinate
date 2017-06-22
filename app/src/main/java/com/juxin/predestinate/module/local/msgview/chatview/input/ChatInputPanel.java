@@ -30,9 +30,11 @@ import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 
 /**
+ * 输入面板
  * Created by Kind on 2017/3/30.
  */
 public class ChatInputPanel extends ChatViewPanel implements View.OnClickListener, View.OnTouchListener, TextWatcher {
+
     private View chatBtnVoice = null;
     private View chatBtnText = null;
 
@@ -195,16 +197,16 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
     private String channelId = "";
     private String whisperId = "";
     private ChatRecordPanel chatRecordPanel = null;
-    private long timeCount = 0;//计时，防止用户快速点击时MediaRecord未初始化引起的界面卡死
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
-        PLogger.d("--->" + event.getAction());
-
-        switch (action) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                chatVoiceRecord.setText("松开 发送");
+                ChatMediaPlayer.getInstance().stopPlayVoice();
+                getChatInstance().chatAdapter.moveToBottom();
+
+                chatVoiceRecord.setText("松开结束");
                 chatVoiceRecord.setPressed(true);
 
                 channelId = getChatInstance().chatAdapter.getChannelId();
@@ -216,11 +218,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                     chatRecordPanel = getChatInstance().chatRecordPanel;
                 }
 
-                if (timeCount == 0 || System.currentTimeMillis() - timeCount > 500) {
-                    chatRecordPanel.onTouch(action, 0f);
-                } else {
-                    PLogger.d("---ChatInputPanel--->点击间隔<500ms，过于频繁");
-                }
+                chatRecordPanel.onTouch(action, 0f);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -228,17 +226,15 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 break;
 
             case MotionEvent.ACTION_UP:
-                chatVoiceRecord.setText("按下 开始");
+                chatVoiceRecord.setText("按住说话");
                 chatVoiceRecord.setPressed(false);
                 chatRecordPanel.onTouch(action, event.getY(), channelId, whisperId);
-                timeCount = System.currentTimeMillis();
                 break;
 
             default:
-                chatVoiceRecord.setText("按下 开始");
+                chatVoiceRecord.setText("按住说话");
                 chatVoiceRecord.setPressed(false);
                 getChatInstance().chatRecordPanel.onTouch(action, 0f);
-                timeCount = System.currentTimeMillis();
                 return false;
         }
         return true;
@@ -288,6 +284,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
         showSendBtn(false);
         closeAllInput();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -301,6 +299,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         chatVoiceRecord.setVisibility(View.INVISIBLE);
 
         showSendBtn();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -313,6 +313,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(false);
         getChatInstance().chatSmilePanel.showToggle();
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     /**
@@ -343,6 +345,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
         InputUtils.HideKeyboard(chatTextEdit);
         getChatInstance().chatExtendPanel.show(true);
         getChatInstance().chatSmilePanel.show(false);
+
+        getChatInstance().chatAdapter.moveToBottom();
     }
 
     public void closeAllInput() {

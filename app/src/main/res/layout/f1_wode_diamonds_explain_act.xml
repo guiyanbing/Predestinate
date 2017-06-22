@@ -31,15 +31,6 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/px60_dp"
         android:paddingLeft="@dimen/px66_dp"
-        android:text="@string/diamond_explain_three"
-        android:textSize="@dimen/px52_sp"
-        android:textColor="@color/color_888888"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/px60_dp"
-        android:paddingLeft="@dimen/px66_dp"
         android:text="@string/diamond_explain_four"
         android:textSize="@dimen/px52_sp"
         android:textColor="@color/color_888888"/>

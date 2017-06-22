@@ -4,13 +4,14 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
+import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.library.utils.StringUtils;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.cache.PCache;
 import com.juxin.predestinate.module.logic.config.DirType;
 import com.juxin.predestinate.module.logic.config.UrlParam;
 import com.juxin.predestinate.module.logic.model.mgr.HttpMgr;
@@ -26,8 +27,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,8 +38,6 @@ import retrofit2.Response;
  * Created by ZRP on 2016/12/29.
  */
 public class HttpMgrImpl implements HttpMgr {
-
-    private Lock lock = new ReentrantLock();
 
     @Override
     public void init() {
@@ -128,11 +125,27 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
-    public HTCallBack download(String url, String filePath, DownloadListener downloadListener) {
-        if (FileUtil.isExist(filePath)) {
-            if (downloadListener != null) downloadListener.onSuccess(url, filePath);
+    public HTCallBack download(final String url, final String filePath, final DownloadListener downloadListener) {
+        if (TextUtils.isEmpty(url)) {
+            if (downloadListener != null)
+                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        downloadListener.onFail(url, new NullPointerException("The download url is empty."));
+                    }
+                });
             return new HTCallBack();
         }
+        if (FileUtil.isExist(filePath)) {
+            MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (downloadListener != null) downloadListener.onSuccess(url, filePath);
+                }
+            });
+            return new HTCallBack();
+        }
+        PSP.getInstance().put(String.valueOf(url.hashCode()), filePath);
         return RequestHelper.getInstance().downloadFile(url, filePath, downloadListener);
     }
 
@@ -248,8 +261,6 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack request(RequestParam requestParam) {
-        lock.lock();
-
         final UrlParam urlParam = requestParam.getUrlParam();
         final Map<String, String> headerMap = requestParam.getHead_param();
         final Map<String, Object> get_param = requestParam.getGet_param();
@@ -275,7 +286,7 @@ public class HttpMgrImpl implements HttpMgr {
         if (!App.isLogin) {
             if (urlParam.isNeedLogin()) {
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
-                    PCache.getInstance().deleteCache(cacheUrl);// 清除该url的缓存
+                    PSP.getInstance().remove(cacheUrl);// 清除该url的缓存
                 return new HTCallBack();
             }
         }
@@ -285,7 +296,7 @@ public class HttpMgrImpl implements HttpMgr {
         //先从缓存中拿数据，如果有缓存，先行抛出缓存结果
         if (RequestParam.CacheType.CT_Cache_No != cacheType) {
             //获取缓存中的数据,如果不为null,则开始解析数据,并返回数据
-            String cacheStr = PCache.getInstance().getCache(cacheUrl);
+            String cacheStr = PSP.getInstance().getString(cacheUrl, "");
             if (cacheStr != null) {
                 if (!TextUtils.isEmpty(cacheStr) && isEncrypt && (!cacheStr.startsWith("{") || !cacheStr.endsWith("}"))) {
                     cacheStr = new String(JniUtil.GetDecryptString(cacheStr));
@@ -357,7 +368,7 @@ public class HttpMgrImpl implements HttpMgr {
                 }
                 String resultString = sb.toString();
                 if (RequestParam.CacheType.CT_Cache_No != cacheType)
-                    PCache.getInstance().cacheString(finalCacheUrl, resultString);//存储到缓存
+                    PSP.getInstance().put(finalCacheUrl, resultString);//存储到缓存
 
                 // 如果是加密数据，对其进行解密并抛出
                 if (!TextUtils.isEmpty(resultString) && isEncrypt && (!resultString.startsWith("{") || !resultString.endsWith("}"))) {
@@ -381,7 +392,6 @@ public class HttpMgrImpl implements HttpMgr {
             }
         };
         httpResultCall.enqueue(rb);
-        lock.unlock();
 
         return new HTCallBack(httpResultCall);
     }

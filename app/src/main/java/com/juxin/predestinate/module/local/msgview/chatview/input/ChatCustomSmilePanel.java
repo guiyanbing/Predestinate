@@ -216,24 +216,28 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
      * 添加表情
      */
     private void addCFace(final String url) {
-        ModuleMgr.getCommonMgr().addCustomFace(url, new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                try {
-                    if (!response.isOk()) {
-                        PToast.showShort("表情添加失败");
-                        return;
-                    }
-                    if (null == items) return;
+        if (isHasAdded(url)) {
+            PToast.showShort(getContext().getString(R.string.face_is_already_exist));
+        } else {
+            ModuleMgr.getCommonMgr().addCustomFace(url, new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    try {
+                        if (!response.isOk()) {
+                            PToast.showShort("表情添加失败");
+                            return;
+                        }
+                        if (null == items) return;
 
-                    optItems(new SmileItem(url), 0);
-                    PToast.showShort("表情添加成功");
-                    initData();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        optItems(new SmileItem(url), 0);
+                        PToast.showShort("表情添加成功");
+                        initData();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -298,4 +302,24 @@ public class ChatCustomSmilePanel extends ChatBaseSmilePanel implements AdapterV
         mLastTime = System.currentTimeMillis();
         return isFastClick;
     }
+
+    /**
+     * 判断这个图片是否添加过
+     *
+     * @param url 图片的url
+     * @return
+     */
+    private boolean isHasAdded(String url) {
+        if (items == null || items.size() == 0) {
+            return false;
+        } else {
+            for (SmileItem item : items) {
+                if (item.getPic().equals(url)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

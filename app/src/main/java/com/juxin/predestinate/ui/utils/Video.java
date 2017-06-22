@@ -32,7 +32,7 @@ public class Video {
         FileOutputStream fOut = null;
         try {
             fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fOut);
             fOut.flush();
             fOut.close();
         } catch (IOException e) {

@@ -2,6 +2,8 @@ package com.juxin.predestinate.ui.mail;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,11 +21,14 @@ import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.utils.RxUtil;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.statistics.StatisticsMessage;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseFragment;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeListView;
 import com.juxin.predestinate.module.logic.swipemenu.SwipeMenu;
@@ -33,7 +38,6 @@ import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.mail.item.MailMsgID;
 import com.juxin.predestinate.ui.main.MainActivity;
-import com.juxin.predestinate.ui.utils.CheckIntervalTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +53,6 @@ import rx.Observer;
 public class MailFragment extends BaseFragment implements AdapterView.OnItemClickListener,
         SwipeListView.OnSwipeItemClickedListener, PObserver, View.OnClickListener, AbsListView.OnScrollListener {
 
-    private CheckIntervalTimeUtil timeUtil;
     private MailFragmentAdapter mailFragmentAdapter;
     private SwipeListView listMail;
     private View mail_bottom;
@@ -58,6 +61,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
 
     private boolean isGone = false;//是否首面底部，默认是false
     private List<BaseMessage> mailDelInfoList = new ArrayList<>();
+    private boolean isShow = true;
 
     @Nullable
     @Override
@@ -110,7 +114,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
-        timeUtil = new CheckIntervalTimeUtil();
         listMail = (SwipeListView) findViewById(R.id.mail_list);
 
         mail_bottom = findViewById(R.id.mail_bottom);
@@ -124,7 +127,8 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         listview_footer.setOnClickListener(null);
         mailFragmentAdapter = new MailFragmentAdapter(getContext(), null);
         listMail.setAdapter(mailFragmentAdapter);
-        showAllData(800);
+        mailFragmentAdapter.updateAllData();
+        showAllData();
 
         listMail.setPullLoadEnable(false);
         listMail.setMenuCreator(new SwipeMenuCreator() {
@@ -196,11 +200,28 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     case MyFriend_Msg:
                         break;
                     case Greet_Msg:
-                        ModuleMgr.getChatListMgr().updateToBatchRead(ModuleMgr.getChatListMgr().getGeetList());
+                        List<BaseMessage> tmpList = ModuleMgr.getChatListMgr().getGeetList();
+                        if (tmpList.size() <= 0) {
+                            PToast.showCenterShort("没有打招呼的人！");
+                            return;
+                        }
+                        LoadingDialog.show(getActivity(), getString(R.string.ignore));
+                        ModuleMgr.getChatListMgr().updateToBatchRead(tmpList, new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000);
+                            }
+                        });
                         break;
                 }
             } else {
-                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID());
+                LoadingDialog.show(getActivity(), getString(R.string.deleted));
+                ModuleMgr.getChatListMgr().deleteMessage(item.getLWhisperID(), new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        LoadingDialog.closeLoadingDialog(1000);
+                    }
+                });
             }
         }
     }
@@ -225,6 +246,10 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                         break;
                 }
             } else {
+                if (MailSpecialID.systemMsg.getSpecialID() == message.getLWhisperID()) {//公告
+                    UIShow.showSysMessActivity(getActivity());
+                    return;
+                }
                 UIShow.showPrivateChatAct(getActivity(), message.getLWhisperID(), message.getName(), message.getKfID());
                 StatisticsMessage.openChat(message.getLWhisperID(), ModuleMgr.getChatListMgr().getNoReadNum(message.getLWhisperID()));
             }
@@ -267,9 +292,9 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case MsgType.MT_User_List_Msg_Change:
             case MsgType.MT_Stranger_New:
             case MsgType.MT_Friend_Num_Notice:
-                if (isHidden()) return;
-
-                showAllData(1300);
+                if (isHidden() || !isShow) return;
+                mailFragmentAdapter.updateAllData();
+                showAllData();
                 break;
             default:
                 break;
@@ -281,7 +306,13 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
         switch (view.getId()) {
             case R.id.mail_delete:
                 mail_delete.setEnabled(false);
-                ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList);
+                LoadingDialog.show(getActivity(), getString(R.string.deleted));
+                ModuleMgr.getChatListMgr().deleteBatchMessage(mailDelInfoList, new DBCallback() {
+                    @Override
+                    public void OnDBExecuted(long result) {
+                        LoadingDialog.closeLoadingDialog(1000);
+                    }
+                });
                 setTitleLeftContainerRemoveAll();
                 listMail.smoothCloseChooseView();
                 mailDelInfoList.clear();
@@ -297,9 +328,20 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
                     @Override
                     public void onSubmit() {
                         setTitleLeftContainerRemoveAll();
-                        ModuleMgr.getChatListMgr().updateToReadAll();
+                        LoadingDialog.show(getActivity(), getString(R.string.ignore));
+                        ModuleMgr.getChatListMgr().updateToReadAll(new DBCallback() {
+                            @Override
+                            public void OnDBExecuted(long result) {
+                                LoadingDialog.closeLoadingDialog(1000, new TimerUtil.CallBack() {
+                                    @Override
+                                    public void call() {
+                                        PToast.showShort("忽略成功!");
+                                    }
+                                });
+                            }
+                        });
                         listMail.smoothCloseChooseView();
-                        PToast.showShort("忽略成功!");
+
                     }
                 }, "忽略未读消息,但消息不会删除.", "忽略消息");
                 break;
@@ -312,9 +354,6 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
      * @param view
      */
     private void detectInfo(AbsListView view) {
-        if (!timeUtil.check(4 * 1000)) {
-            return;
-        }
         final List<Long> stringList = new ArrayList<>();
 
         int firs = view.getFirstVisiblePosition();
@@ -368,7 +407,7 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: {//停止滚动
                 //设置为停止滚动
                 mailFragmentAdapter.setScrollState(false);
-                showAllData(200);
+                showAllData();
                 break;
             }
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING: {//滚动做出了抛的动作
@@ -388,27 +427,41 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
 
-    private void showAllData(int time) {
-        mailFragmentAdapter.updateAllData();
-        TimerUtil.beginTime(new TimerUtil.CallBack() {
-            @Override
-            public void call() {
-                detectInfo(listMail);
-            }
-        }, time);
+    private void showAllData() {
+        handlerStop.removeMessages(1);
+        handlerStop.sendEmptyMessageDelayed(1, 500);
     }
+
+    private final Handler handlerStop = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    detectInfo(listMail);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!isHidden()) {
-            showAllData(1300);
+            mailFragmentAdapter.updateAllData();
+            showAllData();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        isShow = true;
+        PLogger.d("MailFragment-onResume");
+        mailFragmentAdapter.updateAllData();
+        showAllData();
         PLogger.d("MailFragment -- onResume == setmTouchPosition");
         if (mailFragmentAdapter != null && mailFragmentAdapter.getList() != null && mailFragmentAdapter.getList().size() != 0) {
             if (listMail != null)
@@ -422,5 +475,12 @@ public class MailFragment extends BaseFragment implements AdapterView.OnItemClic
     public void onDestroy() {
         super.onDestroy();
         MsgMgr.getInstance().detach(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isShow = false;
+        PLogger.d("MailFragment-onPause");
     }
 }

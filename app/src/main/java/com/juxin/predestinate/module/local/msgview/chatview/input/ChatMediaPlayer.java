@@ -13,6 +13,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
+import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.request.DownloadListener;
 import com.juxin.library.utils.FileUtil;
@@ -38,6 +39,10 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
     private static final int MEDIA_RECORDER_EVENT_Stop = 1;
     private static final int frequency = 200;
     private Handler handler = null;
+
+    public void setOnVoicePlayListener(OnPlayListener onVoicePlayListener) {
+        this.onPlayListener = onVoicePlayListener;
+    }
 
     private OnPlayListener onPlayListener = null;   //播放监听
 
@@ -66,7 +71,7 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
      * @param onPlayListener 播放状态监听。
      */
     public synchronized void togglePlayVoice(final String filePath, final OnPlayListener onPlayListener) {
-        if (oriFilePath != null && oriFilePath.equals(filePath)) {
+        if (isPlayingVoice(filePath)){
             oriFilePath = null;
             stopPlayVoice();
             return;
@@ -125,39 +130,48 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
         if (isPlaying()) return;
 
         try {
-            AudioManager audioManager = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
+            final AudioManager audioManager = (AudioManager) App.context.getSystemService(Context.AUDIO_SERVICE);
             mediaPlayer = new MediaPlayer();
 
             if (isSpeakerDisplay()) {//扬声器播放
                 audioManager.setMode(AudioManager.MODE_NORMAL);
                 audioManager.setSpeakerphoneOn(true);
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             } else {//听筒播放
                 audioManager.setSpeakerphoneOn(false);// 关闭扬声器
                 // 把声音设定成Earpiece（听筒）出来，设定为正在通话中
                 audioManager.setMode(AudioManager.MODE_IN_CALL);
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             }
+
+            //生成音频焦点监听
+            final AudioManager.OnAudioFocusChangeListener focusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+                @Override
+                public void onAudioFocusChange(int focusChange) {}
+            };
 
             FileInputStream fis = new FileInputStream(new File(filePath));
             mediaPlayer.setDataSource(fis.getFD());
-            mediaPlayer.prepare();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     if (ChatMediaPlayer.this.onPlayListener != null) {
                         ChatMediaPlayer.this.onPlayListener.onStart(oriFilePath);
                     }
+                    //申请音频焦点，优先于其他音频
+                    audioManager.requestAudioFocus(focusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                    mediaPlayer.start();
                 }
             });
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    //释放音频焦点
+                    audioManager.abandonAudioFocus(focusChangeListener);
                     stopPlayVoice();
                 }
-
             });
-            mediaPlayer.start();
+            mediaPlayer.prepareAsync();
 
             readySensor();
             playing = true;
@@ -295,6 +309,33 @@ public class ChatMediaPlayer implements Handler.Callback, SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    /**
+     * 是否正在播放的语音
+     * @param filePath
+     * @return
+     */
+    public boolean isPlayingVoice(String filePath){
+        if (TextUtils.isEmpty(filePath))
+            return false;
+
+        if (!isPlaying())
+            return false;
+
+        if (filePath.equals(oriFilePath))
+            return true;
+
+        if (FileUtil.isURL(oriFilePath))
+            oriFilePath = PSP.getInstance().getString(oriFilePath.hashCode() + "", null);
+
+        if (FileUtil.isURL(filePath))
+            filePath = PSP.getInstance().getString(filePath.hashCode() + "", null);
+
+        if (TextUtils.isEmpty(oriFilePath) || TextUtils.isEmpty(filePath))
+            return false;
+
+        return filePath.equals(oriFilePath);
     }
 
     /* -------------------------------视频播放---------------------------------- */

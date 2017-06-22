@@ -1,15 +1,18 @@
 package com.juxin.predestinate.bean.db;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
-
+import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.bean.db.cache.DBCacheCenter;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.VideoMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.squareup.sqlbrite.BriteDatabase;
-
 import java.util.List;
-
 import rx.Observable;
 import rx.Observer;
 
@@ -17,6 +20,7 @@ import rx.Observer;
  * DB处理中心
  * Created by Kind on 2017/3/28.
  */
+
 public class DBCenter {
 
     private BriteDatabase mDatabase;
@@ -25,12 +29,25 @@ public class DBCenter {
     private DBCenterFUnRead centerFUnRead;
     private DBCacheCenter cacheCenter;
 
+    private HandlerThread workerThread = new HandlerThread("LightTaskThread");
+    private DBHandler handler = null;
+
+    public static void makeDBCallback (DBCallback callback, long result) {
+        if (callback != null) {
+            callback.OnDBExecuted(result);
+        }
+    }
+
     public DBCenter(BriteDatabase database) {
         this.mDatabase = database;
-        centerFLetter = new DBCenterFLetter(database);
-        centerFmessage = new DBCenterFMessage(database);
-        centerFUnRead = new DBCenterFUnRead(database);
-        cacheCenter = new DBCacheCenter(database);
+
+        workerThread.start();
+        handler = new DBHandler(workerThread.getLooper() );
+
+        centerFLetter = new DBCenterFLetter(database, handler);
+        centerFmessage = new DBCenterFMessage(database, handler);
+        centerFUnRead = new DBCenterFUnRead(database, handler);
+        cacheCenter = new DBCacheCenter(database, handler);
     }
 
     /******************** DBCacheCenter **************************/
@@ -41,45 +58,74 @@ public class DBCenter {
 
 
     /******************** FUnRead **************************/
-
-
     public DBCenterFUnRead getCenterFUnRead() {
         return centerFUnRead;
     }
 
-    public long insertUnRead(String key, String content) {
-        if (TextUtils.isEmpty(key)) return MessageConstant.ERROR;
-        return centerFUnRead.storageData(key, content);
+    public void insertUnRead(final String key, final String content ,DBCallback callback) {
+        if (TextUtils.isEmpty(key)) {
+            makeDBCallback(callback,MessageConstant.ERROR);
+            return;
+        }
+
+        centerFUnRead.storageData(key, content, callback);
     }
 
     /******************** FLetter **************************/
-    public long insertMsg(BaseMessage baseMessage) {
-        if (TextUtils.isEmpty(baseMessage.getWhisperID())) return MessageConstant.ERROR;
+    public void insertMsg(final BaseMessage baseMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
+                    baseMessage.setStatus(MessageConstant.READ_STATUS);
+                }
 
-        if (BaseMessage.BaseMessageType.hint.getMsgType() == baseMessage.getType()) {
-            baseMessage.setStatus(MessageConstant.READ_STATUS);
-        }
+                long result = centerFmessage.insertOneMsg(baseMessage);
+                if (result != MessageConstant.OK) {
+                    DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                    return;
+                }
 
-        long ret = centerFmessage.insertMsg(baseMessage);
-        if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
-
-        if (BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()) {
-            ret = centerFLetter.storageData(baseMessage);
-        }
-
-        return ret;
+                if (BaseMessage.BaseMessageType.hint.getMsgType() != baseMessage.getType()) {
+                    result = centerFLetter.storageData(baseMessage);
+                    DBCenter.makeDBCallback(callback, (result >=0 ? MessageConstant.OK : MessageConstant.ERROR));
+                }else {
+                    DBCenter.makeDBCallback(callback, MessageConstant.OK);
+                }
+            }
+        });
     }
 
-    public void insertListMsg(List<BaseMessage> list) {
-        BriteDatabase.Transaction transaction = mDatabase.newTransaction();
-        try {
-            for (BaseMessage item : list) {
-                insertMsg(item);
+    public void insertMsgVideo(final VideoMessage videoMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long result = centerFmessage.storageDataVideo(videoMessage);
+                if (result != MessageConstant.OK) {
+                    DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                    return;
+                }
+
+                result = centerFLetter.storageData(videoMessage);
+                long ret = result >=0 ? MessageConstant.OK : MessageConstant.ERROR;
+                DBCenter.makeDBCallback(callback, ret);
             }
-            transaction.markSuccessful();
-        } finally {
-            transaction.end();
-        }
+        });
+    }
+
+    public void insertMsgLocalVideo(final VideoMessage videoMessage, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long result = centerFLetter.storageData(videoMessage);
+                if (result != MessageConstant.OK) {
+                    DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                    return;
+                }
+
+                DBCenter.makeDBCallback(callback, centerFmessage.insertOneMsg(videoMessage));
+            }
+        });
     }
 
     /**
@@ -88,28 +134,28 @@ public class DBCenter {
      * @param message
      * @return
      */
-    public long updateMsg(BaseMessage message) {
-        String userID = message.getWhisperID();
-        if (TextUtils.isEmpty(userID)) return MessageConstant.ERROR;
+    public void updateMsg(final BaseMessage message, final DBCallback callback) {
+        final String userID = message.getWhisperID();
+        if (TextUtils.isEmpty(userID)) {
+            DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+            return ;
+        }
 
         if (BaseMessage.BaseMessageType.hint.getMsgType() != message.getType()) {
+            centerFLetter.updateMsgStatus(message, new DBCallback() {
+                @Override
+                public void OnDBExecuted(long result) {
+                    if (result!= MessageConstant.OK) {
+                        DBCenter.makeDBCallback(callback, MessageConstant.ERROR);
+                        return;
+                    }
 
-            BaseMessage temp = centerFLetter.isExist(message.getWhisperID());
-            if (temp == null) return MessageConstant.ERROR;  //没有数据
-
-            if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
-                    && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-                long ret = centerFLetter.updateStatus(userID, message.getStatus());
-
-                if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
-            } else {
-                if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-                    long ret = centerFLetter.updateStatus(userID, message.getStatus());
-                    if (ret == MessageConstant.ERROR) return MessageConstant.ERROR;
+                    centerFmessage.updateMsg(message, callback);
                 }
-            }
+            });
+        }else {
+            DBCenter.makeDBCallback(callback, MessageConstant.OK);
         }
-        return centerFmessage.updateMsg(message);
     }
 
     public DBCenterFLetter getCenterFLetter() {
@@ -122,12 +168,29 @@ public class DBCenter {
      * @param userID
      * @return
      */
-    public int deleteMessage(long userID) {
-        int ret = centerFLetter.delete(userID);
-        if (ret != MessageConstant.ERROR) {
-            return centerFmessage.delete(userID);
-        }
-        return ret;
+    public void deleteMessage(long userID, final DBCallback callback) {
+        centerFLetter.delete(userID, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if(callback != null){
+                    callback.OnDBExecuted(result);
+                }
+            }
+        });
+        centerFmessage.delete(userID, null);
+    }
+
+    public void deleteMessageList(final List<Long> list, final DBCallback callback) {
+        centerFLetter.deleteList(list, new DBCallback() {
+            @Override
+            public void OnDBExecuted(long result) {
+                if(callback != null){
+                    callback.OnDBExecuted(result);
+                }
+            }
+        });
+
+        centerFmessage.deleteList(list, null);
     }
 
     /**
@@ -138,6 +201,7 @@ public class DBCenter {
      */
     public void deleteMessageHour(int hour) {
         final long delTime = ModuleMgr.getAppMgr().getTime() - (hour * 60 * 60 * 1000);
+
         Observable<List<BaseMessage>> observable = centerFLetter.deleteCommon(delTime);
         observable.subscribe(new Observer<List<BaseMessage>>() {
             @Override
@@ -155,10 +219,11 @@ public class DBCenter {
                 }
                 for (BaseMessage temp : baseMessages) {
                     if (temp.getTime() < delTime) {
-                        centerFLetter.updateContent(temp.getWhisperID());
+                        centerFLetter.updateContent(temp.getWhisperID(), null);
                     }
-                    centerFmessage.delete(temp.getLWhisperID(), delTime);
+                    centerFmessage.delete(temp.getLWhisperID(), delTime, null);
                 }
+
             }
         }).unsubscribe();
     }
@@ -188,9 +253,9 @@ public class DBCenter {
                 }
                 for (BaseMessage temp : baseMessages) {
                     if (temp.getTime() < delTime) {
-                        centerFLetter.updateContent(temp.getWhisperID());
+                        centerFLetter.updateContent(temp.getWhisperID(), null);
                     }
-                    centerFmessage.delete(temp.getLWhisperID());
+                    centerFmessage.delete(temp.getLWhisperID(), null);
                 }
             }
         }).unsubscribe();
@@ -208,11 +273,27 @@ public class DBCenter {
      * @param baseMessage
      * @return
      */
-    public int updateFmessage(BaseMessage baseMessage) {
-        return centerFmessage.updateMsg(baseMessage);
+    public void updateFmessage(final BaseMessage baseMessage, DBCallback callback) {
+        centerFmessage.updateMsg(baseMessage, callback);
     }
 
-    public long updateToReadAll() {
-        return centerFmessage.updateToReadAll();
+    public void updateToReadAll(DBCallback callback) {
+        centerFmessage.updateToReadAll(callback);
+    }
+
+    private class DBHandler extends Handler {
+        public DBHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void dispatchMessage(Message msg) {
+            // catch any Exception
+            try {
+                super.dispatchMessage(msg);
+            } catch (Exception e) {
+                PLogger.e("db dispatchMessage " + e.getMessage());
+            }
+        }
     }
 }

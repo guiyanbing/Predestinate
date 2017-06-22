@@ -11,6 +11,9 @@
     <string name="edit">编辑</string>
     <string name="save">保存</string>
     <string name="request_error">请求出错!</string>
+    <string name="deleted">删除中...</string>
+    <string name="ignore">忽略中...</string>
+
 
     <!-- 主页Fragment -->
     <string name="main_btn_discovery">发现</string>
@@ -269,7 +272,7 @@
     <string name="txt_reg_marry_desc">婚姻</string>
     <string name="txt_reg_job_default">企业职工</string>
     <string name="txt_reg_edu_default">大专</string>
-    <string name="txt_reg_marry_default">单身</string>
+    <string name="txt_reg_marry_default">未婚</string>
     <string name="txt_reg_income_default">2000-5000</string>
     <string name="daltitle_job">工作情况</string>
     <string name="daltitle_edu">学历</string>
@@ -516,6 +519,8 @@
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
 
+    <string name="face_is_already_exist">该表情已存在</string>
+
     <!--红包记录-->
     <string name="head_title">可提现金额</string>
     <string name="head_unit">元</string>
@@ -523,8 +528,7 @@
     <string name="head_draw_record">提现记录</string>
     <string name="diamond_explain_one">1、钻石可用于赠送虚拟礼物</string>
     <string name="diamond_explain_two">2、等价钻石礼物直接纳入我的个人钱包</string>
-    <string name="diamond_explain_three">3、礼物总价，按50%的分成比例</string>
-    <string name="diamond_explain_four">4、活动最终解释权归本APP所有</string>
+    <string name="diamond_explain_four">3、活动最终解释权归本APP所有</string>
     <string name="usable_diamond">可用钻石：</string>
     <string name="withdrawal_instructions_one">收入详情需24小时后解冻才能放入零钱提现</string>
     <string name="withdrawal_instructions_two">其他红包需24小时后解冻才能放入零钱提现</string>
@@ -595,7 +599,6 @@
     <string name="redbag_wantgift">说点动听的话打动帅哥吧，女生主动些，撒个娇、卖个萌，男生会忍不住想要给你送礼物哦！</string>
     <string name="upgrade_vip">升级VIP会员，查看更多来访</string>
     <string name="lately_visit">最近7天有12个用户来看你。</string>
-    <string name="say_hello">hi，傻子</string>
     <string name="txt_dialog_tips">你还没有开通VIP，无法查看最近来访用户。</string>
     <string name="hold_to_talk">按住说话</string>
     <string name="loosen_the_end">松开结束</string>
@@ -750,7 +753,7 @@
     <!-- =================软件升级 start================= -->
     <string name="update_server_error">没有检测到新版本信息</string>
     <string name="update_has_install">检测到新版已安装，请点击跳转</string>
-    <string name="update_already_new">您当前的版本为最新的</string>
+    <string name="update_already_new">已是最新版本，无需升级</string>
     <string name="update_download_error">安装包下载失败，请重试</string>
     <string name="update_find_new">发现新版本 </string>
     <!-- =================软件升级 end================= -->

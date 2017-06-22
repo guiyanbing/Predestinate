@@ -3,6 +3,7 @@ package com.juxin.predestinate.module.local.msgview;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.widget.ListView;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
@@ -33,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -223,7 +224,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             ModuleMgr.getChatMgr().getUserInfoLightweight(uid, new ChatMsgInterface.InfoComplete() {
                 @Override
                 public void onReqComplete(boolean ret, UserInfoLightweight infoLightweight) {
-                    if (ret) addUserInfo(infoLightweight);
+                    if (ret)
+                        addUserInfo(infoLightweight);
                 }
             });
         }
@@ -333,14 +335,30 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     }
 
     /**
+     * ListView是否已到底部，非精准判断
+     *
+     * @param listView
+     * @return
+     */
+    public static boolean isListViewReachBottomEdge(final ListView listView) {
+        //忽略新到来的一条消息，和最后一条消息的高度
+        return listView.getLastVisiblePosition() >= (listView.getCount() - 3);
+    }
+
+    /**
      * 移动到聊天列表的最后一个。
      */
     public void moveToBottom() {
         if (getChatInstance().chatListView == null) {
             return;
         }
-        getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
-        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+        getChatInstance().chatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
+                chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+            }
+        });
     }
 
     /**
@@ -371,18 +389,23 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         ModuleMgr.getChatMgr().attachChatListener(TextUtils.isEmpty(channelId) ? whisperId : channelId, this);
 
         ModuleMgr.getChatMgr().getRecentlyChat(channelId, whisperId, 0)
-                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<BaseMessage>>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
+
                     }
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
+                        this.unsubscribe();
+                        PLogger.printObject(baseMessages);
                         SortList.sortListView(baseMessages);//排序
                         List<BaseMessage> listTemp = new ArrayList<>();
 
@@ -399,7 +422,8 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
 
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
-                        if (isMachine) onDataUpdate();
+                        if (isMachine)
+                            onDataUpdate();
                     }
                 });
     }
@@ -422,10 +446,15 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         PSP.getInstance().put("whisperId", "-1");
     }
 
+    public void clearHistory() {
+        chatInstance.chatContentAdapter.setList(new ArrayList<BaseMessage>());
+    }
+
     @Override
-    public void onChatUpdate(boolean ret, BaseMessage message) {
-        PLogger.printObject(message.getJsonStr());
-        if (ret) {
+    public void onChatUpdate(BaseMessage message) {
+        if (message != null) {
+            boolean isUpdate = true;
+            PLogger.printObject(message.getJsonStr());
             if (message.getTime() == 0) {
                 message.setTime(ModuleMgr.getAppMgr().getTime());
             }
@@ -433,18 +462,38 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
             boolean show = isShowMsg(message);
             if (show) {
                 chatInstance.chatContentAdapter.updateData(message);
-                moveToBottom();
+                if (isListViewReachBottomEdge(getChatInstance().chatListView))
+                    moveToBottom();
                 if (isMachine) onDataUpdate();
 
-                if (message.getSendID() != App.uid)
+                if (!message.isSender())//发送已读消息
                     ModuleMgr.getChatMgr().sendMailReadedMsg(message.getChannelID(), Long.valueOf(whisperId));
+            } else {
+                ChatMsgType msgType = ChatMsgType.getMsgType(message.getType());
+                switch (msgType) {
+                    case CMT_7: {
+                        isUpdate = false;
+                        List<BaseMessage> messData = chatInstance.chatContentAdapter.getList();
+                        if (messData != null) {
+                            for (int i = messData.size() - 1; i >= 0; i--) {
+                                BaseMessage mess = messData.get(i);
+                                if (mess == null) continue;
+                                if (mess.getStatus() == MessageConstant.READ_STATUS) break;
+                                if (mess.getStatus() == MessageConstant.OK_STATUS)
+                                    mess.setStatus(MessageConstant.READ_STATUS);
+                            }
+                            chatInstance.chatContentAdapter.setList(messData);
+                        }
+                    }
+                }
             }
 
             /**
              * 本地模拟消息
              * 接收的网络消息
              */
-            if (message.getDataSource() == MessageConstant.FOUR || (message.getDataSource() == MessageConstant.TWO && show)) {
+            if ((message.getcMsgID() == 0 && isUpdate) || message.getDataSource() == MessageConstant.FOUR
+                    || (message.getDataSource() == MessageConstant.TWO && show)) {
                 ModuleMgr.getChatMgr().updateLocalReadStatus(channelId, whisperId, message.getMsgID());
             }
         }
@@ -557,19 +606,23 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
     public void onRefresh() {
         // 这里是加载更多信息的。
         ModuleMgr.getChatMgr().getHistoryChat(channelId, whisperId, ++page)
-                .observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<BaseMessage>>() {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<BaseMessage>>() {
                     @Override
                     public void onCompleted() {
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
+
                     }
 
                     @Override
                     public void onNext(List<BaseMessage> baseMessages) {
-                        SortList.sortListView(baseMessages);// 排序
+                        this.unsubscribe();
+                        SortList.sortListView(baseMessages);//排序
                         PLogger.printObject(baseMessages);
                         chatInstance.chatListView.stopRefresh();
                         if (baseMessages.size() > 0) {
@@ -577,7 +630,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                                 chatInstance.chatListView.setPullRefreshEnable(false);
                             }
 
-                            List<BaseMessage> listTemp = new ArrayList<BaseMessage>();
+                            List<BaseMessage> listTemp = new ArrayList<>();
                             for (BaseMessage baseMessage : baseMessages) {
                                 if (isShowMsg(baseMessage)) {
                                     listTemp.add(baseMessage);

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -40,7 +41,7 @@
                     android:id="@+id/tv_gift_hello"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/chat_gift_hello_man"
+                    tools:text="@string/chat_gift_hello_man"
                     android:textColor="@color/color_040000"
                     android:textSize="@dimen/px42_sp" />
 
@@ -50,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/px30_dp"
                     android:singleLine="true"
-                    android:text="送你棒棒糖一个"
+                    tools:text="送我棒棒糖一个"
                     android:textColor="@color/color_777777"
                     android:textSize="@dimen/px39_sp" />
             </LinearLayout>

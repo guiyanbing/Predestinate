@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.content.Intent;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -12,7 +11,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,7 +124,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
 
         if (group) {// 群聊
             message.setChannelID(groupId);
-            ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), null, true, message);
+            ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), null, message);
         } else {//私聊或群私聊
             if (!TextUtils.isEmpty(groupId)) {//群里面的私聊
                 message.setChannelID(groupId);
@@ -135,11 +133,13 @@ public class RecMessageMgr implements IMProxy.IMListener {
             message.setWhisperID(String.valueOf(senderID));
             //接收特殊消息
             ModuleMgr.getChatListMgr().setSpecialMsg(message);
-            if (BaseMessage.TalkRed_MsgType == message.getType() || BaseMessage.System_MsgType == message.getType()) {//红包消息不保存，也不通知上层
+            if (BaseMessage.TalkRed_MsgType == message.getType()) {//红包消息不保存，也不通知上层
                 return;
             }
 
-            if (BaseMessage.Follow_MsgType == message.getType() || BaseMessage.RedEnvelopesBalance_MsgType == message.getType()) {
+            if (BaseMessage.Follow_MsgType == message.getType() ||
+                    BaseMessage.RedEnvelopesBalance_MsgType == message.getType() ||
+                    BaseMessage.System_MsgType == message.getType()) {
                 isSave = false;
             }
 
@@ -162,7 +162,7 @@ public class RecMessageMgr implements IMProxy.IMListener {
                     ModuleMgr.getChatMgr().onReceiving(message);
                 }
             } else {
-                ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), true, message);
+                ModuleMgr.getChatMgr().onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
             }
         }
     }

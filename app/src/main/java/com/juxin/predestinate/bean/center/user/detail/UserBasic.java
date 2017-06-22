@@ -23,7 +23,7 @@ public class UserBasic extends BaseData implements Parcelable {
     private String edu;          // 学历  1:初中及以下 2：高中及中专 3，大专 4 ，本科 5：硕士及以上
     private String income;       // 收入情况
     private String job;          // 工作情况
-    private String marry;        // 情感状态  1:单身， 2:恋爱中， 3:已婚， 4:保密
+    private String marry;        // 情感状态  2:未婚， 3:离异， 4:丧偶
     private int height;          // 身高
     private String star;         // 星座
     private String birthday;     // 生日
@@ -62,12 +62,13 @@ public class UserBasic extends BaseData implements Parcelable {
         this.setBirthday(detailObject.optString("birthday"));
         this.setHeight(detailObject.optInt("height"));
 
+        int marry = detailObject.optInt("marry");
         this.setWeight(infoConfig.getWeight().getShowWithSubmit(detailObject.optInt("weight")));
         this.setStar(infoConfig.getStar().getShowWithSubmit(detailObject.optInt("star")));
         this.setEdu(infoConfig.getEdu().getShowWithSubmit(detailObject.optInt("edu")));
         this.setJob(infoConfig.getJob().getShowWithSubmit(detailObject.optInt("job")));
         this.setIncome(infoConfig.getIncome().getShowWithSubmit(detailObject.optInt("income")));
-        this.setMarry(infoConfig.getMarry().getShowWithSubmit(detailObject.optInt("marry")));
+        this.setMarry(infoConfig.getMarry().getShowWithSubmit(marry < 2 ? 2 : marry));
 
         int pid = detailObject.optInt("province");
         int cit = detailObject.optInt("city");
@@ -207,7 +208,7 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     public String getEdu() {
-        return edu;
+        return edu.equals("不限") ? "" : edu;
     }
 
     public void setEdu(String edu) {
@@ -215,7 +216,7 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     public String getIncome() {
-        return income;
+        return income.equals("不限") ? "" : income;
     }
 
     public void setIncome(String income) {

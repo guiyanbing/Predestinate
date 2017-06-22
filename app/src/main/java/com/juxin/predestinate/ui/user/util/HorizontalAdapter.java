@@ -48,7 +48,8 @@ public class HorizontalAdapter extends ExBaseAdapter<UserPhoto> {
         }
 
         UserPhoto userPhoto = getItem(position);
-        ImageLoader.loadCenterCrop(App.context, userPhoto.getPic(), mHolder.img_media);
+        String url = ImageLoader.checkOssImageUrl(userPhoto.getPic());
+        ImageLoader.loadCenterCrop(App.context, url, mHolder.img_media);
         return convertView;
     }
 

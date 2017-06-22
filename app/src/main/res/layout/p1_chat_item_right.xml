@@ -12,23 +12,18 @@
         android:layout_alignParentRight="true"
         android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/chat_item_name"
-        style="@style/chat_item_name"
-        android:layout_marginLeft="@dimen/px222_dp"
-        android:layout_marginRight="@dimen/px25_dp"
-        android:layout_marginTop="@dimen/px5_dp"
-        android:layout_toLeftOf="@+id/chat_item_head"
-        android:visibility="gone"
-        android:text="xiaoyou" />
-
     <LinearLayout
         style="@style/chat_item_content_layout"
-        android:layout_below="@+id/chat_item_name"
         android:layout_marginRight="@dimen/px25_dp"
         android:layout_marginTop="@dimen/px15_dp"
         android:layout_toLeftOf="@+id/chat_item_head"
         android:gravity="right">
+        <ImageView
+            android:id="@+id/chat_item_status_img_error"
+            android:layout_width="@dimen/px48_dp"
+            android:layout_height="@dimen/px48_dp"
+            android:layout_marginRight="@dimen/px18_dp"
+            android:visibility="gone"/>
 
         <FrameLayout
             android:id="@+id/chat_item_right_layout"

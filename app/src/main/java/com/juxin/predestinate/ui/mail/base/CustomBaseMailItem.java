@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.unread.BadgeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -95,9 +95,9 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
     public void showData(BaseMessage msgData) {
         long uid = msgData.getLWhisperID();
 
-        if(uid == MailSpecialID.customerService.getSpecialID() && TextUtils.isEmpty(msgData.getAvatar())){
-            ImageLoader.loadCircleAvatar(getContext(), R.drawable.f1_secretary_avatar, item_headpic);
-        }else {
+        if (uid == MailSpecialID.customerService.getSpecialID() && TextUtils.isEmpty(msgData.getAvatar())) {
+            ImageLoader.loadRoundAvatar(getContext(), R.drawable.f1_secretary_avatar, item_headpic);
+        } else {
             ImageLoader.loadRoundAvatar(getContext(), msgData.getAvatar(), item_headpic);
         }
 
@@ -106,9 +106,9 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         if (!TextUtils.isEmpty(nickname)) {
             item_nickname.setText(nickname.length() <= 10 ? nickname : nickname.substring(0, 9) + "...");
         } else {
-            if(uid == MailSpecialID.customerService.getSpecialID()){
+            if (uid == MailSpecialID.customerService.getSpecialID()) {
                 item_nickname.setText(MailSpecialID.customerService.getSpecialIDName());
-            }else {
+            } else {
                 item_nickname.setText(String.valueOf(uid));
             }
         }
@@ -116,10 +116,14 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
         item_certification.setVisibility(GONE);
 
         String result = BaseMessage.getContent(msgData);
-        if (msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()) {
-            item_last_msg.setTextContent(result);
+        if (!TextUtils.isEmpty(result)) {
+            if (msgData.getType() == BaseMessage.BaseMessageType.common.getMsgType()) {
+                item_last_msg.setTextContent(result);
+            } else {
+                item_last_msg.setText(Html.fromHtml(result));
+            }
         } else {
-            item_last_msg.setText(Html.fromHtml(result));
+            item_last_msg.setText("");
         }
 
         long time = msgData.getTime();
@@ -136,6 +140,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
     /**
      * 角标
+     *
      * @param msgData
      */
     protected void setUnreadnum(BaseMessage msgData) {

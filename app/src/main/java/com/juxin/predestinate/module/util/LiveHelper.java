@@ -1,15 +1,13 @@
 package com.juxin.predestinate.module.util;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 
-import com.baidu.location.Jni;
 import com.juxin.library.request.DownloadListener;
+import com.juxin.library.utils.APKUtil;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
@@ -30,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static com.juxin.predestinate.module.logic.application.App.context;
-import static java.lang.Long.getLong;
 
 /**
  * 直播相关功能
@@ -38,40 +35,52 @@ import static java.lang.Long.getLong;
  * @author gwz
  */
 public class LiveHelper {
+
     private static DownloadPluginFragment downloadPluginFragment = new DownloadPluginFragment();
     private static boolean isDownloading = false;
 
     /**
      * 打开直播间
+     *
      * @param anchorId 主播UID
      * @param videoUrl 视频流地址
-     * @param imgUrl 封面
-     * @param downUrl 下载地址
-     * @param pkg 直播app包名
-     * @param cls 直播app入口
+     * @param imgUrl   封面
+     * @param downUrl  下载地址
+     * @param pkg      直播app包名
+     * @param cls      直播app入口
      */
     public static void openLiveRoom(String anchorId, String videoUrl, String imgUrl, String downUrl, String pkg, String cls) {
-        if (!ApkUnit.getAppIsInstall(App.context, pkg)) {
+        if (!APKUtil.isAppInstalled(App.context, pkg)) {
             saveLiveInfo(anchorId, videoUrl, imgUrl, downUrl);
             return;
         }
+        // 根据当前用户性别判断打开女性直播页面还是打开去直播页面
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
         ComponentName componetName = new ComponentName(pkg, cls);
         Intent intent = new Intent(Intent.ACTION_MAIN);
         Bundle bundle = new Bundle();
         bundle.putString("type", "5");
         intent.putExtras(bundle);
-        intent.putExtra("anchor_id",anchorId);
-        intent.putExtra("video_url",videoUrl);
-        intent.putExtra("image_url",imgUrl);
-        intent.putExtra("uid","yf" + userDetail.getUid());
+        intent.putExtra("anchor_id", anchorId);
+        intent.putExtra("video_url", videoUrl);
+        intent.putExtra("image_url", imgUrl);
+        intent.putExtra("uid", "yf" + userDetail.getUid());
         intent.putExtra("head_url", userDetail.getAvatar());
-        intent.putExtra("sex", userDetail.getGender());
+        intent.putExtra("sex", userDetail.getGender() == 2 ? "0" : "1");//隔壁APP 字符串："0"是女性，"1"是男性
         intent.putExtra("password", ModuleMgr.getLoginMgr().getAuth());
         intent.setComponent(componetName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
+    /**
+     * 保存插件调用信息并进行插件下载
+     *
+     * @param anchorId 主播UID
+     * @param videoUrl 视频流地址
+     * @param imgUrl   封面图片
+     * @param downUrl  插件下载地址
+     */
     private static void saveLiveInfo(String anchorId, String videoUrl, String imgUrl, String downUrl) {
         File file = new File(DirType.getCacheDir() + "live.json");
         JSONObject jo = new JSONObject();
@@ -82,7 +91,7 @@ public class LiveHelper {
             jo.put("image_url", imgUrl);
             jo.put("uid", "yf" + userDetail.getUid());
             jo.put("head_url", userDetail.getAvatar());
-            jo.put("sex", userDetail.getGender());
+            jo.put("sex", userDetail.getGender() == 2 ? "0" : "1");//隔壁APP 字符串："0"是女性，"1"是男性
             jo.put("password", JniUtil.GetEncryptString(ModuleMgr.getLoginMgr().getUserList().get(0).getPw()));
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(jo.toString().getBytes());
@@ -92,15 +101,21 @@ public class LiveHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 下载插件
+     *
+     * @param downUrl
+     */
     private static void downLoadPlugin(String downUrl) {
-        if (!downloadPluginFragment.isAdded())
-            downloadPluginFragment.show(((FragmentActivity) App.activity).getSupportFragmentManager(), "download");
+        if (!downloadPluginFragment.isAdded()) {
+            downloadPluginFragment.setLiveStyle(true);
+            downloadPluginFragment.show((FragmentActivity) App.getActivity());
+        }
         if (isDownloading) return;
 
         isDownloading = true;
@@ -121,14 +136,14 @@ public class LiveHelper {
             @Override
             public void onSuccess(String url, String filePath) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
-                ApkUnit.ExecApkFile(context, filePath);
+                downloadPluginFragment.dismissAllowingStateLoss();
+                APKUtil.installAPK(context, filePath);
             }
 
             @Override
             public void onFail(String url, Throwable throwable) {
                 isDownloading = false;
-                downloadPluginFragment.dismiss();
+                downloadPluginFragment.dismissAllowingStateLoss();
             }
         });
     }

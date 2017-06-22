@@ -142,17 +142,15 @@
 -keep public class pl.droidsonroids.gif.GifIOException{<init>(int);}
 -keep class pl.droidsonroids.gif.GifInfoHandle{<init>(long,int,int,int);}
 
-# ==============GreenDao start================
--keepclassmembers class * extends org.greenrobot.**greendao.**AbstractDao {
-public static java.lang.String TABLENAME;
-}
--keep class **$Properties
-
-# If you do not use SQLCipher:
--dontwarn org.greenrobot.greendao.database.**
-# If you do not use Rx:
--dontwarn rx.**
-# ==============GreenDao end================
+# ProGuard configurations for Bugtags
+-keepattributes LineNumberTable,SourceFile
+-keep class com.bugtags.library.** {*;}
+-dontwarn com.bugtags.library.**
+-keep class io.bugtags.** {*;}
+-dontwarn io.bugtags.**
+-dontwarn org.apache.http.**
+-dontwarn android.net.http.AndroidHttpClient
+# End Bugtags
 
 # ==============支付================
 #银联
@@ -204,7 +202,6 @@ public static java.lang.String TABLENAME;
 
 -keep class com.activity.**{*;}
 -keep class bfb.weixin.pay.**{*;}
-
 
 -dontwarn com.gather.flood.system.*
 -dontwarn com.switfpass.pay.activity.*

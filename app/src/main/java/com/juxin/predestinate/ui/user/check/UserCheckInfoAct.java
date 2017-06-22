@@ -31,7 +31,6 @@ import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.TimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.module.util.my.AttentionUtil;
 import com.juxin.predestinate.ui.user.check.bean.VideoConfig;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
@@ -274,8 +273,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     userDetail.setRemark(remark);
                     setTitle(userDetail.getShowName());
                     footPanel.refreshView(userDetail);
-                    //更新缓存
-                    AttentionUtil.updateUserDetails(userDetail);
                     break;
             }
         } else if (requestCode == REQUEST_CODE_UNLOCK_VIDEO && resultCode == RESULT_OK && data != null) {
@@ -321,8 +318,10 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     public void onMessage(String key, Object value) {
         switch (key) {
             case MsgType.MT_MyInfo_Change:
-                userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-                footPanel.refreshView(userDetail);
+                if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
+                    userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+                    footPanel.refreshView(userDetail);
+                }
                 break;
 
             default:

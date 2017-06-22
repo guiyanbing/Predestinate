@@ -119,6 +119,35 @@ public class StatisticsUser {
     }
 
     /**
+     * 我的认证->身份认证->提交按钮(上传资料信息)
+     *
+     * @param name                  //姓名
+     * @param id_number             身份证号
+     * @param pay_type              支付方式(zhifubao/bank)
+     * @param bank_kaihuhang        开户行
+     * @param bank_zhihang          开户支行
+     * @param bank_cardid           银行卡号
+     * @param zhifubao_account      支付宝账号
+     * @param pic_idnumber_positive 身份证正面图片URL
+     * @param pic_idnumber_contrary 身份证正反面图片URL
+     * @param pic_idnumberinhand    手持身份证照片
+     */
+    public static void meauthIdSubmit(String name, String id_number, int pay_type, String bank_kaihuhang, String bank_zhihang, String bank_cardid, String zhifubao_account, String pic_idnumber_positive, String pic_idnumber_contrary, String pic_idnumberinhand) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("id_number", id_number);
+        params.put("pay_type", pay_type);
+        params.put("bank_kaihuhang", bank_kaihuhang);
+        params.put("bank_zhihang", bank_zhihang);
+        params.put("bank_cardid", bank_cardid);
+        params.put("zhifubao_account", zhifubao_account);
+        params.put("pic_idnumber_positive", pic_idnumber_positive);
+        params.put("pic_idnumber_contrary", pic_idnumber_contrary);
+        params.put("pic_idnumberinhand", pic_idnumberinhand);
+        Statistics.userBehavior(SendPoint.menu_me_meauth_id_submit, params);
+    }
+
+    /**
      * 登录页->登录按钮(无需检测登录成功状态,点击按钮一次上报一次日志)
      *
      * @param username 用户账号,取文本框输入内容
@@ -130,6 +159,36 @@ public class StatisticsUser {
         params.put("password", password);
         params.put("msg", "");//登录状态消息(可选)
         Statistics.userBehavior(SendPoint.login_btnlogin, params);
+    }
+
+    /**
+     * 用户登录->忘记密码->确定(上传表单信息)
+     *
+     * @param tel          手机号码文本框
+     * @param verify_code  验证码文本框
+     * @param new_password 新密码文本框
+     */
+    public static void findPWConfirm(String tel, String verify_code, String new_password) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("tel", tel);
+        params.put("verify_code", verify_code);
+        params.put("new_password", new_password);
+        Statistics.userBehavior(SendPoint.login_findpassword_confirm, params);
+    }
+
+    /**
+     * 用户登录->忘记密码->获取验证码(上传表单信息)
+     *
+     * @param tel          手机号码文本框
+     * @param verify_code  验证码文本框
+     * @param new_password 新密码文本框
+     */
+    public static void findPWGetCode(String tel, String verify_code, String new_password) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("tel", tel);
+        params.put("verify_code", verify_code);
+        params.put("new_password", new_password);
+        Statistics.userBehavior(SendPoint.login_findpassword_getverifycode, params);
     }
 
     /**
@@ -146,6 +205,25 @@ public class StatisticsUser {
         params.put("sex", gender == 1 ? "男" : "女");
         params.put("msg", "");//登录状态消息(可选)
         Statistics.userBehavior(SendPoint.regist_btnreg, params);
+    }
+
+    /**
+     * 完善个人资料->完成(上传资料信息)
+     *
+     * @param avatar     头像照片url
+     * @param profession 职业
+     * @param education  学历
+     * @param height     身高
+     * @param marriage   婚姻
+     */
+    public static void registerSuccess(String avatar, String profession, String education, int height, String marriage) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("avatar", avatar);
+        params.put("profession", profession);
+        params.put("education", education);
+        params.put("height", height);
+        params.put("marriage", marriage);
+        Statistics.userBehavior(SendPoint.regist_success, params);
     }
 
     // 登录后引导->一键打招呼,登录后引导(男用户)
