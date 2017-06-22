@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.content.Intent;
 import android.text.TextUtils;
-
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
@@ -13,7 +12,6 @@ import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
