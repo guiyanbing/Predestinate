@@ -331,7 +331,9 @@ public class VideoAudioChatHelper {
         return bundle;
     }
 
-    //调起视频插件
+    /**
+     * 调起视频插件： 普通
+     */
     private void startRtcInitActivity(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
             Intent intent = new Intent();
@@ -343,4 +345,19 @@ public class VideoAudioChatHelper {
             downloadVideoPlugin(context);
         }
     }
+
+    /**
+     * 调起视频插件： 单聊, 群发
+     */
+    private void startRtcGroupInitActivity(Context context, Bundle bundle) {
+        if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
+            Intent intent = new Intent();
+            intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        } else {
+            downloadVideoPlugin(context);
+        }
+    }
+
 }
