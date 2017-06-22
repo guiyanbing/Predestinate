@@ -1,5 +1,7 @@
 package com.juxin.predestinate.bean.start;
 
+
+import com.juxin.library.utils.TimeBaseUtil;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.net.BaseData;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -20,7 +22,17 @@ public class LoginResult extends BaseData {
     private int group;
     private int ycoin;
 
+    private int loginstatus;//登录状态 0 登陆成功 1 登录失败
     private int miss_info;// 判断是否缺失数据,缺失则继续跳转到用户注册
+
+    private int failCode;//失败代码 1 用户或者密码错误 2 被举报封禁 3 登录过于频繁被禁用 4 管理员禁用
+    private long expire;//[opt] 封禁过期时间等 0 未封禁 -1 永久封禁 该字段仅在failCode==2时有效
+
+    private String msg;//登录失败原因
+
+    private String bannedTime;//封禁时间
+    private String token;
+
 
     /**
      * @return 判断用户是否缺失信息
@@ -32,7 +44,7 @@ public class LoginResult extends BaseData {
     @Override
     public void parseJson(String jsonStr) {
         JSONObject jsonFirst = getJsonObject(jsonStr);
-        JSONObject jsonNext = jsonFirst.optJSONObject("user_info");
+        JSONObject jsonNext = jsonFirst.optJSONObject("userdata");
         if (jsonNext != null) {
             this.setUid(jsonNext.optLong("uid"));
             this.setNickname(jsonNext.optString("nickname"));
@@ -42,9 +54,19 @@ public class LoginResult extends BaseData {
             this.setGroup(jsonNext.optInt("group"));
             this.setYcoin(jsonNext.optInt("ycoin"));
             this.setMiss_info(jsonNext.optInt("miss_info"));
+            this.token= jsonNext.optString("token");
+        }
+        JSONObject jsonfail = jsonFirst.optJSONObject("faildata");
+        if (jsonfail != null) {
+            this.failCode = jsonfail.optInt("filCode");
+            this.msg = jsonfail.optString("msg");
+            this.expire = jsonfail.optLong("expire");
+            setBannedTime(expire);
+
         }
         setUserInfo();
     }
+
 
     /**
      * 登录成功之后根据返回信息重设个人资料
@@ -58,6 +80,58 @@ public class LoginResult extends BaseData {
         myInfo.setGender(getGender());
         myInfo.setGroup(getGroup());
         myInfo.setYcoin(getYcoin());
+    }
+
+    public String getBannedTime() {
+        return bannedTime;
+    }
+
+    public void setBannedTime(long expire) {
+        if (expire == -1) {
+            this.bannedTime = "封停时间:永久";
+        } else {
+            this.bannedTime = "解禁时间:还剩" + TimeBaseUtil.formatSecondsToDate((int) (expire/1000));
+        }
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public int getLoginstatus() {
+        return loginstatus;
+    }
+
+    public void setLoginstatus(int loginstatus) {
+        this.loginstatus = loginstatus;
+    }
+
+    public int getFailCode() {
+        return failCode;
+    }
+
+    public void setFailCode(int failCode) {
+        this.failCode = failCode;
+    }
+
+    public long getExpire() {
+        return expire;
+    }
+
+    public void setExpire(long expire) {
+        this.expire = expire;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public long getUid() {
