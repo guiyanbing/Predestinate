@@ -27,6 +27,7 @@ public enum UrlParam {
 
     reqRegister("pubtest/quickReg", null, false),//注册接口
     reqLogin("public/login", LoginResult.class, false),//普通登录接口
+    reqNewLogin(Hosts.FATE_IT_GO, "x/userinfo/UserLogin", LoginResult.class, false),//2.2版登录接口
     forgotPassword("Public/forgotPassword"),//找回密码
     reqForgotsms("Public/forgotsms", false),//找回密码发送验证码
     getserviceqq("user/getserviceqq", ContactBean.class, true),//获取客服信息
@@ -191,9 +192,12 @@ public enum UrlParam {
 
     delCustomFace(Hosts.FATE_IT_GO, "xs/message/DelCustomFace", null, true),   //删除自定义表情
 
-    AddCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
+    addCustomFace(Hosts.FATE_IT_GO, "xs/message/AddCustomFace", null, true),   //添加自定义表情
 
-    GetUserNetInfo(Hosts.FATE_IT_GO, "xs/userinfo/GetUserNetInfo", null, true),  //获取用户设备网络信息
+    getUserNetInfo(Hosts.FATE_IT_GO, "xs/userinfo/GetUserNetInfo", null, true),  //获取用户设备网络信息
+
+    updateNetInfo(Hosts.FATE_IT_GO, "xs/userinfo/UpdateNetInfo", null, true),  //设置用户设备网络信息
+
 
     // 最后一个，占位
     LastUrlParam("");

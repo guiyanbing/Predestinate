@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
@@ -92,6 +93,7 @@ public class LoginMgr implements ModuleBase {
      * 保存cookie
      */
     public void setCookie(String cookie) {
+        PLogger.d("yao=" + cookie);
         PSP.getInstance().put(LOGINMGR_COOKIE, cookie);
     }
 
@@ -224,12 +226,14 @@ public class LoginMgr implements ModuleBase {
         userAccount.put("username", uid);
 //        userAccount.put("pwd", EncryptUtil.md5(pwd));
         userAccount.put("password", pwd);
+        userAccount.put("platform", "android");
         userAccount.put("ms", Constant.MS_TYPE);
         userAccount.put("ver", Constant.SUB_VERSION);
         userAccount.put("pkgname", ModuleMgr.getAppMgr().getPackageName());
+        userAccount.put("app_key", EncryptUtil.sha1(ModuleMgr.getAppMgr().getSignature()));
         LoadingDialog.show((FragmentActivity) context, context.getResources().getString(R.string.tip_loading_login));
-        ModuleMgr.getHttpMgr().reqPost(UrlParam.reqLogin, null, null, userAccount,
-                RequestParam.CacheType.CT_Cache_No, false, false, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPost(UrlParam.reqNewLogin, null, null, userAccount,
+                RequestParam.CacheType.CT_Cache_No, true, true, new RequestComplete() {
                     @Override
                     public void onRequestComplete(HttpResponse response) {
                         LoadingDialog.closeLoadingDialog(500);
@@ -239,9 +243,17 @@ public class LoginMgr implements ModuleBase {
                         }
                         // 临时资料设置
                         LoginResult result = (LoginResult) response.getBaseData();
+                        if (result.getLoginstatus() != 0 && result.getFailCode() != 2) {
+                            PToast.showShort(result.getMsg());
+                            return;
+                        }
+                        if (result.getLoginstatus() != 0 && result.getFailCode() == 2) {
+                            UIShow.showBottomBannedDlg(context, false, result.getBannedTime());
+                            return;
+                        }
                         result.setUserInfo();
                         putAllLoginInfo(result.getUid(), pwd, true);// Cookie 在http响应头中返回
-
+                        ModuleMgr.getLoginMgr().setCookie("auth=" + result.getToken());
                         if (!result.isValidDetailInfo()) {
                             PToast.showLong(context.getResources().getString(R.string.toast_userdetail_isnull));
                             UIShow.showUserInfoCompleteAct(context, result.getGender());
