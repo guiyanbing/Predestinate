@@ -97,6 +97,7 @@ import com.juxin.predestinate.ui.user.my.CloseBalanceDlg;
 import com.juxin.predestinate.ui.user.my.DemandRedPacketAct;
 import com.juxin.predestinate.ui.user.my.DiamondSendGiftDlg;
 import com.juxin.predestinate.ui.user.my.GiftDiamondPayDlg;
+import com.juxin.predestinate.ui.user.my.InvitationExpiredDlg;
 import com.juxin.predestinate.ui.user.my.LookAtHerDlg;
 import com.juxin.predestinate.ui.user.my.MyAttentionAct;
 import com.juxin.predestinate.ui.user.my.MyDiamondsAct;
@@ -1076,6 +1077,15 @@ public class UIShow {
         dialog.setContext(context);
         dialog.setOtherId(otherId, channel_uid);
         dialog.setIsInvate(isInvate);
+        dialog.showDialog((FragmentActivity) context);
+    }
+
+    /**
+     * 邀请过期弹框
+     */
+    public static void showInvitaExpiredDlg(final Context context, long otherId, String channel_uid, String type, int price) {
+        InvitationExpiredDlg dialog = new InvitationExpiredDlg();
+        dialog.setData(context,otherId,channel_uid,type,price);
         dialog.showDialog((FragmentActivity) context);
     }
 
