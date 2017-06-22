@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.module.local.statistics.StatisticsUser;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -25,8 +26,8 @@ import java.lang.ref.WeakReference;
  * 重置密码
  * Created YAO on 2017/3/24.
  */
-
 public class FindPwdAct extends BaseActivity implements View.OnClickListener, RequestComplete {
+
     private EditText et_phone, et_code, et_pwd;
     private Button bt_send_code;
     private String phone, code, pwd;
@@ -42,7 +43,6 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
         initView();
     }
 
-
     private void initView() {
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_code = (EditText) findViewById(R.id.et_code);
@@ -57,12 +57,16 @@ public class FindPwdAct extends BaseActivity implements View.OnClickListener, Re
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_send_code:
+                StatisticsUser.findPWGetCode(et_phone.getText().toString(), et_code.getText().toString(),
+                        et_pwd.getText().toString());
                 if (checkPhone()) {
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                     ModuleMgr.getLoginMgr().reqForgotsms(phone, this);
                 }
                 break;
             case R.id.bt_submit:
+                StatisticsUser.findPWConfirm(et_phone.getText().toString(), et_code.getText().toString(),
+                        et_pwd.getText().toString());
                 if (checkPhone() && checkSubmitInfo()) {
                     LoadingDialog.show(this, getResources().getString(R.string.tip_loading_submit));
                     ModuleMgr.getLoginMgr().forgotPassword(phone, code, pwd, this);

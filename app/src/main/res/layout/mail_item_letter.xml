@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:descendantFocusability="blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <include layout="@layout/common_gap_item" />
@@ -27,7 +27,6 @@
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="@dimen/px30_dp"
                 android:layout_marginTop="@dimen/px30_dp"
-                android:scaleType="centerCrop"
                 android:src="@drawable/default_head" />
 
             <com.juxin.library.unread.BadgeView
@@ -127,8 +126,7 @@
                     android:textSize="@dimen/px36_sp"
                     android:visibility="gone" />
 
-                <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.juxin.predestinate.module.logic.baseui.custom.EmojiTextView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/mail_item_last_msg"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
@@ -150,7 +148,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/px35_dp"
             android:paddingRight="@dimen/px35_dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/mail_item_right_icon"

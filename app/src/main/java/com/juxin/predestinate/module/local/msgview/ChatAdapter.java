@@ -352,8 +352,13 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         if (getChatInstance().chatListView == null) {
             return;
         }
-        getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
-        chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+        getChatInstance().chatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
+                chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
+            }
+        });
     }
 
     /**
