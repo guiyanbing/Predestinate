@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我要赚红包</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="../../css/mui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="../../css/app.css"/>
+    <style>
+        .top-title {font-size: 12px;text-align: left;vertical-align: middle;padding:15px; color: #D1C3A1; background-color: #F7F4EC }
+        .goEarn{display: inline-block;float:right;font-size: 12px;border: 1px solid #FC6C91;border-radius: 30px;padding: 5px 8px; margin-right: 10px}
+        .goEarnRed {display: inline-block;float:right;font-size: 12px;border: 1px solid #FC6C91;border-radius: 30px;padding: 5px 10px; background-color: #FC6C91; margin-right: 10px}
+        .colorRed {color: #FC6C91}
+        p{padding-left: 10px; font-size: 13px}
+    </style>
+</head>
+
+<body>
+
+<div class="mui-content">
+    <div class="top-title">小编教你简单快捷赚红包的方法，快速上手，提现提到手软，数钱数到手抽筋</div>
+    <div style="background-color: #ffffff;">
+        <p style=" font-size: 16px; padding-top: 15px;  color: #1C1C1C">索要礼物，得收益<span><button onclick="earnRedBag.askForGift()" class="goEarnRed" style="color: #ffffff">索要礼物</button></span></p>
+        <p>展现你的魅力，向男用户索要礼物<span class="colorRed">获得礼物收益</span></p>
+        <p>主动找帅哥聊天，互动消息就能获得<span class="colorRed">随机红包</span></p>
+        <p><span class="colorRed">聊天越多，红包越多</span></p>
+        <p style="margin-top: 20px;">已发送：<span id="askItem" class="colorRed">0人</span></p>
+        <p style="padding-bottom: 15px; margin-top: -8px; font-size: 10px;color: #8f8f94">温馨提示：保持在线，群发消息会持续发送</p>
+    </div>
+    <div style="background-color: #ffffff;">
+        <p style=" font-size: 16px; padding-top: 15px;  color: #1C1C1C">群发视频快速赚钱<span><button onclick="earnRedBag.videoBtnClick()" class="goEarn colorRed" >群发视频</button></span></p>
+        <p>你当前视频收取对方<span class="colorRed">50钻石/分钟</span></p>
+        <p>发动主动视频邀请时，必须<span class="colorRed">保持在线</span></p>
+        <p>视频体验好的女性，会提升发送数量<span class="colorRed"></span></p>
+        <p>主动视频邀请每<span class="colorRed">间隔一段时间</span>，可重发1次</p>
+        <p style="margin-top: 20px;">已发送：<span id="videoItem" class="colorRed">0人</span></p>
+        <p style="padding-bottom: 15px; margin-top: -8px; font-size: 10px;color: #8f8f94">温馨提示：保持在线，群发消息会持续发送</p>
+    </div>
+    <div style="background-color: #ffffff; margin-top: -9px">
+        <p style=" font-size: 16px; padding-top: 15px; padding-bottom: 15px; margin-top: 0px;color: #1C1C1C">开心大转盘
+            <span>
+                <img src="../../assets/sy_itps.png" style="width: 22%; height: 22%; vertical-align: middle; margin-left: 10px; margin-top: -6px">
+                <button onclick="earnRedBag.setTurntable()" class="mui-btn mui-btn-link" style="color: #8f8f94; float: right; vertical-align: middle; margin-top: -6px" >设置<span class="mui-icon mui-icon-forward"></span></button>
+            </span>
+        </p>
+    </div>
+    <div style="background-color: #ffffff;">
+        <p style=" font-size: 16px; padding-top: 15px;  color: #1C1C1C">群发语音快速赚钱<span><button onclick="earnRedBag.voiceBtnClick()" class="goEarn colorRed" >群发语音</button></span></p>
+        <p>你当前视频收取对方<span class="colorRed">20钻石/分钟</span></p>
+        <p>发动主动语音邀请时，必须<span class="colorRed">保持在线</span></p>
+        <p>视频体验好的女性，会提升发送数量<span class="colorRed"></span></p>
+        <p>主动语音邀请每<span class="colorRed">间隔一段时间</span>，可重发1次</p>
+        <p style="margin-top: 20px;">已发送：<span id="voiceItem" class="colorRed">0人</span></p>
+        <p style="padding-bottom: 15px; margin-top: -8px; font-size: 10px;color: #8f8f94">温馨提示：保持在线，群发消息会持续发送</p>
+    </div>
+</div>
+</body>
+<script src="../../js/mui.min.js"></script>
+<script src="../../lib/jxlib.all.js"></script>
+<script src="../../lib/url-config.js"></script>
+<script src="../../src/earnRedBag/earn-red-bag.js"></script>
+<script type="text/javascript">
+    var earnRedBag = null;
+    window.onload = function () {
+      earnRedBag = EarnRedBag();
+      earnRedBag.init();
+    }
+</script>
+</html>

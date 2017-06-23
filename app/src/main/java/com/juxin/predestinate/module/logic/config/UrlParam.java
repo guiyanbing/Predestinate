@@ -64,12 +64,12 @@ public enum UrlParam {
     getVerifyStatus("User/getVerifyStatus", true),
 
 
-    // 男女发起
+    // 男女发起音视频邀请
     inviteVideoChat(Hosts.FATE_IT_GO, "xs/message/InviteVideoChat", null, true),
 
     //女性单邀音视频
-    girlSingleInviteVa(Hosts.FATE_IT_GO,"xs/message/InviteVideoChatW", null, true),
-    //女性群邀视频
+    girlSingleInviteVa(Hosts.FATE_IT_GO, "xs/message/InviteVideoChatW", null, true),
+    //女性群邀音视频
     girlGroupInviteVa(Hosts.FATE_IT_GO, "xs/message/VCGroupInvite", null, true),
 
     //============================== 用户资料相关接口 =============================
@@ -158,7 +158,7 @@ public enum UrlParam {
     // 获取最近礼物列表
     lastGiftList("gift/lastgiftlist", GiftMessageList.class, false),
     // 接受通信邀请
-    reqAcceptChat(Hosts.FATE_IT_GO,"xs/message/AcceptVideoChat", Accept.class,false),
+    reqAcceptChat(Hosts.FATE_IT_GO, "xs/message/AcceptVideoChat", Accept.class, false),
 
     //================= 发现 ===========
     //举报

@@ -234,7 +234,7 @@ public class VideoAudioChatHelper {
             Bundle bundle = newBundle(inviteId, 0, 1, type, 0);
             bundle.putInt("vc_girl_type", 2);
             bundle.putInt("vc_girl_price", 30);
-            startGroupInviteAct(context, bundle);
+            startGroupInviteAct(activity, bundle);
             return;
         }
         PToast.showShort(TextUtils.isEmpty(jo.optString("msg")) ? "数据异常" : jo.optString("msg"));
@@ -391,10 +391,14 @@ public class VideoAudioChatHelper {
      */
     private void startRtcInitActivity(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
-            Intent intent = new Intent();
-            intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
-            intent.putExtras(bundle);
-            context.startActivity(intent);
+            try {
+                Intent intent = new Intent();
+                intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcInitActivity");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             downloadVideoPlugin(context);
         }
@@ -405,10 +409,14 @@ public class VideoAudioChatHelper {
      */
     private void startGroupInviteAct(Context context, Bundle bundle) {
         if (ApkUnit.getAppIsInstall(context, PACKAGE_PLUGIN_VIDEO)) {
-            Intent intent = new Intent();
-            intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
-            intent.putExtras(bundle);
-            context.startActivity(intent);
+            try {
+                Intent intent = new Intent();
+                intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             downloadVideoPlugin(context);
         }

@@ -475,7 +475,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
 //                    }
                     if(privateChat != null) {
-                        privateChat.yTipsLogic(true, false);
+                        if(MailSpecialID.customerService.getSpecialID() != whisperID) {
+                            privateChat.yTipsLogic(true, false);
+                        }
                     }
                 }
                 break;
