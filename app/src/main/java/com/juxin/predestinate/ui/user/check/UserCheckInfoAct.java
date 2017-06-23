@@ -325,7 +325,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 }
                 break;
-
             default:
                 break;
         }
