@@ -653,14 +653,14 @@ public class ChatMgr implements ModuleBase {
      * @param strMsg
      */
     private void toSendMsgToUI(final String strMsg) {
-        MsgMgr.getInstance().delay(new Runnable() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (!TextUtils.isEmpty(strMsg)) {
                     PToast.showShort(strMsg);
                 }
             }
-        }, 0);
+        });
     }
 
     // 成功后更新数据库

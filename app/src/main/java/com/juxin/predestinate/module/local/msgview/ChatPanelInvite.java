@@ -36,7 +36,6 @@ import static com.juxin.predestinate.module.logic.application.App.activity;
  */
 public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClickListener, RequestComplete {
 
-    private ImageView imgPic;
     private TextView tvTitle, tvContent, tvTime, tvConnect;
     private LinearLayout llReject, llConnect;
     private InviteVideoMessage mInviteVideoMessage;
@@ -46,9 +45,6 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     private String channelUid;
     private long inviteId;
     private int type;
-    private ChatAdapter.ChatInstance mChatInstance;
-
-    private boolean isTimeOut = true;
 
     public ChatPanelInvite(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
         super(context, chatInstance, R.layout.f1_chat_item_panel_invite, sender);
@@ -57,7 +53,6 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
 
     @Override
     public void initView() {
-        imgPic = (ImageView) findViewById(R.id.iv_invite_img);
         tvTitle = (TextView) findViewById(R.id.tv_invite_tv_title);
         tvContent = (TextView) findViewById(R.id.tv_invite_tv_content);
         tvTime = (TextView) findViewById(R.id.tv_invite_tv_time);

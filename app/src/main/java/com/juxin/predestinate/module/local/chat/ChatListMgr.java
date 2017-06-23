@@ -496,13 +496,13 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.System_MsgType://系统消息
                 setSystemMsg(message);
                 break;
-            case BaseMessage.Msg_RecvedType://送达消息
+            case BaseMessage.Recved_MsgType://送达消息
                 setMsgRecvedType(message);
                 break;
             case BaseMessage.inviteVideoDelivery_MsgType://语音(视频)邀请送达男用户
                 setInviteVideoDelivery(message);
                 break;
-            case BaseMessage.Alone_Invite_Video://女用户单独视频邀请
+            case BaseMessage.Alone_Invite_Video_MsgType://女用户单独视频邀请
                 setAloneInviteVideoMsg(message);
                 break;
             default:
