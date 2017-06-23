@@ -1,0 +1,53 @@
+package com.juxin.predestinate.bean.my;
+
+
+import com.juxin.predestinate.bean.net.BaseData;
+
+/**
+ * 离线送达信息
+ * Created by zm on 17/3/20.
+ */
+public class OffMsgInfo extends BaseData {
+
+//    "uid":105311211,          //消息的发送方uid("fid"),没有则填0
+//            "msg_id":12312321321321,  //消息ID("d")
+//            "mtp":2,				  //消息类型
+    private long uid;
+    private long msg_id;
+    private int mtp;
+
+    public OffMsgInfo(long uid, long msg_id, int mtp) {
+        this.uid = uid;
+        this.msg_id = msg_id;
+        this.mtp = mtp;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public long getMsg_id() {
+        return msg_id;
+    }
+
+    public void setMsg_id(long msg_id) {
+        this.msg_id = msg_id;
+    }
+
+    public int getMtp() {
+        return mtp;
+    }
+
+    public void setMtp(int mtp) {
+        this.mtp = mtp;
+    }
+
+    @Override
+    public void parseJson(String jsonStr) {
+
+    }
+}
