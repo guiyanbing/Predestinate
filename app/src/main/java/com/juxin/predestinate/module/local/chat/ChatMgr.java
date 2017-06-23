@@ -536,9 +536,9 @@ public class ChatMgr implements ModuleBase {
      * @param msgID
      * @param callback
      */
-    public void updateDeliveryStatus(long userID, long msgID, DBCallback callback) {
+    public void updateDeliveryStatus(long cMsgID, long msgID, DBCallback callback) {
         dbCenter.getCenterFMessage().updateDeliveryStatus(msgID, null);
-        dbCenter.getCenterFLetter().updateDeliveryStatus(userID, callback);
+        dbCenter.getCenterFLetter().updateDeliveryStatus(cMsgID, callback);
     }
 
     private void sendMessage(final BaseMessage message, final IMProxy.SendCallBack sendCallBack) {

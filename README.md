@@ -39,6 +39,11 @@
 - [通用HTM HINT 测试接口 ](http://123.59.187.33:8681/test/TestPushHtmHint?fuid=1001&tuid=1002&mct=通用HTM消息测试&htm=送个礼物，对方立即接收既自动成为好友<a href="send_gift">点击赠送</a>)
 - [送礼提示](http://123.59.187.33:8681/test/TestPushNeedGift?fuid=1111&tuid=1112)
 - [跳转到小秘书聊天框](http://123.59.187.33:8681/test/TestPushJUMPKF?fuid=1111&tuid=1112)
+- [视频邀请](http://123.59.187.33:8681/test/TestPushMsgInvite?fuid=1001&tuid=1002&mct=发来一个视频邀请&media_tp=1)
+- [封号](http://123.59.187.33:8681/test/TestPushBan?tuid=1002&mct=由于投诉已封号&unban_tm=1497931571)
+- [推送消息邀请](http://123.59.187.33:8681/test/TestPushMsgInviteTome?fuid=1001&tuid=1002&invite_id=1000&send_count=20)
+
+
 
 
 ### 2. 其他
