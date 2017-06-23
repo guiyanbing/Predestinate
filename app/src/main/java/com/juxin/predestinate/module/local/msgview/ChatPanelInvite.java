@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -180,8 +181,9 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     }
                 }, 60000);
             }
-            return;
+        }else {
+            LoadingDialog.closeLoadingDialog();
+            PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
         }
-        PToast.showShort(response.getMsg() == null ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
     }
 }
