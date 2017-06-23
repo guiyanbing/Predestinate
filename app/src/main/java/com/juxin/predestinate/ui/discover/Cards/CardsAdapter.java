@@ -153,7 +153,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
         vh.lin_to_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
+                if (ModuleMgr.getCenterMgr().getMyInfo().getYcoin() > 0) {
                     UIShow.showPrivateChatAct(context, infoHot.getUid(), null);
                 } else {
                     PickerDialogUtil.showSimpleTipDialogExt((FragmentActivity) context, new SimpleTipDialog.ConfirmListener() {
