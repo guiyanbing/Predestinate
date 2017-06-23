@@ -42,7 +42,8 @@ public class PayWebActivity extends BaseActivity {
         webPanel.setWebListener(new WebPanelPayH5.WebListener() {
             @Override
             public void onTitle(String title) {
-                setTitle(title);
+                //一直显示支付中...
+                setTitle(getString(R.string.paying));
             }
 
             @Override
