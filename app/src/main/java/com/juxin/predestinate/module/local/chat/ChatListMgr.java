@@ -514,6 +514,12 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (message == null) return;
         VideoMessage videoMessage = (VideoMessage) message;
         if (videoMessage.getVideoTp() == 1) {
+            // 女性用户且处于群发状态, 直接打开聊天界面
+            if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() && VideoAudioChatHelper.getInstance().getGroupInviteStatus()){
+                VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
+                        videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
+                return;
+            }
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
         } else {

@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.content.Context.MODE_APPEND;
 import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
 import static com.juxin.predestinate.module.logic.application.App.context;
 
@@ -62,6 +61,7 @@ public class VideoAudioChatHelper {
     private DownloadPluginFragment downloadPluginFragment = new DownloadPluginFragment();
     private boolean isDownloading = false;
     private int singleType;
+    private static boolean isGroupInvite = false;  // 用户是否处于群发状态
 
     private VideoAudioChatHelper() {
     }
@@ -121,6 +121,15 @@ public class VideoAudioChatHelper {
         PSP.getInstance().put("VCID" + App.uid, JSON.toJSONString(longList));
     }
 
+    /**
+     * 设置是否处于群发状态
+     */
+    public void setGroupInviteStatus(boolean isGroupInvite) {
+        this.isGroupInvite = isGroupInvite;
+    }
+    public boolean getGroupInviteStatus() {
+        return isGroupInvite;
+    }
 
     /**
      * 邀请对方音频或视频聊天
@@ -243,6 +252,37 @@ public class VideoAudioChatHelper {
     }
 
     /**
+     * 普通： 打开被邀请时的页面
+     *
+     * @param vcId     通话频道ID
+     * @param dstUid   对方UID
+     * @param chatType 1视频，2音频
+     */
+    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType) {
+        int price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getAudioPrice();
+        if (chatType == 1) {
+            price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
+        }
+        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
+        bundle.putLong("vc_girl_price", price);
+        startRtcInitActivity(activity, bundle);
+    }
+
+    /**
+     * 直接开启聊天页
+     *
+     * @param vcId     通话频道ID
+     * @param dstUid   对方UID
+     * @param chatType 1视频，2音频
+     */
+    public void openInvitedDirect(Activity activity, long vcId, long dstUid, int chatType) {
+        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 0);
+        bundle.putInt("vc_chat_from", 2);
+        startRtcInitActivity(activity, bundle);
+    }
+
+
+    /**
      * 检测是否需要下载视频插件
      */
     public void checkDownloadPlugin(FragmentActivity activity) {
@@ -258,37 +298,6 @@ public class VideoAudioChatHelper {
                 && ApkUnit.getInstallAppVer(context, PACKAGE_PLUGIN_VIDEO) < ModuleMgr.getCommonMgr().getCommonConfig().getPlugin_version()) {
             downloadVideoPlugin(activity);
         }
-    }
-
-    /**
-     * 普通： 打开被邀请时的页面
-     *
-     * @param vcId     通话频道ID
-     * @param dstUid   对方UID
-     * @param chatType 1视频，2音频
-     */
-    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType) {
-        int price= ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getAudioPrice();
-        if (chatType == 1){
-            price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
-        }
-        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
-        bundle.putLong("vc_girl_price", price);
-        startRtcInitActivity(activity, bundle);
-    }
-
-    /**
-     * 私聊页： 男接受群发邀请
-     *
-     * @param vcId     通话频道ID
-     * @param dstUid   对方UID
-     * @param chatType 1视频，2音频
-     */
-    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price, int vc_chat_from) {
-        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 0);
-        bundle.putInt("vc_chat_from", vc_chat_from);
-        bundle.putLong("vc_girl_price", price);
-        startRtcInitActivity(activity, bundle);
     }
 
     /**
@@ -436,6 +445,7 @@ public class VideoAudioChatHelper {
                 intent.setClassName("com.juxin.predestinate.assist", "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+                setGroupInviteStatus(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
