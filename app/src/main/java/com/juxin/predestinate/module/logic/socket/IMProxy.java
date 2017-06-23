@@ -493,10 +493,10 @@ public class IMProxy {
                 break;
             case 3:// 账号被封消息
                 try {
-                    if (TextUtils.isEmpty(content)) {
+                    if (!TextUtils.isEmpty(content)) {
                         JSONObject contentObject = new JSONObject(content);
                         String unban_tm = contentObject.optString("unban_tm");
-                        UIShow.showBottomBannedDlg(App.getContext(), true, TypeConvertUtil.toLong(unban_tm));
+                        UIShow.showBottomBannedDlg(App.getActivity(), true, TypeConvertUtil.toLong(unban_tm));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
