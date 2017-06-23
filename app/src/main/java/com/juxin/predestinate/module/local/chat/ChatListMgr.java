@@ -524,7 +524,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
                 return;
             }
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
-                    videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
+                    videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), 0);
         } else {
             boolean isInvite = PSP.getInstance().getBoolean("ISINVITE",false);
             if (isInvite && videoMessage.getVideoTp() == 2){
@@ -568,7 +568,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
         //跳转视频
         VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
-                videoMessage.getInvite_id(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp());
+                videoMessage.getInvite_id(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(), videoMessage.getPrice());
     }
 
     /**
