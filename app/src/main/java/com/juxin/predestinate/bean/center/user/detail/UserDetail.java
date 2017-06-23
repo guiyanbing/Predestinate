@@ -102,12 +102,20 @@ public class UserDetail extends UserInfo {
         return unlock_ycoin;
     }
 
+    public boolean isUnlock_ycoin() {
+        return unlock_ycoin == 1;
+    }
+
     public void setUnlock_ycoin(int unlock_ycoin) {
         this.unlock_ycoin = unlock_ycoin;
     }
 
     public int getUnlock_vip() {
         return unlock_vip;
+    }
+
+    public boolean isUnlock_vip() {
+        return unlock_vip == 1;
     }
 
     public void setUnlock_vip(int unlock_vip) {

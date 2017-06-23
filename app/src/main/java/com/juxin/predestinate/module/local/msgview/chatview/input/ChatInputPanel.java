@@ -188,8 +188,8 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
                     Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact, otherID);
                     UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-                    if (otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) &&
-                            (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) {
+                    if ((otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) &&
+                            (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) || !userDetail.isUnlock_vip()) {
                         UIShow.showGoodsVipDlgOld(getContext(), 1, otherID, channel_uid);
                     } else {
                         UIShow.showGoodsYCoinDlgOld(getContext(), otherID, channel_uid);

@@ -606,6 +606,7 @@ public class ChatMgr implements ModuleBase {
                     break;
                 }
                 default:
+                    sendChatCanError();
                     break;
             }
         }
@@ -631,7 +632,8 @@ public class ChatMgr implements ModuleBase {
      */
     private void sendChatCanError() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        if (userDetail.isMan() && userDetail.getYcoin() < 79) {
+        if ((userDetail.isMan() && userDetail.getYcoin() < 79)
+                || !(userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip())) {
             ModuleMgr.getChatListMgr().setTodayChatShow();
             Msg msg = new Msg();
             msg.setData(false);
