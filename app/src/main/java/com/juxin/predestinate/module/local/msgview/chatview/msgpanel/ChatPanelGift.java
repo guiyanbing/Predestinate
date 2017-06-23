@@ -1,6 +1,5 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
@@ -64,6 +63,7 @@ public class ChatPanelGift extends ChatPanel {
         GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(msg.getGiftID());
         if (giftInfo == null) {
             PLogger.d("------>gift list is empty or gift list doesn't have this gift_id.");
+            setVisibility(View.GONE);
             return false;
         }
         tv_gift_status.setText(msg.isGiftAutoReceived() ? getContext().getString(R.string.gift_has_auto_received)
@@ -133,7 +133,6 @@ public class ChatPanelGift extends ChatPanel {
 
                     }
                 });
-
             }
         });
         return true;
