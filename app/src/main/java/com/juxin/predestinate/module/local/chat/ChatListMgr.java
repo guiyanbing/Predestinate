@@ -577,7 +577,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (message == null) return;
         SystemMessage mess = new SystemMessage();
         mess.parseJson(message.getJsonStr());
-        ModuleMgr.getChatMgr().updateDeliveryStatus(mess.getD(), mess.getMsgID(), null);
+        ModuleMgr.getChatMgr().updateDeliveryStatus(mess.getMsgID(), null);
     }
 
     /**
