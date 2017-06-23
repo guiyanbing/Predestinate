@@ -13,6 +13,7 @@ public class SystemMessage extends BaseMessage {
     private int xtType;//系统消息类型（3为已读通知，5为正在输入，6为取消正在输入）
     private long fid;
     private long tid;
+    private long d;
 
     public SystemMessage() {
         super();
@@ -30,6 +31,7 @@ public class SystemMessage extends BaseMessage {
         this.setFid(object.optLong("fid"));
         this.setTid(object.optLong("tid"));
 
+        this.setD(object.optLong("d"));
         this.setMsgID(object.optLong("msg_id"));
         return this;
     }
@@ -74,5 +76,13 @@ public class SystemMessage extends BaseMessage {
 
     public void setXtType(int xtType) {
         this.xtType = xtType;
+    }
+
+    public long getD() {
+        return d;
+    }
+
+    public void setD(long d) {
+        this.d = d;
     }
 }

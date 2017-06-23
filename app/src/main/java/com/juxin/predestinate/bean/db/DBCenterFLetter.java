@@ -441,8 +441,19 @@ public class DBCenterFLetter {
     }
 
     //修改为送达
-    public void updateDeliveryStatus(long userID, DBCallback callback) {
-        updateStatus(userID, MessageConstant.DELIVERY_STATUS, MessageConstant.OK_STATUS, callback);
+    public void updateDeliveryStatus(final long cMsgID, final DBCallback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.DELIVERY_STATUS));
+                long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
+                        FLetter.COLUMN_CMSGID + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
+                        String.valueOf(cMsgID), String.valueOf(BaseMessage.video_MsgType));
+
+                DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
+            }
+        });
     }
 
     /**
