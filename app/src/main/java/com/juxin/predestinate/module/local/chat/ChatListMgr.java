@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
@@ -525,6 +526,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
         } else {
+            boolean isInvite = PSP.getInstance().getBoolean("ISINVITE",false);
+            if (isInvite && videoMessage.getVideoTp() == 2){
+                VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
+                        videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(),videoMessage.getVc_channel_key());
+                PSP.getInstance().put("ISINVITE",false);
+                return;
+            }
+
             UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
         }
     }
@@ -612,7 +621,8 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
         InviteVideoMessage mInviteVideoMessage = (InviteVideoMessage) message;
         CountDownTimerUtil util = CountDownTimerUtil.getInstance();
-        long timeCount = mInviteVideoMessage.getTimeout_tm() - ModuleMgr.getAppMgr().getTime();//计时时间
+        long timeCount = mInviteVideoMessage.getTimeout_tm() - ModuleMgr.getAppMgr().getSecondTime();//计时时间
+        Log.e("TTTTTTTTTTTTTNNN",mInviteVideoMessage.getTimeout_tm()+"|||"+ModuleMgr.getAppMgr().getSecondTime()+"||"+timeCount);
         if (timeCount > 0 && !util.isTimingTask(mInviteVideoMessage.getInvite_id()) && !util.isTimingTask(mInviteVideoMessage.getInvite_id())) {
             util.addTimerTask(mInviteVideoMessage.getInvite_id(),timeCount);
         }

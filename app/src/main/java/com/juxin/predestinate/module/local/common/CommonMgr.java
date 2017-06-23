@@ -499,11 +499,11 @@ public class CommonMgr implements ModuleBase {
     /**
      * 接受视频聊天请求
      *
-     * @param vcid 视频聊天id
+     * @param invite_id 视频聊天id
      */
-    public void reqAcceptVideoChat(long vcid, RequestComplete complete) {
+    public void reqAcceptVideoChat(long invite_id, RequestComplete complete) {
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("vc_id", vcid);
+        postParams.put("invite_id", invite_id);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqAcceptChat, postParams, complete);
     }
 

@@ -275,9 +275,10 @@ public class VideoAudioChatHelper {
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
-    public void openInvitedDirect(Activity activity, long vcId, long dstUid, int chatType) {
+    public void openInvitedDirect(Activity activity, long vcId, long dstUid, int chatType,String vc_channel_key) {
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 0);
         bundle.putInt("vc_chat_from", 2);
+        bundle.putString("vc_channel_key", vc_channel_key);
         startRtcInitActivity(activity, bundle);
     }
 
@@ -356,6 +357,44 @@ public class VideoAudioChatHelper {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 handleInviteChat(context, response, dstUid, type, channel_uid);
+            }
+        });
+    }
+
+    /**
+     * 发起音视频聊天，生成聊天通道id
+     *
+     * @param context 上下文
+     * @param dstUid  被邀请方uid
+     * @param type    音视频类型
+     */
+    public void executeGInviteChat(final Context context, final long dstUid, final int type, final String channel_uid) {
+        HashMap<String, Object> postParams = new HashMap<>();
+        postParams.put("tuid", dstUid);
+        postParams.put("vtype", type);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.inviteVideoChat, postParams, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                //特殊错误码: 3001 用户正在视频聊天中 3002 该用户无法视频聊天 3003 钻石余额不足
+                JSONObject jo = response.getResponseJson();
+                if (response.isOk()) {
+                    JSONObject resJo = jo.optJSONObject("res");
+                    final long vcID = resJo.optLong("vc_id");
+                    addvcID(vcID);
+                    int msgVer = resJo.optInt("confer_msgver");
+                    MsgMgr.getInstance().delay(new Runnable() {
+                        @Override
+                        public void run() {
+                            ModuleMgr.getChatMgr().sendVideoMsgLocalSimulation(String.valueOf(dstUid), type, vcID);
+                        }
+                    }, 500);
+                    return;
+                }
+
+                int code = jo.optInt("code");
+                if (code == 3003)
+                    UIShow.showGoodsDiamondDialogAndTag(context, Constant.OPEN_FROM_CHAT_PLUGIN, dstUid, channel_uid);
+                PToast.showShort(TextUtils.isEmpty(jo.optString("msg")) ? "数据异常" : jo.optString("msg"));
             }
         });
     }
