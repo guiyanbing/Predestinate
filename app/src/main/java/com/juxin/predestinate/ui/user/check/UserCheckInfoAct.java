@@ -321,6 +321,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                 if (channel == CenterConstant.USER_CHECK_INFO_OWN) {
                     userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                     footPanel.refreshView(userDetail);
+                } else if (channel == CenterConstant.USER_CHECK_INFO_OTHER) { //查看别人资料也需要更新 充值vip Y币后需要用到
+                    userDetail = ModuleMgr.getCenterMgr().getMyInfo();
                 }
                 break;
 
