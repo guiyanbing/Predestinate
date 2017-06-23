@@ -224,6 +224,6 @@ public class NotifyMgr implements ModuleBase, ChatMsgInterface.ChatMsgListener {
      * 弹窗
      */
     public void popupActivity() {
-        LockScreenMgr.getInstance().popupActivity(!isInSleep());
+        LockScreenMgr.getInstance().popupActivity(/*!isInSleep()*/true);
     }
 }

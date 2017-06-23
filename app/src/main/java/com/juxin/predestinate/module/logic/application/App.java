@@ -45,14 +45,16 @@ public class App extends MultiDexApplication {
 
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
-
-        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
-        String packageName = ModuleMgr.getAppMgr().getPackageName();
-        if (processName != null && processName.equals(packageName)) {//主进程
-            initAppDelay();
-        }else{
-            initApp();
-        }
+//DELETE START 170623 系统内存不足App被杀掉后还原时候会崩溃，暂时不使用，以后可以优化
+//        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
+//        String packageName = ModuleMgr.getAppMgr().getPackageName();
+//        if (processName != null && processName.equals(packageName)) {//主进程
+//            initAppDelay();
+//        }else{
+//            initApp();
+//        }
+//DELETE END 170623
+        initApp();
     }
 
     private void initAppDelay() {
