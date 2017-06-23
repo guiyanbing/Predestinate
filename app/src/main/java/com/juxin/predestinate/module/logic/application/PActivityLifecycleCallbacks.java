@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.juxin.library.log.PSP;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 
 import java.util.LinkedList;
@@ -39,6 +41,7 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
         if (!isForeground)
             IMProxy.getInstance().heartBeat3(true);
         isForeground = true;
+        PSP.getInstance().put(Constant.APP_IS_FOREGROUND, isForeground);
         App.activity = activity;
 
         // 本地模拟一个只存储10条记录的activity栈
@@ -54,6 +57,7 @@ public class PActivityLifecycleCallbacks implements Application.ActivityLifecycl
     public void onActivityStopped(Activity activity) {
         if (App.activity == activity) {
             isForeground = false;
+            PSP.getInstance().put(Constant.APP_IS_FOREGROUND, isForeground);
             IMProxy.getInstance().heartBeat3(false);
         }
     }

@@ -38,7 +38,7 @@ public class InvitationExpiredDlg extends BaseDialogFragment implements View.OnC
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
         setGravity(Gravity.BOTTOM);
         setDialogSizeRatio(1, 0);
-        setCancelable(false);
+        setCancelable(true);
     }
 
     public void setData(Context context, long otherId, String channel_uid, int type, int price) {
