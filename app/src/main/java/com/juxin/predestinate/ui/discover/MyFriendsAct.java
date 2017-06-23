@@ -131,13 +131,15 @@ public class MyFriendsAct extends BaseActivity implements RequestComplete, ExLis
                 }
             }
         } else {
-            customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customStatusListView.showLoading();
-                    onRefresh();
-                }
-            });
+            if (!response.isCache()) {
+                customStatusListView.showNoData("请求出错", "重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customStatusListView.showLoading();
+                        onRefresh();
+                    }
+                });
+            }
         }
     }
 

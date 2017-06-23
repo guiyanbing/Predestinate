@@ -1338,14 +1338,14 @@ public class UIShow {
     /**
      * 聊天钻石充值弹框
      *
-     * @param girlUrl  女用户头像
+     * @param otherID  女用户头像
      * @param chatType 视频，语音邀请
      * @param price    通信价格
      */
-    public static void showBottomChatDiamondDlg(Context context, String girlUrl, int chatType, int price) {
+    public static void showBottomChatDiamondDlg(Context context, long otherID, int chatType, int price) {
         if (chatDialog == null) chatDialog = new BottomChatDiamondDlg();
 
-        chatDialog.setInfo(girlUrl, chatType, price);
+        chatDialog.setInfo(otherID, chatType, price);
         chatDialog.showDialog((FragmentActivity) context);
     }
 
