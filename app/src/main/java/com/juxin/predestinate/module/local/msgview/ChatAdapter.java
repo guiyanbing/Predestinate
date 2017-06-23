@@ -358,7 +358,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
         getChatInstance().chatListView.post(new Runnable() {
             @Override
             public void run() {
-                getChatInstance().chatListView.setSelection(getChatInstance().chatContentAdapter.getCount() - 1);
+                getChatInstance().chatListView.setSelection(ListView.FOCUS_DOWN);
                 chatInstance.chatInputPanel.getChatTextEdit().requestFocus();
             }
         });
@@ -426,8 +426,7 @@ public class ChatAdapter implements ChatMsgInterface.ChatMsgListener, ExListView
                         chatInstance.chatContentAdapter.setList(listTemp);
                         moveToBottom();
                         checkUnHandledMess(listTemp);
-                        if (isMachine)
-                            onDataUpdate();
+                        if (isMachine) onDataUpdate();
                     }
                 });
     }
