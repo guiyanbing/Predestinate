@@ -374,7 +374,7 @@ public class CommonMgr implements ModuleBase {
         upMap.put("user", PSP.getInstance().getString(FinalKey.LOGIN_USER_KEY, null));
 
         // 如果文件夹创建失败，直接跳出
-        if (DirType.isFolderExists(UPDATE_CACHE_PATH)) return;
+        if (!DirType.isFolderExists(UPDATE_CACHE_PATH)) return;
 
         // 文件写入
         File file = new File(UPDATE_CACHE_PATH + "user_cache");
