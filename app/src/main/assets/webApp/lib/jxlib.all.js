@@ -134,7 +134,12 @@ var CMD = {
   getAgentUrl: 'get_agent_url',
   userBehavior: 'user_behavior',
   jumpToSmallSecretary: 'open_small_secretary',
-  showToast: 'show_toast'
+  showToast: 'show_toast',
+  getVideoTime: 'get_video_time',
+  turntableStartRotate: 'turntable_start_rotate',
+  turntableEndRotate: 'turntable_stop_rotate',
+  openLiveWeb: 'open_live_view',
+  askForGift: 'ask_for_gift'
 }; /**
     * Created by chuhaoyuan on 2016/11/2.
     */
@@ -324,12 +329,22 @@ var PlatformHelper = function PlatformHelper() {
     _executeCMD(CMD.getDeviceModel, null, cb);
   };
 
+  that.askForGift = function (type) {
+    _executeCMD(CMD.askForGift, {
+      type: type
+    });
+  };
+
   that.getBindPhoneNum = function (cb) {
     _executeCMD(CMD.getBindPhoneNum, null, cb);
   };
 
   that.getAgentUrl = function (urlType, cb) {
     _executeCMD(CMD.getAgentUrl, { type: urlType }, cb);
+  };
+
+  that.getVideoTime = function (cb) {
+    _executeCMD(CMD.getVideoTime, null, cb);
   };
 
   that.jumpToUserInfo = function (target_uid) {
@@ -523,6 +538,16 @@ var PlatformHelper = function PlatformHelper() {
       event_type: event_type,
       event_Data: event_Data
     });
+  };
+
+  that.turntableRotateState = function (isRotate) {
+    var cmd = isRotate ? CMD.turntableStartRotate : CMD.turntableEndRotate;
+    _executeCMD(cmd, null, null);
+  };
+
+  that.openLiveWeb = function (data) {
+    // data { anchor_id:  110000, video_url: “”, 视频流地址 image_url ： “” 封面地址  head_image_ur： ‘’ 头像地址 download_url: ‘“ 插件下载地址}
+    _executeCMD(CMD.openLiveWeb, data);
   };
 
   that.executeCMD = _executeCMD;

@@ -25,18 +25,37 @@ web.urlMethod = {
   GetPhoneSMS: 'public/sendSMS',
   CheckPhoneNum: 'user/bindCellPhone',
   GetActivity: 'user/Activity',
+  GetLiveList: 'user/get_live_list',
+  SetLiveRegister: 'user/set_live_register',
   QQServiceNum: 'user/serviceQQ',
   ServicePhone: 'user/getserviceqq',
   ReceiveActivity: 'user/receiveActivity',
   GetMyTurnConfig: 'xs/minigame/GetMyTurnConfig',
   GetOtherTurnConfig: 'xs/minigame/GetTurnConfig',
   SetTurnConfig: 'xs/minigame/SetTurnConfig',
-  TurntableStart: 'xs/minigame/Rotate'
+  TurntableStart: 'xs/minigame/Rotate',
+  QunCount: '/xs/discovery/QunCount',
+  VCGroupCount:'/xs/message/VCGroupCount'
 };
 
 web.pages = {
   GetPhoneChargePage:'http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/setting/tollCollection.html',
   PrePaidPage:"http://test.game.xiaoyaoai.cn:30081/static/YfbWebApp/pages/prepaid/prepaid.html",
   Novel: 'http://api2.app.yuanfenba.net/novel/index',
+  live_download_url_ios: 'https://itunes.apple.com/cn/app/小友直播/id1218187039?mt=8',
+  live_download_url_android: 'https://itunes.apple.com/cn/app/小友直播/id1218187039?mt=8',
 };
+
+web.liveConfig = {
+  ios: {
+    url: "https://itunes.apple.com/cn/app/id1218187039?mt=8",
+    package:  "com.xiaoyou.juxin",
+    entrance:  "xiaoyoo"
+  },
+  android: {
+    url: "http://123.59.187.32/other/XiaoYouYuLe.apk",
+    package:  "com.juxin.xiaoyoulive",
+    entrance:  "com.juxin.xiaoyoulive.ui.WelcomeActivity"
+  }
+}
 

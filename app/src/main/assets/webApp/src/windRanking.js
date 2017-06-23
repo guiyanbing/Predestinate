@@ -24,7 +24,7 @@ var Ranking = Ranking || (function ($) {
 
     $.ready(function () {
       //循环初始化所有下拉刷新，上拉加载。
-      $('.mui-scroll-wrapper').scroll();
+      // $('.mui-scroll-wrapper').scroll();
       var weekType = _weekRank.now;
       _listener.on('onWatchCommand', function (jcmd, data) {
         console.log(' test456 ', jcmd, JSON.stringify(data));
