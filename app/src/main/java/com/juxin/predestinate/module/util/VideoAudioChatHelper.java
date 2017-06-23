@@ -271,6 +271,20 @@ public class VideoAudioChatHelper {
     }
 
     /**
+     * 打开被邀请时的页面
+     *
+     * @param vcId     通话频道ID
+     * @param dstUid   对方UID
+     * @param chatType 1视频，2音频
+     */
+    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType , String channelKey, int msgVer, int vc_chat_from) {
+        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, msgVer);
+        bundle.putString("vc_channel_key", channelKey);
+        bundle.putInt("vc_chat_from", vc_chat_from);
+        startRtcInitActivity(activity, bundle);
+    }
+
+    /**
      * 下载视频插件
      *
      * @param context 上下文

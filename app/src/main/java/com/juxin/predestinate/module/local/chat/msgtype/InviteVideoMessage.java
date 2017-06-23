@@ -36,6 +36,21 @@ public class InviteVideoMessage extends BaseMessage {
         return this;
     }
 
+    public BaseMessage parseJs(String jsonStr) {
+        super.parseJson(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setType(object.optInt("mtp")); //消息类型
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setRu(object.optInt("ru"));
+
+        this.setInvite_id(object.optLong("vc_id"));
+        this.setMedia_tp(object.optInt("media_tp"));
+        this.setPrice(object.optLong("vc_price"));
+
+        return this;
+    }
+
     @Override
     public String getJson(BaseMessage message) {
         JSONObject json = new JSONObject();

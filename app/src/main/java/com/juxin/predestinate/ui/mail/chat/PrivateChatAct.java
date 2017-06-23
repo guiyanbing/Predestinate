@@ -64,7 +64,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img, cus_top_img_phone;
     private TextView base_title_title,net_top_title,cus_top_title_txt;
-    private View cus_top_title_view;
     private LMarqueeView lmvMeassages;
     private LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
 
@@ -142,11 +141,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
      * 获取对方网络信息
      */
     private void getUserNetInfo() {
-        if(otherInfo != null && !otherInfo.isOnline()) {
-            net_top_title.setText(getString(R.string.net_offline));
-            privateChat.getChatAdapter().lookAtHer(false);
-            return;
-        }
         ModuleMgr.getCommonMgr().getUserNetInfo(whisperID, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -156,6 +150,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     net_top_title.setText(getString(R.string.net_online_pre) + userNetInfo.getNetType());
                     privateChat.getChatAdapter().lookAtHer(true);
                 }else {
+                    net_top_title.setText(getString(R.string.net_offline));
                     privateChat.getChatAdapter().lookAtHer(false);
                 }
             }
@@ -210,7 +205,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         base_title_title = (TextView) baseTitleView.findViewById(R.id.cus_top_title);
         net_top_title = (TextView) baseTitleView.findViewById(R.id.net_top_title);
         cus_top_title_txt = (TextView) baseTitleView.findViewById(R.id.cus_top_title_txt);
-        cus_top_title_view = baseTitleView.findViewById(R.id.cus_top_title_view);
         cus_top_title_img = (ImageView) baseTitleView.findViewById(R.id.cus_top_title_img);
         cus_top_img_phone = (ImageView) baseTitleViewRight.findViewById(R.id.cus_top_title_img_phone);
         cus_top_img_phone.setOnClickListener(this);
@@ -264,7 +258,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                         cus_top_title_img.setImageResource(R.drawable.f1_topc02);
                     }
                     if (infoLightweight.isToper()) {//Top榜
-                        cus_top_title_view.setVisibility(View.VISIBLE);
                         llTitleRight.setVisibility(View.VISIBLE);
                         cus_top_title_txt.setText("Top" + infoLightweight.getTop());
                     }
@@ -474,10 +467,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 //                    if (chat_title_yb_name != null) {
 //                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
 //                    }
-                    if(privateChat != null) {
-                        if(MailSpecialID.customerService.getSpecialID() != whisperID) {
-                            privateChat.yTipsLogic(true, false);
-                        }
+                    if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
+                        privateChat.yTipsLogic(true, false);
                     }
                 }
                 break;

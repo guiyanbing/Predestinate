@@ -1,5 +1,6 @@
 package com.juxin.predestinate.module.local.msgview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -16,11 +17,13 @@ import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
+import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.CountDownTimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.my.TimeMgr;
 import com.juxin.predestinate.ui.user.my.adapter.Accept;
 
@@ -43,6 +46,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     private String channelUid;
     private long inviteId;
     private int type;
+    private ChatAdapter.ChatInstance mChatInstance;
 
     private boolean isTimeOut = true;
 
@@ -60,6 +64,9 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         tvConnect = (TextView) findViewById(R.id.tv_invite_tv_connect);
         llReject = (LinearLayout) findViewById(ll_invite_reject);
         llConnect = (LinearLayout) findViewById(ll_invite_connect);
+
+        llReject.setOnClickListener(this);
+        llConnect.setOnClickListener(this);
 
         util = CountDownTimerUtil.getInstance();
     }
@@ -146,17 +153,19 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     break;
                 }
                 //点击回拨
-                UIShow.showInvitaExpiredDlg(context, whisperID,channelUid,mInviteVideoMessage.getType(),(int)mInviteVideoMessage.getPrice());
+                Log.e("TTTTTTTTTT",whisperID+"||"+channelUid+"||"+mInviteVideoMessage.getJsonStr());
+                UIShow.showInvitaExpiredDlg(App.activity, whisperID,channelUid,mInviteVideoMessage.getType(),(int)mInviteVideoMessage.getPrice());
                 break;
         }
     }
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-        //RtcSubUtil.getInstance().stopVibrator();
         if (response.isOk()) {
             Accept accept = (Accept) response.getBaseData();
-
+            VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
+                    mInviteVideoMessage.getInvite_id(), whisperID, mInviteVideoMessage.getType(),accept.getChannelKey(),
+                    accept.getMsgVer(),2);
             return;
         }
         PToast.showShort(response.getMsg() == null ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());

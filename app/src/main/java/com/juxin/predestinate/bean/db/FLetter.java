@@ -19,6 +19,7 @@ public class FLetter {
     public static final String COLUMN_RU = "ru";//如果为1则为熟人消息，否则为0
     public static final String COLUMN_TIME = "time";
     public static final String COLUMN_CONTENT = "content";//json
+    public static final String COLUMN_MSGID = "folder";//msgid
 
     public static final String Num = "num";
 
@@ -34,6 +35,7 @@ public class FLetter {
                 COLUMN_CMSGID + " INTEGER," +
                 COLUMN_RU + " INTEGER," +
                 COLUMN_TIME + " TEXT," +
-                COLUMN_CONTENT + " BLOB, folder TEXT, field1 TEXT, field2 TEXT, field3 TEXT, field4 TEXT, field5 TEXT)";
+                COLUMN_CONTENT + " BLOB, " +
+                COLUMN_MSGID + " TEXT, field1 TEXT, field2 TEXT, field3 TEXT, field4 TEXT, field5 TEXT)";
     }
 }

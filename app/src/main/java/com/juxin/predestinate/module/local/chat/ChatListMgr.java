@@ -497,6 +497,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.inviteVideoDelivery_MsgType://语音(视频)邀请送达男用户
                 setInviteVideoDelivery(message);
                 break;
+            case BaseMessage.Alone_Invite_Video://女用户单独视频邀请
+                setAloneInviteVideoMsg(message);
+                break;
             default:
                 break;
         }
@@ -516,6 +519,25 @@ public class ChatListMgr implements ModuleBase, PObserver {
         } else {
             UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
         }
+    }
+
+    /**
+     * 女用户单独视频邀请
+     *
+     * @param message
+     */
+    private void setAloneInviteVideoMsg(BaseMessage message) {
+        if (message == null) return;
+        InviteVideoMessage videoMessage = new InviteVideoMessage();
+        videoMessage.parseJs(message.getJsonStr());
+        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()){
+            //充值弹框
+//            UIShow.showBottomChatDiamondDlg(App.getContext(),);
+        }
+
+        //跳转视频
+        VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
+                videoMessage.getInvite_id(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp());
     }
 
     /**
@@ -555,7 +577,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (message == null) return;
         SystemMessage mess = new SystemMessage();
         mess.parseJson(message.getJsonStr());
-        ModuleMgr.getChatMgr().updateDeliveryStatus(mess.getD(), mess.getMsgID(), null);
+        ModuleMgr.getChatMgr().updateDeliveryStatus(mess.getMsgID(), null);
     }
 
     /**
