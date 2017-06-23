@@ -234,7 +234,7 @@ public class VideoAudioChatHelper {
             long inviteId = resJo.optLong("invite_id");
             Bundle bundle = newBundle(0, 0, 1, type, 0);  // 此时无vcId返回
             bundle.putInt("vc_girl_type", 2);
-            bundle.putInt("vc_girl_price", 30);
+            bundle.putLong("vc_girl_price", 30);
             bundle.putLong("vc_girl_invite_id", inviteId);
             startGroupInviteAct(activity, bundle);
             return;
@@ -273,7 +273,7 @@ public class VideoAudioChatHelper {
             price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
         }
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
-        bundle.putInt("vc_girl_price", price);
+        bundle.putLong("vc_girl_price", price);
         startRtcInitActivity(activity, bundle);
     }
 
