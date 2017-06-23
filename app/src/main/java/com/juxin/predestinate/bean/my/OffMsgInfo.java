@@ -9,9 +9,6 @@ import com.juxin.predestinate.bean.net.BaseData;
  */
 public class OffMsgInfo extends BaseData {
 
-//    "uid":105311211,          //消息的发送方uid("fid"),没有则填0
-//            "msg_id":12312321321321,  //消息ID("d")
-//            "mtp":2,				  //消息类型
     private long uid;
     private long msg_id;
     private int mtp;
@@ -49,5 +46,14 @@ public class OffMsgInfo extends BaseData {
     @Override
     public void parseJson(String jsonStr) {
 
+    }
+
+    @Override
+    public String toString() {
+        return "OffMsgInfo{" +
+                "uid=" + uid +
+                ", msg_id=" + msg_id +
+                ", mtp=" + mtp +
+                '}';
     }
 }

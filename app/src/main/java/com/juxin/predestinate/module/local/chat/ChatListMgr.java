@@ -517,6 +517,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     private void setVideoMsg(BaseMessage message) {
         if (message == null) return;
+        LoadingDialog.closeLoadingDialog();
         VideoMessage videoMessage = (VideoMessage) message;
         if (videoMessage.getVideoTp() == 1) {
             // 女性用户且处于群发状态, 直接打开聊天界面
@@ -531,7 +532,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
             if (isInvite && videoMessage.getVideoTp() == 2){
                 VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
                         videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(),videoMessage.getVc_channel_key());
-                LoadingDialog.closeLoadingDialog();
                 PSP.getInstance().put("ISINVITE",false);
                 return;
             }

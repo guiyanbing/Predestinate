@@ -352,21 +352,21 @@ public class DBCenterFMessage {
                     stringList.add(channelID);
                     stringList.add(userID);
                     stringList.add(sendID);
-                    stringList.add(String.valueOf(MessageConstant.OK_STATUS));
+                    stringList.add(String.valueOf(MessageConstant.DELIVERY_STATUS));
                 } else if (!TextUtils.isEmpty(channelID)) {
                     sql.append(FMessage.COLUMN_CHANNELID + " = ? AND ")
                             .append(FMessage.COLUMN_SENDID + " = ? AND ")
                             .append(FMessage.COLUMN_STATUS + " = ?");
                     stringList.add(channelID);
                     stringList.add(sendID);
-                    stringList.add(String.valueOf(MessageConstant.OK_STATUS));
+                    stringList.add(String.valueOf(MessageConstant.DELIVERY_STATUS));
                 } else {
                     sql.append(FMessage.COLUMN_WHISPERID + " = ? AND ")
                             .append(FMessage.COLUMN_SENDID + " = ? AND ")
                             .append(FMessage.COLUMN_STATUS + " = ?");
                     stringList.add(userID);
                     stringList.add(sendID);
-                    stringList.add(String.valueOf(MessageConstant.OK_STATUS));
+                    stringList.add(String.valueOf(MessageConstant.DELIVERY_STATUS));
                 }
 
                 if (msgID != MessageConstant.NumNo) {
