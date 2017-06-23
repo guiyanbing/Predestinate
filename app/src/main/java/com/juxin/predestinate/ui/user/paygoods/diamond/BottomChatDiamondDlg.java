@@ -14,10 +14,14 @@ import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.baseui.custom.RadiationView;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
@@ -28,6 +32,9 @@ import com.juxin.predestinate.ui.user.paygoods.bean.PayGoods;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 音视频聊天钻石不足充值页面
  * <p>
@@ -37,11 +44,13 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     public static final int RTC_CHAT_VIDEO = 1;    // 视频通信
     public static final int RTC_CHAT_VOICE = 2;    // 音频通信
 
+    private ImageView girlHead;
+
     private PayGoods payGoods;  // 商品信息
     private GoodsListPanel goodsPanel; // 商品列表
     private GoodsPayTypePanel payTypePanel; // 支付方式
 
-    private String girlUrl;
+    private long otherID;
     private int chatType;
     private int price;
 
@@ -53,14 +62,15 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     }
 
     /**
-     * @param girlUrl  女用户头像
+     * @param otherId  对方ID
      * @param chatType 视频，语音邀请
      * @param price    通信价格
      */
-    public void setInfo(String girlUrl, int chatType, int price) {
-        this.girlUrl = girlUrl;
+    public void setInfo(long otherId, int chatType, int price) {
+        this.otherID = otherId;
         this.chatType = chatType;
         this.price = price;
+
     }
 
     @Override
@@ -73,6 +83,25 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
         return contentView;
     }
 
+    private void reqOtherInfo() {
+        List<Long> uids = new ArrayList<>();
+        uids.add(otherID);
+        ModuleMgr.getCommonMgr().reqUserInfoSummary(uids, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (!response.isOk()) {
+                    return;
+                }
+                UserInfoLightweightList infoLightweightList = new UserInfoLightweightList();
+                infoLightweightList.parseJsonSummary(response.getResponseJson());
+                if (infoLightweightList.getUserInfos() != null && infoLightweightList.getUserInfos().size() > 0) {//数据大于1条
+                    UserInfoLightweight info = infoLightweightList.getUserInfos().get(0);
+                    ImageLoader.loadCircleAvatar(getContext(), info.getAvatar(), girlHead);
+                }
+            }
+        });
+    }
+
     private void initView(View contentView) {
         initRadiationView();
         contentView.findViewById(R.id.btn_cancel).setOnClickListener(this);
@@ -80,13 +109,14 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
 
         TextView diamond = (TextView) findViewById(R.id.diamond_remain);
         ImageView myHead = (ImageView) findViewById(R.id.iv_my_head);
-        ImageView girlHead = (ImageView) findViewById(R.id.iv_girl_head);
+        girlHead = (ImageView) findViewById(R.id.iv_girl_head);
         TextView chatPrice = (TextView) findViewById(R.id.chat_price);
 
         chatPrice.setText(getString(R.string.invite_video_price, price));
         diamond.setText(getString(R.string.diamond_balance) + ModuleMgr.getCenterMgr().getMyInfo().getDiamand());
         ImageLoader.loadCircleAvatar(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), myHead);
-        ImageLoader.loadCircleAvatar(getContext(), girlUrl, girlHead);
+        ImageLoader.loadCircleAvatar(getContext(), "", girlHead);
+        reqOtherInfo();
 
         if (chatType == RTC_CHAT_VOICE) {
             ImageView chatImg = (ImageView) findViewById(R.id.chat_img);
