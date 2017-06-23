@@ -115,6 +115,9 @@ public class DBCenterFLetter {
             values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
 
+            if (baseMessage.getMsgID() != -1)
+                values.put(FLetter.COLUMN_MSGID, baseMessage.getMsgID());
+
             long ret = mDatabase.insert(FLetter.FLETTER_TABLE, values);
             return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
         } catch (Exception e) {
@@ -150,6 +153,9 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_TIME, baseMessage.getTime());
 
             values.put(FLetter.COLUMN_CONTENT, ByteUtil.toBytesUTF(baseMessage.getJsonStr()));
+
+            if (baseMessage.getMsgID() != -1)
+                values.put(FLetter.COLUMN_MSGID, baseMessage.getMsgID());
 
             long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", baseMessage.getWhisperID());
             return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
@@ -248,6 +254,7 @@ public class DBCenterFLetter {
                 message.setRu(CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
                 message.setTime(CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
                 message.setJsonStr(CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                message.setMsgID(CursorUtil.getLong(cursor, FLetter.COLUMN_MSGID));
                 return message;
             }
         } catch (Exception e) {
@@ -281,6 +288,7 @@ public class DBCenterFLetter {
                                 message.setRu(CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
                                 message.setTime(CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
                                 message.setJsonStr(CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                                message.setMsgID(CursorUtil.getLong(cursor, FLetter.COLUMN_MSGID));
                                 return message;
                             }
                         } catch (Exception e) {
@@ -325,7 +333,7 @@ public class DBCenterFLetter {
      * @return
      */
     public Observable<List<BaseMessage>> queryLetterList() {
-        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.cMsgID, f.ru, f.time, f.content, " +
+        String sql = "select f._id, f.userID, f.infoJson, f.type, f.kfID, f.status, f.cMsgID, f.ru, f.time, f.content, f.folder, " +
                 "m.whisperID, m.num from " + FLetter.FLETTER_TABLE + " f left join (select whisperID,count(*) " +
                 "num from " + FMessage.FMESSAGE_TABLE + " where status = 10 group by whisperID) m on f.userID = m.whisperID";
         return queryBySqlFletter(sql);
@@ -365,6 +373,7 @@ public class DBCenterFLetter {
                 bundle.putInt(FLetter.COLUMN_RU, CursorUtil.getInt(cursor, FLetter.COLUMN_RU));
                 bundle.putLong(FLetter.COLUMN_TIME, CursorUtil.getLong(cursor, FLetter.COLUMN_TIME));
                 bundle.putString(FLetter.COLUMN_CONTENT, CursorUtil.getBlobToString(cursor, FLetter.COLUMN_CONTENT));
+                bundle.putLong(FLetter.COLUMN_MSGID, CursorUtil.getLong(cursor, FLetter.COLUMN_MSGID));
                 bundle.putInt(FLetter.Num, CursorUtil.getInt(cursor, FLetter.Num));
 
                 result.add(BaseMessage.parseToLetterMessage(bundle));
@@ -428,6 +437,7 @@ public class DBCenterFLetter {
                 values.put(FLetter.COLUMN_TIME, 0);
                 values.put(FLetter.COLUMN_STATUS, 0);
                 values.put(FLetter.COLUMN_CMSGID, 0);
+                values.put(FLetter.COLUMN_MSGID, 0);
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ? ", userid);
                 long result = ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
                 DBCenter.makeDBCallback(callback, result);
@@ -441,15 +451,15 @@ public class DBCenterFLetter {
     }
 
     //修改为送达
-    public void updateDeliveryStatus(final long cMsgID, final DBCallback callback) {
+    public void updateDeliveryStatus(final long msgID, final DBCallback callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 ContentValues values = new ContentValues();
                 values.put(FLetter.COLUMN_STATUS, String.valueOf(MessageConstant.DELIVERY_STATUS));
                 long ret = mDatabase.update(FLetter.FLETTER_TABLE, values,
-                        FLetter.COLUMN_CMSGID + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
-                        String.valueOf(cMsgID), String.valueOf(BaseMessage.video_MsgType));
+                        FLetter.COLUMN_MSGID + " = ? AND " + FLetter.COLUMN_TYPE + " != ?",
+                        String.valueOf(msgID), String.valueOf(BaseMessage.video_MsgType));
 
                 DBCenter.makeDBCallback(callback, (ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR));
             }
@@ -457,9 +467,8 @@ public class DBCenterFLetter {
     }
 
     /**
-     *
      * @param userID
-     * @param modifyStatus 要修改为的状态
+     * @param modifyStatus   要修改为的状态
      * @param judgmentStatus 判断的状态
      * @param callback
      */
@@ -507,9 +516,9 @@ public class DBCenterFLetter {
                 long ret = MessageConstant.OK;
                 if (BaseMessage.BaseMessageType.video.getMsgType() == message.getType()
                         && BaseMessage.BaseMessageType.video.getMsgType() == temp.getType()) {
-                    ret = updateStatus(userID, message.getStatus());
+                    ret = updateStatus(userID, message.getStatus(), message.getMsgID());
                 } else if (!message.isSender() || (message.getcMsgID() >= temp.getcMsgID())) {
-                    ret = updateStatus(userID, message.getStatus());
+                    ret = updateStatus(userID, message.getStatus(), message.getMsgID());
                 }
 
                 DBCenter.makeDBCallback(callback, ret);
@@ -524,9 +533,11 @@ public class DBCenterFLetter {
      * @param status
      * @return
      */
-    private long updateStatus(String userID, int status) {
+    private long updateStatus(String userID, int status, long msgID) {
         ContentValues values = new ContentValues();
         values.put(FLetter.COLUMN_STATUS, String.valueOf(status));
+        if (msgID != -1) values.put(FLetter.COLUMN_MSGID, msgID);
+
         long ret = mDatabase.update(FLetter.FLETTER_TABLE, values, FLetter.COLUMN_USERID + " = ?", userID);
         return ret >= 0 ? MessageConstant.OK : MessageConstant.ERROR;
     }

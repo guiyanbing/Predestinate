@@ -527,6 +527,7 @@ public class BaseMessage implements IBaseMessage {
         this.setRu(bundle.getInt(FLetter.COLUMN_RU));
         this.setTime(bundle.getLong(FLetter.COLUMN_TIME));
         this.setJsonStr(bundle.getString(FLetter.COLUMN_CONTENT));
+        this.setMsgID(bundle.getLong(FLetter.COLUMN_MSGID));
         this.setNum(bundle.getInt(FLetter.Num));
     }
 
