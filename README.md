@@ -42,7 +42,7 @@
 - [视频邀请](http://123.59.187.33:8681/test/TestPushMsgInvite?fuid=1001&tuid=1002&mct=发来一个视频邀请&media_tp=1)
 - [封号](http://123.59.187.33:8681/test/TestPushBan?tuid=1002&mct=由于投诉已封号&unban_tm=1497931571)
 - [推送消息邀请](http://123.59.187.33:8681/test/TestPushMsgInviteTome?fuid=1001&tuid=1002&invite_id=1000&send_count=20)
-
+- [限制登录](http://123.59.187.33:8681/userinfo/AddForbiddenGet?uid=110872731&action=1&duration=30&desc=由于您被多人举报，被限制登录)
 
 
 
