@@ -231,9 +231,10 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             long inviteId = resJo.optLong("invite_id");
-            Bundle bundle = newBundle(inviteId, 0, 1, type, 0);
+            Bundle bundle = newBundle(0, 0, 1, type, 0);  // 此时无vcId返回
             bundle.putInt("vc_girl_type", 2);
             bundle.putInt("vc_girl_price", 30);
+            bundle.putLong("vc_girl_invite_id", inviteId);
             startGroupInviteAct(activity, bundle);
             return;
         }
