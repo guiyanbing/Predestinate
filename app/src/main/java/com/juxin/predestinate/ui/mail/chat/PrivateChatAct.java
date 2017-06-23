@@ -60,7 +60,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private String name;
     private boolean isFollow = false;
     private int kf_id;
-    private UserInfoLightweight otherInfo;
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img, cus_top_img_phone;
     private TextView base_title_title,net_top_title,cus_top_title_txt;
@@ -241,7 +240,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
         privateChat.getChatAdapter().setWhisperId(whisperID);
-        otherInfo = privateChat.getChatAdapter().getUserInfo(whisperID);
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
         marqueeView = new GiftMessageInfoView(this);
 
