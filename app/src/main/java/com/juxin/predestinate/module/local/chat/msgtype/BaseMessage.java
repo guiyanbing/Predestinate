@@ -76,8 +76,8 @@ public class BaseMessage implements IBaseMessage {
     public static final int TalkRed_MsgType = 12;//聊天红包
     public static final int RedEnvelopesBalance_MsgType = 17;//红包余额变动消息
     public static final int video_MsgType = 24;//视频消息
-    public static final int Msg_RecvedType = 1001;//送达消息
-    public static final int  Alone_Invite_Video = 1003;
+    public static final int Recved_MsgType = 1001;//送达消息
+    public static final int Alone_Invite_Video_MsgType = 1003;
     public static final int inviteVideoDelivery_MsgType = 30;//女性对男性的语音(视频)邀请送达男用户 此消息为群发视频/语音，送达人数对女用户的通知
 
 
