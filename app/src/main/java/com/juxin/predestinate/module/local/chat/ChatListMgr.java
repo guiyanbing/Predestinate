@@ -2,9 +2,11 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
+import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.observe.ModuleBase;
@@ -38,6 +40,7 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -516,8 +519,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (videoMessage.getVideoTp() == 1) {
             // 女性用户且处于群发状态, 直接打开聊天界面
             if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() && VideoAudioChatHelper.getInstance().getGroupInviteStatus()){
-                VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
-                        videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp());
+                sendGroupAcceptMsg(videoMessage);
                 return;
             }
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
@@ -525,6 +527,20 @@ public class ChatListMgr implements ModuleBase, PObserver {
         } else {
             UIShow.sendBroadcast(App.getActivity(), videoMessage.getVideoTp(), videoMessage.getVc_channel_key());
         }
+    }
+
+    /**
+     * 群发有人接受消息
+     */
+    private void sendGroupAcceptMsg(VideoMessage videoMessage) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mt", 9);
+        params.put("fid", videoMessage.getLWhisperID());
+        params.put("vc_id", videoMessage.getVideoID());
+        params.put("vc_channel_key", videoMessage.getVc_channel_key());
+        Intent intent = new Intent("com.juxin.action.plugin");
+        intent.putExtra("extra_json", JSON.toJSONString(params));
+        App.context.sendBroadcast(intent);
     }
 
     /**
