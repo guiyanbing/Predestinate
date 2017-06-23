@@ -548,7 +548,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         params.put("mt", 9);
         params.put("fid", videoMessage.getLWhisperID());
         params.put("vc_id", videoMessage.getVideoID());
-        params.put("vc_channel_key", videoMessage.getVc_channel_key());
         Intent intent = new Intent("com.juxin.action.plugin");
         intent.putExtra("extra_json", JSON.toJSONString(params));
         App.context.sendBroadcast(intent);
