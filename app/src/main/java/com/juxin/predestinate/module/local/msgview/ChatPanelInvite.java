@@ -36,6 +36,7 @@ import static com.juxin.predestinate.module.logic.application.App.activity;
  */
 public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClickListener, RequestComplete {
 
+    private ImageView imgPic;
     private TextView tvTitle, tvContent, tvTime, tvConnect;
     private LinearLayout llReject, llConnect;
     private InviteVideoMessage mInviteVideoMessage;
@@ -59,6 +60,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         tvConnect = (TextView) findViewById(R.id.tv_invite_tv_connect);
         llReject = (LinearLayout) findViewById(ll_invite_reject);
         llConnect = (LinearLayout) findViewById(ll_invite_connect);
+        imgPic = (ImageView) findViewById(R.id.iv_invite_img);
 
         llReject.setOnClickListener(this);
         llConnect.setOnClickListener(this);
@@ -81,8 +83,10 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         tvContent.setText(getContext().getString(R.string.video_cost, mInviteVideoMessage.getPrice()));
         if (mInviteVideoMessage.getMedia_tp() == 1) {
             tvTitle.setText(R.string.invite_video);
+            imgPic.setBackgroundResource(R.drawable.p1_ltlx01);
         } else if (mInviteVideoMessage.getMedia_tp() == 2) {
             tvTitle.setText(R.string.invite_voice);
+            imgPic.setBackgroundResource(R.drawable.p1_ltlx02);
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             TimeMgr.getInstance().attach(this);
