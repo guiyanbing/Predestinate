@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.content.Context.MODE_APPEND;
 import static com.juxin.predestinate.module.local.center.CenterMgr.INFO_SAVE_KEY;
 import static com.juxin.predestinate.module.logic.application.App.context;
 
@@ -260,27 +261,33 @@ public class VideoAudioChatHelper {
     }
 
     /**
-     * 打开被邀请时的页面
+     * 普通： 打开被邀请时的页面
      *
      * @param vcId     通话频道ID
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType) {
-        startRtcInitActivity(activity, newBundle(vcId, dstUid, 2, chatType, 0));
+        int price= ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getAudioPrice();
+        if (chatType == 1){
+            price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
+        }
+        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
+        bundle.putInt("vc_girl_price", price);
+        startRtcInitActivity(activity, bundle);
     }
 
     /**
-     * 打开被邀请时的页面
+     * 私聊页： 男接受群发邀请
      *
      * @param vcId     通话频道ID
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
-    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType , String channelKey, int msgVer, int vc_chat_from) {
-        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, msgVer);
-        bundle.putString("vc_channel_key", channelKey);
+    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price, int vc_chat_from) {
+        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 0);
         bundle.putInt("vc_chat_from", vc_chat_from);
+        bundle.putLong("vc_girl_price", price);
         startRtcInitActivity(activity, bundle);
     }
 

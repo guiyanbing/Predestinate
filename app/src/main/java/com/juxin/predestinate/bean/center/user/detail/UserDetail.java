@@ -16,6 +16,7 @@ public class UserDetail extends UserInfo {
 
     private List<UserPhoto> userPhotos = new ArrayList<>();
     private List<UserVideo> userVideos = new ArrayList<>();
+    private UserChatInfo chatInfo = new UserChatInfo();
     private int voice = 1;          //1为开启语音，0为关闭
     private int videopopularity;    // 私密视频人气值
 
@@ -43,6 +44,11 @@ public class UserDetail extends UserInfo {
             this.voice = jsonObject.optInt("voice");
         }
 
+        // 音视频状态
+        if(!jsonObject.isNull("videochatconfig")) {
+            this.chatInfo.parseJson(jsonObject.optString("videochatconfig"));
+        }
+
         // -------- 他人 -----
         // 视频列表
         if (!jsonObject.isNull("videolist")) {
@@ -61,6 +67,10 @@ public class UserDetail extends UserInfo {
         if (!jsonObject.isNull("unlock_vip")){
             this.setUnlock_vip(jsonObject.optInt("unlock_vip"));
         }
+    }
+
+    public UserChatInfo getChatInfo() {
+        return chatInfo;
     }
 
     public List<UserVideo> getUserVideos() {
@@ -117,16 +127,22 @@ public class UserDetail extends UserInfo {
         super.writeToParcel(dest, flags);
         dest.writeTypedList(this.userPhotos);
         dest.writeTypedList(this.userVideos);
+        dest.writeParcelable(this.chatInfo, flags);
         dest.writeInt(this.voice);
         dest.writeInt(this.videopopularity);
+        dest.writeInt(this.unlock_ycoin);
+        dest.writeInt(this.unlock_vip);
     }
 
     protected UserDetail(Parcel in) {
         super(in);
         this.userPhotos = in.createTypedArrayList(UserPhoto.CREATOR);
         this.userVideos = in.createTypedArrayList(UserVideo.CREATOR);
+        this.chatInfo = in.readParcelable(UserChatInfo.class.getClassLoader());
         this.voice = in.readInt();
         this.videopopularity = in.readInt();
+        this.unlock_ycoin = in.readInt();
+        this.unlock_vip = in.readInt();
     }
 
     public static final Creator<UserDetail> CREATOR = new Creator<UserDetail>() {

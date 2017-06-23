@@ -160,8 +160,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         if (response.isOk()) {
             Accept accept = (Accept) response.getBaseData();
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
-                    mInviteVideoMessage.getInvite_id(), whisperID, mInviteVideoMessage.getType(),accept.getChannelKey(),
-                    accept.getMsgVer(),2);
+                    mInviteVideoMessage.getInvite_id(), whisperID, mInviteVideoMessage.getType(), mInviteVideoMessage.getPrice(), 2);
             return;
         }
         PToast.showShort(response.getMsg() == null ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
