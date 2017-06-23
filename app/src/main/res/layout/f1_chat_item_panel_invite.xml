@@ -27,7 +27,7 @@
                 android:layout_width="@dimen/px150_dp"
                 android:layout_height="@dimen/px150_dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/p1_ltlx01" />
+                android:background="@drawable/p1_ltlx01" />
 
             <LinearLayout
                 android:id="@+id/ll_content"
