@@ -208,7 +208,7 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     public String getEdu() {
-        return edu.equals("不限") ? "" : edu;
+        return "不限".equals(edu) ? "" : edu;
     }
 
     public void setEdu(String edu) {
@@ -216,7 +216,7 @@ public class UserBasic extends BaseData implements Parcelable {
     }
 
     public String getIncome() {
-        return income.equals("不限") ? "" : income;
+        return "不限".equals(income) ? "" : income;
     }
 
     public void setIncome(String income) {
