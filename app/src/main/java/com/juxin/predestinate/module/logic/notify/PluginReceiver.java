@@ -36,8 +36,12 @@ public class PluginReceiver extends BroadcastReceiver {
                                     jo.optInt("giftnum"), jo.optInt("gtype"));
                             break;
                         case 7://更改消息状态
-                            ModuleMgr.getChatMgr().sendMailReadedMsg(null,jo.optLong("tid"));
+                            ModuleMgr.getChatMgr().sendMailReadedMsg(null, jo.optLong("tid"));
                             ModuleMgr.getChatMgr().updateLocalReadStatus(null, jo.optString("tid"), jo.optLong("msgId"));
+                            break;
+
+                        case 8: // 重置主包群发状态
+                            VideoAudioChatHelper.getInstance().setGroupInviteStatus(false);
                             break;
                         default:
                             break;
