@@ -43,6 +43,7 @@ public enum UrlParam {
     locationStatistics(Hosts.FATE_IT_GO, "xs/location/UpdateUserPosition", null, false),//位置信息统计
     reqSayHiList("pubtest/getSayHiUserNew", UserInfoLightweightList.class, true),//一键打招呼列表
     reqOfflineMsg("Fruit/getOfflineMsg", OfflineMsg.class), // 离线消息
+    reqOfflineRecvedMsg(Hosts.FATE_IT_GO,"xs/message/OfflineRecved", null, false), // 离线送达消息
 
     //============================== 设置页相关接口 =============================
     reqReqVerifyCode("Public/sendSMSM", false),//获取手机验证码
@@ -158,7 +159,7 @@ public enum UrlParam {
     // 获取最近礼物列表
     lastGiftList("gift/lastgiftlist", GiftMessageList.class, false),
     // 接受通信邀请
-    reqAcceptChat(Hosts.FATE_IT_GO, "xs/message/AcceptVideoChat", Accept.class, false),
+    reqAcceptChat(Hosts.FATE_IT_GO, "xs/message/VCGroupAccept", Accept.class, false),
 
     //================= 发现 ===========
     //举报

@@ -84,11 +84,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
 
         this.id = mInviteVideoMessage.getInvite_id();
         tvContent.setText(getContext().getString(R.string.video_cost, mInviteVideoMessage.getPrice()));
-        if (mInviteVideoMessage.getMedia_tp() == 1) {
-            tvTitle.setText(R.string.invite_video);
-        }else if (mInviteVideoMessage.getMedia_tp() == 2){
-            tvTitle.setText(R.string.invite_voice);
-        }
+        tvTitle.setText(mInviteVideoMessage.getMsgDesc()+"");
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             TimeMgr.getInstance().attach(this);
         }
@@ -154,7 +150,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                 }
                 //点击回拨
                 Log.e("TTTTTTTTTT",whisperID+"||"+channelUid+"||"+mInviteVideoMessage.getJsonStr());
-                UIShow.showInvitaExpiredDlg(App.activity, whisperID,channelUid,mInviteVideoMessage.getType(),(int)mInviteVideoMessage.getPrice());
+                UIShow.showInvitaExpiredDlg(App.activity, whisperID,channelUid,mInviteVideoMessage.getMedia_tp(),(int)mInviteVideoMessage.getPrice());
                 break;
         }
     }
