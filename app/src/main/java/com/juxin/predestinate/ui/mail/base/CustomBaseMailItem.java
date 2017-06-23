@@ -182,7 +182,7 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
                 break;
 
             case 1:
-                item_last_status.setText("发送中");
+                item_last_status.setText("已发送");
                 break;
             case 3: // 发送中
                 long time = msgData.getCurrentTime() - msgData.getTime();

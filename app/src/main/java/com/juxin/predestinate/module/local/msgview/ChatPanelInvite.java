@@ -2,7 +2,6 @@ package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,7 +24,6 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.CountDownTimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.my.TimeMgr;
 
 import static com.juxin.predestinate.R.id.ll_invite_connect;
@@ -94,10 +92,8 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             TimeMgr.getInstance().attach(this);
         }
-        Log.e("TTTTTTTTTTTTTNNN",whisperID+"|||"+channelUid+"|||"+mInviteVideoMessage.getTimeout_tm()+"||"+util.isTimingTask(id)+"||"+util.isHandled(id)+"||");
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             Long time = util.getTask(id);
-            Log.e("TTTTTTTTTTTTTNNN",whisperID+"|||"+channelUid+"|||"+mInviteVideoMessage.getTimeout_tm()+"||"+util.isTimingTask(id)+"||"+util.isHandled(id)+"||"+time);
             if (time > 0) {
                 tvTime.setText(getContext().getString(R.string.time, time));
                 llReject.setVisibility(View.VISIBLE);
@@ -153,14 +149,25 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
             case ll_invite_connect:
                 if (util.isTimingTask(id) && !util.isHandled(id)){
                     //接通逻辑
-                    ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId,this);
+                    if (isHasDiamond())
+                        ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId,this);
                     break;
                 }
                 //点击回拨
-                Log.e("TTTTTTTTTT",whisperID+"||"+channelUid+"||"+mInviteVideoMessage.getJsonStr());
-                UIShow.showInvitaExpiredDlg(activity, whisperID,channelUid,mInviteVideoMessage.getMedia_tp(),(int)mInviteVideoMessage.getPrice());
+                if (isHasDiamond())
+                    UIShow.showInvitaExpiredDlg(activity, whisperID,channelUid,mInviteVideoMessage.getMedia_tp(),(int)mInviteVideoMessage.getPrice());
                 break;
         }
+    }
+
+    private boolean isHasDiamond(){
+        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < mInviteVideoMessage.getPrice()){
+            //充值弹框
+            PToast.showShort("钻石不足，请充值");
+            UIShow.showBottomChatDiamondDlg(App.getContext(),whisperID,mInviteVideoMessage.getMedia_tp(),(int) mInviteVideoMessage.getPrice());
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -168,7 +175,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         if (response.isOk()) {
             LoadingDialog.show((FragmentActivity) App.activity);
             PSP.getInstance().put("ISINVITE",true);
-            VideoAudioChatHelper.getInstance().executeGInviteChat(App.activity,whisperID,type,channelUid);
+//            VideoAudioChatHelper.getInstance().executeGInviteChat(App.activity,whisperID,type,channelUid);
         }
         if (llConnect != null){
             llConnect.postDelayed(new Runnable() {

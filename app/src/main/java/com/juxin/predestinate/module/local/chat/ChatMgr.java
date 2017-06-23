@@ -2,6 +2,7 @@ package com.juxin.predestinate.module.local.chat;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
@@ -18,6 +19,7 @@ import com.juxin.predestinate.bean.db.DBCallback;
 import com.juxin.predestinate.bean.db.DBCenter;
 import com.juxin.predestinate.bean.file.UpLoadResult;
 import com.juxin.predestinate.bean.my.GiftsList;
+import com.juxin.predestinate.bean.my.OffMsgInfo;
 import com.juxin.predestinate.bean.my.SendGiftResultInfo;
 import com.juxin.predestinate.bean.start.OfflineBean;
 import com.juxin.predestinate.bean.start.OfflineMsg;
@@ -42,14 +44,18 @@ import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.logic.socket.IMProxy;
 import com.juxin.predestinate.module.logic.socket.NetData;
 import com.juxin.predestinate.module.util.BaseUtil;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -1175,18 +1181,25 @@ public class ChatMgr implements ModuleBase {
         ModuleMgr.getCommonMgr().reqOfflineMsg(new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                List<OffMsgInfo> mOffMsgInfos = new ArrayList<>();
                 PLogger.d("offlineMsg:  " + response.getResponseString());
                 if (!response.isOk()) return;
 
                 OfflineMsg offlineMsg = (OfflineMsg) response.getBaseData();
                 if (offlineMsg == null || offlineMsg.getMsgList().size() <= 0)
                     return;
-
+                OfflineBean bea = null;
+                if (offlineMsg.getMsgList().size() > 0)
+                    bea = offlineMsg.getMsgList().get(offlineMsg.getMsgList().size()-1);
                 // 逐条处理离线消息
                 for (OfflineBean bean : offlineMsg.getMsgList()) {
                     if (bean == null) continue;
 
                     dispatchOfflineMsg(bean);
+                    mOffMsgInfos.add(new OffMsgInfo(bean.getFid(),bean.getD(),bean.getMtp()));
+                    if (bean == bea){
+                        ModuleMgr.getCommonMgr().reqOfflineRecvedMsg(mOffMsgInfos,null);
+                    }
                 }
 
                 // 服务器每次最多取1000条，若超过则再次请求

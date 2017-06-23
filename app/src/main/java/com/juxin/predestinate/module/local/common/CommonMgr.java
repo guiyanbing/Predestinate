@@ -19,6 +19,7 @@ import com.juxin.predestinate.bean.config.CommonConfig;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.bean.my.GiftsList;
 import com.juxin.predestinate.bean.my.IdCardVerifyStatusInfo;
+import com.juxin.predestinate.bean.my.OffMsgInfo;
 import com.juxin.predestinate.bean.settting.ContactBean;
 import com.juxin.predestinate.module.local.location.LocationMgr;
 import com.juxin.predestinate.module.local.statistics.Statistics;
@@ -170,6 +171,17 @@ public class CommonMgr implements ModuleBase {
         getParams.put("count", 1000);
 
         ModuleMgr.getHttpMgr().reqGetNoCacheHttp(UrlParam.reqOfflineMsg, getParams, complete);
+    }
+
+    /**
+     * 发送离线送达消息
+     */
+    public void reqOfflineRecvedMsg(List<OffMsgInfo> uids,RequestComplete complete) {
+        OffMsgInfo[] uidlist = uids.toArray(new OffMsgInfo[uids.size()]);
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("list", uidlist);// uids
+
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOfflineRecvedMsg, postParams, complete);
     }
 
     /**

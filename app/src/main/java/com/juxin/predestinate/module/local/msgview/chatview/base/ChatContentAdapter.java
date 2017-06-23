@@ -376,7 +376,7 @@ public class ChatContentAdapter extends ExBaseAdapter<BaseMessage> {
 
             switch (msg.getStatus()) {
                 case 1: // 发送成功
-                    status.setText("发送中");
+                    status.setText("已发送");
                     break;
 
                 case 2: // 发送失败

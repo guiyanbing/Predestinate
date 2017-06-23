@@ -5,11 +5,11 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
+import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -30,6 +30,7 @@ import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
@@ -530,6 +531,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
             if (isInvite && videoMessage.getVideoTp() == 2){
                 VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
                         videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(),videoMessage.getVc_channel_key());
+                LoadingDialog.closeLoadingDialog();
                 PSP.getInstance().put("ISINVITE",false);
                 return;
             }
@@ -563,7 +565,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
         videoMessage.parseJs(message.getJsonStr());
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()){
             //充值弹框
-//            UIShow.showBottomChatDiamondDlg(App.getContext(),);
+            if (videoMessage.getMedia_tp() == 1)
+                PToast.showShort("您收到一条视频邀请,钻石不足，请充值");
+            if (videoMessage.getMedia_tp() == 2)
+                PToast.showShort("您收到一条语音邀请,钻石不足，请充值");
+            UIShow.showBottomChatDiamondDlg(App.getContext(),videoMessage.getLWhisperID(),videoMessage.getMedia_tp(),(int) videoMessage.getPrice());
         }
 
         //跳转视频
@@ -622,7 +628,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         InviteVideoMessage mInviteVideoMessage = (InviteVideoMessage) message;
         CountDownTimerUtil util = CountDownTimerUtil.getInstance();
         long timeCount = mInviteVideoMessage.getTimeout_tm() - ModuleMgr.getAppMgr().getSecondTime();//计时时间
-        Log.e("TTTTTTTTTTTTTNNN",mInviteVideoMessage.getTimeout_tm()+"|||"+ModuleMgr.getAppMgr().getSecondTime()+"||"+timeCount);
         if (timeCount > 0 && !util.isTimingTask(mInviteVideoMessage.getInvite_id()) && !util.isTimingTask(mInviteVideoMessage.getInvite_id())) {
             util.addTimerTask(mInviteVideoMessage.getInvite_id(),timeCount);
         }
