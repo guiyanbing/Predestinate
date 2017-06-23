@@ -237,13 +237,18 @@ public class VideoAudioChatHelper {
     }
 
     private void handleGroupInvite(HttpResponse response, Activity activity, int type) {
+        int price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getAudioPrice();
+        if (type == TYPE_VIDEO_CHAT) {
+            price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
+        }
+
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             long inviteId = resJo.optLong("invite_id");
             Bundle bundle = newBundle(0, 0, 1, type, 0);  // 此时无vcId返回
             bundle.putInt("vc_girl_type", 2);
-            bundle.putLong("vc_girl_price", 30);
+            bundle.putLong("vc_girl_price", price);
             bundle.putLong("vc_girl_invite_id", inviteId);
             startGroupInviteAct(activity, bundle);
             return;
@@ -258,11 +263,7 @@ public class VideoAudioChatHelper {
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
-    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType) {
-        int price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getAudioPrice();
-        if (chatType == 1) {
-            price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
-        }
+    public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putLong("vc_girl_price", price);
         startRtcInitActivity(activity, bundle);
