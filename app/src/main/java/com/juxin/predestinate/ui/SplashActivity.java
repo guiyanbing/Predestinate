@@ -40,9 +40,10 @@ public class SplashActivity extends BaseActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!App.isAppInited())
-                    return;
-
+//DELETE START 170623 系统内存不足App被杀掉后还原时候会崩溃，暂时不使用，以后可以优化
+//                if (!App.isAppInited())
+//                    return;
+//DELETE END 170623
                 timer.cancel();
 
                 MsgMgr.getInstance().runOnUiThread(new Runnable() {
