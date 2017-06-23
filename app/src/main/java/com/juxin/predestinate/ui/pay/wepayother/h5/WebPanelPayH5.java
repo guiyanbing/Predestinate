@@ -33,26 +33,23 @@ import java.util.Map;
  * Fix by IQQ on 2017/05/27.
  */
 public class WebPanelPayH5 extends BasePanel {
-
     private static final int FRAME_WEB = 0;     //web页
     private static final int FRAME_ERROR = 1;   //加载失败页
     private static final int FRAME_LOADING = 2; //loading页
-
     private String url;
     private boolean isLoadingInnerControl = true;    //是否由内部控制loading的展示逻辑
-
     private CustomFrameLayout customFrameLayout;
     private WebView webView;
-
     private Context context;
+    private H5PayStart h5PayStart;
 
-    public WebPanelPayH5(Context context, String url, boolean isLoadingInnerControl) {
+    public WebPanelPayH5(Context context, String url, boolean isLoadingInnerControl, H5PayStart h5PayStart) {
         super(context);
         this.context = context;
         this.url = url;
         this.isLoadingInnerControl = isLoadingInnerControl;
         setContentView(R.layout.common_web_panel);
-
+        this.h5PayStart = h5PayStart;
         initView();
     }
 
@@ -65,6 +62,8 @@ public class WebPanelPayH5 extends BasePanel {
         } else {
             PToast.showShort("微信未安装");
         }
+        if(null != h5PayStart)
+            h5PayStart.OnPayStart();
     }
 
     public String getHostName(String urlString) {
