@@ -143,8 +143,8 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                 case R.id.ll_userinfo_bottom_send:  // 底部发信
                     Statistics.userBehavior(SendPoint.userinfo_btnsendmessage, userDetail.getUid());
                     UserDetail info = ModuleMgr.getCenterMgr().getMyInfo();
-                    if (info.isMan() && !info.isVip()) {
-                        showVipTips();
+                    if (info.isMan() && info.getYcoin() <= 0) {
+                        showYCoinTips();
                         return;
                     }
                     UIShow.showPrivateChatAct(UserCheckInfoAct.this, userDetail.getUid(), null);
@@ -178,7 +178,7 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
     /**
      * 开通Vip提示
      */
-    private void showVipTips() {
+    private void showYCoinTips() {
         PickerDialogUtil.showSimpleTipDialogExt(this, new SimpleTipDialog.ConfirmListener() {
             @Override
             public void onCancel() {
