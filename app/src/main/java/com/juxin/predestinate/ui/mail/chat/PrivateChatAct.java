@@ -142,11 +142,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
      * 获取对方网络信息
      */
     private void getUserNetInfo() {
-        if(otherInfo != null && !otherInfo.isOnline()) {
-            net_top_title.setText(getString(R.string.net_offline));
-            privateChat.getChatAdapter().lookAtHer(false);
-            return;
-        }
         ModuleMgr.getCommonMgr().getUserNetInfo(whisperID, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -156,6 +151,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     net_top_title.setText(getString(R.string.net_online_pre) + userNetInfo.getNetType());
                     privateChat.getChatAdapter().lookAtHer(true);
                 }else {
+                    net_top_title.setText(getString(R.string.net_offline));
                     privateChat.getChatAdapter().lookAtHer(false);
                 }
             }

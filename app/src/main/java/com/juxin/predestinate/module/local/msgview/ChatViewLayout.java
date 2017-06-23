@@ -139,7 +139,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      * @param isClose 是否点了关闭提示
      */
     public void yTipsLogic(boolean isShow, boolean isClose) {
-        if (!isShow || isClose) {
+        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() || (!isShow || isClose)) {
             ll_y_tips.setVisibility(View.GONE);
             return;
         }
