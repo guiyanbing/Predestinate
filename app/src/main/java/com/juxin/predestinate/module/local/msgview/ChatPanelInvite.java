@@ -165,8 +165,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     private boolean isHasDiamond() {
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < mInviteVideoMessage.getPrice()) {
             //充值弹框
-            PToast.showShort("钻石不足，请充值");
-            UIShow.showBottomChatDiamondDlg(App.getContext(), whisperID, mInviteVideoMessage.getMedia_tp(), (int) mInviteVideoMessage.getPrice());
+            UIShow.showBottomChatDiamondDlg(App.activity, whisperID, mInviteVideoMessage.getMedia_tp(), (int) mInviteVideoMessage.getPrice());
             return false;
         }
         return true;
@@ -185,7 +184,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     }
                 }, 60000);
             }
-        }else {
+        } else {
             LoadingDialog.closeLoadingDialog();
             PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
         }
