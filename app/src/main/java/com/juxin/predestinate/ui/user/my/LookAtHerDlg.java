@@ -19,7 +19,6 @@ import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseDialogFragment;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.VideoAudioChatHelper;
-import com.juxin.predestinate.ui.mail.chat.PrivateChatAct;
 
 /**
  * 创建日期：2017/6/7
@@ -33,7 +32,9 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
     private int selectVal;
     private boolean isMan = true;
     private boolean isInvate = false;
+    private boolean isAcceptInvitat = false;
     private CheckBox cb_own_agree, cb_own_disagree, cb_def_sel;
+    private  long inviteId;
 
     public LookAtHerDlg() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
@@ -53,6 +54,11 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
 
     public void setIsInvate(boolean isInvate) {
         this.isInvate = isInvate;
+    }
+
+    public void setAcceptInvitat(boolean isAcceptInvitat,long inviteId) {
+        this.isAcceptInvitat = isAcceptInvitat;
+        this.inviteId = inviteId;
     }
 
     @Override
@@ -137,8 +143,12 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                             saveType(Constant.APPEAR_FOREVER_TYPE, Constant.APPEAR_TYPE_NO_OWN);
                         }
                     }
-                    VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
-                            false, selectVal, channel_uid, false);
+                    if (!isAcceptInvitat){
+                        VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
+                                false, selectVal, channel_uid, false);
+                    }else {
+                        VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId);
+                    }
                 }
                 dismiss();
                 break;

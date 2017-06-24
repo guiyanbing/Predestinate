@@ -160,6 +160,8 @@ public enum UrlParam {
     lastGiftList("gift/lastgiftlist", GiftMessageList.class, false),
     // 接受通信邀请
     reqAcceptChat(Hosts.FATE_IT_GO, "xs/message/VCGroupAccept", Accept.class, false),
+    // 拒绝通信邀请
+    reqRejectChat("xs/message/RejectVideoChat"),
 
     //================= 发现 ===========
     //举报

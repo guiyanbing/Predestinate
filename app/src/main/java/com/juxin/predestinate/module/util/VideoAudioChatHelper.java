@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
@@ -148,6 +149,33 @@ public class VideoAudioChatHelper {
         }
         this.singleType = singleType;
         inviteVAChat(context, dstUid, type, channel_uid);
+    }
+
+    /**
+     * 邀请对方音频或视频聊天
+     *
+     * @param inviteId   邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     */
+    public void acceptInviteVAChat(long inviteId) {
+        LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
+        ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    PSP.getInstance().put("ISINVITE", true);
+                    MsgMgr.getInstance().delay(new Runnable() {
+                        @Override
+                        public void run() {
+                            PSP.getInstance().put("ISINVITE", false);
+                            LoadingDialog.closeLoadingDialog();
+                        }
+                    },20000);
+                } else {
+                    LoadingDialog.closeLoadingDialog();
+                    PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? App.getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
+                }
+            }
+        });
     }
 
     /**

@@ -520,6 +520,17 @@ public class CommonMgr implements ModuleBase {
     }
 
     /**
+     * 拒绝视频聊天请求
+     *
+     * @param vcid 视频聊天id
+     */
+    public void reqRejectVideoChat(long vcid, RequestComplete complete) {
+        Map<String, Object> postParams = new HashMap<>();
+        postParams.put("vc_id", vcid);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqRejectChat, postParams, complete);
+    }
+
+    /**
      * 上传身份证照片
      *
      * @param url      图片本地地址
