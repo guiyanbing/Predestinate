@@ -104,7 +104,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
             }
             if(bean.getBooleanAudiochat()) {
                 tv_second.setText(getString(R.string.invitation_he_audio));
-                rl_own_agree.setVisibility(View.VISIBLE);
+                rl_own_disagree.setVisibility(View.VISIBLE);
             }
             tv_select_ok.setText(getString(R.string.cancel));
         }
