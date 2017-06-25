@@ -25,6 +25,8 @@ public class Constant {
     public static final int APPEAR_TYPE_OWN = 1;//自己露脸
     public static final int APPEAR_TYPE_NO_OWN = 2;//自己不露脸
 
+    public static final String APP_IS_FOREGROUND = "app_is_foreground";//是否属于前台显示
+
     // -----------------------私有K-V-----------------------
     public static final String PRIVATE_CHAT_TOP_H = "private_chat_top_h"; //私聊页顶部三个高度
     public static final String APPEAR_FOREVER_TYPE = "appear_forever_type"; //默认出场方式

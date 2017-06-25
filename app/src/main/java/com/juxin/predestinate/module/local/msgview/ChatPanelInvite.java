@@ -1,15 +1,11 @@
 package com.juxin.predestinate.module.local.msgview;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.juxin.library.log.PSP;
-import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
 import com.juxin.predestinate.R;
@@ -20,11 +16,9 @@ import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
-import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
-import com.juxin.predestinate.module.logic.request.HttpResponse;
-import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.CountDownTimerUtil;
 import com.juxin.predestinate.module.util.UIShow;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.my.TimeMgr;
 
 import static com.juxin.predestinate.R.id.ll_invite_connect;
@@ -35,8 +29,9 @@ import static com.juxin.predestinate.module.logic.application.App.activity;
  * 邀请音视频消息，只能出现在发送左侧
  * Created by Kind on 2017/6/20.
  */
-public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClickListener, RequestComplete {
+public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClickListener {
 
+    private ImageView imgPic;
     private TextView tvTitle, tvContent, tvTime, tvConnect;
     private LinearLayout llReject, llConnect;
     private InviteVideoMessage mInviteVideoMessage;
@@ -60,6 +55,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         tvConnect = (TextView) findViewById(R.id.tv_invite_tv_connect);
         llReject = (LinearLayout) findViewById(ll_invite_reject);
         llConnect = (LinearLayout) findViewById(ll_invite_connect);
+        imgPic = (ImageView) findViewById(R.id.iv_invite_img);
 
         llReject.setOnClickListener(this);
         llConnect.setOnClickListener(this);
@@ -82,8 +78,10 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         tvContent.setText(getContext().getString(R.string.video_cost, mInviteVideoMessage.getPrice()));
         if (mInviteVideoMessage.getMedia_tp() == 1) {
             tvTitle.setText(R.string.invite_video);
+            imgPic.setBackgroundResource(R.drawable.p1_ltlx01);
         } else if (mInviteVideoMessage.getMedia_tp() == 2) {
             tvTitle.setText(R.string.invite_voice);
+            imgPic.setBackgroundResource(R.drawable.p1_ltlx02);
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             TimeMgr.getInstance().attach(this);
@@ -146,8 +144,11 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                 if (util.isTimingTask(id) && !util.isHandled(id)) {
                     //接通逻辑
                     if (isHasDiamond()) {
-                        LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
-                        ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId, this);
+                        if (type == 1){
+                            UIShow.showLookAtHerDlg(App.activity, whisperID, channelUid, inviteId);
+                        }else {
+                            VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId);
+                        }
                     }
                     break;
                 }
@@ -161,29 +162,10 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     private boolean isHasDiamond() {
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < mInviteVideoMessage.getPrice()) {
             //充值弹框
-            PToast.showShort("钻石不足，请充值");
-            UIShow.showBottomChatDiamondDlg(App.getContext(), whisperID, mInviteVideoMessage.getMedia_tp(), (int) mInviteVideoMessage.getPrice());
+            UIShow.showBottomChatDiamondDlg(App.activity, whisperID, mInviteVideoMessage.getMedia_tp(), (int) mInviteVideoMessage.getPrice(),
+                    false,0);
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onRequestComplete(HttpResponse response) {
-        if (response.isOk()) {
-            PSP.getInstance().put("ISINVITE", true);
-            if (llConnect != null) {
-                llConnect.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        PSP.getInstance().put("ISINVITE", false);
-                        LoadingDialog.closeLoadingDialog();
-                    }
-                }, 60000);
-            }
-        }else {
-            LoadingDialog.closeLoadingDialog();
-            PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
-        }
     }
 }

@@ -20,6 +20,7 @@ import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
+import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
@@ -153,6 +154,33 @@ public class VideoAudioChatHelper {
     /**
      * 邀请对方音频或视频聊天
      *
+     * @param inviteId   邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     */
+    public void acceptInviteVAChat(long inviteId) {
+        LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
+        ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId, new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    PSP.getInstance().put("ISINVITE", true);
+                    MsgMgr.getInstance().delay(new Runnable() {
+                        @Override
+                        public void run() {
+                            PSP.getInstance().put("ISINVITE", false);
+                            LoadingDialog.closeLoadingDialog();
+                        }
+                    },20000);
+                } else {
+                    LoadingDialog.closeLoadingDialog();
+                    PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? App.getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
+                }
+            }
+        });
+    }
+
+    /**
+     * 邀请对方音频或视频聊天
+     *
      * @param context Activity
      * @param dstUid  对方UID
      * @param type    1为视频{@link #TYPE_VIDEO_CHAT TYPE_VIDEO_CHAT}，2为音频{@link #TYPE_AUDIO_CHAT TYPE_AUDIO_CHAT}
@@ -246,7 +274,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             long inviteId = resJo.optLong("invite_id");
-            Bundle bundle = newBundle(0, 0, 1, type, 0);  // 此时无vcId返回
+            Bundle bundle = newBundle(0, 0, 1, type, 20);  // 此时无vcId返回
             bundle.putInt("vc_girl_type", 2);
             bundle.putLong("vc_girl_price", price);
             bundle.putLong("vc_girl_invite_id", inviteId);
@@ -277,7 +305,7 @@ public class VideoAudioChatHelper {
      * @param chatType 1视频，2音频
      */
     public void openInvitedDirect(Activity activity, long vcId, long dstUid, int chatType,String vc_channel_key) {
-        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 0);
+        Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putInt("vc_chat_from", 2);
         bundle.putString("vc_channel_key", vc_channel_key);
         startRtcInitActivity(activity, bundle);

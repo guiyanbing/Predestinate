@@ -1085,6 +1085,17 @@ public class UIShow {
     }
 
     /**
+     * 接收邀请时选择出场方式
+     */
+    public static void showLookAtHerDlg(final Context context, long otherId, String channel_uid, long inviteId) {
+        LookAtHerDlg dialog = new LookAtHerDlg();
+        dialog.setContext(context);
+        dialog.setOtherId(otherId, channel_uid);
+        dialog.setAcceptInvitat(true,inviteId);
+        dialog.showDialog((FragmentActivity) context);
+    }
+
+    /**
      * 邀请过期弹框
      */
     public static void showInvitaExpiredDlg(final Context context, long otherId, String channel_uid, int type, int price) {
@@ -1341,11 +1352,14 @@ public class UIShow {
      * @param otherID  女用户头像
      * @param chatType 视频，语音邀请
      * @param price    通信价格
+     * @param isAloneInvite      是否是单邀
+     * @param videoID            vc_id
+     * @param vc_channel_key     vc_channel_key
      */
-    public static void showBottomChatDiamondDlg(Context context, long otherID, int chatType, int price) {
+    public static void showBottomChatDiamondDlg(Context context, long otherID, int chatType, int price,boolean isAloneInvite, long videoID) {
         if (chatDialog == null) chatDialog = new BottomChatDiamondDlg();
 
-        chatDialog.setInfo(otherID, chatType, price);
+        chatDialog.setInfo(otherID, chatType, price,isAloneInvite,videoID);
         chatDialog.showDialog((FragmentActivity) context);
     }
 

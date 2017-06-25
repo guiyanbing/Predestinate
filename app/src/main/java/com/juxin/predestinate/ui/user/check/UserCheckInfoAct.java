@@ -323,7 +323,6 @@ public class UserCheckInfoAct extends BaseActivity implements PObserver, Request
                     footPanel.refreshView(userDetail);
                 }
                 break;
-
             default:
                 break;
         }

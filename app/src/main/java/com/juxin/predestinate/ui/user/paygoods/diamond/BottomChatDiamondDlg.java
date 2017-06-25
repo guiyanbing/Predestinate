@@ -1,5 +1,6 @@
 package com.juxin.predestinate.ui.user.paygoods.diamond;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -12,8 +13,11 @@ import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
 import com.juxin.library.log.PLogger;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.FileUtil;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweightList;
 import com.juxin.predestinate.module.logic.application.App;
@@ -24,6 +28,7 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.UIUtil;
+import com.juxin.predestinate.module.util.VideoAudioChatHelper;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 import com.juxin.predestinate.ui.user.paygoods.GoodsListPanel;
 import com.juxin.predestinate.ui.user.paygoods.GoodsPayTypePanel;
@@ -54,6 +59,9 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     private int chatType;
     private int price;
 
+    private boolean isAloneInvite = false;
+    private long videoID;
+
     public BottomChatDiamondDlg() {
         settWindowAnimations(R.style.AnimDownInDownOutOverShoot);
         setGravity(Gravity.BOTTOM);
@@ -62,15 +70,18 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     }
 
     /**
-     * @param otherId  对方ID
-     * @param chatType 视频，语音邀请
-     * @param price    通信价格
+     * @param otherId            对方ID
+     * @param chatType           视频，语音邀请
+     * @param price              通信价格
+     * @param isAloneInvite      是否是单邀
+     * @param videoID            vc_id
      */
-    public void setInfo(long otherId, int chatType, int price) {
+    public void setInfo(long otherId, int chatType, int price,boolean isAloneInvite, long videoID ) {
         this.otherID = otherId;
         this.chatType = chatType;
         this.price = price;
-
+        this.isAloneInvite = isAloneInvite;
+        this.videoID = videoID;
     }
 
     @Override
@@ -81,6 +92,38 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
         initList();
         initView(contentView);
         return contentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isAloneInvite){
+            ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
+                @Override
+                public void onRequestComplete(HttpResponse response) {
+                    if (response.isOk()){
+                        UserDetail userDetail = (UserDetail) response.getBaseData();
+                        if (userDetail.getDiamand() >= price){
+                            isAloneInvite = false;
+                            //跳转视频
+                            VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
+                                    videoID, otherID, chatType, price);
+                        }
+                        return;
+                    }
+                    isAloneInvite = false;
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
+        if (isAloneInvite){
+            ModuleMgr.getCommonMgr().reqRejectVideoChat(videoID,null);
+        }
     }
 
     private void reqOtherInfo() {

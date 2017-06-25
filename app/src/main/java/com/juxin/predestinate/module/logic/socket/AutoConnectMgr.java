@@ -229,7 +229,12 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
             newRandomNum = new Random(System.currentTimeMillis()).nextInt();
             PSP.getInstance().put("Net_Random_Last", newRandomNum);
         }
-        NetData heartbeatData = new NetData(uid, heartbeatType, lastRandomNum, newRandomNum);
+        NetData heartbeatData;
+        if(heartbeatType == TCPConstant.MSG_ID_HEART_BEAT3) {
+            heartbeatData = new NetData(uid, heartbeatType, new byte[]{PSP.getInstance().getBoolean(Constant.APP_IS_FOREGROUND, false) ? (byte) 1 : (byte) 2});
+        }else {
+            heartbeatData = new NetData(uid, heartbeatType, lastRandomNum, newRandomNum);
+        }
         PLogger.d("getHeartbeat: ---心跳--->类型：" + heartbeatType + "/" + heartbeatData.toString());
         return heartbeatData;
     }
@@ -245,7 +250,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
             heartbeatResend = 0;
         }
         heartbeatSend++;//叠加心跳发送次数
-        return getHeartbeat(TCPConstant.MSG_ID_Heartbeat_Reply);
+        return getHeartbeat(TCPConstant.MSG_ID_HEART_BEAT3);
     }
 
     /**
@@ -426,7 +431,7 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
         String content = data.getContent();
         PLogger.d("---socket消息头：" + data.getHeaderString() + "\n---socket消息体：" + content);
 
-        if (data.getMsgType() == TCPConstant.MSG_ID_Heartbeat_Reply) {//心跳回送消息
+        if (data.getMsgType() == TCPConstant.MSG_ID_HEART_BEAT3) {//心跳回送消息
             heartbeatResend++;
         }
 

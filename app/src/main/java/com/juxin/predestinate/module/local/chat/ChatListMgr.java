@@ -9,7 +9,6 @@ import android.os.Message;
 import com.alibaba.fastjson.JSON;
 import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
-import com.juxin.library.log.PToast;
 import com.juxin.library.observe.ModuleBase;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -548,7 +547,6 @@ public class ChatListMgr implements ModuleBase, PObserver {
         params.put("mt", 9);
         params.put("fid", videoMessage.getLWhisperID());
         params.put("vc_id", videoMessage.getVideoID());
-        params.put("vc_channel_key", videoMessage.getVc_channel_key());
         Intent intent = new Intent("com.juxin.action.plugin");
         intent.putExtra("extra_json", JSON.toJSONString(params));
         App.context.sendBroadcast(intent);
@@ -565,11 +563,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
         videoMessage.parseJs(message.getJsonStr());
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()){
             //充值弹框
-            if (videoMessage.getMedia_tp() == 1)
-                PToast.showShort("您收到一条视频邀请,钻石不足，请充值");
-            if (videoMessage.getMedia_tp() == 2)
-                PToast.showShort("您收到一条语音邀请,钻石不足，请充值");
-            UIShow.showBottomChatDiamondDlg(App.getContext(),videoMessage.getLWhisperID(),videoMessage.getMedia_tp(),(int) videoMessage.getPrice());
+            UIShow.showBottomChatDiamondDlg(App.getContext(),videoMessage.getLWhisperID(),videoMessage.getMedia_tp(),
+                    (int) videoMessage.getPrice(),true,videoMessage.getInvite_id());
+            return;
         }
 
         //跳转视频

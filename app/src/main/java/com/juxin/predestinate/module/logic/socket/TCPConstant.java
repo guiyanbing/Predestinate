@@ -15,7 +15,7 @@ public class TCPConstant {
     public static final int MSG_ID_Login = 1;               //长连接登录消息id
     public static final int MSG_ID_Account_Closed = 65530;    //账号被封消息
     public static final int MSG_ID_KICK_Offline = 65533;    //异地登陆踢下线消息id
-    public static final int MSG_ID_Heartbeat_Reply = 65532; //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
+//    public static final int MSG_ID_Heartbeat_Reply = 65532; //回送逻辑的心跳消息，客户端发送心跳，服务器回复该类型的消息，包体为0
     public static final int MSG_ID_Heartbeat = 65535;       //普通心跳消息id，登录使用
     public static final int MSG_ID_PUSH_MESSAGE = 102;      //服务器推送的消息
     public static final int MSG_ID_SERVER_PUSH_START_INDEX = 100;//服务器推送消息，开始id

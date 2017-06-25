@@ -58,7 +58,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private long whisperID = 0;
     private String channel_uid = "";
     private String name;
-    private boolean isFollow = false;
     private int kf_id;
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img, cus_top_img_phone;
@@ -66,10 +65,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private LMarqueeView lmvMeassages;
     private LMarqueeFactory<LinearLayout, GiftMessageList.GiftMessageInfo> marqueeView;
 
-    private LinearLayout privatechat_head;
     private RelativeLayout llTitleRight;
-    private ImageView chat_title_attention_icon;
-    private TextView chat_title_attention_name, chat_title_yb_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -286,16 +282,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     }
                 }
             });
-//            initHeadView();
             initFollow();
             isShowTopPhone();
         }
 
         //状态栏 + 标题 +（关注TA、查看手机）// （去掉滚动条高度） 高度
-        if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && MailSpecialID.customerService.getSpecialID() != whisperID)
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getViewHeight(privatechat_head) + UIUtil.getStatusHeight(this));
-        else
-            PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getStatusHeight(this));
+        PSP.getInstance().put(Constant.PRIVATE_CHAT_TOP_H, UIUtil.getViewHeight(getTitleView()) + UIUtil.getStatusHeight(this));
     }
 
     private void initFollow() {
@@ -304,18 +296,10 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
             public void onRequestComplete(HttpResponse response) {
                 if (!response.isOk()) return;
                 UserDetail userDetail = (UserDetail) response.getBaseData();
-                isFollow = userDetail.isFollow();
                 kf_id = userDetail.getKf_id();
                 channel_uid = String.valueOf(userDetail.getChannel_uid());
                 name = userDetail.getNickname();
                 setNickName(userDetail.getShowName());
-//                if (isFollow) {
-//                    chat_title_attention_name.setText("已关注");
-//                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
-//                } else {
-//                    chat_title_attention_name.setText("关注她");
-//                    chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
-//                }
             }
         });
     }
@@ -331,84 +315,12 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private void initHeadView() {
-        privatechat_head = (LinearLayout) findViewById(R.id.privatechat_head);
-        privatechat_head.setVisibility(View.VISIBLE);
-        findViewById(R.id.chat_title_attention).setOnClickListener(this);
-        findViewById(R.id.chat_title_phone).setOnClickListener(this);
-        findViewById(R.id.chat_title_wx).setOnClickListener(this);
-        findViewById(R.id.chat_title_yb).setOnClickListener(this);
-
-        chat_title_attention_icon = (ImageView) findViewById(R.id.chat_title_attention_icon);
-        chat_title_attention_name = (TextView) findViewById(R.id.chat_title_attention_name);
-        chat_title_yb_name = (TextView) findViewById(R.id.chat_title_yb_name);
-
-        chat_title_yb_name.setText("Y币:" + ModuleMgr.getCenterMgr().getMyInfo().getYcoin());
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.chat_title_attention: {//关注
-                Statistics.userBehavior(SendPoint.chatframe_nav_follow, whisperID);
-
-                String content = ModuleMgr.getCenterMgr().getMyInfo().getNickname();
-                if (!TextUtils.isEmpty(content) && !"null".equals(content)) {
-                    content = "[" + content + "]" + getString(R.string.just_looking_for_you);
-                } else {
-                    content = getString(R.string.just_looking_for_you);
-                }
-                ModuleMgr.getChatMgr().sendAttentionMsg(whisperID, content, kf_id, isFollow ? 2 : 1, new IMProxy.SendCallBack() {
-                    @Override
-                    public void onResult(long msgId, boolean group, String groupId, long sender, String contents) {
-                        MessageRet messageRet = new MessageRet();
-                        messageRet.parseJson(contents);
-                        if (messageRet.isOk() && messageRet.isS()) {
-                            isFollow = !isFollow;
-                            if (isFollow) {
-                                chat_title_attention_name.setText("已关注");
-                                chat_title_attention_icon.setBackgroundResource(R.drawable.f1_chat01);
-                            } else {
-                                chat_title_attention_name.setText("关注她");
-                                chat_title_attention_icon.setBackgroundResource(R.drawable.f1_follow_star);
-                            }
-                        } else {
-                            PToast.showShort(isFollow ? "取消关注失败！" : "关注失败！");
-                        }
-                    }
-
-                    @Override
-                    public void onSendFailed(NetData data) {
-                        PToast.showShort(isFollow ? "取消关注失败！" : "关注失败！");
-                    }
-                });
-                break;
-            }
-            case R.id.chat_title_phone://手机
-                Statistics.userBehavior(SendPoint.chatframe_nav_tel, whisperID);
-                PSP.getInstance().put("payPoint", "mobile");
-                checkAndShowVip();
-                break;
-            case R.id.chat_title_wx://微信
-                Statistics.userBehavior(SendPoint.chatframe_nav_weixin, whisperID);
-                PSP.getInstance().put("payPoint", "wx");
-                checkAndShowVip();
-                break;
-            case R.id.chat_title_yb://Y币
-                Statistics.userBehavior(SendPoint.chatframe_nav_y, whisperID);
-                UIShow.showGoodsYCoinDlgOld(this, whisperID, channel_uid);
-                break;
             case R.id.cus_top_title_img_phone://音视频
                 new SelectCallTypeDialog(this, whisperID, channel_uid);
                 break;
-        }
-    }
-
-    private void checkAndShowVip() {
-        if (ModuleMgr.getCenterMgr().getMyInfo().isVip()) {
-            UIShow.showCheckOtherInfoAct(this, whisperID);
-        } else {
-            UIShow.showGoodsVipDlgOld(this, 2, whisperID, channel_uid);
         }
     }
 
@@ -463,9 +375,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                     executeYCoinTask();
                 } else {//不请求网络
                     checkIsCanSendMsg();
-//                    if (chat_title_yb_name != null) {
-//                        chat_title_yb_name.setText("Y币:" + String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getYcoin()));
-//                    }
                     if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
                         privateChat.yTipsLogic(true, false);
                     }
