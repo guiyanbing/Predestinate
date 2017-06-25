@@ -138,7 +138,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 checkIsCanSendMsg();
                 //在线状态
                 if("在线".equalsIgnoreCase(chatInfo.getOtherInfo().getLast_online())) {
-                    net_top_title.setText(getString(R.string.net_online_pre) + chatInfo.getOtherInfo().getNet_tp());
+                    net_top_title.setText(getString(R.string.net_online_pre) + chatInfo.getOtherInfo().netTp2Str(chatInfo.getOtherInfo().getNet_tp()));
                     privateChat.getChatAdapter().lookAtHer(true);
                 }else {
                     net_top_title.setText(getString(R.string.net_offline));
