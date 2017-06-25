@@ -59,6 +59,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
     private String channel_uid = "";
     private String name;
     private int kf_id;
+    private UserInfoLightweight otherInfo;
     private ChatViewLayout privateChat = null;
     private ImageView cus_top_title_img, cus_top_img_phone;
     private TextView base_title_title,net_top_title,cus_top_title_txt;
@@ -137,6 +138,11 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
      * 获取对方网络信息
      */
     private void getUserNetInfo() {
+        if(otherInfo != null && !otherInfo.isOnline()) {
+            net_top_title.setText(getString(R.string.net_offline));
+            privateChat.getChatAdapter().lookAtHer(false);
+            return;
+        }
         ModuleMgr.getCommonMgr().getUserNetInfo(whisperID, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
@@ -237,6 +243,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         privateChat = (ChatViewLayout) findViewById(R.id.privatechat_view);
         privateChat.getChatAdapter().setWhisperId(whisperID);
+        otherInfo = privateChat.getChatAdapter().getUserInfo(whisperID);
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
         marqueeView = new GiftMessageInfoView(this);
 
