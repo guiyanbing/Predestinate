@@ -1146,4 +1146,15 @@ public class CommonMgr implements ModuleBase {
         parms.put("phone_info", phone_info);
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.updateNetInfo, parms, complete);
     }
+
+    /**
+     * 聊天窗口信息--整合接口
+     * @param tuid 对方uid
+     * @param complete 回调
+     */
+    public void reqChatInfo(long tuid, RequestComplete complete) {
+        HashMap<String, Object> parms = new HashMap<>();
+        parms.put("tuid", tuid);
+        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqChatInfo, parms, complete);
+    }
 }

@@ -18,11 +18,13 @@ import com.juxin.library.observe.Msg;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.observe.PObserver;
+import com.juxin.library.utils.TypeConvertUtil;
 import com.juxin.library.view.roadlights.LMarqueeFactory;
 import com.juxin.library.view.roadlights.LMarqueeView;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
+import com.juxin.predestinate.bean.my.ChatInfo;
 import com.juxin.predestinate.bean.my.GiftMessageList;
 import com.juxin.predestinate.bean.my.UserNetInfo;
 import com.juxin.predestinate.module.local.chat.MessageRet;
@@ -119,41 +121,37 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private void executeYCoinTask() {
-        ModuleMgr.getCommonMgr().checkycoin(new RequestComplete() {
-            @Override
-            public void onRequestComplete(HttpResponse response) {
-                CheckYCoinBean yCoinBean = new CheckYCoinBean();
-                yCoinBean.parseJson(response.getResponseString());
-                if (yCoinBean.isOk()) {
-                    ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
-                    ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
-                    checkIsCanSendMsg();
-                }
-            }
-        });
-    }
-
     /**
-     * 获取对方网络信息
+     * 聊天窗口信息--整合接口
      */
-    private void getUserNetInfo() {
-        if(otherInfo != null && !otherInfo.isOnline()) {
-            net_top_title.setText(getString(R.string.net_offline));
-            privateChat.getChatAdapter().lookAtHer(false);
-            return;
-        }
-        ModuleMgr.getCommonMgr().getUserNetInfo(whisperID, new RequestComplete() {
+    private void reqChatInfo() {
+        ModuleMgr.getCommonMgr().reqChatInfo(whisperID, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
-                if (response.isOk()) {
-                    UserNetInfo userNetInfo = new UserNetInfo();
-                    userNetInfo.parseJson(response.getResponseString());
-                    net_top_title.setText(getString(R.string.net_online_pre) + userNetInfo.getNetType());
+                if (!response.isOk()) return;
+
+                ChatInfo chatInfo = new ChatInfo();
+                chatInfo.parseJson(response.getResponseString());
+                //Y币
+                ModuleMgr.getCenterMgr().getMyInfo().setYcoin(chatInfo.getYcoin());
+                ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(chatInfo.getOtherInfo().getUid()+"");
+                checkIsCanSendMsg();
+                //在线状态
+                if("在线".equalsIgnoreCase(chatInfo.getOtherInfo().getLast_online())) {
+                    net_top_title.setText(getString(R.string.net_online_pre) + chatInfo.getOtherInfo().getNet_tp());
                     privateChat.getChatAdapter().lookAtHer(true);
                 }else {
                     net_top_title.setText(getString(R.string.net_offline));
                     privateChat.getChatAdapter().lookAtHer(false);
+                }
+                //音视频是否可见
+                if(MailSpecialID.customerService.getSpecialID() != whisperID && ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
+                    ChatInfo.OtherInfo.VideoConfig videoConfig = chatInfo.getOtherInfo().getVideoConfig();
+                    if (videoConfig.isVideoChat()) {
+                        privateChat.setInputLookAtHerVisibility(View.VISIBLE);
+                    }else {
+                        privateChat.setInputLookAtHerVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -247,9 +245,8 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         lmvMeassages = (LMarqueeView) findViewById(R.id.privatechat_lmv_messages);
         marqueeView = new GiftMessageInfoView(this);
 
-        getUserNetInfo();
+        reqChatInfo();
         initLastGiftList();
-        executeYCoinTask();
 
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
@@ -274,21 +271,6 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {
             privateChat.yTipsLogic(true, false);
-            ModuleMgr.getCenterMgr().reqVideoChatConfig(whisperID, new RequestComplete() {
-                @Override
-                public void onRequestComplete(HttpResponse response) {
-                    if (!response.isOk())
-                        return;
-                    VideoConfig config = (VideoConfig) response.getBaseData();
-                    if(ModuleMgr.getCenterMgr().getMyInfo().isMan()) {
-                        if (config.isVideoChat()) {
-                            privateChat.setInputLookAtHerVisibility(View.VISIBLE);
-                        }else {
-                            privateChat.setInputLookAtHerVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
             initFollow();
             isShowTopPhone();
         }
@@ -379,7 +361,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             case MsgType.MT_Update_Ycoin:
                 if ((Boolean) value) {//去请求网络
-                    executeYCoinTask();
+                    reqChatInfo();
                 } else {//不请求网络
                     checkIsCanSendMsg();
                     if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {

@@ -208,6 +208,8 @@ public enum UrlParam {
 
     updateNetInfo(Hosts.FATE_IT_GO, "xs/userinfo/UpdateNetInfo", null, true),  //设置用户设备网络信息
 
+    reqChatInfo(Hosts.FATE_IT_GO, "xs/userinfo/ChatInfo", null, true),  //聊天窗口信息
+
 
     // 最后一个，占位
     LastUrlParam("");
