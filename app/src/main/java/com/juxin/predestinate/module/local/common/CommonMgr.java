@@ -198,11 +198,12 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
+                if (response.isOk()) {
+                    videoVerify = (VideoVerifyBean) response.getBaseData();
+                }
                 if (complete != null) {
                     complete.onRequestComplete(response);
                 }
-                if (response.isOk())
-                    videoVerify = (VideoVerifyBean) response.getBaseData();
             }
         });
     }
@@ -210,7 +211,7 @@ public class CommonMgr implements ModuleBase {
     /**
      * 修改自己的音频、视频开关配置
      */
-    public void setVideochatConfig(boolean videoStatus, boolean audioStatus) {
+    public void setVideochatConfig(boolean videoStatus, boolean audioStatus, final RequestComplete complete) {
         HashMap<String, Object> post_param = new HashMap<>();
         post_param.put("videochat", videoStatus ? 1 : 0);
         post_param.put("audiochat", audioStatus ? 1 : 0);
@@ -218,7 +219,7 @@ public class CommonMgr implements ModuleBase {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
-                    requestVideochatConfig();
+                    requestVideochatConfig(complete);
                     return;
                 }
                 PToast.showShort(response.getMsg());

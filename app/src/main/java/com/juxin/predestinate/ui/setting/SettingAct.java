@@ -21,6 +21,8 @@ import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
 import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.logic.config.DirType;
+import com.juxin.predestinate.module.logic.request.HttpResponse;
+import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.ApkUnit;
 import com.juxin.predestinate.module.util.PickerDialogUtil;
 import com.juxin.predestinate.module.util.UIShow;
@@ -32,7 +34,7 @@ import com.juxin.predestinate.module.util.VideoAudioChatHelper;
  *
  * @author xy
  */
-public class SettingAct extends BaseActivity implements OnClickListener {
+public class SettingAct extends BaseActivity implements OnClickListener, RequestComplete {
 
     private TextView setting_clear_cache_tv, setting_account;
     private ToggleButton setting_message_iv, setting_vibration_iv, setting_voice_iv, setting_quit_message_iv, settingVideoIv, settingAudioIv;
@@ -121,6 +123,10 @@ public class SettingAct extends BaseActivity implements OnClickListener {
             setting_quit_message_iv.setBackgroundResource(0);
         }
 
+        setVideoAndAudioStatus();
+    }
+
+    private void setVideoAndAudioStatus(){
         if (videoVerifyBean.getBooleanVideochat()) {
             videoStatus = true;
             settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
@@ -243,7 +249,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingVideoIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setVideochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus);
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus,this);
                 }
                 break;
             }
@@ -260,7 +266,7 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                         settingAudioIv.setBackgroundResource(R.drawable.f1_setting_ok);
                         videoVerifyBean.setAudiochat(1);
                     }
-                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus);
+                    ModuleMgr.getCommonMgr().setVideochatConfig(videoStatus, audioStatus, this);
                 }
                 break;
             }
@@ -364,5 +370,15 @@ public class SettingAct extends BaseActivity implements OnClickListener {
                 handler.sendMessage(msg);
             }
         }.start();
+    }
+
+    @Override
+    public void onRequestComplete(HttpResponse response) {
+        if (response.isOk()){
+            if (settingVideoIv != null && settingAudioIv != null && SettingAct.this != null){
+                videoVerifyBean = ModuleMgr.getCommonMgr().getVideoVerify();
+                setVideoAndAudioStatus();
+            }
+        }
     }
 }
