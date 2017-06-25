@@ -1,9 +1,7 @@
 package com.juxin.predestinate.module.local.msgview.chatview.msgpanel;
 
 import android.content.Context;
-import android.text.Html;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,7 +50,6 @@ public class ChatPanelCustomHint extends ChatPanel {
             getContentView().setVisibility(View.GONE);
         }
         MyURLSpan.addClickToTextViewLink(App.getActivity(), text, hintContent, msg.getLWhisperID(), channel_uid);
-        text.setMovementMethod(LinkMovementMethod.getInstance());
         return true;
     }
 }

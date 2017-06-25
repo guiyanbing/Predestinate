@@ -176,7 +176,7 @@ public class CommonMgr implements ModuleBase {
     /**
      * 发送离线送达消息
      */
-    public void reqOfflineRecvedMsg(List<OffMsgInfo> uids,RequestComplete complete) {
+    public void reqOfflineRecvedMsg(List<OffMsgInfo> uids, RequestComplete complete) {
         OffMsgInfo[] uidlist = uids.toArray(new OffMsgInfo[uids.size()]);
         Map<String, Object> postParams = new HashMap<>();
         postParams.put("list", uidlist);// uids
@@ -195,7 +195,7 @@ public class CommonMgr implements ModuleBase {
      * 获取自己的音频、视频开关配置
      */
     public void requestVideochatConfig(final RequestComplete complete) {
-        ModuleMgr.getHttpMgr().reqGet(UrlParam.reqMyVideochatConfig, null, null, RequestParam.CacheType.CT_Cache_No, true, new RequestComplete() {
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqMyVideochatConfig, null, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
@@ -237,7 +237,6 @@ public class CommonMgr implements ModuleBase {
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.addVideoVerify, post_param, complete);
     }
 
-
     /**
      * 获取客服信息
      */
@@ -250,7 +249,6 @@ public class CommonMgr implements ModuleBase {
                 }
             }
         });
-
     }
 
     /**
@@ -1125,7 +1123,8 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 获取对方设备网络信息
-     * @param tuid 对方uid
+     *
+     * @param tuid     对方uid
      * @param complete 回调
      */
     public void getUserNetInfo(long tuid, RequestComplete complete) {
@@ -1136,9 +1135,10 @@ public class CommonMgr implements ModuleBase {
 
     /**
      * 设置用户设备网络信息
-     * @param net_tp 网络类型 //用户上网方式（2017-06-20）Wifi 1 4G 2 3G/2G 3 其它 4
+     *
+     * @param net_tp     网络类型 //用户上网方式（2017-06-20）Wifi 1 4G 2 3G/2G 3 其它 4
      * @param phone_info //用户设备描述
-     * @param complete 回调
+     * @param complete   回调
      */
     public void updateNetInfo(int net_tp, String phone_info, RequestComplete complete) {
         HashMap<String, Object> parms = new HashMap<>();
