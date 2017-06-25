@@ -192,7 +192,7 @@ public class VideoAudioChatHelper {
         }
 
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        if (userDetail.getGender() == 1) {
+        if (userDetail.isMan()) {
             boolean isTip = false;
             switch (type) {
                 case TYPE_VIDEO_CHAT:

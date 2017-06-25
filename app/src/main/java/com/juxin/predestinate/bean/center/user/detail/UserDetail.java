@@ -20,8 +20,8 @@ public class UserDetail extends UserInfo {
     private int voice = 1;          //1为开启语音，0为关闭
     private int videopopularity;    // 私密视频人气值
 
-    private int unlock_ycoin;//1为开启语音，0为关闭
-    private int unlock_vip;
+    private int unlock_ycoin;//控制Y币开关
+    private int unlock_vip;//控制VIP开关
 
     @Override
     public void parseJson(String s) {
