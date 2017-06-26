@@ -47,19 +47,19 @@ public class RecMessageMgr implements IMProxy.IMListener {
                 message = messageType.msgClass.newInstance();
                 onSaveSendUI(true, message, group, msgID, groupId, senderID, jsonStr, type);
             } else {
-                if (group) {//是群聊
-                    //如果是重复消息或小于当前ID的消息就扔掉
-                    if (!checkNewMsgGId(msgID) && msgID != -1) {
-                        PLogger.d("重复群聊消息：" + this.recMsgGId + "-" + msgID);
-                        return;
-                    }
-                } else {
-                    //如果是重复消息或小于当前ID的消息就扔掉
-                    if (!checkNewMsgId(msgID) && msgID != -1) {
-                        PLogger.d("重复私聊消息：" + this.recMsgId + "-" + msgID);
-                        return;
-                    }
-                }
+//                if (group) {//是群聊
+//                    //如果是重复消息或小于当前ID的消息就扔掉
+//                    if (!checkNewMsgGId(msgID) && msgID != -1) {
+//                        PLogger.d("重复群聊消息：" + this.recMsgGId + "-" + msgID);
+//                        return;
+//                    }
+//                } else {
+//                    //如果是重复消息或小于当前ID的消息就扔掉
+//                    if (!checkNewMsgId(msgID) && msgID != -1) {
+//                        PLogger.d("重复私聊消息：" + this.recMsgId + "-" + msgID);
+//                        return;
+//                    }
+//                }
                 message = new BaseMessage();
                 onSaveSendUI(false, message, group, msgID, groupId, senderID, jsonStr, type);
             }

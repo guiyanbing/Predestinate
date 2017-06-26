@@ -246,6 +246,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
+            addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             bundle.putInt("vc_girl_type", 1);
@@ -299,6 +300,7 @@ public class VideoAudioChatHelper {
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
+        bundle.putInt("vc_chat_from", 1);
         bundle.putLong("vc_girl_price", price);
         startRtcInitActivity(activity, bundle);
     }

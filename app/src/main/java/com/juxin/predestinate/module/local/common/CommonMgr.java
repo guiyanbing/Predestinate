@@ -1155,6 +1155,6 @@ public class CommonMgr implements ModuleBase {
     public void reqChatInfo(long tuid, RequestComplete complete) {
         HashMap<String, Object> parms = new HashMap<>();
         parms.put("tuid", tuid);
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqChatInfo, parms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqChatInfo, parms, complete);
     }
 }
