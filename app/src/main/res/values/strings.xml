@@ -508,6 +508,9 @@
     <string name="gift_click_to_receive">点击收礼</string>
     <string name="send_you">送你</string>
 
+    <string name="chat_invite_cancel">对方已取消对你的%s邀请</string>
+    <string name="chat_invite_reject">你拒绝了对方的%s邀请</string>
+
     <string name="all_friends">全部好友</string>
     <string name="level">亲密等级</string>
     <string name="intimate_member">亲密成员</string>
