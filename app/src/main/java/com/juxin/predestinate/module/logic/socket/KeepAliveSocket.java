@@ -140,7 +140,7 @@ public class KeepAliveSocket {
 
     public void sendPacket(NetData data) {
         if (packetWriter == null) {
-            PLogger.d("connected but writer not ready?");
+            PLogger.d("not connected or writer not ready?");
             if(listener != null){
                 listener.onSendPacketError(state, data);
             }
