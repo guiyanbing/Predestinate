@@ -19,6 +19,8 @@ public class InviteVideoMessage extends BaseMessage {
     private long price;//聊天单价
     private long timeout_tm;//超时时间，unix时间戳
 
+    private int send_count;//已经发了多少人(只有女性用户请发邀请后会收到)
+
     public InviteVideoMessage() {
         super();
     }
@@ -47,6 +49,18 @@ public class InviteVideoMessage extends BaseMessage {
         this.setInvite_id(object.optLong("vc_id"));
         this.setMedia_tp(object.optInt("media_tp"));
         this.setPrice(object.optLong("vc_price"));
+
+        return this;
+    }
+
+    public BaseMessage parseJsonTotal(String jsonStr) {
+        super.parseJson(jsonStr);
+        JSONObject object = getJsonObject(jsonStr);
+        this.setType(object.optInt("mtp")); //消息类型
+        this.setMsgDesc(object.optString("mct")); //消息内容
+        this.setTime(object.optLong("mt")); //消息时间 int64
+        this.setInvite_id(object.optLong("invite_id"));
+        this.setSend_count(object.optInt("send_count"));
 
         return this;
     }
@@ -114,6 +128,14 @@ public class InviteVideoMessage extends BaseMessage {
 
     public void setTimeout_tm(long timeout_tm) {
         this.timeout_tm = timeout_tm;
+    }
+
+    public int getSend_count() {
+        return send_count;
+    }
+
+    public void setSend_count(int send_count) {
+        this.send_count = send_count;
     }
 
     @Override

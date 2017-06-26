@@ -504,6 +504,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
             case BaseMessage.Alone_Invite_Video_MsgType://女用户单独视频邀请
                 setAloneInviteVideoMsg(message);
                 break;
+            case BaseMessage.VideoInviteTomen_MsgType://女性对男性的语音(视频)邀请送达男用户 此消息为群发视频/语音，送达人数对女用户的通知
+                setVideoInviteTomen(message);
+                break;
             default:
                 break;
         }
@@ -573,6 +576,19 @@ public class ChatListMgr implements ModuleBase, PObserver {
         //跳转视频
         VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                 videoMessage.getInvite_id(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(), videoMessage.getPrice());
+    }
+
+    /**
+     * 女性对男性的语音(视频)邀请送达男用户 此消息为群发视频/语音，送达人数对女用户的通知
+     *
+     * @param message
+     */
+    private void setVideoInviteTomen(BaseMessage message) {
+        if (message == null) return;
+        InviteVideoMessage videoMessage = new InviteVideoMessage();
+        videoMessage.parseJsonTotal(message.getJsonStr());
+        //向插件发送广播
+
     }
 
     /**
