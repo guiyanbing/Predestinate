@@ -162,7 +162,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                         if (type == 1) {
                             UIShow.showLookAtHerDlg(App.activity, whisperID, channelUid, inviteId);
                         } else {
-                            VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId);
+                            VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId, 1);
                         }
                     }
                     break;
