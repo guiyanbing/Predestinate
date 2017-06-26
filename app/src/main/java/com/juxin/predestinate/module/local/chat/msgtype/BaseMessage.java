@@ -709,7 +709,12 @@ public class BaseMessage implements IBaseMessage {
                 result = "[系统通知]";
                 break;
             case inviteVideoMass:
-                result = "[邀请视频]";
+                InviteVideoMessage inviteMessage = (InviteVideoMessage) msg;
+                if(inviteMessage.getMedia_tp() ==1){
+                    result = "[视频邀请]";
+                }else {
+                    result = "[语音邀请]";
+                }
                 break;
             case maxVersion:
                 result = "[你的版本过低，无法接收此类消息]";
