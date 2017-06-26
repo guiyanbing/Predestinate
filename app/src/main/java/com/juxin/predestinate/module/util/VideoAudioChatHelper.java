@@ -246,6 +246,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
+            addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             bundle.putInt("vc_girl_type", 1);
