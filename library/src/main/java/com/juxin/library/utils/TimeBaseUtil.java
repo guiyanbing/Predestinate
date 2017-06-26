@@ -313,7 +313,7 @@ public class TimeBaseUtil {
 
     /**
      * 格式化秒钟为天时分
-     *
+     * 封禁弹框时间
      * @param seconds
      */
     public static String formatSecondsToDate3(int seconds) {
