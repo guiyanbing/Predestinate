@@ -13,6 +13,7 @@ import com.juxin.predestinate.bean.center.user.light.UserInfoLightweight;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.GiftMessage;
 import com.juxin.predestinate.module.local.chat.msgtype.InviteVideoMessage;
+import com.juxin.predestinate.module.local.chat.msgtype.TextMessage;
 import com.juxin.predestinate.module.local.msgview.chatview.ChatPanel;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -124,6 +125,13 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     tvTime.setText(getContext().getString(R.string.lost_efficacy));
                     llReject.setVisibility(View.GONE);
                     tvConnect.setText(R.string.call_back);
+                    String desc = "";
+                    if (type == 1){
+                        desc = getContext().getString(R.string.chat_invite_cancel, getContext().getString(R.string.video));
+                    }else if (type == 2){
+                        desc = getContext().getString(R.string.chat_invite_cancel, getContext().getString(R.string.audio));
+                    }
+                    insertHitTips(desc);
                 }
             }
         }
@@ -138,6 +146,13 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     tvTime.setText(getContext().getString(R.string.lost_efficacy));
                     llReject.setVisibility(View.GONE);
                     tvConnect.setText(R.string.call_back);
+                    String desc = "";
+                    if (type == 1){
+                        desc = getContext().getString(R.string.chat_invite_reject, getContext().getString(R.string.video));
+                    }else if (type == 2){
+                        desc = getContext().getString(R.string.chat_invite_reject, getContext().getString(R.string.audio));
+                    }
+                    insertHitTips(desc);
                 }
                 break;
             case ll_invite_connect:
@@ -157,6 +172,18 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     UIShow.showInvitaExpiredDlg(activity, whisperID, channelUid, mInviteVideoMessage.getMedia_tp(), (int) mInviteVideoMessage.getPrice());
                 break;
         }
+    }
+
+    private void insertHitTips(String desc){
+        // 往数据库插一条14提示消息，标识已接受礼物
+        TextMessage textMessage = new TextMessage();
+        textMessage.setWhisperID(whisperID+"");
+        textMessage.setSendID(App.uid);
+        textMessage.setMsgDesc(desc);
+        textMessage.setcMsgID(BaseMessage.getCMsgID());
+        textMessage.setType(BaseMessage.BaseMessageType.hint.getMsgType());
+        textMessage.setJsonStr(textMessage.getJson(textMessage));
+        ModuleMgr.getChatMgr().onLocalReceiving(textMessage);
     }
 
     private boolean isHasDiamond() {
