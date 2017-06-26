@@ -154,7 +154,7 @@ public class VideoAudioChatHelper {
     /**
      * 邀请对方音频或视频聊天
      *
-     * @param inviteId   邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     * @param inviteId 邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
      */
     public void acceptInviteVAChat(long inviteId) {
         LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
@@ -169,7 +169,7 @@ public class VideoAudioChatHelper {
                             PSP.getInstance().put("ISINVITE", false);
                             LoadingDialog.closeLoadingDialog();
                         }
-                    },20000);
+                    }, 20000);
                 } else {
                     LoadingDialog.closeLoadingDialog();
                     PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? App.getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
@@ -236,6 +236,11 @@ public class VideoAudioChatHelper {
     }
 
     private void handleSingleInvite(final Context context, HttpResponse response, final long dstUid, final int type) {
+        int price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getAudioPrice();
+        if (type == TYPE_VIDEO_CHAT) {
+            price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
+        }
+
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
@@ -243,6 +248,7 @@ public class VideoAudioChatHelper {
             int msgVer = resJo.optInt("confer_msgver");
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             bundle.putInt("vc_girl_type", 1);
+            bundle.putLong("vc_girl_price", price);
             startGroupInviteAct(context, bundle);
             return;
         }
@@ -269,7 +275,6 @@ public class VideoAudioChatHelper {
         if (type == TYPE_VIDEO_CHAT) {
             price = ModuleMgr.getCenterMgr().getMyInfo().getChatInfo().getVideoPrice();
         }
-
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
@@ -304,7 +309,7 @@ public class VideoAudioChatHelper {
      * @param dstUid   对方UID
      * @param chatType 1视频，2音频
      */
-    public void openInvitedDirect(Activity activity, long vcId, long dstUid, int chatType,String vc_channel_key) {
+    public void openInvitedDirect(Activity activity, long vcId, long dstUid, int chatType, String vc_channel_key) {
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
         bundle.putInt("vc_chat_from", 2);
         bundle.putString("vc_channel_key", vc_channel_key);
