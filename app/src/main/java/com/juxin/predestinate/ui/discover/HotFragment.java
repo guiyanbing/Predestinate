@@ -100,11 +100,11 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
             list.parseJson(response.getResponseString());
             if (list.getHotLists().size() != 0) {
                 isRef = list.isRef();
-                if (isRef && page == 1 && list.getHotLists().size() < cachDataSize) {
-                    isNeedReq = false;
-                } else {
-                    isNeedReq = true;
-                }
+//                if (isRef && page == 1 && list.getHotLists().size() < cachDataSize) {
+//                    isNeedReq = false;
+//                } else {
+//                    isNeedReq = true;
+//                }
 
                 PLogger.d("HotFragment======》  --- isNeedReq = " + isNeedReq + " --- isRef = " + isRef);
 
@@ -170,7 +170,7 @@ public class HotFragment extends BaseFragment implements RequestComplete, CardsV
             int position = index % viewData.size();
             nowPosition = position;
             //判断是否需要请求数据
-            if (position + cachDataSize >= viewData.size() && isNeedReq && isCanReq) {
+            if (position + cachDataSize >= viewData.size() && /*isNeedReq &&*/ isCanReq) {
                 loadMoreData();
             }
         }
