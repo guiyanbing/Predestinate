@@ -35,7 +35,8 @@ web.urlMethod = {
   SetTurnConfig: 'xs/minigame/SetTurnConfig',
   TurntableStart: 'xs/minigame/Rotate',
   QunCount: '/xs/discovery/QunCount',
-  VCGroupCount:'/xs/message/VCGroupCount'
+  VCGroupCount:'/xs/message/VCGroupCount',
+  GetVideoChatConfig: 'xs/message/GetVideochatConfig'
 };
 
 web.pages = {

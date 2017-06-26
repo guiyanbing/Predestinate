@@ -116,6 +116,28 @@ public class ChatInfo extends BaseData {
             this.videoConfig.parseJson(job.optJSONObject("videochatconfig").toString());
         }
 
+        public String netTp2Str(int netType) {
+            String tempType;
+            switch (netType) {
+                case 1:
+                    tempType = "Wifi";
+                    break;
+                case 2:
+                    tempType = "4G";
+                    break;
+                case 3:
+                    tempType = "3G/2G";
+                    break;
+                case 4:
+                    tempType = "其它";
+                    break;
+                default:
+                    tempType = "其它";
+                    break;
+            }
+            return tempType;
+        }
+
         public int getAge() {
             return age;
         }
