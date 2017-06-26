@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 /**
  * Created by zm on 2017/5/16
  */
-public class IDCardAuthenticationAct extends BaseActivity implements View.OnClickListener,RequestComplete{
+public class IDCardAuthenticationAct extends BaseActivity implements View.OnClickListener, RequestComplete {
 
     private TextView tvTitleInfo;
     private EditText eitName;
@@ -43,7 +43,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private EditText eitBankBranch;
     private TextView tvBankCardId;
     private TextView tvKeFu;
-    private LinearLayout llOpenBank,llBankBranch;
+    private LinearLayout llOpenBank, llBankBranch;
     private RadioButton rbZhi;
     private RadioButton rbYin;
     private AddPhotoView apvFrontPhoto;
@@ -51,13 +51,14 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private AddPhotoView apvHandPhoto;
     private LinearLayout llKeFu;
 
-    private String cardName,cardLocal,cardLocalBranch,cardIdCard,cardNum;
-    private String strImgFront,strImgTail,strImgHand;
+    private String cardName, cardLocal, cardLocalBranch, cardIdCard, cardNum;
+    private String strImgFront, strImgTail, strImgHand;
 
-    private int paytype = 2;
+    private int paytype = 2; //1 银行卡 2支付宝
     private int authIDCard = 105;
     private IdCardVerifyStatusInfo mIdCardVerifyStatusInfo;
-    private LinearLayout llAudit,llCertification;
+    private LinearLayout llAudit, llCertification;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +93,12 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         ContactBean contactBean = ModuleMgr.getCommonMgr().getContactBean();
         tvKeFu.setText(contactBean.getTel());
         setBg();
-        if (mIdCardVerifyStatusInfo.getStatus() == 1){
+        if (mIdCardVerifyStatusInfo.getStatus() == 1) {
             llAudit.setVisibility(View.VISIBLE);
-        }else if (mIdCardVerifyStatusInfo.getStatus() == 2){
+        } else if (mIdCardVerifyStatusInfo.getStatus() == 2) {
             llCertification.setVisibility(View.VISIBLE);
         }
-        if (mIdCardVerifyStatusInfo.getPaytype() == 1){
+        if (mIdCardVerifyStatusInfo.getPaytype() == 1) {
             rbYin.setChecked(true);
             rbZhi.setChecked(false);
             llOpenBank.setVisibility(View.VISIBLE);
@@ -121,7 +122,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         eitIdCard.setText(mIdCardVerifyStatusInfo.getId_num());
         eitBankCardId.setText(mIdCardVerifyStatusInfo.getAccountnum());
         if (!TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_front_img_small()) && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getId_back_img_small())
-                && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getFace_img_small())){
+                && !TextUtils.isEmpty(mIdCardVerifyStatusInfo.getFace_img_small())) {
             apvFrontPhoto.setImg(mIdCardVerifyStatusInfo.getId_front_img_small());
             apvTailPhoto.setImg(mIdCardVerifyStatusInfo.getId_back_img_small());
             apvHandPhoto.setImg(mIdCardVerifyStatusInfo.getFace_img_small());
@@ -131,7 +132,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     private void initTitle() {
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.txt_authtype_id));
-        if (mIdCardVerifyStatusInfo.getStatus() != 1 && mIdCardVerifyStatusInfo.getStatus() != 2){
+        if (mIdCardVerifyStatusInfo.getStatus() != 1 && mIdCardVerifyStatusInfo.getStatus() != 2) {
             setTitleRight(getString(R.string.title_right_submit), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -199,8 +200,15 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
                         PToast.showShort(getString(R.string.please_upload_the_idcard_handle));
                         return;
                     }
-                    StatisticsUser.meauthIdSubmit(cardName,cardIdCard,paytype,cardLocal,cardLocalBranch,cardNum,cardNum,strImgFront,strImgTail,strImgHand);
-                    ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum, cardLocal, cardLocalBranch, strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
+
+
+                    //当是支付宝的时候 开户行 支行信息不传
+                    StatisticsUser.meauthIdSubmit(cardName, cardIdCard, paytype,
+                            paytype == 2 ? "" : cardLocal, paytype == 2 ? "" : cardLocalBranch,
+                            cardNum, cardNum, strImgFront, strImgTail, strImgHand);
+                    ModuleMgr.getCommonMgr().userVerify(cardIdCard, cardName, cardNum,
+                            paytype == 2 ? "" : cardLocal, paytype == 2 ? "" : cardLocalBranch,
+                            strImgFront, strImgTail, strImgHand, paytype, IDCardAuthenticationAct.this);
                 }
             });
         }
@@ -227,29 +235,29 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     }
 
     // 验证手机号码
-    public boolean checkMobileNumber(String mobileNumber){
+    public boolean checkMobileNumber(String mobileNumber) {
 //        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(14[57])|(17[0])|(17[6-8])|(18[0,0-9]))\\d{8}$");
         boolean flag = false;
-        try{
+        try {
             Pattern regex = Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
             Matcher matcher = regex.matcher(mobileNumber);
             flag = matcher.matches();
-        }catch(Exception e){
+        } catch (Exception e) {
             flag = false;
         }
         return flag;
     }
 
     //验证邮箱
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
 //        "[a-zA-Z_]{1,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";"\\w+(\\.\\w)*+[@,＠]()+\\w+(\\.\\w{2,3}){1,3}"
         boolean flag = false;
-        try{
+        try {
             String check = "\\w+(\\.\\w)*[@,＠]\\w+(\\.\\w{2,3}){1,3}";
             Pattern regex = Pattern.compile(check);
             Matcher matcher = regex.matcher(email);
             flag = matcher.matches();
-        }catch(Exception e){
+        } catch (Exception e) {
             flag = false;
         }
         return flag;
@@ -257,7 +265,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.id_card_ll_kefu:
 //                UIShow.showQQService(this);
                 break;
@@ -290,7 +298,7 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
         }
     }
 
-    private void setBg(){
+    private void setBg() {
         Drawable drawableFirst = getResources().getDrawable(R.drawable.f1_id_card_selector);
         drawableFirst.setBounds(0, 0, UIUtil.dp2px(17), UIUtil.dp2px(17));//第一0是距左右边距离，第二0是距上下边距离，第三69长度,第四宽度
         Drawable drawable = getResources().getDrawable(R.drawable.f1_id_card_selector);
@@ -303,10 +311,10 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == authIDCard) {
-            if (data != null){
-                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK,0);
+            if (data != null) {
+                int back = data.getIntExtra(IDCardAuthenticationSucceedAct.IDCARDBACK, 0);
 //                                Log.e("TTTTTTTTTTTTTPPP000", "zhixing" + back);
-                if (back == 1){
+                if (back == 1) {
                     //                    Log.e("TTTTTTTTTTTTTPPP111","zhixing");
                     data.putExtra(IDCardAuthenticationSucceedAct.IDCARDBACK, 1);
                     setResult(RESULT_OK, data);
@@ -318,11 +326,11 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
 
     @Override
     public void onRequestComplete(HttpResponse response) {
-        if (response.isOk()){
-            UIShow.showIDCardAuthenticationSucceedAct(this,authIDCard);
+        if (response.isOk()) {
+            UIShow.showIDCardAuthenticationSucceedAct(this, authIDCard);
             ModuleMgr.getCenterMgr().getMyInfo().setIdcard_validation(1);
         }
 //        Log.e("TTTTTTTTTTTTTTTMMM",response.getResponseString()+"|||");
-        PToast.showShort(response.getMsg()+"");
+        PToast.showShort(response.getMsg() + "");
     }
 }
