@@ -43,7 +43,7 @@
 - [封号](http://123.59.187.33:8681/test/TestPushBan?tuid=1002&mct=由于投诉已封号&unban_tm=1497931571)
 - [推送消息邀请](http://123.59.187.33:8681/test/TestPushMsgInviteTome?fuid=1001&tuid=1002&invite_id=1000&send_count=20)
 - [限制登录](http://123.59.187.33:8681/userinfo/AddForbiddenGet?uid=110872731&action=1&duration=30&desc=由于您被多人举报，被限制登录)
-
+- [开通三天后免费聊天](http://123.59.187.33:8681/test/SetFreeChatUser?uid=110872452&unlock_ycoin=1&unlock_vip=1)
 
 
 ### 2. 其他
