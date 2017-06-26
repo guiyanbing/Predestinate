@@ -585,6 +585,13 @@ public class ChatMgr implements ModuleBase {
 
     private void sendMessageRefreshYcoin() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        if(userDetail.isUnlock_ycoin()) {//不需要Y币
+            return;
+        }
+        if(userDetail.isUnlock_vip() && userDetail.getYcoin() > 0) {//不需要VIP
+            ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
+            return;
+        }
         if ((userDetail.isVip() && userDetail.getYcoin() > 0) || (!userDetail.isVip() && userDetail.getYcoin() > 79)) {
             if (userDetail.isVip())
                 ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
