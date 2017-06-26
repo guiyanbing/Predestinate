@@ -176,10 +176,10 @@ public class CommonMgr implements ModuleBase {
     /**
      * 发送离线送达消息
      */
-    public void reqOfflineRecvedMsg(List<OffMsgInfo> uids, RequestComplete complete) {
-        OffMsgInfo[] uidlist = uids.toArray(new OffMsgInfo[uids.size()]);
+    public void reqOfflineRecvedMsg(List<OffMsgInfo> msgs, RequestComplete complete) {
+        OffMsgInfo[] uidlist = msgs.toArray(new OffMsgInfo[msgs.size()]);
         Map<String, Object> postParams = new HashMap<>();
-        postParams.put("list", uidlist);// uids
+        postParams.put("list", uidlist);// msgs
 
         ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOfflineRecvedMsg, postParams, complete);
     }
