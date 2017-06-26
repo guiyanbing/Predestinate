@@ -36,7 +36,6 @@ public class BaseMessage implements IBaseMessage {
         autoUpdateHtml(TextMessage.class, 28),//自动升级提示
         sysNotice(SysNoticeMessage.class, 29),//系统通知消息
         inviteVideoMass(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
-      //  aloneInviteVideo(AloneInviteVideoMessage.class, 31),//女用户单独视频邀请
         maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
 

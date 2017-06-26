@@ -183,14 +183,17 @@ public class CustomBaseMailItem extends LinearLayout implements View.OnClickList
 
             case 1:
                 item_last_status.setText("已发送");
+                item_last_status.setBackgroundResource(R.drawable.f1_mail_item_delivery);
                 break;
             case 3: // 发送中
                 long time = msgData.getCurrentTime() - msgData.getTime();
                 if (time <= 90000) {
                     item_last_status.setText("发送中");
+                    item_last_status.setBackgroundResource(R.drawable.f1_mail_item_delivery);
                     break;
                 }
                 item_last_status.setText("失败");
+                item_last_status.setBackgroundResource(R.drawable.f1_mail_item_fall);
                 break;
             case 11: // 已读
                 item_last_status.setText("已读");
