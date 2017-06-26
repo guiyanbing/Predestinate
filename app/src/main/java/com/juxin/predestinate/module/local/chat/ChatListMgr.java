@@ -585,11 +585,24 @@ public class ChatListMgr implements ModuleBase, PObserver {
      */
     private void setVideoInviteTomen(BaseMessage message) {
         if (message == null) return;
-        InviteVideoMessage videoMessage = new InviteVideoMessage();
-        videoMessage.parseJsonTotal(message.getJsonStr());
+        InviteVideoMessage inviteMessage = new InviteVideoMessage();
+        inviteMessage.parseJsonTotal(message.getJsonStr());
         //向插件发送广播
-
+        sendGroupInviteCount(inviteMessage);
     }
+
+    /**
+     * 群发已邀请人数广播
+     */
+    private void sendGroupInviteCount(InviteVideoMessage message) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mt", 10);
+        params.put("vc_invite_count", message.getSend_count());
+        Intent intent = new Intent("com.juxin.action.plugin");
+        intent.putExtra("extra_json", JSON.toJSONString(params));
+        App.context.sendBroadcast(intent);
+    }
+
 
     /**
      * 红包消息
