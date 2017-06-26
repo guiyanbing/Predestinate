@@ -379,6 +379,9 @@ public class NetData implements Parcelable {
         dest.writeInt(this.num1);
         dest.writeInt(this.num2);
         dest.writeLong(this.messageId);
+        if(content == null && num1 ==0 && num2 == 0) {
+            dest.writeByteArray(this.noEncryptContent);
+        }
     }
 
     protected NetData(Parcel in) {
@@ -389,6 +392,10 @@ public class NetData implements Parcelable {
         this.num1 = in.readInt();
         this.num2 = in.readInt();
         this.messageId = in.readLong();
+        if(content == null && num1 ==0 && num2 == 0){
+            noEncryptContent = new byte[length];
+            in.readByteArray(noEncryptContent);
+        }
     }
 
     public static final Parcelable.Creator<NetData> CREATOR = new Parcelable.Creator<NetData>() {

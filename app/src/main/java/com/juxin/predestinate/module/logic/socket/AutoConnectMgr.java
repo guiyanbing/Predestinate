@@ -221,18 +221,18 @@ public class AutoConnectMgr implements KeepAliveSocket.SocketConnectionListener 
      * @return NetData socket发送消息
      */
     private NetData getHeartbeat(int heartbeatType) {
-        if (lastRandomNum == 0) {
-            newRandomNum = PSP.getInstance().getInt("Net_Random_Last", new Random(System.currentTimeMillis()).nextInt());
-            lastRandomNum = newRandomNum;
-        } else {
-            lastRandomNum = newRandomNum;
-            newRandomNum = new Random(System.currentTimeMillis()).nextInt();
-            PSP.getInstance().put("Net_Random_Last", newRandomNum);
-        }
         NetData heartbeatData;
         if(heartbeatType == TCPConstant.MSG_ID_HEART_BEAT3) {
             heartbeatData = new NetData(uid, heartbeatType, new byte[]{PSP.getInstance().getBoolean(Constant.APP_IS_FOREGROUND, false) ? (byte) 1 : (byte) 2});
         }else {
+            if (lastRandomNum == 0) {
+                newRandomNum = PSP.getInstance().getInt("Net_Random_Last", new Random(System.currentTimeMillis()).nextInt());
+                lastRandomNum = newRandomNum;
+            } else {
+                lastRandomNum = newRandomNum;
+                newRandomNum = new Random(System.currentTimeMillis()).nextInt();
+                PSP.getInstance().put("Net_Random_Last", newRandomNum);
+            }
             heartbeatData = new NetData(uid, heartbeatType, lastRandomNum, newRandomNum);
         }
         PLogger.d("getHeartbeat: ---心跳--->类型：" + heartbeatType + "/" + heartbeatData.toString());
