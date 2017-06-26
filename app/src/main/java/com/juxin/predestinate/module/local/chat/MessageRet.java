@@ -11,6 +11,7 @@ public class MessageRet extends BaseData {
 
     public static final int MSG_CODE_BALANCE_INSUFFICIENT = -1;//余额不足或者不是VIP
     public static final int MSG_CODE_PULL_BLACK = -2;//已拉黑
+    public static final int MSG_CODE_BALANCE_Y = -4;//Y币不够了
     public static final int MSG_CODE_OK = 0;//成功
 
     //{"d":3302,"msg_id":1166518,"s":0,"status":"ok","tm":1498109958}

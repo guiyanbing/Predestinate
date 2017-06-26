@@ -313,10 +313,11 @@ public class TimeBaseUtil {
 
     /**
      * 格式化秒钟为天时分
-     *
+     * 封禁弹框时间
      * @param seconds
      */
     public static String formatSecondsToDate3(int seconds) {
+        int tempS = seconds;
         int oneDayToSeconds = 86400;
         int oneHourToSeconds = 3600;
         int oneMinuteToSeconds = 60;
@@ -334,6 +335,9 @@ public class TimeBaseUtil {
         }
         if (minute != 0) {
             str.append(minute + "分钟");
+        }
+        if(tempS < 60) {
+            str.append("1分钟");
         }
         return str.toString();
     }
