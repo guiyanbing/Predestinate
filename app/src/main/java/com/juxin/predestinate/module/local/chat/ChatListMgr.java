@@ -568,7 +568,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()) {
 
             //充值弹框
-            UIShow.showBottomChatDiamondDlg(App.getContext(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(),
+            UIShow.showBottomChatDiamondDlg(App.getActivity(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(),
                     (int) videoMessage.getPrice(), true, videoMessage.getInvite_id());
             return;
         }

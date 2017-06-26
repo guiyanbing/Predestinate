@@ -1354,7 +1354,6 @@ public class UIShow {
      * @param price    通信价格
      * @param isAloneInvite      是否是单邀
      * @param videoID            vc_id
-     * @param vc_channel_key     vc_channel_key
      */
     public static void showBottomChatDiamondDlg(Context context, long otherID, int chatType, int price,boolean isAloneInvite, long videoID) {
         if (chatDialog == null) chatDialog = new BottomChatDiamondDlg();
