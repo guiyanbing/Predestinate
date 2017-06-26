@@ -107,7 +107,6 @@ public class Statistics {
 
         LocationMgr.PointD pointD = LocationMgr.getInstance().getPointD();
         String province = pointD.province;
-        if (TextUtils.isEmpty(province) || "null".equals(province)) return;
 
         Map<String, Object> requestObject = new HashMap<>();
         requestObject.put("longitude", pointD.longitude);
