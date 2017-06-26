@@ -3,11 +3,13 @@ package com.juxin.predestinate.bean.my;
 
 import com.juxin.predestinate.bean.net.BaseData;
 
+import java.io.Serializable;
+
 /**
  * 离线送达信息
  * Created by zm on 17/3/20.
  */
-public class OffMsgInfo extends BaseData {
+public class OffMsgInfo extends BaseData implements Serializable {
 
     private long uid;
     private long msg_id;
@@ -50,7 +52,7 @@ public class OffMsgInfo extends BaseData {
 
     @Override
     public String toString() {
-        return "OffMsgInfo{" +
+        return "{" +
                 "uid=" + uid +
                 ", msg_id=" + msg_id +
                 ", mtp=" + mtp +
