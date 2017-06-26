@@ -317,6 +317,7 @@ public class TimeBaseUtil {
      * @param seconds
      */
     public static String formatSecondsToDate3(int seconds) {
+        int tempS = seconds;
         int oneDayToSeconds = 86400;
         int oneHourToSeconds = 3600;
         int oneMinuteToSeconds = 60;
@@ -334,6 +335,9 @@ public class TimeBaseUtil {
         }
         if (minute != 0) {
             str.append(minute + "分钟");
+        }
+        if(tempS < 60) {
+            str.append("还剩1分钟");
         }
         return str.toString();
     }
