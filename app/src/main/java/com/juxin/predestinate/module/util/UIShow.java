@@ -755,7 +755,7 @@ public class UIShow {
                         if (payGood.isOK()) {
                             payGood.setPay_id(orderID);
                             Intent intent = new Intent(activity, PayListAct.class);
-                            intent.putExtra("payGood", (Serializable) payGood);
+                            intent.putExtra("payGood", payGood);
                             activity.startActivityForResult(intent, Constant.REQ_PAYLISTACT);
                         } else {
                             PToast.showShort(response.getMsg());
