@@ -337,7 +337,7 @@ public class TimeBaseUtil {
             str.append(minute + "分钟");
         }
         if(tempS < 60) {
-            str.append("还剩1分钟");
+            str.append("1分钟");
         }
         return str.toString();
     }

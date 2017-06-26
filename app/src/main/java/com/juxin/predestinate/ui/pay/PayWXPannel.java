@@ -22,12 +22,9 @@ public class PayWXPannel extends BasePayPannel {
         payWeixinUtils = new PayWeixinUtils(activity);
     }
 
-
     @Override
     public void onClick(View v) {
         super.onClick(v);
         payWeixinUtils.onPayment(getPayGood());
     }
-
-
 }

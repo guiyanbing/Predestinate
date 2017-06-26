@@ -1,13 +1,11 @@
 package com.juxin.predestinate.ui.pay;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
@@ -17,10 +15,9 @@ import com.juxin.predestinate.module.local.mail.MailSpecialID;
 import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
+import com.juxin.predestinate.module.logic.config.Constant;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.user.auth.PhoneVerifyAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
-
 import java.util.List;
 
 /**
@@ -33,7 +30,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public static boolean bPayOkFlag;
 
     private PayGood payGood;
-    private BasePayPannel payAlipayPannel, payWXPannel, payPhonecardPannel, payAlipayWebPannel;
+    private BasePayPannel payAlipayPannel, payWXPannel, payPhonecardPannel;
 
     private TextView paylist_help_txt;
     private boolean help_txt = true;
@@ -59,11 +56,9 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
 
         paylist_title.setText(Html.fromHtml("订单信息：" + payGood.getPay_name() + " " + "<font color='#fd6c8e'>" + payGood.getPay_money() + "</font>" + " 元"));
 
-
         LinearLayout pay_listView = (LinearLayout) findViewById(R.id.paytype_list);
         payAlipayPannel = new PayAlipayPannel(this, payGood);
         payWXPannel = new PayWXPannel(this, payGood);
-        payAlipayWebPannel = new PayAlipayWebPannel(this, payGood);
         payPhonecardPannel = new PayPhoneCardPannel(this, payGood);
 
         PayTypeList payTypeList = ModuleMgr.getCommonMgr().getCommonConfig().getPayTypeList();
@@ -89,7 +84,6 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         paylist_help_txt = (TextView) findViewById(R.id.paylist_help_txt);
         findViewById(R.id.paylist_help).setOnClickListener(this);
 
-        //pay_listView.addView(payAlipayWebPannel.getContentView());
         pay_listView.addView(payPhonecardPannel.getContentView());
     }
 
@@ -118,4 +112,10 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         //通知刷个人资料  在
         MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
     }
+
+    public void result() {
+        setResult(Constant.BACK_PAYLISTACT);
+        this.finish();
+    }
+
 }

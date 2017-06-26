@@ -69,13 +69,14 @@ public class Constant {
     public static final int GOOD_DIAMOND = 1;    //钻石
     public static final int GOOD_VIP = 2;        //VIP服务
     public static final int REQ_PAYLISTACT = 0x15;       //支付请求码
-    public static final int PAY_WEIXIN = 0x16;// 微信支付
-    public static final int PAYMENTACT = 0x17;
-    public static final int PAY_VOICE_OK = 0x18; // 银联语音支付
-    public static final int PAY_VOICE_DETAIL = 0x19; // 银联语音支付
-    public static final int PAY_VOICEACT = 0x20;// 银联语音支付
-    public static final int PAYMENTACT_TO = 0x21;// 跳转支付宝网页
-    public static final int PAY_ALIPAY_WEB_ACT = 0x22;// 支付宝网页支付
+    public static final int BACK_PAYLISTACT = 0x16;// 支付返回
+    public static final int PAY_WEIXIN = 0x17;// 微信支付
+    public static final int PAYMENTACT = 0x18;
+    public static final int PAY_VOICE_OK = 0x19; // 银联语音支付
+    public static final int PAY_VOICE_DETAIL = 0x20; // 银联语音支付
+    public static final int PAY_VOICEACT = 0x21;// 银联语音支付
+    public static final int PAYMENTACT_TO = 0x22;// 跳转支付宝网页
+    public static final int PAY_ALIPAY_WEB_ACT = 0x23;// 支付宝网页支付
 
     //============= 打招呼类型 start =============
     /**

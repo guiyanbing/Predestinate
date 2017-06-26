@@ -299,6 +299,7 @@ public class VideoAudioChatHelper {
      */
     public void openInvitedActivity(Activity activity, long vcId, long dstUid, int chatType, long price) {
         Bundle bundle = newBundle(vcId, dstUid, 2, chatType, 20);
+        bundle.putInt("vc_chat_from", 1);
         bundle.putLong("vc_girl_price", price);
         startRtcInitActivity(activity, bundle);
     }
