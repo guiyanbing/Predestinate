@@ -625,6 +625,9 @@ public class ChatListMgr implements ModuleBase, PObserver {
         InviteVideoMessage mInviteVideoMessage = (InviteVideoMessage) message;
         CountDownTimerUtil util = CountDownTimerUtil.getInstance();
         long timeCount = mInviteVideoMessage.getTimeout_tm() - ModuleMgr.getAppMgr().getSecondTime();//计时时间
+        if (timeCount > 120){
+            timeCount = 120;
+        }
         if (timeCount > 0 && !util.isTimingTask(mInviteVideoMessage.getInvite_id()) && !util.isTimingTask(mInviteVideoMessage.getInvite_id())) {
             util.addTimerTask(mInviteVideoMessage.getInvite_id(),timeCount);
         }
