@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
 import com.juxin.library.observe.MsgMgr;
@@ -128,6 +129,7 @@ public class VideoAudioChatHelper {
     public void setGroupInviteStatus(boolean isGroupInvite) {
         this.isGroupInvite = isGroupInvite;
     }
+
     public boolean getGroupInviteStatus() {
         return isGroupInvite;
     }
@@ -439,6 +441,9 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
+
+            PLogger.d("susu---" + vcID);
+
             addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
             MsgMgr.getInstance().delay(new Runnable() {
