@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.juxin.library.image.ImageLoader;
-import com.juxin.library.log.PLogger;
 import com.juxin.library.log.PToast;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.hot.UserInfoHot;
@@ -47,14 +46,15 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
 
     @Override
     public int getCount() {
-        if (isNeedrReq()) {
-            return datas.size();
-        } else {
-            if (datas.size() == 1) {
-                return datas.size();
-            }
-            return Integer.MAX_VALUE;
-        }
+//        if (isNeedrReq()) {
+//            return datas.size();
+//        } else {
+//            if (datas.size() == 1) {
+//                return datas.size();
+//            }
+//            return Integer.MAX_VALUE;
+//        }
+        return datas.size();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CardsAdapter extends BaseCardAdapter<UserInfoHot> {
 
 
         final UserInfoHot infoHot = datas.get(position);
-        PLogger.d("onBindData=====> infoHot == " + infoHot.toString());
+//        PLogger.d("onBindData=====> infoHot == " + infoHot.toString());
         if (cardview != null) {
             vh = new ViewHoder(cardview);
             cardview.setTag(vh);
