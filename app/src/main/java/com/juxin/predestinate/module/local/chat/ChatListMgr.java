@@ -387,22 +387,22 @@ public class ChatListMgr implements ModuleBase, PObserver {
         dbCenter.getCenterFLetter().queryLetterList().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<BaseMessage>>() {
-            @Override
-            public void onCompleted() {
-            }
+                    @Override
+                    public void onCompleted() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(List<BaseMessage> baseMessages) {
-                this.unsubscribe();
-                PLogger.d("getWhisperList=un===2" + baseMessages.size());
-                updateListMsg(baseMessages);
-            }
-        });
+                    @Override
+                    public void onNext(List<BaseMessage> baseMessages) {
+                        this.unsubscribe();
+                        PLogger.d("getWhisperList=un===2" + baseMessages.size());
+                        updateListMsg(baseMessages);
+                    }
+                });
     }
 
     @Override
@@ -520,18 +520,18 @@ public class ChatListMgr implements ModuleBase, PObserver {
         VideoMessage videoMessage = (VideoMessage) message;
         if (videoMessage.getVideoTp() == 1) {
             // 女性用户且处于群发状态, 直接打开聊天界面
-            if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() && VideoAudioChatHelper.getInstance().getGroupInviteStatus()){
+            if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() && VideoAudioChatHelper.getInstance().getGroupInviteStatus()) {
                 sendGroupAcceptMsg(videoMessage);
                 return;
             }
             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
                     videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), 0);
         } else {
-            boolean isInvite = PSP.getInstance().getBoolean("ISINVITE",false);
-            if (isInvite && videoMessage.getVideoTp() == 2){
+            boolean isInvite = PSP.getInstance().getBoolean("ISINVITE", false);
+            if (isInvite && videoMessage.getVideoTp() == 2) {
                 VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
-                        videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(),videoMessage.getVc_channel_key());
-                PSP.getInstance().put("ISINVITE",false);
+                        videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), videoMessage.getVc_channel_key());
+                PSP.getInstance().put("ISINVITE", false);
                 return;
             }
 
@@ -562,10 +562,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (message == null) return;
         InviteVideoMessage videoMessage = new InviteVideoMessage();
         videoMessage.parseJs(message.getJsonStr());
-        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()){
+        if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()) {
+
             //充值弹框
-            UIShow.showBottomChatDiamondDlg(App.getContext(),videoMessage.getLWhisperID(),videoMessage.getMedia_tp(),
-                    (int) videoMessage.getPrice(),true,videoMessage.getInvite_id());
+            UIShow.showBottomChatDiamondDlg(App.getContext(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(),
+                    (int) videoMessage.getPrice(), true, videoMessage.getInvite_id());
             return;
         }
 
@@ -590,6 +591,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 系统消息
+     *
      * @param message
      */
     private void setSystemMsg(BaseMessage message) {
@@ -605,6 +607,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 送达消息Msg_RecvedType
+     *
      * @param message
      */
     private void setMsgRecvedType(BaseMessage message) {
@@ -616,6 +619,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
 
     /**
      * 语音(视频)邀请送达男用户
+     *
      * @param message
      */
     private void setInviteVideoDelivery(BaseMessage message) {
@@ -625,11 +629,11 @@ public class ChatListMgr implements ModuleBase, PObserver {
         InviteVideoMessage mInviteVideoMessage = (InviteVideoMessage) message;
         CountDownTimerUtil util = CountDownTimerUtil.getInstance();
         long timeCount = mInviteVideoMessage.getTimeout_tm() - ModuleMgr.getAppMgr().getSecondTime();//计时时间
-        if (timeCount > 120){
+        if (timeCount > 120) {
             timeCount = 120;
         }
         if (timeCount > 0 && !util.isTimingTask(mInviteVideoMessage.getInvite_id()) && !util.isTimingTask(mInviteVideoMessage.getInvite_id())) {
-            util.addTimerTask(mInviteVideoMessage.getInvite_id(),timeCount);
+            util.addTimerTask(mInviteVideoMessage.getInvite_id(), timeCount);
         }
     }
 
