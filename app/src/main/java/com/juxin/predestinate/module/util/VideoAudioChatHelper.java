@@ -404,6 +404,7 @@ public class VideoAudioChatHelper {
             final long vcID = resJo.optLong("vc_id");
             addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
+            //如果是自己发送的请求就往本地插入一条消息
             MsgMgr.getInstance().delay(new Runnable() {
                 @Override
                 public void run() {

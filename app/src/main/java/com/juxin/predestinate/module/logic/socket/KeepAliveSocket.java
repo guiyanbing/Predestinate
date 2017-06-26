@@ -139,20 +139,14 @@ public class KeepAliveSocket {
 
 
     public void sendPacket(NetData data) {
-
-        switch (state) {
-            case CONNECTED_SUCCESS:
-                if (packetWriter == null) {
-                    PLogger.d("connected but writer not ready?");
-                    break;
-                }
-                packetWriter.sendPacket(data);
-                break;
-            default:
+        if (packetWriter == null) {
+            PLogger.d("not connected or writer not ready?");
+            if(listener != null){
                 listener.onSendPacketError(state, data);
-                break;
+            }
+            return;
         }
-
+        packetWriter.sendPacket(data);
     }
 
     //ture正常关闭，false非正常关闭
