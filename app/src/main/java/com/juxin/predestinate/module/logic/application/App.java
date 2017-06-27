@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Process;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDexApplication;
 
@@ -35,54 +33,20 @@ public class App extends MultiDexApplication {
     public static boolean isLogin = false;
 
     private static PActivityLifecycleCallbacks lifecycleCallbacks;
-    private static int initFlag;
+    public static long t;
 
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onCreate() {
         super.onCreate();
+        t = System.currentTimeMillis();
         context = getApplicationContext();
 
         lifecycleCallbacks = new PActivityLifecycleCallbacks();
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
-//DELETE START 170623 系统内存不足App被杀掉后还原时候会崩溃，暂时不使用，以后可以优化
-//        String processName = ModuleMgr.getAppMgr().getProcessName(context, Process.myPid());
-//        String packageName = ModuleMgr.getAppMgr().getPackageName();
-//        if (processName != null && processName.equals(packageName)) {//主进程
-//            initAppDelay();
-//        }else{
-//            initApp();
-//        }
-//DELETE END 170623
-        initApp();
-    }
 
-    private void initAppDelay() {
-        if (initFlag > 0)
-            return;
-
-        initFlag++;
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                initApp();
-                initFlag++;
-            }
-        });
-    }
-
-    private void initApp() {
         ModuleMgr.initModule(context);
         initBugTags();
-    }
-
-    /**
-     * App是否已初始化完成
-     *
-     * @return
-     */
-    public static boolean isAppInited() {
-        return initFlag > 1;
     }
 
     /**

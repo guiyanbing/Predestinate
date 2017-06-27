@@ -1,3 +1,4 @@
+
 import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
@@ -84,7 +85,7 @@ android {
     }
 
     applicationVariants.all { variant ->
-        if (variant.buildType.name.equals('release')) {
+        if (variant.buildType.name == 'release') {
             def apkPath = rootProject.cApkPath;
             project.getTasksByName("assemble${variant.name.capitalize()}", false).each { task ->
                 task.doLast {
@@ -117,11 +118,11 @@ android {
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith('.apk')) {
                     def fileName = outputFile.name
-                    if (apkPath != null && !apkPath.equals("")) {
+                    if (apkPath != null && apkPath != "") {
                         fileName = "${cAppName}.apk"
                     }
 
-                    if (apkPath == null || apkPath.equals("")) {
+                    if (apkPath == null || apkPath == "") {
                         apkPath = outputFile.parent
                     }
                     output.outputFile = new File(apkPath, fileName)
