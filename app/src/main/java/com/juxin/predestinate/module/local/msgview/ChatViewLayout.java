@@ -92,7 +92,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         tv_y_tips_buy = (TextView) contentView.findViewById(R.id.tv_y_tips_buy);
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
         iv_y_tips_close = (ImageView) contentView.findViewById(R.id.iv_y_tips_close);
-
+        PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TMP_TIPS_VALUE), false);
         yTipsLogic(false, false);
         // 最外层
         viewGroup = (ViewGroup) contentView.findViewById(R.id.chat_content_layout);
@@ -140,10 +140,11 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      * @param isClose 是否点了关闭提示
      */
     public void yTipsLogic(boolean isShow, boolean isClose) {
+        boolean isTmpCloseYTips = PSP.getInstance().getBoolean(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TMP_TIPS_VALUE), false);
         //提示条：女隐藏，锁定Y币（不需要Y币）隐藏，男非VIP隐藏，
         if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() || ModuleMgr.getCenterMgr().getMyInfo().isUnlock_ycoin()
                 || (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip())
-                || (!isShow || isClose)) {
+                || (!isShow || isClose) || isTmpCloseYTips) {
             ll_y_tips.setVisibility(View.GONE);
             return;
         }

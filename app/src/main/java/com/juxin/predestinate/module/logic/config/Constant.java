@@ -32,6 +32,7 @@ public class Constant {
     public static final String APPEAR_FOREVER_TYPE = "appear_forever_type"; //默认出场方式
     public static final String FLIP_ALBUM_UID = "flip_album_uid";//被查看的相册用户id
     public static final String CLOSE_Y_TIPS_VALUE = "close_y_tips_value";//是否关闭了Y币提示
+    public static final String CLOSE_Y_TMP_TIPS_VALUE = "close_y_tmp_tips_value";//是否临时关闭了Y币提示
 
     // -------------------------K-V---------------------------
     public static final String IS_SHOW_MESSAGE = "is_show_message";             // 是否显示过通知栏
