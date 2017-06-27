@@ -140,8 +140,10 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
      * @param isClose 是否点了关闭提示
      */
     public void yTipsLogic(boolean isShow, boolean isClose) {
-        //提示条：男非VIP隐藏，女隐藏
-        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() || (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip()) || (!isShow || isClose)) {
+        //提示条：女隐藏，锁定Y币（不需要Y币）隐藏，男非VIP隐藏，
+        if (!ModuleMgr.getCenterMgr().getMyInfo().isMan() || ModuleMgr.getCenterMgr().getMyInfo().isUnlock_ycoin()
+                || (ModuleMgr.getCenterMgr().getMyInfo().isMan() && !ModuleMgr.getCenterMgr().getMyInfo().isVip())
+                || (!isShow || isClose)) {
             ll_y_tips.setVisibility(View.GONE);
             return;
         }

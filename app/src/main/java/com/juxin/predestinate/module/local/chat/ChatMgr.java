@@ -595,14 +595,15 @@ public class ChatMgr implements ModuleBase {
         if (userDetail.isUnlock_ycoin()) {//不需要Y币
             return;
         }
-        if (userDetail.isUnlock_vip() && userDetail.getYcoin() > 0) {//不需要VIP
-            ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
-            return;
-        }
 
         //如何今天可以免费发一条消息不扣除Y币，并刷新Y币以防与服务器不同步
         if (ModuleMgr.getChatListMgr().getTodayChatShow()) {
             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_Ycoin, true);
+            return;
+        }
+
+        if (userDetail.isUnlock_vip() && userDetail.getYcoin() > 0) {//不需要VIP
+            ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
             return;
         }
 
@@ -666,8 +667,13 @@ public class ChatMgr implements ModuleBase {
      */
     private void sendChatCanError() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        if ((userDetail.isMan() && userDetail.getYcoin() < 79)
-                || !(userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip())) {
+        if (!( //以下条件满足一个就不锁定聊天框
+                (userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip())                      //解锁VIP和Y币
+                || (userDetail.isMan() && userDetail.getYcoin() > 79 && !userDetail.isVip())    //男非VIP，Y币大于79
+                || (userDetail.isMan() && userDetail.getYcoin() > 0 && userDetail.isVip())      //男VIP，Y币大于0
+                || (userDetail.isMan() && userDetail.isUnlock_ycoin() && !userDetail.isUnlock_vip() && userDetail.isVip()//解锁Y币不解锁VIP，男VIP
+                || (userDetail.isMan() && !userDetail.isUnlock_ycoin() && userDetail.isUnlock_vip() && userDetail.getYcoin() > 0))//不解锁Y币解锁VIP，男Y币大于0
+        )){
             ModuleMgr.getChatListMgr().setTodayChatShow();
             Msg msg = new Msg();
             msg.setData(false);

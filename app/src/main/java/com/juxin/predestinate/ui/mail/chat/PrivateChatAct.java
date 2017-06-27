@@ -121,6 +121,21 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private void executeYCoinTask() {
+        ModuleMgr.getCommonMgr().checkycoin(new RequestComplete() {
+            @Override
+            public void onRequestComplete(HttpResponse response) {
+                CheckYCoinBean yCoinBean = new CheckYCoinBean();
+                yCoinBean.parseJson(response.getResponseString());
+                if (yCoinBean.isOk()) {
+                    ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
+                    ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
+                    checkIsCanSendMsg();
+                }
+            }
+        });
+    }
+
     /**
      * 聊天窗口信息--整合接口
      */
@@ -134,8 +149,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 chatInfo.parseJson(response.getResponseString());
                 //Y币
                 ModuleMgr.getCenterMgr().getMyInfo().setYcoin(chatInfo.getYcoin());
-                ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(chatInfo.getOtherInfo().getUid()+"");
-                checkIsCanSendMsg();
+
                 //在线状态
                 if("在线".equalsIgnoreCase(chatInfo.getOtherInfo().getLast_online())) {
                     net_top_title.setText(getString(R.string.net_online_pre) + chatInfo.getOtherInfo().netTp2Str(chatInfo.getOtherInfo().getNet_tp()));
@@ -251,7 +265,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
 
         reqChatInfo();
         initLastGiftList();
-
+        executeYCoinTask();
         privateChat.getChatAdapter().setOnUserInfoListener(new ChatInterface.OnUserInfoListener() {
             @Override
             public void onComplete(UserInfoLightweight infoLightweight) {
@@ -365,7 +379,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 break;
             case MsgType.MT_Update_Ycoin:
                 if ((Boolean) value) {//去请求网络
-                    reqChatInfo();
+                    executeYCoinTask();
                 } else {//不请求网络
                     checkIsCanSendMsg();
                     if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
