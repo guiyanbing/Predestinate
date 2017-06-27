@@ -35,6 +35,7 @@ public class TimeMgr {
     private CompositeDisposable rxDisposable = new CompositeDisposable();//订阅中心
     private ConcurrentHashMap<PObserver, Disposable> observerDisposableMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Class, PObserver> classObserverMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Long, PObserver> idObserverMap = new ConcurrentHashMap<>();
 
     /**
      * 抛出事件到主线程
@@ -53,10 +54,14 @@ public class TimeMgr {
      *
      * @param observer 事件回调
      */
-    public void attach(final PObserver observer) {
+    public void attach(final PObserver observer,long id) {
         if (observer == null) {
             PLogger.e("------>PObserver is null.");
             return;
+        }
+
+        if (idObserverMap.containsKey(id)){
+            detach(idObserverMap.get(id));
         }
 
         Disposable disposable = RxBus.getInstance().toFlowable(Msg.class)
@@ -77,6 +82,7 @@ public class TimeMgr {
         if (rxDisposable.add(disposable)) {
             classObserverMap.put(observer.getClass(), observer);
             observerDisposableMap.put(observer, disposable);
+            idObserverMap.put(id,observer);
             PLogger.d("------>attach[" + observer.getClass() + "], attached-size[" + rxDisposable.size() + "]");
         }
     }
@@ -102,6 +108,7 @@ public class TimeMgr {
     public void clear() {
         if (!rxDisposable.isDisposed()) {
             PLogger.d("------>clear");
+            idObserverMap.clear();
             rxDisposable.clear();
         }
     }

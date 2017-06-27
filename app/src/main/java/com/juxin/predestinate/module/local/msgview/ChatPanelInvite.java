@@ -85,7 +85,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
             imgPic.setBackgroundResource(R.drawable.p1_ltlx02);
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
-            TimeMgr.getInstance().attach(this);
+            TimeMgr.getInstance().attach(this,id);
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             Long time = util.getTask(id);
