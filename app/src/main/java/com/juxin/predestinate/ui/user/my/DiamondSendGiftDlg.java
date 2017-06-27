@@ -18,9 +18,10 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.module.util.my.GiftHelper;
+import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 
-public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, RequestComplete, GiftHelper.OnRequestGiftListCallback {
+public class DiamondSendGiftDlg extends Dialog implements RequestComplete, GiftHelper.OnRequestGiftListCallback {
     private String channelId;
     private String otherId;
     private String channel_uid; // 统计用
@@ -49,7 +50,7 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, 
     private void initView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.f1_dlg_send_gift, null);
         setContentView(view);
-        view.findViewById(R.id.btn_diamond_ok).setOnClickListener(this);
+        view.findViewById(R.id.btn_diamond_ok).setOnClickListener(clickListener);
 
         tv_diamonds = (TextView) findViewById(R.id.tv_send_gift_my_diamonds);
         tv_gift_diamonds = (TextView) findViewById(R.id.tv_send_gift_diamonds);
@@ -82,20 +83,22 @@ public class DiamondSendGiftDlg extends Dialog implements View.OnClickListener, 
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_diamond_ok:
-                int dec = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftBean.getMoney();
-                if (dec >= 0) {//赠送礼物
-                    ModuleMgr.getChatMgr().sendGiftMsg("", otherId, giftBean.getId(), 1, 3);
-                } else {
-                    UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec), -1, TypeConvertUtil.toLong(otherId), channel_uid);
-                }
-                dismiss();
-                break;
+    private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
+        @Override
+        public void onNoDoubleClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_diamond_ok:
+                    int dec = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftBean.getMoney();
+                    if (dec >= 0) {//赠送礼物
+                        ModuleMgr.getChatMgr().sendGiftMsg("", otherId, giftBean.getId(), 1, 3);
+                    } else {
+                        UIShow.showGoodsDiamondDialog(mContext, Math.abs(dec), -1, TypeConvertUtil.toLong(otherId), channel_uid);
+                    }
+                    dismiss();
+                    break;
+            }
         }
-    }
+    };
 
     @Override
     public void onRequestComplete(HttpResponse response) {

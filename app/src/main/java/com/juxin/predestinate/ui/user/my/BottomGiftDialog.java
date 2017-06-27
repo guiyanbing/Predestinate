@@ -36,6 +36,7 @@ import com.juxin.predestinate.ui.user.my.adapter.GiftViewPagerAdapter;
 import com.juxin.predestinate.ui.user.my.view.CustomViewPager;
 import com.juxin.predestinate.ui.user.my.view.GiftPopView;
 import com.juxin.predestinate.ui.user.my.view.PageIndicatorView;
+import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
         findViewById(R.id.bottom_gif_view_blank).setOnClickListener(this);
         findViewById(R.id.bottom_gif_rl_top).setOnClickListener(this);
         contentView.findViewById(R.id.bottom_gif_txv_pay).setOnClickListener(this);
-        contentView.findViewById(R.id.bottom_gif_txv_send).setOnClickListener(this);
+        contentView.findViewById(R.id.bottom_gif_txv_send).setOnClickListener(clickListener);
         txvLeft.setText("<");
         txvRight.setText(">");
         txvAllStone.setText(ModuleMgr.getCenterMgr().getMyInfo().getDiamand() + "");
@@ -135,27 +136,6 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 }
                 UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid, channel_uid);
                 break;
-            case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
-                int needStone = Integer.valueOf(txvNeedStone.getText().toString());
-                if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) {
-                    UIShow.showGoodsDiamondDialog(getContext(), needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand(),
-                            getFromTag(), uid, channel_uid);
-                    return;
-                }
-                if (position == -1) {//为选择礼物
-                    PToast.showShort(getContext().getString(R.string.please_select_a_gift));
-                    return;
-                }
-                StatisticsMessage.chatGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
-
-                //统计
-                if (getFromTag() == Constant.OPEN_FROM_HOT) {
-                    StatisticsDiscovery.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
-                }
-                ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);
-
-                dismiss();
-                break;
             case R.id.bottom_gif_txv_sendnum:
                 gpvPop.setVisibility(View.VISIBLE);
                 break;
@@ -164,6 +144,38 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 break;
         }
     }
+
+    private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
+        @Override
+        public void onNoDoubleClick(View v) {
+            switch (v.getId()) {
+                case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
+                    int needStone = Integer.valueOf(txvNeedStone.getText().toString());
+                    if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) {
+                        UIShow.showGoodsDiamondDialog(getContext(), needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand(),
+                                getFromTag(), uid, channel_uid);
+                        return;
+                    }
+                    if (position == -1) {//为选择礼物
+                        PToast.showShort(getContext().getString(R.string.please_select_a_gift));
+                        return;
+                    }
+                    StatisticsMessage.chatGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
+
+                    //统计
+                    if (getFromTag() == Constant.OPEN_FROM_HOT) {
+                        StatisticsDiscovery.onGiveGift(uid, arrGifts.get(position).getId(), arrGifts.get(position).getMoney());
+                    }
+                    ModuleMgr.getChatMgr().sendGiftMsg("", uid + "", arrGifts.get(position).getId(), num, 1);
+
+                    dismiss();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
 
     public void setToId(long to_id, String channel_uid) {
         this.uid = to_id;//设置接收礼物方的uid

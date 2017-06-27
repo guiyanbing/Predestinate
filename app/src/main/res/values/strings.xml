@@ -527,7 +527,7 @@
     <string name="pay_errcode_unknown">支付出错</string>
     <string name="pay_order_error">订单数据出错，请重新请求!</string>
     <string name="msg_send_gift_greeting_male_tips">礼物打招呼，女孩回复率高</string>
-    <string name="chat_y_tips_buy">立即购买 ></string>
+    <string name="chat_y_tips_buy">立即购买</string>
     <string name="chat_pay_diamond_tips">钻石不足，购买钻石与她通话</string>
     <string name="chat_y_tips"><Data><![CDATA[<font color=\'#666666\'> 发消息需要Y币，</font><font color=\'#fcbc4c\'>余额：</font><font color=\'#666666\'>%1$d</font>]]> </Data></string>
 
