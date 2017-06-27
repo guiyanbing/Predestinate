@@ -19,6 +19,9 @@ public class OfflineBean extends BaseData {
     private long mt;            // 消息时间（时间戳）
     private long d;             // 消息ID
 
+    //用于送达
+    private long msg_id;
+
     // voice消息
     private String mct;         // 消息文本内容
     private int mod;
@@ -43,6 +46,8 @@ public class OfflineBean extends BaseData {
         this.mtp = object.optInt("mtp");
         this.mt = object.optLong("mt");
         this.d = object.optLong("d");
+
+        this.msg_id = object.optLong("msg_id");
 
         this.mct = object.optString("mct");
         this.mod = object.optInt("mod");
@@ -79,6 +84,10 @@ public class OfflineBean extends BaseData {
         return d;
     }
 
+    public long getMsg_id() {
+        return msg_id;
+    }
+
     public String getMct() {
         return mct;
     }
@@ -110,4 +119,5 @@ public class OfflineBean extends BaseData {
     public String getVc_channel_key() {
         return vc_channel_key;
     }
+
 }

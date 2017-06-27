@@ -484,7 +484,9 @@ public class BaseUtil {
         ) || BaseUtil.isTopActivity(App.context,
                 UserMailNotifyAct.class.getName(),
                 "com.juxin.predestinate.assist.ui.video.RtcVideoActivity",
-                "com.juxin.predestinate.assist.ui.RtcInitActivity");
+                "com.juxin.predestinate.assist.ui.voice.RtcVoiceActivity",
+                "com.juxin.predestinate.assist.ui.RtcInitActivity",
+                "com.juxin.predestinate.assist.ui.RtcGroupInitAct");
     }
 
     /**

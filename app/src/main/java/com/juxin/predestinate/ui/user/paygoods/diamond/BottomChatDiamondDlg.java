@@ -59,7 +59,7 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     private int chatType;
     private int price;
 
-    private boolean isAloneInvite = false;
+    private boolean isAloneInvite = false;  // 单邀
     private long videoID;
 
     public BottomChatDiamondDlg() {
