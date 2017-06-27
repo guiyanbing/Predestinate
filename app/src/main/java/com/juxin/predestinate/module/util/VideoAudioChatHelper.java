@@ -63,6 +63,7 @@ public class VideoAudioChatHelper {
     private boolean isDownloading = false;
     private int singleType;
     private static boolean isGroupInvite = false;  // 用户是否处于群发状态
+    private static long inviteId = 0 ;
 
     private VideoAudioChatHelper() {
     }
@@ -134,6 +135,13 @@ public class VideoAudioChatHelper {
     }
 
     /**
+     *  处于群发要请时获取inviteId
+     */
+    public long getInviteId() {
+        return inviteId;
+    }
+
+    /**
      * 邀请对方音频或视频聊天
      *
      * @param context
@@ -158,13 +166,14 @@ public class VideoAudioChatHelper {
      * @param inviteId 邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
      * @param selectVal 是否露脸
      */
-    public void acceptInviteVAChat(long inviteId, int selectVal) {
+    public void acceptInviteVAChat(final long inviteId, int selectVal) {
         this.singleType = selectVal;
         LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
         ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId, new RequestComplete() {
             @Override
             public void onRequestComplete(HttpResponse response) {
                 if (response.isOk()) {
+                    VideoAudioChatHelper.getInstance().inviteId = inviteId;
                     PSP.getInstance().put("ISINVITE", true);
                     MsgMgr.getInstance().delay(new Runnable() {
                         @Override
@@ -174,6 +183,7 @@ public class VideoAudioChatHelper {
                         }
                     }, 20000);
                 } else {
+                    VideoAudioChatHelper.getInstance().inviteId = 0;
                     LoadingDialog.closeLoadingDialog();
                     PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? App.getContext().getString(R.string.chat_join_fail_tips) : response.getMsg());
                 }

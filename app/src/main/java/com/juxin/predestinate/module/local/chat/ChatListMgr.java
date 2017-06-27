@@ -532,6 +532,7 @@ public class ChatListMgr implements ModuleBase, PObserver {
         } else {
             boolean isInvite = PSP.getInstance().getBoolean("ISINVITE", false);
             if (isInvite && videoMessage.getVideoTp() == 2) {
+                CountDownTimerUtil.getInstance().addHandledIds(VideoAudioChatHelper.getInstance().getInviteId());
                 VideoAudioChatHelper.getInstance().openInvitedDirect((Activity) App.getActivity(),
                         videoMessage.getVideoID(), videoMessage.getLWhisperID(), videoMessage.getVideoMediaTp(), videoMessage.getVc_channel_key());
                 PSP.getInstance().put("ISINVITE", false);
