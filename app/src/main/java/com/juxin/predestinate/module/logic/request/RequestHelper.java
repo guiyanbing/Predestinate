@@ -1,6 +1,7 @@
 package com.juxin.predestinate.module.logic.request;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.juxin.library.log.PLogger;
 import com.juxin.library.request.DownloadListener;
@@ -78,13 +79,14 @@ public class RequestHelper {
      * @param url           请求Url
      * @param get_param     get数据
      * @param post_param    post数据
+     * @param jsonParam     json数据
      * @param file_params   文件数据
      * @param isEncrypt     是否加密
      * @param isJsonRequest 是否为application/json格式提交的post数据
      * @return Call
      */
     public Call<ResponseBody> reqHttpCallUrl(Map<String, String> headerMap, String url,
-                                             Map<String, Object> get_param, Map<String, Object> post_param,
+                                             Map<String, Object> get_param, Map<String, Object> post_param, String jsonParam,
                                              Map<String, File> file_params, boolean isEncrypt, boolean isJsonRequest) {
         url = UrlEnc.appendUrl(url, get_param, post_param, isEncrypt);
         if (headerMap == null) headerMap = new HashMap<>();
@@ -112,6 +114,10 @@ public class RequestHelper {
             } else {
                 return requestAPI.executePostCall(headerMap, url, post_param);
             }
+        } else if (!TextUtils.isEmpty(jsonParam)) {
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                    isEncrypt ? JniUtil.GetEncryptString(jsonParam) : jsonParam);
+            return requestAPI.executePostCall(headerMap, url, body);
         } else {//无请求参数的post/get请求[get请求参数已经在hash的时候拼接，故无需再次拼接]
             PLogger.d("---request--->带参数的get请求：" + url);
             return requestAPI.executeGetCall(headerMap, url);

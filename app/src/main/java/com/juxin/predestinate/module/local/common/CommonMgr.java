@@ -178,10 +178,11 @@ public class CommonMgr implements ModuleBase {
      */
     public void reqOfflineRecvedMsg(List<OffMsgInfo> msgs, RequestComplete complete) {
         OffMsgInfo[] uidlist = msgs.toArray(new OffMsgInfo[msgs.size()]);
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("list", uidlist);// msgs
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOfflineRecvedMsg, postParams, complete);
+        Map<String, Object> params = new HashMap<>();
+        params.put("list", msgs);// msgs
+
+        ModuleMgr.getHttpMgr().reqPostJsonNoCacheHttp(UrlParam.reqOfflineRecvedMsg, JSON.toJSONString(params), complete);
     }
 
     /**
