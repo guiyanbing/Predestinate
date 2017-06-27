@@ -147,7 +147,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
                         VideoAudioChatHelper.getInstance().inviteVAChat((Activity) context, otherId, VideoAudioChatHelper.TYPE_VIDEO_CHAT,
                                 false, selectVal, channel_uid, false);
                     }else {
-                        VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId);
+                        VideoAudioChatHelper.getInstance().acceptInviteVAChat(inviteId, selectVal);
                     }
                 }
                 dismiss();

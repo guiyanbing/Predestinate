@@ -26,6 +26,7 @@ public class RequestParam {
     private Map<String, String> head_param;                 //请求头map
     private Map<String, Object> get_param;                  //get请求参数
     private Map<String, Object> post_param;                 //post请求参数
+    private String jsonParam;                               //json请求参数
     private Map<String, File> file_param;                   //文件上传参数
     private RequestComplete requestCallback;                //请求回调
     private RequestComplete logicCallBack;                  //logic回调
@@ -71,6 +72,14 @@ public class RequestParam {
 
     public void setPost_param(Map<String, Object> post_param) {
         this.post_param = post_param;
+    }
+
+    public String getJsonParam() {
+        return jsonParam;
+    }
+
+    public void setJsonParam(String jsonParam) {
+        this.jsonParam = jsonParam;
     }
 
     public Map<String, File> getFile_param() {

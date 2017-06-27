@@ -176,12 +176,13 @@ public class CommonMgr implements ModuleBase {
     /**
      * 发送离线送达消息
      */
-    public void reqOfflineRecvedMsg(List<OffMsgInfo> uids, RequestComplete complete) {
-        OffMsgInfo[] uidlist = uids.toArray(new OffMsgInfo[uids.size()]);
-        Map<String, Object> postParams = new HashMap<>();
-        postParams.put("list", uidlist);// uids
+    public void reqOfflineRecvedMsg(List<OffMsgInfo> msgs, RequestComplete complete) {
+        OffMsgInfo[] uidlist = msgs.toArray(new OffMsgInfo[msgs.size()]);
 
-        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqOfflineRecvedMsg, postParams, complete);
+        Map<String, Object> params = new HashMap<>();
+        params.put("list", msgs);// msgs
+
+        ModuleMgr.getHttpMgr().reqPostJsonNoCacheHttp(UrlParam.reqOfflineRecvedMsg, JSON.toJSONString(params), complete);
     }
 
     /**
@@ -1155,6 +1156,6 @@ public class CommonMgr implements ModuleBase {
     public void reqChatInfo(long tuid, RequestComplete complete) {
         HashMap<String, Object> parms = new HashMap<>();
         parms.put("tuid", tuid);
-        ModuleMgr.getHttpMgr().reqPostAndCacheHttp(UrlParam.reqChatInfo, parms, complete);
+        ModuleMgr.getHttpMgr().reqPostNoCacheHttp(UrlParam.reqChatInfo, parms, complete);
     }
 }

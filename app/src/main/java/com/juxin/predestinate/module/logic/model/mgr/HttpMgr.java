@@ -53,6 +53,11 @@ public interface HttpMgr extends ModuleBase {
     HTCallBack reqPostNoCacheHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback);
 
     /**
+     * Post: 加密，不缓存
+     */
+    HTCallBack reqPostJsonNoCacheHttp(UrlParam urlParam, String jsonParam, RequestComplete requestCallback);
+
+    /**
      * Post: 不加密，不缓存
      */
     HTCallBack reqPostNoCacheNoEncHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback);

@@ -156,8 +156,10 @@ public class VideoAudioChatHelper {
      * 邀请对方音频或视频聊天
      *
      * @param inviteId 邀请id,即为邀请流水号，接受邀请并发起视频的时候使用
+     * @param selectVal 是否露脸
      */
-    public void acceptInviteVAChat(long inviteId) {
+    public void acceptInviteVAChat(long inviteId, int selectVal) {
+        this.singleType = selectVal;
         LoadingDialog.show((FragmentActivity) App.activity, "加入中...");
         ModuleMgr.getCommonMgr().reqAcceptVideoChat(inviteId, new RequestComplete() {
             @Override
@@ -246,6 +248,7 @@ public class VideoAudioChatHelper {
         if (response.isOk()) {
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
+            addvcID(vcID);
             int msgVer = resJo.optInt("confer_msgver");
             Bundle bundle = newBundle(vcID, dstUid, 1, type, msgVer);
             bundle.putInt("vc_girl_type", 1);

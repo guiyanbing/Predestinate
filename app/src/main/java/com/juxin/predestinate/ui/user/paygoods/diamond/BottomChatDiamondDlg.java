@@ -59,7 +59,7 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     private int chatType;
     private int price;
 
-    private boolean isAloneInvite = false;
+    private boolean isAloneInvite = false;  // 单邀
     private long videoID;
 
     public BottomChatDiamondDlg() {
@@ -70,13 +70,13 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     }
 
     /**
-     * @param otherId            对方ID
-     * @param chatType           视频，语音邀请
-     * @param price              通信价格
-     * @param isAloneInvite      是否是单邀
-     * @param videoID            vc_id
+     * @param otherId       对方ID
+     * @param chatType      视频，语音邀请
+     * @param price         通信价格
+     * @param isAloneInvite 是否是单邀
+     * @param videoID       vc_id
      */
-    public void setInfo(long otherId, int chatType, int price,boolean isAloneInvite, long videoID ) {
+    public void setInfo(long otherId, int chatType, int price, boolean isAloneInvite, long videoID) {
         this.otherID = otherId;
         this.chatType = chatType;
         this.price = price;
@@ -97,13 +97,13 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     @Override
     public void onResume() {
         super.onResume();
-        if (isAloneInvite){
+        if (isAloneInvite) {
             ModuleMgr.getCenterMgr().reqMyInfo(new RequestComplete() {
                 @Override
                 public void onRequestComplete(HttpResponse response) {
-                    if (response.isOk()){
+                    if (response.isOk()) {
                         UserDetail userDetail = (UserDetail) response.getBaseData();
-                        if (userDetail.getDiamand() >= price){
+                        if (userDetail.getDiamand() >= price) {
                             isAloneInvite = false;
                             //跳转视频
                             VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
@@ -121,8 +121,8 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
     public void onDestroy() {
         super.onDestroy();
         MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
-        if (isAloneInvite){
-            ModuleMgr.getCommonMgr().reqRejectVideoChat(videoID,null);
+        if (isAloneInvite) {
+            ModuleMgr.getCommonMgr().reqRejectVideoChat(videoID, null);
         }
     }
 
@@ -156,7 +156,7 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
         TextView chatPrice = (TextView) findViewById(R.id.chat_price);
 
         chatPrice.setText(getString(R.string.invite_video_price, price));
-        diamond.setText(getString(R.string.diamond_balance) + ModuleMgr.getCenterMgr().getMyInfo().getDiamand());
+        diamond.setText(String.valueOf(ModuleMgr.getCenterMgr().getMyInfo().getDiamand()));
         ImageLoader.loadCircleAvatar(getContext(), ModuleMgr.getCenterMgr().getMyInfo().getAvatar(), myHead);
         ImageLoader.loadCircleAvatar(getContext(), "", girlHead);
         reqOtherInfo();
@@ -170,7 +170,7 @@ public class BottomChatDiamondDlg extends BaseDialogFragment implements View.OnC
 
         // 商品
         LinearLayout container = (LinearLayout) contentView.findViewById(R.id.pay_type_container);
-        goodsPanel = new GoodsListPanel(getContext());
+        goodsPanel = new GoodsListPanel(getContext(), GoodsConstant.DLG_DIAMOND_CHAT);
         container.addView(goodsPanel.getContentView());
         goodsPanel.refresh(payGoods.getCommodityList());
 

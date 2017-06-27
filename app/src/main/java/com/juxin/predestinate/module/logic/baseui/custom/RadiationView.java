@@ -19,13 +19,13 @@ public class RadiationView extends View {
     // 默认值
     private float density;
     private static final int DEFAULT_ALPHA = 70;      //  默认透明度
-    private static final int DEFAULT_MIN_RADIUS = 15;  //  默认最小半径
+    private static final int DEFAULT_MIN_RADIUS = 16;  //  默认最小半径
 
     private Paint mPaint = new Paint();         // 画笔
     private int mColor = 0xe6ffffff;            // 颜色
     private int mAlpha;                         // 透明度  0~255
     private int mAlphaInterval = 3;             // 透明度增大区间
-    private int speed = 100;                    // 扩散速度
+    private int speed = 110;                    // 扩散速度
     private int maxRadius = 100;                // 最大辐射半径
     private int minRadius;                      // 最小半径
     private int radius = minRadius;             // 当前半径
@@ -128,7 +128,7 @@ public class RadiationView extends View {
         centerX = width / 2;
         centerY = height / 2;
         // 最大辐射半径
-        maxRadius = (width > height) ? height / 2 : width / 2;
+        maxRadius = 10 + ((width > height) ? height / 2 : width / 2);
         if (maxRadius < (int) (density * DEFAULT_MIN_RADIUS)) {
             //throw new RuntimeException("size too small");
         }
@@ -144,7 +144,7 @@ public class RadiationView extends View {
         }
 
         // 位置监听回调
-        if (radius == (maxRadius - 12)) {
+        if (radius == (maxRadius - 15)) {
             if (listener != null) {
                 listener.onArrival();
             }

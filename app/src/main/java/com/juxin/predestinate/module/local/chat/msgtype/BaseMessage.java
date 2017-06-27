@@ -38,7 +38,6 @@ public class BaseMessage implements IBaseMessage {
         inviteVideoMass(InviteVideoMessage.class, 30),//女性对男性的语音（视频）邀请
         maxVersion(MaxVersionMessage.class, 1000000),//最大版本消息 1000000这个不要随便改
 
-
         ;
 
         public Class<? extends BaseMessage> msgClass = null;
