@@ -42,6 +42,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
     private String channelUid;
     private long inviteId;
     private int type;
+    private boolean isHandled = false;
 
     public ChatPanelInvite(Context context, ChatAdapter.ChatInstance chatInstance, boolean sender) {
         super(context, chatInstance, R.layout.f1_chat_item_panel_invite, sender);
@@ -86,6 +87,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             TimeMgr.getInstance().attach(this,id);
+            isHandled = false;
         }
         if (util.isTimingTask(id) && !util.isHandled(id)) {
             Long time = util.getTask(id);
@@ -134,6 +136,11 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
                     insertHitTips(desc);
                 }
             }
+        }else if (MsgType.MT_Time_Change.equalsIgnoreCase(key) && util.isHandled(id) && !isHandled){
+            isHandled = true;
+            tvTime.setText(getContext().getString(R.string.lost_efficacy));
+            llReject.setVisibility(View.GONE);
+            tvConnect.setText(R.string.call_back);
         }
     }
 
