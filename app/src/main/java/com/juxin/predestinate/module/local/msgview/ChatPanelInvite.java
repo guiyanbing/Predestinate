@@ -117,7 +117,7 @@ public class ChatPanelInvite extends ChatPanel implements PObserver, View.OnClic
 
     @Override
     public void onMessage(String key, Object value) {
-        if (key == MsgType.MT_Time_Change && value instanceof Long && !util.isHandled(id)) {
+        if (MsgType.MT_Time_Change.equalsIgnoreCase(key) && value instanceof Long && !util.isHandled(id)) {
             Long messageId = (long) value;
             if (messageId == id && util.getTask(id) != null) {
                 tvTime.setText(getContext().getString(R.string.time, util.getTask(id)));

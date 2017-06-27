@@ -19,8 +19,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 消息处理中枢
- * Created by ZRP on 2016/12/27.
+ * 用于计时处理
+ * Created by ZM on 2017/6/21.
  */
 public class TimeMgr {
 

@@ -66,6 +66,11 @@ public class HttpMgrImpl implements HttpMgr {
     }
 
     @Override
+    public HTCallBack reqPostJsonNoCacheHttp(UrlParam urlParam, String jsonParam, RequestComplete requestCallback) {
+        return reqPostJsonNoCacheHttp(urlParam, null, jsonParam, requestCallback);
+    }
+
+    @Override
     public HTCallBack reqPostNoCacheNoEncHttp(UrlParam urlParam, Map<String, Object> post_param, RequestComplete requestCallback) {
         return reqPostHttp(urlParam, null, null, post_param, RequestParam.CacheType.CT_Cache_No, false, false, requestCallback);
     }
@@ -97,7 +102,7 @@ public class HttpMgrImpl implements HttpMgr {
 
     @Override
     public HTCallBack uploadFile(UrlParam urlParam, Map<String, Object> post_param, Map<String, File> file_param, RequestComplete requestCallback) {
-        return reqHttp(urlParam, null, file_param, null, post_param, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
+        return reqHttp(urlParam, null, file_param, null, post_param, null, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
     }
 
     @Override
@@ -220,7 +225,7 @@ public class HttpMgrImpl implements HttpMgr {
      */
     private HTCallBack reqGetHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, Object> get_param,
                                   RequestParam.CacheType cacheType, boolean isEncrypt, RequestComplete requestCallback) {
-        return reqHttp(urlParam, headerMap, null, get_param, null, cacheType, isEncrypt, true, requestCallback);
+        return reqHttp(urlParam, headerMap, null, get_param, null, null, cacheType, isEncrypt, true, requestCallback);
     }
 
     /**
@@ -239,11 +244,22 @@ public class HttpMgrImpl implements HttpMgr {
                                    Map<String, Object> get_param, Map<String, Object> post_param,
                                    RequestParam.CacheType cacheType, boolean isEncrypt,
                                    boolean isJsonRequest, RequestComplete requestCallback) {
-        return reqHttp(urlParam, headerMap, null, get_param, post_param, cacheType, isEncrypt, isJsonRequest, requestCallback);
+        return reqHttp(urlParam, headerMap, null, get_param, post_param, null, cacheType, isEncrypt, isJsonRequest, requestCallback);
     }
 
+    private HTCallBack reqPostJsonNoCacheHttp(UrlParam urlParam, Map<String, String> headerMap, String jsonParam, RequestComplete requestCallback) {
+        return reqPostJsonHttp(urlParam, headerMap, jsonParam, RequestParam.CacheType.CT_Cache_No, true, true, requestCallback);
+    }
+
+    private HTCallBack reqPostJsonHttp(UrlParam urlParam, Map<String, String> headerMap, String jsonParam,
+                                   RequestParam.CacheType cacheType, boolean isEncrypt,
+                                       boolean isJsonRequest, RequestComplete requestCallback) {
+        return reqHttp(urlParam, headerMap, null, null, null, jsonParam, cacheType, isEncrypt, isJsonRequest, requestCallback);
+    }
+
+
     private HTCallBack reqHttp(UrlParam urlParam, Map<String, String> headerMap, Map<String, File> file_param,
-                               Map<String, Object> get_param, Map<String, Object> post_param,
+                               Map<String, Object> get_param, Map<String, Object> post_param, String jsonParam,
                                RequestParam.CacheType cacheType, boolean isEncrypt,
                                boolean isJsonRequest, RequestComplete requestCallback) {
         RequestParam requestParam = new RequestParam();
@@ -252,6 +268,7 @@ public class HttpMgrImpl implements HttpMgr {
         requestParam.setFile_param(file_param);
         requestParam.setGet_param(get_param);
         requestParam.setPost_param(post_param);
+        requestParam.setJsonParam(jsonParam);
         requestParam.setCacheType(cacheType);
         requestParam.setNeedEncrypt(isEncrypt);
         requestParam.setJsonRequest(isJsonRequest);
@@ -265,6 +282,7 @@ public class HttpMgrImpl implements HttpMgr {
         final Map<String, String> headerMap = requestParam.getHead_param();
         final Map<String, Object> get_param = requestParam.getGet_param();
         final Map<String, Object> post_param = requestParam.getPost_param();
+        final String jsonParam = requestParam.getJsonParam();
         final Map<String, File> file_param = requestParam.getFile_param();
         final RequestComplete requestCallback = requestParam.getRequestCallback();
         final RequestParam.CacheType cacheType = requestParam.getCacheType();
@@ -318,7 +336,7 @@ public class HttpMgrImpl implements HttpMgr {
         //然后正式发出请求，请求完成之后再次抛出请  求结果
         final String finalCacheUrl = cacheUrl;
         Call<ResponseBody> httpResultCall = RequestHelper.getInstance().reqHttpCallUrl(
-                requestHeaderMap, urlParam.getFinalUrl(), get_param, post_param, file_param, isEncrypt, isJsonRequest);
+                requestHeaderMap, urlParam.getFinalUrl(), get_param, post_param, jsonParam, file_param, isEncrypt, isJsonRequest);
 
         Callback<ResponseBody> rb = new Callback<ResponseBody>() {
             @Override

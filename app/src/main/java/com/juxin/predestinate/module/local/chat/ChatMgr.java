@@ -159,7 +159,7 @@ public class ChatMgr implements ModuleBase {
         dbCenter.insertMsgLocalVideo(videoMessage, new DBCallback() {
             @Override
             public void OnDBExecuted(long result) {
-                if(result == MessageConstant.ERROR){
+                if (result == MessageConstant.ERROR) {
                     return;
                 }
                 pushMsg(videoMessage);
@@ -189,7 +189,8 @@ public class ChatMgr implements ModuleBase {
                 }
                 MessageRet messageRet = new MessageRet();
                 messageRet.parseJson(contents);
-                if (!messageRet.isOk() || !messageRet.isS()) return;
+                if (!messageRet.isOk() || !messageRet.isS())
+                    return;
 
                 Observable<Boolean> observable = dbCenter.getCenterFLetter().isHaveMsg(whisperID);
                 observable.subscribe(new Observer<Boolean>() {
@@ -346,7 +347,8 @@ public class ChatMgr implements ModuleBase {
             @Override
             public void OnDBExecuted(long result) {
                 onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
-                if (result == MessageConstant.ERROR) return;
+                if (result == MessageConstant.ERROR)
+                    return;
 
                 sendMessage(commonMessage, null);
             }
@@ -387,7 +389,8 @@ public class ChatMgr implements ModuleBase {
             @Override
             public void OnDBExecuted(long result) {
                 onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
-                if (result != MessageConstant.OK) return;
+                if (result != MessageConstant.OK)
+                    return;
 
                 MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
@@ -441,7 +444,8 @@ public class ChatMgr implements ModuleBase {
             public void OnDBExecuted(long result) {
                 onChatMsgUpdate(commonMessage.getChannelID(), commonMessage.getWhisperID(), commonMessage);
 
-                if (result != MessageConstant.OK) return;
+                if (result != MessageConstant.OK)
+                    return;
 
                 MsgMgr.getInstance().runOnUiThread(new Runnable() {
                     @Override
@@ -505,7 +509,8 @@ public class ChatMgr implements ModuleBase {
             @Override
             public void OnDBExecuted(long result) {
                 onChatMsgUpdate(giftMessage.getChannelID(), giftMessage.getWhisperID(), giftMessage);
-                if (result != MessageConstant.OK) return;
+                if (result != MessageConstant.OK)
+                    return;
 
                 ModuleMgr.getCommonMgr().sendGift(whisperID, String.valueOf(giftID), giftCount, gType, new RequestComplete() {
                     @Override
@@ -515,7 +520,8 @@ public class ChatMgr implements ModuleBase {
                         if (response.isOk()) {
                             updateOk(giftMessage, null);
                             GiftsList.GiftInfo giftInfo = ModuleMgr.getCommonMgr().getGiftLists().getGiftInfo(giftID);
-                            if (giftInfo == null) return;
+                            if (giftInfo == null)
+                                return;
                             int stone = ModuleMgr.getCenterMgr().getMyInfo().getDiamand() - giftInfo.getMoney() * giftCount;
                             if (stone >= 0)
                                 ModuleMgr.getCenterMgr().getMyInfo().setDiamand(stone);
@@ -539,6 +545,7 @@ public class ChatMgr implements ModuleBase {
 
     /**
      * 更新送达状态
+     *
      * @param msgID
      * @param callback
      */
@@ -585,16 +592,16 @@ public class ChatMgr implements ModuleBase {
 
     private void sendMessageRefreshYcoin() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-        if(userDetail.isUnlock_ycoin()) {//不需要Y币
+        if (userDetail.isUnlock_ycoin()) {//不需要Y币
             return;
         }
-        if(userDetail.isUnlock_vip() && userDetail.getYcoin() > 0) {//不需要VIP
+        if (userDetail.isUnlock_vip() && userDetail.getYcoin() > 0) {//不需要VIP
             ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
             return;
         }
 
         //如何今天可以免费发一条消息不扣除Y币，并刷新Y币以防与服务器不同步
-        if(ModuleMgr.getChatListMgr().getTodayChatShow()){
+        if (ModuleMgr.getChatListMgr().getTodayChatShow()) {
             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_Ycoin, true);
             return;
         }
@@ -802,7 +809,8 @@ public class ChatMgr implements ModuleBase {
             }
         }
 
-        if (TextUtils.isEmpty(videoMessage.getWhisperID())) return;
+        if (TextUtils.isEmpty(videoMessage.getWhisperID()))
+            return;
 
         dbCenter.insertMsgVideo(videoMessage, new DBCallback() {
             @Override
@@ -819,7 +827,7 @@ public class ChatMgr implements ModuleBase {
         long vcId = PSP.getInstance().getLong("VIDEOID" + App.uid, 0);
         if (videoMessage.getVideoTp() == 4 && videoMessage.getVideoID() != vcId) {
             MsgMgr.getInstance().sendMsg(MsgType.MT_Update_MyInfo, null);
-            PSP.getInstance().put("VIDEOID" + App.uid, videoMessage.getVideoID()+"");
+            PSP.getInstance().put("VIDEOID" + App.uid, videoMessage.getVideoID() + "");
         }
     }
 
@@ -921,7 +929,8 @@ public class ChatMgr implements ModuleBase {
     }
 
     private void pushMsg(BaseMessage message) {
-        if (message == null) return;
+        if (message == null)
+            return;
         onChatMsgUpdate(message.getChannelID(), message.getWhisperID(), message);
     }
 
@@ -1184,10 +1193,13 @@ public class ChatMgr implements ModuleBase {
     private void removeInfoComplete(boolean isRemove, boolean isOK, long userID, UserInfoLightweight infoLightweight) {
         PLogger.d("---removeInfoComplete--->" + infoLightweight);
         synchronized (infoMap) {
-            if (infoMap.size() <= 0) return;
+            if (infoMap.size() <= 0)
+                return;
             ChatMsgInterface.InfoComplete infoComplete = infoMap.get(userID);
-            if (infoComplete != null) infoComplete.onReqComplete(isOK, infoLightweight);
-            if (isRemove && infoComplete != null) infoMap.remove(userID);
+            if (infoComplete != null)
+                infoComplete.onReqComplete(isOK, infoLightweight);
+            if (isRemove && infoComplete != null)
+                infoMap.remove(userID);
         }
     }
 
@@ -1204,22 +1216,26 @@ public class ChatMgr implements ModuleBase {
             public void onRequestComplete(HttpResponse response) {
                 List<OffMsgInfo> mOffMsgInfos = new ArrayList<>();
                 PLogger.d("offlineMsg:  " + response.getResponseString());
-                if (!response.isOk()) return;
+                if (!response.isOk())
+                    return;
 
                 OfflineMsg offlineMsg = (OfflineMsg) response.getBaseData();
                 if (offlineMsg == null || offlineMsg.getMsgList().size() <= 0)
                     return;
                 OfflineBean bea = null;
                 if (offlineMsg.getMsgList().size() > 0)
-                    bea = offlineMsg.getMsgList().get(offlineMsg.getMsgList().size()-1);
+                    bea = offlineMsg.getMsgList().get(offlineMsg.getMsgList().size() - 1);
                 // 逐条处理离线消息
                 for (OfflineBean bean : offlineMsg.getMsgList()) {
-                    if (bean == null) continue;
+                    if (bean == null)
+                        continue;
 
                     dispatchOfflineMsg(bean);
-                    mOffMsgInfos.add(new OffMsgInfo(bean.getFid(),bean.getD(),bean.getMtp()));
-                    if (bean == bea){
-                        ModuleMgr.getCommonMgr().reqOfflineRecvedMsg(mOffMsgInfos,null);
+                    if (bean.getMtp() != BaseMessage.Recved_MsgType && bean.getMtp() != BaseMessage.System_MsgType) {//普通消息才加入送达列表中
+                        mOffMsgInfos.add(new OffMsgInfo(bean.getFid(), bean.getD(), bean.getMtp()));
+                    }
+                    if (bean == bea) {
+                        ModuleMgr.getCommonMgr().reqOfflineRecvedMsg(mOffMsgInfos, null);
                     }
                 }
 
@@ -1237,8 +1253,10 @@ public class ChatMgr implements ModuleBase {
      * 离线消息派发
      */
     private void dispatchOfflineMsg(OfflineBean bean) {
-        if (bean.getD() == 0) return;
-        if (lastOfflineAVMap == null) lastOfflineAVMap = new HashMap<>();
+        if (bean.getD() == 0)
+            return;
+        if (lastOfflineAVMap == null)
+            lastOfflineAVMap = new HashMap<>();
         // 音视频消息
         if (bean.getMtp() == BaseMessage.BaseMessageType.video.getMsgType()) {
             long vc_id = bean.getVc_id();
@@ -1247,6 +1265,11 @@ public class ChatMgr implements ModuleBase {
             } else {
                 lastOfflineAVMap.remove(vc_id);
             }
+            return;
+        }
+        //已送达消息
+        if (bean.getMtp() == BaseMessage.Recved_MsgType) {
+            ModuleMgr.getChatMgr().updateDeliveryStatus(bean.getMsg_id(), null);
             return;
         }
 
@@ -1264,15 +1287,18 @@ public class ChatMgr implements ModuleBase {
      * 处理最新的音视频离线消息
      */
     private void dispatchLastOfflineAVMap() {
-        if (lastOfflineAVMap == null || lastOfflineAVMap.size() == 0) return;
-        if (BaseUtil.isScreenLock(App.context)) return;
+        if (lastOfflineAVMap == null || lastOfflineAVMap.size() == 0)
+            return;
+        if (BaseUtil.isScreenLock(App.context))
+            return;
 
         OfflineBean bean = null;
         long mt = 0;
 
         for (Map.Entry<Long, OfflineBean> entry : lastOfflineAVMap.entrySet()) {
             OfflineBean msgBean = entry.getValue();
-            if (msgBean == null) return;
+            if (msgBean == null)
+                return;
 
             // 邀请加入聊天, 过滤最新一条
             if (msgBean.getVc_tp() == 1) {

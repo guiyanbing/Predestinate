@@ -161,7 +161,7 @@ public enum UrlParam {
     // 接受通信邀请
     reqAcceptChat(Hosts.FATE_IT_GO, "xs/message/VCGroupAccept", Accept.class, false),
     // 拒绝通信邀请
-    reqRejectChat("xs/message/RejectVideoChat"),
+    reqRejectChat(Hosts.FATE_IT_GO, "xs/message/RejectVideoChat",null,false),
 
     //================= 发现 ===========
     //举报
