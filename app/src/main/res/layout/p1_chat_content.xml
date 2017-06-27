@@ -41,7 +41,6 @@
                     android:layout_above="@+id/input_giftview"
                     android:layout_alignRight="@+id/chat_content_list"
                     android:layout_marginBottom="@dimen/px35_dp"
-                    android:layout_marginRight="@dimen/px15_dp"
                     android:src="@drawable/f1_look_at_her"
                     android:visibility="gone" />
 
@@ -51,17 +50,16 @@
                     android:layout_height="@dimen/px135_dp"
                     android:layout_alignBottom="@+id/chat_content_list"
                     android:layout_alignRight="@+id/chat_content_list"
-                    android:layout_marginBottom="@dimen/px35_dp"
-                    android:layout_marginRight="@dimen/px15_dp"
+                    android:layout_marginBottom="@dimen/px45_dp"
                     android:src="@drawable/f1_fc_gift_w" />
 
                 <LinearLayout
                     android:id="@+id/ll_y_tips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/input_giftview"
-                    android:layout_toLeftOf="@+id/input_giftview"
-                    android:layout_marginBottom="@dimen/px18_dp"
+                    android:layout_alignBottom="@+id/chat_content_list"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/px25_dp"
                     android:background="@drawable/f1_gray_fillet"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -81,21 +79,22 @@
                             android:id="@+id/tv_y_tips_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textSize="12sp"/>
+                            android:text="发消息需要Y币，余额：0"
+                            android:textSize="10sp" />
 
                         <TextView
                             android:id="@+id/tv_y_tips_buy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/px45_dp"
                             android:text="@string/chat_y_tips_buy"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue"/>
+                            android:textColor="@color/blue"
+                            android:textSize="10sp" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_y_tips_split"
-                        android:layout_width="@dimen/px3_dp"
+                        android:layout_width="1px"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/px18_dp"
                         android:layout_marginRight="@dimen/px18_dp"
@@ -105,8 +104,8 @@
 
                     <ImageView
                         android:id="@+id/iv_y_tips_close"
-                        android:layout_width="@dimen/px45_dp"
-                        android:layout_height="@dimen/px45_dp"
+                        android:layout_width="@dimen/px30_dp"
+                        android:layout_height="@dimen/px30_dp"
                         android:src="@drawable/f1_y_tips_close" />
                 </LinearLayout>
             </RelativeLayout>
