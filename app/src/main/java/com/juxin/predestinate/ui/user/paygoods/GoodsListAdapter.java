@@ -32,6 +32,10 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
 
         if (itemType > 0)       // 非0状态下都引用第二种布局
             this.itemType = 1;
+
+        if (itemType == GoodsConstant.DLG_DIAMOND_CHAT) {  // 聊天充值
+            this.itemType = 0;
+        }
     }
 
     @Override
@@ -76,6 +80,10 @@ public class GoodsListAdapter extends BaseRecyclerViewAdapter {
             case GoodsConstant.DLG_YCOIN_NEW:       // 新Y币充值弹框
                 if (ModuleMgr.getCenterMgr().getMyInfo().isVip())
                     tv_desc.setVisibility(View.GONE);
+                break;
+
+            case GoodsConstant.DLG_DIAMOND_CHAT:    // 聊天钻石充值
+                goods_ico.setVisibility(View.GONE);
                 break;
         }
     }
