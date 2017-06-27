@@ -27,6 +27,7 @@ import com.juxin.predestinate.module.logic.model.impl.UnreadMgrImpl;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.user.auth.IDCardAuthenticationSucceedAct;
 import com.juxin.predestinate.ui.user.my.adapter.ViewGroupPagerAdapter;
+import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
  * 我的钱包页面
  * Created by zm on 2017/4/20
  */
-public class RedBoxRecordAct extends BaseActivity implements View.OnClickListener, PObserver {
+public class RedBoxRecordAct extends BaseActivity implements PObserver {
 
     public static String REDBOXMONEY = "REDBOXMONEY";//键
     private int authResult = 103, authForVodeo = 104, authIDCard = 105;
@@ -70,7 +71,7 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         tvTips = (TextView) findViewById(R.id.wode_wallet_tv_tips);
         tvTips.setText(Html.fromHtml(getString(R.string.withdraw_tip)));
         tvTips.setVisibility(View.GONE);
-        tvWithdraw.setOnClickListener(this);
+        tvWithdraw.setOnClickListener(clickListener);
         refreshView(ModuleMgr.getCenterMgr().getMyInfo().getRedbagsum() / 100f);
         initViewsList();
         initViewPager();
@@ -108,37 +109,40 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         tvMoney.setText(money + "");
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.wode_wallet_tv_draw:
-                Statistics.userBehavior(SendPoint.menu_me_money_withdraw);
-                String money = tvMoney.getText().toString().trim();
-                float minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney() / 100f;
-                if (Float.valueOf(money) <= minMoney) {
-                    PToast.showShort(getString(R.string.withdraw_tips) + minMoney + getString(R.string.head_unit));
-                    return;
-                }
+    private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
+        @Override
+        public void onNoDoubleClick(View v) {
+            switch (v.getId()) {
+                case R.id.wode_wallet_tv_draw:
+                    Statistics.userBehavior(SendPoint.menu_me_money_withdraw);
+                    String money = tvMoney.getText().toString().trim();
+                    float minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney() / 100f;
+                    if (Float.valueOf(money) <= minMoney) {
+                        PToast.showShort(getString(R.string.withdraw_tips) + minMoney + getString(R.string.head_unit));
+                        return;
+                    }
 
-                int status = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getStatus();
-                if (!ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//是否绑定了手机号
-                    UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);
+                    int status = ModuleMgr.getCommonMgr().getIdCardVerifyStatusInfo().getStatus();
+                    if (!ModuleMgr.getCenterMgr().getMyInfo().isVerifyCellphone()) {//是否绑定了手机号
+                        UIShow.showRedBoxPhoneVerifyAct(RedBoxRecordAct.this);
+                        break;
+                    }
+                    if (status <= 0) {//是否进行了身份认证
+                        UIShow.showIDCardAuthenticationAct(RedBoxRecordAct.this, authIDCard);
+                        break;
+                    }
+                    if (status != 2) {//身份认证还未通过
+                        PToast.showShort(R.string.the_identity_certification_audit);
+                        break;
+                    }
+                    UIShow.showWithDrawApplyAct(0, 0, false, RedBoxRecordAct.this);
                     break;
-                }
-                if (status <= 0) {//是否进行了身份认证
-                    UIShow.showIDCardAuthenticationAct(this, authIDCard);
+                default:
                     break;
-                }
-                if (status != 2) {//身份认证还未通过
-                    PToast.showShort(R.string.the_identity_certification_audit);
-                    break;
-                }
-                UIShow.showWithDrawApplyAct(0, 0, false, this);
-                break;
-            default:
-                break;
+            }
         }
-    }
+    };
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -160,6 +164,12 @@ public class RedBoxRecordAct extends BaseActivity implements View.OnClickListene
         switch (key) {
             case MsgType.MT_GET_MONEY_Notice:
                 refreshView(0.0); //提现成功更新可提现金额
+                //主动刷新提现记录
+                if (panls.size() != 0) {
+                    if (panls.get(2) != null) {
+                        ((WithDrawRecordPanel) panls.get(2)).onRefresh();
+                    }
+                }
                 break;
             default:
                 break;

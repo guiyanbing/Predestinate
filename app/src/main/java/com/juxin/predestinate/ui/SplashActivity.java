@@ -13,21 +13,15 @@ import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.ui.start.NavUserAct;
 import com.juxin.predestinate.ui.user.util.CenterConstant;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * 闪屏页面
  * Created by ZRP on 2016/12/27.
  */
 public class SplashActivity extends BaseActivity {
     private final static long delayTime = 2000;
-    private Timer timer;
-    private long t;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        t = System.currentTimeMillis();
         isCanBack(false);
         setCanNotify(false);//设置该页面不弹出悬浮窗消息通知
         super.onCreate(savedInstanceState);
@@ -36,32 +30,20 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initDelay(){
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+        MsgMgr.getInstance().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//DELETE START 170623 系统内存不足App被杀掉后还原时候会崩溃，暂时不使用，以后可以优化
-//                if (!App.isAppInited())
-//                    return;
-//DELETE END 170623
-                timer.cancel();
+                initData();
 
-                MsgMgr.getInstance().runOnUiThread(new Runnable() {
+                int delay = (int) (delayTime - (System.currentTimeMillis() - App.t));
+                MsgMgr.getInstance().delay(new Runnable() {
                     @Override
                     public void run() {
-                        initData();
-
-                        int delay = (int) (delayTime - (System.currentTimeMillis() - t));
-                        MsgMgr.getInstance().delay(new Runnable() {
-                            @Override
-                            public void run() {
-                                skipLogic();
-                            }
-                        }, delay);
+                        skipLogic();
                     }
-                });
+                }, delay);
             }
-        }, 1000, 200);
+        });
     }
 
     private void initData() {

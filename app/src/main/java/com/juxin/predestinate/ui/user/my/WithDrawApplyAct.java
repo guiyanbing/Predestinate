@@ -23,12 +23,13 @@ import com.juxin.predestinate.module.logic.request.HttpResponse;
 import com.juxin.predestinate.module.logic.request.RequestComplete;
 import com.juxin.predestinate.module.util.UIShow;
 import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
+import com.juxin.predestinate.ui.utils.NoDoubleClickListener;
 
 /**
  * 红包提现--银行卡界面
  * Created by zm on 2017/4/20
  */
-public class WithDrawApplyAct extends BaseActivity implements View.OnClickListener, RequestComplete {
+public class WithDrawApplyAct extends BaseActivity implements RequestComplete {
 
     private String mEidtMoney = "0";
     private boolean mIsFromEdit;
@@ -70,7 +71,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         tvOpenBank = (TextView) findViewById(R.id.bank_card_tv_card);
         mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY + ModuleMgr.getCenterMgr().getMyInfo().getUid(), 0) + "";
         etMoney.setText(mEidtMoney + getString(R.string.head_unit));
-        btnNext.setOnClickListener(this);
+        btnNext.setOnClickListener(clickListener);
         initDefaultAddress();
 
     }
@@ -91,52 +92,74 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
 //     ModuleMgr.getCommonMgr().reqWithdrawAddress(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (!(NetworkUtils.isConnected(this))) {
-            PToast.showShort(getResources().getString(R.string.tip_net_error));
-            return;
-        }
-        switch (v.getId()) {
-            case R.id.bank_card_btn_next:
-//                String cardName = etCardName.getText().toString().trim();
-//                String cardLocal = etCardLocal.getText().toString().trim();
-//                String cardLocalBranch = etCardLocalBranch.getText().toString().trim();
-//                String cardNum = etCardNum.getText().toString().trim();
-//                if(mIsFromEdit) {
-//                    if(TextUtils.isEmpty(cardName)) {
-//                        PToast.showShort(getString(R.string.name_cannot_be_empty));
-//                        return;
-//                    }
-//                    if(TextUtils.isEmpty(cardLocal)) {
-//                        PToast.showShort(getString(R.string.bank_cannot_be_empty));
-//                        return;
-//                    }
+//    @Override
+//    public void onClick(View v) {
+//        if (!(NetworkUtils.isConnected(this))) {
+//            PToast.showShort(getResources().getString(R.string.tip_net_error));
+//            return;
+//        }
+//        switch (v.getId()) {
+//            case R.id.bank_card_btn_next:
+////                String cardName = etCardName.getText().toString().trim();
+////                String cardLocal = etCardLocal.getText().toString().trim();
+////                String cardLocalBranch = etCardLocalBranch.getText().toString().trim();
+////                String cardNum = etCardNum.getText().toString().trim();
+////                if(mIsFromEdit) {
+////                    if(TextUtils.isEmpty(cardName)) {
+////                        PToast.showShort(getString(R.string.name_cannot_be_empty));
+////                        return;
+////                    }
+////                    if(TextUtils.isEmpty(cardLocal)) {
+////                        PToast.showShort(getString(R.string.bank_cannot_be_empty));
+////                        return;
+////                    }
+////
+////                    if(TextUtils.isEmpty(cardNum)) {
+////                        PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
+////                        return;
+////                    }
+////                    // 修改地址
+////                    ModuleMgr.getCommonMgr().reqWithdrawModify(mEidtMoney,info.getPaytype(),cardName,cardNum,cardLocal,info.getSubbank(),this);
+////                    break;
+////                }
+//                //获取自己可提现金额
+////                String myMoney = PSP.getInstance().getLong(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
+////                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
 //
-//                    if(TextUtils.isEmpty(cardNum)) {
-//                        PToast.showShort(getString(R.string.bank_card_cannot_be_empty));
-//                        return;
-//                    }
-//                    // 修改地址
-//                    ModuleMgr.getCommonMgr().reqWithdrawModify(mEidtMoney,info.getPaytype(),cardName,cardNum,cardLocal,info.getSubbank(),this);
+//                // 提现请求
+//                if (Float.valueOf(mEidtMoney) <= 0) {
+//                    PToast.showShort(R.string.money_cout_be_0);
 //                    break;
 //                }
-                //获取自己可提现金额
-//                String myMoney = PSP.getInstance().getLong(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
-//                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
+//                ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney, info.getPaytype(), info.getAccountname(), info.getAccountnum(), info.getBank(), info.getSubbank(), this);
+//                break;
+//
+//            default:
+//                break;
+//        }
+//    }
 
-                // 提现请求
-                if (Float.valueOf(mEidtMoney) <= 0) {
-                    PToast.showShort(R.string.money_cout_be_0);
+    private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
+        @Override
+        public void onNoDoubleClick(View v) {
+            if (!(NetworkUtils.isConnected(WithDrawApplyAct.this))) {
+                PToast.showShort(getResources().getString(R.string.tip_net_error));
+                return;
+            }
+            switch (v.getId()) {
+                case R.id.bank_card_btn_next:
+                    if (Float.valueOf(mEidtMoney) <= 0) {
+                        PToast.showShort(R.string.money_cout_be_0);
+                        break;
+                    }
+                    ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney, info.getPaytype(), info.getAccountname(), info.getAccountnum(), info.getBank(), info.getSubbank(), WithDrawApplyAct.this);
                     break;
-                }
-                ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney, info.getPaytype(), info.getAccountname(), info.getAccountnum(), info.getBank(), info.getSubbank(), this);
-                break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
-    }
+    };
 
     @Override
     public void onRequestComplete(HttpResponse response) {
