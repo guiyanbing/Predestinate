@@ -49,4 +49,5 @@ public class GoodsConstant {
 
     // 送礼钻石弹框
     public static final int DLG_DIAMOND_GIFT = 8;              // 充值钻石
+    public static final int DLG_DIAMOND_CHAT = 9;              // 聊天充值钻石
 }

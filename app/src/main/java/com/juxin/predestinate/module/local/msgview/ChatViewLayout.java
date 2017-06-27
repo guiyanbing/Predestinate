@@ -45,7 +45,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     private ViewGroup chatFixedTip = null;
     private ViewGroup chatFloatTip = null;
     private ImageView input_giftview, input_look_at_her, iv_y_tips_close;
-    private LinearLayout ll_y_tips;
+    private LinearLayout ll_y_tips,ll_y_left_tips;
     public TextView tv_y_tips_count;
     private TextView tv_y_tips_buy, tv_y_tips_split;
 
@@ -87,6 +87,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
         input_look_at_her = (ImageView) contentView.findViewById(R.id.input_look_at_her);
         input_giftview = (ImageView) contentView.findViewById(R.id.input_giftview);
         ll_y_tips = (LinearLayout) contentView.findViewById(R.id.ll_y_tips);
+        ll_y_left_tips = (LinearLayout) contentView.findViewById(R.id.ll_y_left_tips);
         tv_y_tips_count = (TextView) contentView.findViewById(R.id.tv_y_tips_count);
         tv_y_tips_buy = (TextView) contentView.findViewById(R.id.tv_y_tips_buy);
         tv_y_tips_split = (TextView) contentView.findViewById(R.id.tv_y_tips_split);
@@ -200,7 +201,7 @@ public class ChatViewLayout extends LinearLayout implements InterceptTouchLinear
     }
 
     public void onClickYTipsBuy(View.OnClickListener listener) {
-        tv_y_tips_buy.setOnClickListener(listener);
+        ll_y_left_tips.setOnClickListener(listener);
     }
 
     public void onClickYTipsClose(View.OnClickListener listener) {
