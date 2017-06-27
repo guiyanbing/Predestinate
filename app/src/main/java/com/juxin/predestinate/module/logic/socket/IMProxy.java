@@ -16,6 +16,7 @@ import com.juxin.library.log.PLogger;
 import com.juxin.library.observe.MsgMgr;
 import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.TypeConvertUtil;
+import com.juxin.predestinate.module.local.login.LoginMgr;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.custom.SimpleTipDialog;
@@ -497,6 +498,7 @@ public class IMProxy {
                         JSONObject contentObject = new JSONObject(content);
                         String unban_tm = contentObject.optString("unban_tm");
                         UIShow.showBottomBannedDlg(App.getActivity(), true, TypeConvertUtil.toLong(unban_tm));
+                        ModuleMgr.getLoginMgr().clearCookie();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
