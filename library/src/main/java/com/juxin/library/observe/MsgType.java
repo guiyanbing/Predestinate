@@ -169,4 +169,9 @@ public class MsgType {
      */
     public static final String MT_Net_Change = "MT_Net_Change";
 
+    /**
+     * 提现成功通知
+     */
+    public static final String MT_GET_MONEY_Notice = "MT_GET_MONEY_Notice";
+
 }

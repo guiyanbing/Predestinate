@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.juxin.library.log.PSP;
 import com.juxin.library.log.PToast;
+import com.juxin.library.observe.MsgMgr;
+import com.juxin.library.observe.MsgType;
 import com.juxin.library.utils.NetworkUtils;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
@@ -26,18 +28,18 @@ import com.juxin.predestinate.bean.my.WithdrawAddressInfo;
  * 红包提现--银行卡界面
  * Created by zm on 2017/4/20
  */
-public class WithDrawApplyAct extends BaseActivity implements View.OnClickListener,RequestComplete{
+public class WithDrawApplyAct extends BaseActivity implements View.OnClickListener, RequestComplete {
 
     private String mEidtMoney = "0";
     private boolean mIsFromEdit;
 
-    private LinearLayout llOpenBank,llBankBranch;
+    private LinearLayout llOpenBank, llBankBranch;
     private EditText etMoney;
     private EditText etCardName;
     private EditText etCardLocal;
     private EditText etCardLocalBranch;
     private EditText etCardNum;
-    private View viewBank,viewBankBranch;
+    private View viewBank, viewBankBranch;
     private TextView tvOpenBank;
     private Button btnNext;
     private WithdrawAddressInfo info;
@@ -46,12 +48,12 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.f1_wode_bank_card_act);
-        mIsFromEdit = getIntent().getBooleanExtra("fromEdit",false);
+        mIsFromEdit = getIntent().getBooleanExtra("fromEdit", false);
         info = getIntent().getParcelableExtra("info");
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         setBackView(R.id.base_title_back);
         setTitle(getString(R.string.withdrawal_page));
 
@@ -66,7 +68,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         viewBankBranch = findViewById(R.id.bank_card_view_bank_branch);
         btnNext = (Button) findViewById(R.id.bank_card_btn_next);
         tvOpenBank = (TextView) findViewById(R.id.bank_card_tv_card);
-        mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY+ModuleMgr.getCenterMgr().getMyInfo().getUid(),0)+"";
+        mEidtMoney = PSP.getInstance().getFloat(RedBoxRecordAct.REDBOXMONEY + ModuleMgr.getCenterMgr().getMyInfo().getUid(), 0) + "";
         etMoney.setText(mEidtMoney + getString(R.string.head_unit));
         btnNext.setOnClickListener(this);
         initDefaultAddress();
@@ -78,7 +80,7 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
         etCardLocal.setText(info.getBank());
         etCardLocalBranch.setText(info.getSubbank());
         etCardNum.setText(info.getAccountnum());
-        if (info.getPaytype() == 2){
+        if (info.getPaytype() == 2) {
             llOpenBank.setVisibility(View.GONE);
             llBankBranch.setVisibility(View.GONE);
             viewBank.setVisibility(View.GONE);
@@ -124,11 +126,11 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
 //                int minMoney = ModuleMgr.getCommonMgr().getCommonConfig().getMinmoney();
 
                 // 提现请求
-                if (Float.valueOf(mEidtMoney) <= 0){
+                if (Float.valueOf(mEidtMoney) <= 0) {
                     PToast.showShort(R.string.money_cout_be_0);
                     break;
                 }
-                ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney,info.getPaytype(),info.getAccountname(),info.getAccountnum(), info.getBank(), info.getSubbank(), this);
+                ModuleMgr.getCommonMgr().reqWithdraw(mEidtMoney, info.getPaytype(), info.getAccountname(), info.getAccountnum(), info.getBank(), info.getSubbank(), this);
                 break;
 
             default:
@@ -149,9 +151,11 @@ public class WithDrawApplyAct extends BaseActivity implements View.OnClickListen
 //            }
 //            return;
 //        }
-        if (response.getUrlParam() == UrlParam.reqWithdraw || response.getUrlParam() == UrlParam.reqWithdrawModify){//申请提现结果返回，修改地址结果返回
-            if (response.isOk()){
+        if (response.getUrlParam() == UrlParam.reqWithdraw || response.getUrlParam() == UrlParam.reqWithdrawModify) {//申请提现结果返回，修改地址结果返回
+            if (response.isOk()) {
                 PToast.showShort(TextUtils.isEmpty(response.getMsg()) ? getString(R.string.submit_succeed) : response.getMsg());
+                //通知提现成功 更新可提现余额
+                MsgMgr.getInstance().sendMsg(MsgType.MT_GET_MONEY_Notice, null);
                 UIShow.showWithDrawSuccessAct(WithDrawApplyAct.this);
                 this.finish();
                 return;
