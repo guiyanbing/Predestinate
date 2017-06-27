@@ -236,10 +236,9 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
 
     // 验证手机号码
     public boolean checkMobileNumber(String mobileNumber) {
-//        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(14[57])|(17[0])|(17[6-8])|(18[0,0-9]))\\d{8}$");
         boolean flag = false;
         try {
-            Pattern regex = Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
+            Pattern regex = Pattern.compile("^((13[0-9])|(14[5,7,9])|(15[^4,\\D])|(17[0,1,3,5-8])|(18[0-9]))\\d{8}$");
             Matcher matcher = regex.matcher(mobileNumber);
             flag = matcher.matches();
         } catch (Exception e) {
@@ -250,7 +249,6 @@ public class IDCardAuthenticationAct extends BaseActivity implements View.OnClic
 
     //验证邮箱
     public boolean checkEmail(String email) {
-//        "[a-zA-Z_]{1,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";"\\w+(\\.\\w)*+[@,＠]()+\\w+(\\.\\w{2,3}){1,3}"
         boolean flag = false;
         try {
             String check = "\\w+(\\.\\w)*[@,＠]\\w+(\\.\\w{2,3}){1,3}";

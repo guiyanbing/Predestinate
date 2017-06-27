@@ -159,4 +159,9 @@ public class MsgType {
     public static final String MT_Friend_Num_Notice = "MT_Friend_Num_Notice";
 
 
+    /**
+     * 提现成功通知
+     */
+    public static final String MT_GET_MONEY_Notice = "MT_GET_MONEY_Notice";
+
 }

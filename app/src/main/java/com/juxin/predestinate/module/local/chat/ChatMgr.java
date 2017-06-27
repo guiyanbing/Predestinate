@@ -549,9 +549,9 @@ public class ChatMgr implements ModuleBase {
                 PLogger.d("isMsgOK=" + message.getType() + "=" + contents);
 
                 if (messageRet.isOk() && messageRet.isS()) {
-                    checkPermissions(message);
                     updateOk(message, messageRet);
                     sendMessageRefreshYcoin();
+                    checkPermissions(message);
                 } else {
                     if (MessageRet.MSG_CODE_PULL_BLACK == messageRet.getS()) {
                         updateFailBlacklist(message, messageRet);
@@ -575,6 +575,13 @@ public class ChatMgr implements ModuleBase {
 
     private void sendMessageRefreshYcoin() {
         UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+
+        //如何今天可以免费发一条消息不扣除Y币，并刷新Y币以防与服务器不同步
+        if(ModuleMgr.getChatListMgr().getTodayChatShow()){
+            MsgMgr.getInstance().sendMsg(MsgType.MT_Update_Ycoin, true);
+            return;
+        }
+
         if ((userDetail.isVip() && userDetail.getYcoin() > 0) || (!userDetail.isVip() && userDetail.getYcoin() > 79)) {
             if (userDetail.isVip())
                 ModuleMgr.getCenterMgr().getMyInfo().setYcoin(userDetail.getYcoin() - 1);
@@ -616,8 +623,15 @@ public class ChatMgr implements ModuleBase {
         if (ModuleMgr.getCenterMgr().getMyInfo().isMan() && ModuleMgr.getChatListMgr().getTodayChatShow()) {
             //更新时间
             ModuleMgr.getChatListMgr().setTodayChatShow();
+            UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+
+            boolean result = false;
+            if ((userDetail.isVip() && userDetail.getYcoin() > 0) || (!userDetail.isVip() && userDetail.getYcoin() > 79)) {
+                result = true;
+            }
+
             Msg msg = new Msg();
-            msg.setData(false);
+            msg.setData(result);
             MsgMgr.getInstance().sendMsg(MsgType.MT_Chat_Can, msg);
         }
     }
