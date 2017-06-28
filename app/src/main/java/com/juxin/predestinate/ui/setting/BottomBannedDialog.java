@@ -1,6 +1,7 @@
 package com.juxin.predestinate.ui.setting;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,9 +54,6 @@ public class BottomBannedDialog extends BaseDialogFragment {
             @Override
             public void onClick(View v) {
                 getDialog().cancel();
-                ModuleMgr.getLoginMgr().logout();
-                if (isLogin)
-                    UIShow.showActivityClearTask(mContext, UserLoginExtAct.class);
             }
         });
         ContactBean contactBean = ModuleMgr.getCommonMgr().getContactBean();
@@ -68,4 +66,14 @@ public class BottomBannedDialog extends BaseDialogFragment {
             return getResources().getString(R.string.dal_bottom_bannd_time_001);
         return getResources().getString(R.string.dal_bottom_bannd_time_002) + TimeBaseUtil.formatSecondsToDate3((int) (banndeTime - System.currentTimeMillis() / 1000));
     }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        ModuleMgr.getLoginMgr().logout();
+        if (isLogin)
+            UIShow.showActivityClearTask(mContext, UserLoginExtAct.class);
+    }
 }
+
+
