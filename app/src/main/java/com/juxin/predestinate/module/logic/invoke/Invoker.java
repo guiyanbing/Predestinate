@@ -306,7 +306,7 @@ public class Invoker {
             PLogger.d("---get_user_detail--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
-            UserInfo userInfo = ModuleMgr.getCenterMgr().getMyInfo();
+            UserDetail userInfo = ModuleMgr.getCenterMgr().getMyInfo();
             Map<String, Object> responseObject = new HashMap<>();
             responseObject.put("uid", userInfo.getUid());
             responseObject.put("avatar", userInfo.getAvatar());
@@ -315,8 +315,11 @@ public class Invoker {
             responseObject.put("gender", userInfo.getGender());
             responseObject.put("is_vip", userInfo.isVip());
             //responseObject.put("money", userInfo.getMoney());
+            responseObject.put("diamond_count", userInfo.getDiamand());
             responseObject.put("longitude", LocationMgr.getInstance().getPointD().longitude);
             responseObject.put("latitude", LocationMgr.getInstance().getPointD().latitude);
+            responseObject.put("video_price", userInfo.getChatInfo().getVideoPrice());
+            responseObject.put("voice_price", userInfo.getChatInfo().getAudioPrice());
 
             doInJS(dataObject.optString("callbackName"), dataObject.optString("callbackID"), JSON.toJSONString(responseObject));
         }
@@ -380,24 +383,24 @@ public class Invoker {
                     UIShow.showRotaryActivity(context);
                     break;
                 case 508://群发视频
-                    VideoAudioChatHelper.getInstance().girlGroupInvite(context,VideoAudioChatHelper.TYPE_VIDEO_CHAT);
+                    VideoAudioChatHelper.getInstance().girlGroupInvite(context, VideoAudioChatHelper.TYPE_VIDEO_CHAT);
                     break;
                 case 509://群发语音
-                    VideoAudioChatHelper.getInstance().girlGroupInvite(context,VideoAudioChatHelper.TYPE_AUDIO_CHAT);
+                    VideoAudioChatHelper.getInstance().girlGroupInvite(context, VideoAudioChatHelper.TYPE_AUDIO_CHAT);
                     break;
                 default:
                     break;
             }
         }
 
-        public void ask_for_gift(String data){
+        public void ask_for_gift(String data) {
             PLogger.d("---ask_for_gift--->" + data);
             JSONObject dataObject = JsonUtil.getJsonObject(data);
 
             //索要礼物
             Activity act = appInterface.getAct();
             Activity context = (act == null ? (Activity) App.getActivity() : act);
-            switch (dataObject.optString("type")){
+            switch (dataObject.optString("type")) {
                 case "normal":
                     UIShow.showNormalAskGiftDlg(context);
                     break;
