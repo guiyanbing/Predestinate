@@ -569,14 +569,14 @@ public class ChatListMgr implements ModuleBase, PObserver {
         if (ModuleMgr.getCenterMgr().getMyInfo().getDiamand() < videoMessage.getPrice()) {
 
             //充值弹框
-            UIShow.showBottomChatDiamondDlg(App.getActivity(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(),
+            UIShow.showBottomChatDiamondDlg(App.getActivity(), message.getLWhisperID(), videoMessage.getMedia_tp(),
                     (int) videoMessage.getPrice(), true, videoMessage.getInvite_id());
             return;
         }
 
         //跳转视频
         VideoAudioChatHelper.getInstance().openInvitedActivity((Activity) App.getActivity(),
-                videoMessage.getInvite_id(), videoMessage.getLWhisperID(), videoMessage.getMedia_tp(), videoMessage.getPrice());
+                videoMessage.getInvite_id(), message.getLWhisperID(), videoMessage.getMedia_tp(), videoMessage.getPrice());
     }
 
     /**

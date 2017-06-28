@@ -91,7 +91,7 @@ public class AlbumHorizontalPanel extends BasePanel implements AdapterView.OnIte
 
             @Override
             public void onSubmit() {
-                UIShow.showBuyCoinActivity(getContext());
+                UIShow.showOpenVipActivity(getContext());
             }
         }, getContext().getString(R.string.goods_vip_check_other_album), "", "取消", "去开通", true, R.color.text_zhuyao_black);
     }

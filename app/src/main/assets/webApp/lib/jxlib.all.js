@@ -299,7 +299,9 @@ var PlatformHelper = function PlatformHelper() {
         userType: resp.user_type,
         money: resp.money,
         latitude: resp.latitude,
-        longitude: resp.longitude
+        longitude: resp.longitude,
+        videoPrice: resp.video_price,
+        voicePrice: resp.voice_price
       };
       cb(_userData);
     });
