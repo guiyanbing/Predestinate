@@ -87,7 +87,7 @@ public class LookAtHerDlg extends BaseDialogFragment implements View.OnClickList
         rl_own_disagree.setOnClickListener(this);
         tv_select_ok.setOnClickListener(this);
 
-        cb_own_agree.setChecked(true);
+        cb_own_disagree.setChecked(true);
 
         if (!isMan && isInvate) {//女号--邀请他
             VideoVerifyBean bean = ModuleMgr.getCommonMgr().getVideoVerify();
