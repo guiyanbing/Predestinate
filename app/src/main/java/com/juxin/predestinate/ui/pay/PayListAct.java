@@ -62,7 +62,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         payPhonecardPannel = new PayPhoneCardPannel(this, payGood);
 
         PayTypeList payTypeList = ModuleMgr.getCommonMgr().getCommonConfig().getPayTypeList();
-        List<PayTypeList.PayType> payTypes = payTypeList.getPayTypes();
+        List<PayTypeList.PayType> payTypes = payTypeList == null ? null : payTypeList.getPayTypes();
         if (null != payTypes && payTypes.size() > 0) {
             for (PayTypeList.PayType temp : payTypes) {
 
@@ -79,7 +79,6 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
             pay_listView.addView(payWXPannel.getContentView());
         }
 
-
         findViewById(R.id.paylist_qq).setOnClickListener(this);
         paylist_help_txt = (TextView) findViewById(R.id.paylist_help_txt);
         findViewById(R.id.paylist_help).setOnClickListener(this);
@@ -91,7 +90,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.paylist_qq: {
-                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(),"");
+                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), "");
             }
             case R.id.paylist_help: {
                 if (help_txt) {
