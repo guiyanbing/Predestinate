@@ -134,6 +134,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 } else if (getFromTag() == Constant.OPEN_FROM_CHAT_FRAME) {
                     Statistics.userBehavior(SendPoint.chatframe_tool_gift_pay, uid);
                 }
+                dismiss();
                 UIShow.showGoodsDiamondDialogAndTag(getContext(), getFromTag(), uid, channel_uid);
                 break;
             case R.id.bottom_gif_txv_sendnum:
@@ -152,6 +153,7 @@ public class BottomGiftDialog extends BaseDialogFragment implements View.OnClick
                 case R.id.bottom_gif_txv_send://发送礼物按钮逻辑
                     int needStone = Integer.valueOf(txvNeedStone.getText().toString());
                     if (needStone > ModuleMgr.getCenterMgr().getMyInfo().getDiamand()) {
+                        dismiss();
                         UIShow.showGoodsDiamondDialog(getContext(), needStone - ModuleMgr.getCenterMgr().getMyInfo().getDiamand(),
                                 getFromTag(), uid, channel_uid);
                         return;
