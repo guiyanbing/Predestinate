@@ -188,13 +188,21 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
 
                     Statistics.userBehavior(SendPoint.chatframe_bottom_replyandcontact, otherID);
                     UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
-                    if ((otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) &&
-                            (!"0".equals(userDetail.getyCoinUserid()) || (userDetail.getYcoin() > 0))) || !userDetail.isUnlock_vip()) {
-                        UIShow.showGoodsVipDlgOld(getContext(), 1, otherID, channel_uid);
-                    } else {
+                    boolean isVip = userDetail.isVip();
+                    int yCoin = userDetail.getYcoin();
+                    if(isVip || userDetail.isUnlock_vip()){     //判断是否为VIP，或者不需要VIP，则必定为Y币不足
                         UIShow.showGoodsYCoinDlgOld(getContext(), otherID, channel_uid);
+                    }else{//在不是VIP的情况下
+                        if(
+                                (otherID != TypeConvertUtil.toLong(userDetail.getyCoinUserid()) && yCoin > 79)//如果非Y币绑定用户且还有可聊天用Y币，则需要充值VIP
+                                ){
+                            UIShow.showGoodsVipDlgOld(getContext(), 1, otherID, channel_uid);
+                        }else{//其他情况均为充值Y币
+                            UIShow.showGoodsYCoinDlgOld(getContext(), otherID, channel_uid);
+                        }
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
         }
