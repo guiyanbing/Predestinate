@@ -1,6 +1,5 @@
 package com.juxin.predestinate.ui.pay;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
@@ -18,7 +17,6 @@ import com.juxin.predestinate.module.local.pay.goods.PayGood;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.BaseActivity;
 import com.juxin.predestinate.module.util.UIShow;
-import com.juxin.predestinate.ui.user.auth.PhoneVerifyAct;
 import com.juxin.predestinate.ui.user.paygoods.GoodsConstant;
 
 import java.util.List;
@@ -67,7 +65,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
         payPhonecardPannel = new PayPhoneCardPannel(this, payGood);
 
         PayTypeList payTypeList = ModuleMgr.getCommonMgr().getCommonConfig().getPayTypeList();
-        List<PayTypeList.PayType> payTypes = payTypeList.getPayTypes();
+        List<PayTypeList.PayType> payTypes = payTypeList == null ? null : payTypeList.getPayTypes();
         if (null != payTypes && payTypes.size() > 0) {
             for (PayTypeList.PayType temp : payTypes) {
 
@@ -84,7 +82,6 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
             pay_listView.addView(payWXPannel.getContentView());
         }
 
-
         findViewById(R.id.paylist_qq).setOnClickListener(this);
         paylist_help_txt = (TextView) findViewById(R.id.paylist_help_txt);
         findViewById(R.id.paylist_help).setOnClickListener(this);
@@ -97,7 +94,7 @@ public class PayListAct extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.paylist_qq: {
-                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(),"");
+                UIShow.showPrivateChatAct(this, MailSpecialID.customerService.getSpecialID(), "");
             }
             case R.id.paylist_help: {
                 if (help_txt) {
