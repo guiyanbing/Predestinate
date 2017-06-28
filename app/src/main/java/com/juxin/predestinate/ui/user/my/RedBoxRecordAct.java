@@ -107,7 +107,7 @@ public class RedBoxRecordAct extends BaseActivity implements PObserver {
     public void refreshView(double money) {
         PSP.getInstance().put(REDBOXMONEY + ModuleMgr.getCenterMgr().getMyInfo().getUid(), (float) money);//存储可提现金额
         tvMoney.setText(money + "");
-        ModuleMgr.getCenterMgr().getMyInfo().setRedbagsum(money);
+        ModuleMgr.getCenterMgr().getMyInfo().setRedbagsum(money*100);
     }
 
     private NoDoubleClickListener clickListener = new NoDoubleClickListener() {
