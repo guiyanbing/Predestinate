@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.juxin.library.log.PLogger;
 import com.juxin.predestinate.R;
+import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.module.local.chat.msgtype.BaseMessage;
 import com.juxin.predestinate.module.local.chat.utils.MessageConstant;
 import com.juxin.predestinate.module.local.chat.utils.SortList;
@@ -51,9 +52,19 @@ public class MailFragmentAdapter extends ExBaseAdapter<BaseMessage> {
     public void updateAllData() {
         List<BaseMessage> messageLists = ModuleMgr.getChatListMgr().getMsgList();
         PLogger.d("messageLists=多少人=" + messageLists.size());
+
+        UserDetail userDetail = ModuleMgr.getCenterMgr().getMyInfo();
+        String yCoinUserid = userDetail.getyCoinUserid();
+        boolean needTopUser = false;//是否置顶用户
+        if(!(userDetail.isUnlock_vip() || userDetail.isVip()) && !"0".equals(yCoinUserid)){
+            needTopUser = true;
+        }
+
         for (BaseMessage temp : messageLists) {
             if (MailSpecialID.customerService.getSpecialID() == temp.getLWhisperID()) {
                 temp.setWeight(MessageConstant.Great_Weight);
+            }else if(needTopUser && temp.getWhisperID().equals(yCoinUserid)){
+                temp.setWeight(MessageConstant.In_Weight);
             }
         }
 

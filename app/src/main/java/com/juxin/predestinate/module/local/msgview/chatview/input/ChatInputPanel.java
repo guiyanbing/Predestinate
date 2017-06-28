@@ -484,7 +484,7 @@ public class ChatInputPanel extends ChatViewPanel implements View.OnClickListene
                 UIShow.showYTipsCloseDlg(getContext(), new CloseBalanceDlg.IsCloseYTips() {
                     @Override
                     public void isCloseYTips() {
-                        getChatInstance().chatViewLayout.yTipsLogic(true, true);
+                        getChatInstance().chatViewLayout.yTipsLogic(true);
                     }
                 });
             }

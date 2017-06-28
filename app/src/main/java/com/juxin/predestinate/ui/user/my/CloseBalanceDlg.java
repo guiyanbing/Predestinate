@@ -73,6 +73,7 @@ public class CloseBalanceDlg extends BaseDialogFragment implements View.OnClickL
                 break;
             case R.id.tv_sure:
                 PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TIPS_VALUE), cb_def_sel.isChecked());
+                PSP.getInstance().put(ModuleMgr.getCommonMgr().getPrivateKey(Constant.CLOSE_Y_TMP_TIPS_VALUE), true);
                 isCloseYTips.isCloseYTips();
                 dismiss();
                 break;

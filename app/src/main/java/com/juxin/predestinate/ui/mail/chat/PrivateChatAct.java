@@ -288,7 +288,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
         });
 
         if (MailSpecialID.customerService.getSpecialID() != whisperID) {
-            privateChat.yTipsLogic(true, false);
+            privateChat.yTipsLogic(false);
             initFollow();
             isShowTopPhone();
         }
@@ -383,7 +383,7 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 } else {//不请求网络
                     checkIsCanSendMsg();
                     if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
-                        privateChat.yTipsLogic(true, false);
+                        privateChat.yTipsLogic(false);
                     }
                 }
                 break;
