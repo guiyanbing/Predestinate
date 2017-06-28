@@ -130,6 +130,9 @@ public class PrivateChatAct extends BaseActivity implements View.OnClickListener
                 if (yCoinBean.isOk()) {
                     ModuleMgr.getCenterMgr().getMyInfo().setYcoin(yCoinBean.getY());
                     ModuleMgr.getCenterMgr().getMyInfo().setyCoinUserid(yCoinBean.getTouid());
+                    if(privateChat != null && MailSpecialID.customerService.getSpecialID() != whisperID) {
+                        privateChat.yTipsLogic(false);
+                    }
                     checkIsCanSendMsg();
                 }
             }
