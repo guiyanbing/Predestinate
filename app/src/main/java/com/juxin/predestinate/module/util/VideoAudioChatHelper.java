@@ -18,6 +18,7 @@ import com.juxin.library.utils.JniUtil;
 import com.juxin.predestinate.R;
 import com.juxin.predestinate.bean.center.user.detail.UserDetail;
 import com.juxin.predestinate.bean.config.VideoVerifyBean;
+import com.juxin.predestinate.module.local.msgview.chatview.input.ChatMediaPlayer;
 import com.juxin.predestinate.module.logic.application.App;
 import com.juxin.predestinate.module.logic.application.ModuleMgr;
 import com.juxin.predestinate.module.logic.baseui.LoadingDialog;
@@ -414,6 +415,7 @@ public class VideoAudioChatHelper {
         //特殊错误码: 3001 用户正在视频聊天中 3002 该用户无法视频聊天 3003 钻石余额不足
         JSONObject jo = response.getResponseJson();
         if (response.isOk()) {
+            ChatMediaPlayer.getInstance().stopPlayVoice();
             JSONObject resJo = jo.optJSONObject("res");
             final long vcID = resJo.optLong("vc_id");
             addvcID(vcID);
